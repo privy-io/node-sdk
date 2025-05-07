@@ -11,6 +11,15 @@ export class Users extends APIResource {
   /**
    * Create a new user with linked accounts. Optionally pre-generate embedded wallets
    * for the user.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.create({
+   *   linked_accounts: [
+   *     { address: 'tom.bombadill@privy.io', type: 'email' },
+   *   ],
+   * });
+   * ```
    */
   create(body: UserCreateParams, options?: RequestOptions): APIPromise<User> {
     return this._client.post('/v1/users', { body, ...options });
@@ -18,6 +27,11 @@ export class Users extends APIResource {
 
   /**
    * Get a user by user ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.retrieve('user_id');
+   * ```
    */
   retrieve(userID: string, options?: RequestOptions): APIPromise<User> {
     return this._client.get(path`/v1/users/${userID}`, options);
@@ -25,6 +39,14 @@ export class Users extends APIResource {
 
   /**
    * Get all users in your app.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const user of client.users.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: UserListParams | null | undefined = {},
@@ -35,6 +57,11 @@ export class Users extends APIResource {
 
   /**
    * Delete a user by user ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.delete('user_id');
+   * ```
    */
   delete(userID: string, options?: RequestOptions): APIPromise<UserDeleteResponse> {
     return this._client.delete(path`/v1/users/${userID}`, {
@@ -45,6 +72,13 @@ export class Users extends APIResource {
 
   /**
    * Adds custom metadata to a user by user ID.
+   *
+   * @example
+   * ```ts
+   * const response = await client.users.createCustomMetadata(
+   *   'user_id',
+   * );
+   * ```
    */
   createCustomMetadata(
     userID: string,

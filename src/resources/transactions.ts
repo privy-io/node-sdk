@@ -8,6 +8,13 @@ import { path } from '../internal/utils/path';
 export class Transactions extends APIResource {
   /**
    * Get a transaction by transaction ID.
+   *
+   * @example
+   * ```ts
+   * const transaction = await client.transactions.retrieve(
+   *   'transaction_id',
+   * );
+   * ```
    */
   retrieve(transactionID: string, options?: RequestOptions): APIPromise<TransactionRetrieveResponse> {
     return this._client.get(path`/v1/transactions/${transactionID}`, options);

@@ -9,6 +9,33 @@ import { path } from '../internal/utils/path';
 export class Policies extends APIResource {
   /**
    * Create a new policy.
+   *
+   * @example
+   * ```ts
+   * const policy = await client.policies.create({
+   *   chain_type: 'ethereum',
+   *   name: 'Allowlisted stablecoins',
+   *   rules: [
+   *     {
+   *       action: 'ALLOW',
+   *       conditions: [
+   *         { ... },
+   *       ],
+   *       method: 'eth_sendTransaction',
+   *       name: 'Allowlist USDC contract on Base',
+   *     },
+   *     {
+   *       action: 'ALLOW',
+   *       conditions: [
+   *         { ... },
+   *       ],
+   *       method: 'eth_sendTransaction',
+   *       name: 'Allowlist USDT contract on Base',
+   *     },
+   *   ],
+   *   version: '1.0',
+   * });
+   * ```
    */
   create(params: PolicyCreateParams, options?: RequestOptions): APIPromise<Policy> {
     const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
@@ -28,6 +55,13 @@ export class Policies extends APIResource {
 
   /**
    * Get a policy by policy ID.
+   *
+   * @example
+   * ```ts
+   * const policy = await client.policies.retrieve(
+   *   'xxxxxxxxxxxxxxxxxxxxxxxx',
+   * );
+   * ```
    */
   retrieve(policyID: string, options?: RequestOptions): APIPromise<Policy> {
     return this._client.get(path`/v1/policies/${policyID}`, options);
@@ -35,6 +69,13 @@ export class Policies extends APIResource {
 
   /**
    * Update a policy by policy ID.
+   *
+   * @example
+   * ```ts
+   * const policy = await client.policies.update(
+   *   'xxxxxxxxxxxxxxxxxxxxxxxx',
+   * );
+   * ```
    */
   update(
     policyID: string,
@@ -58,6 +99,13 @@ export class Policies extends APIResource {
 
   /**
    * Delete a policy by policy ID.
+   *
+   * @example
+   * ```ts
+   * const policy = await client.policies.delete(
+   *   'xxxxxxxxxxxxxxxxxxxxxxxx',
+   * );
+   * ```
    */
   delete(
     policyID: string,

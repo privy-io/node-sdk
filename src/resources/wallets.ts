@@ -10,6 +10,13 @@ import { path } from '../internal/utils/path';
 export class Wallets extends APIResource {
   /**
    * Create a new wallet.
+   *
+   * @example
+   * ```ts
+   * const wallet = await client.wallets.create({
+   *   chain_type: 'ethereum',
+   * });
+   * ```
    */
   create(params: WalletCreateParams, options?: RequestOptions): APIPromise<Wallet> {
     const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
@@ -29,6 +36,11 @@ export class Wallets extends APIResource {
 
   /**
    * Get a wallet by wallet ID.
+   *
+   * @example
+   * ```ts
+   * const wallet = await client.wallets.retrieve('wallet_id');
+   * ```
    */
   retrieve(walletID: string, options?: RequestOptions): APIPromise<Wallet> {
     return this._client.get(path`/v1/wallets/${walletID}`, options);
@@ -36,6 +48,11 @@ export class Wallets extends APIResource {
 
   /**
    * Update a wallet's policies or authorization key configuration.
+   *
+   * @example
+   * ```ts
+   * const wallet = await client.wallets.update('wallet_id');
+   * ```
    */
   update(
     walletID: string,
@@ -59,6 +76,14 @@ export class Wallets extends APIResource {
 
   /**
    * Get all wallets in your app.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const wallet of client.wallets.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: WalletListParams | null | undefined = {},
@@ -69,6 +94,17 @@ export class Wallets extends APIResource {
 
   /**
    * Obtain a user session signer to enable wallet access.
+   *
+   * @example
+   * ```ts
+   * const response = await client.wallets.authenticateWithJwt({
+   *   encryption_type: 'HPKE',
+   *   recipient_public_key:
+   *     'DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1',
+   *   user_jwt:
+   *     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
+   * });
+   * ```
    */
   authenticateWithJwt(
     body: WalletAuthenticateWithJwtParams,
@@ -79,6 +115,25 @@ export class Wallets extends APIResource {
 
   /**
    * Create wallets with an associated recovery user.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.wallets.createWalletsWithRecovery({
+   *     primary_signer: {
+   *       subject_id: 'cm7oxq1el000e11o8iwp7d0d0',
+   *     },
+   *     recovery_user: {
+   *       linked_accounts: [
+   *         { address: 'john@doe.com', type: 'email' },
+   *       ],
+   *     },
+   *     wallets: [
+   *       { chain_type: 'ethereum' },
+   *       { chain_type: 'solana' },
+   *     ],
+   *   });
+   * ```
    */
   createWalletsWithRecovery(
     body: WalletCreateWalletsWithRecoveryParams,
@@ -89,6 +144,14 @@ export class Wallets extends APIResource {
 
   /**
    * Sign a message or transaction with a wallet by wallet ID.
+   *
+   * @example
+   * ```ts
+   * const response = await client.wallets.rpc('wallet_id', {
+   *   method: 'eth_signTransaction',
+   *   params: { transaction: {} },
+   * });
+   * ```
    */
   rpc(walletID: string, params: WalletRpcParams, options?: RequestOptions): APIPromise<WalletRpcResponse> {
     const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;

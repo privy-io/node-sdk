@@ -9,6 +9,16 @@ import { path } from '../internal/utils/path';
 export class KeyQuorums extends APIResource {
   /**
    * Create a new key quorum.
+   *
+   * @example
+   * ```ts
+   * const keyQuorum = await client.keyQuorums.create({
+   *   public_keys: [
+   *     '-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx4aoeD72yykviK+f/ckqE2CItVIG\n1rCnvC3/XZ1HgpOcMEMialRmTrqIK4oZlYd1RfxU3za/C9yjhboIuoPD3g==\n-----END PUBLIC KEY-----',
+   *     '-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAErzZtQr/bMIh3Y8f9ZqseB9i/AfjQ\nhu+agbNqXcJy/TfoNqvc/Y3Mh7gIZ8ZLXQEykycx4mYSpqrxp1lBKqsZDQ==\n-----END PUBLIC KEY-----",',
+   *   ],
+   * });
+   * ```
    */
   create(body: KeyQuorumCreateParams, options?: RequestOptions): APIPromise<KeyQuorum> {
     return this._client.post('/v1/key_quorums', { body, ...options });
@@ -16,6 +26,13 @@ export class KeyQuorums extends APIResource {
 
   /**
    * Get a key quorum by ID.
+   *
+   * @example
+   * ```ts
+   * const keyQuorum = await client.keyQuorums.retrieve(
+   *   'key_quorum_id',
+   * );
+   * ```
    */
   retrieve(keyQuorumID: string, options?: RequestOptions): APIPromise<KeyQuorum> {
     return this._client.get(path`/v1/key_quorums/${keyQuorumID}`, options);
@@ -23,6 +40,18 @@ export class KeyQuorums extends APIResource {
 
   /**
    * Update a key quorum by key quorum ID.
+   *
+   * @example
+   * ```ts
+   * const keyQuorum = await client.keyQuorums.update(
+   *   'key_quorum_id',
+   *   {
+   *     public_keys: [
+   *       '-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx4aoeD72yykviK+f/ckqE2CItVIG\n1rCnvC3/XZ1HgpOcMEMialRmTrqIK4oZlYd1RfxU3za/C9yjhboIuoPD3g==\n-----END PUBLIC KEY-----',
+   *     ],
+   *   },
+   * );
+   * ```
    */
   update(
     keyQuorumID: string,
@@ -46,6 +75,13 @@ export class KeyQuorums extends APIResource {
 
   /**
    * Delete a key quorum by key quorum ID.
+   *
+   * @example
+   * ```ts
+   * const keyQuorum = await client.keyQuorums.delete(
+   *   'key_quorum_id',
+   * );
+   * ```
    */
   delete(
     keyQuorumID: string,

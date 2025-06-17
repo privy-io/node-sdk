@@ -26,18 +26,6 @@ export class Users extends APIResource {
   }
 
   /**
-   * Get a user by user ID.
-   *
-   * @example
-   * ```ts
-   * const user = await client.users.retrieve('user_id');
-   * ```
-   */
-  retrieve(userID: string, options?: RequestOptions): APIPromise<User> {
-    return this._client.get(path`/v1/users/${userID}`, options);
-  }
-
-  /**
    * Get all users in your app.
    *
    * @example
@@ -60,13 +48,13 @@ export class Users extends APIResource {
    *
    * @example
    * ```ts
-   * const user = await client.users.delete('user_id');
+   * await client.users.delete('user_id');
    * ```
    */
-  delete(userID: string, options?: RequestOptions): APIPromise<UserDeleteResponse> {
+  delete(userID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/users/${userID}`, {
       ...options,
-      headers: buildHeaders([{ Accept: 'text/html' }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 
@@ -165,6 +153,8 @@ export namespace User {
     type: 'phone';
 
     verified_at: number;
+
+    number?: string;
   }
 
   export interface CrossApp {
@@ -654,8 +644,6 @@ export namespace User {
   }
 }
 
-export type UserDeleteResponse = '204 No Content';
-
 export interface UserCreateCustomMetadataResponse {
   custom_metadata: Record<string, string | number | boolean>;
 }
@@ -680,31 +668,14 @@ export interface UserCreateParams {
   >;
 
   /**
-   * Create a smart wallet. Requires create_ethereum_wallet to also be true.
-   */
-  create_ethereum_smart_wallet?: boolean;
-
-  /**
-   * Create an Ethereum embedded wallet. Cannot be used with
-   * create_n_ethereum_wallets.
-   */
-  create_ethereum_wallet?: boolean;
-
-  /**
-   * Number of Ethereum embedded wallets to pregenerate. Cannot be used with
-   * create_ethereum_wallet.
-   */
-  create_n_ethereum_wallets?: number;
-
-  /**
-   * Create a Solana embedded wallet.
-   */
-  create_solana_wallet?: boolean;
-
-  /**
    * Custom metadata associated with the user.
    */
   custom_metadata?: Record<string, string | number | boolean>;
+
+  /**
+   * Wallets to create for the user.
+   */
+  wallets?: Array<UserCreateParams.Wallet>;
 }
 
 export namespace UserCreateParams {
@@ -857,6 +828,46 @@ export namespace UserCreateParams {
 
     type: 'custom_auth';
   }
+
+  export interface Wallet {
+    /**
+     * Chain type of the wallet. 'Ethereum' supports any EVM-compatible network.
+     */
+    chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
+
+    /**
+     * Additional signers for the wallet.
+     */
+    additional_signers?: Array<Wallet.AdditionalSigner>;
+
+    /**
+     * Create a smart wallet with this wallet as the signer. Only supported for wallets
+     * with `chain_type: "ethereum"`.
+     */
+    create_smart_wallet?: boolean;
+
+    /**
+     * Policy IDs to enforce on the wallet. Currently, only one policy is supported per
+     * wallet.
+     */
+    policy_ids?: Array<string>;
+  }
+
+  export namespace Wallet {
+    export interface AdditionalSigner {
+      /**
+       * The key quorum ID for the signer.
+       */
+      signer_id: string;
+
+      /**
+       * The array of policy IDs that will be applied to wallet requests. If specified,
+       * this will override the base policy IDs set on the wallet. Currently, only one
+       * policy is supported per signer.
+       */
+      override_policy_ids?: Array<string>;
+    }
+  }
 }
 
 export interface UserListParams extends CursorParams {}
@@ -864,7 +875,6 @@ export interface UserListParams extends CursorParams {}
 export declare namespace Users {
   export {
     type User as User,
-    type UserDeleteResponse as UserDeleteResponse,
     type UserCreateCustomMetadataResponse as UserCreateCustomMetadataResponse,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,

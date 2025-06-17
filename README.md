@@ -32,7 +32,7 @@ const client = new PrivyAPI({
 });
 
 async function main() {
-  const wallet = await client.wallets.retrieve('wallet_id');
+  const wallet = await client.wallets.create({ chain_type: 'ethereum' });
 
   console.log(wallet.id);
 }
@@ -55,7 +55,8 @@ const client = new PrivyAPI({
 });
 
 async function main() {
-  const wallet: PrivyAPI.Wallet = await client.wallets.retrieve('wallet_id');
+  const params: PrivyAPI.WalletCreateParams = { chain_type: 'ethereum' };
+  const wallet: PrivyAPI.Wallet = await client.wallets.create(params);
 }
 
 main();
@@ -72,7 +73,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const wallet = await client.wallets.retrieve('wallet_id').catch(async (err) => {
+  const wallet = await client.wallets.create({ chain_type: 'ethereum' }).catch(async (err) => {
     if (err instanceof PrivyAPI.APIError) {
       console.log(err.status); // 400
       console.log(err.name); // BadRequestError
@@ -115,7 +116,7 @@ const client = new PrivyAPI({
 });
 
 // Or, configure per-request:
-await client.wallets.retrieve('wallet_id', {
+await client.wallets.create({ chain_type: 'ethereum' }, {
   maxRetries: 5,
 });
 ```
@@ -132,7 +133,7 @@ const client = new PrivyAPI({
 });
 
 // Override per-request:
-await client.wallets.retrieve('wallet_id', {
+await client.wallets.create({ chain_type: 'ethereum' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -155,11 +156,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new PrivyAPI();
 
-const response = await client.wallets.retrieve('wallet_id').asResponse();
+const response = await client.wallets.create({ chain_type: 'ethereum' }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: wallet, response: raw } = await client.wallets.retrieve('wallet_id').withResponse();
+const { data: wallet, response: raw } = await client.wallets
+  .create({ chain_type: 'ethereum' })
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(wallet.id);
 ```

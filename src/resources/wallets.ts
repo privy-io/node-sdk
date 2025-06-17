@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as WalletsAPI from './wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
@@ -19,7 +20,11 @@ export class Wallets extends APIResource {
    * ```
    */
   create(params: WalletCreateParams, options?: RequestOptions): APIPromise<Wallet> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      ...body
+    } = params;
     return this._client.post('/v1/wallets', {
       body,
       ...options,
@@ -28,22 +33,11 @@ export class Wallets extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
         },
         options?.headers,
       ]),
     });
-  }
-
-  /**
-   * Get a wallet by wallet ID.
-   *
-   * @example
-   * ```ts
-   * const wallet = await client.wallets.retrieve('wallet_id');
-   * ```
-   */
-  retrieve(walletID: string, options?: RequestOptions): APIPromise<Wallet> {
-    return this._client.get(path`/v1/wallets/${walletID}`, options);
   }
 
   /**
@@ -98,9 +92,6 @@ export class Wallets extends APIResource {
    * @example
    * ```ts
    * const response = await client.wallets.authenticateWithJwt({
-   *   encryption_type: 'HPKE',
-   *   recipient_public_key:
-   *     'DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1',
    *   user_jwt:
    *     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
    * });
@@ -154,7 +145,11 @@ export class Wallets extends APIResource {
    * ```
    */
   rpc(walletID: string, params: WalletRpcParams, options?: RequestOptions): APIPromise<WalletRpcResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      ...body
+    } = params;
     return this._client.post(path`/v1/wallets/${walletID}/rpc`, {
       body,
       ...options,
@@ -163,6 +158,7 @@ export class Wallets extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
         },
         options?.headers,
       ]),
@@ -192,7 +188,7 @@ export interface Wallet {
   /**
    * Chain type of the wallet. 'Ethereum' supports any EVM-compatible network.
    */
-  chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar';
+  chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
 
   /**
    * Unix timestamp of when the wallet was created in milliseconds.
@@ -200,14 +196,20 @@ export interface Wallet {
   created_at: number;
 
   /**
-   * The key quorum ID of the owner of the wallet.
-   */
-  owner_id: string;
-
-  /**
    * List of policy IDs for policies that are enforced on the wallet.
    */
   policy_ids: Array<string>;
+
+  /**
+   * Unix timestamp of when the wallet was exported in milliseconds, if the wallet
+   * was exported.
+   */
+  exported_at?: number;
+
+  /**
+   * The key quorum ID of the owner of the wallet.
+   */
+  owner_id?: string;
 
   /**
    * The compressed, raw public key for the wallet along the chain cryptographic
@@ -222,44 +224,67 @@ export namespace Wallet {
   }
 }
 
-export interface WalletAuthenticateWithJwtResponse {
-  /**
-   * The encrypted authorization key data.
-   */
-  encrypted_authorization_key: WalletAuthenticateWithJwtResponse.EncryptedAuthorizationKey;
-
-  /**
-   * The expiration time of the authorization key in seconds since the epoch.
-   */
-  expires_at: number;
-
-  /**
-   * The wallets that the signer has access to.
-   */
-  wallets: Array<Wallet>;
-}
+export type WalletAuthenticateWithJwtResponse =
+  | WalletAuthenticateWithJwtResponse.WithEncryption
+  | WalletAuthenticateWithJwtResponse.WithoutEncryption;
 
 export namespace WalletAuthenticateWithJwtResponse {
-  /**
-   * The encrypted authorization key data.
-   */
-  export interface EncryptedAuthorizationKey {
+  export interface WithEncryption {
     /**
-     * The encrypted authorization key corresponding to the user's current
-     * authentication session.
+     * The encrypted authorization key data.
      */
-    ciphertext: string;
+    encrypted_authorization_key: WithEncryption.EncryptedAuthorizationKey;
 
     /**
-     * Base64-encoded ephemeral public key used in the HPKE encryption process.
-     * Required for decryption.
+     * The expiration time of the authorization key in seconds since the epoch.
      */
-    encapsulated_key: string;
+    expires_at: number;
 
     /**
-     * The encryption type used. Currently only supports HPKE.
+     * The wallets that the signer has access to.
      */
-    encryption_type: 'HPKE';
+    wallets: Array<WalletsAPI.Wallet>;
+  }
+
+  export namespace WithEncryption {
+    /**
+     * The encrypted authorization key data.
+     */
+    export interface EncryptedAuthorizationKey {
+      /**
+       * The encrypted authorization key corresponding to the user's current
+       * authentication session.
+       */
+      ciphertext: string;
+
+      /**
+       * Base64-encoded ephemeral public key used in the HPKE encryption process.
+       * Required for decryption.
+       */
+      encapsulated_key: string;
+
+      /**
+       * The encryption type used. Currently only supports HPKE.
+       */
+      encryption_type: 'HPKE';
+    }
+  }
+
+  export interface WithoutEncryption {
+    /**
+     * The raw authorization key data.
+     */
+    authorization_key: string;
+
+    /**
+     * The expiration time of the authorization key in seconds since the epoch.
+     */
+    expires_at: number;
+
+    /**
+     * The wallets that the signer has access to.
+     */
+    wallets: Array<WalletsAPI.Wallet>;
   }
 }
 
@@ -367,6 +392,34 @@ export namespace WalletRpcResponse {
       hash: string;
 
       transaction_id?: string;
+
+      transaction_request?: Data.TransactionRequest;
+    }
+
+    export namespace Data {
+      export interface TransactionRequest {
+        chain_id?: string | number;
+
+        data?: string;
+
+        from?: string;
+
+        gas_limit?: string | number;
+
+        gas_price?: string | number;
+
+        max_fee_per_gas?: string | number;
+
+        max_priority_fee_per_gas?: string | number;
+
+        nonce?: string | number;
+
+        to?: string;
+
+        type?: 0 | 1 | 2;
+
+        value?: string | number;
+      }
     }
 
     export interface Error {
@@ -424,7 +477,7 @@ export interface WalletCreateParams {
    * Body param: Chain type of the wallet. "ethereum" supports any EVM-compatible
    * network.
    */
-  chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar';
+  chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
 
   /**
    * Body param: Additional signers for the wallet.
@@ -454,6 +507,12 @@ export interface WalletCreateParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Idempotency keys ensure API requests are executed only once within
+   * a 24-hour window.
+   */
+  'privy-idempotency-key'?: string;
 }
 
 export namespace WalletCreateParams {
@@ -523,26 +582,26 @@ export interface WalletListParams extends CursorParams {
   /**
    * Chain type of the wallet. 'Ethereum' supports any EVM-compatible network.
    */
-  chain_type?: 'solana' | 'ethereum' | 'cosmos' | 'stellar';
+  chain_type?: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
 }
 
 export interface WalletAuthenticateWithJwtParams {
   /**
-   * The encryption type for the authentication response. Currently only supports
-   * HPKE.
-   */
-  encryption_type: 'HPKE';
-
-  /**
-   * Base64-encoded public key of the recipient who will decrypt the session key.
-   * This key must be generated securely and kept confidential.
-   */
-  recipient_public_key: string;
-
-  /**
    * The user's JWT, to be used to authenticate the user.
    */
   user_jwt: string;
+
+  /**
+   * The encryption type for the authentication response. Currently only supports
+   * HPKE.
+   */
+  encryption_type?: 'HPKE';
+
+  /**
+   * The public key of your ECDH keypair, in base64-encoded, SPKI-format, whose
+   * private key will be able to decrypt the session key.
+   */
+  recipient_public_key?: string;
 }
 
 export interface WalletCreateWalletsWithRecoveryParams {
@@ -589,7 +648,7 @@ export namespace WalletCreateWalletsWithRecoveryParams {
     /**
      * Chain type of the wallet. "ethereum" supports any EVM-compatible network.
      */
-    chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar';
+    chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
 
     /**
      * List of policy IDs for policies that should be enforced on the wallet.
@@ -632,15 +691,16 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
     'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
   }
 
   export namespace EthSignTransaction {
@@ -702,15 +762,16 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
     'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
   }
 
   export namespace EthSendTransaction {
@@ -767,15 +828,16 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
     'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
   }
 
   export namespace PersonalSign {
@@ -808,15 +870,16 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
     'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
   }
 
   export namespace EthSignTypedDataV4 {
@@ -826,7 +889,7 @@ export declare namespace WalletRpcParams {
 
     export namespace Params {
       export interface TypedData {
-        domain: TypedData.UnionMember0 | Record<string, unknown>;
+        domain: Record<string, unknown>;
 
         message: Record<string, unknown>;
 
@@ -836,18 +899,6 @@ export declare namespace WalletRpcParams {
       }
 
       export namespace TypedData {
-        export interface UnionMember0 {
-          chainId: number;
-
-          name: string;
-
-          verifyingContract: string;
-
-          version: string;
-
-          [k: string]: unknown;
-        }
-
         export interface Type {
           name: string;
 
@@ -879,20 +930,21 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
     'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
   }
 
   export namespace Secp256k1Sign {
     export interface Params {
-      hash?: unknown;
+      hash: string;
     }
   }
 
@@ -918,15 +970,16 @@ export declare namespace WalletRpcParams {
     chain_type?: 'solana';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
     'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
   }
 
   export namespace SignTransaction {
@@ -964,15 +1017,16 @@ export declare namespace WalletRpcParams {
     chain_type?: 'solana';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
     'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
   }
 
   export namespace SignAndSendTransaction {
@@ -1005,15 +1059,16 @@ export declare namespace WalletRpcParams {
     chain_type?: 'solana';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
     'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
   }
 
   export namespace SignMessage {

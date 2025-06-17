@@ -30,19 +30,8 @@ describe('resource wallets', () => {
       owner_id: 'owner_id',
       policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-idempotency-key': 'privy-idempotency-key',
     });
-  });
-
-  // skipped: tests are disabled for the time being
-  test.skip('retrieve', async () => {
-    const responsePromise = client.wallets.retrieve('wallet_id');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   // skipped: tests are disabled for the time being
@@ -101,8 +90,6 @@ describe('resource wallets', () => {
   // skipped: tests are disabled for the time being
   test.skip('authenticateWithJwt: only required params', async () => {
     const responsePromise = client.wallets.authenticateWithJwt({
-      encryption_type: 'HPKE',
-      recipient_public_key: 'DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1',
       user_jwt:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
     });
@@ -118,10 +105,10 @@ describe('resource wallets', () => {
   // skipped: tests are disabled for the time being
   test.skip('authenticateWithJwt: required and optional params', async () => {
     const response = await client.wallets.authenticateWithJwt({
-      encryption_type: 'HPKE',
-      recipient_public_key: 'DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1',
       user_jwt:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
+      encryption_type: 'HPKE',
+      recipient_public_key: 'DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1',
     });
   });
 
@@ -189,8 +176,8 @@ describe('resource wallets', () => {
       },
       address: 'address',
       chain_type: 'ethereum',
-      body_wallet_id: 'wallet_id',
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-idempotency-key': 'privy-idempotency-key',
     });
   });
 });

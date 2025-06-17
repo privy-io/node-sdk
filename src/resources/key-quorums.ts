@@ -25,20 +25,6 @@ export class KeyQuorums extends APIResource {
   }
 
   /**
-   * Get a key quorum by ID.
-   *
-   * @example
-   * ```ts
-   * const keyQuorum = await client.keyQuorums.retrieve(
-   *   'key_quorum_id',
-   * );
-   * ```
-   */
-  retrieve(keyQuorumID: string, options?: RequestOptions): APIPromise<KeyQuorum> {
-    return this._client.get(path`/v1/key_quorums/${keyQuorumID}`, options);
-  }
-
-  /**
    * Update a key quorum by key quorum ID.
    *
    * @example

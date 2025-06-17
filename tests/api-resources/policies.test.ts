@@ -94,18 +94,6 @@ describe('resource policies', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('retrieve', async () => {
-    const responsePromise = client.policies.retrieve('xxxxxxxxxxxxxxxxxxxxxxxx');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // skipped: tests are disabled for the time being
   test.skip('update', async () => {
     const responsePromise = client.policies.update('xxxxxxxxxxxxxxxxxxxxxxxx');
     const rawResponse = await responsePromise.asResponse();
@@ -125,6 +113,8 @@ describe('resource policies', () => {
         'xxxxxxxxxxxxxxxxxxxxxxxx',
         {
           name: 'Allowlisted stablecoins',
+          owner: { public_key: 'public_key' },
+          owner_id: 'owner_id',
           rules: [
             {
               action: 'ALLOW',

@@ -39,18 +39,6 @@ describe('resource keyQuorums', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('retrieve', async () => {
-    const responsePromise = client.keyQuorums.retrieve('key_quorum_id');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // skipped: tests are disabled for the time being
   test.skip('update: only required params', async () => {
     const responsePromise = client.keyQuorums.update('key_quorum_id', {
       public_keys: [

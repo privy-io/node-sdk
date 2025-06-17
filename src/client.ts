@@ -34,14 +34,14 @@ import {
   Policy,
   PolicyCreateParams,
   PolicyDeleteParams,
+  PolicyDeleteResponse,
   PolicyUpdateParams,
 } from './resources/policies';
-import { TransactionRetrieveResponse, Transactions } from './resources/transactions';
+import { Transactions } from './resources/transactions';
 import {
   User,
   UserCreateCustomMetadataResponse,
   UserCreateParams,
-  UserDeleteResponse,
   UserListParams,
   Users,
   UsersCursor,
@@ -836,7 +836,6 @@ export declare namespace PrivyAPI {
   export {
     Users as Users,
     type User as User,
-    type UserDeleteResponse as UserDeleteResponse,
     type UserCreateCustomMetadataResponse as UserCreateCustomMetadataResponse,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
@@ -846,12 +845,13 @@ export declare namespace PrivyAPI {
   export {
     Policies as Policies,
     type Policy as Policy,
+    type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyUpdateParams as PolicyUpdateParams,
     type PolicyDeleteParams as PolicyDeleteParams,
   };
 
-  export { Transactions as Transactions, type TransactionRetrieveResponse as TransactionRetrieveResponse };
+  export { Transactions as Transactions };
 
   export {
     KeyQuorums as KeyQuorums,

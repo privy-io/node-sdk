@@ -27,24 +27,16 @@ describe('resource users', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.users.create({
       linked_accounts: [{ address: 'tom.bombadill@privy.io', type: 'email' }],
-      create_ethereum_smart_wallet: true,
-      create_ethereum_wallet: true,
-      create_n_ethereum_wallets: 1,
-      create_solana_wallet: true,
       custom_metadata: { foo: 'string' },
+      wallets: [
+        {
+          chain_type: 'solana',
+          additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+          create_smart_wallet: true,
+          policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
+        },
+      ],
     });
-  });
-
-  // skipped: tests are disabled for the time being
-  test.skip('retrieve', async () => {
-    const responsePromise = client.users.retrieve('user_id');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   // skipped: tests are disabled for the time being

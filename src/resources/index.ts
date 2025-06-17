@@ -10,15 +10,15 @@ export {
 export {
   Policies,
   type Policy,
+  type PolicyDeleteResponse,
   type PolicyCreateParams,
   type PolicyUpdateParams,
   type PolicyDeleteParams,
 } from './policies';
-export { Transactions, type TransactionRetrieveResponse } from './transactions';
+export { Transactions } from './transactions';
 export {
   Users,
   type User,
-  type UserDeleteResponse,
   type UserCreateCustomMetadataResponse,
   type UserCreateParams,
   type UserListParams,

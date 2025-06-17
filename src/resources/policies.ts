@@ -54,20 +54,6 @@ export class Policies extends APIResource {
   }
 
   /**
-   * Get a policy by policy ID.
-   *
-   * @example
-   * ```ts
-   * const policy = await client.policies.retrieve(
-   *   'xxxxxxxxxxxxxxxxxxxxxxxx',
-   * );
-   * ```
-   */
-  retrieve(policyID: string, options?: RequestOptions): APIPromise<Policy> {
-    return this._client.get(path`/v1/policies/${policyID}`, options);
-  }
-
-  /**
    * Update a policy by policy ID.
    *
    * @example
@@ -111,7 +97,7 @@ export class Policies extends APIResource {
     policyID: string,
     params: PolicyDeleteParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<Policy> {
+  ): APIPromise<PolicyDeleteResponse> {
     const { 'privy-authorization-signature': privyAuthorizationSignature } = params ?? {};
     return this._client.delete(path`/v1/policies/${policyID}`, {
       ...options,
@@ -167,6 +153,8 @@ export interface Policy {
 
 export namespace Policy {
   export interface Rule {
+    id: string;
+
     /**
      * Action to take if the conditions are true.
      */
@@ -328,6 +316,13 @@ export namespace Policy {
       value: string | Array<string>;
     }
   }
+}
+
+export interface PolicyDeleteResponse {
+  /**
+   * Whether the policy was deleted successfully.
+   */
+  success: boolean;
 }
 
 export interface PolicyCreateParams {
@@ -551,6 +546,18 @@ export interface PolicyUpdateParams {
   name?: string;
 
   /**
+   * Body param: The P-256 public key of the owner of the policy. If you provide
+   * this, do not specify an owner_id as it will be generated automatically.
+   */
+  owner?: PolicyUpdateParams.Owner | null;
+
+  /**
+   * Body param: The key quorum ID to set as the owner of the policy. If you provide
+   * this, do not specify an owner.
+   */
+  owner_id?: string | null;
+
+  /**
    * Body param: The rules that apply to each method the policy covers.
    */
   rules?: Array<PolicyUpdateParams.Rule>;
@@ -563,6 +570,14 @@ export interface PolicyUpdateParams {
 }
 
 export namespace PolicyUpdateParams {
+  /**
+   * The P-256 public key of the owner of the policy. If you provide this, do not
+   * specify an owner_id as it will be generated automatically.
+   */
+  export interface Owner {
+    public_key: string;
+  }
+
   export interface Rule {
     /**
      * Action to take if the conditions are true.
@@ -738,6 +753,7 @@ export interface PolicyDeleteParams {
 export declare namespace Policies {
   export {
     type Policy as Policy,
+    type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyUpdateParams as PolicyUpdateParams,
     type PolicyDeleteParams as PolicyDeleteParams,

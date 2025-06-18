@@ -302,6 +302,7 @@ export type WalletRpcResponse =
   | WalletRpcResponse.EthSendTransaction
   | WalletRpcResponse.PersonalSign
   | WalletRpcResponse.EthSignTypedDataV4
+  | WalletRpcResponse.EthSign7702Authorization
   | WalletRpcResponse.Secp256k1Sign;
 
 export namespace WalletRpcResponse {
@@ -448,6 +449,42 @@ export namespace WalletRpcResponse {
       encoding: 'hex';
 
       signature: string;
+    }
+  }
+
+  export interface EthSign7702Authorization {
+    method: 'eth_sign7702Authorization';
+
+    data?: EthSign7702Authorization.Data;
+
+    error?: EthSign7702Authorization.Error;
+  }
+
+  export namespace EthSign7702Authorization {
+    export interface Data {
+      authorization: Data.Authorization;
+    }
+
+    export namespace Data {
+      export interface Authorization {
+        chain_id: string | number;
+
+        contract: string;
+
+        nonce: string | number;
+
+        r: string;
+
+        s: string;
+
+        y_parity: 0 | 1;
+      }
+    }
+
+    export interface Error {
+      code: string;
+
+      message: string;
     }
   }
 
@@ -657,6 +694,7 @@ export type WalletRpcParams =
   | WalletRpcParams.EthSendTransaction
   | WalletRpcParams.PersonalSign
   | WalletRpcParams.EthSignTypedDataV4
+  | WalletRpcParams.EthSign7702Authorization
   | WalletRpcParams.Secp256k1Sign
   | WalletRpcParams.SignTransaction
   | WalletRpcParams.SignAndSendTransaction
@@ -899,6 +937,50 @@ export declare namespace WalletRpcParams {
           type: string;
         }
       }
+    }
+  }
+
+  export interface EthSign7702Authorization {
+    /**
+     * Body param:
+     */
+    method: 'eth_sign7702Authorization';
+
+    /**
+     * Body param:
+     */
+    params: EthSign7702Authorization.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace EthSign7702Authorization {
+    export interface Params {
+      chain_id: string | number;
+
+      contract: string;
+
+      nonce?: string | number;
     }
   }
 

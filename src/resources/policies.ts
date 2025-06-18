@@ -169,6 +169,7 @@ export namespace Policy {
       | Rule.EthereumCalldata
       | Rule.EthereumTypedDataDomain
       | Rule.EthereumTypedDataMessage
+      | Rule.Ethereum7702Authorization
       | Rule.SolanaProgramInstruction
       | Rule.SolanaSystemProgramInstruction
       | Rule.SolanaTokenProgramInstruction
@@ -181,6 +182,7 @@ export namespace Policy {
       | 'eth_sendTransaction'
       | 'eth_signTransaction'
       | 'eth_signTypedData_v4'
+      | 'eth_sign7702Authorization'
       | 'signTransaction'
       | 'signAndSendTransaction'
       | 'exportPrivateKey'
@@ -267,6 +269,19 @@ export namespace Policy {
           type: string;
         }
       }
+    }
+
+    /**
+     * Allowed contract addresses for eth_signAuthorization requests.
+     */
+    export interface Ethereum7702Authorization {
+      field: 'contract';
+
+      field_source: 'ethereum_7702_authorization';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+      value: string | Array<string>;
     }
 
     /**
@@ -382,6 +397,7 @@ export namespace PolicyCreateParams {
       | Rule.EthereumCalldata
       | Rule.EthereumTypedDataDomain
       | Rule.EthereumTypedDataMessage
+      | Rule.Ethereum7702Authorization
       | Rule.SolanaProgramInstruction
       | Rule.SolanaSystemProgramInstruction
       | Rule.SolanaTokenProgramInstruction
@@ -394,6 +410,7 @@ export namespace PolicyCreateParams {
       | 'eth_sendTransaction'
       | 'eth_signTransaction'
       | 'eth_signTypedData_v4'
+      | 'eth_sign7702Authorization'
       | 'signTransaction'
       | 'signAndSendTransaction'
       | 'exportPrivateKey'
@@ -480,6 +497,19 @@ export namespace PolicyCreateParams {
           type: string;
         }
       }
+    }
+
+    /**
+     * Allowed contract addresses for eth_signAuthorization requests.
+     */
+    export interface Ethereum7702Authorization {
+      field: 'contract';
+
+      field_source: 'ethereum_7702_authorization';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+      value: string | Array<string>;
     }
 
     /**
@@ -593,6 +623,7 @@ export namespace PolicyUpdateParams {
       | Rule.EthereumCalldata
       | Rule.EthereumTypedDataDomain
       | Rule.EthereumTypedDataMessage
+      | Rule.Ethereum7702Authorization
       | Rule.SolanaProgramInstruction
       | Rule.SolanaSystemProgramInstruction
       | Rule.SolanaTokenProgramInstruction
@@ -605,6 +636,7 @@ export namespace PolicyUpdateParams {
       | 'eth_sendTransaction'
       | 'eth_signTransaction'
       | 'eth_signTypedData_v4'
+      | 'eth_sign7702Authorization'
       | 'signTransaction'
       | 'signAndSendTransaction'
       | 'exportPrivateKey'
@@ -691,6 +723,19 @@ export namespace PolicyUpdateParams {
           type: string;
         }
       }
+    }
+
+    /**
+     * Allowed contract addresses for eth_signAuthorization requests.
+     */
+    export interface Ethereum7702Authorization {
+      field: 'contract';
+
+      field_source: 'ethereum_7702_authorization';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+      value: string | Array<string>;
     }
 
     /**

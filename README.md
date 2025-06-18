@@ -1,6 +1,6 @@
 # Privy API TypeScript API Library
 
-[![NPM version](https://img.shields.io/npm/v/privy-api-client.svg)](https://npmjs.org/package/privy-api-client) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/privy-api-client)
+[![NPM version](<https://img.shields.io/npm/v/privy-api-client.svg?label=npm%20(stable)>)](https://npmjs.org/package/privy-api-client) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/privy-api-client)
 
 This library provides convenient access to the Privy API REST API from server-side TypeScript or JavaScript.
 
@@ -31,13 +31,9 @@ const client = new PrivyAPI({
   environment: 'staging', // defaults to 'production'
 });
 
-async function main() {
-  const wallet = await client.wallets.create({ chain_type: 'ethereum' });
+const wallet = await client.wallets.create({ chain_type: 'ethereum' });
 
-  console.log(wallet.id);
-}
-
-main();
+console.log(wallet.id);
 ```
 
 ### Request & Response types
@@ -54,12 +50,8 @@ const client = new PrivyAPI({
   environment: 'staging', // defaults to 'production'
 });
 
-async function main() {
-  const params: PrivyAPI.WalletCreateParams = { chain_type: 'ethereum' };
-  const wallet: PrivyAPI.Wallet = await client.wallets.create(params);
-}
-
-main();
+const params: PrivyAPI.WalletCreateParams = { chain_type: 'ethereum' };
+const wallet: PrivyAPI.Wallet = await client.wallets.create(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -72,19 +64,15 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-async function main() {
-  const wallet = await client.wallets.create({ chain_type: 'ethereum' }).catch(async (err) => {
-    if (err instanceof PrivyAPI.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
-}
-
-main();
+const wallet = await client.wallets.create({ chain_type: 'ethereum' }).catch(async (err) => {
+  if (err instanceof PrivyAPI.APIError) {
+    console.log(err.status); // 400
+    console.log(err.name); // BadRequestError
+    console.log(err.headers); // {server: 'nginx', ...}
+  } else {
+    throw err;
+  }
+});
 ```
 
 Error codes are as follows:

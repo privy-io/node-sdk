@@ -2,7 +2,7 @@
 
 import type { PrivyAPI } from '../client';
 
-export class APIResource {
+export abstract class APIResource {
   protected _client: PrivyAPI;
 
   constructor(client: PrivyAPI) {

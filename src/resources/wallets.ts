@@ -89,13 +89,7 @@ export class Wallets extends APIResource {
   /**
    * Obtain a user session signer to enable wallet access.
    *
-   * @example
-   * ```ts
-   * const response = await client.wallets.authenticateWithJwt({
-   *   user_jwt:
-   *     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
-   * });
-   * ```
+   * @deprecated
    */
   authenticateWithJwt(
     body: WalletAuthenticateWithJwtParams,

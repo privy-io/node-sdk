@@ -113,6 +113,7 @@ export interface User {
     | User.LinkedIn
     | User.Spotify
     | User.Tiktok
+    | User.Line
     | User.Twitter
     | User.SmartWallet
     | User.Passkey
@@ -336,6 +337,24 @@ export namespace User {
     type: 'tiktok_oauth';
 
     username: string | null;
+
+    verified_at: number;
+  }
+
+  export interface Line {
+    email: string | null;
+
+    first_verified_at: number | null;
+
+    latest_verified_at: number | null;
+
+    name: string | null;
+
+    profile_picture_url: string | null;
+
+    subject: string;
+
+    type: 'line_oauth';
 
     verified_at: number;
   }
@@ -663,6 +682,7 @@ export interface UserCreateParams {
     | UserCreateParams.Spotify
     | UserCreateParams.Instagram
     | UserCreateParams.Tiktok
+    | UserCreateParams.Line
     | UserCreateParams.Apple
     | UserCreateParams.LinkedIn
     | UserCreateParams.Farcaster
@@ -772,6 +792,18 @@ export namespace UserCreateParams {
     type: 'tiktok_oauth';
 
     username: string;
+  }
+
+  export interface Line {
+    subject: string;
+
+    type: 'line_oauth';
+
+    email?: string;
+
+    name?: string;
+
+    profile_picture_url?: string;
   }
 
   export interface Apple {

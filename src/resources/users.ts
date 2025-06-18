@@ -72,7 +72,10 @@ export class Users extends APIResource {
     userID: string,
     options?: RequestOptions,
   ): APIPromise<UserCreateCustomMetadataResponse> {
-    return this._client.post(path`/v1/users/${userID}/custom_metadata`, options);
+    return this._client.post(path`/v1/users/${userID}/custom_metadata`, {
+      defaultBaseURL: 'https://auth.privy.io',
+      ...options,
+    });
   }
 }
 

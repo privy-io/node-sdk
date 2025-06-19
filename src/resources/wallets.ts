@@ -477,7 +477,7 @@ export namespace WalletRpcResponse {
 
         s: string;
 
-        y_parity: 0 | 1;
+        y_parity: number;
       }
     }
 

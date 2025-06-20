@@ -123,7 +123,7 @@ export interface Policy {
   /**
    * Chain type the policy applies to.
    */
-  chain_type: 'ethereum';
+  chain_type: 'ethereum' | 'solana';
 
   /**
    * Unix timestamp of when the policy was created in milliseconds.
@@ -344,7 +344,7 @@ export interface PolicyCreateParams {
   /**
    * Body param: Chain type the policy applies to.
    */
-  chain_type: 'ethereum';
+  chain_type: 'ethereum' | 'solana';
 
   /**
    * Body param: Name to assign to policy.

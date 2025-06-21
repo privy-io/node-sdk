@@ -260,6 +260,7 @@ export class PrivyAPI {
       timeout: this.timeout,
       logger: this.logger,
       logLevel: this.logLevel,
+      fetch: this.fetch,
       fetchOptions: this.fetchOptions,
       appID: this.appID,
       appSecret: this.appSecret,

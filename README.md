@@ -15,7 +15,7 @@ npm install git+ssh://git@github.com:stainless-sdks/privy-api-client-typescript.
 ```
 
 > [!NOTE]
-> Once this package is [published to npm](https://app.stainless.com/docs/guides/publish), this will become: `npm install privy-api-client`
+> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install privy-api-client`
 
 ## Usage
 

@@ -366,7 +366,7 @@ export interface PolicyCreateParams {
    * you provide this, do not specify an owner_id as it will be generated
    * automatically.
    */
-  owner?: PolicyCreateParams.Owner | null;
+  owner?: PolicyCreateParams.UserID | PolicyCreateParams.PublicKey | null;
 
   /**
    * Body param: The key quorum ID to set as the owner of the policy. If you provide
@@ -560,11 +560,11 @@ export namespace PolicyCreateParams {
     }
   }
 
-  /**
-   * The pem-formatted, P-256 public key of the owner of the policy. If you provide
-   * this, do not specify an owner_id as it will be generated automatically.
-   */
-  export interface Owner {
+  export interface UserID {
+    user_id: string;
+  }
+
+  export interface PublicKey {
     public_key: string;
   }
 }

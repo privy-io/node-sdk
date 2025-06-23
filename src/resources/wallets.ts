@@ -519,7 +519,7 @@ export interface WalletCreateParams {
    * Body param: The P-256 public key of the owner of the wallet. If you provide
    * this, do not specify an owner_id as it will be generated automatically.
    */
-  owner?: WalletCreateParams.Owner | null;
+  owner?: WalletCreateParams.PublicKey | WalletCreateParams.UserID | null;
 
   /**
    * Body param: The key quorum ID to set as the owner of the wallet. If you provide
@@ -557,8 +557,17 @@ export namespace WalletCreateParams {
    * The P-256 public key of the owner of the wallet. If you provide this, do not
    * specify an owner_id as it will be generated automatically.
    */
-  export interface Owner {
+  export interface PublicKey {
     public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the wallet. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserID {
+    user_id: string;
   }
 }
 

@@ -259,7 +259,7 @@ export namespace Policy {
       export interface TypedData {
         primary_type: string;
 
-        types: Record<string, Array<TypedData.Type>>;
+        types: { [key: string]: Array<TypedData.Type> };
       }
 
       export namespace TypedData {
@@ -487,7 +487,7 @@ export namespace PolicyCreateParams {
       export interface TypedData {
         primary_type: string;
 
-        types: Record<string, Array<TypedData.Type>>;
+        types: { [key: string]: Array<TypedData.Type> };
       }
 
       export namespace TypedData {
@@ -713,7 +713,7 @@ export namespace PolicyUpdateParams {
       export interface TypedData {
         primary_type: string;
 
-        types: Record<string, Array<TypedData.Type>>;
+        types: { [key: string]: Array<TypedData.Type> };
       }
 
       export namespace TypedData {

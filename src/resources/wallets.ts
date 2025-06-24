@@ -930,13 +930,13 @@ export declare namespace WalletRpcParams {
 
     export namespace Params {
       export interface TypedData {
-        domain: Record<string, unknown>;
+        domain: { [key: string]: unknown };
 
-        message: Record<string, unknown>;
+        message: { [key: string]: unknown };
 
         primary_type: string;
 
-        types: Record<string, Array<TypedData.Type>>;
+        types: { [key: string]: Array<TypedData.Type> };
       }
 
       export namespace TypedData {

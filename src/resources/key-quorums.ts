@@ -97,6 +97,8 @@ export interface KeyQuorum {
   authorization_threshold?: number;
 
   display_name?: string;
+
+  user_ids?: Array<string>;
 }
 
 export namespace KeyQuorum {

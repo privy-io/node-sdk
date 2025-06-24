@@ -131,7 +131,7 @@ export interface User {
   /**
    * Custom metadata associated with the user.
    */
-  custom_metadata?: Record<string, string | number | boolean>;
+  custom_metadata?: { [key: string]: string | number | boolean };
 }
 
 export namespace User {
@@ -667,7 +667,7 @@ export namespace User {
 }
 
 export interface UserCreateCustomMetadataResponse {
-  custom_metadata: Record<string, string | number | boolean>;
+  custom_metadata: { [key: string]: string | number | boolean };
 }
 
 export interface UserCreateParams {
@@ -693,7 +693,7 @@ export interface UserCreateParams {
   /**
    * Custom metadata associated with the user.
    */
-  custom_metadata?: Record<string, string | number | boolean>;
+  custom_metadata?: { [key: string]: string | number | boolean };
 
   /**
    * Wallets to create for the user.

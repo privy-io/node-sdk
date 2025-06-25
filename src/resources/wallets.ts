@@ -101,24 +101,7 @@ export class Wallets extends APIResource {
   /**
    * Create wallets with an associated recovery user.
    *
-   * @example
-   * ```ts
-   * const response =
-   *   await client.wallets.createWalletsWithRecovery({
-   *     primary_signer: {
-   *       subject_id: 'cm7oxq1el000e11o8iwp7d0d0',
-   *     },
-   *     recovery_user: {
-   *       linked_accounts: [
-   *         { address: 'john@doe.com', type: 'email' },
-   *       ],
-   *     },
-   *     wallets: [
-   *       { chain_type: 'ethereum' },
-   *       { chain_type: 'solana' },
-   *     ],
-   *   });
-   * ```
+   * @deprecated
    */
   createWalletsWithRecovery(
     body: WalletCreateWalletsWithRecoveryParams,

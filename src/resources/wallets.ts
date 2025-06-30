@@ -48,12 +48,8 @@ export class Wallets extends APIResource {
    * const wallet = await client.wallets.update('wallet_id');
    * ```
    */
-  update(
-    walletID: string,
-    params: WalletUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Wallet> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params ?? {};
+  update(walletID: string, params: WalletUpdateParams, options?: RequestOptions): APIPromise<Wallet> {
+    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
     return this._client.patch(path`/v1/wallets/${walletID}`, {
       body,
       ...options,

@@ -63,12 +63,8 @@ export class Policies extends APIResource {
    * );
    * ```
    */
-  update(
-    policyID: string,
-    params: PolicyUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Policy> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params ?? {};
+  update(policyID: string, params: PolicyUpdateParams, options?: RequestOptions): APIPromise<Policy> {
+    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
     return this._client.patch(path`/v1/policies/${policyID}`, {
       body,
       ...options,

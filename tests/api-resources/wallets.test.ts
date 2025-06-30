@@ -36,7 +36,7 @@ describe('resource wallets', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('update', async () => {
-    const responsePromise = client.wallets.update('wallet_id');
+    const responsePromise = client.wallets.update('wallet_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -44,24 +44,6 @@ describe('resource wallets', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // skipped: tests are disabled for the time being
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.wallets.update(
-        'wallet_id',
-        {
-          additional_signers: [{ override_policy_ids: ['string'], signer_id: 'signer_id' }],
-          owner: { public_key: 'public_key' },
-          owner_id: 'owner_id',
-          policy_ids: ['tb54eps4z44ed0jepousxi4n'],
-          'privy-authorization-signature': 'privy-authorization-signature',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(PrivyAPI.NotFoundError);
   });
 
   // skipped: tests are disabled for the time being

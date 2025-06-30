@@ -95,7 +95,7 @@ describe('resource policies', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('update', async () => {
-    const responsePromise = client.policies.update('xxxxxxxxxxxxxxxxxxxxxxxx');
+    const responsePromise = client.policies.update('xxxxxxxxxxxxxxxxxxxxxxxx', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -103,38 +103,6 @@ describe('resource policies', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // skipped: tests are disabled for the time being
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.policies.update(
-        'xxxxxxxxxxxxxxxxxxxxxxxx',
-        {
-          name: 'Allowlisted stablecoins',
-          owner: { public_key: 'public_key' },
-          owner_id: 'owner_id',
-          rules: [
-            {
-              action: 'ALLOW',
-              conditions: [
-                {
-                  field: 'to',
-                  field_source: 'ethereum_transaction',
-                  operator: 'eq',
-                  value: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-                },
-              ],
-              method: 'eth_sendTransaction',
-              name: 'Allowlist USDC contract on Base',
-            },
-          ],
-          'privy-authorization-signature': 'privy-authorization-signature',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(PrivyAPI.NotFoundError);
   });
 
   // skipped: tests are disabled for the time being

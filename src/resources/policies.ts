@@ -17,19 +17,17 @@ export class Policies extends APIResource {
    *   name: 'name',
    *   rules: [
    *     {
-   *       id: 'rule_123',
    *       action: 'ALLOW',
    *       conditions: [
    *         {
    *           field: 'to',
    *           field_source: 'ethereum_transaction',
    *           operator: 'eq',
-   *           value:
-   *             '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+   *           value: 'string',
    *         },
    *       ],
    *       method: 'eth_sendTransaction',
-   *       name: 'Allowlist USDC contract on Base',
+   *       name: 'name',
    *     },
    *   ],
    *   version: '1.0',
@@ -116,7 +114,7 @@ export interface Policy {
   id: string;
 
   /**
-   * Chain type the policy applies to.
+   * The chain type the policy applies to.
    */
   chain_type: 'ethereum' | 'solana';
 
@@ -145,12 +143,9 @@ export interface Policy {
 
 export namespace Policy {
   /**
-   * A rule that defines the conditions and action to take if the conditions are
-   * true.
+   * The rules that apply to each method the policy covers.
    */
   export interface Rule {
-    id: string;
-
     /**
      * Action to take if the conditions are true.
      */
@@ -180,9 +175,6 @@ export namespace Policy {
       | 'exportPrivateKey'
       | '*';
 
-    /**
-     * Name to assign to rule.
-     */
     name: string;
   }
 
@@ -334,7 +326,7 @@ export interface PolicyDeleteResponse {
 
 export interface PolicyCreateParams {
   /**
-   * Body param: Chain type the policy applies to.
+   * Body param: The chain type the policy applies to.
    */
   chain_type: 'ethereum' | 'solana';
 
@@ -375,12 +367,9 @@ export interface PolicyCreateParams {
 
 export namespace PolicyCreateParams {
   /**
-   * A rule that defines the conditions and action to take if the conditions are
-   * true.
+   * The rules that apply to each method the policy covers.
    */
   export interface Rule {
-    id: string;
-
     /**
      * Action to take if the conditions are true.
      */
@@ -410,9 +399,6 @@ export namespace PolicyCreateParams {
       | 'exportPrivateKey'
       | '*';
 
-    /**
-     * Name to assign to rule.
-     */
     name: string;
   }
 
@@ -603,12 +589,9 @@ export namespace PolicyUpdateParams {
   }
 
   /**
-   * A rule that defines the conditions and action to take if the conditions are
-   * true.
+   * The rules that apply to each method the policy covers.
    */
   export interface Rule {
-    id: string;
-
     /**
      * Action to take if the conditions are true.
      */
@@ -638,9 +621,6 @@ export namespace PolicyUpdateParams {
       | 'exportPrivateKey'
       | '*';
 
-    /**
-     * Name to assign to rule.
-     */
     name: string;
   }
 

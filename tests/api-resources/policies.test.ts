@@ -16,18 +16,12 @@ describe('resource policies', () => {
       name: 'name',
       rules: [
         {
-          id: 'rule_123',
           action: 'ALLOW',
           conditions: [
-            {
-              field: 'to',
-              field_source: 'ethereum_transaction',
-              operator: 'eq',
-              value: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-            },
+            { field: 'to', field_source: 'ethereum_transaction', operator: 'eq', value: 'string' },
           ],
           method: 'eth_sendTransaction',
-          name: 'Allowlist USDC contract on Base',
+          name: 'name',
         },
       ],
       version: '1.0',
@@ -48,18 +42,12 @@ describe('resource policies', () => {
       name: 'name',
       rules: [
         {
-          id: 'rule_123',
           action: 'ALLOW',
           conditions: [
-            {
-              field: 'to',
-              field_source: 'ethereum_transaction',
-              operator: 'eq',
-              value: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-            },
+            { field: 'to', field_source: 'ethereum_transaction', operator: 'eq', value: 'string' },
           ],
           method: 'eth_sendTransaction',
-          name: 'Allowlist USDC contract on Base',
+          name: 'name',
         },
       ],
       version: '1.0',

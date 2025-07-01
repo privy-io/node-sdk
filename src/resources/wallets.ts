@@ -673,7 +673,7 @@ export namespace WalletCreateWalletsWithRecoveryParams {
 export type WalletRpcParams =
   | WalletRpcParams.EthereumSignTransactionRpcInput
   | WalletRpcParams.EthereumSendTransactionRpcInput
-  | WalletRpcParams.PersonalSignRpcInput
+  | WalletRpcParams.EthereumPersonalSignRpcInput
   | WalletRpcParams.EthereumSignTypedDataRpcInput
   | WalletRpcParams.EthereumSign7702AuthorizationRpcInput
   | WalletRpcParams.EthereumSecp256k1SignRpcInput
@@ -829,7 +829,7 @@ export declare namespace WalletRpcParams {
     }
   }
 
-  export interface PersonalSignRpcInput {
+  export interface EthereumPersonalSignRpcInput {
     /**
      * Body param:
      */
@@ -838,7 +838,7 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
-    params: PersonalSignRpcInput.Params;
+    params: EthereumPersonalSignRpcInput.Params;
 
     /**
      * Body param:
@@ -868,7 +868,7 @@ export declare namespace WalletRpcParams {
     'privy-idempotency-key'?: string;
   }
 
-  export namespace PersonalSignRpcInput {
+  export namespace EthereumPersonalSignRpcInput {
     export interface Params {
       encoding: 'utf-8' | 'hex';
 

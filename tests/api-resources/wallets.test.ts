@@ -158,6 +158,7 @@ describe('resource wallets', () => {
       },
       address: 'address',
       chain_type: 'ethereum',
+      body_wallet_id: 'wallet_id',
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
     });

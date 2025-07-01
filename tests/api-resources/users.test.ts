@@ -72,8 +72,10 @@ describe('resource users', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('createCustomMetadata', async () => {
-    const responsePromise = client.users.createCustomMetadata('user_id');
+  test.skip('createCustomMetadata: only required params', async () => {
+    const responsePromise = client.users.createCustomMetadata('user_id', {
+      custom_metadata: { key: 'value' },
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -81,5 +83,12 @@ describe('resource users', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('createCustomMetadata: required and optional params', async () => {
+    const response = await client.users.createCustomMetadata('user_id', {
+      custom_metadata: { key: 'value' },
+    });
   });
 });

@@ -36,7 +36,7 @@ import {
 import { Transactions } from './resources/transactions';
 import {
   User,
-  UserCreateCustomMetadataResponse,
+  UserCreateCustomMetadataParams,
   UserCreateParams,
   UserListParams,
   Users,
@@ -854,10 +854,10 @@ export declare namespace PrivyAPI {
   export {
     Users as Users,
     type User as User,
-    type UserCreateCustomMetadataResponse as UserCreateCustomMetadataResponse,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
+    type UserCreateCustomMetadataParams as UserCreateCustomMetadataParams,
   };
 
   export {

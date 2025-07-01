@@ -159,7 +159,7 @@ export interface Wallet {
   address: string;
 
   /**
-   * Chain type of the wallet. 'Ethereum' supports any EVM-compatible network.
+   * Chain type of the wallet
    */
   chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
 
@@ -213,9 +213,6 @@ export namespace WalletAuthenticateWithJwtResponse {
      */
     expires_at: number;
 
-    /**
-     * The wallets that the signer has access to.
-     */
     wallets: Array<WalletsAPI.Wallet>;
   }
 
@@ -254,9 +251,6 @@ export namespace WalletAuthenticateWithJwtResponse {
      */
     expires_at: number;
 
-    /**
-     * The wallets that the signer has access to.
-     */
     wallets: Array<WalletsAPI.Wallet>;
   }
 }
@@ -274,24 +268,24 @@ export interface WalletCreateWalletsWithRecoveryResponse {
 }
 
 export type WalletRpcResponse =
-  | WalletRpcResponse.SignTransaction
-  | WalletRpcResponse.SignAndSendTransaction
-  | WalletRpcResponse.SignMessage
-  | WalletRpcResponse.EthSignTransaction
-  | WalletRpcResponse.EthSendTransaction
-  | WalletRpcResponse.PersonalSign
-  | WalletRpcResponse.EthSignTypedDataV4
-  | WalletRpcResponse.EthSign7702Authorization
-  | WalletRpcResponse.Secp256k1Sign;
+  | WalletRpcResponse.SolanaSignTransactionRpcResponse
+  | WalletRpcResponse.SolanaSignAndSendTransactionRpcResponse
+  | WalletRpcResponse.SolanaSignMessageRpcResponse
+  | WalletRpcResponse.EthereumSignTransactionRpcResponse
+  | WalletRpcResponse.EthereumSendTransactionRpcResponse
+  | WalletRpcResponse.EthereumPersonalSignRpcResponse
+  | WalletRpcResponse.EthereumSignTypedDataRpcResponse
+  | WalletRpcResponse.EthereumSign7702AuthorizationRpcResponse
+  | WalletRpcResponse.EthereumSecp256k1SignRpcResponse;
 
 export namespace WalletRpcResponse {
-  export interface SignTransaction {
-    data: SignTransaction.Data;
+  export interface SolanaSignTransactionRpcResponse {
+    data: SolanaSignTransactionRpcResponse.Data;
 
     method: 'signTransaction';
   }
 
-  export namespace SignTransaction {
+  export namespace SolanaSignTransactionRpcResponse {
     export interface Data {
       encoding: 'base64';
 
@@ -299,15 +293,15 @@ export namespace WalletRpcResponse {
     }
   }
 
-  export interface SignAndSendTransaction {
+  export interface SolanaSignAndSendTransactionRpcResponse {
     method: 'signAndSendTransaction';
 
-    data?: SignAndSendTransaction.Data;
+    data?: SolanaSignAndSendTransactionRpcResponse.Data;
 
-    error?: SignAndSendTransaction.Error;
+    error?: SolanaSignAndSendTransactionRpcResponse.Error;
   }
 
-  export namespace SignAndSendTransaction {
+  export namespace SolanaSignAndSendTransactionRpcResponse {
     export interface Data {
       caip2: string;
 
@@ -323,13 +317,13 @@ export namespace WalletRpcResponse {
     }
   }
 
-  export interface SignMessage {
-    data: SignMessage.Data;
+  export interface SolanaSignMessageRpcResponse {
+    data: SolanaSignMessageRpcResponse.Data;
 
     method: 'signMessage';
   }
 
-  export namespace SignMessage {
+  export namespace SolanaSignMessageRpcResponse {
     export interface Data {
       encoding: 'base64';
 
@@ -337,13 +331,13 @@ export namespace WalletRpcResponse {
     }
   }
 
-  export interface EthSignTransaction {
-    data: EthSignTransaction.Data;
+  export interface EthereumSignTransactionRpcResponse {
+    data: EthereumSignTransactionRpcResponse.Data;
 
     method: 'eth_signTransaction';
   }
 
-  export namespace EthSignTransaction {
+  export namespace EthereumSignTransactionRpcResponse {
     export interface Data {
       encoding: 'rlp';
 
@@ -351,15 +345,15 @@ export namespace WalletRpcResponse {
     }
   }
 
-  export interface EthSendTransaction {
+  export interface EthereumSendTransactionRpcResponse {
     method: 'eth_sendTransaction';
 
-    data?: EthSendTransaction.Data;
+    data?: EthereumSendTransactionRpcResponse.Data;
 
-    error?: EthSendTransaction.Error;
+    error?: EthereumSendTransactionRpcResponse.Error;
   }
 
-  export namespace EthSendTransaction {
+  export namespace EthereumSendTransactionRpcResponse {
     export interface Data {
       caip2: string;
 
@@ -403,13 +397,13 @@ export namespace WalletRpcResponse {
     }
   }
 
-  export interface PersonalSign {
-    data: PersonalSign.Data;
+  export interface EthereumPersonalSignRpcResponse {
+    data: EthereumPersonalSignRpcResponse.Data;
 
     method: 'personal_sign';
   }
 
-  export namespace PersonalSign {
+  export namespace EthereumPersonalSignRpcResponse {
     export interface Data {
       encoding: 'hex';
 
@@ -417,13 +411,13 @@ export namespace WalletRpcResponse {
     }
   }
 
-  export interface EthSignTypedDataV4 {
-    data: EthSignTypedDataV4.Data;
+  export interface EthereumSignTypedDataRpcResponse {
+    data: EthereumSignTypedDataRpcResponse.Data;
 
     method: 'eth_signTypedData_v4';
   }
 
-  export namespace EthSignTypedDataV4 {
+  export namespace EthereumSignTypedDataRpcResponse {
     export interface Data {
       encoding: 'hex';
 
@@ -431,15 +425,15 @@ export namespace WalletRpcResponse {
     }
   }
 
-  export interface EthSign7702Authorization {
+  export interface EthereumSign7702AuthorizationRpcResponse {
     method: 'eth_sign7702Authorization';
 
-    data?: EthSign7702Authorization.Data;
+    data?: EthereumSign7702AuthorizationRpcResponse.Data;
 
-    error?: EthSign7702Authorization.Error;
+    error?: EthereumSign7702AuthorizationRpcResponse.Error;
   }
 
-  export namespace EthSign7702Authorization {
+  export namespace EthereumSign7702AuthorizationRpcResponse {
     export interface Data {
       authorization: Data.Authorization;
     }
@@ -467,13 +461,13 @@ export namespace WalletRpcResponse {
     }
   }
 
-  export interface Secp256k1Sign {
-    data: Secp256k1Sign.Data;
+  export interface EthereumSecp256k1SignRpcResponse {
+    data: EthereumSecp256k1SignRpcResponse.Data;
 
     method: 'secp256k1_sign';
   }
 
-  export namespace Secp256k1Sign {
+  export namespace EthereumSecp256k1SignRpcResponse {
     export interface Data {
       encoding: 'hex';
 
@@ -484,8 +478,7 @@ export namespace WalletRpcResponse {
 
 export interface WalletCreateParams {
   /**
-   * Body param: Chain type of the wallet. "ethereum" supports any EVM-compatible
-   * network.
+   * Body param: Chain type of the wallet
    */
   chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
 
@@ -599,7 +592,7 @@ export namespace WalletUpdateParams {
 
 export interface WalletListParams extends CursorParams {
   /**
-   * Chain type of the wallet. 'Ethereum' supports any EVM-compatible network.
+   * Chain type of the wallet
    */
   chain_type?: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
 }
@@ -665,7 +658,7 @@ export namespace WalletCreateWalletsWithRecoveryParams {
 
   export interface Wallet {
     /**
-     * Chain type of the wallet. "ethereum" supports any EVM-compatible network.
+     * Chain type of the wallet
      */
     chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
 
@@ -678,18 +671,18 @@ export namespace WalletCreateWalletsWithRecoveryParams {
 }
 
 export type WalletRpcParams =
-  | WalletRpcParams.EthSignTransaction
-  | WalletRpcParams.EthSendTransaction
-  | WalletRpcParams.PersonalSign
-  | WalletRpcParams.EthSignTypedDataV4
-  | WalletRpcParams.EthSign7702Authorization
-  | WalletRpcParams.Secp256k1Sign
-  | WalletRpcParams.SignTransaction
-  | WalletRpcParams.SignAndSendTransaction
-  | WalletRpcParams.SignMessage;
+  | WalletRpcParams.EthereumSignTransactionRpcInput
+  | WalletRpcParams.EthereumSendTransactionRpcInput
+  | WalletRpcParams.PersonalSignRpcInput
+  | WalletRpcParams.EthereumSignTypedDataRpcInput
+  | WalletRpcParams.EthereumSign7702AuthorizationRpcInput
+  | WalletRpcParams.EthereumSecp256k1SignRpcInput
+  | WalletRpcParams.SolanaSignTransactionRpcInput
+  | WalletRpcParams.SolanaSignAndSendTransactionRpcInput
+  | WalletRpcParams.SolanaSignMessageRpcInput;
 
 export declare namespace WalletRpcParams {
-  export interface EthSignTransaction {
+  export interface EthereumSignTransactionRpcInput {
     /**
      * Body param:
      */
@@ -698,7 +691,7 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
-    params: EthSignTransaction.Params;
+    params: EthereumSignTransactionRpcInput.Params;
 
     /**
      * Body param:
@@ -709,6 +702,11 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param:
+     */
+    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -723,7 +721,7 @@ export declare namespace WalletRpcParams {
     'privy-idempotency-key'?: string;
   }
 
-  export namespace EthSignTransaction {
+  export namespace EthereumSignTransactionRpcInput {
     export interface Params {
       transaction: Params.Transaction;
     }
@@ -755,7 +753,7 @@ export declare namespace WalletRpcParams {
     }
   }
 
-  export interface EthSendTransaction {
+  export interface EthereumSendTransactionRpcInput {
     /**
      * Body param:
      */
@@ -769,7 +767,7 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
-    params: EthSendTransaction.Params;
+    params: EthereumSendTransactionRpcInput.Params;
 
     /**
      * Body param:
@@ -780,6 +778,11 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param:
+     */
+    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -794,7 +797,7 @@ export declare namespace WalletRpcParams {
     'privy-idempotency-key'?: string;
   }
 
-  export namespace EthSendTransaction {
+  export namespace EthereumSendTransactionRpcInput {
     export interface Params {
       transaction: Params.Transaction;
     }
@@ -826,7 +829,7 @@ export declare namespace WalletRpcParams {
     }
   }
 
-  export interface PersonalSign {
+  export interface PersonalSignRpcInput {
     /**
      * Body param:
      */
@@ -835,7 +838,7 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
-    params: PersonalSign.Params;
+    params: PersonalSignRpcInput.Params;
 
     /**
      * Body param:
@@ -846,6 +849,11 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param:
+     */
+    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -860,7 +868,7 @@ export declare namespace WalletRpcParams {
     'privy-idempotency-key'?: string;
   }
 
-  export namespace PersonalSign {
+  export namespace PersonalSignRpcInput {
     export interface Params {
       encoding: 'utf-8' | 'hex';
 
@@ -868,7 +876,7 @@ export declare namespace WalletRpcParams {
     }
   }
 
-  export interface EthSignTypedDataV4 {
+  export interface EthereumSignTypedDataRpcInput {
     /**
      * Body param:
      */
@@ -877,7 +885,7 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
-    params: EthSignTypedDataV4.Params;
+    params: EthereumSignTypedDataRpcInput.Params;
 
     /**
      * Body param:
@@ -888,6 +896,11 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param:
+     */
+    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -902,7 +915,7 @@ export declare namespace WalletRpcParams {
     'privy-idempotency-key'?: string;
   }
 
-  export namespace EthSignTypedDataV4 {
+  export namespace EthereumSignTypedDataRpcInput {
     export interface Params {
       typed_data: Params.TypedData;
     }
@@ -928,7 +941,7 @@ export declare namespace WalletRpcParams {
     }
   }
 
-  export interface EthSign7702Authorization {
+  export interface EthereumSign7702AuthorizationRpcInput {
     /**
      * Body param:
      */
@@ -937,7 +950,7 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
-    params: EthSign7702Authorization.Params;
+    params: EthereumSign7702AuthorizationRpcInput.Params;
 
     /**
      * Body param:
@@ -948,6 +961,11 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param:
+     */
+    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -962,7 +980,7 @@ export declare namespace WalletRpcParams {
     'privy-idempotency-key'?: string;
   }
 
-  export namespace EthSign7702Authorization {
+  export namespace EthereumSign7702AuthorizationRpcInput {
     export interface Params {
       chain_id: string | number;
 
@@ -972,7 +990,7 @@ export declare namespace WalletRpcParams {
     }
   }
 
-  export interface Secp256k1Sign {
+  export interface EthereumSecp256k1SignRpcInput {
     /**
      * Body param:
      */
@@ -981,7 +999,7 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
-    params: Secp256k1Sign.Params;
+    params: EthereumSecp256k1SignRpcInput.Params;
 
     /**
      * Body param:
@@ -992,6 +1010,11 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param:
+     */
+    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -1006,13 +1029,13 @@ export declare namespace WalletRpcParams {
     'privy-idempotency-key'?: string;
   }
 
-  export namespace Secp256k1Sign {
+  export namespace EthereumSecp256k1SignRpcInput {
     export interface Params {
       hash: string;
     }
   }
 
-  export interface SignTransaction {
+  export interface SolanaSignTransactionRpcInput {
     /**
      * Body param:
      */
@@ -1021,7 +1044,7 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
-    params: SignTransaction.Params;
+    params: SolanaSignTransactionRpcInput.Params;
 
     /**
      * Body param:
@@ -1034,6 +1057,11 @@ export declare namespace WalletRpcParams {
     chain_type?: 'solana';
 
     /**
+     * Body param:
+     */
+    body_wallet_id?: string;
+
+    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
@@ -1046,7 +1074,7 @@ export declare namespace WalletRpcParams {
     'privy-idempotency-key'?: string;
   }
 
-  export namespace SignTransaction {
+  export namespace SolanaSignTransactionRpcInput {
     export interface Params {
       encoding: 'base64';
 
@@ -1054,7 +1082,7 @@ export declare namespace WalletRpcParams {
     }
   }
 
-  export interface SignAndSendTransaction {
+  export interface SolanaSignAndSendTransactionRpcInput {
     /**
      * Body param:
      */
@@ -1068,7 +1096,7 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
-    params: SignAndSendTransaction.Params;
+    params: SolanaSignAndSendTransactionRpcInput.Params;
 
     /**
      * Body param:
@@ -1079,6 +1107,11 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'solana';
+
+    /**
+     * Body param:
+     */
+    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -1093,7 +1126,7 @@ export declare namespace WalletRpcParams {
     'privy-idempotency-key'?: string;
   }
 
-  export namespace SignAndSendTransaction {
+  export namespace SolanaSignAndSendTransactionRpcInput {
     export interface Params {
       encoding: 'base64';
 
@@ -1101,7 +1134,7 @@ export declare namespace WalletRpcParams {
     }
   }
 
-  export interface SignMessage {
+  export interface SolanaSignMessageRpcInput {
     /**
      * Body param:
      */
@@ -1110,7 +1143,7 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
-    params: SignMessage.Params;
+    params: SolanaSignMessageRpcInput.Params;
 
     /**
      * Body param:
@@ -1121,6 +1154,11 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'solana';
+
+    /**
+     * Body param:
+     */
+    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -1135,7 +1173,7 @@ export declare namespace WalletRpcParams {
     'privy-idempotency-key'?: string;
   }
 
-  export namespace SignMessage {
+  export namespace SolanaSignMessageRpcInput {
     export interface Params {
       encoding: 'base64';
 

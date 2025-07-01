@@ -63,16 +63,19 @@ export class Users extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.users.createCustomMetadata(
+   * const user = await client.users.createCustomMetadata(
    *   'user_id',
+   *   { custom_metadata: { key: 'value' } },
    * );
    * ```
    */
   createCustomMetadata(
     userID: string,
+    body: UserCreateCustomMetadataParams,
     options?: RequestOptions,
-  ): APIPromise<UserCreateCustomMetadataResponse> {
+  ): APIPromise<User> {
     return this._client.post(path`/v1/users/${userID}/custom_metadata`, {
+      body,
       defaultBaseURL: 'https://auth.privy.io',
       ...options,
     });
@@ -100,33 +103,33 @@ export interface User {
   is_guest: boolean;
 
   linked_accounts: Array<
-    | User.Email
-    | User.Phone
-    | User.CrossApp
-    | User.AuthorizationKey
-    | User.CustomJwt
-    | User.Apple
-    | User.Discord
-    | User.GitHub
-    | User.Google
-    | User.Instagram
-    | User.LinkedIn
-    | User.Spotify
-    | User.Tiktok
-    | User.Line
-    | User.Twitter
-    | User.SmartWallet
-    | User.Passkey
-    | User.Farcaster
-    | User.Ethereum
-    | User.EthereumEmbeddedWallet
-    | User.Solana
-    | User.SolanaEmbeddedWallet
-    | User.BitcoinSegwitEmbeddedWallet
-    | User.BitcoinTaprootEmbeddedWallet
+    | User.LinkedAccountEmail
+    | User.LinkedAccountPhone
+    | User.LinkedAccountCrossApp
+    | User.LinkedAccountAuthorizationKey
+    | User.LinkedAccountCustomJwt
+    | User.LinkedAccountAppleOAuth
+    | User.LinkedAccountDiscordOAuth
+    | User.LinkedAccountGitHubOAuth
+    | User.LinkedAccountGoogleOAuth
+    | User.LinkedAccountInstagramOAuth
+    | User.LinkedAccountLinkedInOAuth
+    | User.LinkedAccountSpotifyOAuth
+    | User.LinkedAccountTiktokOAuth
+    | User.LinkedAccountLineOAuth
+    | User.LinkedAccountTwitterOAuth
+    | User.LinkedAccountSmartWallet
+    | User.LinkedAccountPasskey
+    | User.LinkedAccountFarcaster
+    | User.LinkedAccountEthereum
+    | User.LinkedAccountEthereumEmbeddedWallet
+    | User.LinkedAccountSolana
+    | User.LinkedAccountSolanaEmbeddedWallet
+    | User.LinkedAccountBitcoinSegwitEmbeddedWallet
+    | User.LinkedAccountBitcoinTaprootEmbeddedWallet
   >;
 
-  mfa_methods: Array<User.Passkey | User.SMS | User.Totp>;
+  mfa_methods: Array<User.PasskeyMfaMethod | User.SMSMfaMethod | User.TotpMfaMethod>;
 
   /**
    * Custom metadata associated with the user.
@@ -135,7 +138,7 @@ export interface User {
 }
 
 export namespace User {
-  export interface Email {
+  export interface LinkedAccountEmail {
     address: string;
 
     first_verified_at: number | null;
@@ -147,7 +150,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface Phone {
+  export interface LinkedAccountPhone {
     first_verified_at: number | null;
 
     latest_verified_at: number | null;
@@ -161,8 +164,8 @@ export namespace User {
     number?: string;
   }
 
-  export interface CrossApp {
-    embedded_wallets: Array<CrossApp.EmbeddedWallet>;
+  export interface LinkedAccountCrossApp {
+    embedded_wallets: Array<LinkedAccountCrossApp.EmbeddedWallet>;
 
     first_verified_at: number | null;
 
@@ -170,7 +173,7 @@ export namespace User {
 
     provider_app_id: string;
 
-    smart_wallets: Array<CrossApp.SmartWallet>;
+    smart_wallets: Array<LinkedAccountCrossApp.SmartWallet>;
 
     subject: string;
 
@@ -179,7 +182,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export namespace CrossApp {
+  export namespace LinkedAccountCrossApp {
     export interface EmbeddedWallet {
       address: string;
     }
@@ -189,7 +192,7 @@ export namespace User {
     }
   }
 
-  export interface AuthorizationKey {
+  export interface LinkedAccountAuthorizationKey {
     first_verified_at: number | null;
 
     latest_verified_at: number | null;
@@ -201,7 +204,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface CustomJwt {
+  export interface LinkedAccountCustomJwt {
     custom_user_id: string;
 
     first_verified_at: number | null;
@@ -213,7 +216,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface Apple {
+  export interface LinkedAccountAppleOAuth {
     email: string | null;
 
     first_verified_at: number | null;
@@ -227,7 +230,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface Discord {
+  export interface LinkedAccountDiscordOAuth {
     email: string | null;
 
     first_verified_at: number | null;
@@ -243,7 +246,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface GitHub {
+  export interface LinkedAccountGitHubOAuth {
     email: string | null;
 
     first_verified_at: number | null;
@@ -261,7 +264,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface Google {
+  export interface LinkedAccountGoogleOAuth {
     email: string;
 
     first_verified_at: number | null;
@@ -277,7 +280,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface Instagram {
+  export interface LinkedAccountInstagramOAuth {
     first_verified_at: number | null;
 
     latest_verified_at: number | null;
@@ -291,7 +294,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface LinkedIn {
+  export interface LinkedAccountLinkedInOAuth {
     email: string | null;
 
     first_verified_at: number | null;
@@ -309,7 +312,7 @@ export namespace User {
     vanity_name?: string;
   }
 
-  export interface Spotify {
+  export interface LinkedAccountSpotifyOAuth {
     email: string | null;
 
     first_verified_at: number | null;
@@ -325,7 +328,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface Tiktok {
+  export interface LinkedAccountTiktokOAuth {
     first_verified_at: number | null;
 
     latest_verified_at: number | null;
@@ -341,7 +344,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface Line {
+  export interface LinkedAccountLineOAuth {
     email: string | null;
 
     first_verified_at: number | null;
@@ -359,7 +362,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface Twitter {
+  export interface LinkedAccountTwitterOAuth {
     first_verified_at: number | null;
 
     latest_verified_at: number | null;
@@ -377,7 +380,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface SmartWallet {
+  export interface LinkedAccountSmartWallet {
     address: string;
 
     first_verified_at: number | null;
@@ -397,7 +400,7 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface Passkey {
+  export interface LinkedAccountPasskey {
     credential_id: string;
 
     enrolled_in_mfa: boolean;
@@ -419,7 +422,7 @@ export namespace User {
     created_with_os?: string;
   }
 
-  export interface Farcaster {
+  export interface LinkedAccountFarcaster {
     fid: number;
 
     first_verified_at: number | null;
@@ -447,7 +450,7 @@ export namespace User {
     username?: string;
   }
 
-  export interface Ethereum {
+  export interface LinkedAccountEthereum {
     address: string;
 
     chain_type: 'ethereum';
@@ -469,7 +472,7 @@ export namespace User {
     wallet_client_type?: string;
   }
 
-  export interface EthereumEmbeddedWallet {
+  export interface LinkedAccountEthereumEmbeddedWallet {
     id: string | null;
 
     address: string;
@@ -507,7 +510,7 @@ export namespace User {
     wallet_index: number;
   }
 
-  export interface Solana {
+  export interface LinkedAccountSolana {
     address: string;
 
     chain_type: 'solana';
@@ -527,7 +530,7 @@ export namespace User {
     wallet_client_type?: string;
   }
 
-  export interface SolanaEmbeddedWallet {
+  export interface LinkedAccountSolanaEmbeddedWallet {
     id: string | null;
 
     address: string;
@@ -567,7 +570,7 @@ export namespace User {
     wallet_index: number;
   }
 
-  export interface BitcoinSegwitEmbeddedWallet {
+  export interface LinkedAccountBitcoinSegwitEmbeddedWallet {
     id: string | null;
 
     address: string;
@@ -607,7 +610,7 @@ export namespace User {
     wallet_index: number;
   }
 
-  export interface BitcoinTaprootEmbeddedWallet {
+  export interface LinkedAccountBitcoinTaprootEmbeddedWallet {
     id: string | null;
 
     address: string;
@@ -647,47 +650,43 @@ export namespace User {
     wallet_index: number;
   }
 
-  export interface Passkey {
+  export interface PasskeyMfaMethod {
     type: 'passkey';
 
     verified_at: number;
   }
 
-  export interface SMS {
+  export interface SMSMfaMethod {
     type: 'sms';
 
     verified_at: number;
   }
 
-  export interface Totp {
+  export interface TotpMfaMethod {
     type: 'totp';
 
     verified_at: number;
   }
 }
 
-export interface UserCreateCustomMetadataResponse {
-  custom_metadata: { [key: string]: string | number | boolean };
-}
-
 export interface UserCreateParams {
   linked_accounts: Array<
-    | UserCreateParams.Wallet
-    | UserCreateParams.Email
-    | UserCreateParams.Phone
-    | UserCreateParams.Google
-    | UserCreateParams.Twitter
-    | UserCreateParams.Discord
-    | UserCreateParams.GitHub
-    | UserCreateParams.Spotify
-    | UserCreateParams.Instagram
-    | UserCreateParams.Tiktok
-    | UserCreateParams.Line
-    | UserCreateParams.Apple
-    | UserCreateParams.LinkedIn
-    | UserCreateParams.Farcaster
-    | UserCreateParams.Telegram
-    | UserCreateParams.CustomJwt
+    | UserCreateParams.LinkedAccountWalletInput
+    | UserCreateParams.LinkedAccountEmailInput
+    | UserCreateParams.LinkedAccountPhoneInput
+    | UserCreateParams.LinkedAccountGoogleInput
+    | UserCreateParams.LinkedAccountTwitterInput
+    | UserCreateParams.LinkedAccountDiscordInput
+    | UserCreateParams.LinkedAccountGitHubInput
+    | UserCreateParams.LinkedAccountSpotifyInput
+    | UserCreateParams.LinkedAccountInstagramInput
+    | UserCreateParams.LinkedAccountTiktokInput
+    | UserCreateParams.LinkedAccountLineInput
+    | UserCreateParams.LinkedAccountAppleInput
+    | UserCreateParams.LinkedAccountLinkedInInput
+    | UserCreateParams.LinkedAccountFarcasterInput
+    | UserCreateParams.LinkedAccountTelegramInput
+    | UserCreateParams.LinkedAccountCustomJwtInput
   >;
 
   /**
@@ -702,7 +701,7 @@ export interface UserCreateParams {
 }
 
 export namespace UserCreateParams {
-  export interface Wallet {
+  export interface LinkedAccountWalletInput {
     address: string;
 
     chain_type: 'ethereum' | 'solana';
@@ -710,19 +709,19 @@ export namespace UserCreateParams {
     type: 'wallet';
   }
 
-  export interface Email {
+  export interface LinkedAccountEmailInput {
     address: string;
 
     type: 'email';
   }
 
-  export interface Phone {
+  export interface LinkedAccountPhoneInput {
     number: string;
 
     type: 'phone';
   }
 
-  export interface Google {
+  export interface LinkedAccountGoogleInput {
     email: string;
 
     name: string;
@@ -732,7 +731,7 @@ export namespace UserCreateParams {
     type: 'google_oauth';
   }
 
-  export interface Twitter {
+  export interface LinkedAccountTwitterInput {
     name: string;
 
     subject: string;
@@ -744,7 +743,7 @@ export namespace UserCreateParams {
     profile_picture_url?: string;
   }
 
-  export interface Discord {
+  export interface LinkedAccountDiscordInput {
     subject: string;
 
     type: 'discord_oauth';
@@ -754,7 +753,7 @@ export namespace UserCreateParams {
     email?: string;
   }
 
-  export interface GitHub {
+  export interface LinkedAccountGitHubInput {
     subject: string;
 
     type: 'github_oauth';
@@ -766,7 +765,7 @@ export namespace UserCreateParams {
     name?: string;
   }
 
-  export interface Spotify {
+  export interface LinkedAccountSpotifyInput {
     subject: string;
 
     type: 'spotify_oauth';
@@ -776,7 +775,7 @@ export namespace UserCreateParams {
     name?: string;
   }
 
-  export interface Instagram {
+  export interface LinkedAccountInstagramInput {
     subject: string;
 
     type: 'instagram_oauth';
@@ -784,7 +783,7 @@ export namespace UserCreateParams {
     username: string;
   }
 
-  export interface Tiktok {
+  export interface LinkedAccountTiktokInput {
     name: string | null;
 
     subject: string;
@@ -794,7 +793,7 @@ export namespace UserCreateParams {
     username: string;
   }
 
-  export interface Line {
+  export interface LinkedAccountLineInput {
     subject: string;
 
     type: 'line_oauth';
@@ -806,7 +805,7 @@ export namespace UserCreateParams {
     profile_picture_url?: string;
   }
 
-  export interface Apple {
+  export interface LinkedAccountAppleInput {
     subject: string;
 
     type: 'apple_oauth';
@@ -814,7 +813,7 @@ export namespace UserCreateParams {
     email?: string;
   }
 
-  export interface LinkedIn {
+  export interface LinkedAccountLinkedInInput {
     subject: string;
 
     type: 'linkedin_oauth';
@@ -826,7 +825,7 @@ export namespace UserCreateParams {
     vanityName?: string;
   }
 
-  export interface Farcaster {
+  export interface LinkedAccountFarcasterInput {
     fid: number;
 
     owner_address: string;
@@ -844,7 +843,7 @@ export namespace UserCreateParams {
     username?: string;
   }
 
-  export interface Telegram {
+  export interface LinkedAccountTelegramInput {
     telegram_user_id: string;
 
     type: 'telegram';
@@ -858,7 +857,7 @@ export namespace UserCreateParams {
     username?: string;
   }
 
-  export interface CustomJwt {
+  export interface LinkedAccountCustomJwtInput {
     custom_user_id: string;
 
     type: 'custom_auth';
@@ -866,7 +865,7 @@ export namespace UserCreateParams {
 
   export interface Wallet {
     /**
-     * Chain type of the wallet. 'Ethereum' supports any EVM-compatible network.
+     * Chain type of the wallet
      */
     chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
 
@@ -907,12 +906,19 @@ export namespace UserCreateParams {
 
 export interface UserListParams extends CursorParams {}
 
+export interface UserCreateCustomMetadataParams {
+  /**
+   * Custom metadata associated with the user.
+   */
+  custom_metadata: { [key: string]: string | number | boolean };
+}
+
 export declare namespace Users {
   export {
     type User as User,
-    type UserCreateCustomMetadataResponse as UserCreateCustomMetadataResponse,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
+    type UserCreateCustomMetadataParams as UserCreateCustomMetadataParams,
   };
 }

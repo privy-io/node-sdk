@@ -14,23 +14,22 @@ export class Policies extends APIResource {
    * ```ts
    * const policy = await client.policies.create({
    *   chain_type: 'ethereum',
-   *   name: 'Allowlisted stablecoins',
+   *   name: 'name',
    *   rules: [
    *     {
+   *       id: 'rule_123',
    *       action: 'ALLOW',
    *       conditions: [
-   *         { ... },
+   *         {
+   *           field: 'to',
+   *           field_source: 'ethereum_transaction',
+   *           operator: 'eq',
+   *           value:
+   *             '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+   *         },
    *       ],
    *       method: 'eth_sendTransaction',
    *       name: 'Allowlist USDC contract on Base',
-   *     },
-   *     {
-   *       action: 'ALLOW',
-   *       conditions: [
-   *         { ... },
-   *       ],
-   *       method: 'eth_sendTransaction',
-   *       name: 'Allowlist USDT contract on Base',
    *     },
    *   ],
    *   version: '1.0',
@@ -136,9 +135,6 @@ export interface Policy {
    */
   owner_id: string | null;
 
-  /**
-   * The rules that apply to each method the policy covers.
-   */
   rules: Array<Policy.Rule>;
 
   /**
@@ -148,6 +144,10 @@ export interface Policy {
 }
 
 export namespace Policy {
+  /**
+   * A rule that defines the conditions and action to take if the conditions are
+   * true.
+   */
   export interface Rule {
     id: string;
 
@@ -156,19 +156,15 @@ export namespace Policy {
      */
     action: 'ALLOW' | 'DENY';
 
-    /**
-     * An unordered set of boolean conditions that define the action the rule allows or
-     * denies.
-     */
     conditions: Array<
-      | Rule.EthereumTransaction
-      | Rule.EthereumCalldata
-      | Rule.EthereumTypedDataDomain
-      | Rule.EthereumTypedDataMessage
-      | Rule.Ethereum7702Authorization
-      | Rule.SolanaProgramInstruction
-      | Rule.SolanaSystemProgramInstruction
-      | Rule.SolanaTokenProgramInstruction
+      | Rule.EthereumTransactionCondition
+      | Rule.EthereumCalldataCondition
+      | Rule.EthereumTypedDataDomainCondition
+      | Rule.EthereumTypedDataMessageCondition
+      | Rule.Ethereum7702AuthorizationCondition
+      | Rule.SolanaProgramInstructionCondition
+      | Rule.SolanaSystemProgramInstructionCondition
+      | Rule.SolanaTokenProgramInstructionCondition
     >;
 
     /**
@@ -195,7 +191,7 @@ export namespace Policy {
      * The verbatim Ethereum transaction object in an eth_signTransaction or
      * eth_sendTransaction request.
      */
-    export interface EthereumTransaction {
+    export interface EthereumTransactionCondition {
       field: 'to' | 'value';
 
       field_source: 'ethereum_transaction';
@@ -210,7 +206,7 @@ export namespace Policy {
      * method's parameters. Note that that 'ethereum_calldata' conditions must contain
      * an abi parameter with the JSON ABI of the smart contract.
      */
-    export interface EthereumCalldata {
+    export interface EthereumCalldataCondition {
       abi: unknown;
 
       field: string;
@@ -225,7 +221,7 @@ export namespace Policy {
     /**
      * Attributes from the signing domain that will verify the signature.
      */
-    export interface EthereumTypedDataDomain {
+    export interface EthereumTypedDataDomainCondition {
       field: 'chainId' | 'verifyingContract';
 
       field_source: 'ethereum_typed_data_domain';
@@ -239,19 +235,19 @@ export namespace Policy {
      * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
      * EIP-712.
      */
-    export interface EthereumTypedDataMessage {
+    export interface EthereumTypedDataMessageCondition {
       field: string;
 
       field_source: 'ethereum_typed_data_message';
 
       operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
 
-      typed_data: EthereumTypedDataMessage.TypedData;
+      typed_data: EthereumTypedDataMessageCondition.TypedData;
 
       value: string | Array<string>;
     }
 
-    export namespace EthereumTypedDataMessage {
+    export namespace EthereumTypedDataMessageCondition {
       export interface TypedData {
         primary_type: string;
 
@@ -270,7 +266,7 @@ export namespace Policy {
     /**
      * Allowed contract addresses for eth_signAuthorization requests.
      */
-    export interface Ethereum7702Authorization {
+    export interface Ethereum7702AuthorizationCondition {
       field: 'contract';
 
       field_source: 'ethereum_7702_authorization';
@@ -283,7 +279,7 @@ export namespace Policy {
     /**
      * Solana Program attributes, enables allowlisting Solana Programs.
      */
-    export interface SolanaProgramInstruction {
+    export interface SolanaProgramInstructionCondition {
       field: 'programId';
 
       field_source: 'solana_program_instruction';
@@ -297,7 +293,7 @@ export namespace Policy {
      * Solana System Program attributes, including more granular Transfer instruction
      * fields.
      */
-    export interface SolanaSystemProgramInstruction {
+    export interface SolanaSystemProgramInstructionCondition {
       field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
 
       field_source: 'solana_system_program_instruction';
@@ -311,7 +307,7 @@ export namespace Policy {
      * Solana Token Program attributes, including more granular TransferChecked
      * instruction fields.
      */
-    export interface SolanaTokenProgramInstruction {
+    export interface SolanaTokenProgramInstructionCondition {
       field:
         | 'instructionName'
         | 'TransferChecked.source'
@@ -348,7 +344,7 @@ export interface PolicyCreateParams {
   name: string;
 
   /**
-   * Body param: The rules that apply to each method the policy covers.
+   * Body param:
    */
   rules: Array<PolicyCreateParams.Rule>;
 
@@ -378,25 +374,27 @@ export interface PolicyCreateParams {
 }
 
 export namespace PolicyCreateParams {
+  /**
+   * A rule that defines the conditions and action to take if the conditions are
+   * true.
+   */
   export interface Rule {
+    id: string;
+
     /**
      * Action to take if the conditions are true.
      */
     action: 'ALLOW' | 'DENY';
 
-    /**
-     * An unordered set of boolean conditions that define the action the rule allows or
-     * denies.
-     */
     conditions: Array<
-      | Rule.EthereumTransaction
-      | Rule.EthereumCalldata
-      | Rule.EthereumTypedDataDomain
-      | Rule.EthereumTypedDataMessage
-      | Rule.Ethereum7702Authorization
-      | Rule.SolanaProgramInstruction
-      | Rule.SolanaSystemProgramInstruction
-      | Rule.SolanaTokenProgramInstruction
+      | Rule.EthereumTransactionCondition
+      | Rule.EthereumCalldataCondition
+      | Rule.EthereumTypedDataDomainCondition
+      | Rule.EthereumTypedDataMessageCondition
+      | Rule.Ethereum7702AuthorizationCondition
+      | Rule.SolanaProgramInstructionCondition
+      | Rule.SolanaSystemProgramInstructionCondition
+      | Rule.SolanaTokenProgramInstructionCondition
     >;
 
     /**
@@ -423,7 +421,7 @@ export namespace PolicyCreateParams {
      * The verbatim Ethereum transaction object in an eth_signTransaction or
      * eth_sendTransaction request.
      */
-    export interface EthereumTransaction {
+    export interface EthereumTransactionCondition {
       field: 'to' | 'value';
 
       field_source: 'ethereum_transaction';
@@ -438,7 +436,7 @@ export namespace PolicyCreateParams {
      * method's parameters. Note that that 'ethereum_calldata' conditions must contain
      * an abi parameter with the JSON ABI of the smart contract.
      */
-    export interface EthereumCalldata {
+    export interface EthereumCalldataCondition {
       abi: unknown;
 
       field: string;
@@ -453,7 +451,7 @@ export namespace PolicyCreateParams {
     /**
      * Attributes from the signing domain that will verify the signature.
      */
-    export interface EthereumTypedDataDomain {
+    export interface EthereumTypedDataDomainCondition {
       field: 'chainId' | 'verifyingContract';
 
       field_source: 'ethereum_typed_data_domain';
@@ -467,19 +465,19 @@ export namespace PolicyCreateParams {
      * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
      * EIP-712.
      */
-    export interface EthereumTypedDataMessage {
+    export interface EthereumTypedDataMessageCondition {
       field: string;
 
       field_source: 'ethereum_typed_data_message';
 
       operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
 
-      typed_data: EthereumTypedDataMessage.TypedData;
+      typed_data: EthereumTypedDataMessageCondition.TypedData;
 
       value: string | Array<string>;
     }
 
-    export namespace EthereumTypedDataMessage {
+    export namespace EthereumTypedDataMessageCondition {
       export interface TypedData {
         primary_type: string;
 
@@ -498,7 +496,7 @@ export namespace PolicyCreateParams {
     /**
      * Allowed contract addresses for eth_signAuthorization requests.
      */
-    export interface Ethereum7702Authorization {
+    export interface Ethereum7702AuthorizationCondition {
       field: 'contract';
 
       field_source: 'ethereum_7702_authorization';
@@ -511,7 +509,7 @@ export namespace PolicyCreateParams {
     /**
      * Solana Program attributes, enables allowlisting Solana Programs.
      */
-    export interface SolanaProgramInstruction {
+    export interface SolanaProgramInstructionCondition {
       field: 'programId';
 
       field_source: 'solana_program_instruction';
@@ -525,7 +523,7 @@ export namespace PolicyCreateParams {
      * Solana System Program attributes, including more granular Transfer instruction
      * fields.
      */
-    export interface SolanaSystemProgramInstruction {
+    export interface SolanaSystemProgramInstructionCondition {
       field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
 
       field_source: 'solana_system_program_instruction';
@@ -539,7 +537,7 @@ export namespace PolicyCreateParams {
      * Solana Token Program attributes, including more granular TransferChecked
      * instruction fields.
      */
-    export interface SolanaTokenProgramInstruction {
+    export interface SolanaTokenProgramInstructionCondition {
       field:
         | 'instructionName'
         | 'TransferChecked.source'
@@ -584,7 +582,7 @@ export interface PolicyUpdateParams {
   owner_id?: string | null;
 
   /**
-   * Body param: The rules that apply to each method the policy covers.
+   * Body param:
    */
   rules?: Array<PolicyUpdateParams.Rule>;
 
@@ -604,25 +602,27 @@ export namespace PolicyUpdateParams {
     public_key: string;
   }
 
+  /**
+   * A rule that defines the conditions and action to take if the conditions are
+   * true.
+   */
   export interface Rule {
+    id: string;
+
     /**
      * Action to take if the conditions are true.
      */
     action: 'ALLOW' | 'DENY';
 
-    /**
-     * An unordered set of boolean conditions that define the action the rule allows or
-     * denies.
-     */
     conditions: Array<
-      | Rule.EthereumTransaction
-      | Rule.EthereumCalldata
-      | Rule.EthereumTypedDataDomain
-      | Rule.EthereumTypedDataMessage
-      | Rule.Ethereum7702Authorization
-      | Rule.SolanaProgramInstruction
-      | Rule.SolanaSystemProgramInstruction
-      | Rule.SolanaTokenProgramInstruction
+      | Rule.EthereumTransactionCondition
+      | Rule.EthereumCalldataCondition
+      | Rule.EthereumTypedDataDomainCondition
+      | Rule.EthereumTypedDataMessageCondition
+      | Rule.Ethereum7702AuthorizationCondition
+      | Rule.SolanaProgramInstructionCondition
+      | Rule.SolanaSystemProgramInstructionCondition
+      | Rule.SolanaTokenProgramInstructionCondition
     >;
 
     /**
@@ -649,7 +649,7 @@ export namespace PolicyUpdateParams {
      * The verbatim Ethereum transaction object in an eth_signTransaction or
      * eth_sendTransaction request.
      */
-    export interface EthereumTransaction {
+    export interface EthereumTransactionCondition {
       field: 'to' | 'value';
 
       field_source: 'ethereum_transaction';
@@ -664,7 +664,7 @@ export namespace PolicyUpdateParams {
      * method's parameters. Note that that 'ethereum_calldata' conditions must contain
      * an abi parameter with the JSON ABI of the smart contract.
      */
-    export interface EthereumCalldata {
+    export interface EthereumCalldataCondition {
       abi: unknown;
 
       field: string;
@@ -679,7 +679,7 @@ export namespace PolicyUpdateParams {
     /**
      * Attributes from the signing domain that will verify the signature.
      */
-    export interface EthereumTypedDataDomain {
+    export interface EthereumTypedDataDomainCondition {
       field: 'chainId' | 'verifyingContract';
 
       field_source: 'ethereum_typed_data_domain';
@@ -693,19 +693,19 @@ export namespace PolicyUpdateParams {
      * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
      * EIP-712.
      */
-    export interface EthereumTypedDataMessage {
+    export interface EthereumTypedDataMessageCondition {
       field: string;
 
       field_source: 'ethereum_typed_data_message';
 
       operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
 
-      typed_data: EthereumTypedDataMessage.TypedData;
+      typed_data: EthereumTypedDataMessageCondition.TypedData;
 
       value: string | Array<string>;
     }
 
-    export namespace EthereumTypedDataMessage {
+    export namespace EthereumTypedDataMessageCondition {
       export interface TypedData {
         primary_type: string;
 
@@ -724,7 +724,7 @@ export namespace PolicyUpdateParams {
     /**
      * Allowed contract addresses for eth_signAuthorization requests.
      */
-    export interface Ethereum7702Authorization {
+    export interface Ethereum7702AuthorizationCondition {
       field: 'contract';
 
       field_source: 'ethereum_7702_authorization';
@@ -737,7 +737,7 @@ export namespace PolicyUpdateParams {
     /**
      * Solana Program attributes, enables allowlisting Solana Programs.
      */
-    export interface SolanaProgramInstruction {
+    export interface SolanaProgramInstructionCondition {
       field: 'programId';
 
       field_source: 'solana_program_instruction';
@@ -751,7 +751,7 @@ export namespace PolicyUpdateParams {
      * Solana System Program attributes, including more granular Transfer instruction
      * fields.
      */
-    export interface SolanaSystemProgramInstruction {
+    export interface SolanaSystemProgramInstructionCondition {
       field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
 
       field_source: 'solana_system_program_instruction';
@@ -765,7 +765,7 @@ export namespace PolicyUpdateParams {
      * Solana Token Program attributes, including more granular TransferChecked
      * instruction fields.
      */
-    export interface SolanaTokenProgramInstruction {
+    export interface SolanaTokenProgramInstructionCondition {
       field:
         | 'instructionName'
         | 'TransferChecked.source'

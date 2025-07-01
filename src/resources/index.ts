@@ -19,9 +19,9 @@ export { Transactions } from './transactions';
 export {
   Users,
   type User,
-  type UserCreateCustomMetadataResponse,
   type UserCreateParams,
   type UserListParams,
+  type UserCreateCustomMetadataParams,
   type UsersCursor,
 } from './users';
 export {

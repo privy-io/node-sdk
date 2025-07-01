@@ -13,9 +13,10 @@ describe('resource policies', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.policies.create({
       chain_type: 'ethereum',
-      name: 'Allowlisted stablecoins',
+      name: 'name',
       rules: [
         {
+          id: 'rule_123',
           action: 'ALLOW',
           conditions: [
             {
@@ -27,19 +28,6 @@ describe('resource policies', () => {
           ],
           method: 'eth_sendTransaction',
           name: 'Allowlist USDC contract on Base',
-        },
-        {
-          action: 'ALLOW',
-          conditions: [
-            {
-              field: 'to',
-              field_source: 'ethereum_transaction',
-              operator: 'eq',
-              value: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2',
-            },
-          ],
-          method: 'eth_sendTransaction',
-          name: 'Allowlist USDT contract on Base',
         },
       ],
       version: '1.0',
@@ -57,9 +45,10 @@ describe('resource policies', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.policies.create({
       chain_type: 'ethereum',
-      name: 'Allowlisted stablecoins',
+      name: 'name',
       rules: [
         {
+          id: 'rule_123',
           action: 'ALLOW',
           conditions: [
             {
@@ -71,19 +60,6 @@ describe('resource policies', () => {
           ],
           method: 'eth_sendTransaction',
           name: 'Allowlist USDC contract on Base',
-        },
-        {
-          action: 'ALLOW',
-          conditions: [
-            {
-              field: 'to',
-              field_source: 'ethereum_transaction',
-              operator: 'eq',
-              value: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2',
-            },
-          ],
-          method: 'eth_sendTransaction',
-          name: 'Allowlist USDT contract on Base',
         },
       ],
       version: '1.0',

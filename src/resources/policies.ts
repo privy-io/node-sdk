@@ -346,15 +346,14 @@ export interface PolicyCreateParams {
   version: '1.0';
 
   /**
-   * Body param: The pem-formatted, P-256 public key of the owner of the policy. If
-   * you provide this, do not specify an owner_id as it will be generated
-   * automatically.
+   * Body param: The P-256 public key of the owner of the resource. If you provide
+   * this, do not specify an owner_id as it will be generated automatically.
    */
-  owner?: PolicyCreateParams.UserID | PolicyCreateParams.PublicKey | null;
+  owner?: PolicyCreateParams.Owner;
 
   /**
-   * Body param: The key quorum ID to set as the owner of the policy. If you provide
-   * this, do not specify an owner.
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
    */
   owner_id?: string | null;
 
@@ -540,13 +539,11 @@ export namespace PolicyCreateParams {
     }
   }
 
-  export interface UserID {
-    user_id: string;
-  }
-
-  export interface PublicKey {
-    public_key: string;
-  }
+  /**
+   * The P-256 public key of the owner of the resource. If you provide this, do not
+   * specify an owner_id as it will be generated automatically.
+   */
+  export interface Owner {}
 }
 
 export interface PolicyUpdateParams {
@@ -556,14 +553,14 @@ export interface PolicyUpdateParams {
   name?: string;
 
   /**
-   * Body param: The P-256 public key of the owner of the policy. If you provide
+   * Body param: The P-256 public key of the owner of the resource. If you provide
    * this, do not specify an owner_id as it will be generated automatically.
    */
-  owner?: PolicyUpdateParams.Owner | null;
+  owner?: PolicyUpdateParams.Owner;
 
   /**
-   * Body param: The key quorum ID to set as the owner of the policy. If you provide
-   * this, do not specify an owner.
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
    */
   owner_id?: string | null;
 
@@ -581,12 +578,10 @@ export interface PolicyUpdateParams {
 
 export namespace PolicyUpdateParams {
   /**
-   * The P-256 public key of the owner of the policy. If you provide this, do not
+   * The P-256 public key of the owner of the resource. If you provide this, do not
    * specify an owner_id as it will be generated automatically.
    */
-  export interface Owner {
-    public_key: string;
-  }
+  export interface Owner {}
 
   /**
    * The rules that apply to each method the policy covers.

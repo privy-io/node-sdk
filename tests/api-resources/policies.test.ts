@@ -51,7 +51,7 @@ describe('resource policies', () => {
         },
       ],
       version: '1.0',
-      owner: { user_id: 'user_id' },
+      owner: {},
       owner_id: 'owner_id',
       'privy-authorization-signature': 'privy-authorization-signature',
     });

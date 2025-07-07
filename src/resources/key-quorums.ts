@@ -12,12 +12,7 @@ export class KeyQuorums extends APIResource {
    *
    * @example
    * ```ts
-   * const keyQuorum = await client.keyQuorums.create({
-   *   public_keys: [
-   *     '-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx4aoeD72yykviK+f/ckqE2CItVIG\n1rCnvC3/XZ1HgpOcMEMialRmTrqIK4oZlYd1RfxU3za/C9yjhboIuoPD3g==\n-----END PUBLIC KEY-----',
-   *     '-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAErzZtQr/bMIh3Y8f9ZqseB9i/AfjQ\nhu+agbNqXcJy/TfoNqvc/Y3Mh7gIZ8ZLXQEykycx4mYSpqrxp1lBKqsZDQ==\n-----END PUBLIC KEY-----",',
-   *   ],
-   * });
+   * const keyQuorum = await client.keyQuorums.create();
    * ```
    */
   create(body: KeyQuorumCreateParams, options?: RequestOptions): APIPromise<KeyQuorum> {
@@ -31,11 +26,6 @@ export class KeyQuorums extends APIResource {
    * ```ts
    * const keyQuorum = await client.keyQuorums.update(
    *   'key_quorum_id',
-   *   {
-   *     public_keys: [
-   *       '-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx4aoeD72yykviK+f/ckqE2CItVIG\n1rCnvC3/XZ1HgpOcMEMialRmTrqIK4oZlYd1RfxU3za/C9yjhboIuoPD3g==\n-----END PUBLIC KEY-----',
-   *     ],
-   *   },
    * );
    * ```
    */
@@ -110,28 +100,35 @@ export namespace KeyQuorum {
 }
 
 export interface KeyQuorumCreateParams {
-  public_keys: Array<string>;
-
   authorization_threshold?: number;
 
   display_name?: string;
+
+  public_keys?: Array<string>;
+
+  user_ids?: Array<string>;
 }
 
 export interface KeyQuorumUpdateParams {
   /**
    * Body param:
    */
-  public_keys: Array<string>;
-
-  /**
-   * Body param:
-   */
   authorization_threshold?: number;
 
   /**
    * Body param:
    */
   display_name?: string;
+
+  /**
+   * Body param:
+   */
+  public_keys?: Array<string>;
+
+  /**
+   * Body param:
+   */
+  user_ids?: Array<string>;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are

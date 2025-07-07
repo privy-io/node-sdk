@@ -488,16 +488,16 @@ export interface WalletCreateParams {
   additional_signers?: Array<WalletCreateParams.AdditionalSigner>;
 
   /**
-   * Body param: The P-256 public key of the owner of the wallet. If you provide
+   * Body param: The P-256 public key of the owner of the resource. If you provide
    * this, do not specify an owner_id as it will be generated automatically.
    */
-  owner?: WalletCreateParams.PublicKey | WalletCreateParams.UserID | null;
+  owner?: WalletCreateParams.PublicKeyOwner | WalletCreateParams.UserOwner;
 
   /**
-   * Body param: The key quorum ID to set as the owner of the wallet. If you provide
-   * this, do not specify an owner.
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
    */
-  owner_id?: string | null;
+  owner_id?: string;
 
   /**
    * Body param: List of policy IDs for policies that should be enforced on the
@@ -526,19 +526,19 @@ export namespace WalletCreateParams {
   }
 
   /**
-   * The P-256 public key of the owner of the wallet. If you provide this, do not
+   * The P-256 public key of the owner of the resource. If you provide this, do not
    * specify an owner_id as it will be generated automatically.
    */
-  export interface PublicKey {
+  export interface PublicKeyOwner {
     public_key: string;
   }
 
   /**
-   * The user ID of the owner of the wallet. The user must already exist, and this
+   * The user ID of the owner of the resource. The user must already exist, and this
    * value must start with "did:privy:". If you provide this, do not specify an
    * owner_id as it will be generated automatically.
    */
-  export interface UserID {
+  export interface UserOwner {
     user_id: string;
   }
 }
@@ -550,14 +550,14 @@ export interface WalletUpdateParams {
   additional_signers?: Array<WalletUpdateParams.AdditionalSigner>;
 
   /**
-   * Body param: The P-256 public key of the owner of the wallet. If you provide
+   * Body param: The P-256 public key of the owner of the resource. If you provide
    * this, do not specify an owner_id as it will be generated automatically.
    */
-  owner?: WalletUpdateParams.Owner | null;
+  owner?: WalletUpdateParams.Owner;
 
   /**
-   * Body param: The key quorum ID to set as the owner of the wallet. If you provide
-   * this, do not specify an owner.
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
    */
   owner_id?: string | null;
 
@@ -582,12 +582,10 @@ export namespace WalletUpdateParams {
   }
 
   /**
-   * The P-256 public key of the owner of the wallet. If you provide this, do not
+   * The P-256 public key of the owner of the resource. If you provide this, do not
    * specify an owner_id as it will be generated automatically.
    */
-  export interface Owner {
-    public_key: string;
-  }
+  export interface Owner {}
 }
 
 export interface WalletListParams extends CursorParams {

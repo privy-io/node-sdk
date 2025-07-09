@@ -589,10 +589,9 @@ export namespace WalletUpdateParams {
 }
 
 export interface WalletListParams extends CursorParams {
-  /**
-   * Chain type of the wallet
-   */
-  chain_type?: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
+  chain_type?: 'cosmos' | 'stellar' | 'sui' | 'tron' | 'solana' | 'ethereum';
+
+  user_id?: string;
 }
 
 export interface WalletAuthenticateWithJwtParams {

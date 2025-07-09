@@ -488,10 +488,11 @@ export interface WalletCreateParams {
   additional_signers?: Array<WalletCreateParams.AdditionalSigner>;
 
   /**
-   * Body param: The P-256 public key of the owner of the resource. If you provide
-   * this, do not specify an owner_id as it will be generated automatically.
+   * Body param: The owner of the resource. If you provide this, do not specify an
+   * owner_id as it will be generated automatically. When updating a wallet, you can
+   * set the owner to null to remove the owner.
    */
-  owner?: WalletCreateParams.PublicKeyOwner | WalletCreateParams.UserOwner;
+  owner?: WalletCreateParams.PublicKeyOwner | WalletCreateParams.UserOwner | null;
 
   /**
    * Body param: The key quorum ID to set as the owner of the resource. If you
@@ -550,10 +551,11 @@ export interface WalletUpdateParams {
   additional_signers?: Array<WalletUpdateParams.AdditionalSigner>;
 
   /**
-   * Body param: The P-256 public key of the owner of the resource. If you provide
-   * this, do not specify an owner_id as it will be generated automatically.
+   * Body param: The owner of the resource. If you provide this, do not specify an
+   * owner_id as it will be generated automatically. When updating a wallet, you can
+   * set the owner to null to remove the owner.
    */
-  owner?: WalletUpdateParams.Owner;
+  owner?: WalletUpdateParams.PublicKeyOwner | WalletUpdateParams.UserOwner | null;
 
   /**
    * Body param: The key quorum ID to set as the owner of the resource. If you
@@ -585,7 +587,18 @@ export namespace WalletUpdateParams {
    * The P-256 public key of the owner of the resource. If you provide this, do not
    * specify an owner_id as it will be generated automatically.
    */
-  export interface Owner {}
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
 }
 
 export interface WalletListParams extends CursorParams {

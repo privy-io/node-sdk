@@ -863,7 +863,7 @@ export namespace UserCreateParams {
     /**
      * Chain type of the wallet
      */
-    chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron';
+    chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron' | 'bitcoin-segwit';
 
     /**
      * Additional signers for the wallet.

@@ -169,15 +169,21 @@ export interface Wallet {
   created_at: number;
 
   /**
-   * List of policy IDs for policies that are enforced on the wallet.
-   */
-  policy_ids: Array<string>;
-
-  /**
    * Unix timestamp of when the wallet was exported in milliseconds, if the wallet
    * was exported.
    */
-  exported_at?: number;
+  exported_at: number | null;
+
+  /**
+   * Unix timestamp of when the wallet was imported in milliseconds, if the wallet
+   * was imported.
+   */
+  imported_at: number | null;
+
+  /**
+   * List of policy IDs for policies that are enforced on the wallet.
+   */
+  policy_ids: Array<string>;
 
   /**
    * The key quorum ID of the owner of the wallet.

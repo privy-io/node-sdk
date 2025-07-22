@@ -394,6 +394,8 @@ export namespace User {
     type: 'smart_wallet';
 
     verified_at: number;
+
+    smart_wallet_version?: string;
   }
 
   export interface LinkedAccountPasskey {

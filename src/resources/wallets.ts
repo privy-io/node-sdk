@@ -608,7 +608,7 @@ export namespace WalletUpdateParams {
 }
 
 export interface WalletListParams extends CursorParams {
-  chain_type?: 'cosmos' | 'stellar' | 'sui' | 'tron' | 'bitcoin-segwit' | 'solana' | 'ethereum';
+  chain_type?: 'cosmos' | 'stellar' | 'sui' | 'tron' | 'bitcoin-segwit' | 'spark' | 'solana' | 'ethereum';
 
   user_id?: string;
 }

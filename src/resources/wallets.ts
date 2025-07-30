@@ -161,7 +161,7 @@ export interface Wallet {
   /**
    * Chain type of the wallet
    */
-  chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron' | 'bitcoin-segwit';
+  chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron' | 'bitcoin-segwit' | 'near';
 
   /**
    * Unix timestamp of when the wallet was created in milliseconds.
@@ -486,7 +486,7 @@ export interface WalletCreateParams {
   /**
    * Body param: Chain type of the wallet
    */
-  chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron' | 'bitcoin-segwit';
+  chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron' | 'bitcoin-segwit' | 'near';
 
   /**
    * Body param: Additional signers for the wallet.
@@ -608,7 +608,16 @@ export namespace WalletUpdateParams {
 }
 
 export interface WalletListParams extends CursorParams {
-  chain_type?: 'cosmos' | 'stellar' | 'sui' | 'tron' | 'bitcoin-segwit' | 'spark' | 'solana' | 'ethereum';
+  chain_type?:
+    | 'cosmos'
+    | 'stellar'
+    | 'sui'
+    | 'tron'
+    | 'bitcoin-segwit'
+    | 'near'
+    | 'spark'
+    | 'solana'
+    | 'ethereum';
 
   user_id?: string;
 }
@@ -676,7 +685,7 @@ export namespace WalletCreateWalletsWithRecoveryParams {
     /**
      * Chain type of the wallet
      */
-    chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron' | 'bitcoin-segwit';
+    chain_type: 'solana' | 'ethereum' | 'cosmos' | 'stellar' | 'sui' | 'tron' | 'bitcoin-segwit' | 'near';
 
     /**
      * List of policy IDs for policies that should be enforced on the wallet.

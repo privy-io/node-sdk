@@ -170,7 +170,8 @@ export interface Wallet {
     | 'tron'
     | 'bitcoin-segwit'
     | 'near'
-    | 'spark';
+    | 'spark'
+    | 'ton';
 
   /**
    * Unix timestamp of when the wallet was created in milliseconds.
@@ -504,7 +505,8 @@ export interface WalletCreateParams {
     | 'tron'
     | 'bitcoin-segwit'
     | 'near'
-    | 'spark';
+    | 'spark'
+    | 'ton';
 
   /**
    * Body param: Additional signers for the wallet.
@@ -633,6 +635,7 @@ export interface WalletListParams extends CursorParams {
     | 'tron'
     | 'bitcoin-segwit'
     | 'near'
+    | 'ton'
     | 'spark'
     | 'solana'
     | 'ethereum';
@@ -712,7 +715,8 @@ export namespace WalletCreateWalletsWithRecoveryParams {
       | 'tron'
       | 'bitcoin-segwit'
       | 'near'
-      | 'spark';
+      | 'spark'
+      | 'ton';
 
     /**
      * List of policy IDs for policies that should be enforced on the wallet.

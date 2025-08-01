@@ -874,7 +874,8 @@ export namespace UserCreateParams {
       | 'tron'
       | 'bitcoin-segwit'
       | 'near'
-      | 'spark';
+      | 'spark'
+      | 'ton';
 
     /**
      * Additional signers for the wallet.

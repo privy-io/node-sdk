@@ -29,7 +29,6 @@ describe('resource wallets', () => {
       owner: { public_key: 'public_key' },
       owner_id: 'owner_id',
       policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
-      'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
     });
   });

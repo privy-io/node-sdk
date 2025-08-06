@@ -20,21 +20,12 @@ export class Wallets extends APIResource {
    * ```
    */
   create(params: WalletCreateParams, options?: RequestOptions): APIPromise<Wallet> {
-    const {
-      'privy-authorization-signature': privyAuthorizationSignature,
-      'privy-idempotency-key': privyIdempotencyKey,
-      ...body
-    } = params;
+    const { 'privy-idempotency-key': privyIdempotencyKey, ...body } = params;
     return this._client.post('/v1/wallets', {
       body,
       ...options,
       headers: buildHeaders([
-        {
-          ...(privyAuthorizationSignature != null ?
-            { 'privy-authorization-signature': privyAuthorizationSignature }
-          : undefined),
-          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
-        },
+        { ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined) },
         options?.headers,
       ]),
     });
@@ -209,6 +200,8 @@ export interface Wallet {
 
 export namespace Wallet {
   export interface AdditionalSigner {
+    override_policy_ids: Array<string>;
+
     signer_id: string;
   }
 }
@@ -531,12 +524,6 @@ export interface WalletCreateParams {
    * wallet. Currently, only one policy is supported per wallet.
    */
   policy_ids?: Array<string>;
-
-  /**
-   * Header param: Request authorization signature. If multiple signatures are
-   * required, they should be comma separated.
-   */
-  'privy-authorization-signature'?: string;
 
   /**
    * Header param: Idempotency keys ensure API requests are executed only once within

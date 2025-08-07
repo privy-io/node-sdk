@@ -825,6 +825,11 @@ export declare namespace WalletRpcParams {
     /**
      * Body param:
      */
+    sponsor?: boolean;
+
+    /**
+     * Body param:
+     */
     body_wallet_id?: string;
 
     /**
@@ -1150,6 +1155,11 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'solana';
+
+    /**
+     * Body param:
+     */
+    sponsor?: boolean;
 
     /**
      * Body param:

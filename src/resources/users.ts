@@ -418,6 +418,8 @@ export namespace User {
     created_with_device?: string;
 
     created_with_os?: string;
+
+    public_key?: string;
   }
 
   export interface LinkedAccountFarcaster {

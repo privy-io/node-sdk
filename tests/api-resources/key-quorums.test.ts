@@ -9,7 +9,7 @@ const client = new PrivyAPI({
 });
 
 describe('resource keyQuorums', () => {
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('create', async () => {
     const responsePromise = client.keyQuorums.create({});
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource keyQuorums', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('update', async () => {
     const responsePromise = client.keyQuorums.update('key_quorum_id', {});
     const rawResponse = await responsePromise.asResponse();
@@ -33,7 +33,7 @@ describe('resource keyQuorums', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('delete', async () => {
     const responsePromise = client.keyQuorums.delete('key_quorum_id');
     const rawResponse = await responsePromise.asResponse();
@@ -45,7 +45,7 @@ describe('resource keyQuorums', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('delete: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(

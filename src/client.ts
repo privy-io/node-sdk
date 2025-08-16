@@ -830,11 +830,13 @@ export class PrivyAPI {
   transactions: API.Transactions = new API.Transactions(this);
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
 }
+
 PrivyAPI.Wallets = Wallets;
 PrivyAPI.Users = Users;
 PrivyAPI.Policies = Policies;
 PrivyAPI.Transactions = Transactions;
 PrivyAPI.KeyQuorums = KeyQuorums;
+
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
 

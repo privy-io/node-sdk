@@ -1,6 +1,6 @@
 import { PrivyAPI } from '../client';
 import { Fetch } from '../internal/builtin-types';
-import { WalletsService } from './services/wallets';
+import { PrivyWalletsService } from './services/wallets';
 
 interface PrivyClientOptions {
   appId: string;
@@ -15,7 +15,7 @@ export class PrivyClient {
 
   private constructor(privyApiClient: PrivyAPI) {
     this.privyApiClient = privyApiClient;
-    this.walletsService = new WalletsService(privyApiClient);
+    this.walletsService = new PrivyWalletsService(privyApiClient);
   }
 
   public static create({
@@ -35,9 +35,9 @@ export class PrivyClient {
     return new PrivyClient(privyApiClient);
   }
 
-  private walletsService: WalletsService;
+  private walletsService: PrivyWalletsService;
 
-  public wallets(): WalletsService {
+  public wallets(): PrivyWalletsService {
     return this.walletsService;
   }
 }

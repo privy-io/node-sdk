@@ -98,6 +98,18 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Get a wallet by wallet ID.
+   *
+   * @example
+   * ```ts
+   * const wallet = await client.wallets.get('wallet_id');
+   * ```
+   */
+  get(walletID: string, options?: RequestOptions): APIPromise<Wallet> {
+    return this._client.get(path`/v1/wallets/${walletID}`, options);
+  }
+
+  /**
    * Sign a message or transaction with a wallet by wallet ID.
    *
    * @example

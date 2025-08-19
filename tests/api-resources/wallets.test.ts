@@ -122,6 +122,18 @@ describe('resource wallets', () => {
   });
 
   // Prism tests are disabled
+  test.skip('get', async () => {
+    const responsePromise = client.wallets.get('wallet_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
   test.skip('rpc: only required params', async () => {
     const responsePromise = client.wallets.rpc('wallet_id', {
       method: 'eth_signTransaction',

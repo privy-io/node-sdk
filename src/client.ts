@@ -57,6 +57,7 @@ import {
   WalletsCursor,
 } from './resources/wallets';
 import { type Fetch } from './internal/builtin-types';
+import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import { toBase64 } from './internal/utils/base64';
@@ -222,6 +223,12 @@ export class PrivyAPI {
       baseURL,
       environment: opts.environment ?? 'production',
     };
+
+    if (isRunningInBrowser()) {
+      throw new Errors.PrivyAPIError(
+        "It looks like you're running in a browser-like environment, which is disabled to protect your secret API credentials from attackers. If you have a strong business need for client-side use of this API, please open a GitHub issue with your use-case and security mitigations.",
+      );
+    }
 
     if (baseURL && opts.environment) {
       throw new Errors.PrivyAPIError(

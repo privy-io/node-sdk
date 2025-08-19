@@ -31,7 +31,7 @@ const client = new PrivyAPI({
   environment: 'staging', // defaults to 'production'
 });
 
-const wallet = await client.wallets.create({ chain_type: 'ethereum' });
+const wallet = await client.wallets.get('wallet_id');
 
 console.log(wallet.id);
 ```
@@ -50,8 +50,7 @@ const client = new PrivyAPI({
   environment: 'staging', // defaults to 'production'
 });
 
-const params: PrivyAPI.WalletCreateParams = { chain_type: 'ethereum' };
-const wallet: PrivyAPI.Wallet = await client.wallets.create(params);
+const wallet: PrivyAPI.Wallet = await client.wallets.get('wallet_id');
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -64,7 +63,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const wallet = await client.wallets.create({ chain_type: 'ethereum' }).catch(async (err) => {
+const wallet = await client.wallets.get('wallet_id').catch(async (err) => {
   if (err instanceof PrivyAPI.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -104,7 +103,7 @@ const client = new PrivyAPI({
 });
 
 // Or, configure per-request:
-await client.wallets.create({ chain_type: 'ethereum' }, {
+await client.wallets.get('wallet_id', {
   maxRetries: 5,
 });
 ```
@@ -121,7 +120,7 @@ const client = new PrivyAPI({
 });
 
 // Override per-request:
-await client.wallets.create({ chain_type: 'ethereum' }, {
+await client.wallets.get('wallet_id', {
   timeout: 5 * 1000,
 });
 ```
@@ -144,13 +143,11 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new PrivyAPI();
 
-const response = await client.wallets.create({ chain_type: 'ethereum' }).asResponse();
+const response = await client.wallets.get('wallet_id').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: wallet, response: raw } = await client.wallets
-  .create({ chain_type: 'ethereum' })
-  .withResponse();
+const { data: wallet, response: raw } = await client.wallets.get('wallet_id').withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(wallet.id);
 ```
@@ -232,7 +229,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.wallets.create({
+client.wallets.get({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
@@ -350,7 +347,6 @@ TypeScript >= 4.9 is supported.
 
 The following runtimes are supported:
 
-- Web browsers (Up-to-date Chrome, Firefox, Safari, Edge, and more)
 - Node.js 20 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.
 - Deno v1.28.0 or higher.
 - Bun 1.0 or later.
@@ -358,6 +354,9 @@ The following runtimes are supported:
 - Vercel Edge Runtime.
 - Jest 28 or greater with the `"node"` environment (`"jsdom"` is not supported at this time).
 - Nitro v2.6 or greater.
+
+> [!WARNING]
+> Web browser runtimes aren't supported. The SDK will throw an error if used in a browser environment.
 
 Note that React Native is not supported at this time.
 

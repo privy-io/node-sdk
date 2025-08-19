@@ -18,6 +18,7 @@
   },
   "scripts": {
     "test": "./scripts/test",
+    "test:integration": "jest --testPathPattern=tests/integration",
     "build": "./scripts/build",
     "prepublishOnly": "echo 'to publish, run yarn build && (cd dist; yarn publish)' && exit 1",
     "format": "./scripts/format",

@@ -1,8 +1,10 @@
+import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
-import { WalletRpcResponse } from 'privy-api-client/resources';
 import { verifyMessage } from 'viem';
 
 describe('PrivyWalletsService', () => {
+  const authorizationContext = new AuthorizationContext({});
+
   let privyClient: PrivyClient;
   let fundedEthereumWalletId: string;
   let fundedEthereumWalletAddress: `0x${string}`;
@@ -41,7 +43,7 @@ describe('PrivyWalletsService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signMessage(fundedEthereumWalletId, 'Hello, world!');
+          .signMessage(fundedEthereumWalletId, 'Hello, world!', authorizationContext);
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
@@ -55,7 +57,7 @@ describe('PrivyWalletsService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signMessage(fundedEthereumWalletId, '0x1234567890');
+          .signMessage(fundedEthereumWalletId, '0x1234567890', authorizationContext);
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
@@ -67,7 +69,10 @@ describe('PrivyWalletsService', () => {
       });
       it('should be able to sign a byte array message', async () => {
         const message = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-        const response = await privyClient.wallets().ethereum().signMessage(fundedEthereumWalletId, message);
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signMessage(fundedEthereumWalletId, message, authorizationContext);
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({

@@ -2,7 +2,7 @@ import { PrivyAPI } from '../client';
 import { Fetch } from '../internal/builtin-types';
 import { PrivyWalletsService } from './services/wallets';
 
-interface PrivyClientOptions {
+export interface PrivyClientOptions {
   appId: string;
   appSecret: string;
   serverUrl?: string;

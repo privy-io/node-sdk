@@ -1,4 +1,5 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
+import { AuthorizationContext } from '../AuthorizationContext';
 import { PrivyWalletsService } from './wallets';
 
 export class PrivyEthereumService {
@@ -11,6 +12,7 @@ export class PrivyEthereumService {
   public async signMessage(
     walletId: string,
     message: string | Uint8Array,
+    authorizationContext: AuthorizationContext,
   ): Promise<WalletRpcResponse.EthereumPersonalSignRpcResponse.Data> {
     let params: WalletRpcParams.EthereumPersonalSignRpcInput.Params;
     if (message instanceof Uint8Array) {

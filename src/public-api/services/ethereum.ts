@@ -1,12 +1,11 @@
-import { WalletRpcParams, WalletRpcResponse } from '../../resources';
+import { WalletRpcParams, WalletRpcResponse, Wallets } from '../../resources';
 import { AuthorizationContext } from '../AuthorizationContext';
-import { PrivyWalletsService } from './wallets';
 
 export class PrivyEthereumService {
-  private privyWalletsService: PrivyWalletsService;
+  private wallets: Wallets;
 
-  constructor(privyWalletsService: PrivyWalletsService) {
-    this.privyWalletsService = privyWalletsService;
+  constructor(wallets: Wallets) {
+    this.wallets = wallets;
   }
 
   public async signMessage(
@@ -24,7 +23,7 @@ export class PrivyEthereumService {
       params = { message, encoding: 'utf-8' };
     }
 
-    const rpcResponse = await this.privyWalletsService.rpc(walletId, {
+    const rpcResponse = await this.wallets.rpc(walletId, {
       method: 'personal_sign',
       params,
     });

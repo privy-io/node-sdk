@@ -53,7 +53,7 @@ describe('resource policies', () => {
       version: '1.0',
       owner: { public_key: 'public_key' },
       owner_id: 'owner_id',
-      'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-idempotency-key': 'privy-idempotency-key',
     });
   });
 

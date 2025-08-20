@@ -35,16 +35,12 @@ export class Policies extends APIResource {
    * ```
    */
   create(params: PolicyCreateParams, options?: RequestOptions): APIPromise<Policy> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const { 'privy-idempotency-key': privyIdempotencyKey, ...body } = params;
     return this._client.post('/v1/policies', {
       body,
       ...options,
       headers: buildHeaders([
-        {
-          ...(privyAuthorizationSignature != null ?
-            { 'privy-authorization-signature': privyAuthorizationSignature }
-          : undefined),
-        },
+        { ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined) },
         options?.headers,
       ]),
     });
@@ -359,10 +355,10 @@ export interface PolicyCreateParams {
   owner_id?: string | null;
 
   /**
-   * Header param: Request authorization signature. If multiple signatures are
-   * required, they should be comma separated.
+   * Header param: Idempotency keys ensure API requests are executed only once within
+   * a 24-hour window.
    */
-  'privy-authorization-signature'?: string;
+  'privy-idempotency-key'?: string;
 }
 
 export namespace PolicyCreateParams {

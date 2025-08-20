@@ -110,6 +110,41 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Sign a message with a wallet by wallet ID.
+   *
+   * @example
+   * ```ts
+   * const response = await client.wallets.rawSign('wallet_id', {
+   *   params: {},
+   * });
+   * ```
+   */
+  rawSign(
+    walletID: string,
+    params: WalletRawSignParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletRawSignResponse> {
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      ...body
+    } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/raw_sign`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Sign a message or transaction with a wallet by wallet ID.
    *
    * @example
@@ -286,6 +321,26 @@ export interface WalletCreateWalletsWithRecoveryResponse {
    * The wallets that were created.
    */
   wallets: Array<Wallet>;
+}
+
+export interface WalletRawSignResponse {
+  data?: WalletRawSignResponse.Data;
+
+  error?: WalletRawSignResponse.Error;
+}
+
+export namespace WalletRawSignResponse {
+  export interface Data {
+    encoding: 'hex';
+
+    signature: string;
+  }
+
+  export interface Error {
+    code: string;
+
+    message: string;
+  }
 }
 
 export type WalletRpcResponse =
@@ -722,6 +777,34 @@ export namespace WalletCreateWalletsWithRecoveryParams {
      * Currently, only one policy is supported per wallet.
      */
     policy_ids?: Array<string>;
+  }
+}
+
+export interface WalletRawSignParams {
+  /**
+   * Body param:
+   */
+  params: WalletRawSignParams.Params;
+
+  /**
+   * Header param: Request authorization signature. If multiple signatures are
+   * required, they should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Idempotency keys ensure API requests are executed only once within
+   * a 24-hour window.
+   */
+  'privy-idempotency-key'?: string;
+}
+
+export namespace WalletRawSignParams {
+  export interface Params {
+    /**
+     * The hash to sign. Must start with `0x`.
+     */
+    hash?: string;
   }
 }
 
@@ -1252,6 +1335,7 @@ export declare namespace Wallets {
     type Wallet as Wallet,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
+    type WalletRawSignResponse as WalletRawSignResponse,
     type WalletRpcResponse as WalletRpcResponse,
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
@@ -1259,6 +1343,7 @@ export declare namespace Wallets {
     type WalletListParams as WalletListParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
+    type WalletRawSignParams as WalletRawSignParams,
     type WalletRpcParams as WalletRpcParams,
   };
 }

@@ -50,6 +50,8 @@ import {
   WalletCreateWalletsWithRecoveryParams,
   WalletCreateWalletsWithRecoveryResponse,
   WalletListParams,
+  WalletRawSignParams,
+  WalletRawSignResponse,
   WalletRpcParams,
   WalletRpcResponse,
   WalletUpdateParams,
@@ -855,6 +857,7 @@ export declare namespace PrivyAPI {
     type Wallet as Wallet,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
+    type WalletRawSignResponse as WalletRawSignResponse,
     type WalletRpcResponse as WalletRpcResponse,
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
@@ -862,6 +865,7 @@ export declare namespace PrivyAPI {
     type WalletListParams as WalletListParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
+    type WalletRawSignParams as WalletRawSignParams,
     type WalletRpcParams as WalletRpcParams,
   };
 

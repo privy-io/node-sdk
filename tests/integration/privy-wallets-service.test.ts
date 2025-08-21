@@ -2,10 +2,14 @@ import { ecdsaVerify } from 'secp256k1';
 import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
 import { hexToBytes, verifyMessage } from 'viem';
-import { generateP256KeyPair, publicKeyToPem } from '../helpers/authorization';
 
 describe('PrivyWalletsService', () => {
   const authorizationContext = new AuthorizationContext({});
+  const P256_PRIVATE_KEY = process.env['P256_PRIVATE_KEY']!;
+  const P256_PUBLIC_KEY = process.env['P256_PUBLIC_KEY']!;
+  const P256_OWNED_TRON_ID = process.env['P256_OWNED_TRON_ID']!;
+  const P256_OWNED_TRON_PK = process.env['P256_OWNED_TRON_PK']!;
+  const P256_OWNED_TRON_ADDRESS = process.env['P256_OWNED_TRON_ADDRESS']!;
 
   let privyClient: PrivyClient;
   let fundedEthereumWalletId: string;
@@ -45,6 +49,18 @@ describe('PrivyWalletsService', () => {
     it.skip('should be able to create a new tron wallet', async () => {
       const walletResponse = await privyClient.wallets().create({
         chain_type: 'tron',
+      });
+
+      console.log(walletResponse);
+
+      expect(walletResponse.id).toBeDefined();
+      expect(walletResponse.address).toBeDefined();
+      expect(walletResponse.chain_type).toBe('tron');
+    });
+    it.skip('should be able to create a new tron wallet owned by a p256 key pair', async () => {
+      const walletResponse = await privyClient.wallets().create({
+        chain_type: 'tron',
+        owner: { public_key: P256_PUBLIC_KEY },
       });
 
       console.log(walletResponse);
@@ -124,25 +140,15 @@ describe('PrivyWalletsService', () => {
         expect(verified).toBe(true);
       });
       it('should be able to sign a message with an authorization context', async () => {
-        const { publicKey, privateKey } = await generateP256KeyPair();
-        const publicKeyPem = publicKeyToPem(publicKey);
-        const privateKeyPKCS8 = privateKey.toString('base64');
-
-        // Create a Tier 2 (e.g. Tron) wallet owned by the new key pair
-        const createdWallet = await privyClient.wallets().create({
-          chain_type: 'tron',
-          owner: { public_key: publicKeyPem },
-        });
-
         // Set up the authorization context
         const authorizationContext = new AuthorizationContext({
-          authorizationPrivateKeys: [privateKeyPKCS8],
+          authorizationPrivateKeys: [P256_PRIVATE_KEY],
         });
 
         const response = await privyClient
           .wallets()
           .rawSign(
-            createdWallet.id,
+            P256_OWNED_TRON_ID,
             { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
             authorizationContext,
           );
@@ -153,7 +159,7 @@ describe('PrivyWalletsService', () => {
 
         const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
         const signatureBytes = hexToBytes(response.signature as `0x${string}`);
-        const publicKeyBytes = hexToBytes(`0x${createdWallet.public_key}`);
+        const publicKeyBytes = hexToBytes(`0x${P256_OWNED_TRON_PK}`);
 
         const verified = ecdsaVerify(signatureBytes, hashBytes, publicKeyBytes);
         expect(verified).toBe(true);

@@ -27,6 +27,7 @@ export class PrivyWalletsService {
     walletId: string,
     rawSignParams: WalletRawSignParams.Params,
     authorizationContext: AuthorizationContext,
+    idempotencyKey?: string,
   ): Promise<WalletRawSignResponse.Data> {
     const authorizationSignaturesHeader = await authorizationContext.generateAuthorizationSignatures({
       version: 1,
@@ -35,12 +36,14 @@ export class PrivyWalletsService {
       body: { params: rawSignParams },
       headers: {
         'privy-app-id': this.apiClient.appID,
+        ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
       },
     });
 
     const response = await this.wallets.rawSign(walletId, {
       params: rawSignParams,
       'privy-authorization-signature': authorizationSignaturesHeader.join(','),
+      ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
     });
 
     if ('data' in response) {

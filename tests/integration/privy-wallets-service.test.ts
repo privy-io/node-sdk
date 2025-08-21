@@ -2,6 +2,7 @@ import { ecdsaVerify } from 'secp256k1';
 import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
 import { hexToBytes, verifyMessage } from 'viem';
+import crypto from 'node:crypto';
 
 describe('PrivyWalletsService', () => {
   const authorizationContext = new AuthorizationContext({});
@@ -138,6 +139,30 @@ describe('PrivyWalletsService', () => {
 
         const verified = ecdsaVerify(signatureBytes, hashBytes, publicKeyBytes);
         expect(verified).toBe(true);
+      });
+      it('will fail if the idempotency key is reused with a different body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        await privyClient
+          .wallets()
+          .rawSign(
+            tronWalletId,
+            { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+            authorizationContext,
+            idempotencyKey,
+          );
+
+        await expect(
+          privyClient
+            .wallets()
+            .rawSign(
+              tronWalletId,
+              { hash: '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321' },
+              authorizationContext,
+              idempotencyKey,
+            ),
+        ).rejects.toThrow(
+          `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
+        );
       });
       it('should be able to sign a message with an authorization context', async () => {
         // Set up the authorization context

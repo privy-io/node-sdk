@@ -690,6 +690,7 @@ export interface WalletListParams extends CursorParams {
     | 'bitcoin-segwit'
     | 'near'
     | 'ton'
+    | 'starknet'
     | 'spark'
     | 'solana'
     | 'ethereum';

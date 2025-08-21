@@ -1,5 +1,7 @@
 import canonicalize from 'canonicalize';
-import crypto from 'node:crypto';
+import { p256 } from '@noble/curves/nist';
+import { sha256 } from '@noble/hashes/sha2';
+import { PrivKey } from '@noble/curves/utils';
 
 export interface AuthorizationContextOptions {
   userJwts?: readonly string[];
@@ -30,16 +32,44 @@ export class AuthorizationContext {
   public generateAuthorizationSignatures(input: WalletApiRequestSignatureInput): string[] {
     const payload = Buffer.from(canonicalize(input) ?? '');
 
-    return this.authorizationPrivateKeys.map((privateKey) => {
-      const privateKeyObj = crypto.createPrivateKey({
-        key: Buffer.from(privateKey, 'base64'),
-        format: 'der',
-        type: 'pkcs8',
-      });
-      const signatureBuffer = crypto.sign('sha256', payload, privateKeyObj);
-      return signatureBuffer.toString('base64');
+    return this.authorizationPrivateKeys.map((privateKeyPKCS8) => {
+      const privateKey = importPKCS8PrivateKey(privateKeyPKCS8);
+      const signature = signWithP256(payload, privateKey);
+      return signature.toString('base64');
     });
   }
+}
+
+/**
+ * @internal
+ *
+ * Imports a P-256 private key for use with the `@noble/curves` library.
+ *
+ * @param privateKey - A base64-encoded PKCS8-formatted private key, with no PEM headers.
+ * @returns A private key object for the P-256 curve.
+ */
+function importPKCS8PrivateKey(privateKey: string): PrivKey {
+  const pkcs8Bytes = Buffer.from(privateKey, 'base64');
+  const privateKeyStart = pkcs8Bytes.indexOf(Buffer.from([0x04, 0x20]));
+  if (privateKeyStart === -1) {
+    throw new Error('Invalid wallet authorization private key');
+  }
+  const privateKeyBytes = pkcs8Bytes.subarray(privateKeyStart + 2, privateKeyStart + 34);
+  return p256.Point.Fn.fromBytes(privateKeyBytes);
+}
+
+/**
+ * @internal
+ *
+ * Signs a message with a P-256 private key using the `@noble/curves` library.
+ *
+ * @param message - A buffer containing the bytes to sign.
+ * @param privateKey - A private key object for the P-256 curve.
+ * @returns A buffer containing the signature bytes.
+ */
+function signWithP256(message: Buffer, privateKey: PrivKey): Buffer {
+  const signature = p256.sign(sha256(message), privateKey).toBytes('der');
+  return Buffer.from(signature);
 }
 
 export type WalletApiRequestSignatureInput = {

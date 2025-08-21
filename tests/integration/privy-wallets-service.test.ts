@@ -2,6 +2,7 @@ import { ecdsaVerify } from 'secp256k1';
 import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
 import { hexToBytes, verifyMessage } from 'viem';
+import { generateP256KeyPair, publicKeyToPem } from '../helpers/authorization';
 
 describe('PrivyWalletsService', () => {
   const authorizationContext = new AuthorizationContext({});
@@ -118,6 +119,41 @@ describe('PrivyWalletsService', () => {
         const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
         const signatureBytes = hexToBytes(response.signature as `0x${string}`);
         const publicKeyBytes = hexToBytes(`0x${tronPublicKey}`);
+
+        const verified = ecdsaVerify(signatureBytes, hashBytes, publicKeyBytes);
+        expect(verified).toBe(true);
+      });
+      it('should be able to sign a message with an authorization context', async () => {
+        const { publicKey, privateKey } = await generateP256KeyPair();
+        const publicKeyPem = publicKeyToPem(publicKey);
+        const privateKeyPKCS8 = privateKey.toString('base64');
+
+        // Create a Tier 2 (e.g. Tron) wallet owned by the new key pair
+        const createdWallet = await privyClient.wallets().create({
+          chain_type: 'tron',
+          owner: { public_key: publicKeyPem },
+        });
+
+        // Set up the authorization context
+        const authorizationContext = new AuthorizationContext({
+          authorizationPrivateKeys: [privateKeyPKCS8],
+        });
+
+        const response = await privyClient
+          .wallets()
+          .rawSign(
+            createdWallet.id,
+            { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+            authorizationContext,
+          );
+
+        expect(response.encoding).toBe('hex');
+        expect(response.signature).toBeDefined();
+        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
+
+        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
+        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
+        const publicKeyBytes = hexToBytes(`0x${createdWallet.public_key}`);
 
         const verified = ecdsaVerify(signatureBytes, hashBytes, publicKeyBytes);
         expect(verified).toBe(true);

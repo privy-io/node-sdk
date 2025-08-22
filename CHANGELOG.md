@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.0-alpha.2 (2025-08-22)
+
+Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/privy-io/node-sdk/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
+
+### Features
+
+* **api:** api update ([ff5f1e0](https://github.com/privy-io/node-sdk/commit/ff5f1e010ec7f02a1267d428d852abbdd3f50393))
+* **api:** api update ([5e9126b](https://github.com/privy-io/node-sdk/commit/5e9126b8c787d1e9bd207a183b74e4cec4406f70))
+* **api:** api update ([a8da4d1](https://github.com/privy-io/node-sdk/commit/a8da4d16b8802f8a9214db86b259461f7b1d3146))
+
+
+### Chores
+
+* add package to package.json ([9158f2f](https://github.com/privy-io/node-sdk/commit/9158f2f808b8f566de30f191aa78d7af9e62a632))
+* **client:** qualify global Blob ([0a947da](https://github.com/privy-io/node-sdk/commit/0a947da3b05c5534be2d11f6fa90afc392c74990))
+
 ## 0.1.0-alpha.1 (2025-08-21)
 
 Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/privy-io/node-sdk/compare/v0.0.1-alpha.0...v0.1.0-alpha.1)

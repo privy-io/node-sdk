@@ -325,7 +325,9 @@ export interface WalletCreateWalletsWithRecoveryResponse {
 }
 
 export interface WalletRawSignResponse {
-  data: WalletRawSignResponse.Data;
+  data?: WalletRawSignResponse.Data;
+
+  error?: WalletRawSignResponse.Error;
 }
 
 export namespace WalletRawSignResponse {
@@ -333,6 +335,12 @@ export namespace WalletRawSignResponse {
     encoding: 'hex';
 
     signature: string;
+  }
+
+  export interface Error {
+    code: string;
+
+    message: string;
   }
 }
 

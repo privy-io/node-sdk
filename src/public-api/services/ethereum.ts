@@ -1,5 +1,6 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
 import { PrivyWalletsService } from './wallets';
+import { AuthorizationContext } from '../AuthorizationContext';
 
 export class PrivyEthereumService {
   private privyWalletsService: PrivyWalletsService;
@@ -11,6 +12,7 @@ export class PrivyEthereumService {
   public async signMessage(
     walletId: string,
     message: string | Uint8Array,
+    authorizationContext: AuthorizationContext,
   ): Promise<WalletRpcResponse.EthereumPersonalSignRpcResponse.Data> {
     let params: WalletRpcParams.EthereumPersonalSignRpcInput.Params;
     if (message instanceof Uint8Array) {
@@ -23,10 +25,11 @@ export class PrivyEthereumService {
       params = { message, encoding: 'utf-8' };
     }
 
-    const response = await this.privyWalletsService.rpc(walletId, {
-      method: 'personal_sign',
-      params,
-    });
+    const response = await this.privyWalletsService.rpc(
+      walletId,
+      { method: 'personal_sign', params },
+      authorizationContext,
+    );
 
     return response.data;
   }

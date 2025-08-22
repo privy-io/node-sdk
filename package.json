@@ -27,7 +27,11 @@
     "lint": "./scripts/lint",
     "fix": "./scripts/format"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@noble/curves": "^1.9.7",
+    "@noble/hashes": "^1.8.0",
+    "canonicalize": "^2.1.0"
+  },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
     "@swc/core": "^1.3.102",

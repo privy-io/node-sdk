@@ -209,7 +209,8 @@ export interface Wallet {
     | 'bitcoin-segwit'
     | 'near'
     | 'spark'
-    | 'ton';
+    | 'ton'
+    | 'starknet';
 
   /**
    * Unix timestamp of when the wallet was created in milliseconds.
@@ -566,7 +567,8 @@ export interface WalletCreateParams {
     | 'bitcoin-segwit'
     | 'near'
     | 'spark'
-    | 'ton';
+    | 'ton'
+    | 'starknet';
 
   /**
    * Body param: Additional signers for the wallet.
@@ -771,7 +773,8 @@ export namespace WalletCreateWalletsWithRecoveryParams {
       | 'bitcoin-segwit'
       | 'near'
       | 'spark'
-      | 'ton';
+      | 'ton'
+      | 'starknet';
 
     /**
      * List of policy IDs for policies that should be enforced on the wallet.

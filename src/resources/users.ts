@@ -877,7 +877,8 @@ export namespace UserCreateParams {
       | 'bitcoin-segwit'
       | 'near'
       | 'spark'
-      | 'ton';
+      | 'ton'
+      | 'starknet';
 
     /**
      * Additional signers for the wallet.

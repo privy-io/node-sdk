@@ -325,9 +325,7 @@ export interface WalletCreateWalletsWithRecoveryResponse {
 }
 
 export interface WalletRawSignResponse {
-  data?: WalletRawSignResponse.Data;
-
-  error?: WalletRawSignResponse.Error;
+  data: WalletRawSignResponse.Data;
 }
 
 export namespace WalletRawSignResponse {
@@ -335,12 +333,6 @@ export namespace WalletRawSignResponse {
     encoding: 'hex';
 
     signature: string;
-  }
-
-  export interface Error {
-    code: string;
-
-    message: string;
   }
 }
 
@@ -846,11 +838,6 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
@@ -927,11 +914,6 @@ export declare namespace WalletRpcParams {
     sponsor?: boolean;
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
@@ -998,11 +980,6 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
@@ -1043,11 +1020,6 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'ethereum';
-
-    /**
-     * Body param:
-     */
-    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -1110,11 +1082,6 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
@@ -1159,11 +1126,6 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
@@ -1202,11 +1164,6 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'solana';
-
-    /**
-     * Body param:
-     */
-    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -1261,11 +1218,6 @@ export declare namespace WalletRpcParams {
     sponsor?: boolean;
 
     /**
-     * Body param:
-     */
-    body_wallet_id?: string;
-
-    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
@@ -1306,11 +1258,6 @@ export declare namespace WalletRpcParams {
      * Body param:
      */
     chain_type?: 'solana';
-
-    /**
-     * Body param:
-     */
-    body_wallet_id?: string;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are

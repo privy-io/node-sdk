@@ -2,7 +2,7 @@ import { PrivyAPI } from 'privy-api-client/client';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
-import { Hex, hexToBytes, verifyMessage } from 'viem';
+import { Hex, hexToBytes, verifyHash, verifyMessage } from 'viem';
 import crypto from 'node:crypto';
 
 describe('PrivyWalletsService', () => {
@@ -186,6 +186,75 @@ describe('PrivyWalletsService', () => {
             .wallets()
             .ethereum()
             .signMessage(FUNDED_ETHEREUM_WALLET_ID, 'Goodbye, world!', undefined, idempotencyKey),
+        ).rejects.toThrow(
+          `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
+        );
+      });
+    });
+    describe('secp256k1 sign', () => {
+      it('should be able to sign a hash', async () => {
+        const hash = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signSecp256k1(FUNDED_ETHEREUM_WALLET_ID, hash);
+
+        expect(response.signature).toBeDefined();
+        const signature = response.signature as Hex;
+
+        const verified = await verifyHash({ hash, signature, address: FUNDED_ETHEREUM_WALLET_ADDRESS });
+        expect(verified).toBe(true);
+      });
+      it('should be able to sign a hash with an authorization context', async () => {
+        // Set up the authorization context
+        const authorizationContext: AuthorizationContext = {
+          authorizationPrivateKeys: [P256_PRIVATE_KEY],
+        };
+
+        const hash = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signSecp256k1(P256_OWNED_ETHEREUM_WALLET_ID, hash, authorizationContext);
+
+        expect(response.signature).toBeDefined();
+        const signature = response.signature as Hex;
+
+        const verified = await verifyHash({ hash, signature, address: P256_OWNED_ETHEREUM_WALLET_ADDRESS });
+        expect(verified).toBe(true);
+      });
+      it('will succeed if the idempotency key is reused with the same body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        const hash = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
+        await privyClient
+          .wallets()
+          .ethereum()
+          .signSecp256k1(FUNDED_ETHEREUM_WALLET_ID, hash, undefined, idempotencyKey);
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signSecp256k1(FUNDED_ETHEREUM_WALLET_ID, hash, undefined, idempotencyKey);
+
+        expect(response.signature).toBeDefined();
+        const signature = response.signature as Hex;
+
+        const verified = await verifyHash({ hash, signature, address: FUNDED_ETHEREUM_WALLET_ADDRESS });
+        expect(verified).toBe(true);
+      });
+      it('will fail if the idempotency key is reused with a different body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        const hash1 = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
+        await privyClient
+          .wallets()
+          .ethereum()
+          .signSecp256k1(FUNDED_ETHEREUM_WALLET_ID, hash1, undefined, idempotencyKey);
+
+        const hash2 = '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef12345678';
+        await expect(
+          privyClient
+            .wallets()
+            .ethereum()
+            .signSecp256k1(FUNDED_ETHEREUM_WALLET_ID, hash2, undefined, idempotencyKey),
         ).rejects.toThrow(
           `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
         );

@@ -37,7 +37,11 @@ export type WalletApiRequestSignatureInput = {
  * @param request The request to be formatted.
  * @return The raw bytes representing the authorization payload.
  */
-export function formatRequestForAuthorizationSignature(input: WalletApiRequestSignatureInput): Uint8Array {
+export function formatRequestForAuthorizationSignature({
+  input,
+}: {
+  input: WalletApiRequestSignatureInput;
+}): Uint8Array {
   const serializedInput = canonicalize(input);
   if (!serializedInput) {
     throw new PrivyAPIError('Failed to serialize request for authorization signature');
@@ -55,17 +59,20 @@ export function formatRequestForAuthorizationSignature(input: WalletApiRequestSi
  * @param input The request payload to sign.
  * @returns An array of authorization signatures.
  */
-export function generateAuthorizationSignatures(
-  authorizationContext: AuthorizationContext,
-  input: WalletApiRequestSignatureInput,
-): string[] {
-  const payload = formatRequestForAuthorizationSignature(input);
+export function generateAuthorizationSignatures({
+  authorizationContext,
+  input,
+}: {
+  authorizationContext: AuthorizationContext;
+  input: WalletApiRequestSignatureInput;
+}): string[] {
+  const payload = formatRequestForAuthorizationSignature({ input });
 
   // TODO: add support for user JWTs
   // TODO: add support for passed in signatures
   const privateKeys = authorizationContext.authorizationPrivateKeys ?? [];
 
-  return privateKeys.map((sk) => generateAuthorizationSignature(sk, payload));
+  return privateKeys.map((privateKey) => generateAuthorizationSignature({ privateKey, input: payload }));
 }
 
 /**
@@ -75,11 +82,14 @@ export function generateAuthorizationSignatures(
  * @param request The request payload to sign or a serialized version of the request using {@link formatRequestForAuthorizationSignature}.
  * @return The authorization signature.
  */
-export function generateAuthorizationSignature(
-  privateKey: string,
-  input: WalletApiRequestSignatureInput | Uint8Array,
-): string {
-  const payload = input instanceof Uint8Array ? input : formatRequestForAuthorizationSignature(input);
+export function generateAuthorizationSignature({
+  privateKey,
+  input,
+}: {
+  privateKey: string;
+  input: WalletApiRequestSignatureInput | Uint8Array;
+}): string {
+  const payload = input instanceof Uint8Array ? input : formatRequestForAuthorizationSignature({ input });
 
   const importedPrivateKey = importPKCS8PrivateKey(privateKey);
 

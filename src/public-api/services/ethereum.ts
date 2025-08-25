@@ -12,7 +12,7 @@ export class PrivyEthereumService {
   public async signMessage(
     walletId: string,
     message: string | Uint8Array,
-    authorizationContext: AuthorizationContext,
+    authorizationContext?: AuthorizationContext,
   ): Promise<WalletRpcResponse.EthereumPersonalSignRpcResponse.Data> {
     let params: WalletRpcParams.EthereumPersonalSignRpcInput.Params;
     if (message instanceof Uint8Array) {

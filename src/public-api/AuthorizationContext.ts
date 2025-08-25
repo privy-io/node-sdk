@@ -2,46 +2,90 @@ import canonicalize from 'canonicalize';
 import { p256 } from '@noble/curves/nist';
 import { sha256 } from '@noble/hashes/sha2';
 import { PrivKey } from '@noble/curves/utils';
+import { PrivyAPIError } from '../core/error';
 
-export interface AuthorizationContextOptions {
-  userJwts?: readonly string[];
+export interface AuthorizationContext {
   /**
    * The private keys to use for authorization.
    * These should be base64-encoded PKCS8-formatted private keys, with no PEM headers.
    */
-  authorizationPrivateKeys?: readonly string[];
-  signatures?: readonly string[];
+  authorizationPrivateKeys?: string[];
+  // TODO: userJwts?: readonly string[];
+  // TODO: signatures?: readonly string[];
 }
 
-export class AuthorizationContext {
-  private readonly userJwts: readonly string[];
-  private readonly authorizationPrivateKeys: readonly string[];
-  private readonly signatures: readonly string[];
+export type WalletApiRequestSignatureInput = {
+  /** Signature version. 1 is currently the only valid version. */
+  version: 1;
+  /** Request method. Signatures are not required on 'GET' requests. */
+  method: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  /** URL for the request. Should not contain a trailing slash. */
+  url: string;
+  /** Request body. */
+  body: any;
+  /** Privy-specific headers. */
+  headers: {
+    'privy-app-id': string;
+    'privy-idempotency-key'?: string;
+  };
+};
 
-  public constructor({
-    userJwts = [],
-    authorizationPrivateKeys = [],
-    signatures = [],
-  }: AuthorizationContextOptions) {
-    this.userJwts = userJwts;
-    this.authorizationPrivateKeys = authorizationPrivateKeys;
-    this.signatures = signatures;
+/**
+ * Formats the request payload into the expected authorization payload, canconicalizes it,
+ * and encodes the JSON string into bytes.
+ *
+ * @param request The request to be formatted.
+ * @return The raw bytes representing the authorization payload.
+ */
+export function formatRequestForAuthorizationSignature(input: WalletApiRequestSignatureInput): Uint8Array {
+  const serializedInput = canonicalize(input);
+  if (!serializedInput) {
+    throw new PrivyAPIError('Failed to serialize request for authorization signature');
   }
+  return new TextEncoder().encode(serializedInput);
+}
 
-  /** @internal */
-  public generateAuthorizationSignatures(input: WalletApiRequestSignatureInput): string[] {
-    const payload = new TextEncoder().encode(canonicalize(input) ?? '');
+/**
+ * Generates authorization signatures from the given authorization context and signable request.
+ * This method handles JWT exchange and private key signing.
+ *
+ * Manual signing of requests is intended for advanced use cases.
+ *
+ * @param authorizationContext The authorization context containing JWTs, private keys, and signatures.
+ * @param input The request payload to sign.
+ * @returns An array of authorization signatures.
+ */
+export function generateAuthorizationSignatures(
+  authorizationContext: AuthorizationContext,
+  input: WalletApiRequestSignatureInput,
+): string[] {
+  const payload = formatRequestForAuthorizationSignature(input);
 
-    // TODO: add support for user JWTs
-    // TODO: add support for passed in signatures
+  // TODO: add support for user JWTs
+  // TODO: add support for passed in signatures
+  const privateKeys = authorizationContext.authorizationPrivateKeys ?? [];
 
-    return this.authorizationPrivateKeys.map((privateKeyPKCS8) => {
-      const privateKey = importPKCS8PrivateKey(privateKeyPKCS8);
-      const signature = signWithP256(payload, privateKey);
-      // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
-      return Buffer.from(signature).toString('base64');
-    });
-  }
+  return privateKeys.map((sk) => generateAuthorizationSignature(sk, payload));
+}
+
+/**
+ * Signs the given request with the provided private key.
+ *
+ * @param privateKey The base64-encoded PKCS8-formatted private key, with no PEM headers.
+ * @param request The request payload to sign or a serialized version of the request using {@link formatRequestForAuthorizationSignature}.
+ * @return The authorization signature.
+ */
+export function generateAuthorizationSignature(
+  privateKey: string,
+  input: WalletApiRequestSignatureInput | Uint8Array,
+): string {
+  const payload = input instanceof Uint8Array ? input : formatRequestForAuthorizationSignature(input);
+
+  const importedPrivateKey = importPKCS8PrivateKey(privateKey);
+
+  const signature = p256.sign(sha256(payload), importedPrivateKey).toBytes('der');
+  // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
+  return Buffer.from(signature).toString('base64');
 }
 
 /**
@@ -62,32 +106,3 @@ function importPKCS8PrivateKey(privateKey: string): PrivKey {
   const privateKeyBytes = pkcs8Bytes.subarray(privateKeyStart + 2, privateKeyStart + 34);
   return p256.Point.Fn.fromBytes(privateKeyBytes);
 }
-
-/**
- * @internal
- *
- * Signs a message with a P-256 private key using the `@noble/curves` library.
- *
- * @param message - The bytes to sign over.
- * @param privateKey - A private key object for the P-256 curve.
- * @returns The bytes of the resulting signature.
- */
-function signWithP256(message: Uint8Array, privateKey: PrivKey): Uint8Array {
-  return p256.sign(sha256(message), privateKey).toBytes('der');
-}
-
-export type WalletApiRequestSignatureInput = {
-  /** Signature version. 1 is currently the only valid version. */
-  version: 1;
-  /** Request method. Signatures are not required on 'GET' requests. */
-  method: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-  /** URL for the request. Should not contain a trailing slash. */
-  url: string;
-  /** Request body. */
-  body: any;
-  /** Privy-specific headers. */
-  headers: {
-    'privy-app-id': string;
-    'privy-idempotency-key'?: string;
-  };
-};

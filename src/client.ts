@@ -855,18 +855,18 @@ export declare namespace PrivyAPI {
   export {
     Wallets as Wallets,
     type Wallet as Wallet,
-    type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
-    type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
     type WalletRpcResponse as WalletRpcResponse,
+    type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
+    type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
-    type WalletUpdateParams as WalletUpdateParams,
     type WalletListParams as WalletListParams,
-    type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
-    type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletRawSignParams as WalletRawSignParams,
     type WalletRpcParams as WalletRpcParams,
+    type WalletUpdateParams as WalletUpdateParams,
+    type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
+    type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
   };
 
   export {

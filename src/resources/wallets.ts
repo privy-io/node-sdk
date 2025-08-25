@@ -32,30 +32,6 @@ export class Wallets extends APIResource {
   }
 
   /**
-   * Update a wallet's policies or authorization key configuration.
-   *
-   * @example
-   * ```ts
-   * const wallet = await client.wallets.update('wallet_id');
-   * ```
-   */
-  update(walletID: string, params: WalletUpdateParams, options?: RequestOptions): APIPromise<Wallet> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
-    return this._client.patch(path`/v1/wallets/${walletID}`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(privyAuthorizationSignature != null ?
-            { 'privy-authorization-signature': privyAuthorizationSignature }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
-  }
-
-  /**
    * Get all wallets in your app.
    *
    * @example
@@ -71,6 +47,98 @@ export class Wallets extends APIResource {
     options?: RequestOptions,
   ): PagePromise<WalletsCursor, Wallet> {
     return this._client.getAPIList('/v1/wallets', Cursor<Wallet>, { query, ...options });
+  }
+
+  /**
+   * Sign a message with a wallet by wallet ID.
+   *
+   * @example
+   * ```ts
+   * const response = await client.wallets._rawSign(
+   *   'wallet_id',
+   *   { params: {} },
+   * );
+   * ```
+   */
+  _rawSign(
+    walletID: string,
+    params: WalletRawSignParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletRawSignResponse> {
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      ...body
+    } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/raw_sign`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Sign a message or transaction with a wallet by wallet ID.
+   *
+   * @example
+   * ```ts
+   * const response = await client.wallets._rpc('wallet_id', {
+   *   method: 'eth_signTransaction',
+   *   params: { transaction: {} },
+   * });
+   * ```
+   */
+  _rpc(walletID: string, params: WalletRpcParams, options?: RequestOptions): APIPromise<WalletRpcResponse> {
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      ...body
+    } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/rpc`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Update a wallet's policies or authorization key configuration.
+   *
+   * @example
+   * ```ts
+   * const wallet = await client.wallets._update('wallet_id');
+   * ```
+   */
+  _update(walletID: string, params: WalletUpdateParams, options?: RequestOptions): APIPromise<Wallet> {
+    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    return this._client.patch(path`/v1/wallets/${walletID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -107,73 +175,6 @@ export class Wallets extends APIResource {
    */
   get(walletID: string, options?: RequestOptions): APIPromise<Wallet> {
     return this._client.get(path`/v1/wallets/${walletID}`, options);
-  }
-
-  /**
-   * Sign a message with a wallet by wallet ID.
-   *
-   * @example
-   * ```ts
-   * const response = await client.wallets.rawSign('wallet_id', {
-   *   params: {},
-   * });
-   * ```
-   */
-  rawSign(
-    walletID: string,
-    params: WalletRawSignParams,
-    options?: RequestOptions,
-  ): APIPromise<WalletRawSignResponse> {
-    const {
-      'privy-authorization-signature': privyAuthorizationSignature,
-      'privy-idempotency-key': privyIdempotencyKey,
-      ...body
-    } = params;
-    return this._client.post(path`/v1/wallets/${walletID}/raw_sign`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(privyAuthorizationSignature != null ?
-            { 'privy-authorization-signature': privyAuthorizationSignature }
-          : undefined),
-          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
-        },
-        options?.headers,
-      ]),
-    });
-  }
-
-  /**
-   * Sign a message or transaction with a wallet by wallet ID.
-   *
-   * @example
-   * ```ts
-   * const response = await client.wallets.rpc('wallet_id', {
-   *   method: 'eth_signTransaction',
-   *   params: { transaction: {} },
-   * });
-   * ```
-   */
-  rpc(walletID: string, params: WalletRpcParams, options?: RequestOptions): APIPromise<WalletRpcResponse> {
-    const {
-      'privy-authorization-signature': privyAuthorizationSignature,
-      'privy-idempotency-key': privyIdempotencyKey,
-      ...body
-    } = params;
-    return this._client.post(path`/v1/wallets/${walletID}/rpc`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(privyAuthorizationSignature != null ?
-            { 'privy-authorization-signature': privyAuthorizationSignature }
-          : undefined),
-          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
-        },
-        options?.headers,
-      ]),
-    });
   }
 }
 
@@ -252,76 +253,6 @@ export namespace Wallet {
 
     signer_id: string;
   }
-}
-
-export type WalletAuthenticateWithJwtResponse =
-  | WalletAuthenticateWithJwtResponse.WithEncryption
-  | WalletAuthenticateWithJwtResponse.WithoutEncryption;
-
-export namespace WalletAuthenticateWithJwtResponse {
-  export interface WithEncryption {
-    /**
-     * The encrypted authorization key data.
-     */
-    encrypted_authorization_key: WithEncryption.EncryptedAuthorizationKey;
-
-    /**
-     * The expiration time of the authorization key in seconds since the epoch.
-     */
-    expires_at: number;
-
-    wallets: Array<WalletsAPI.Wallet>;
-  }
-
-  export namespace WithEncryption {
-    /**
-     * The encrypted authorization key data.
-     */
-    export interface EncryptedAuthorizationKey {
-      /**
-       * The encrypted authorization key corresponding to the user's current
-       * authentication session.
-       */
-      ciphertext: string;
-
-      /**
-       * Base64-encoded ephemeral public key used in the HPKE encryption process.
-       * Required for decryption.
-       */
-      encapsulated_key: string;
-
-      /**
-       * The encryption type used. Currently only supports HPKE.
-       */
-      encryption_type: 'HPKE';
-    }
-  }
-
-  export interface WithoutEncryption {
-    /**
-     * The raw authorization key data.
-     */
-    authorization_key: string;
-
-    /**
-     * The expiration time of the authorization key in seconds since the epoch.
-     */
-    expires_at: number;
-
-    wallets: Array<WalletsAPI.Wallet>;
-  }
-}
-
-export interface WalletCreateWalletsWithRecoveryResponse {
-  /**
-   * The ID of the created user.
-   */
-  recovery_user_id: string;
-
-  /**
-   * The wallets that were created.
-   */
-  wallets: Array<Wallet>;
 }
 
 export interface WalletRawSignResponse {
@@ -553,6 +484,76 @@ export namespace WalletRpcResponse {
   }
 }
 
+export type WalletAuthenticateWithJwtResponse =
+  | WalletAuthenticateWithJwtResponse.WithEncryption
+  | WalletAuthenticateWithJwtResponse.WithoutEncryption;
+
+export namespace WalletAuthenticateWithJwtResponse {
+  export interface WithEncryption {
+    /**
+     * The encrypted authorization key data.
+     */
+    encrypted_authorization_key: WithEncryption.EncryptedAuthorizationKey;
+
+    /**
+     * The expiration time of the authorization key in seconds since the epoch.
+     */
+    expires_at: number;
+
+    wallets: Array<WalletsAPI.Wallet>;
+  }
+
+  export namespace WithEncryption {
+    /**
+     * The encrypted authorization key data.
+     */
+    export interface EncryptedAuthorizationKey {
+      /**
+       * The encrypted authorization key corresponding to the user's current
+       * authentication session.
+       */
+      ciphertext: string;
+
+      /**
+       * Base64-encoded ephemeral public key used in the HPKE encryption process.
+       * Required for decryption.
+       */
+      encapsulated_key: string;
+
+      /**
+       * The encryption type used. Currently only supports HPKE.
+       */
+      encryption_type: 'HPKE';
+    }
+  }
+
+  export interface WithoutEncryption {
+    /**
+     * The raw authorization key data.
+     */
+    authorization_key: string;
+
+    /**
+     * The expiration time of the authorization key in seconds since the epoch.
+     */
+    expires_at: number;
+
+    wallets: Array<WalletsAPI.Wallet>;
+  }
+}
+
+export interface WalletCreateWalletsWithRecoveryResponse {
+  /**
+   * The ID of the created user.
+   */
+  recovery_user_id: string;
+
+  /**
+   * The wallets that were created.
+   */
+  wallets: Array<Wallet>;
+}
+
 export interface WalletCreateParams {
   /**
    * Body param: Chain type of the wallet
@@ -626,63 +627,6 @@ export namespace WalletCreateParams {
   }
 }
 
-export interface WalletUpdateParams {
-  /**
-   * Body param: Additional signers for the wallet.
-   */
-  additional_signers?: Array<WalletUpdateParams.AdditionalSigner>;
-
-  /**
-   * Body param: The owner of the resource. If you provide this, do not specify an
-   * owner_id as it will be generated automatically. When updating a wallet, you can
-   * set the owner to null to remove the owner.
-   */
-  owner?: WalletUpdateParams.PublicKeyOwner | WalletUpdateParams.UserOwner | null;
-
-  /**
-   * Body param: The key quorum ID to set as the owner of the resource. If you
-   * provide this, do not specify an owner.
-   */
-  owner_id?: string | null;
-
-  /**
-   * Body param: New policy IDs to enforce on the wallet. Currently, only one policy
-   * is supported per wallet.
-   */
-  policy_ids?: Array<string>;
-
-  /**
-   * Header param: Request authorization signature. If multiple signatures are
-   * required, they should be comma separated.
-   */
-  'privy-authorization-signature'?: string;
-}
-
-export namespace WalletUpdateParams {
-  export interface AdditionalSigner {
-    override_policy_ids: Array<string>;
-
-    signer_id: string;
-  }
-
-  /**
-   * The P-256 public key of the owner of the resource. If you provide this, do not
-   * specify an owner_id as it will be generated automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
-
-  /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
-   */
-  export interface UserOwner {
-    user_id: string;
-  }
-}
-
 export interface WalletListParams extends CursorParams {
   chain_type?:
     | 'cosmos'
@@ -698,90 +642,6 @@ export interface WalletListParams extends CursorParams {
     | 'ethereum';
 
   user_id?: string;
-}
-
-export interface WalletAuthenticateWithJwtParams {
-  /**
-   * The user's JWT, to be used to authenticate the user.
-   */
-  user_jwt: string;
-
-  /**
-   * The encryption type for the authentication response. Currently only supports
-   * HPKE.
-   */
-  encryption_type?: 'HPKE';
-
-  /**
-   * The public key of your ECDH keypair, in base64-encoded, SPKI-format, whose
-   * private key will be able to decrypt the session key.
-   */
-  recipient_public_key?: string;
-}
-
-export interface WalletCreateWalletsWithRecoveryParams {
-  primary_signer: WalletCreateWalletsWithRecoveryParams.PrimarySigner;
-
-  recovery_user: WalletCreateWalletsWithRecoveryParams.RecoveryUser;
-
-  wallets: Array<WalletCreateWalletsWithRecoveryParams.Wallet>;
-}
-
-export namespace WalletCreateWalletsWithRecoveryParams {
-  export interface PrimarySigner {
-    /**
-     * The JWT subject ID of the user.
-     */
-    subject_id: string;
-  }
-
-  export interface RecoveryUser {
-    linked_accounts: Array<RecoveryUser.UnionMember0 | RecoveryUser.UnionMember1>;
-  }
-
-  export namespace RecoveryUser {
-    export interface UnionMember0 {
-      /**
-       * The email address of the user.
-       */
-      address: string;
-
-      type: 'email';
-    }
-
-    export interface UnionMember1 {
-      /**
-       * The JWT subject ID of the user.
-       */
-      custom_user_id: string;
-
-      type: 'custom_auth';
-    }
-  }
-
-  export interface Wallet {
-    /**
-     * Chain type of the wallet
-     */
-    chain_type:
-      | 'solana'
-      | 'ethereum'
-      | 'cosmos'
-      | 'stellar'
-      | 'sui'
-      | 'tron'
-      | 'bitcoin-segwit'
-      | 'near'
-      | 'spark'
-      | 'ton'
-      | 'starknet';
-
-    /**
-     * List of policy IDs for policies that should be enforced on the wallet.
-     * Currently, only one policy is supported per wallet.
-     */
-    policy_ids?: Array<string>;
-  }
 }
 
 export interface WalletRawSignParams {
@@ -1289,20 +1149,161 @@ export declare namespace WalletRpcParams {
   }
 }
 
+export interface WalletUpdateParams {
+  /**
+   * Body param: Additional signers for the wallet.
+   */
+  additional_signers?: Array<WalletUpdateParams.AdditionalSigner>;
+
+  /**
+   * Body param: The owner of the resource. If you provide this, do not specify an
+   * owner_id as it will be generated automatically. When updating a wallet, you can
+   * set the owner to null to remove the owner.
+   */
+  owner?: WalletUpdateParams.PublicKeyOwner | WalletUpdateParams.UserOwner | null;
+
+  /**
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
+   */
+  owner_id?: string | null;
+
+  /**
+   * Body param: New policy IDs to enforce on the wallet. Currently, only one policy
+   * is supported per wallet.
+   */
+  policy_ids?: Array<string>;
+
+  /**
+   * Header param: Request authorization signature. If multiple signatures are
+   * required, they should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+}
+
+export namespace WalletUpdateParams {
+  export interface AdditionalSigner {
+    override_policy_ids: Array<string>;
+
+    signer_id: string;
+  }
+
+  /**
+   * The P-256 public key of the owner of the resource. If you provide this, do not
+   * specify an owner_id as it will be generated automatically.
+   */
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
+}
+
+export interface WalletAuthenticateWithJwtParams {
+  /**
+   * The user's JWT, to be used to authenticate the user.
+   */
+  user_jwt: string;
+
+  /**
+   * The encryption type for the authentication response. Currently only supports
+   * HPKE.
+   */
+  encryption_type?: 'HPKE';
+
+  /**
+   * The public key of your ECDH keypair, in base64-encoded, SPKI-format, whose
+   * private key will be able to decrypt the session key.
+   */
+  recipient_public_key?: string;
+}
+
+export interface WalletCreateWalletsWithRecoveryParams {
+  primary_signer: WalletCreateWalletsWithRecoveryParams.PrimarySigner;
+
+  recovery_user: WalletCreateWalletsWithRecoveryParams.RecoveryUser;
+
+  wallets: Array<WalletCreateWalletsWithRecoveryParams.Wallet>;
+}
+
+export namespace WalletCreateWalletsWithRecoveryParams {
+  export interface PrimarySigner {
+    /**
+     * The JWT subject ID of the user.
+     */
+    subject_id: string;
+  }
+
+  export interface RecoveryUser {
+    linked_accounts: Array<RecoveryUser.UnionMember0 | RecoveryUser.UnionMember1>;
+  }
+
+  export namespace RecoveryUser {
+    export interface UnionMember0 {
+      /**
+       * The email address of the user.
+       */
+      address: string;
+
+      type: 'email';
+    }
+
+    export interface UnionMember1 {
+      /**
+       * The JWT subject ID of the user.
+       */
+      custom_user_id: string;
+
+      type: 'custom_auth';
+    }
+  }
+
+  export interface Wallet {
+    /**
+     * Chain type of the wallet
+     */
+    chain_type:
+      | 'solana'
+      | 'ethereum'
+      | 'cosmos'
+      | 'stellar'
+      | 'sui'
+      | 'tron'
+      | 'bitcoin-segwit'
+      | 'near'
+      | 'spark'
+      | 'ton'
+      | 'starknet';
+
+    /**
+     * List of policy IDs for policies that should be enforced on the wallet.
+     * Currently, only one policy is supported per wallet.
+     */
+    policy_ids?: Array<string>;
+  }
+}
+
 export declare namespace Wallets {
   export {
     type Wallet as Wallet,
-    type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
-    type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
     type WalletRpcResponse as WalletRpcResponse,
+    type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
+    type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
-    type WalletUpdateParams as WalletUpdateParams,
     type WalletListParams as WalletListParams,
-    type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
-    type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletRawSignParams as WalletRawSignParams,
     type WalletRpcParams as WalletRpcParams,
+    type WalletUpdateParams as WalletUpdateParams,
+    type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
+    type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
   };
 }

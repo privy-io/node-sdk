@@ -346,6 +346,72 @@ describe('PrivyWalletsService', () => {
         );
       });
     });
+    describe('transaction signing', () => {
+      const transaction: WalletRpcParams.EthereumSignTransactionRpcInput.Params.Transaction = {
+        type: 2,
+        chain_id: 1,
+        to: '0x742d35Cc6634C0532925a3b8D1A8a9ff1e7a7A4C',
+        value: '0x1',
+        gas_limit: '0x5208',
+        data: '0x',
+      };
+      it('should be able to sign a transaction', async () => {
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, transaction);
+
+        expect(response.signed_transaction).toBeDefined();
+        expect(response.encoding).toBe('rlp');
+        expect(response.signed_transaction).toMatch(/^0x[0-9a-fA-F]+$/);
+      });
+      it('should be able to sign a transaction with an authorization context', async () => {
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signTransaction(P256_OWNED_ETHEREUM_WALLET_ID, transaction, p256AuthorizationContext);
+
+        expect(response.signed_transaction).toBeDefined();
+        expect(response.encoding).toBe('rlp');
+        expect(response.signed_transaction).toMatch(/^0x[0-9a-fA-F]+$/);
+      });
+      it('will succeed if the idempotency key is reused with the same body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        await privyClient
+          .wallets()
+          .ethereum()
+          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, transaction, undefined, idempotencyKey);
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, transaction, undefined, idempotencyKey);
+
+        expect(response.signed_transaction).toBeDefined();
+        expect(response.encoding).toBe('rlp');
+        expect(response.signed_transaction).toMatch(/^0x[0-9a-fA-F]+$/);
+      });
+      it('will fail if the idempotency key is reused with a different body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        await privyClient
+          .wallets()
+          .ethereum()
+          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, transaction, undefined, idempotencyKey);
+
+        await expect(
+          privyClient
+            .wallets()
+            .ethereum()
+            .signTransaction(
+              OWNERLESS_ETHEREUM_WALLET_ID,
+              { ...transaction, to: '0xabcdef1234abcdef1234abcdef1234abcdef1234' },
+              undefined,
+              idempotencyKey,
+            ),
+        ).rejects.toThrow(
+          `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
+        );
+      });
+    });
   });
   describe('other chains', () => {
     describe('raw sign', () => {

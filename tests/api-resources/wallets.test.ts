@@ -34,6 +34,18 @@ describe('resource wallets', () => {
   });
 
   // Prism tests are disabled
+  test.skip('update', async () => {
+    const responsePromise = client.wallets.update('wallet_id', {});
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.wallets.list();
     const rawResponse = await responsePromise.asResponse();
@@ -119,5 +131,67 @@ describe('resource wallets', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('rawSign: only required params', async () => {
+    const responsePromise = client.wallets.rawSign('wallet_id', { params: {} });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('rawSign: required and optional params', async () => {
+    const response = await client.wallets.rawSign('wallet_id', {
+      params: { hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e' },
+      'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-idempotency-key': 'privy-idempotency-key',
+    });
+  });
+
+  // Prism tests are disabled
+  test.skip('rpc: only required params', async () => {
+    const responsePromise = client.wallets.rpc('wallet_id', {
+      method: 'eth_signTransaction',
+      params: { transaction: {} },
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('rpc: required and optional params', async () => {
+    const response = await client.wallets.rpc('wallet_id', {
+      method: 'eth_signTransaction',
+      params: {
+        transaction: {
+          chain_id: 'string',
+          data: 'data',
+          from: 'from',
+          gas_limit: 'string',
+          gas_price: 'string',
+          max_fee_per_gas: 'string',
+          max_priority_fee_per_gas: 'string',
+          nonce: 'string',
+          to: 'to',
+          type: 0,
+          value: 'string',
+        },
+      },
+      address: 'address',
+      chain_type: 'ethereum',
+      'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-idempotency-key': 'privy-idempotency-key',
+    });
   });
 });

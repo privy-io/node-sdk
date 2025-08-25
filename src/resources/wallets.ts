@@ -32,6 +32,30 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Update a wallet's policies or authorization key configuration.
+   *
+   * @example
+   * ```ts
+   * const wallet = await client.wallets.update('wallet_id');
+   * ```
+   */
+  update(walletID: string, params: WalletUpdateParams, options?: RequestOptions): APIPromise<Wallet> {
+    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    return this._client.patch(path`/v1/wallets/${walletID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Get all wallets in your app.
    *
    * @example
@@ -83,6 +107,73 @@ export class Wallets extends APIResource {
    */
   get(walletID: string, options?: RequestOptions): APIPromise<Wallet> {
     return this._client.get(path`/v1/wallets/${walletID}`, options);
+  }
+
+  /**
+   * Sign a message with a wallet by wallet ID.
+   *
+   * @example
+   * ```ts
+   * const response = await client.wallets.rawSign('wallet_id', {
+   *   params: {},
+   * });
+   * ```
+   */
+  rawSign(
+    walletID: string,
+    params: WalletRawSignParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletRawSignResponse> {
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      ...body
+    } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/raw_sign`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Sign a message or transaction with a wallet by wallet ID.
+   *
+   * @example
+   * ```ts
+   * const response = await client.wallets.rpc('wallet_id', {
+   *   method: 'eth_signTransaction',
+   *   params: { transaction: {} },
+   * });
+   * ```
+   */
+  rpc(walletID: string, params: WalletRpcParams, options?: RequestOptions): APIPromise<WalletRpcResponse> {
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      ...body
+    } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/rpc`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -233,6 +324,235 @@ export interface WalletCreateWalletsWithRecoveryResponse {
   wallets: Array<Wallet>;
 }
 
+export interface WalletRawSignResponse {
+  data?: WalletRawSignResponse.Data;
+
+  error?: WalletRawSignResponse.Error;
+}
+
+export namespace WalletRawSignResponse {
+  export interface Data {
+    encoding: 'hex';
+
+    signature: string;
+  }
+
+  export interface Error {
+    code: string;
+
+    message: string;
+  }
+}
+
+export type WalletRpcResponse =
+  | WalletRpcResponse.SolanaSignTransactionRpcResponse
+  | WalletRpcResponse.SolanaSignAndSendTransactionRpcResponse
+  | WalletRpcResponse.SolanaSignMessageRpcResponse
+  | WalletRpcResponse.EthereumSignTransactionRpcResponse
+  | WalletRpcResponse.EthereumSendTransactionRpcResponse
+  | WalletRpcResponse.EthereumPersonalSignRpcResponse
+  | WalletRpcResponse.EthereumSignTypedDataRpcResponse
+  | WalletRpcResponse.EthereumSign7702AuthorizationRpcResponse
+  | WalletRpcResponse.EthereumSecp256k1SignRpcResponse;
+
+export namespace WalletRpcResponse {
+  export interface SolanaSignTransactionRpcResponse {
+    data: SolanaSignTransactionRpcResponse.Data;
+
+    method: 'signTransaction';
+  }
+
+  export namespace SolanaSignTransactionRpcResponse {
+    export interface Data {
+      encoding: 'base64';
+
+      signed_transaction: string;
+    }
+  }
+
+  export interface SolanaSignAndSendTransactionRpcResponse {
+    method: 'signAndSendTransaction';
+
+    data?: SolanaSignAndSendTransactionRpcResponse.Data;
+
+    error?: SolanaSignAndSendTransactionRpcResponse.Error;
+  }
+
+  export namespace SolanaSignAndSendTransactionRpcResponse {
+    export interface Data {
+      caip2: string;
+
+      hash: string;
+
+      transaction_id?: string;
+    }
+
+    export interface Error {
+      code: string;
+
+      message: string;
+    }
+  }
+
+  export interface SolanaSignMessageRpcResponse {
+    data: SolanaSignMessageRpcResponse.Data;
+
+    method: 'signMessage';
+  }
+
+  export namespace SolanaSignMessageRpcResponse {
+    export interface Data {
+      encoding: 'base64';
+
+      signature: string;
+    }
+  }
+
+  export interface EthereumSignTransactionRpcResponse {
+    data: EthereumSignTransactionRpcResponse.Data;
+
+    method: 'eth_signTransaction';
+  }
+
+  export namespace EthereumSignTransactionRpcResponse {
+    export interface Data {
+      encoding: 'rlp';
+
+      signed_transaction: string;
+    }
+  }
+
+  export interface EthereumSendTransactionRpcResponse {
+    method: 'eth_sendTransaction';
+
+    data?: EthereumSendTransactionRpcResponse.Data;
+
+    error?: EthereumSendTransactionRpcResponse.Error;
+  }
+
+  export namespace EthereumSendTransactionRpcResponse {
+    export interface Data {
+      caip2: string;
+
+      hash: string;
+
+      transaction_id?: string;
+
+      transaction_request?: Data.TransactionRequest;
+    }
+
+    export namespace Data {
+      export interface TransactionRequest {
+        chain_id?: string | number;
+
+        data?: string;
+
+        from?: string;
+
+        gas_limit?: string | number;
+
+        gas_price?: string | number;
+
+        max_fee_per_gas?: string | number;
+
+        max_priority_fee_per_gas?: string | number;
+
+        nonce?: string | number;
+
+        to?: string;
+
+        type?: 0 | 1 | 2;
+
+        value?: string | number;
+      }
+    }
+
+    export interface Error {
+      code: string;
+
+      message: string;
+    }
+  }
+
+  export interface EthereumPersonalSignRpcResponse {
+    data: EthereumPersonalSignRpcResponse.Data;
+
+    method: 'personal_sign';
+  }
+
+  export namespace EthereumPersonalSignRpcResponse {
+    export interface Data {
+      encoding: 'hex';
+
+      signature: string;
+    }
+  }
+
+  export interface EthereumSignTypedDataRpcResponse {
+    data: EthereumSignTypedDataRpcResponse.Data;
+
+    method: 'eth_signTypedData_v4';
+  }
+
+  export namespace EthereumSignTypedDataRpcResponse {
+    export interface Data {
+      encoding: 'hex';
+
+      signature: string;
+    }
+  }
+
+  export interface EthereumSign7702AuthorizationRpcResponse {
+    method: 'eth_sign7702Authorization';
+
+    data?: EthereumSign7702AuthorizationRpcResponse.Data;
+
+    error?: EthereumSign7702AuthorizationRpcResponse.Error;
+  }
+
+  export namespace EthereumSign7702AuthorizationRpcResponse {
+    export interface Data {
+      authorization: Data.Authorization;
+    }
+
+    export namespace Data {
+      export interface Authorization {
+        chain_id: string | number;
+
+        contract: string;
+
+        nonce: string | number;
+
+        r: string;
+
+        s: string;
+
+        y_parity: number;
+      }
+    }
+
+    export interface Error {
+      code: string;
+
+      message: string;
+    }
+  }
+
+  export interface EthereumSecp256k1SignRpcResponse {
+    data: EthereumSecp256k1SignRpcResponse.Data;
+
+    method: 'secp256k1_sign';
+  }
+
+  export namespace EthereumSecp256k1SignRpcResponse {
+    export interface Data {
+      encoding: 'hex';
+
+      signature: string;
+    }
+  }
+}
+
 export interface WalletCreateParams {
   /**
    * Body param: Chain type of the wallet
@@ -282,6 +602,63 @@ export interface WalletCreateParams {
 }
 
 export namespace WalletCreateParams {
+  export interface AdditionalSigner {
+    override_policy_ids: Array<string>;
+
+    signer_id: string;
+  }
+
+  /**
+   * The P-256 public key of the owner of the resource. If you provide this, do not
+   * specify an owner_id as it will be generated automatically.
+   */
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
+}
+
+export interface WalletUpdateParams {
+  /**
+   * Body param: Additional signers for the wallet.
+   */
+  additional_signers?: Array<WalletUpdateParams.AdditionalSigner>;
+
+  /**
+   * Body param: The owner of the resource. If you provide this, do not specify an
+   * owner_id as it will be generated automatically. When updating a wallet, you can
+   * set the owner to null to remove the owner.
+   */
+  owner?: WalletUpdateParams.PublicKeyOwner | WalletUpdateParams.UserOwner | null;
+
+  /**
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
+   */
+  owner_id?: string | null;
+
+  /**
+   * Body param: New policy IDs to enforce on the wallet. Currently, only one policy
+   * is supported per wallet.
+   */
+  policy_ids?: Array<string>;
+
+  /**
+   * Header param: Request authorization signature. If multiple signatures are
+   * required, they should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+}
+
+export namespace WalletUpdateParams {
   export interface AdditionalSigner {
     override_policy_ids: Array<string>;
 
@@ -407,15 +784,525 @@ export namespace WalletCreateWalletsWithRecoveryParams {
   }
 }
 
+export interface WalletRawSignParams {
+  /**
+   * Body param:
+   */
+  params: WalletRawSignParams.Params;
+
+  /**
+   * Header param: Request authorization signature. If multiple signatures are
+   * required, they should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Idempotency keys ensure API requests are executed only once within
+   * a 24-hour window.
+   */
+  'privy-idempotency-key'?: string;
+}
+
+export namespace WalletRawSignParams {
+  export interface Params {
+    /**
+     * The hash to sign. Must start with `0x`.
+     */
+    hash?: string;
+  }
+}
+
+export type WalletRpcParams =
+  | WalletRpcParams.EthereumSignTransactionRpcInput
+  | WalletRpcParams.EthereumSendTransactionRpcInput
+  | WalletRpcParams.EthereumPersonalSignRpcInput
+  | WalletRpcParams.EthereumSignTypedDataRpcInput
+  | WalletRpcParams.EthereumSign7702AuthorizationRpcInput
+  | WalletRpcParams.EthereumSecp256k1SignRpcInput
+  | WalletRpcParams.SolanaSignTransactionRpcInput
+  | WalletRpcParams.SolanaSignAndSendTransactionRpcInput
+  | WalletRpcParams.SolanaSignMessageRpcInput;
+
+export declare namespace WalletRpcParams {
+  export interface EthereumSignTransactionRpcInput {
+    /**
+     * Body param:
+     */
+    method: 'eth_signTransaction';
+
+    /**
+     * Body param:
+     */
+    params: EthereumSignTransactionRpcInput.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace EthereumSignTransactionRpcInput {
+    export interface Params {
+      transaction: Params.Transaction;
+    }
+
+    export namespace Params {
+      export interface Transaction {
+        chain_id?: string | number;
+
+        data?: string;
+
+        from?: string;
+
+        gas_limit?: string | number;
+
+        gas_price?: string | number;
+
+        max_fee_per_gas?: string | number;
+
+        max_priority_fee_per_gas?: string | number;
+
+        nonce?: string | number;
+
+        to?: string;
+
+        type?: 0 | 1 | 2;
+
+        value?: string | number;
+      }
+    }
+  }
+
+  export interface EthereumSendTransactionRpcInput {
+    /**
+     * Body param:
+     */
+    caip2: string;
+
+    /**
+     * Body param:
+     */
+    method: 'eth_sendTransaction';
+
+    /**
+     * Body param:
+     */
+    params: EthereumSendTransactionRpcInput.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Body param:
+     */
+    sponsor?: boolean;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace EthereumSendTransactionRpcInput {
+    export interface Params {
+      transaction: Params.Transaction;
+    }
+
+    export namespace Params {
+      export interface Transaction {
+        chain_id?: string | number;
+
+        data?: string;
+
+        from?: string;
+
+        gas_limit?: string | number;
+
+        gas_price?: string | number;
+
+        max_fee_per_gas?: string | number;
+
+        max_priority_fee_per_gas?: string | number;
+
+        nonce?: string | number;
+
+        to?: string;
+
+        type?: 0 | 1 | 2;
+
+        value?: string | number;
+      }
+    }
+  }
+
+  export interface EthereumPersonalSignRpcInput {
+    /**
+     * Body param:
+     */
+    method: 'personal_sign';
+
+    /**
+     * Body param:
+     */
+    params: EthereumPersonalSignRpcInput.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace EthereumPersonalSignRpcInput {
+    export interface Params {
+      encoding: 'utf-8' | 'hex';
+
+      message: string;
+    }
+  }
+
+  export interface EthereumSignTypedDataRpcInput {
+    /**
+     * Body param:
+     */
+    method: 'eth_signTypedData_v4';
+
+    /**
+     * Body param:
+     */
+    params: EthereumSignTypedDataRpcInput.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace EthereumSignTypedDataRpcInput {
+    export interface Params {
+      typed_data: Params.TypedData;
+    }
+
+    export namespace Params {
+      export interface TypedData {
+        domain: { [key: string]: unknown };
+
+        message: { [key: string]: unknown };
+
+        primary_type: string;
+
+        types: { [key: string]: Array<TypedData.Type> };
+      }
+
+      export namespace TypedData {
+        export interface Type {
+          name: string;
+
+          type: string;
+        }
+      }
+    }
+  }
+
+  export interface EthereumSign7702AuthorizationRpcInput {
+    /**
+     * Body param:
+     */
+    method: 'eth_sign7702Authorization';
+
+    /**
+     * Body param:
+     */
+    params: EthereumSign7702AuthorizationRpcInput.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace EthereumSign7702AuthorizationRpcInput {
+    export interface Params {
+      chain_id: string | number;
+
+      contract: string;
+
+      nonce?: string | number;
+    }
+  }
+
+  export interface EthereumSecp256k1SignRpcInput {
+    /**
+     * Body param:
+     */
+    method: 'secp256k1_sign';
+
+    /**
+     * Body param:
+     */
+    params: EthereumSecp256k1SignRpcInput.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace EthereumSecp256k1SignRpcInput {
+    export interface Params {
+      hash: string;
+    }
+  }
+
+  export interface SolanaSignTransactionRpcInput {
+    /**
+     * Body param:
+     */
+    method: 'signTransaction';
+
+    /**
+     * Body param:
+     */
+    params: SolanaSignTransactionRpcInput.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'solana';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace SolanaSignTransactionRpcInput {
+    export interface Params {
+      encoding: 'base64';
+
+      transaction: string;
+    }
+  }
+
+  export interface SolanaSignAndSendTransactionRpcInput {
+    /**
+     * Body param:
+     */
+    caip2: string;
+
+    /**
+     * Body param:
+     */
+    method: 'signAndSendTransaction';
+
+    /**
+     * Body param:
+     */
+    params: SolanaSignAndSendTransactionRpcInput.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'solana';
+
+    /**
+     * Body param:
+     */
+    sponsor?: boolean;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace SolanaSignAndSendTransactionRpcInput {
+    export interface Params {
+      encoding: 'base64';
+
+      transaction: string;
+    }
+  }
+
+  export interface SolanaSignMessageRpcInput {
+    /**
+     * Body param:
+     */
+    method: 'signMessage';
+
+    /**
+     * Body param:
+     */
+    params: SolanaSignMessageRpcInput.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'solana';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace SolanaSignMessageRpcInput {
+    export interface Params {
+      encoding: 'base64';
+
+      message: string;
+    }
+  }
+}
+
 export declare namespace Wallets {
   export {
     type Wallet as Wallet,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
+    type WalletRawSignResponse as WalletRawSignResponse,
+    type WalletRpcResponse as WalletRpcResponse,
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
+    type WalletUpdateParams as WalletUpdateParams,
     type WalletListParams as WalletListParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
+    type WalletRawSignParams as WalletRawSignParams,
+    type WalletRpcParams as WalletRpcParams,
   };
 }

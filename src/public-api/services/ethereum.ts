@@ -51,4 +51,24 @@ export class PrivyEthereumService {
 
     return response.data;
   }
+
+  public async sign7702Authorization(
+    walletId: string,
+    params: WalletRpcParams.EthereumSign7702AuthorizationRpcInput.Params,
+    authorizationContext?: AuthorizationContext,
+    idempotencyKey?: string,
+  ): Promise<WalletRpcResponse.EthereumSign7702AuthorizationRpcResponse.Data> {
+    const response = await this.privyWalletsService.rpc(
+      walletId,
+      { method: 'eth_sign7702Authorization', params },
+      authorizationContext,
+      idempotencyKey,
+    );
+
+    if (!response.data) {
+      throw new Error(response.error?.message ?? 'Unexpected response from Privy API');
+    }
+
+    return response.data;
+  }
 }

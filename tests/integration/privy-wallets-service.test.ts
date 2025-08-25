@@ -3,6 +3,7 @@ import { secp256k1 } from '@noble/curves/secp256k1';
 import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
 import { Hex, hexToBytes, verifyMessage } from 'viem';
+import crypto from 'node:crypto';
 
 describe('PrivyWalletsService', () => {
   // Read the required environment variables from .env
@@ -153,6 +154,42 @@ describe('PrivyWalletsService', () => {
           //                                                             No authorization context passed in
         ).rejects.toThrow(PrivyAPI.AuthenticationError);
       });
+      it('will succeed if the idempotency key is reused with the same body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        await privyClient
+          .wallets()
+          .ethereum()
+          .signMessage(FUNDED_ETHEREUM_WALLET_ID, 'Hello, world!', undefined, idempotencyKey);
+
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signMessage(FUNDED_ETHEREUM_WALLET_ID, 'Hello, world!', undefined, idempotencyKey);
+
+        expect(response.signature).toBeDefined();
+        const verified = await verifyMessage({
+          address: FUNDED_ETHEREUM_WALLET_ADDRESS,
+          message: 'Hello, world!',
+          signature: response.signature as `0x${string}`,
+        });
+        expect(verified).toBe(true);
+      });
+      it('will fail if the idempotency key is reused with a different body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        await privyClient
+          .wallets()
+          .ethereum()
+          .signMessage(FUNDED_ETHEREUM_WALLET_ID, 'Hello, world!', undefined, idempotencyKey);
+
+        await expect(
+          privyClient
+            .wallets()
+            .ethereum()
+            .signMessage(FUNDED_ETHEREUM_WALLET_ID, 'Goodbye, world!', undefined, idempotencyKey),
+        ).rejects.toThrow(
+          `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
+        );
+      });
     });
   });
   describe('other chains', () => {
@@ -172,6 +209,60 @@ describe('PrivyWalletsService', () => {
 
         const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
         expect(verified).toBe(true);
+      });
+      it('will succeed if the idempotency key is reused with the same body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        await privyClient
+          .wallets()
+          .rawSign(
+            FUNDED_TRON_WALLET_ID,
+            { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+            undefined,
+            idempotencyKey,
+          );
+
+        const response = await privyClient
+          .wallets()
+          .rawSign(
+            FUNDED_TRON_WALLET_ID,
+            { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+            undefined,
+            idempotencyKey,
+          );
+        expect(response.encoding).toBe('hex');
+        expect(response.signature).toBeDefined();
+        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
+
+        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
+        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
+        const publicKeyBytes = hexToBytes(`0x${FUNDED_TRON_WALLET_PK}`);
+
+        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
+        expect(verified).toBe(true);
+      });
+      it('will fail if the idempotency key is reused with a different body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        await privyClient
+          .wallets()
+          .rawSign(
+            FUNDED_TRON_WALLET_ID,
+            { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+            undefined,
+            idempotencyKey,
+          );
+
+        await expect(
+          privyClient
+            .wallets()
+            .rawSign(
+              FUNDED_TRON_WALLET_ID,
+              { hash: '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321' },
+              undefined,
+              idempotencyKey,
+            ),
+        ).rejects.toThrow(
+          `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
+        );
       });
       it('should be able to sign a message with an authorization context', async () => {
         // Set up the authorization context

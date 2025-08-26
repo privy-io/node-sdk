@@ -38,52 +38,32 @@ describe('PrivyWalletsService', () => {
     });
   });
   describe.skip('create', () => {
-    it('should be able to create a new ethereum wallet', async () => {
+    test.each([
+      { chainType: 'ethereum', owner: null },
+      { chainType: 'ethereum', owner: 'p256' },
+      { chainType: 'solana', owner: null },
+      { chainType: 'solana', owner: 'p256' },
+      { chainType: 'tron', owner: null, hasPublicKey: true },
+      { chainType: 'tron', owner: 'p256', hasPublicKey: true },
+    ] as const)('.create($chainType, owner:$owner)', async ({ chainType, owner, hasPublicKey }) => {
       const walletResponse = await privyClient.wallets().create({
-        chain_type: 'ethereum',
+        chain_type: chainType,
+        owner: owner === 'p256' ? { public_key: P256_PUBLIC_KEY } : null,
       });
 
       expect(walletResponse.id).toBeDefined();
+      expect(walletResponse.chain_type).toBe(chainType);
       expect(walletResponse.address).toBeDefined();
-      expect(walletResponse.chain_type).toBe('ethereum');
-    });
-    it('should be able to create a new ethereum wallet owned by a p256 key pair', async () => {
-      const walletResponse = await privyClient.wallets().create({
-        chain_type: 'ethereum',
-        owner: { public_key: P256_PUBLIC_KEY },
-      });
+      hasPublicKey && expect(walletResponse.public_key).toBeDefined();
 
-      expect(walletResponse.id).toBeDefined();
-      expect(walletResponse.address).toBeDefined();
-      expect(walletResponse.chain_type).toBe('ethereum');
-    });
-    it('should be able to create a new solana wallet', async () => {
-      const walletResponse = await privyClient.wallets().create({
-        chain_type: 'solana',
-      });
-
-      expect(walletResponse.id).toBeDefined();
-      expect(walletResponse.address).toBeDefined();
-      expect(walletResponse.chain_type).toBe('solana');
-    });
-    it('should be able to create a new tron wallet', async () => {
-      const walletResponse = await privyClient.wallets().create({
-        chain_type: 'tron',
-      });
-
-      expect(walletResponse.id).toBeDefined();
-      expect(walletResponse.address).toBeDefined();
-      expect(walletResponse.chain_type).toBe('tron');
-    });
-    it('should be able to create a new tron wallet owned by a p256 key pair', async () => {
-      const walletResponse = await privyClient.wallets().create({
-        chain_type: 'tron',
-        owner: { public_key: P256_PUBLIC_KEY },
-      });
-
-      expect(walletResponse.id).toBeDefined();
-      expect(walletResponse.address).toBeDefined();
-      expect(walletResponse.chain_type).toBe('tron');
+      // Log the details of the created wallets so it can be added to the envfile
+      const OWNER_PREFIX: string = owner === 'p256' ? 'P256_OWNED' : 'OWNERLESS';
+      const CHAIN_TYPE: string = chainType.toUpperCase();
+      console.log(
+        `${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_ID=${walletResponse.id}` +
+          `\n${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_ADDRESS=${walletResponse.address}` +
+          (hasPublicKey ? `\n${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_PK=${walletResponse.public_key}` : ''),
+      );
     });
   });
   describe('ethereum', () => {

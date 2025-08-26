@@ -37,11 +37,7 @@ export type WalletApiRequestSignatureInput = {
  * @param request The request to be formatted.
  * @return The raw bytes representing the authorization payload.
  */
-export function formatRequestForAuthorizationSignature({
-  input,
-}: {
-  input: WalletApiRequestSignatureInput;
-}): Uint8Array {
+export function formatRequestForAuthorizationSignature(input: WalletApiRequestSignatureInput): Uint8Array {
   const serializedInput = canonicalize(input);
   if (!serializedInput) {
     throw new PrivyAPIError('Failed to serialize request for authorization signature');
@@ -66,34 +62,35 @@ export function generateAuthorizationSignatures({
   authorizationContext: AuthorizationContext;
   input: WalletApiRequestSignatureInput;
 }): string[] {
-  const payload = formatRequestForAuthorizationSignature({ input });
+  const payload = formatRequestForAuthorizationSignature(input);
 
   // TODO: add support for user JWTs
   // TODO: add support for passed in signatures
   const privateKeys = authorizationContext.authorizationPrivateKeys ?? [];
 
-  return privateKeys.map((privateKey) => generateAuthorizationSignature({ privateKey, input: payload }));
+  return privateKeys.map((sk) =>
+    generateAuthorizationSignature({ authorizationPrivateKey: sk, input: payload }),
+  );
 }
 
 /**
  * Signs the given request with the provided private key.
  *
- * @param privateKey The base64-encoded PKCS8-formatted private key, with no PEM headers.
- * @param request The request payload to sign or a serialized version of the request using {@link formatRequestForAuthorizationSignature}.
+ * @param authorizationPrivateKey The base64-encoded PKCS8-formatted private key, with no PEM headers.
+ * @param input The request payload to sign, or one serialized using {@link formatRequestForAuthorizationSignature}.
  * @return The authorization signature.
  */
 export function generateAuthorizationSignature({
-  privateKey,
+  authorizationPrivateKey,
   input,
 }: {
-  privateKey: string;
+  authorizationPrivateKey: string;
   input: WalletApiRequestSignatureInput | Uint8Array;
 }): string {
-  const payload = input instanceof Uint8Array ? input : formatRequestForAuthorizationSignature({ input });
+  const payload = input instanceof Uint8Array ? input : formatRequestForAuthorizationSignature(input);
+  const privateKey = importPKCS8PrivateKey(authorizationPrivateKey);
 
-  const importedPrivateKey = importPKCS8PrivateKey(privateKey);
-
-  const signature = p256.sign(sha256(payload), importedPrivateKey).toBytes('der');
+  const signature = p256.sign(sha256(payload), privateKey).toBytes('der');
   // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
   return Buffer.from(signature).toString('base64');
 }

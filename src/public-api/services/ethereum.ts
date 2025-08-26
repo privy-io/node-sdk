@@ -35,4 +35,20 @@ export class PrivyEthereumService {
 
     return response.data;
   }
+
+  public async signSecp256k1(
+    walletId: string,
+    hash: string,
+    authorizationContext?: AuthorizationContext,
+    idempotencyKey?: string,
+  ): Promise<WalletRpcResponse.EthereumSecp256k1SignRpcResponse.Data> {
+    const response = await this.privyWalletsService.rpc(
+      walletId,
+      { method: 'secp256k1_sign', params: { hash } },
+      authorizationContext,
+      idempotencyKey,
+    );
+
+    return response.data;
+  }
 }

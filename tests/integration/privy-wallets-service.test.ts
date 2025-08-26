@@ -505,6 +505,66 @@ describe('PrivyWalletsService', () => {
         );
       });
     });
+    // Skipped to not waste funds. Logic is shared with signing transactions so safe to not frequently test.
+    describe.skip('transaction sending', () => {
+      const transaction: WalletRpcParams.EthereumSendTransactionRpcInput.Params.Transaction = {
+        to: '0x429c8e85D3A18F9F0a64a7A851777e24D591485C', // Some ethereum address
+        value: '0x1', // 1 wei
+        chain_id: 11_155_111, // sepolia testnet
+      };
+      it('should be able to send a transaction', async () => {
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .sendTransaction(OWNERLESS_ETHEREUM_WALLET_ID, 'eip155:11155111', transaction);
+
+        expect(response.hash).toBeDefined();
+        expect(response.caip2).toBe('eip155:11155111');
+        expect(response.hash).toMatch(/^0x[0-9a-fA-F]+$/);
+      });
+      it('should be able to sign a 7702 authorization with an authorization context', async () => {
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .sendTransaction(
+            P256_OWNED_ETHEREUM_WALLET_ID,
+            'eip155:11155111',
+            transaction,
+            p256AuthorizationContext,
+          );
+
+        expect(response.hash).toBeDefined();
+        expect(response.caip2).toBe('eip155:11155111');
+        expect(response.hash).toMatch(/^0x[0-9a-fA-F]+$/);
+      });
+      it('will succeed if the idempotency key is reused with the same body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        const firstTx = await privyClient
+          .wallets()
+          .ethereum()
+          .sendTransaction(
+            OWNERLESS_ETHEREUM_WALLET_ID,
+            'eip155:11155111',
+            transaction,
+            undefined,
+            idempotencyKey,
+          );
+
+        const secondTx = await privyClient
+          .wallets()
+          .ethereum()
+          .sendTransaction(
+            OWNERLESS_ETHEREUM_WALLET_ID,
+            'eip155:11155111',
+            transaction,
+            undefined,
+            idempotencyKey,
+          );
+
+        expect(firstTx.hash).toEqual(secondTx.hash);
+        expect(firstTx.transaction_id).toEqual(secondTx.transaction_id);
+      });
+    });
   });
   describe('other chains', () => {
     describe('raw sign', () => {

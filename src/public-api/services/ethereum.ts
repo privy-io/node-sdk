@@ -103,4 +103,25 @@ export class PrivyEthereumService {
 
     return response.data;
   }
+
+  public async sendTransaction(
+    walletId: string,
+    caip2: string,
+    transaction: WalletRpcParams.EthereumSendTransactionRpcInput.Params.Transaction,
+    authorizationContext?: AuthorizationContext,
+    idempotencyKey?: string,
+  ): Promise<WalletRpcResponse.EthereumSendTransactionRpcResponse.Data> {
+    const response = await this.privyWalletsService.rpc(
+      walletId,
+      { method: 'eth_sendTransaction', caip2, params: { transaction } },
+      authorizationContext,
+      idempotencyKey,
+    );
+
+    if (!response.data) {
+      throw new Error(response.error?.message ?? 'Unexpected response from Privy API');
+    }
+
+    return response.data;
+  }
 }

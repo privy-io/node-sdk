@@ -1,7 +1,8 @@
 import { PrivyAPI } from 'privy-api-client/client';
+import { secp256k1 } from '@noble/curves/secp256k1';
 import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
-import { Hex, verifyMessage } from 'viem';
+import { Hex, hexToBytes, verifyMessage } from 'viem';
 
 describe('PrivyWalletsService', () => {
   // Read the required environment variables from .env
@@ -12,6 +13,12 @@ describe('PrivyWalletsService', () => {
   const FUNDED_ETHEREUM_WALLET_ADDRESS = process.env['FUNDED_ETHEREUM_WALLET_ADDRESS']! as Hex;
   const P256_OWNED_ETHEREUM_WALLET_ID = process.env['P256_OWNED_ETHEREUM_WALLET_ID']!;
   const P256_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['P256_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
+  const FUNDED_TRON_WALLET_ID = process.env['FUNDED_TRON_WALLET_ID']!;
+  const FUNDED_TRON_WALLET_PK = process.env['FUNDED_TRON_WALLET_PK']!;
+  const FUNDED_TRON_WALLET_ADDRESS = process.env['FUNDED_TRON_WALLET_ADDRESS']! as Hex;
+  const P256_OWNED_TRON_WALLET_ID = process.env['P256_OWNED_TRON_WALLET_ID']!;
+  const P256_OWNED_TRON_WALLET_PK = process.env['P256_OWNED_TRON_WALLET_PK']!;
+  const P256_OWNED_TRON_WALLET_ADDRESS = process.env['P256_OWNED_TRON_WALLET_ADDRESS']! as Hex;
   const P256_PRIVATE_KEY = process.env['P256_PRIVATE_KEY']!;
   const P256_PUBLIC_KEY = process.env['P256_PUBLIC_KEY']!;
 
@@ -51,6 +58,25 @@ describe('PrivyWalletsService', () => {
       expect(walletResponse.id).toBeDefined();
       expect(walletResponse.address).toBeDefined();
       expect(walletResponse.chain_type).toBe('solana');
+    });
+    it('should be able to create a new tron wallet', async () => {
+      const walletResponse = await privyClient.wallets().create({
+        chain_type: 'tron',
+      });
+
+      expect(walletResponse.id).toBeDefined();
+      expect(walletResponse.address).toBeDefined();
+      expect(walletResponse.chain_type).toBe('tron');
+    });
+    it('should be able to create a new tron wallet owned by a p256 key pair', async () => {
+      const walletResponse = await privyClient.wallets().create({
+        chain_type: 'tron',
+        owner: { public_key: P256_PUBLIC_KEY },
+      });
+
+      expect(walletResponse.id).toBeDefined();
+      expect(walletResponse.address).toBeDefined();
+      expect(walletResponse.chain_type).toBe('tron');
     });
   });
   describe('ethereum', () => {
@@ -126,6 +152,51 @@ describe('PrivyWalletsService', () => {
           //                                                             ^^^^^^^^^
           //                                                             No authorization context passed in
         ).rejects.toThrow(PrivyAPI.AuthenticationError);
+      });
+    });
+  });
+  describe('other chains', () => {
+    describe('raw sign', () => {
+      it('should be able to sign a message', async () => {
+        const response = await privyClient.wallets().rawSign(FUNDED_TRON_WALLET_ID, {
+          hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+        });
+
+        expect(response.encoding).toBe('hex');
+        expect(response.signature).toBeDefined();
+        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
+
+        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
+        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
+        const publicKeyBytes = hexToBytes(`0x${FUNDED_TRON_WALLET_PK}`);
+
+        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
+        expect(verified).toBe(true);
+      });
+      it('should be able to sign a message with an authorization context', async () => {
+        // Set up the authorization context
+        const authorizationContext: AuthorizationContext = {
+          authorizationPrivateKeys: [P256_PRIVATE_KEY],
+        };
+
+        const response = await privyClient
+          .wallets()
+          .rawSign(
+            P256_OWNED_TRON_WALLET_ID,
+            { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+            authorizationContext,
+          );
+
+        expect(response.encoding).toBe('hex');
+        expect(response.signature).toBeDefined();
+        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
+
+        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
+        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
+        const publicKeyBytes = hexToBytes(`0x${P256_OWNED_TRON_WALLET_PK}`);
+
+        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
+        expect(verified).toBe(true);
       });
     });
   });

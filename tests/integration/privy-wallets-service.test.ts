@@ -11,19 +11,27 @@ describe('PrivyWalletsService', () => {
   // Read the required environment variables from .env
   const TEST_APP_ID = process.env['TEST_APP_ID']!;
   const TEST_APP_SECRET = process.env['TEST_APP_SECRET']!;
-  const TEST_APP_SERVER_URL = process.env['TEST_APP_SERVER_URL']!;
-  const FUNDED_ETHEREUM_WALLET_ID = process.env['FUNDED_ETHEREUM_WALLET_ID']!;
-  const FUNDED_ETHEREUM_WALLET_ADDRESS = process.env['FUNDED_ETHEREUM_WALLET_ADDRESS']! as Hex;
+  const TEST_API_URL = process.env['TEST_API_URL']!;
+
+  const P256_PUBLIC_KEY = process.env['P256_PUBLIC_KEY']!;
+  const P256_PRIVATE_KEY = process.env['P256_PRIVATE_KEY']!;
+
+  const FUNDED_ETHEREUM_WALLET_ID = process.env['OWNERLESS_ETHEREUM_WALLET_ID']!;
+  const FUNDED_ETHEREUM_WALLET_ADDRESS = process.env['OWNERLESS_ETHEREUM_WALLET_ADDRESS']! as Hex;
   const P256_OWNED_ETHEREUM_WALLET_ID = process.env['P256_OWNED_ETHEREUM_WALLET_ID']!;
   const P256_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['P256_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
-  const FUNDED_TRON_WALLET_ID = process.env['FUNDED_TRON_WALLET_ID']!;
-  const FUNDED_TRON_WALLET_PK = process.env['FUNDED_TRON_WALLET_PK']!;
-  const FUNDED_TRON_WALLET_ADDRESS = process.env['FUNDED_TRON_WALLET_ADDRESS']! as Hex;
+
+  const FUNDED_SOLANA_WALLET_ID = process.env['OWNERLESS_SOLANA_WALLET_ID']!;
+  const FUNDED_SOLANA_WALLET_ADDRESS = process.env['OWNERLESS_SOLANA_WALLET_ADDRESS']! as Hex;
+  const P256_OWNED_SOLANA_WALLET_ID = process.env['P256_OWNED_SOLANA_WALLET_ID']!;
+  const P256_OWNED_SOLANA_WALLET_ADDRESS = process.env['P256_OWNED_SOLANA_WALLET_ADDRESS']! as Hex;
+
+  const FUNDED_TRON_WALLET_ID = process.env['OWNERLESS_TRON_WALLET_ID']!;
+  const FUNDED_TRON_WALLET_ADDRESS = process.env['OWNERLESS_TRON_WALLET_ADDRESS']! as Hex;
+  const FUNDED_TRON_WALLET_PK = process.env['OWNERLESS_TRON_WALLET_PK']!;
   const P256_OWNED_TRON_WALLET_ID = process.env['P256_OWNED_TRON_WALLET_ID']!;
-  const P256_OWNED_TRON_WALLET_PK = process.env['P256_OWNED_TRON_WALLET_PK']!;
   const P256_OWNED_TRON_WALLET_ADDRESS = process.env['P256_OWNED_TRON_WALLET_ADDRESS']! as Hex;
-  const P256_PRIVATE_KEY = process.env['P256_PRIVATE_KEY']!;
-  const P256_PUBLIC_KEY = process.env['P256_PUBLIC_KEY']!;
+  const P256_OWNED_TRON_WALLET_PK = process.env['P256_OWNED_TRON_WALLET_PK']!;
 
   const p256AuthorizationContext: AuthorizationContext = {
     authorizationPrivateKeys: [P256_PRIVATE_KEY],
@@ -34,7 +42,7 @@ describe('PrivyWalletsService', () => {
     privyClient = new PrivyClient({
       appId: TEST_APP_ID,
       appSecret: TEST_APP_SECRET,
-      apiUrl: TEST_APP_SERVER_URL,
+      apiUrl: TEST_API_URL,
     });
   });
   describe.skip('create', () => {

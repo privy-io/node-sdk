@@ -13,6 +13,7 @@ export class PrivyEthereumService {
     walletId: string,
     message: string | Uint8Array,
     authorizationContext?: AuthorizationContext,
+    idempotencyKey?: string,
   ): Promise<WalletRpcResponse.EthereumPersonalSignRpcResponse.Data> {
     let params: WalletRpcParams.EthereumPersonalSignRpcInput.Params;
     if (message instanceof Uint8Array) {
@@ -29,6 +30,7 @@ export class PrivyEthereumService {
       walletId,
       { method: 'personal_sign', params },
       authorizationContext,
+      idempotencyKey,
     );
 
     return response.data;

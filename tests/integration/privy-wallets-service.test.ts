@@ -1,5 +1,7 @@
 import { PrivyAPI } from 'privy-api-client/client';
 import { secp256k1 } from '@noble/curves/secp256k1';
+import { base58 } from '@scure/base';
+import nacl from 'tweetnacl';
 import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
 import { Hex, hexToBytes, verifyHash, verifyMessage } from 'viem';
@@ -344,6 +346,57 @@ describe('PrivyWalletsService', () => {
         ).rejects.toThrow(
           `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
         );
+      });
+    });
+  });
+  describe('solana', () => {
+    describe('signMessage', () => {
+      it('should be able to sign a base64-encoded message', async () => {
+        const base64Message = Buffer.from('Hello, world!', 'utf8').toString('base64');
+        const response = await privyClient
+          .wallets()
+          .solana()
+          .signMessage(OWNERLESS_SOLANA_WALLET_ID, base64Message);
+
+        expect(response.signature).toBeDefined();
+
+        const verified = nacl.sign.detached.verify(
+          Buffer.from(base64Message, 'base64'),
+          Buffer.from(response.signature, 'base64'),
+          base58.decode(OWNERLESS_SOLANA_WALLET_ADDRESS),
+        );
+        expect(verified).toBe(true);
+      });
+      it('should be able to sign a byte array message', async () => {
+        const message = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        const response = await privyClient
+          .wallets()
+          .solana()
+          .signMessage(OWNERLESS_SOLANA_WALLET_ID, message);
+
+        expect(response.signature).toBeDefined();
+        const verified = nacl.sign.detached.verify(
+          message,
+          Buffer.from(response.signature, 'base64'),
+          base58.decode(OWNERLESS_SOLANA_WALLET_ADDRESS),
+        );
+        expect(verified).toBe(true);
+      });
+      it('should be able to sign a message with an authorization context', async () => {
+        const base64Message = Buffer.from('Hello, world!', 'utf8').toString('base64');
+        const response = await privyClient
+          .wallets()
+          .solana()
+          .signMessage(P256_OWNED_SOLANA_WALLET_ID, base64Message, p256AuthorizationContext);
+
+        expect(response.signature).toBeDefined();
+
+        const verified = nacl.sign.detached.verify(
+          Buffer.from(base64Message, 'base64'),
+          Buffer.from(response.signature, 'base64'),
+          base58.decode(P256_OWNED_SOLANA_WALLET_ADDRESS),
+        );
+        expect(verified).toBe(true);
       });
     });
   });

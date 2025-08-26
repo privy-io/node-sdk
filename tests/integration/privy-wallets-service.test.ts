@@ -1,4 +1,12 @@
 import { PrivyAPI } from 'privy-api-client/client';
+import {
+  VersionedTransaction,
+  SystemProgram,
+  PublicKey,
+  TransactionMessage,
+  clusterApiUrl,
+  Connection,
+} from '@solana/web3.js';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { base58 } from '@scure/base';
 import nacl from 'tweetnacl';
@@ -613,6 +621,84 @@ describe('PrivyWalletsService', () => {
         const verified = nacl.sign.detached.verify(
           Buffer.from(base64Message, 'base64'),
           Buffer.from(response.signature, 'base64'),
+          base58.decode(P256_OWNED_SOLANA_WALLET_ADDRESS),
+        );
+        expect(verified).toBe(true);
+      });
+    });
+    describe('signTransaction', () => {
+      const connection = new Connection(clusterApiUrl('devnet'));
+      async function createTransferTransaction(from: string, lamports: number) {
+        const fromPubkey = new PublicKey(base58.decode(from));
+        const toPubkey = new PublicKey(base58.decode('9NvE68JVWHHHGLp5NNELtM5fiBw6SXHrzqQJjUqaykC1'));
+
+        const { blockhash: recentBlockhash } = await connection.getLatestBlockhash();
+
+        const instruction = SystemProgram.transfer({ fromPubkey, toPubkey, lamports });
+        const message = new TransactionMessage({
+          payerKey: fromPubkey,
+          instructions: [instruction],
+          recentBlockhash,
+        });
+
+        return new VersionedTransaction(message.compileToV0Message());
+      }
+      it('should be able to sign a base64-encoded transaction', async () => {
+        const transaction = await createTransferTransaction(OWNERLESS_SOLANA_WALLET_ADDRESS, 100);
+        const response = await privyClient
+          .wallets()
+          .solana()
+          .signTransaction(
+            OWNERLESS_SOLANA_WALLET_ID,
+            Buffer.from(transaction.serialize()).toString('base64'),
+          );
+
+        expect(response.signed_transaction).toBeDefined();
+        const signedTransaction = VersionedTransaction.deserialize(
+          Buffer.from(response.signed_transaction, 'base64'),
+        );
+
+        const verified = nacl.sign.detached.verify(
+          transaction.message.serialize(),
+          signedTransaction.signatures[0]!,
+          base58.decode(OWNERLESS_SOLANA_WALLET_ADDRESS),
+        );
+        expect(verified).toBe(true);
+      });
+      it('should be able to sign a binary encoded transaction', async () => {
+        const transaction = await createTransferTransaction(OWNERLESS_SOLANA_WALLET_ADDRESS, 100);
+        const response = await privyClient
+          .wallets()
+          .solana()
+          .signTransaction(OWNERLESS_SOLANA_WALLET_ID, transaction.serialize());
+
+        expect(response.signed_transaction).toBeDefined();
+        const signedTransaction = VersionedTransaction.deserialize(
+          Buffer.from(response.signed_transaction, 'base64'),
+        );
+
+        const verified = nacl.sign.detached.verify(
+          transaction.message.serialize(),
+          signedTransaction.signatures[0]!,
+          base58.decode(OWNERLESS_SOLANA_WALLET_ADDRESS),
+        );
+        expect(verified).toBe(true);
+      });
+      it('should be able to sign a transaction with an authorization context', async () => {
+        const transaction = await createTransferTransaction(P256_OWNED_SOLANA_WALLET_ADDRESS, 100);
+        const response = await privyClient
+          .wallets()
+          .solana()
+          .signTransaction(P256_OWNED_SOLANA_WALLET_ID, transaction.serialize(), p256AuthorizationContext);
+
+        expect(response.signed_transaction).toBeDefined();
+        const signedTransaction = VersionedTransaction.deserialize(
+          Buffer.from(response.signed_transaction, 'base64'),
+        );
+
+        const verified = nacl.sign.detached.verify(
+          transaction.message.serialize(),
+          signedTransaction.signatures[0]!,
           base58.decode(P256_OWNED_SOLANA_WALLET_ADDRESS),
         );
         expect(verified).toBe(true);

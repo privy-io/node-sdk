@@ -33,4 +33,29 @@ export class PrivySolanaService {
 
     return response.data;
   }
+
+  public async signTransaction(
+    walletId: string,
+    transaction: string | Uint8Array,
+    authorizationContext?: AuthorizationContext,
+    idempotencyKey?: string,
+  ): Promise<WalletRpcResponse.SolanaSignTransactionRpcResponse.Data> {
+    let params: WalletRpcParams.SolanaSignTransactionRpcInput.Params;
+    if (transaction instanceof Uint8Array) {
+      // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
+      params = { transaction: Buffer.from(transaction).toString('base64'), encoding: 'base64' };
+    } else {
+      // Strings are assumed to be base64 encoded
+      params = { transaction, encoding: 'base64' };
+    }
+
+    const response = await this.privyWalletsService.rpc(
+      walletId,
+      { method: 'signTransaction', params },
+      authorizationContext,
+      idempotencyKey,
+    );
+
+    return response.data;
+  }
 }

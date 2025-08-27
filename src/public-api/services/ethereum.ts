@@ -1,6 +1,6 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
 import { PrivyWalletsService } from './wallets';
-import { PrivyWalletsRpcConfig } from './types';
+import { PrivyWalletsRpcConfig, WithAuthorization, WithIdempotency } from './types';
 
 export class PrivyEthereumService {
   private privyWalletsService: PrivyWalletsService;
@@ -25,11 +25,11 @@ export class PrivyEthereumService {
       params = { message, encoding: 'utf-8' };
     }
 
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { method: 'personal_sign', params },
-      config,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      method: 'personal_sign',
+      params,
+      ...config,
+    });
 
     return response.data;
   }
@@ -39,11 +39,11 @@ export class PrivyEthereumService {
     hash: string,
     config?: PrivyWalletsRpcConfig,
   ): Promise<WalletRpcResponse.EthereumSecp256k1SignRpcResponse.Data> {
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { method: 'secp256k1_sign', params: { hash } },
-      config,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      method: 'secp256k1_sign',
+      params: { hash },
+      ...config,
+    });
 
     return response.data;
   }
@@ -53,11 +53,11 @@ export class PrivyEthereumService {
     params: WalletRpcParams.EthereumSign7702AuthorizationRpcInput.Params,
     config?: PrivyWalletsRpcConfig,
   ): Promise<WalletRpcResponse.EthereumSign7702AuthorizationRpcResponse.Data> {
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { method: 'eth_sign7702Authorization', params },
-      config,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      method: 'eth_sign7702Authorization',
+      params,
+      ...config,
+    });
 
     if (!response.data) {
       throw new Error(response.error?.message ?? 'Unexpected response from Privy API');
@@ -71,11 +71,11 @@ export class PrivyEthereumService {
     transaction: WalletRpcParams.EthereumSignTransactionRpcInput.Params.Transaction,
     config?: PrivyWalletsRpcConfig,
   ): Promise<WalletRpcResponse.EthereumSignTransactionRpcResponse.Data> {
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { method: 'eth_signTransaction', params: { transaction } },
-      config,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      method: 'eth_signTransaction',
+      params: { transaction },
+      ...config,
+    });
 
     return response.data;
   }
@@ -85,26 +85,26 @@ export class PrivyEthereumService {
     typedData: WalletRpcParams.EthereumSignTypedDataRpcInput.Params.TypedData,
     config?: PrivyWalletsRpcConfig,
   ): Promise<WalletRpcResponse.EthereumSignTypedDataRpcResponse.Data> {
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { method: 'eth_signTypedData_v4', params: { typed_data: typedData } },
-      config,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      method: 'eth_signTypedData_v4',
+      params: { typed_data: typedData },
+      ...config,
+    });
 
     return response.data;
   }
 
   public async sendTransaction(
     walletId: string,
-    // Need to remember to 'pick' things we want to be a part of the input
-    input: Pick<WalletRpcParams.EthereumSendTransactionRpcInput, 'caip2' | 'params' | 'sponsor'>,
-    config?: PrivyWalletsRpcConfig,
+    input: WithIdempotency<
+      WithAuthorization<Omit<WalletRpcParams.EthereumSendTransactionRpcInput, 'chain_type' | 'method'>>
+    >,
   ): Promise<WalletRpcResponse.EthereumSendTransactionRpcResponse.Data> {
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { ...input, method: 'eth_sendTransaction', chain_type: 'ethereum' },
-      config,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
+      method: 'eth_sendTransaction',
+      chain_type: 'ethereum',
+    });
 
     if (!response.data) {
       throw new Error(response.error?.message ?? 'Unexpected response from Privy API');

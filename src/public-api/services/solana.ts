@@ -23,7 +23,11 @@ export class PrivySolanaService {
       params = { message, encoding: 'base64' };
     }
 
-    const response = await this.privyWalletsService.rpc(walletId, { method: 'signMessage', params }, config);
+    const response = await this.privyWalletsService.rpc(walletId, {
+      method: 'signMessage',
+      params,
+      ...config,
+    });
 
     return response.data;
   }
@@ -42,11 +46,11 @@ export class PrivySolanaService {
       params = { transaction, encoding: 'base64' };
     }
 
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { method: 'signTransaction', params },
-      config,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      method: 'signTransaction',
+      params,
+      ...config,
+    });
 
     return response.data;
   }
@@ -66,11 +70,12 @@ export class PrivySolanaService {
       params = { transaction, encoding: 'base64' };
     }
 
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { method: 'signAndSendTransaction', caip2, params },
-      config,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      method: 'signAndSendTransaction',
+      caip2,
+      params,
+      ...config,
+    });
 
     if (!response.data) {
       throw new Error(response.error?.message ?? 'Unexpected response from Privy API');

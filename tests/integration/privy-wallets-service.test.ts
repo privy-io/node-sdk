@@ -547,11 +547,11 @@ describe('PrivyWalletsService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .sendTransaction(
-            P256_OWNED_ETHEREUM_WALLET_ID,
-            { caip2: 'eip155:11155111', params: { transaction } },
-            { authorization_context: p256AuthorizationContext },
-          );
+          .sendTransaction(P256_OWNED_ETHEREUM_WALLET_ID, {
+            caip2: 'eip155:11155111',
+            params: { transaction },
+            authorization_context: p256AuthorizationContext,
+          });
 
         expect(response.hash).toBeDefined();
         expect(response.caip2).toBe('eip155:11155111');
@@ -559,23 +559,20 @@ describe('PrivyWalletsService', () => {
       });
       it('will succeed if the idempotency key is reused with the same body', async () => {
         const idempotencyKey = crypto.randomUUID();
-        const firstTx = await privyClient
-          .wallets()
-          .ethereum()
-          .sendTransaction(
-            OWNERLESS_ETHEREUM_WALLET_ID,
-            { caip2: 'eip155:11155111', params: { transaction } },
-            { idempotency_key: idempotencyKey },
-          );
+        const firstTx = await privyClient.wallets().ethereum().sendTransaction(OWNERLESS_ETHEREUM_WALLET_ID, {
+          caip2: 'eip155:11155111',
+          params: { transaction },
+          idempotency_key: idempotencyKey,
+        });
 
         const secondTx = await privyClient
           .wallets()
           .ethereum()
-          .sendTransaction(
-            OWNERLESS_ETHEREUM_WALLET_ID,
-            { caip2: 'eip155:11155111', params: { transaction } },
-            { idempotency_key: idempotencyKey },
-          );
+          .sendTransaction(OWNERLESS_ETHEREUM_WALLET_ID, {
+            caip2: 'eip155:11155111',
+            params: { transaction },
+            idempotency_key: idempotencyKey,
+          });
 
         expect(firstTx.hash).toEqual(secondTx.hash);
         expect(firstTx.transaction_id).toEqual(secondTx.transaction_id);

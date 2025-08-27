@@ -9,7 +9,7 @@ import {
 import { generateAuthorizationSignatures } from '../AuthorizationContext';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
-import { PrivyWalletsRpcConfig, WithAuthorization, WithIdempotency } from './types';
+import { WithAuthorization, WithIdempotency } from './types';
 
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
@@ -29,18 +29,17 @@ export class PrivyWalletsService extends Wallets {
     return this.solanaService;
   }
 
-  public async rpc<Params extends WalletRpcParams>(
+  public async rpc<Params extends WithIdempotency<WithAuthorization<WalletRpcParams>>>(
     walletId: string,
     params: Params,
-    config?: PrivyWalletsRpcConfig,
   ): Promise<Extract<WalletRpcResponse, { method: Params['method'] }>>;
   public async rpc(
     walletId: string,
-    params: WalletRpcParams,
     {
       authorization_context: authorizationContext = {},
       idempotency_key: idempotencyKey,
-    }: PrivyWalletsRpcConfig = {},
+      ...params
+    }: WithIdempotency<WithAuthorization<WalletRpcParams>>,
   ): Promise<WalletRpcResponse> {
     const authorizationSignaturesHeader = generateAuthorizationSignatures({
       authorizationContext,

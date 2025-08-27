@@ -7,7 +7,7 @@ type AuthorizationKeys = 'privy-authorization-signature';
 export type WithAuthorization<Params> = Omit<Params, AuthorizationKeys> & AuthorizationConfig;
 
 export interface IdempotencyConfig {
-  idempotencyKey?: string;
+  idempotency_key?: string;
 }
 type IdempotencyKeys = 'privy-idempotency-key';
 export type WithIdempotency<Params> = Omit<Params, IdempotencyKeys> & IdempotencyConfig;

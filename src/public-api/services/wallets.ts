@@ -37,7 +37,7 @@ export class PrivyWalletsService extends Wallets {
   public async rpc(
     walletId: string,
     params: WalletRpcParams,
-    { authorizationContext = {}, idempotencyKey }: PrivyWalletsRpcConfig = {},
+    { authorizationContext = {}, idempotency_key: idempotencyKey }: PrivyWalletsRpcConfig = {},
   ): Promise<WalletRpcResponse> {
     const authorizationSignaturesHeader = generateAuthorizationSignatures({
       authorizationContext,
@@ -64,7 +64,7 @@ export class PrivyWalletsService extends Wallets {
     walletId: string,
     {
       authorizationContext = {},
-      idempotencyKey,
+      idempotency_key: idempotencyKey,
       ...params
     }: WithIdempotency<WithAuthorization<WalletRawSignParams>>,
   ): Promise<WalletRawSignResponse.Data> {

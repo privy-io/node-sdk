@@ -156,12 +156,12 @@ describe('PrivyWalletsService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signMessage(OWNERLESS_ETHEREUM_WALLET_ID, 'Hello, world!', { idempotencyKey });
+          .signMessage(OWNERLESS_ETHEREUM_WALLET_ID, 'Hello, world!', { idempotency_key: idempotencyKey });
 
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signMessage(OWNERLESS_ETHEREUM_WALLET_ID, 'Hello, world!', { idempotencyKey });
+          .signMessage(OWNERLESS_ETHEREUM_WALLET_ID, 'Hello, world!', { idempotency_key: idempotencyKey });
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
@@ -176,13 +176,12 @@ describe('PrivyWalletsService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signMessage(OWNERLESS_ETHEREUM_WALLET_ID, 'Hello, world!', { idempotencyKey });
+          .signMessage(OWNERLESS_ETHEREUM_WALLET_ID, 'Hello, world!', { idempotency_key: idempotencyKey });
 
         await expect(
-          privyClient
-            .wallets()
-            .ethereum()
-            .signMessage(OWNERLESS_ETHEREUM_WALLET_ID, 'Goodbye, world!', { idempotencyKey }),
+          privyClient.wallets().ethereum().signMessage(OWNERLESS_ETHEREUM_WALLET_ID, 'Goodbye, world!', {
+            idempotency_key: idempotencyKey,
+          }),
         ).rejects.toThrow(
           `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
         );
@@ -223,11 +222,11 @@ describe('PrivyWalletsService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, hash, { idempotencyKey });
+          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, hash, { idempotency_key: idempotencyKey });
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, hash, { idempotencyKey });
+          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, hash, { idempotency_key: idempotencyKey });
 
         expect(response.signature).toBeDefined();
         const signature = response.signature as Hex;
@@ -241,14 +240,14 @@ describe('PrivyWalletsService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, hash1, { idempotencyKey });
+          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, hash1, { idempotency_key: idempotencyKey });
 
         const hash2 = '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef12345678';
         await expect(
           privyClient
             .wallets()
             .ethereum()
-            .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, hash2, { idempotencyKey }),
+            .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, hash2, { idempotency_key: idempotencyKey }),
         ).rejects.toThrow(
           `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
         );
@@ -311,11 +310,15 @@ describe('PrivyWalletsService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, authorization7702, { idempotencyKey });
+          .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, authorization7702, {
+            idempotency_key: idempotencyKey,
+          });
         const response = await privyClient
           .wallets()
           .ethereum()
-          .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, authorization7702, { idempotencyKey });
+          .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, authorization7702, {
+            idempotency_key: idempotencyKey,
+          });
 
         expect(response.authorization).toBeDefined();
         const signedAuthorization = response.authorization;
@@ -338,7 +341,9 @@ describe('PrivyWalletsService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, authorization7702, { idempotencyKey });
+          .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, authorization7702, {
+            idempotency_key: idempotencyKey,
+          });
 
         await expect(
           privyClient
@@ -350,7 +355,7 @@ describe('PrivyWalletsService', () => {
                 ...authorization7702,
                 contract: '0xabcdef1234abcdef1234abcdef1234abcdef1234',
               },
-              { idempotencyKey },
+              { idempotency_key: idempotencyKey },
             ),
         ).rejects.toThrow(
           `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
@@ -393,11 +398,11 @@ describe('PrivyWalletsService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, transaction, { idempotencyKey });
+          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, transaction, { idempotency_key: idempotencyKey });
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, transaction, { idempotencyKey });
+          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, transaction, { idempotency_key: idempotencyKey });
 
         expect(response.signed_transaction).toBeDefined();
         expect(response.encoding).toBe('rlp');
@@ -408,7 +413,7 @@ describe('PrivyWalletsService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, transaction, { idempotencyKey });
+          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, transaction, { idempotency_key: idempotencyKey });
 
         await expect(
           privyClient
@@ -417,7 +422,7 @@ describe('PrivyWalletsService', () => {
             .signTransaction(
               OWNERLESS_ETHEREUM_WALLET_ID,
               { ...transaction, to: '0xabcdef1234abcdef1234abcdef1234abcdef1234' },
-              { idempotencyKey },
+              { idempotency_key: idempotencyKey },
             ),
         ).rejects.toThrow(
           `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
@@ -479,11 +484,11 @@ describe('PrivyWalletsService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, typedData, { idempotencyKey });
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, typedData, { idempotency_key: idempotencyKey });
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, typedData, { idempotencyKey });
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, typedData, { idempotency_key: idempotencyKey });
 
         expect(response.signature).toBeDefined();
         expect(response.encoding).toBe('hex');
@@ -502,7 +507,7 @@ describe('PrivyWalletsService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, typedData, { idempotencyKey });
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, typedData, { idempotency_key: idempotencyKey });
 
         await expect(
           privyClient
@@ -511,7 +516,7 @@ describe('PrivyWalletsService', () => {
             .signTypedData(
               OWNERLESS_ETHEREUM_WALLET_ID,
               { ...typedData, message: { content: 'A different message' } },
-              { idempotencyKey },
+              { idempotency_key: idempotencyKey },
             ),
         ).rejects.toThrow(
           `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
@@ -560,7 +565,7 @@ describe('PrivyWalletsService', () => {
           .sendTransaction(
             OWNERLESS_ETHEREUM_WALLET_ID,
             { caip2: 'eip155:11155111', params: { transaction } },
-            { idempotencyKey },
+            { idempotency_key: idempotencyKey },
           );
 
         const secondTx = await privyClient
@@ -569,7 +574,7 @@ describe('PrivyWalletsService', () => {
           .sendTransaction(
             OWNERLESS_ETHEREUM_WALLET_ID,
             { caip2: 'eip155:11155111', params: { transaction } },
-            { idempotencyKey },
+            { idempotency_key: idempotencyKey },
           );
 
         expect(firstTx.hash).toEqual(secondTx.hash);
@@ -788,12 +793,12 @@ describe('PrivyWalletsService', () => {
         const idempotencyKey = crypto.randomUUID();
         await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
           params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotencyKey,
+          idempotency_key: idempotencyKey,
         });
 
         const response = await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
           params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotencyKey,
+          idempotency_key: idempotencyKey,
         });
         expect(response.encoding).toBe('hex');
         expect(response.signature).toBeDefined();
@@ -810,13 +815,13 @@ describe('PrivyWalletsService', () => {
         const idempotencyKey = crypto.randomUUID();
         await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
           params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotencyKey,
+          idempotency_key: idempotencyKey,
         });
 
         await expect(
           privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
             params: { hash: '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321' },
-            idempotencyKey,
+            idempotency_key: idempotencyKey,
           }),
         ).rejects.toThrow(
           `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,

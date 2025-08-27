@@ -106,14 +106,14 @@ export class PrivyEthereumService {
 
   public async sendTransaction(
     walletId: string,
-    caip2: string,
-    transaction: WalletRpcParams.EthereumSendTransactionRpcInput.Params.Transaction,
+    // Need to remember to 'pick' things we want to be a part of the input
+    input: Pick<WalletRpcParams.EthereumSendTransactionRpcInput, 'caip2' | 'params' | 'sponsor'>,
     authorizationContext?: AuthorizationContext,
     idempotencyKey?: string,
   ): Promise<WalletRpcResponse.EthereumSendTransactionRpcResponse.Data> {
     const response = await this.privyWalletsService.rpc(
       walletId,
-      { method: 'eth_sendTransaction', caip2, params: { transaction } },
+      { ...input, method: 'eth_sendTransaction', chain_type: 'ethereum' },
       authorizationContext,
       idempotencyKey,
     );
@@ -125,3 +125,9 @@ export class PrivyEthereumService {
     return response.data;
   }
 }
+
+// Need to remember to 'omit' things we don't want to be a part of the input
+type SendTransactionInputAlternative = Omit<
+  WalletRpcParams.EthereumSendTransactionRpcInput,
+  'privy-authorization-signature' | 'privy-idempotency-key' | 'chain_type' | 'method' | 'address'
+>;

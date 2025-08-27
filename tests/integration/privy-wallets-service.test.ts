@@ -526,7 +526,10 @@ describe('PrivyWalletsService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .sendTransaction(OWNERLESS_ETHEREUM_WALLET_ID, 'eip155:11155111', transaction);
+          .sendTransaction(OWNERLESS_ETHEREUM_WALLET_ID, {
+            caip2: 'eip155:11155111',
+            params: { transaction },
+          });
 
         expect(response.hash).toBeDefined();
         expect(response.caip2).toBe('eip155:11155111');
@@ -538,8 +541,7 @@ describe('PrivyWalletsService', () => {
           .ethereum()
           .sendTransaction(
             P256_OWNED_ETHEREUM_WALLET_ID,
-            'eip155:11155111',
-            transaction,
+            { caip2: 'eip155:11155111', params: { transaction } },
             p256AuthorizationContext,
           );
 
@@ -554,8 +556,7 @@ describe('PrivyWalletsService', () => {
           .ethereum()
           .sendTransaction(
             OWNERLESS_ETHEREUM_WALLET_ID,
-            'eip155:11155111',
-            transaction,
+            { caip2: 'eip155:11155111', params: { transaction } },
             undefined,
             idempotencyKey,
           );
@@ -565,8 +566,7 @@ describe('PrivyWalletsService', () => {
           .ethereum()
           .sendTransaction(
             OWNERLESS_ETHEREUM_WALLET_ID,
-            'eip155:11155111',
-            transaction,
+            { caip2: 'eip155:11155111', params: { transaction } },
             undefined,
             idempotencyKey,
           );

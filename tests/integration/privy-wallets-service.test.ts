@@ -704,6 +704,65 @@ describe('PrivyWalletsService', () => {
         expect(verified).toBe(true);
       });
     });
+    // Skipped to not waste funds. Logic is shared with signing transactions so safe to not frequently test.
+    describe.skip('signAndSendTransaction', () => {
+      const connection = new Connection(clusterApiUrl('devnet'));
+      const devnetCaip2 = 'solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1';
+      async function createTransferTransaction(from: string, lamports: number) {
+        const fromPubkey = new PublicKey(base58.decode(from));
+        const toPubkey = new PublicKey(base58.decode('9NvE68JVWHHHGLp5NNELtM5fiBw6SXHrzqQJjUqaykC1'));
+
+        const { blockhash: recentBlockhash } = await connection.getLatestBlockhash();
+
+        const instruction = SystemProgram.transfer({ fromPubkey, toPubkey, lamports });
+        const message = new TransactionMessage({
+          payerKey: fromPubkey,
+          instructions: [instruction],
+          recentBlockhash,
+        });
+
+        return new VersionedTransaction(message.compileToV0Message());
+      }
+      it('should be able to sign a base64-encoded transaction', async () => {
+        const transaction = await createTransferTransaction(OWNERLESS_SOLANA_WALLET_ADDRESS, 100);
+        const response = await privyClient
+          .wallets()
+          .solana()
+          .signAndSendTransaction(
+            OWNERLESS_SOLANA_WALLET_ID,
+            devnetCaip2,
+            Buffer.from(transaction.serialize()).toString('base64'),
+          );
+
+        expect(response.caip2).toBeDefined();
+        expect(response.hash).toBeDefined();
+      });
+      it('should be able to sign a binary encoded transaction', async () => {
+        const transaction = await createTransferTransaction(OWNERLESS_SOLANA_WALLET_ADDRESS, 100);
+        const response = await privyClient
+          .wallets()
+          .solana()
+          .signAndSendTransaction(OWNERLESS_SOLANA_WALLET_ID, devnetCaip2, transaction.serialize());
+
+        expect(response.caip2).toBeDefined();
+        expect(response.hash).toBeDefined();
+      });
+      it('should be able to sign a transaction with an authorization context', async () => {
+        const transaction = await createTransferTransaction(P256_OWNED_SOLANA_WALLET_ADDRESS, 100);
+        const response = await privyClient
+          .wallets()
+          .solana()
+          .signAndSendTransaction(
+            P256_OWNED_SOLANA_WALLET_ID,
+            devnetCaip2,
+            transaction.serialize(),
+            p256AuthorizationContext,
+          );
+
+        expect(response.caip2).toBeDefined();
+        expect(response.hash).toBeDefined();
+      });
+    });
   });
   describe('other chains', () => {
     describe('raw sign', () => {

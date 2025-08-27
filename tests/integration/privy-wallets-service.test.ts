@@ -770,7 +770,7 @@ describe('PrivyWalletsService', () => {
     describe('raw sign', () => {
       it('should be able to sign a message', async () => {
         const response = await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
-          hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
         });
 
         expect(response.encoding).toBe('hex');
@@ -786,21 +786,15 @@ describe('PrivyWalletsService', () => {
       });
       it('will succeed if the idempotency key is reused with the same body', async () => {
         const idempotencyKey = crypto.randomUUID();
-        await privyClient
-          .wallets()
-          .rawSign(
-            OWNERLESS_TRON_WALLET_ID,
-            { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-            { idempotencyKey },
-          );
+        await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
+          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+          idempotencyKey,
+        });
 
-        const response = await privyClient
-          .wallets()
-          .rawSign(
-            OWNERLESS_TRON_WALLET_ID,
-            { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-            { idempotencyKey },
-          );
+        const response = await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
+          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+          idempotencyKey,
+        });
         expect(response.encoding).toBe('hex');
         expect(response.signature).toBeDefined();
         expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
@@ -814,34 +808,25 @@ describe('PrivyWalletsService', () => {
       });
       it('will fail if the idempotency key is reused with a different body', async () => {
         const idempotencyKey = crypto.randomUUID();
-        await privyClient
-          .wallets()
-          .rawSign(
-            OWNERLESS_TRON_WALLET_ID,
-            { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-            { idempotencyKey },
-          );
+        await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
+          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+          idempotencyKey,
+        });
 
         await expect(
-          privyClient
-            .wallets()
-            .rawSign(
-              OWNERLESS_TRON_WALLET_ID,
-              { hash: '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321' },
-              { idempotencyKey },
-            ),
+          privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
+            params: { hash: '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321' },
+            idempotencyKey,
+          }),
         ).rejects.toThrow(
           `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
         );
       });
       it('should be able to sign a message with an authorization context', async () => {
-        const response = await privyClient
-          .wallets()
-          .rawSign(
-            P256_OWNED_TRON_WALLET_ID,
-            { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-            { authorizationContext: p256AuthorizationContext },
-          );
+        const response = await privyClient.wallets().rawSign(P256_OWNED_TRON_WALLET_ID, {
+          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+          authorizationContext: p256AuthorizationContext,
+        });
 
         expect(response.encoding).toBe('hex');
         expect(response.signature).toBeDefined();

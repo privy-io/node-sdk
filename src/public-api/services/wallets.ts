@@ -8,17 +8,24 @@ import {
 } from '../../resources';
 import { AuthorizationContext, generateAuthorizationSignatures } from '../AuthorizationContext';
 import { PrivyEthereumService } from './ethereum';
+import { PrivySolanaService } from './solana';
 
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
+  private solanaService: PrivySolanaService;
 
   constructor(privyApiClient: PrivyAPI) {
     super(privyApiClient);
     this.ethereumService = new PrivyEthereumService(this);
+    this.solanaService = new PrivySolanaService(this);
   }
 
   public ethereum(): PrivyEthereumService {
     return this.ethereumService;
+  }
+
+  public solana(): PrivySolanaService {
+    return this.solanaService;
   }
 
   public async rpc<Params extends WalletRpcParams>(

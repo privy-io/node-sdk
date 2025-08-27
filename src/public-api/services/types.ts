@@ -1,7 +1,7 @@
 import { AuthorizationContext } from '../AuthorizationContext';
 
 export interface AuthorizationConfig {
-  authorizationContext?: AuthorizationContext;
+  authorization_context?: AuthorizationContext;
 }
 type AuthorizationKeys = 'privy-authorization-signature';
 export type WithAuthorization<Params> = Omit<Params, AuthorizationKeys> & AuthorizationConfig;

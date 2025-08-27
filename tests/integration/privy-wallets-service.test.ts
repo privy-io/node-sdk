@@ -134,7 +134,7 @@ describe('PrivyWalletsService', () => {
           .wallets()
           .ethereum()
           .signMessage(P256_OWNED_ETHEREUM_WALLET_ID, 'Hello, world!', {
-            authorizationContext: p256AuthorizationContext,
+            authorization_context: p256AuthorizationContext,
           });
 
         expect(response.signature).toBeDefined();
@@ -207,7 +207,7 @@ describe('PrivyWalletsService', () => {
           .wallets()
           .ethereum()
           .signSecp256k1(P256_OWNED_ETHEREUM_WALLET_ID, hash, {
-            authorizationContext: p256AuthorizationContext,
+            authorization_context: p256AuthorizationContext,
           });
 
         expect(response.signature).toBeDefined();
@@ -286,7 +286,7 @@ describe('PrivyWalletsService', () => {
           .wallets()
           .ethereum()
           .sign7702Authorization(P256_OWNED_ETHEREUM_WALLET_ID, authorization7702, {
-            authorizationContext: p256AuthorizationContext,
+            authorization_context: p256AuthorizationContext,
           });
 
         expect(response.authorization).toBeDefined();
@@ -386,7 +386,7 @@ describe('PrivyWalletsService', () => {
           .wallets()
           .ethereum()
           .signTransaction(P256_OWNED_ETHEREUM_WALLET_ID, transaction, {
-            authorizationContext: p256AuthorizationContext,
+            authorization_context: p256AuthorizationContext,
           });
 
         expect(response.signed_transaction).toBeDefined();
@@ -464,7 +464,7 @@ describe('PrivyWalletsService', () => {
           .wallets()
           .ethereum()
           .signTypedData(P256_OWNED_ETHEREUM_WALLET_ID, typedData, {
-            authorizationContext: p256AuthorizationContext,
+            authorization_context: p256AuthorizationContext,
           });
 
         expect(response.signature).toBeDefined();
@@ -550,7 +550,7 @@ describe('PrivyWalletsService', () => {
           .sendTransaction(
             P256_OWNED_ETHEREUM_WALLET_ID,
             { caip2: 'eip155:11155111', params: { transaction } },
-            { authorizationContext: p256AuthorizationContext },
+            { authorization_context: p256AuthorizationContext },
           );
 
         expect(response.hash).toBeDefined();
@@ -621,7 +621,7 @@ describe('PrivyWalletsService', () => {
           .wallets()
           .solana()
           .signMessage(P256_OWNED_SOLANA_WALLET_ID, base64Message, {
-            authorizationContext: p256AuthorizationContext,
+            authorization_context: p256AuthorizationContext,
           });
 
         expect(response.signature).toBeDefined();
@@ -698,7 +698,7 @@ describe('PrivyWalletsService', () => {
           .wallets()
           .solana()
           .signTransaction(P256_OWNED_SOLANA_WALLET_ID, transaction.serialize(), {
-            authorizationContext: p256AuthorizationContext,
+            authorization_context: p256AuthorizationContext,
           });
 
         expect(response.signed_transaction).toBeDefined();
@@ -763,7 +763,7 @@ describe('PrivyWalletsService', () => {
           .wallets()
           .solana()
           .signAndSendTransaction(P256_OWNED_SOLANA_WALLET_ID, devnetCaip2, transaction.serialize(), {
-            authorizationContext: p256AuthorizationContext,
+            authorization_context: p256AuthorizationContext,
           });
 
         expect(response.caip2).toBeDefined();
@@ -830,7 +830,7 @@ describe('PrivyWalletsService', () => {
       it('should be able to sign a message with an authorization context', async () => {
         const response = await privyClient.wallets().rawSign(P256_OWNED_TRON_WALLET_ID, {
           params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          authorizationContext: p256AuthorizationContext,
+          authorization_context: p256AuthorizationContext,
         });
 
         expect(response.encoding).toBe('hex');

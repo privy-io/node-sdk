@@ -1,6 +1,6 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
 import { PrivyWalletsService } from './wallets';
-import { PrivyWalletsRpcConfig, WithAuthorization, WithIdempotency } from './types';
+import { WithAuthorization, WithIdempotency } from './types';
 
 export class PrivyEthereumService {
   private privyWalletsService: PrivyWalletsService;
@@ -11,8 +11,7 @@ export class PrivyEthereumService {
 
   public async signMessage(
     walletId: string,
-    message: string | Uint8Array,
-    config?: PrivyWalletsRpcConfig,
+    { message, ...input }: PrivyEthereumService.SignMessageInput,
   ): Promise<WalletRpcResponse.EthereumPersonalSignRpcResponse.Data> {
     let params: WalletRpcParams.EthereumPersonalSignRpcInput.Params;
     if (message instanceof Uint8Array) {
@@ -26,9 +25,10 @@ export class PrivyEthereumService {
     }
 
     const response = await this.privyWalletsService.rpc(walletId, {
-      method: 'personal_sign',
+      ...input,
       params,
-      ...config,
+      method: 'personal_sign',
+      chain_type: 'ethereum',
     });
 
     return response.data;
@@ -36,13 +36,12 @@ export class PrivyEthereumService {
 
   public async signSecp256k1(
     walletId: string,
-    hash: string,
-    config?: PrivyWalletsRpcConfig,
+    input: PrivyEthereumService.SignSecp256k1Input,
   ): Promise<WalletRpcResponse.EthereumSecp256k1SignRpcResponse.Data> {
     const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
       method: 'secp256k1_sign',
-      params: { hash },
-      ...config,
+      chain_type: 'ethereum',
     });
 
     return response.data;
@@ -50,13 +49,12 @@ export class PrivyEthereumService {
 
   public async sign7702Authorization(
     walletId: string,
-    params: WalletRpcParams.EthereumSign7702AuthorizationRpcInput.Params,
-    config?: PrivyWalletsRpcConfig,
+    input: PrivyEthereumService.Sign7702AuthorizationInput,
   ): Promise<WalletRpcResponse.EthereumSign7702AuthorizationRpcResponse.Data> {
     const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
       method: 'eth_sign7702Authorization',
-      params,
-      ...config,
+      chain_type: 'ethereum',
     });
 
     if (!response.data) {
@@ -68,13 +66,12 @@ export class PrivyEthereumService {
 
   public async signTransaction(
     walletId: string,
-    transaction: WalletRpcParams.EthereumSignTransactionRpcInput.Params.Transaction,
-    config?: PrivyWalletsRpcConfig,
+    input: PrivyEthereumService.SignTransactionInput,
   ): Promise<WalletRpcResponse.EthereumSignTransactionRpcResponse.Data> {
     const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
       method: 'eth_signTransaction',
-      params: { transaction },
-      ...config,
+      chain_type: 'ethereum',
     });
 
     return response.data;
@@ -82,13 +79,12 @@ export class PrivyEthereumService {
 
   public async signTypedData(
     walletId: string,
-    typedData: WalletRpcParams.EthereumSignTypedDataRpcInput.Params.TypedData,
-    config?: PrivyWalletsRpcConfig,
+    input: PrivyEthereumService.SignTypedDataInput,
   ): Promise<WalletRpcResponse.EthereumSignTypedDataRpcResponse.Data> {
     const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
       method: 'eth_signTypedData_v4',
-      params: { typed_data: typedData },
-      ...config,
+      chain_type: 'ethereum',
     });
 
     return response.data;
@@ -96,9 +92,7 @@ export class PrivyEthereumService {
 
   public async sendTransaction(
     walletId: string,
-    input: WithIdempotency<
-      WithAuthorization<Omit<WalletRpcParams.EthereumSendTransactionRpcInput, 'chain_type' | 'method'>>
-    >,
+    input: PrivyEthereumService.SendTransactionInput,
   ): Promise<WalletRpcResponse.EthereumSendTransactionRpcResponse.Data> {
     const response = await this.privyWalletsService.rpc(walletId, {
       ...input,
@@ -114,8 +108,23 @@ export class PrivyEthereumService {
   }
 }
 
-// Need to remember to 'omit' things we don't want to be a part of the input
-type SendTransactionInputAlternative = Omit<
-  WalletRpcParams.EthereumSendTransactionRpcInput,
-  'privy-authorization-signature' | 'privy-idempotency-key' | 'chain_type' | 'method' | 'address'
->;
+export namespace PrivyEthereumService {
+  // prettier-ignore
+  export type SignMessageInput =
+    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumPersonalSignRpcInput, 'chain_type' | 'method' | 'params'> & {message: string | Uint8Array}>>;
+  // prettier-ignore
+  export type SignSecp256k1Input =
+    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumSecp256k1SignRpcInput, 'chain_type' | 'method'>>>;
+  // prettier-ignore
+  export type Sign7702AuthorizationInput =
+    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumSign7702AuthorizationRpcInput, 'chain_type' | 'method'>>>;
+  // prettier-ignore
+  export type SignTransactionInput =
+    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumSignTransactionRpcInput, 'chain_type' | 'method'>>>;
+  // prettier-ignore
+  export type SignTypedDataInput =
+    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumSignTypedDataRpcInput, 'chain_type' | 'method'>>>;
+  // prettier-ignore
+  export type SendTransactionInput =
+    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumSendTransactionRpcInput, 'chain_type' | 'method'>>>;
+}

@@ -1,15 +1,21 @@
 import { AuthorizationContext } from '../AuthorizationContext';
 
-export interface AuthorizationConfig {
-  authorization_context?: AuthorizationContext;
-}
-type AuthorizationKeys = 'privy-authorization-signature';
-export type WithAuthorization<Params> = Omit<Params, AuthorizationKeys> & AuthorizationConfig;
+export type AuthorizationConfig = { authorization_context?: AuthorizationContext };
+type AuthParams = { 'privy-authorization-signature'?: string };
+// prettier-ignore
+export type WithAuthorization<P extends AuthParams> =
+  TheOmit<P, keyof AuthParams> & AuthorizationConfig;
 
-export interface IdempotencyConfig {
-  idempotency_key?: string;
-}
-type IdempotencyKeys = 'privy-idempotency-key';
-export type WithIdempotency<Params> = Omit<Params, IdempotencyKeys> & IdempotencyConfig;
+export type IdempotencyConfig = { idempotency_key?: string };
+type IdempotencyParams = { 'privy-idempotency-key'?: string };
+// prettier-ignore
+export type WithIdempotency<P extends IdempotencyParams> =
+  TheOmit<P, keyof IdempotencyParams> & IdempotencyConfig;
 
 export type PrivyWalletsRpcConfig = AuthorizationConfig & IdempotencyConfig;
+
+/**
+ * `Omit` loses type info in unions like the `WalletRpcParams` type.
+ * @see https://github.com/microsoft/TypeScript/issues/54525
+ */
+type TheOmit<T, K extends keyof T> = { [P in keyof T as P extends K ? never : P]: T[P] };

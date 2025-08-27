@@ -87,4 +87,20 @@ export class PrivyEthereumService {
 
     return response.data;
   }
+
+  public async signTypedData(
+    walletId: string,
+    typedData: WalletRpcParams.EthereumSignTypedDataRpcInput.Params.TypedData,
+    authorizationContext?: AuthorizationContext,
+    idempotencyKey?: string,
+  ): Promise<WalletRpcResponse.EthereumSignTypedDataRpcResponse.Data> {
+    const response = await this.privyWalletsService.rpc(
+      walletId,
+      { method: 'eth_signTypedData_v4', params: { typed_data: typedData } },
+      authorizationContext,
+      idempotencyKey,
+    );
+
+    return response.data;
+  }
 }

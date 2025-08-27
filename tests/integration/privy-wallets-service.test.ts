@@ -2,7 +2,7 @@ import { PrivyAPI } from 'privy-api-client/client';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
-import { Hex, hexToBytes, verifyHash, verifyMessage } from 'viem';
+import { Hex, hexToBytes, verifyHash, verifyMessage, verifyTypedData } from 'viem';
 import { verifyAuthorization } from 'viem/utils';
 import crypto from 'node:crypto';
 import { WalletRpcParams } from 'privy-api-client/resources';
@@ -404,6 +404,99 @@ describe('PrivyWalletsService', () => {
             .signTransaction(
               OWNERLESS_ETHEREUM_WALLET_ID,
               { ...transaction, to: '0xabcdef1234abcdef1234abcdef1234abcdef1234' },
+              undefined,
+              idempotencyKey,
+            ),
+        ).rejects.toThrow(
+          `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
+        );
+      });
+    });
+    describe('typed data signing', () => {
+      const typedData: WalletRpcParams.EthereumSignTypedDataRpcInput.Params.TypedData = {
+        domain: {
+          name: 'Test',
+          version: '1',
+          chainId: 1,
+          verifyingContract: '0x1234567890123456789012345678901234567890',
+        },
+        primary_type: 'Message' as const,
+        types: { Message: [{ name: 'content', type: 'string' }] },
+        message: { content: 'Hello world' },
+      };
+      it('should be able to sign typed data', async () => {
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, typedData);
+
+        expect(response.signature).toBeDefined();
+        expect(response.encoding).toBe('hex');
+        const verified = await verifyTypedData({
+          signature: response.signature as Hex,
+          address: OWNERLESS_ETHEREUM_WALLET_ADDRESS,
+          domain: typedData.domain,
+          types: typedData.types,
+          primaryType: typedData.primary_type,
+          message: typedData.message,
+        });
+        expect(verified).toBe(true);
+      });
+      it('should be able to sign typed data with an authorization context', async () => {
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signTypedData(P256_OWNED_ETHEREUM_WALLET_ID, typedData, p256AuthorizationContext);
+
+        expect(response.signature).toBeDefined();
+        expect(response.encoding).toBe('hex');
+        const verified = await verifyTypedData({
+          signature: response.signature as Hex,
+          address: P256_OWNED_ETHEREUM_WALLET_ADDRESS,
+          domain: typedData.domain,
+          types: typedData.types,
+          primaryType: typedData.primary_type,
+          message: typedData.message,
+        });
+        expect(verified).toBe(true);
+      });
+      it('will succeed if the idempotency key is reused with the same body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        await privyClient
+          .wallets()
+          .ethereum()
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, typedData, undefined, idempotencyKey);
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, typedData, undefined, idempotencyKey);
+
+        expect(response.signature).toBeDefined();
+        expect(response.encoding).toBe('hex');
+        const verified = await verifyTypedData({
+          signature: response.signature as Hex,
+          address: OWNERLESS_ETHEREUM_WALLET_ADDRESS,
+          domain: typedData.domain,
+          types: typedData.types,
+          primaryType: typedData.primary_type,
+          message: typedData.message,
+        });
+        expect(verified).toBe(true);
+      });
+      it('will fail if the idempotency key is reused with a different body', async () => {
+        const idempotencyKey = crypto.randomUUID();
+        await privyClient
+          .wallets()
+          .ethereum()
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, typedData, undefined, idempotencyKey);
+
+        await expect(
+          privyClient
+            .wallets()
+            .ethereum()
+            .signTypedData(
+              OWNERLESS_ETHEREUM_WALLET_ID,
+              { ...typedData, message: { content: 'A different message' } },
               undefined,
               idempotencyKey,
             ),

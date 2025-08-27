@@ -6,9 +6,10 @@ import {
   WalletRpcResponse,
   Wallets,
 } from '../../resources';
-import { AuthorizationContext, generateAuthorizationSignatures } from '../AuthorizationContext';
+import { generateAuthorizationSignatures } from '../AuthorizationContext';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
+import { PrivyWalletsRpcConfig } from './types';
 
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
@@ -31,14 +32,12 @@ export class PrivyWalletsService extends Wallets {
   public async rpc<Params extends WalletRpcParams>(
     walletId: string,
     params: Params,
-    authorizationContext?: AuthorizationContext,
-    idempotencyKey?: string,
+    config?: PrivyWalletsRpcConfig,
   ): Promise<Extract<WalletRpcResponse, { method: Params['method'] }>>;
   public async rpc(
     walletId: string,
     params: WalletRpcParams,
-    authorizationContext: AuthorizationContext = {},
-    idempotencyKey?: string,
+    { authorizationContext = {}, idempotencyKey }: PrivyWalletsRpcConfig = {},
   ): Promise<WalletRpcResponse> {
     const authorizationSignaturesHeader = generateAuthorizationSignatures({
       authorizationContext,
@@ -64,8 +63,7 @@ export class PrivyWalletsService extends Wallets {
   public async rawSign(
     walletId: string,
     params: WalletRawSignParams.Params,
-    authorizationContext: AuthorizationContext = {},
-    idempotencyKey?: string,
+    { authorizationContext = {}, idempotencyKey }: PrivyWalletsRpcConfig = {},
   ): Promise<WalletRawSignResponse.Data> {
     const authorizationSignaturesHeader = generateAuthorizationSignatures({
       authorizationContext,

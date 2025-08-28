@@ -61,6 +61,26 @@ describe('PrivyWalletsService', () => {
       );
     });
   });
+  describe('update', () => {
+    it('should be able to change the owner on a wallet', async () => {
+      // Check the wallet is ownerless initially
+      const wallet1 = await privyClient.wallets().get(OWNERLESS_TRON_WALLET_ID);
+      expect(wallet1.owner_id).toBeNull();
+
+      // Update the owner field to a p256 key
+      const wallet2 = await privyClient.wallets().update(OWNERLESS_TRON_WALLET_ID, {
+        owner: { public_key: P256_PUBLIC_KEY },
+      });
+      expect(wallet2.owner_id).toBeDefined();
+
+      // Update the wallet back to ownerless
+      const wallet3 = await privyClient.wallets().update(OWNERLESS_TRON_WALLET_ID, {
+        owner: null,
+        authorization_context: p256AuthorizationContext,
+      });
+      expect(wallet3.owner_id).toBeNull();
+    });
+  });
   describe('other chains', () => {
     describe('raw sign', () => {
       it('should be able to sign a message', async () => {

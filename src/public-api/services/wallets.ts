@@ -4,6 +4,8 @@ import {
   WalletRawSignResponse,
   WalletRpcParams,
   WalletRpcResponse,
+  WalletUpdateParams,
+  Wallet,
   Wallets,
 } from '../../resources';
 import { generateAuthorizationSignatures } from '../AuthorizationContext';
@@ -68,7 +70,7 @@ export class PrivyWalletsService extends Wallets {
       authorization_context: authorizationContext = {},
       idempotency_key: idempotencyKey,
       ...params
-    }: WithIdempotency<WithAuthorization<WalletRawSignParams>>,
+    }: PrivyWalletsService.RawSignInput,
   ): Promise<WalletRawSignResponse.Data> {
     const authorizationSignaturesHeader = generateAuthorizationSignatures({
       authorizationContext,
@@ -96,6 +98,31 @@ export class PrivyWalletsService extends Wallets {
 
     return response.data;
   }
+
+  public async update(
+    walletId: string,
+    { authorization_context: authorizationContext = {}, ...params }: PrivyWalletsService.UpdateInput,
+  ): Promise<Wallet> {
+    const authorizationSignaturesHeader = generateAuthorizationSignatures({
+      authorizationContext,
+      input: {
+        version: 1,
+        method: 'PATCH',
+        url: `${this._client.baseURL}/v1/wallets/${walletId}`,
+        body: params,
+        headers: {
+          'privy-app-id': this._client.appID,
+        },
+      },
+    });
+
+    const response = await this._update(walletId, {
+      ...params,
+      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
+    });
+
+    return response;
+  }
 }
 
 /**
@@ -107,6 +134,8 @@ export namespace PrivyWalletsService {
   export type RpcInput = Prettify<WithIdempotency<WithAuthorization<WalletRpcParams>>>;
   /** The input type for the {@link PrivyWalletsService.rawSign} method. */
   export type RawSignInput = Prettify<WithIdempotency<WithAuthorization<WalletRawSignParams>>>;
+  /** The input type for the {@link PrivyWalletsService.update} method. */
+  export type UpdateInput = Prettify<WithAuthorization<WalletUpdateParams>>;
 }
 
 // prettier-ignore

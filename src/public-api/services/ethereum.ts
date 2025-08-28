@@ -1,6 +1,6 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
 import { PrivyWalletsService } from './wallets';
-import { WithAuthorization, WithIdempotency } from './types';
+import { AuthParams, IdempotencyParams, Prettify, WithAuthorization, WithIdempotency } from './types';
 
 export class PrivyEthereumService {
   private privyWalletsService: PrivyWalletsService;
@@ -110,21 +110,18 @@ export class PrivyEthereumService {
 
 export namespace PrivyEthereumService {
   // prettier-ignore
-  export type SignMessageInput =
-    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumPersonalSignRpcInput, 'chain_type' | 'method' | 'params'> & {message: string | Uint8Array}>>;
+  export type SignMessageInput = Prettify<Omit<PrivyWalletsRpcInput<WalletRpcParams.EthereumPersonalSignRpcInput>, 'params'> & {message: string | Uint8Array}>;
   // prettier-ignore
-  export type SignSecp256k1Input =
-    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumSecp256k1SignRpcInput, 'chain_type' | 'method'>>>;
+  export type SignSecp256k1Input = PrivyWalletsRpcInput<WalletRpcParams.EthereumSecp256k1SignRpcInput>;
   // prettier-ignore
-  export type Sign7702AuthorizationInput =
-    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumSign7702AuthorizationRpcInput, 'chain_type' | 'method'>>>;
+  export type Sign7702AuthorizationInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSign7702AuthorizationRpcInput>;
   // prettier-ignore
-  export type SignTransactionInput =
-    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumSignTransactionRpcInput, 'chain_type' | 'method'>>>;
+  export type SignTransactionInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSignTransactionRpcInput>;
   // prettier-ignore
-  export type SignTypedDataInput =
-    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumSignTypedDataRpcInput, 'chain_type' | 'method'>>>;
-  // prettier-ignore
-  export type SendTransactionInput =
-    WithIdempotency<WithAuthorization<Omit<WalletRpcParams.EthereumSendTransactionRpcInput, 'chain_type' | 'method'>>>;
+  export type SignTypedDataInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSignTypedDataRpcInput>;
+  export type SendTransactionInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSendTransactionRpcInput>;
 }
+
+// prettier-ignore
+export type PrivyWalletsRpcInput<P extends (WalletRpcParams & IdempotencyParams & AuthParams)> =
+  Prettify<WithIdempotency<WithAuthorization<Omit<P, 'chain_type'|'method'>>>>;

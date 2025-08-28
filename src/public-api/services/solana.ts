@@ -1,6 +1,5 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
-import { PrivyWalletsService } from './wallets';
-import { Prettify } from './types';
+import { PrivyWalletsService, ReplaceParams } from './wallets';
 import { PrivyWalletsRpcInput } from './wallets';
 
 export class PrivySolanaService {
@@ -84,11 +83,29 @@ export class PrivySolanaService {
   }
 }
 
+// prettier-ignore
+/**
+ * The namespace for types related to the Solana service class.
+ * @see {@link PrivySolanaService} class.
+ * @see {@link PrivyWalletsRpcInput} type.
+ */
 export namespace PrivySolanaService {
-  // prettier-ignore
-  export type SignMessageInput = Prettify<Omit<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignMessageRpcInput>, 'params'> & {message: string | Uint8Array}>;
-  // prettier-ignore
-  export type SignTransactionInput = Prettify<Omit<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignTransactionRpcInput>, 'params'> & {transaction: string | Uint8Array}>;
-  // prettier-ignore
-  export type SignAndSendTransactionInput = Prettify<Omit<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignAndSendTransactionRpcInput>, 'params'> & {transaction: string | Uint8Array}>;
+  /**
+   * The input type for the {@link PrivySolanaService.signMessage} method.
+   * Instead of accepting the raw `params` object, it accepts a message `string` or `Uint8Array`
+   * that is automatically converted to the right `params` object.
+   */
+  export type SignMessageInput = ReplaceParams<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignMessageRpcInput>, {message: string | Uint8Array}>;
+  /**
+   * The input type for the {@link PrivySolanaService.signTransaction} method.
+   * Instead of accepting the raw `params` object, it accepts a transaction `string` or `Uint8Array`
+   * that is automatically converted to the right `params` object.
+   */
+  export type SignTransactionInput = ReplaceParams<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignTransactionRpcInput>, {transaction: string | Uint8Array}>;
+  /**
+   * The input type for the {@link PrivySolanaService.signAndSendTransaction} method.
+   * Instead of accepting the raw `params` object, it accepts a transaction `string` or `Uint8Array`
+   * that is automatically converted to the right `params` object.
+   */
+  export type SignAndSendTransactionInput = ReplaceParams<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignAndSendTransactionRpcInput>, {transaction: string | Uint8Array}>;
 }

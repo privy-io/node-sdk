@@ -1,6 +1,5 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
-import { PrivyWalletsService } from './wallets';
-import { Prettify } from './types';
+import { ReplaceParams, PrivyWalletsService } from './wallets';
 import { PrivyWalletsRpcInput } from './wallets';
 
 export class PrivyEthereumService {
@@ -109,17 +108,27 @@ export class PrivyEthereumService {
   }
 }
 
+// prettier-ignore
+/**
+ * The namespace for types related to the Ethereum service class.
+ * @see {@link PrivyEthereumService} class.
+ * @see {@link PrivyWalletsRpcInput} type.
+ */
 export namespace PrivyEthereumService {
-  // prettier-ignore
-  export type SignMessageInput = Prettify<Omit<PrivyWalletsRpcInput<WalletRpcParams.EthereumPersonalSignRpcInput>, 'params'> & {message: string | Uint8Array}>;
-  // prettier-ignore
+  /**
+   * The input type for the {@link PrivyEthereumService.signMessage} method.
+   * Instead of accepting the raw `params` object, it accepts a message `string` or `Uint8Array`
+   * that is automatically converted to the right `params` object.
+   */
+  export type SignMessageInput = ReplaceParams<PrivyWalletsRpcInput<WalletRpcParams.EthereumPersonalSignRpcInput>, {message: string | Uint8Array}>;
+  /** The input type for the {@link PrivyEthereumService.signSecp256k1} method. */
   export type SignSecp256k1Input = PrivyWalletsRpcInput<WalletRpcParams.EthereumSecp256k1SignRpcInput>;
-  // prettier-ignore
+  /** The input type for the {@link PrivyEthereumService.sign7702Authorization} method. */
   export type Sign7702AuthorizationInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSign7702AuthorizationRpcInput>;
-  // prettier-ignore
+  /** The input type for the {@link PrivyEthereumService.signTransaction} method. */
   export type SignTransactionInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSignTransactionRpcInput>;
-  // prettier-ignore
+  /** The input type for the {@link PrivyEthereumService.signTypedData} method. */
   export type SignTypedDataInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSignTypedDataRpcInput>;
-  // prettier-ignore
+  /** The input type for the {@link PrivyEthereumService.sendTransaction} method. */
   export type SendTransactionInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSendTransactionRpcInput>;
 }

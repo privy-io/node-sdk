@@ -98,11 +98,42 @@ export class PrivyWalletsService extends Wallets {
   }
 }
 
+/**
+ * The namespace for types related to the Wallets service class.
+ * @see {@link PrivyWalletsService} class.
+ */
 export namespace PrivyWalletsService {
+  /** The input type for the {@link PrivyWalletsService.rpc} method. */
   export type RpcInput = Prettify<WithIdempotency<WithAuthorization<WalletRpcParams>>>;
+  /** The input type for the {@link PrivyWalletsService.rawSign} method. */
   export type RawSignInput = Prettify<WithIdempotency<WithAuthorization<WalletRawSignParams>>>;
 }
 
 // prettier-ignore
-export type PrivyWalletsRpcInput<P extends WalletRpcParams> =
-  Prettify<WithIdempotency<WithAuthorization<Omit<P, 'chain_type'|'method'>>>>;
+/**
+ * Helper type for the input to the RPC utility methods, such as `ethereum().signMessage()`.
+ * It modifies the raw input to the RPC method ({@link WalletRpcParams}) to:
+ * - Include the idempotency key string in place of the idempotency HTTP header via {@link WithIdempotency}
+ * - Include the authorization context over the authorization signature HTTP header via {@link WithAuthorization}
+ *
+ * Finally, it omits the `chain_type` and `method` properties from the input, as these will be
+ * internally set by the RPC utility method used.
+ * e.g. `ethereum().signMessage()` will set `chain_type=ethereum` and `method=personal_sign`.
+ */
+export type PrivyWalletsRpcInput<Params extends WalletRpcParams> =
+  Prettify<WithIdempotency<WithAuthorization<Omit<Params, 'chain_type'|'method'>>>>;
+
+// prettier-ignore
+/**
+ * Helper type that takes a parameters object and an extension object and returns a new parameters
+ * object with the extension object merged in, and the `params` property omitted.
+ *
+ * This is used to turn Params objects that accept the raw `params` object into ones that accept a
+ * more ergonomic extension object instead that can be used internally by Privy's service methods to
+ * turn into the right value for `params`.
+ *
+ * e.g. `ethereum().signMessage()` will accept a `message` string or `Uint8Array` that is
+ * automatically converted to the right `{ message: '...', encoding: '...' }` object.
+ */
+export type ReplaceParams<Params, Extension> =
+  Prettify<Omit<Params, 'params'> & Extension>;

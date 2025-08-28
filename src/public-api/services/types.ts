@@ -1,16 +1,38 @@
 import { AuthorizationContext } from '../AuthorizationContext';
 
+/**
+ * Configuration object that can be set by the caller and is used to generate the right value for
+ * the `privy-authorization-signature` HTTP header.
+ */
 export type AuthorizationConfig = { authorization_context?: AuthorizationContext };
 type AuthParams = { 'privy-authorization-signature'?: any };
 // prettier-ignore
-export type WithAuthorization<P extends AuthParams> =
-  TheOmit<P, keyof AuthParams> & AuthorizationConfig;
+/**
+ * Helper type that takes a parameters object (body & headers of an API request) and replaces the
+ * `privy-authorization-signature` HTTP header with the authorization config object.
+ *
+ * This is used to turn Params objects that accept the raw header value into ones that accept the
+ * more ergonomic config object instead.
+ */
+export type WithAuthorization<Params extends AuthParams> =
+  TheOmit<Params, keyof AuthParams> & AuthorizationConfig;
 
+/**
+ * Configuration object that can be set by the caller and is used to generate the right value for
+ * the `privy-idempotency-key` HTTP header.
+ */
 export type IdempotencyConfig = { idempotency_key?: string };
 type IdempotencyParams = { 'privy-idempotency-key'?: any };
 // prettier-ignore
-export type WithIdempotency<P extends IdempotencyParams> =
-  TheOmit<P, keyof IdempotencyParams> & IdempotencyConfig;
+/**
+ * Helper type that takes a parameters object (body & headers of an API request) and replaces
+ * the `privy-idempotency-key` HTTP header with the idempotency config object.
+ *
+ * This is used to turn Params objects that accept the raw header value into ones that accept the
+ * more ergonomic config object instead.
+ */
+export type WithIdempotency<Params extends IdempotencyParams> =
+  TheOmit<Params, keyof IdempotencyParams> & IdempotencyConfig;
 
 /**
  * `Omit` loses type info in unions like the `WalletRpcParams` type.

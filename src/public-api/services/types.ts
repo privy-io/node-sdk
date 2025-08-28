@@ -12,8 +12,6 @@ export type IdempotencyParams = { 'privy-idempotency-key'?: any };
 export type WithIdempotency<P extends IdempotencyParams> =
   TheOmit<P, keyof IdempotencyParams> & IdempotencyConfig;
 
-export type PrivyWalletsRpcConfig = AuthorizationConfig & IdempotencyConfig;
-
 /**
  * `Omit` loses type info in unions like the `WalletRpcParams` type.
  * @see https://github.com/microsoft/TypeScript/issues/54525

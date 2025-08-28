@@ -18,6 +18,11 @@ export type WithIdempotency<P extends IdempotencyParams> =
  */
 type TheOmit<T, K extends keyof T> = { [P in keyof T as P extends K ? never : P]: T[P] };
 
+/**
+ * Utility type that takes an object type and makes the hover overlay more readable.
+ *
+ * [Learn more](https://www.totaltypescript.com/concepts/the-prettify-helper)
+ */
 export type Prettify<T> = {
   [K in keyof T]: T[K];
 } & {};

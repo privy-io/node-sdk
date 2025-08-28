@@ -1,6 +1,7 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
 import { PrivyWalletsService } from './wallets';
-import { AuthParams, IdempotencyParams, Prettify, WithAuthorization, WithIdempotency } from './types';
+import { Prettify } from './types';
+import { PrivyWalletsRpcInput } from './wallets';
 
 export class PrivySolanaService {
   private privyWalletsService: PrivyWalletsService;
@@ -91,7 +92,3 @@ export namespace PrivySolanaService {
   // prettier-ignore
   export type SignAndSendTransactionInput = Prettify<Omit<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignAndSendTransactionRpcInput>, 'params'> & {transaction: string | Uint8Array}>;
 }
-
-// prettier-ignore
-export type PrivyWalletsRpcInput<P extends (WalletRpcParams & IdempotencyParams & AuthParams)> =
-  Prettify<WithIdempotency<WithAuthorization<Omit<P, 'chain_type'|'method'>>>>;

@@ -1,13 +1,13 @@
 import { AuthorizationContext } from '../AuthorizationContext';
 
 export type AuthorizationConfig = { authorization_context?: AuthorizationContext };
-export type AuthParams = { 'privy-authorization-signature'?: any };
+type AuthParams = { 'privy-authorization-signature'?: any };
 // prettier-ignore
 export type WithAuthorization<P extends AuthParams> =
   TheOmit<P, keyof AuthParams> & AuthorizationConfig;
 
 export type IdempotencyConfig = { idempotency_key?: string };
-export type IdempotencyParams = { 'privy-idempotency-key'?: any };
+type IdempotencyParams = { 'privy-idempotency-key'?: any };
 // prettier-ignore
 export type WithIdempotency<P extends IdempotencyParams> =
   TheOmit<P, keyof IdempotencyParams> & IdempotencyConfig;

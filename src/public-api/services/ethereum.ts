@@ -1,6 +1,7 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
 import { PrivyWalletsService } from './wallets';
-import { AuthParams, IdempotencyParams, Prettify, WithAuthorization, WithIdempotency } from './types';
+import { Prettify } from './types';
+import { PrivyWalletsRpcInput } from './wallets';
 
 export class PrivyEthereumService {
   private privyWalletsService: PrivyWalletsService;
@@ -121,7 +122,3 @@ export namespace PrivyEthereumService {
   export type SignTypedDataInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSignTypedDataRpcInput>;
   export type SendTransactionInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSendTransactionRpcInput>;
 }
-
-// prettier-ignore
-export type PrivyWalletsRpcInput<P extends (WalletRpcParams & IdempotencyParams & AuthParams)> =
-  Prettify<WithIdempotency<WithAuthorization<Omit<P, 'chain_type'|'method'>>>>;

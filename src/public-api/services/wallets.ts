@@ -9,7 +9,7 @@ import {
 import { generateAuthorizationSignatures } from '../AuthorizationContext';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
-import { WithAuthorization, WithIdempotency } from './types';
+import { Prettify, WithAuthorization, WithIdempotency } from './types';
 
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
@@ -29,7 +29,7 @@ export class PrivyWalletsService extends Wallets {
     return this.solanaService;
   }
 
-  public async rpc<Params extends WithIdempotency<WithAuthorization<WalletRpcParams>>>(
+  public async rpc<Params extends PrivyWalletsService.RpcInput>(
     walletId: string,
     params: Params,
   ): Promise<Extract<WalletRpcResponse, { method: Params['method'] }>>;
@@ -39,7 +39,7 @@ export class PrivyWalletsService extends Wallets {
       authorization_context: authorizationContext = {},
       idempotency_key: idempotencyKey,
       ...params
-    }: WithIdempotency<WithAuthorization<WalletRpcParams>>,
+    }: PrivyWalletsService.RpcInput,
   ): Promise<WalletRpcResponse> {
     const authorizationSignaturesHeader = generateAuthorizationSignatures({
       authorizationContext,
@@ -97,3 +97,12 @@ export class PrivyWalletsService extends Wallets {
     return response.data;
   }
 }
+
+export namespace PrivyWalletsService {
+  export type RpcInput = Prettify<WithIdempotency<WithAuthorization<WalletRpcParams>>>;
+  export type RawSignInput = Prettify<WithIdempotency<WithAuthorization<WalletRawSignParams>>>;
+}
+
+// prettier-ignore
+export type PrivyWalletsRpcInput<P extends WalletRpcParams> =
+  Prettify<WithIdempotency<WithAuthorization<Omit<P, 'chain_type'|'method'>>>>;

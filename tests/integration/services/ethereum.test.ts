@@ -1,47 +1,23 @@
 import { PrivyAPI } from 'privy-api-client/client';
-import {
-  VersionedTransaction,
-  SystemProgram,
-  PublicKey,
-  TransactionMessage,
-  clusterApiUrl,
-  Connection,
-} from '@solana/web3.js';
-import { secp256k1 } from '@noble/curves/secp256k1';
-import { base58 } from '@scure/base';
-import nacl from 'tweetnacl';
 import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
-import { Hex, hexToBytes, verifyHash, verifyMessage, verifyTypedData } from 'viem';
+import { Hex, verifyHash, verifyMessage, verifyTypedData } from 'viem';
 import { verifyAuthorization } from 'viem/utils';
 import crypto from 'node:crypto';
 import { WalletRpcParams } from 'privy-api-client/resources';
 
-describe('PrivyWalletsService', () => {
+describe('PrivyEthereumService', () => {
   // Read the required environment variables from .env
   const TEST_APP_ID = process.env['TEST_APP_ID']!;
   const TEST_APP_SECRET = process.env['TEST_APP_SECRET']!;
   const TEST_API_URL = process.env['TEST_API_URL']!;
 
-  const P256_PUBLIC_KEY = process.env['P256_PUBLIC_KEY']!;
   const P256_PRIVATE_KEY = process.env['P256_PRIVATE_KEY']!;
 
   const OWNERLESS_ETHEREUM_WALLET_ID = process.env['OWNERLESS_ETHEREUM_WALLET_ID']!;
   const OWNERLESS_ETHEREUM_WALLET_ADDRESS = process.env['OWNERLESS_ETHEREUM_WALLET_ADDRESS']! as Hex;
   const P256_OWNED_ETHEREUM_WALLET_ID = process.env['P256_OWNED_ETHEREUM_WALLET_ID']!;
   const P256_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['P256_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
-
-  const OWNERLESS_SOLANA_WALLET_ID = process.env['OWNERLESS_SOLANA_WALLET_ID']!;
-  const OWNERLESS_SOLANA_WALLET_ADDRESS = process.env['OWNERLESS_SOLANA_WALLET_ADDRESS']! as Hex;
-  const P256_OWNED_SOLANA_WALLET_ID = process.env['P256_OWNED_SOLANA_WALLET_ID']!;
-  const P256_OWNED_SOLANA_WALLET_ADDRESS = process.env['P256_OWNED_SOLANA_WALLET_ADDRESS']! as Hex;
-
-  const OWNERLESS_TRON_WALLET_ID = process.env['OWNERLESS_TRON_WALLET_ID']!;
-  const OWNERLESS_TRON_WALLET_ADDRESS = process.env['OWNERLESS_TRON_WALLET_ADDRESS']! as Hex;
-  const OWNERLESS_TRON_WALLET_PK = process.env['OWNERLESS_TRON_WALLET_PK']!;
-  const P256_OWNED_TRON_WALLET_ID = process.env['P256_OWNED_TRON_WALLET_ID']!;
-  const P256_OWNED_TRON_WALLET_ADDRESS = process.env['P256_OWNED_TRON_WALLET_ADDRESS']! as Hex;
-  const P256_OWNED_TRON_WALLET_PK = process.env['P256_OWNED_TRON_WALLET_PK']!;
 
   const p256AuthorizationContext: AuthorizationContext = {
     authorizationPrivateKeys: [P256_PRIVATE_KEY],
@@ -53,35 +29,6 @@ describe('PrivyWalletsService', () => {
       appId: TEST_APP_ID,
       appSecret: TEST_APP_SECRET,
       apiUrl: TEST_API_URL,
-    });
-  });
-  describe.skip('create', () => {
-    test.each([
-      { chainType: 'ethereum', owner: null },
-      { chainType: 'ethereum', owner: 'p256' },
-      { chainType: 'solana', owner: null },
-      { chainType: 'solana', owner: 'p256' },
-      { chainType: 'tron', owner: null, hasPublicKey: true },
-      { chainType: 'tron', owner: 'p256', hasPublicKey: true },
-    ] as const)('.create($chainType, owner:$owner)', async ({ chainType, owner, hasPublicKey }) => {
-      const walletResponse = await privyClient.wallets().create({
-        chain_type: chainType,
-        owner: owner === 'p256' ? { public_key: P256_PUBLIC_KEY } : null,
-      });
-
-      expect(walletResponse.id).toBeDefined();
-      expect(walletResponse.chain_type).toBe(chainType);
-      expect(walletResponse.address).toBeDefined();
-      hasPublicKey && expect(walletResponse.public_key).toBeDefined();
-
-      // Log the details of the created wallets so it can be added to the envfile
-      const OWNER_PREFIX: string = owner === 'p256' ? 'P256_OWNED' : 'OWNERLESS';
-      const CHAIN_TYPE: string = chainType.toUpperCase();
-      console.log(
-        `${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_ID=${walletResponse.id}` +
-          `\n${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_ADDRESS=${walletResponse.address}` +
-          (hasPublicKey ? `\n${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_PK=${walletResponse.public_key}` : ''),
-      );
     });
   });
   describe('ethereum', () => {
@@ -588,268 +535,6 @@ describe('PrivyWalletsService', () => {
 
         expect(firstTx.hash).toEqual(secondTx.hash);
         expect(firstTx.transaction_id).toEqual(secondTx.transaction_id);
-      });
-    });
-  });
-  describe('solana', () => {
-    describe('signMessage', () => {
-      it('should be able to sign a base64-encoded message', async () => {
-        const base64Message = Buffer.from('Hello, world!', 'utf8').toString('base64');
-        const response = await privyClient
-          .wallets()
-          .solana()
-          .signMessage(OWNERLESS_SOLANA_WALLET_ID, { message: base64Message });
-
-        expect(response.signature).toBeDefined();
-
-        const verified = nacl.sign.detached.verify(
-          Buffer.from(base64Message, 'base64'),
-          Buffer.from(response.signature, 'base64'),
-          base58.decode(OWNERLESS_SOLANA_WALLET_ADDRESS),
-        );
-        expect(verified).toBe(true);
-      });
-      it('should be able to sign a byte array message', async () => {
-        const message = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-        const response = await privyClient
-          .wallets()
-          .solana()
-          .signMessage(OWNERLESS_SOLANA_WALLET_ID, { message });
-
-        expect(response.signature).toBeDefined();
-        const verified = nacl.sign.detached.verify(
-          message,
-          Buffer.from(response.signature, 'base64'),
-          base58.decode(OWNERLESS_SOLANA_WALLET_ADDRESS),
-        );
-        expect(verified).toBe(true);
-      });
-      it('should be able to sign a message with an authorization context', async () => {
-        const base64Message = Buffer.from('Hello, world!', 'utf8').toString('base64');
-        const response = await privyClient.wallets().solana().signMessage(P256_OWNED_SOLANA_WALLET_ID, {
-          message: base64Message,
-          authorization_context: p256AuthorizationContext,
-        });
-
-        expect(response.signature).toBeDefined();
-
-        const verified = nacl.sign.detached.verify(
-          Buffer.from(base64Message, 'base64'),
-          Buffer.from(response.signature, 'base64'),
-          base58.decode(P256_OWNED_SOLANA_WALLET_ADDRESS),
-        );
-        expect(verified).toBe(true);
-      });
-    });
-    describe('signTransaction', () => {
-      const connection = new Connection(clusterApiUrl('devnet'));
-      async function createTransferTransaction(from: string, lamports: number) {
-        const fromPubkey = new PublicKey(base58.decode(from));
-        const toPubkey = new PublicKey(base58.decode('9NvE68JVWHHHGLp5NNELtM5fiBw6SXHrzqQJjUqaykC1'));
-
-        const { blockhash: recentBlockhash } = await connection.getLatestBlockhash();
-
-        const instruction = SystemProgram.transfer({ fromPubkey, toPubkey, lamports });
-        const message = new TransactionMessage({
-          payerKey: fromPubkey,
-          instructions: [instruction],
-          recentBlockhash,
-        });
-
-        return new VersionedTransaction(message.compileToV0Message());
-      }
-      it('should be able to sign a base64-encoded transaction', async () => {
-        const transaction = await createTransferTransaction(OWNERLESS_SOLANA_WALLET_ADDRESS, 100);
-        const response = await privyClient
-          .wallets()
-          .solana()
-          .signTransaction(OWNERLESS_SOLANA_WALLET_ID, {
-            transaction: Buffer.from(transaction.serialize()).toString('base64'),
-          });
-
-        expect(response.signed_transaction).toBeDefined();
-        const signedTransaction = VersionedTransaction.deserialize(
-          Buffer.from(response.signed_transaction, 'base64'),
-        );
-
-        const verified = nacl.sign.detached.verify(
-          transaction.message.serialize(),
-          signedTransaction.signatures[0]!,
-          base58.decode(OWNERLESS_SOLANA_WALLET_ADDRESS),
-        );
-        expect(verified).toBe(true);
-      });
-      it('should be able to sign a binary encoded transaction', async () => {
-        const transaction = await createTransferTransaction(OWNERLESS_SOLANA_WALLET_ADDRESS, 100);
-        const response = await privyClient.wallets().solana().signTransaction(OWNERLESS_SOLANA_WALLET_ID, {
-          transaction: transaction.serialize(),
-        });
-
-        expect(response.signed_transaction).toBeDefined();
-        const signedTransaction = VersionedTransaction.deserialize(
-          Buffer.from(response.signed_transaction, 'base64'),
-        );
-
-        const verified = nacl.sign.detached.verify(
-          transaction.message.serialize(),
-          signedTransaction.signatures[0]!,
-          base58.decode(OWNERLESS_SOLANA_WALLET_ADDRESS),
-        );
-        expect(verified).toBe(true);
-      });
-      it('should be able to sign a transaction with an authorization context', async () => {
-        const transaction = await createTransferTransaction(P256_OWNED_SOLANA_WALLET_ADDRESS, 100);
-        const response = await privyClient.wallets().solana().signTransaction(P256_OWNED_SOLANA_WALLET_ID, {
-          transaction: transaction.serialize(),
-          authorization_context: p256AuthorizationContext,
-        });
-
-        expect(response.signed_transaction).toBeDefined();
-        const signedTransaction = VersionedTransaction.deserialize(
-          Buffer.from(response.signed_transaction, 'base64'),
-        );
-
-        const verified = nacl.sign.detached.verify(
-          transaction.message.serialize(),
-          signedTransaction.signatures[0]!,
-          base58.decode(P256_OWNED_SOLANA_WALLET_ADDRESS),
-        );
-        expect(verified).toBe(true);
-      });
-    });
-    // Skipped to not waste funds. Logic is shared with signing transactions so safe to not frequently test.
-    describe.skip('signAndSendTransaction', () => {
-      const connection = new Connection(clusterApiUrl('devnet'));
-      const devnetCaip2 = 'solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1';
-      async function createTransferTransaction(from: string, lamports: number) {
-        const fromPubkey = new PublicKey(base58.decode(from));
-        const toPubkey = new PublicKey(base58.decode('9NvE68JVWHHHGLp5NNELtM5fiBw6SXHrzqQJjUqaykC1'));
-
-        const { blockhash: recentBlockhash } = await connection.getLatestBlockhash();
-
-        const instruction = SystemProgram.transfer({ fromPubkey, toPubkey, lamports });
-        const message = new TransactionMessage({
-          payerKey: fromPubkey,
-          instructions: [instruction],
-          recentBlockhash,
-        });
-
-        return new VersionedTransaction(message.compileToV0Message());
-      }
-      it('should be able to sign a base64-encoded transaction', async () => {
-        const transaction = await createTransferTransaction(OWNERLESS_SOLANA_WALLET_ADDRESS, 100);
-        const response = await privyClient
-          .wallets()
-          .solana()
-          .signAndSendTransaction(OWNERLESS_SOLANA_WALLET_ID, {
-            caip2: devnetCaip2,
-            transaction: Buffer.from(transaction.serialize()).toString('base64'),
-          });
-
-        expect(response.caip2).toBeDefined();
-        expect(response.hash).toBeDefined();
-      });
-      it('should be able to sign a binary encoded transaction', async () => {
-        const transaction = await createTransferTransaction(OWNERLESS_SOLANA_WALLET_ADDRESS, 100);
-        const response = await privyClient
-          .wallets()
-          .solana()
-          .signAndSendTransaction(OWNERLESS_SOLANA_WALLET_ID, {
-            caip2: devnetCaip2,
-            transaction: transaction.serialize(),
-          });
-
-        expect(response.caip2).toBeDefined();
-        expect(response.hash).toBeDefined();
-      });
-      it('should be able to sign a transaction with an authorization context', async () => {
-        const transaction = await createTransferTransaction(P256_OWNED_SOLANA_WALLET_ADDRESS, 100);
-        const response = await privyClient
-          .wallets()
-          .solana()
-          .signAndSendTransaction(P256_OWNED_SOLANA_WALLET_ID, {
-            caip2: devnetCaip2,
-            transaction: transaction.serialize(),
-            authorization_context: p256AuthorizationContext,
-          });
-
-        expect(response.caip2).toBeDefined();
-        expect(response.hash).toBeDefined();
-      });
-    });
-  });
-  describe('other chains', () => {
-    describe('raw sign', () => {
-      it('should be able to sign a message', async () => {
-        const response = await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-        });
-
-        expect(response.encoding).toBe('hex');
-        expect(response.signature).toBeDefined();
-        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
-
-        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
-        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
-        const publicKeyBytes = hexToBytes(`0x${OWNERLESS_TRON_WALLET_PK}`);
-
-        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
-        expect(verified).toBe(true);
-      });
-      it('will succeed if the idempotency key is reused with the same body', async () => {
-        const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotency_key: idempotencyKey,
-        });
-
-        const response = await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotency_key: idempotencyKey,
-        });
-        expect(response.encoding).toBe('hex');
-        expect(response.signature).toBeDefined();
-        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
-
-        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
-        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
-        const publicKeyBytes = hexToBytes(`0x${OWNERLESS_TRON_WALLET_PK}`);
-
-        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
-        expect(verified).toBe(true);
-      });
-      it('will fail if the idempotency key is reused with a different body', async () => {
-        const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotency_key: idempotencyKey,
-        });
-
-        await expect(
-          privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET_ID, {
-            params: { hash: '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321' },
-            idempotency_key: idempotencyKey,
-          }),
-        ).rejects.toThrow(
-          `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
-        );
-      });
-      it('should be able to sign a message with an authorization context', async () => {
-        const response = await privyClient.wallets().rawSign(P256_OWNED_TRON_WALLET_ID, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          authorization_context: p256AuthorizationContext,
-        });
-
-        expect(response.encoding).toBe('hex');
-        expect(response.signature).toBeDefined();
-        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
-
-        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
-        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
-        const publicKeyBytes = hexToBytes(`0x${P256_OWNED_TRON_WALLET_PK}`);
-
-        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
-        expect(verified).toBe(true);
       });
     });
   });

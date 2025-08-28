@@ -1,5 +1,9 @@
 import { ClientOptions, PrivyAPI } from '../client';
 import { PrivyWalletsService } from './services/wallets';
+import { PrivyPoliciesService } from './services/policies';
+import { PrivyTransactionsService } from './services/transactions';
+import { PrivyKeyQuorumsService } from './services/key-quorums';
+import { PrivyUsersService } from './services/users';
 
 export interface PrivyClientOptions {
   appId: string;
@@ -12,6 +16,10 @@ export interface PrivyClientOptions {
 export class PrivyClient {
   private privyApiClient: PrivyAPI;
   private walletsService: PrivyWalletsService;
+  private policiesService: PrivyPoliciesService;
+  private transactionsService: PrivyTransactionsService;
+  private keyQuorumsService: PrivyKeyQuorumsService;
+  private usersService: PrivyUsersService;
 
   public constructor({ appId, appSecret, apiUrl, ...clientOptions }: PrivyClientOptions) {
     this.privyApiClient = new PrivyAPI({
@@ -21,9 +29,29 @@ export class PrivyClient {
       ...clientOptions,
     });
     this.walletsService = new PrivyWalletsService(this.privyApiClient);
+    this.policiesService = new PrivyPoliciesService(this.privyApiClient);
+    this.transactionsService = new PrivyTransactionsService(this.privyApiClient);
+    this.keyQuorumsService = new PrivyKeyQuorumsService(this.privyApiClient);
+    this.usersService = new PrivyUsersService(this.privyApiClient);
   }
 
   public wallets(): PrivyWalletsService {
     return this.walletsService;
+  }
+
+  public policies(): PrivyPoliciesService {
+    return this.policiesService;
+  }
+
+  public transactions(): PrivyTransactionsService {
+    return this.transactionsService;
+  }
+
+  public keyQuorums(): PrivyKeyQuorumsService {
+    return this.keyQuorumsService;
+  }
+
+  public users(): PrivyUsersService {
+    return this.usersService;
   }
 }

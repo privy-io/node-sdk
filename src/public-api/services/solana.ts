@@ -1,6 +1,6 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
-import { PrivyWalletsService } from './wallets';
-import { AuthorizationContext } from '../AuthorizationContext';
+import { PrivyWalletsService, ReplaceParams } from './wallets';
+import { PrivyWalletsRpcInput } from './wallets';
 
 export class PrivySolanaService {
   private privyWalletsService: PrivyWalletsService;
@@ -11,9 +11,7 @@ export class PrivySolanaService {
 
   public async signMessage(
     walletId: string,
-    message: string | Uint8Array,
-    authorizationContext?: AuthorizationContext,
-    idempotencyKey?: string,
+    { message, ...input }: PrivySolanaService.SignMessageInput,
   ): Promise<WalletRpcResponse.SolanaSignMessageRpcResponse.Data> {
     let params: WalletRpcParams.SolanaSignMessageRpcInput.Params;
     if (message instanceof Uint8Array) {
@@ -24,21 +22,19 @@ export class PrivySolanaService {
       params = { message, encoding: 'base64' };
     }
 
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { method: 'signMessage', params },
-      authorizationContext,
-      idempotencyKey,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
+      method: 'signMessage',
+      chain_type: 'solana',
+      params,
+    });
 
     return response.data;
   }
 
   public async signTransaction(
     walletId: string,
-    transaction: string | Uint8Array,
-    authorizationContext?: AuthorizationContext,
-    idempotencyKey?: string,
+    { transaction, ...input }: PrivySolanaService.SignTransactionInput,
   ): Promise<WalletRpcResponse.SolanaSignTransactionRpcResponse.Data> {
     let params: WalletRpcParams.SolanaSignTransactionRpcInput.Params;
     if (transaction instanceof Uint8Array) {
@@ -49,22 +45,19 @@ export class PrivySolanaService {
       params = { transaction, encoding: 'base64' };
     }
 
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { method: 'signTransaction', params },
-      authorizationContext,
-      idempotencyKey,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
+      method: 'signTransaction',
+      chain_type: 'solana',
+      params,
+    });
 
     return response.data;
   }
 
   public async signAndSendTransaction(
     walletId: string,
-    caip2: string,
-    transaction: string | Uint8Array,
-    authorizationContext?: AuthorizationContext,
-    idempotencyKey?: string,
+    { transaction, ...input }: PrivySolanaService.SignAndSendTransactionInput,
   ): Promise<WalletRpcResponse.SolanaSignAndSendTransactionRpcResponse.Data> {
     let params: WalletRpcParams.SolanaSignAndSendTransactionRpcInput.Params;
     if (transaction instanceof Uint8Array) {
@@ -75,12 +68,12 @@ export class PrivySolanaService {
       params = { transaction, encoding: 'base64' };
     }
 
-    const response = await this.privyWalletsService.rpc(
-      walletId,
-      { method: 'signAndSendTransaction', caip2, params },
-      authorizationContext,
-      idempotencyKey,
-    );
+    const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
+      method: 'signAndSendTransaction',
+      chain_type: 'solana',
+      params,
+    });
 
     if (!response.data) {
       throw new Error(response.error?.message ?? 'Unexpected response from Privy API');
@@ -88,4 +81,31 @@ export class PrivySolanaService {
 
     return response.data;
   }
+}
+
+// prettier-ignore
+/**
+ * The namespace for types related to the Solana service class.
+ * @see {@link PrivySolanaService} class.
+ * @see {@link PrivyWalletsRpcInput} type.
+ */
+export namespace PrivySolanaService {
+  /**
+   * The input type for the {@link PrivySolanaService.signMessage} method.
+   * Instead of accepting the raw `params` object, it accepts a message `string` or `Uint8Array`
+   * that is automatically converted to the right `params` object.
+   */
+  export type SignMessageInput = ReplaceParams<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignMessageRpcInput>, {message: string | Uint8Array}>;
+  /**
+   * The input type for the {@link PrivySolanaService.signTransaction} method.
+   * Instead of accepting the raw `params` object, it accepts a transaction `string` or `Uint8Array`
+   * that is automatically converted to the right `params` object.
+   */
+  export type SignTransactionInput = ReplaceParams<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignTransactionRpcInput>, {transaction: string | Uint8Array}>;
+  /**
+   * The input type for the {@link PrivySolanaService.signAndSendTransaction} method.
+   * Instead of accepting the raw `params` object, it accepts a transaction `string` or `Uint8Array`
+   * that is automatically converted to the right `params` object.
+   */
+  export type SignAndSendTransactionInput = ReplaceParams<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignAndSendTransactionRpcInput>, {transaction: string | Uint8Array}>;
 }

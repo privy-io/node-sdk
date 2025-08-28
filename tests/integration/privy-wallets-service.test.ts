@@ -598,7 +598,7 @@ describe('PrivyWalletsService', () => {
         const response = await privyClient
           .wallets()
           .solana()
-          .signMessage(OWNERLESS_SOLANA_WALLET_ID, base64Message);
+          .signMessage(OWNERLESS_SOLANA_WALLET_ID, { message: base64Message });
 
         expect(response.signature).toBeDefined();
 
@@ -614,7 +614,7 @@ describe('PrivyWalletsService', () => {
         const response = await privyClient
           .wallets()
           .solana()
-          .signMessage(OWNERLESS_SOLANA_WALLET_ID, message);
+          .signMessage(OWNERLESS_SOLANA_WALLET_ID, { message });
 
         expect(response.signature).toBeDefined();
         const verified = nacl.sign.detached.verify(
@@ -626,12 +626,10 @@ describe('PrivyWalletsService', () => {
       });
       it('should be able to sign a message with an authorization context', async () => {
         const base64Message = Buffer.from('Hello, world!', 'utf8').toString('base64');
-        const response = await privyClient
-          .wallets()
-          .solana()
-          .signMessage(P256_OWNED_SOLANA_WALLET_ID, base64Message, {
-            authorization_context: p256AuthorizationContext,
-          });
+        const response = await privyClient.wallets().solana().signMessage(P256_OWNED_SOLANA_WALLET_ID, {
+          message: base64Message,
+          authorization_context: p256AuthorizationContext,
+        });
 
         expect(response.signature).toBeDefined();
 
@@ -665,10 +663,9 @@ describe('PrivyWalletsService', () => {
         const response = await privyClient
           .wallets()
           .solana()
-          .signTransaction(
-            OWNERLESS_SOLANA_WALLET_ID,
-            Buffer.from(transaction.serialize()).toString('base64'),
-          );
+          .signTransaction(OWNERLESS_SOLANA_WALLET_ID, {
+            transaction: Buffer.from(transaction.serialize()).toString('base64'),
+          });
 
         expect(response.signed_transaction).toBeDefined();
         const signedTransaction = VersionedTransaction.deserialize(
@@ -684,10 +681,9 @@ describe('PrivyWalletsService', () => {
       });
       it('should be able to sign a binary encoded transaction', async () => {
         const transaction = await createTransferTransaction(OWNERLESS_SOLANA_WALLET_ADDRESS, 100);
-        const response = await privyClient
-          .wallets()
-          .solana()
-          .signTransaction(OWNERLESS_SOLANA_WALLET_ID, transaction.serialize());
+        const response = await privyClient.wallets().solana().signTransaction(OWNERLESS_SOLANA_WALLET_ID, {
+          transaction: transaction.serialize(),
+        });
 
         expect(response.signed_transaction).toBeDefined();
         const signedTransaction = VersionedTransaction.deserialize(
@@ -703,12 +699,10 @@ describe('PrivyWalletsService', () => {
       });
       it('should be able to sign a transaction with an authorization context', async () => {
         const transaction = await createTransferTransaction(P256_OWNED_SOLANA_WALLET_ADDRESS, 100);
-        const response = await privyClient
-          .wallets()
-          .solana()
-          .signTransaction(P256_OWNED_SOLANA_WALLET_ID, transaction.serialize(), {
-            authorization_context: p256AuthorizationContext,
-          });
+        const response = await privyClient.wallets().solana().signTransaction(P256_OWNED_SOLANA_WALLET_ID, {
+          transaction: transaction.serialize(),
+          authorization_context: p256AuthorizationContext,
+        });
 
         expect(response.signed_transaction).toBeDefined();
         const signedTransaction = VersionedTransaction.deserialize(
@@ -747,11 +741,10 @@ describe('PrivyWalletsService', () => {
         const response = await privyClient
           .wallets()
           .solana()
-          .signAndSendTransaction(
-            OWNERLESS_SOLANA_WALLET_ID,
-            devnetCaip2,
-            Buffer.from(transaction.serialize()).toString('base64'),
-          );
+          .signAndSendTransaction(OWNERLESS_SOLANA_WALLET_ID, {
+            caip2: devnetCaip2,
+            transaction: Buffer.from(transaction.serialize()).toString('base64'),
+          });
 
         expect(response.caip2).toBeDefined();
         expect(response.hash).toBeDefined();
@@ -761,7 +754,10 @@ describe('PrivyWalletsService', () => {
         const response = await privyClient
           .wallets()
           .solana()
-          .signAndSendTransaction(OWNERLESS_SOLANA_WALLET_ID, devnetCaip2, transaction.serialize());
+          .signAndSendTransaction(OWNERLESS_SOLANA_WALLET_ID, {
+            caip2: devnetCaip2,
+            transaction: transaction.serialize(),
+          });
 
         expect(response.caip2).toBeDefined();
         expect(response.hash).toBeDefined();
@@ -771,7 +767,9 @@ describe('PrivyWalletsService', () => {
         const response = await privyClient
           .wallets()
           .solana()
-          .signAndSendTransaction(P256_OWNED_SOLANA_WALLET_ID, devnetCaip2, transaction.serialize(), {
+          .signAndSendTransaction(P256_OWNED_SOLANA_WALLET_ID, {
+            caip2: devnetCaip2,
+            transaction: transaction.serialize(),
             authorization_context: p256AuthorizationContext,
           });
 

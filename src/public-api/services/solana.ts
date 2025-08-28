@@ -1,6 +1,6 @@
 import { WalletRpcParams, WalletRpcResponse } from '../../resources';
 import { PrivyWalletsService } from './wallets';
-import { PrivyWalletsRpcConfig } from './types';
+import { AuthParams, IdempotencyParams, Prettify, WithAuthorization, WithIdempotency } from './types';
 
 export class PrivySolanaService {
   private privyWalletsService: PrivyWalletsService;
@@ -11,8 +11,7 @@ export class PrivySolanaService {
 
   public async signMessage(
     walletId: string,
-    message: string | Uint8Array,
-    config?: PrivyWalletsRpcConfig,
+    { message, ...input }: PrivySolanaService.SignMessageInput,
   ): Promise<WalletRpcResponse.SolanaSignMessageRpcResponse.Data> {
     let params: WalletRpcParams.SolanaSignMessageRpcInput.Params;
     if (message instanceof Uint8Array) {
@@ -24,9 +23,10 @@ export class PrivySolanaService {
     }
 
     const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
       method: 'signMessage',
+      chain_type: 'solana',
       params,
-      ...config,
     });
 
     return response.data;
@@ -34,8 +34,7 @@ export class PrivySolanaService {
 
   public async signTransaction(
     walletId: string,
-    transaction: string | Uint8Array,
-    config?: PrivyWalletsRpcConfig,
+    { transaction, ...input }: PrivySolanaService.SignTransactionInput,
   ): Promise<WalletRpcResponse.SolanaSignTransactionRpcResponse.Data> {
     let params: WalletRpcParams.SolanaSignTransactionRpcInput.Params;
     if (transaction instanceof Uint8Array) {
@@ -47,9 +46,10 @@ export class PrivySolanaService {
     }
 
     const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
       method: 'signTransaction',
+      chain_type: 'solana',
       params,
-      ...config,
     });
 
     return response.data;
@@ -57,9 +57,7 @@ export class PrivySolanaService {
 
   public async signAndSendTransaction(
     walletId: string,
-    caip2: string,
-    transaction: string | Uint8Array,
-    config?: PrivyWalletsRpcConfig,
+    { transaction, ...input }: PrivySolanaService.SignAndSendTransactionInput,
   ): Promise<WalletRpcResponse.SolanaSignAndSendTransactionRpcResponse.Data> {
     let params: WalletRpcParams.SolanaSignAndSendTransactionRpcInput.Params;
     if (transaction instanceof Uint8Array) {
@@ -71,10 +69,10 @@ export class PrivySolanaService {
     }
 
     const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
       method: 'signAndSendTransaction',
-      caip2,
+      chain_type: 'solana',
       params,
-      ...config,
     });
 
     if (!response.data) {
@@ -84,3 +82,16 @@ export class PrivySolanaService {
     return response.data;
   }
 }
+
+export namespace PrivySolanaService {
+  // prettier-ignore
+  export type SignMessageInput = Prettify<Omit<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignMessageRpcInput>, 'params'> & {message: string | Uint8Array}>;
+  // prettier-ignore
+  export type SignTransactionInput = Prettify<Omit<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignTransactionRpcInput>, 'params'> & {transaction: string | Uint8Array}>;
+  // prettier-ignore
+  export type SignAndSendTransactionInput = Prettify<Omit<PrivyWalletsRpcInput<WalletRpcParams.SolanaSignAndSendTransactionRpcInput>, 'params'> & {transaction: string | Uint8Array}>;
+}
+
+// prettier-ignore
+export type PrivyWalletsRpcInput<P extends (WalletRpcParams & IdempotencyParams & AuthParams)> =
+  Prettify<WithIdempotency<WithAuthorization<Omit<P, 'chain_type'|'method'>>>>;

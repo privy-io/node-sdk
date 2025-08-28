@@ -9,6 +9,7 @@ import {
   Wallets,
   WalletUpdateParams,
 } from '../../resources';
+import { PrivyClient } from '../PrivyClient';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
 import { Prettify, WithAuthorization, WithIdempotency } from './types';
@@ -16,9 +17,11 @@ import { Prettify, WithAuthorization, WithIdempotency } from './types';
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
   private solanaService: PrivySolanaService;
+  private privyClient: PrivyClient;
 
-  constructor(privyApiClient: PrivyAPI) {
+  constructor(privyApiClient: PrivyAPI, privyClient: PrivyClient) {
     super(privyApiClient);
+    this.privyClient = privyClient;
     this.ethereumService = new PrivyEthereumService(this);
     this.solanaService = new PrivySolanaService(this);
   }
@@ -43,7 +46,7 @@ export class PrivyWalletsService extends Wallets {
       ...params
     }: PrivyWalletsService.RpcInput,
   ): Promise<WalletRpcResponse> {
-    const authorizationSignaturesHeader = generateAuthorizationSignatures({
+    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
       authorizationContext,
       input: {
         version: 1,
@@ -72,7 +75,7 @@ export class PrivyWalletsService extends Wallets {
       ...params
     }: PrivyWalletsService.RawSignInput,
   ): Promise<WalletRawSignResponse.Data> {
-    const authorizationSignaturesHeader = generateAuthorizationSignatures({
+    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
       authorizationContext,
       input: {
         version: 1,
@@ -99,7 +102,7 @@ export class PrivyWalletsService extends Wallets {
     walletId: string,
     { authorization_context: authorizationContext = {}, ...params }: PrivyWalletsService.UpdateInput,
   ): Promise<Wallet> {
-    const authorizationSignaturesHeader = generateAuthorizationSignatures({
+    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
       authorizationContext,
       input: {
         version: 1,

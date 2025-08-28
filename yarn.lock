@@ -428,6 +428,25 @@
     "@eslint/core" "^0.10.0"
     levn "^0.4.1"
 
+"@hpke/chacha20poly1305@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@hpke/chacha20poly1305/-/chacha20poly1305-1.7.1.tgz#645160fc32b377969bf01e9de8108eeb1ceef73e"
+  integrity sha512-Zp8IwRIkdCucu877wCNqDp3B8yOhAnAah/YDDkO94pPr/KKV7IGnBbpwIjDB3BsAySWBMrhhdE0JKYw3N4FCag==
+  dependencies:
+    "@hpke/common" "^1.8.1"
+
+"@hpke/common@^1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@hpke/common/-/common-1.8.1.tgz#555fb3c13e92783c8364cf9ea25272a6723e598c"
+  integrity sha512-PSI4QSxH8XDli0TqAsWycVfrLLCM/bBe+hVlJwtuJJiKIvCaFS3CXX/WtRfJceLJye9NHc2J7GvHVCY9B1BEbA==
+
+"@hpke/core@^1.7.4":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@hpke/core/-/core-1.7.4.tgz#22e8e7d53e98fc775fbefb7be2b781d9b9face7f"
+  integrity sha512-1BfPQB7unq/tNx7eznmoFgmJlMFnymdLNNt2CQX/L8oYOfmc1+cFEItpXZ90mgthW7tB2oksy/G7Xh1t569qzA==
+  dependencies:
+    "@hpke/common" "^1.8.1"
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"
@@ -2733,6 +2752,11 @@ jest@^29.4.0:
     "@jest/types" "^29.6.3"
     import-local "^3.0.2"
     jest-cli "^29.7.0"
+
+jose@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-6.1.0.tgz#96285365689d16f2845a353964d2284bf19f464c"
+  integrity sha512-TTQJyoEoKcC1lscpVDCSsVgYzUDg/0Bt3WE//WiTPK6uOCQC2KZS4MpugbMWt/zyjkopgZoXhZuCi00gLudfUA==
 
 js-tokens@^4.0.0:
   version "4.0.0"

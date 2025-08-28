@@ -5,6 +5,7 @@ import { PrivyTransactionsService } from './services/transactions';
 import { PrivyKeyQuorumsService } from './services/key-quorums';
 import { PrivyUsersService } from './services/users';
 import { PrivyUtils } from './services/utils';
+import { JwtExchangeService } from '../lib/jwt-exchange';
 
 export interface PrivyClientOptions {
   appId: string;
@@ -22,6 +23,12 @@ export class PrivyClient {
   private keyQuorumsService: PrivyKeyQuorumsService;
   private usersService: PrivyUsersService;
   private utilsService: PrivyUtils;
+  private jwtExchangeService: JwtExchangeService;
+
+  /** @internal */
+  _jwtExchange(): JwtExchangeService {
+    return this.jwtExchangeService;
+  }
 
   public constructor({ appId, appSecret, apiUrl, ...clientOptions }: PrivyClientOptions) {
     this.privyApiClient = new PrivyAPI({
@@ -30,7 +37,8 @@ export class PrivyClient {
       baseURL: apiUrl,
       ...clientOptions,
     });
-    this.walletsService = new PrivyWalletsService(this.privyApiClient);
+    this.jwtExchangeService = new JwtExchangeService(this.privyApiClient.wallets);
+    this.walletsService = new PrivyWalletsService(this.privyApiClient, this);
     this.policiesService = new PrivyPoliciesService(this.privyApiClient);
     this.transactionsService = new PrivyTransactionsService(this.privyApiClient);
     this.keyQuorumsService = new PrivyKeyQuorumsService(this.privyApiClient);

@@ -3,6 +3,7 @@ import { sha256 } from '@noble/hashes/sha2';
 import canonicalize from 'canonicalize';
 import { PrivyAPIError } from '../core/error';
 import { importPKCS8PrivateKey } from './cryptography';
+import { PrivyClient } from '../public-api/PrivyClient';
 
 export interface AuthorizationContext {
   /**
@@ -10,7 +11,7 @@ export interface AuthorizationContext {
    * These should be base64-encoded PKCS8-formatted private keys, with no PEM headers.
    */
   authorizationPrivateKeys?: string[];
-  // TODO: userJwts?: readonly string[];
+  userJwts?: readonly string[];
   // TODO: signatures?: readonly string[];
 }
 
@@ -55,18 +56,28 @@ export function formatRequestForAuthorizationSignature(input: WalletApiRequestSi
  * @param input The request payload to sign.
  * @returns An array of authorization signatures.
  */
-export function generateAuthorizationSignatures({
-  authorizationContext,
-  input,
-}: {
-  authorizationContext: AuthorizationContext;
-  input: WalletApiRequestSignatureInput;
-}): string[] {
+export async function generateAuthorizationSignatures(
+  client: PrivyClient,
+  {
+    authorizationContext,
+    input,
+  }: {
+    authorizationContext: AuthorizationContext;
+    input: WalletApiRequestSignatureInput;
+  },
+): Promise<string[]> {
   const payload = formatRequestForAuthorizationSignature(input);
 
-  // TODO: add support for user JWTs
+  const userJwts = authorizationContext.userJwts ?? [];
+  let jwtBackedKeys: string[] = [];
+  if (userJwts.length > 0) {
+    jwtBackedKeys = await Promise.all(
+      userJwts.map((jwt) => client._jwtExchange().exchangeJwtForAuthorizationKey(jwt)),
+    );
+  }
+
   // TODO: add support for passed in signatures
-  const privateKeys = authorizationContext.authorizationPrivateKeys ?? [];
+  const privateKeys = [...(authorizationContext.authorizationPrivateKeys ?? []), ...jwtBackedKeys];
 
   return privateKeys.map((sk) =>
     generateAuthorizationSignature({ authorizationPrivateKey: sk, input: payload }),

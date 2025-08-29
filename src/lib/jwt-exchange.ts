@@ -1,13 +1,16 @@
 import { PrivyAPIError } from '../core/error';
 import { Wallets } from '../resources';
 import { HPKERecipient, setupHPKE } from './cryptography';
+import { LRUCache } from 'lru-cache';
 
 export class JwtExchangeService {
   private _hpkeRecipient: HPKERecipient | null = null;
   private walletsService: Wallets;
+  private jwtCache: LRUCache<string, string>;
 
-  constructor(walletsService: Wallets) {
+  constructor(walletsService: Wallets, authorizationKeyCacheMaxCapacity: number) {
     this.walletsService = walletsService;
+    this.jwtCache = new LRUCache({ max: authorizationKeyCacheMaxCapacity });
   }
 
   private async getHpkeRecipient(): Promise<HPKERecipient> {
@@ -24,7 +27,10 @@ export class JwtExchangeService {
    * @internal
    */
   async exchangeJwtForAuthorizationKey(jwt: string): Promise<string> {
-    // FIXME: add key cache
+    const cachedAuthorizationKey = this.jwtCache.get(jwt);
+    if (cachedAuthorizationKey) {
+      return cachedAuthorizationKey;
+    }
 
     const { publicKeySpki, decryptPayload } = await this.getHpkeRecipient();
 
@@ -44,7 +50,14 @@ export class JwtExchangeService {
         Buffer.from(encryptedAuthorizationKey.encapsulated_key, 'base64'),
         Buffer.from(encryptedAuthorizationKey.ciphertext, 'base64'),
       );
-      return new TextDecoder().decode(decryptedAuthorizationKey);
+      const authorizationKey = new TextDecoder().decode(decryptedAuthorizationKey);
+      this.jwtCache.set(
+        jwt,
+        authorizationKey,
+        // Setting the TTL here makes the LRU cache check and prune on `.get`.
+        { ttl: signer.expires_at - Date.now() },
+      );
+      return authorizationKey;
     } else {
       throw new PrivyAPIError('JWT exchange failed: unsupported encryption type');
     }

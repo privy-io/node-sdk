@@ -32,7 +32,8 @@
     "@hpke/core": "^1.7.4",
     "@noble/curves": "^1.9.7",
     "@noble/hashes": "^1.8.0",
-    "canonicalize": "^2.1.0"
+    "canonicalize": "^2.1.0",
+    "lru-cache": "^11.1.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",

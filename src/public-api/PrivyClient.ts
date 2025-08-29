@@ -4,6 +4,7 @@ import { PrivyPoliciesService } from './services/policies';
 import { PrivyTransactionsService } from './services/transactions';
 import { PrivyKeyQuorumsService } from './services/key-quorums';
 import { PrivyUsersService } from './services/users';
+import { PrivyUtils } from './services/utils';
 
 export interface PrivyClientOptions {
   appId: string;
@@ -20,6 +21,7 @@ export class PrivyClient {
   private transactionsService: PrivyTransactionsService;
   private keyQuorumsService: PrivyKeyQuorumsService;
   private usersService: PrivyUsersService;
+  private utilsService: PrivyUtils;
 
   public constructor({ appId, appSecret, apiUrl, ...clientOptions }: PrivyClientOptions) {
     this.privyApiClient = new PrivyAPI({
@@ -33,6 +35,7 @@ export class PrivyClient {
     this.transactionsService = new PrivyTransactionsService(this.privyApiClient);
     this.keyQuorumsService = new PrivyKeyQuorumsService(this.privyApiClient);
     this.usersService = new PrivyUsersService(this.privyApiClient);
+    this.utilsService = new PrivyUtils();
   }
 
   public wallets(): PrivyWalletsService {
@@ -53,5 +56,9 @@ export class PrivyClient {
 
   public users(): PrivyUsersService {
     return this.usersService;
+  }
+
+  public utils(): PrivyUtils {
+    return this.utilsService;
   }
 }

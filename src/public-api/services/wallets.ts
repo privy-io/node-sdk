@@ -8,7 +8,7 @@ import {
   Wallet,
   Wallets,
 } from '../../resources';
-import { generateAuthorizationSignatures } from '../AuthorizationContext';
+import { PrivyRequestSigner } from './utils/PrivyRequestSigner';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
 import { Prettify, WithAuthorization, WithIdempotency } from './types';
@@ -16,11 +16,13 @@ import { Prettify, WithAuthorization, WithIdempotency } from './types';
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
   private solanaService: PrivySolanaService;
+  private requestSigner: PrivyRequestSigner;
 
-  constructor(privyApiClient: PrivyAPI) {
+  constructor(privyApiClient: PrivyAPI, requestSigner: PrivyRequestSigner) {
     super(privyApiClient);
     this.ethereumService = new PrivyEthereumService(this);
     this.solanaService = new PrivySolanaService(this);
+    this.requestSigner = requestSigner;
   }
 
   public ethereum(): PrivyEthereumService {
@@ -43,7 +45,7 @@ export class PrivyWalletsService extends Wallets {
       ...params
     }: PrivyWalletsService.RpcInput,
   ): Promise<WalletRpcResponse> {
-    const authorizationSignaturesHeader = generateAuthorizationSignatures({
+    const authorizationSignaturesHeader = this.requestSigner.generateAuthorizationSignatures({
       authorizationContext,
       input: {
         version: 1,
@@ -72,7 +74,7 @@ export class PrivyWalletsService extends Wallets {
       ...params
     }: PrivyWalletsService.RawSignInput,
   ): Promise<WalletRawSignResponse.Data> {
-    const authorizationSignaturesHeader = generateAuthorizationSignatures({
+    const authorizationSignaturesHeader = this.requestSigner.generateAuthorizationSignatures({
       authorizationContext,
       input: {
         version: 1,
@@ -103,7 +105,7 @@ export class PrivyWalletsService extends Wallets {
     walletId: string,
     { authorization_context: authorizationContext = {}, ...params }: PrivyWalletsService.UpdateInput,
   ): Promise<Wallet> {
-    const authorizationSignaturesHeader = generateAuthorizationSignatures({
+    const authorizationSignaturesHeader = this.requestSigner.generateAuthorizationSignatures({
       authorizationContext,
       input: {
         version: 1,

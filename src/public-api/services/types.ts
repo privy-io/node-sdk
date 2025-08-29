@@ -1,4 +1,4 @@
-import { AuthorizationContext } from '../AuthorizationContext';
+import { AuthorizationContext } from '../../lib/authorization';
 
 /**
  * Configuration object that can be set by the caller and is used to generate the right value for

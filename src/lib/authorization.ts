@@ -1,3 +1,9 @@
+import { p256 } from '@noble/curves/nist';
+import { sha256 } from '@noble/hashes/sha2';
+import canonicalize from 'canonicalize';
+import { PrivyAPIError } from '../core/error';
+import { importPKCS8PrivateKey } from './cryptography';
+
 export interface AuthorizationContext {
   /**
    * The private keys to use for authorization.
@@ -23,3 +29,40 @@ export type WalletApiRequestSignatureInput = {
     'privy-idempotency-key'?: string;
   };
 };
+
+/**
+ * Formats the request payload into the expected authorization payload, canconicalizes it,
+ * and encodes the JSON string into bytes.
+ *
+ * @param request The request to be formatted.
+ * @return The raw bytes representing the authorization payload.
+ */
+export function formatRequestForAuthorizationSignature(input: WalletApiRequestSignatureInput): Uint8Array {
+  const serializedInput = canonicalize(input);
+  if (!serializedInput) {
+    throw new PrivyAPIError('Failed to serialize request for authorization signature');
+  }
+  return new TextEncoder().encode(serializedInput);
+}
+
+/**
+ * Signs the given request with the provided private key.
+ *
+ * @param authorizationPrivateKey The base64-encoded PKCS8-formatted private key, with no PEM headers.
+ * @param input The request payload to sign, or one serialized using {@link formatRequestForAuthorizationSignature}.
+ * @return The authorization signature.
+ */
+export function generateAuthorizationSignature({
+  authorizationPrivateKey,
+  input,
+}: {
+  authorizationPrivateKey: string;
+  input: WalletApiRequestSignatureInput | Uint8Array;
+}): string {
+  const payload = input instanceof Uint8Array ? input : formatRequestForAuthorizationSignature(input);
+  const privateKey = importPKCS8PrivateKey(authorizationPrivateKey);
+
+  const signature = p256.sign(sha256(payload), privateKey).toBytes('der');
+  // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
+  return Buffer.from(signature).toString('base64');
+}

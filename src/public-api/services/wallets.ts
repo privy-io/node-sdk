@@ -1,14 +1,14 @@
 import { PrivyAPI } from '../../client';
+import { generateAuthorizationSignatures } from '../../lib/authorization';
 import {
+  Wallet,
   WalletRawSignParams,
   WalletRawSignResponse,
   WalletRpcParams,
   WalletRpcResponse,
-  WalletUpdateParams,
-  Wallet,
   Wallets,
+  WalletUpdateParams,
 } from '../../resources';
-import { PrivyRequestSigner } from './utils/PrivyRequestSigner';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
 import { Prettify, WithAuthorization, WithIdempotency } from './types';
@@ -16,13 +16,11 @@ import { Prettify, WithAuthorization, WithIdempotency } from './types';
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
   private solanaService: PrivySolanaService;
-  private requestSigner: PrivyRequestSigner;
 
-  constructor(privyApiClient: PrivyAPI, requestSigner: PrivyRequestSigner) {
+  constructor(privyApiClient: PrivyAPI) {
     super(privyApiClient);
     this.ethereumService = new PrivyEthereumService(this);
     this.solanaService = new PrivySolanaService(this);
-    this.requestSigner = requestSigner;
   }
 
   public ethereum(): PrivyEthereumService {
@@ -45,7 +43,7 @@ export class PrivyWalletsService extends Wallets {
       ...params
     }: PrivyWalletsService.RpcInput,
   ): Promise<WalletRpcResponse> {
-    const authorizationSignaturesHeader = this.requestSigner.generateAuthorizationSignatures({
+    const authorizationSignaturesHeader = generateAuthorizationSignatures({
       authorizationContext,
       input: {
         version: 1,
@@ -74,7 +72,7 @@ export class PrivyWalletsService extends Wallets {
       ...params
     }: PrivyWalletsService.RawSignInput,
   ): Promise<WalletRawSignResponse.Data> {
-    const authorizationSignaturesHeader = this.requestSigner.generateAuthorizationSignatures({
+    const authorizationSignaturesHeader = generateAuthorizationSignatures({
       authorizationContext,
       input: {
         version: 1,
@@ -105,7 +103,7 @@ export class PrivyWalletsService extends Wallets {
     walletId: string,
     { authorization_context: authorizationContext = {}, ...params }: PrivyWalletsService.UpdateInput,
   ): Promise<Wallet> {
-    const authorizationSignaturesHeader = this.requestSigner.generateAuthorizationSignatures({
+    const authorizationSignaturesHeader = generateAuthorizationSignatures({
       authorizationContext,
       input: {
         version: 1,

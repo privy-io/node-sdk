@@ -11,6 +11,7 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
+import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
@@ -33,12 +34,17 @@ import {
   PolicyDeleteResponse,
   PolicyUpdateParams,
 } from './resources/policies';
-import { Transactions } from './resources/transactions';
+import { TransactionGetResponse, Transactions } from './resources/transactions';
 import {
   User,
   UserCreateCustomMetadataParams,
   UserCreateParams,
+  UserGetByEmailAddressParams,
+  UserGetByJwtSubjectIDParams,
+  UserGetByWalletAddressParams,
   UserListParams,
+  UserUnlinkLinkedAccountParams,
+  UserUpdateLinkedAccountParams,
   Users,
   UsersCursor,
 } from './resources/users';
@@ -57,7 +63,7 @@ import {
   WalletUpdateParams,
   Wallets,
   WalletsCursor,
-} from './resources/wallets';
+} from './resources/wallets/wallets';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -309,24 +315,8 @@ export class PrivyAPI {
     return buildHeaders([{ Authorization }]);
   }
 
-  /**
-   * Basic re-implementation of `qs.stringify` for primitive types.
-   */
   protected stringifyQuery(query: Record<string, unknown>): string {
-    return Object.entries(query)
-      .filter(([_, value]) => typeof value !== 'undefined')
-      .map(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        }
-        if (value === null) {
-          return `${encodeURIComponent(key)}=`;
-        }
-        throw new Errors.PrivyAPIError(
-          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
-        );
-      })
-      .join('&');
+    return qs.stringify(query, { arrayFormat: 'comma' });
   }
 
   private getUserAgent(): string {
@@ -876,6 +866,11 @@ export declare namespace PrivyAPI {
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
     type UserCreateCustomMetadataParams as UserCreateCustomMetadataParams,
+    type UserGetByEmailAddressParams as UserGetByEmailAddressParams,
+    type UserGetByJwtSubjectIDParams as UserGetByJwtSubjectIDParams,
+    type UserGetByWalletAddressParams as UserGetByWalletAddressParams,
+    type UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams,
+    type UserUpdateLinkedAccountParams as UserUpdateLinkedAccountParams,
   };
 
   export {
@@ -883,17 +878,17 @@ export declare namespace PrivyAPI {
     type Policy as Policy,
     type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyCreateParams as PolicyCreateParams,
-    type PolicyUpdateParams as PolicyUpdateParams,
     type PolicyDeleteParams as PolicyDeleteParams,
+    type PolicyUpdateParams as PolicyUpdateParams,
   };
 
-  export { Transactions as Transactions };
+  export { Transactions as Transactions, type TransactionGetResponse as TransactionGetResponse };
 
   export {
     KeyQuorums as KeyQuorums,
     type KeyQuorum as KeyQuorum,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
-    type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
+    type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
   };
 }

@@ -47,42 +47,16 @@ export class Policies extends APIResource {
   }
 
   /**
-   * Update a policy by policy ID.
-   *
-   * @example
-   * ```ts
-   * const policy = await client.policies.update(
-   *   'xxxxxxxxxxxxxxxxxxxxxxxx',
-   * );
-   * ```
-   */
-  update(policyID: string, params: PolicyUpdateParams, options?: RequestOptions): APIPromise<Policy> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
-    return this._client.patch(path`/v1/policies/${policyID}`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(privyAuthorizationSignature != null ?
-            { 'privy-authorization-signature': privyAuthorizationSignature }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
-  }
-
-  /**
    * Delete a policy by policy ID.
    *
    * @example
    * ```ts
-   * const policy = await client.policies.delete(
+   * const response = await client.policies._delete(
    *   'xxxxxxxxxxxxxxxxxxxxxxxx',
    * );
    * ```
    */
-  delete(
+  _delete(
     policyID: string,
     params: PolicyDeleteParams | null | undefined = {},
     options?: RequestOptions,
@@ -99,6 +73,46 @@ export class Policies extends APIResource {
         options?.headers,
       ]),
     });
+  }
+
+  /**
+   * Update a policy by policy ID.
+   *
+   * @example
+   * ```ts
+   * const policy = await client.policies._update(
+   *   'xxxxxxxxxxxxxxxxxxxxxxxx',
+   * );
+   * ```
+   */
+  _update(policyID: string, params: PolicyUpdateParams, options?: RequestOptions): APIPromise<Policy> {
+    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    return this._client.patch(path`/v1/policies/${policyID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Get a policy by policy ID.
+   *
+   * @example
+   * ```ts
+   * const policy = await client.policies.get(
+   *   'xxxxxxxxxxxxxxxxxxxxxxxx',
+   * );
+   * ```
+   */
+  get(policyID: string, options?: RequestOptions): APIPromise<Policy> {
+    return this._client.get(path`/v1/policies/${policyID}`, options);
   }
 }
 
@@ -554,6 +568,14 @@ export namespace PolicyCreateParams {
   }
 }
 
+export interface PolicyDeleteParams {
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+}
+
 export interface PolicyUpdateParams {
   /**
    * Body param: Name to assign to policy.
@@ -778,20 +800,12 @@ export namespace PolicyUpdateParams {
   }
 }
 
-export interface PolicyDeleteParams {
-  /**
-   * Request authorization signature. If multiple signatures are required, they
-   * should be comma separated.
-   */
-  'privy-authorization-signature'?: string;
-}
-
 export declare namespace Policies {
   export {
     type Policy as Policy,
     type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyCreateParams as PolicyCreateParams,
-    type PolicyUpdateParams as PolicyUpdateParams,
     type PolicyDeleteParams as PolicyDeleteParams,
+    type PolicyUpdateParams as PolicyUpdateParams,
   };
 }

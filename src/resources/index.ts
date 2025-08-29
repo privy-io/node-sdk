@@ -4,24 +4,29 @@ export {
   KeyQuorums,
   type KeyQuorum,
   type KeyQuorumCreateParams,
-  type KeyQuorumUpdateParams,
   type KeyQuorumDeleteParams,
+  type KeyQuorumUpdateParams,
 } from './key-quorums';
 export {
   Policies,
   type Policy,
   type PolicyDeleteResponse,
   type PolicyCreateParams,
-  type PolicyUpdateParams,
   type PolicyDeleteParams,
+  type PolicyUpdateParams,
 } from './policies';
-export { Transactions } from './transactions';
+export { Transactions, type TransactionGetResponse } from './transactions';
 export {
   Users,
   type User,
   type UserCreateParams,
   type UserListParams,
   type UserCreateCustomMetadataParams,
+  type UserGetByEmailAddressParams,
+  type UserGetByJwtSubjectIDParams,
+  type UserGetByWalletAddressParams,
+  type UserUnlinkLinkedAccountParams,
+  type UserUpdateLinkedAccountParams,
   type UsersCursor,
 } from './users';
 export {
@@ -39,4 +44,4 @@ export {
   type WalletAuthenticateWithJwtParams,
   type WalletCreateWalletsWithRecoveryParams,
   type WalletsCursor,
-} from './wallets';
+} from './wallets/wallets';

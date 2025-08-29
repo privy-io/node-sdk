@@ -91,4 +91,116 @@ describe('resource users', () => {
       custom_metadata: { key: 'value' },
     });
   });
+
+  // Prism tests are disabled
+  test.skip('get', async () => {
+    const responsePromise = client.users.get('user_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByEmailAddress: only required params', async () => {
+    const responsePromise = client.users.getByEmailAddress({ address: 'dev@stainless.com' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByEmailAddress: required and optional params', async () => {
+    const response = await client.users.getByEmailAddress({ address: 'dev@stainless.com' });
+  });
+
+  // Prism tests are disabled
+  test.skip('getByJwtSubjectID: only required params', async () => {
+    const responsePromise = client.users.getByJwtSubjectID({ custom_user_id: 'custom_user_id' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByJwtSubjectID: required and optional params', async () => {
+    const response = await client.users.getByJwtSubjectID({ custom_user_id: 'custom_user_id' });
+  });
+
+  // Prism tests are disabled
+  test.skip('getByWalletAddress: only required params', async () => {
+    const responsePromise = client.users.getByWalletAddress({ address: 'address' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByWalletAddress: required and optional params', async () => {
+    const response = await client.users.getByWalletAddress({ address: 'address' });
+  });
+
+  // Prism tests are disabled
+  test.skip('unlinkLinkedAccount: only required params', async () => {
+    const responsePromise = client.users.unlinkLinkedAccount('user_id', {
+      handle: 'test@test.com',
+      type: 'email',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('unlinkLinkedAccount: required and optional params', async () => {
+    const response = await client.users.unlinkLinkedAccount('user_id', {
+      handle: 'test@test.com',
+      type: 'email',
+      provider: 'provider',
+    });
+  });
+
+  // Prism tests are disabled
+  test.skip('updateLinkedAccount: only required params', async () => {
+    const responsePromise = client.users.updateLinkedAccount('user_id', {
+      address: 'address',
+      chain_type: 'ethereum',
+      type: 'wallet',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('updateLinkedAccount: required and optional params', async () => {
+    const response = await client.users.updateLinkedAccount('user_id', {
+      address: 'address',
+      chain_type: 'ethereum',
+      type: 'wallet',
+    });
+  });
 });

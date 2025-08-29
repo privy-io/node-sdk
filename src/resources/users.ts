@@ -76,6 +76,103 @@ export class Users extends APIResource {
   ): APIPromise<User> {
     return this._client.post(path`/v1/users/${userID}/custom_metadata`, { body, ...options });
   }
+
+  /**
+   * Get a user by user ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.get('user_id');
+   * ```
+   */
+  get(userID: string, options?: RequestOptions): APIPromise<User> {
+    return this._client.get(path`/v1/users/${userID}`, options);
+  }
+
+  /**
+   * Looks up a user by their email address.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByEmailAddress({
+   *   address: 'dev@stainless.com',
+   * });
+   * ```
+   */
+  getByEmailAddress(body: UserGetByEmailAddressParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/email/address', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their custom auth ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByJwtSubjectID({
+   *   custom_user_id: 'custom_user_id',
+   * });
+   * ```
+   */
+  getByJwtSubjectID(body: UserGetByJwtSubjectIDParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/custom_auth/id', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their wallet address.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByWalletAddress({
+   *   address: 'address',
+   * });
+   * ```
+   */
+  getByWalletAddress(body: UserGetByWalletAddressParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/wallet/address', { body, ...options });
+  }
+
+  /**
+   * Unlinks a user linked account.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.unlinkLinkedAccount(
+   *   'user_id',
+   *   { handle: 'test@test.com', type: 'email' },
+   * );
+   * ```
+   */
+  unlinkLinkedAccount(
+    userID: string,
+    body: UserUnlinkLinkedAccountParams,
+    options?: RequestOptions,
+  ): APIPromise<User> {
+    return this._client.post(path`/v1/users/${userID}/accounts/unlink`, { body, ...options });
+  }
+
+  /**
+   * Adds or updates a linked account for a user. This endpoint is not yet available
+   * to all users.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.updateLinkedAccount(
+   *   'user_id',
+   *   {
+   *     address: 'address',
+   *     chain_type: 'ethereum',
+   *     type: 'wallet',
+   *   },
+   * );
+   * ```
+   */
+  updateLinkedAccount(
+    userID: string,
+    body: UserUpdateLinkedAccountParams,
+    options?: RequestOptions,
+  ): APIPromise<User> {
+    return this._client.post(path`/v1/users/${userID}/accounts`, { body, ...options });
+  }
 }
 
 export type UsersCursor = Cursor<User>;
@@ -924,6 +1021,228 @@ export interface UserCreateCustomMetadataParams {
   custom_metadata: { [key: string]: string | number | boolean };
 }
 
+export interface UserGetByEmailAddressParams {
+  address: string;
+}
+
+export interface UserGetByJwtSubjectIDParams {
+  custom_user_id: string;
+}
+
+export interface UserGetByWalletAddressParams {
+  address: string;
+}
+
+export interface UserUnlinkLinkedAccountParams {
+  handle: string;
+
+  type:
+    | 'email'
+    | 'wallet'
+    | 'smart_wallet'
+    | 'farcaster'
+    | 'passkey'
+    | 'phone'
+    | 'google_oauth'
+    | 'discord_oauth'
+    | 'twitter_oauth'
+    | 'github_oauth'
+    | 'linkedin_oauth'
+    | 'apple_oauth'
+    | 'spotify_oauth'
+    | 'instagram_oauth'
+    | 'tiktok_oauth'
+    | 'line_oauth'
+    | 'custom_auth'
+    | 'telegram'
+    | 'cross_app'
+    | 'guest';
+
+  provider?: string;
+}
+
+export type UserUpdateLinkedAccountParams =
+  | UserUpdateLinkedAccountParams.LinkedAccountWalletInput
+  | UserUpdateLinkedAccountParams.LinkedAccountEmailInput
+  | UserUpdateLinkedAccountParams.LinkedAccountPhoneInput
+  | UserUpdateLinkedAccountParams.LinkedAccountGoogleInput
+  | UserUpdateLinkedAccountParams.LinkedAccountTwitterInput
+  | UserUpdateLinkedAccountParams.LinkedAccountDiscordInput
+  | UserUpdateLinkedAccountParams.LinkedAccountGitHubInput
+  | UserUpdateLinkedAccountParams.LinkedAccountSpotifyInput
+  | UserUpdateLinkedAccountParams.LinkedAccountInstagramInput
+  | UserUpdateLinkedAccountParams.LinkedAccountTiktokInput
+  | UserUpdateLinkedAccountParams.LinkedAccountLineInput
+  | UserUpdateLinkedAccountParams.LinkedAccountAppleInput
+  | UserUpdateLinkedAccountParams.LinkedAccountLinkedInInput
+  | UserUpdateLinkedAccountParams.LinkedAccountFarcasterInput
+  | UserUpdateLinkedAccountParams.LinkedAccountTelegramInput
+  | UserUpdateLinkedAccountParams.LinkedAccountCustomJwtInput;
+
+export declare namespace UserUpdateLinkedAccountParams {
+  export interface LinkedAccountWalletInput {
+    address: string;
+
+    chain_type: 'ethereum' | 'solana';
+
+    type: 'wallet';
+  }
+
+  export interface LinkedAccountEmailInput {
+    address: string;
+
+    type: 'email';
+  }
+
+  export interface LinkedAccountPhoneInput {
+    number: string;
+
+    type: 'phone';
+  }
+
+  export interface LinkedAccountGoogleInput {
+    email: string;
+
+    name: string;
+
+    subject: string;
+
+    type: 'google_oauth';
+  }
+
+  export interface LinkedAccountTwitterInput {
+    name: string;
+
+    subject: string;
+
+    type: 'twitter_oauth';
+
+    username: string;
+
+    profile_picture_url?: string;
+  }
+
+  export interface LinkedAccountDiscordInput {
+    subject: string;
+
+    type: 'discord_oauth';
+
+    username: string;
+
+    email?: string;
+  }
+
+  export interface LinkedAccountGitHubInput {
+    subject: string;
+
+    type: 'github_oauth';
+
+    username: string;
+
+    email?: string;
+
+    name?: string;
+  }
+
+  export interface LinkedAccountSpotifyInput {
+    subject: string;
+
+    type: 'spotify_oauth';
+
+    email?: string;
+
+    name?: string;
+  }
+
+  export interface LinkedAccountInstagramInput {
+    subject: string;
+
+    type: 'instagram_oauth';
+
+    username: string;
+  }
+
+  export interface LinkedAccountTiktokInput {
+    name: string | null;
+
+    subject: string;
+
+    type: 'tiktok_oauth';
+
+    username: string;
+  }
+
+  export interface LinkedAccountLineInput {
+    subject: string;
+
+    type: 'line_oauth';
+
+    email?: string;
+
+    name?: string;
+
+    profile_picture_url?: string;
+  }
+
+  export interface LinkedAccountAppleInput {
+    subject: string;
+
+    type: 'apple_oauth';
+
+    email?: string;
+  }
+
+  export interface LinkedAccountLinkedInInput {
+    subject: string;
+
+    type: 'linkedin_oauth';
+
+    email?: string;
+
+    name?: string;
+
+    vanityName?: string;
+  }
+
+  export interface LinkedAccountFarcasterInput {
+    fid: number;
+
+    owner_address: string;
+
+    type: 'farcaster';
+
+    bio?: string;
+
+    display_name?: string;
+
+    homepage_url?: string;
+
+    profile_picture_url?: string;
+
+    username?: string;
+  }
+
+  export interface LinkedAccountTelegramInput {
+    telegram_user_id: string;
+
+    type: 'telegram';
+
+    first_name?: string;
+
+    last_name?: string;
+
+    photo_url?: string;
+
+    username?: string;
+  }
+
+  export interface LinkedAccountCustomJwtInput {
+    custom_user_id: string;
+
+    type: 'custom_auth';
+  }
+}
+
 export declare namespace Users {
   export {
     type User as User,
@@ -931,5 +1250,10 @@ export declare namespace Users {
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
     type UserCreateCustomMetadataParams as UserCreateCustomMetadataParams,
+    type UserGetByEmailAddressParams as UserGetByEmailAddressParams,
+    type UserGetByJwtSubjectIDParams as UserGetByJwtSubjectIDParams,
+    type UserGetByWalletAddressParams as UserGetByWalletAddressParams,
+    type UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams,
+    type UserUpdateLinkedAccountParams as UserUpdateLinkedAccountParams,
   };
 }

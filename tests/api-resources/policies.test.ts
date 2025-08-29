@@ -58,8 +58,8 @@ describe('resource policies', () => {
   });
 
   // Prism tests are disabled
-  test.skip('update', async () => {
-    const responsePromise = client.policies.update('xxxxxxxxxxxxxxxxxxxxxxxx', {});
+  test.skip('_delete', async () => {
+    const responsePromise = client.policies._delete('xxxxxxxxxxxxxxxxxxxxxxxx');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -70,26 +70,38 @@ describe('resource policies', () => {
   });
 
   // Prism tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.policies.delete('xxxxxxxxxxxxxxxxxxxxxxxx');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('delete: request options and params are passed correctly', async () => {
+  test.skip('_delete: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.policies.delete(
+      client.policies._delete(
         'xxxxxxxxxxxxxxxxxxxxxxxx',
         { 'privy-authorization-signature': 'privy-authorization-signature' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(PrivyAPI.NotFoundError);
+  });
+
+  // Prism tests are disabled
+  test.skip('_update', async () => {
+    const responsePromise = client.policies._update('xxxxxxxxxxxxxxxxxxxxxxxx', {});
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('get', async () => {
+    const responsePromise = client.policies.get('xxxxxxxxxxxxxxxxxxxxxxxx');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

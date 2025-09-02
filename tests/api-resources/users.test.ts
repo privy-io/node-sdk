@@ -105,6 +105,40 @@ describe('resource users', () => {
   });
 
   // Prism tests are disabled
+  test.skip('getByCustomAuthID: only required params', async () => {
+    const responsePromise = client.users.getByCustomAuthID({ custom_user_id: 'custom_user_id' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByCustomAuthID: required and optional params', async () => {
+    const response = await client.users.getByCustomAuthID({ custom_user_id: 'custom_user_id' });
+  });
+
+  // Prism tests are disabled
+  test.skip('getByDiscordUsername: only required params', async () => {
+    const responsePromise = client.users.getByDiscordUsername({ username: 'username' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByDiscordUsername: required and optional params', async () => {
+    const response = await client.users.getByDiscordUsername({ username: 'username' });
+  });
+
+  // Prism tests are disabled
   test.skip('getByEmailAddress: only required params', async () => {
     const responsePromise = client.users.getByEmailAddress({ address: 'dev@stainless.com' });
     const rawResponse = await responsePromise.asResponse();
@@ -122,8 +156,8 @@ describe('resource users', () => {
   });
 
   // Prism tests are disabled
-  test.skip('getByJwtSubjectID: only required params', async () => {
-    const responsePromise = client.users.getByJwtSubjectID({ custom_user_id: 'custom_user_id' });
+  test.skip('getByFarcasterID: only required params', async () => {
+    const responsePromise = client.users.getByFarcasterID({ fid: 0 });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -134,8 +168,127 @@ describe('resource users', () => {
   });
 
   // Prism tests are disabled
-  test.skip('getByJwtSubjectID: required and optional params', async () => {
-    const response = await client.users.getByJwtSubjectID({ custom_user_id: 'custom_user_id' });
+  test.skip('getByFarcasterID: required and optional params', async () => {
+    const response = await client.users.getByFarcasterID({ fid: 0 });
+  });
+
+  // Prism tests are disabled
+  test.skip('getByGitHubUsername: only required params', async () => {
+    const responsePromise = client.users.getByGitHubUsername({ username: 'username' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByGitHubUsername: required and optional params', async () => {
+    const response = await client.users.getByGitHubUsername({ username: 'username' });
+  });
+
+  // Prism tests are disabled
+  test.skip('getByPhoneNumber: only required params', async () => {
+    const responsePromise = client.users.getByPhoneNumber({ number: 'number' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByPhoneNumber: required and optional params', async () => {
+    const response = await client.users.getByPhoneNumber({ number: 'number' });
+  });
+
+  // Prism tests are disabled
+  test.skip('getBySmartWalletAddress: only required params', async () => {
+    const responsePromise = client.users.getBySmartWalletAddress({ address: 'address' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getBySmartWalletAddress: required and optional params', async () => {
+    const response = await client.users.getBySmartWalletAddress({ address: 'address' });
+  });
+
+  // Prism tests are disabled
+  test.skip('getByTelegramUserID: only required params', async () => {
+    const responsePromise = client.users.getByTelegramUserID({ telegram_user_id: 'telegram_user_id' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByTelegramUserID: required and optional params', async () => {
+    const response = await client.users.getByTelegramUserID({ telegram_user_id: 'telegram_user_id' });
+  });
+
+  // Prism tests are disabled
+  test.skip('getByTelegramUsername: only required params', async () => {
+    const responsePromise = client.users.getByTelegramUsername({ username: 'username' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByTelegramUsername: required and optional params', async () => {
+    const response = await client.users.getByTelegramUsername({ username: 'username' });
+  });
+
+  // Prism tests are disabled
+  test.skip('getByTwitterSubject: only required params', async () => {
+    const responsePromise = client.users.getByTwitterSubject({ subject: 'subject' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByTwitterSubject: required and optional params', async () => {
+    const response = await client.users.getByTwitterSubject({ subject: 'subject' });
+  });
+
+  // Prism tests are disabled
+  test.skip('getByTwitterUsername: only required params', async () => {
+    const responsePromise = client.users.getByTwitterUsername({ username: 'username' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('getByTwitterUsername: required and optional params', async () => {
+    const response = await client.users.getByTwitterUsername({ username: 'username' });
   });
 
   // Prism tests are disabled
@@ -153,6 +306,51 @@ describe('resource users', () => {
   // Prism tests are disabled
   test.skip('getByWalletAddress: required and optional params', async () => {
     const response = await client.users.getByWalletAddress({ address: 'address' });
+  });
+
+  // Prism tests are disabled
+  test.skip('pregenerateWallets: only required params', async () => {
+    const responsePromise = client.users.pregenerateWallets('user_id', {
+      wallets: [{ chain_type: 'ethereum' }],
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('pregenerateWallets: required and optional params', async () => {
+    const response = await client.users.pregenerateWallets('user_id', {
+      wallets: [
+        {
+          chain_type: 'ethereum',
+          additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['string'] }],
+          create_smart_wallet: true,
+          policy_ids: ['string'],
+        },
+      ],
+    });
+  });
+
+  // Prism tests are disabled
+  test.skip('search: only required params', async () => {
+    const responsePromise = client.users.search({ search_term: 'search_term' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('search: required and optional params', async () => {
+    const response = await client.users.search({ search_term: 'search_term' });
   });
 
   // Prism tests are disabled
@@ -176,31 +374,6 @@ describe('resource users', () => {
       handle: 'test@test.com',
       type: 'email',
       provider: 'provider',
-    });
-  });
-
-  // Prism tests are disabled
-  test.skip('updateLinkedAccount: only required params', async () => {
-    const responsePromise = client.users.updateLinkedAccount('user_id', {
-      address: 'address',
-      chain_type: 'ethereum',
-      type: 'wallet',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('updateLinkedAccount: required and optional params', async () => {
-    const response = await client.users.updateLinkedAccount('user_id', {
-      address: 'address',
-      chain_type: 'ethereum',
-      type: 'wallet',
     });
   });
 });

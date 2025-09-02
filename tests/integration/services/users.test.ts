@@ -1,4 +1,4 @@
-import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
+import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
 
 describe('PrivyUsersService', () => {
   // Read the required environment variables from .env

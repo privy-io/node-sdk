@@ -1,10 +1,13 @@
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
+import { generateP256KeyPair } from '../../helpers/authorization-keys';
 
 describe('PrivyPoliciesService', () => {
   // Read the required environment variables from .env
   const TEST_APP_ID = process.env['TEST_APP_ID']!;
   const TEST_APP_SECRET = process.env['TEST_APP_SECRET']!;
   const TEST_API_URL = process.env['TEST_API_URL']!;
+
+  const OWNERLESS_ETHEREUM_POLICY_ID = process.env['OWNERLESS_ETHEREUM_POLICY_ID']!;
 
   let privyClient: PrivyClient;
   beforeEach(() => {
@@ -46,6 +49,28 @@ describe('PrivyPoliciesService', () => {
           method: 'eth_sendTransaction',
         }),
       ]);
+    });
+  });
+  describe('update', () => {
+    it('should be able to change the owner on a policy', async () => {
+      const keypair = generateP256KeyPair();
+
+      // Check the policy is ownerless initially
+      const policy1 = await privyClient.policies().get(OWNERLESS_ETHEREUM_POLICY_ID);
+      expect(policy1.owner_id).toBeNull();
+
+      // Update the owner field to a p256 key
+      const policy2 = await privyClient.policies().update(OWNERLESS_ETHEREUM_POLICY_ID, {
+        owner: { public_key: keypair.publicKey },
+      });
+      expect(policy2.owner_id).toBeDefined();
+
+      // Update the policy back to ownerless
+      const policy3 = await privyClient.policies().update(OWNERLESS_ETHEREUM_POLICY_ID, {
+        owner: null,
+        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+      });
+      expect(policy3.owner_id).toBeNull();
     });
   });
 });

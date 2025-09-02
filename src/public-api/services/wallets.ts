@@ -92,10 +92,6 @@ export class PrivyWalletsService extends Wallets {
       ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
     });
 
-    if (!response.data) {
-      throw new Error(response.error?.message ?? 'Unexpected response from Privy API');
-    }
-
     return response.data;
   }
 

@@ -56,7 +56,7 @@ export class PrivyClient {
       authorizationKeyCacheMaxCapacity,
     );
     this.walletsService = new PrivyWalletsService(this.privyApiClient, this);
-    this.policiesService = new PrivyPoliciesService(this.privyApiClient);
+    this.policiesService = new PrivyPoliciesService(this.privyApiClient, this);
     this.transactionsService = new PrivyTransactionsService(this.privyApiClient);
     this.keyQuorumsService = new PrivyKeyQuorumsService(this.privyApiClient);
     this.usersService = new PrivyUsersService(this.privyApiClient);

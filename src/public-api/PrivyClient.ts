@@ -11,9 +11,12 @@ export interface PrivyClientOptions {
   appId: string;
   appSecret: string;
   apiUrl?: string;
+  authorizationKeyCacheMaxCapacity?: number;
   logLevel?: ClientOptions['logLevel'];
   fetch?: ClientOptions['fetch'];
 }
+
+const DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY = 1000;
 
 export class PrivyClient {
   private privyApiClient: PrivyAPI;
@@ -30,14 +33,23 @@ export class PrivyClient {
     return this.jwtExchangeService;
   }
 
-  public constructor({ appId, appSecret, apiUrl, ...clientOptions }: PrivyClientOptions) {
+  public constructor({
+    appId,
+    appSecret,
+    apiUrl,
+    authorizationKeyCacheMaxCapacity = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
+    ...clientOptions
+  }: PrivyClientOptions) {
     this.privyApiClient = new PrivyAPI({
       appID: appId,
       appSecret: appSecret,
       baseURL: apiUrl,
       ...clientOptions,
     });
-    this.jwtExchangeService = new JwtExchangeService(this.privyApiClient.wallets);
+    this.jwtExchangeService = new JwtExchangeService(
+      this.privyApiClient.wallets,
+      authorizationKeyCacheMaxCapacity,
+    );
     this.walletsService = new PrivyWalletsService(this.privyApiClient, this);
     this.policiesService = new PrivyPoliciesService(this.privyApiClient);
     this.transactionsService = new PrivyTransactionsService(this.privyApiClient);

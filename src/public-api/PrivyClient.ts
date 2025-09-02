@@ -58,7 +58,7 @@ export class PrivyClient {
     this.walletsService = new PrivyWalletsService(this.privyApiClient, this);
     this.policiesService = new PrivyPoliciesService(this.privyApiClient, this);
     this.transactionsService = new PrivyTransactionsService(this.privyApiClient);
-    this.keyQuorumsService = new PrivyKeyQuorumsService(this.privyApiClient);
+    this.keyQuorumsService = new PrivyKeyQuorumsService(this.privyApiClient, this);
     this.usersService = new PrivyUsersService(this.privyApiClient);
     this.utilsService = new PrivyUtils(this);
   }

@@ -23,6 +23,7 @@ import {
   KeyQuorum,
   KeyQuorumCreateParams,
   KeyQuorumDeleteParams,
+  KeyQuorumDeleteResponse,
   KeyQuorumUpdateParams,
   KeyQuorums,
 } from './resources/key-quorums';
@@ -913,6 +914,7 @@ export declare namespace PrivyAPI {
   export {
     KeyQuorums as KeyQuorums,
     type KeyQuorum as KeyQuorum,
+    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,

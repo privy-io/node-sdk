@@ -24,7 +24,7 @@ export class KeyQuorums extends APIResource {
    *
    * @example
    * ```ts
-   * const keyQuorum = await client.keyQuorums._delete(
+   * const response = await client.keyQuorums._delete(
    *   'key_quorum_id',
    * );
    * ```
@@ -33,7 +33,7 @@ export class KeyQuorums extends APIResource {
     keyQuorumID: string,
     params: KeyQuorumDeleteParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<KeyQuorum> {
+  ): APIPromise<KeyQuorumDeleteResponse> {
     const { 'privy-authorization-signature': privyAuthorizationSignature } = params ?? {};
     return this._client.delete(path`/v1/key_quorums/${keyQuorumID}`, {
       ...options,
@@ -113,6 +113,13 @@ export namespace KeyQuorum {
   }
 }
 
+export interface KeyQuorumDeleteResponse {
+  /**
+   * Whether the key quorum was deleted successfully.
+   */
+  success: boolean;
+}
+
 export interface KeyQuorumCreateParams {
   authorization_threshold?: number;
 
@@ -162,6 +169,7 @@ export interface KeyQuorumUpdateParams {
 export declare namespace KeyQuorums {
   export {
     type KeyQuorum as KeyQuorum,
+    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,

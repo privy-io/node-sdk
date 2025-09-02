@@ -3,6 +3,7 @@
 export {
   KeyQuorums,
   type KeyQuorum,
+  type KeyQuorumDeleteResponse,
   type KeyQuorumCreateParams,
   type KeyQuorumDeleteParams,
   type KeyQuorumUpdateParams,

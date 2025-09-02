@@ -8,7 +8,7 @@ import {
 } from '@solana/web3.js';
 import { base58 } from '@scure/base';
 import nacl from 'tweetnacl';
-import { AuthorizationContext } from 'privy-api-client/public-api/AuthorizationContext';
+import { AuthorizationContext } from 'privy-api-client/lib/authorization';
 import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
 
 describe('PrivySolanaService', () => {

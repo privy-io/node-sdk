@@ -1,14 +1,14 @@
 import { PrivyAPI } from '../../client';
+import { generateAuthorizationSignatures } from '../../lib/authorization';
 import {
+  Wallet,
   WalletRawSignParams,
   WalletRawSignResponse,
   WalletRpcParams,
   WalletRpcResponse,
-  WalletUpdateParams,
-  Wallet,
   Wallets,
+  WalletUpdateParams,
 } from '../../resources';
-import { generateAuthorizationSignatures } from '../AuthorizationContext';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
 import { Prettify, WithAuthorization, WithIdempotency } from './types';
@@ -91,10 +91,6 @@ export class PrivyWalletsService extends Wallets {
       'privy-authorization-signature': authorizationSignaturesHeader.join(','),
       ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
     });
-
-    if (!response.data) {
-      throw new Error(response.error?.message ?? 'Unexpected response from Privy API');
-    }
 
     return response.data;
   }

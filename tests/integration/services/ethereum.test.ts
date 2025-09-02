@@ -1,10 +1,10 @@
-import { PrivyAPI } from 'privy-api-client/client';
-import { AuthorizationContext } from 'privy-api-client/lib/authorization';
-import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
+import { PrivyAPI } from '@privy-io/node/client';
+import { AuthorizationContext } from '@privy-io/node/lib/authorization';
+import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
 import { Hex, verifyHash, verifyMessage, verifyTypedData } from 'viem';
 import { verifyAuthorization } from 'viem/utils';
 import crypto from 'node:crypto';
-import { WalletRpcParams } from 'privy-api-client/resources';
+import { WalletRpcParams } from '@privy-io/node/resources';
 import { generateTestJWT } from '../../helpers/jwt-auth';
 
 describe('PrivyEthereumService', () => {

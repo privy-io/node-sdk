@@ -1,4 +1,4 @@
-import { PrivyClient } from 'privy-api-client/public-api/PrivyClient';
+import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
 import { derPublicKeyToPem, generateP256KeyPair } from '../../helpers/authorization-keys';
 
 describe('PrivyKeyQuorumsService', () => {

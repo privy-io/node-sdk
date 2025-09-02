@@ -269,9 +269,7 @@ export namespace Wallet {
 }
 
 export interface WalletRawSignResponse {
-  data?: WalletRawSignResponse.Data;
-
-  error?: WalletRawSignResponse.Error;
+  data: WalletRawSignResponse.Data;
 }
 
 export namespace WalletRawSignResponse {
@@ -279,12 +277,6 @@ export namespace WalletRawSignResponse {
     encoding: 'hex';
 
     signature: string;
-  }
-
-  export interface Error {
-    code: string;
-
-    message: string;
   }
 }
 

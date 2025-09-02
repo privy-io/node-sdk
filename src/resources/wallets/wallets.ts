@@ -57,6 +57,24 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Initialize a wallet import. Complete by submitting the import.
+   *
+   * @example
+   * ```ts
+   * const response = await client.wallets._initImport({
+   *   address: 'address',
+   *   chain_type: 'ethereum',
+   *   encryption_type: 'HPKE',
+   *   entropy_type: 'hd',
+   *   index: 0,
+   * });
+   * ```
+   */
+  _initImport(body: WalletInitImportParams, options?: RequestOptions): APIPromise<WalletInitImportResponse> {
+    return this._client.post('/v1/wallets/import/init', { body, ...options });
+  }
+
+  /**
    * Sign a message with a wallet by wallet ID.
    *
    * @example
@@ -122,6 +140,29 @@ export class Wallets extends APIResource {
         options?.headers,
       ]),
     });
+  }
+
+  /**
+   * Submit a wallet import request.
+   *
+   * @example
+   * ```ts
+   * const wallet = await client.wallets._submitImport({
+   *   wallet: {
+   *     address: '0xF1DBff66C993EE895C8cb176c30b07A559d76496',
+   *     chain_type: 'ethereum',
+   *     ciphertext:
+   *       'PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9',
+   *     encapsulated_key:
+   *       'BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=',
+   *     encryption_type: 'HPKE',
+   *     entropy_type: 'private-key',
+   *   },
+   * });
+   * ```
+   */
+  _submitImport(body: WalletSubmitImportParams, options?: RequestOptions): APIPromise<Wallet> {
+    return this._client.post('/v1/wallets/import/submit', { body, ...options });
   }
 
   /**
@@ -266,6 +307,18 @@ export namespace Wallet {
 
     signer_id: string;
   }
+}
+
+export interface WalletInitImportResponse {
+  /**
+   * The base64-encoded encryption public key to encrypt the wallet entropy with.
+   */
+  encryption_public_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: 'HPKE';
 }
 
 export interface WalletRawSignResponse {
@@ -647,6 +700,60 @@ export interface WalletListParams extends CursorParams {
     | 'ethereum';
 
   user_id?: string;
+}
+
+export type WalletInitImportParams =
+  | WalletInitImportParams.HDInitInput
+  | WalletInitImportParams.PrivateKeyInitInput;
+
+export declare namespace WalletInitImportParams {
+  export interface HDInitInput {
+    /**
+     * The address of the wallet to import.
+     */
+    address: string;
+
+    /**
+     * The chain type of the wallet to import. Currently supports `ethereum` and
+     * `solana`.
+     */
+    chain_type: 'ethereum' | 'solana';
+
+    /**
+     * The encryption type of the wallet to import. Currently only supports `HPKE`.
+     */
+    encryption_type: 'HPKE';
+
+    /**
+     * The entropy type of the wallet to import.
+     */
+    entropy_type: 'hd';
+
+    /**
+     * The index of the wallet to import.
+     */
+    index: number;
+  }
+
+  export interface PrivateKeyInitInput {
+    /**
+     * The address of the wallet to import.
+     */
+    address: string;
+
+    /**
+     * The chain type of the wallet to import. Currently supports `ethereum` and
+     * `solana`.
+     */
+    chain_type: 'ethereum' | 'solana';
+
+    /**
+     * The encryption type of the wallet to import. Currently only supports `HPKE`.
+     */
+    encryption_type: 'HPKE';
+
+    entropy_type: 'private-key';
+  }
 }
 
 export interface WalletRawSignParams {
@@ -1154,6 +1261,104 @@ export declare namespace WalletRpcParams {
   }
 }
 
+export interface WalletSubmitImportParams {
+  wallet: WalletSubmitImportParams.HDSubmitInput | WalletSubmitImportParams.PrivateKeySubmitInput;
+
+  additional_signers?: Array<WalletSubmitImportParams.AdditionalSigner>;
+
+  owner?: WalletSubmitImportParams.UserID | WalletSubmitImportParams.PublicKey | null;
+
+  owner_id?: string | null;
+
+  policy_ids?: Array<string>;
+}
+
+export namespace WalletSubmitImportParams {
+  export interface HDSubmitInput {
+    /**
+     * The address of the wallet to import.
+     */
+    address: string;
+
+    /**
+     * The chain type of the wallet to import. Currently supports `ethereum` and
+     * `solana`.
+     */
+    chain_type: 'ethereum' | 'solana';
+
+    /**
+     * The encrypted entropy of the wallet to import.
+     */
+    ciphertext: string;
+
+    /**
+     * The base64-encoded encapsulated key that was generated during encryption, for
+     * use during decryption inside the TEE.
+     */
+    encapsulated_key: string;
+
+    /**
+     * The encryption type of the wallet to import. Currently only supports `HPKE`.
+     */
+    encryption_type: 'HPKE';
+
+    /**
+     * The entropy type of the wallet to import.
+     */
+    entropy_type: 'hd';
+
+    /**
+     * The index of the wallet to import.
+     */
+    index: number;
+  }
+
+  export interface PrivateKeySubmitInput {
+    /**
+     * The address of the wallet to import.
+     */
+    address: string;
+
+    /**
+     * The chain type of the wallet to import. Currently supports `ethereum` and
+     * `solana`.
+     */
+    chain_type: 'ethereum' | 'solana';
+
+    /**
+     * The encrypted entropy of the wallet to import.
+     */
+    ciphertext: string;
+
+    /**
+     * The base64-encoded encapsulated key that was generated during encryption, for
+     * use during decryption inside the TEE.
+     */
+    encapsulated_key: string;
+
+    /**
+     * The encryption type of the wallet to import. Currently only supports `HPKE`.
+     */
+    encryption_type: 'HPKE';
+
+    entropy_type: 'private-key';
+  }
+
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    override_policy_ids?: Array<string>;
+  }
+
+  export interface UserID {
+    user_id: string;
+  }
+
+  export interface PublicKey {
+    public_key: string;
+  }
+}
+
 export interface WalletUpdateParams {
   /**
    * Body param: Additional signers for the wallet.
@@ -1301,6 +1506,7 @@ Wallets.Balance = Balance;
 export declare namespace Wallets {
   export {
     type Wallet as Wallet,
+    type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
     type WalletRpcResponse as WalletRpcResponse,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
@@ -1308,8 +1514,10 @@ export declare namespace Wallets {
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
     type WalletListParams as WalletListParams,
+    type WalletInitImportParams as WalletInitImportParams,
     type WalletRawSignParams as WalletRawSignParams,
     type WalletRpcParams as WalletRpcParams,
+    type WalletSubmitImportParams as WalletSubmitImportParams,
     type WalletUpdateParams as WalletUpdateParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,

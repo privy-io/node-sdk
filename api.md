@@ -3,6 +3,7 @@
 Types:
 
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRawSignResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateWithJwtResponse</a></code>
@@ -12,8 +13,10 @@ Methods:
 
 - <code title="post /v1/wallets">client.wallets.<a href="./src/resources/wallets/wallets.ts">create</a>({ ...params }) -> Wallet</code>
 - <code title="get /v1/wallets">client.wallets.<a href="./src/resources/wallets/wallets.ts">list</a>({ ...params }) -> WalletsCursor</code>
+- <code title="post /v1/wallets/import/init">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_initImport</a>({ ...params }) -> WalletInitImportResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/raw_sign">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rawSign</a>(walletID, { ...params }) -> WalletRawSignResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/rpc">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rpc</a>(walletID, { ...params }) -> WalletRpcResponse</code>
+- <code title="post /v1/wallets/import/submit">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_submitImport</a>({ ...params }) -> Wallet</code>
 - <code title="patch /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_update</a>(walletID, { ...params }) -> Wallet</code>
 - <code title="post /v1/wallets/authenticate">client.wallets.<a href="./src/resources/wallets/wallets.ts">authenticateWithJwt</a>({ ...params }) -> WalletAuthenticateWithJwtResponse</code>
 - <code title="post /v1/wallets_with_recovery">client.wallets.<a href="./src/resources/wallets/wallets.ts">createWalletsWithRecovery</a>({ ...params }) -> WalletCreateWalletsWithRecoveryResponse</code>
@@ -52,25 +55,51 @@ Methods:
 - <code title="delete /v1/users/{user_id}">client.users.<a href="./src/resources/users.ts">delete</a>(userID) -> void</code>
 - <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/resources/users.ts">createCustomMetadata</a>(userID, { ...params }) -> User</code>
 - <code title="get /v1/users/{user_id}">client.users.<a href="./src/resources/users.ts">get</a>(userID) -> User</code>
+- <code title="post /v1/users/custom_auth/id">client.users.<a href="./src/resources/users.ts">getByCustomAuthID</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/discord/username">client.users.<a href="./src/resources/users.ts">getByDiscordUsername</a>({ ...params }) -> User</code>
 - <code title="post /v1/users/email/address">client.users.<a href="./src/resources/users.ts">getByEmailAddress</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/custom_auth/id">client.users.<a href="./src/resources/users.ts">getByJwtSubjectID</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/farcaster/fid">client.users.<a href="./src/resources/users.ts">getByFarcasterID</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/github/username">client.users.<a href="./src/resources/users.ts">getByGitHubUsername</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/phone/number">client.users.<a href="./src/resources/users.ts">getByPhoneNumber</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/smart_wallet/address">client.users.<a href="./src/resources/users.ts">getBySmartWalletAddress</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/telegram/telegram_user_id">client.users.<a href="./src/resources/users.ts">getByTelegramUserID</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/telegram/username">client.users.<a href="./src/resources/users.ts">getByTelegramUsername</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/twitter/subject">client.users.<a href="./src/resources/users.ts">getByTwitterSubject</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/twitter/username">client.users.<a href="./src/resources/users.ts">getByTwitterUsername</a>({ ...params }) -> User</code>
 - <code title="post /v1/users/wallet/address">client.users.<a href="./src/resources/users.ts">getByWalletAddress</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/{user_id}/wallets">client.users.<a href="./src/resources/users.ts">pregenerateWallets</a>(userID, { ...params }) -> User</code>
+- <code title="post /v1/users/search">client.users.<a href="./src/resources/users.ts">search</a>({ ...params }) -> User</code>
 - <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/resources/users.ts">unlinkLinkedAccount</a>(userID, { ...params }) -> User</code>
-- <code title="post /v1/users/{user_id}/accounts">client.users.<a href="./src/resources/users.ts">updateLinkedAccount</a>(userID, { ...params }) -> User</code>
 
 # Policies
 
 Types:
 
-- <code><a href="./src/resources/policies.ts">Policy</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyDeleteResponse</a></code>
+- <code><a href="./src/resources/policies/policies.ts">Policy</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PolicyDeleteResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/policies">client.policies.<a href="./src/resources/policies.ts">create</a>({ ...params }) -> Policy</code>
-- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_delete</a>(policyID, { ...params }) -> PolicyDeleteResponse</code>
-- <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
-- <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">get</a>(policyID) -> Policy</code>
+- <code title="post /v1/policies">client.policies.<a href="./src/resources/policies/policies.ts">create</a>({ ...params }) -> Policy</code>
+- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies/policies.ts">\_delete</a>(policyID, { ...params }) -> PolicyDeleteResponse</code>
+- <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
+- <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies/policies.ts">get</a>(policyID) -> Policy</code>
+
+## Rules
+
+Types:
+
+- <code><a href="./src/resources/policies/rules.ts">RuleCreateResponse</a></code>
+- <code><a href="./src/resources/policies/rules.ts">RuleDeleteResponse</a></code>
+- <code><a href="./src/resources/policies/rules.ts">RuleUpdateResponse</a></code>
+- <code><a href="./src/resources/policies/rules.ts">RuleGetResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/policies/{policy_id}/rules">client.policies.rules.<a href="./src/resources/policies/rules.ts">\_create</a>(policyID, { ...params }) -> RuleCreateResponse</code>
+- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.rules.<a href="./src/resources/policies/rules.ts">\_delete</a>(ruleID, { ...params }) -> RuleDeleteResponse</code>
+- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.rules.<a href="./src/resources/policies/rules.ts">\_update</a>(ruleID, { ...params }) -> RuleUpdateResponse</code>
+- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.rules.<a href="./src/resources/policies/rules.ts">get</a>(ruleID, { ...params }) -> RuleGetResponse</code>
 
 # Transactions
 

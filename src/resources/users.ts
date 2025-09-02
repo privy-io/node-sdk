@@ -90,6 +90,34 @@ export class Users extends APIResource {
   }
 
   /**
+   * Looks up a user by their custom auth ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByCustomAuthID({
+   *   custom_user_id: 'custom_user_id',
+   * });
+   * ```
+   */
+  getByCustomAuthID(body: UserGetByCustomAuthIDParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/custom_auth/id', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Discord username.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByDiscordUsername({
+   *   username: 'username',
+   * });
+   * ```
+   */
+  getByDiscordUsername(body: UserGetByDiscordUsernameParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/discord/username', { body, ...options });
+  }
+
+  /**
    * Looks up a user by their email address.
    *
    * @example
@@ -104,17 +132,118 @@ export class Users extends APIResource {
   }
 
   /**
-   * Looks up a user by their custom auth ID.
+   * Looks up a user by their Farcaster ID.
    *
    * @example
    * ```ts
-   * const user = await client.users.getByJwtSubjectID({
-   *   custom_user_id: 'custom_user_id',
+   * const user = await client.users.getByFarcasterID({
+   *   fid: 0,
    * });
    * ```
    */
-  getByJwtSubjectID(body: UserGetByJwtSubjectIDParams, options?: RequestOptions): APIPromise<User> {
-    return this._client.post('/v1/users/custom_auth/id', { body, ...options });
+  getByFarcasterID(body: UserGetByFarcasterIDParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/farcaster/fid', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Github username.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByGitHubUsername({
+   *   username: 'username',
+   * });
+   * ```
+   */
+  getByGitHubUsername(body: UserGetByGitHubUsernameParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/github/username', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their phone number.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByPhoneNumber({
+   *   number: 'number',
+   * });
+   * ```
+   */
+  getByPhoneNumber(body: UserGetByPhoneNumberParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/phone/number', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their smart wallet address.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getBySmartWalletAddress({
+   *   address: 'address',
+   * });
+   * ```
+   */
+  getBySmartWalletAddress(
+    body: UserGetBySmartWalletAddressParams,
+    options?: RequestOptions,
+  ): APIPromise<User> {
+    return this._client.post('/v1/users/smart_wallet/address', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Telegram user ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByTelegramUserID({
+   *   telegram_user_id: 'telegram_user_id',
+   * });
+   * ```
+   */
+  getByTelegramUserID(body: UserGetByTelegramUserIDParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/telegram/telegram_user_id', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Telegram username.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByTelegramUsername({
+   *   username: 'username',
+   * });
+   * ```
+   */
+  getByTelegramUsername(body: UserGetByTelegramUsernameParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/telegram/username', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Twitter subject.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByTwitterSubject({
+   *   subject: 'subject',
+   * });
+   * ```
+   */
+  getByTwitterSubject(body: UserGetByTwitterSubjectParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/twitter/subject', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Twitter username.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByTwitterUsername({
+   *   username: 'username',
+   * });
+   * ```
+   */
+  getByTwitterUsername(body: UserGetByTwitterUsernameParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/twitter/username', { body, ...options });
   }
 
   /**
@@ -129,6 +258,39 @@ export class Users extends APIResource {
    */
   getByWalletAddress(body: UserGetByWalletAddressParams, options?: RequestOptions): APIPromise<User> {
     return this._client.post('/v1/users/wallet/address', { body, ...options });
+  }
+
+  /**
+   * Creates an embedded wallet for an existing user.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.pregenerateWallets(
+   *   'user_id',
+   *   { wallets: [{ chain_type: 'ethereum' }] },
+   * );
+   * ```
+   */
+  pregenerateWallets(
+    userID: string,
+    body: UserPregenerateWalletsParams,
+    options?: RequestOptions,
+  ): APIPromise<User> {
+    return this._client.post(path`/v1/users/${userID}/wallets`, { body, ...options });
+  }
+
+  /**
+   * Search users by search term, emails, phone numbers, or wallet addresses.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.search({
+   *   search_term: 'search_term',
+   * });
+   * ```
+   */
+  search(body: UserSearchParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/search', { body, ...options });
   }
 
   /**
@@ -148,30 +310,6 @@ export class Users extends APIResource {
     options?: RequestOptions,
   ): APIPromise<User> {
     return this._client.post(path`/v1/users/${userID}/accounts/unlink`, { body, ...options });
-  }
-
-  /**
-   * Adds or updates a linked account for a user. This endpoint is not yet available
-   * to all users.
-   *
-   * @example
-   * ```ts
-   * const user = await client.users.updateLinkedAccount(
-   *   'user_id',
-   *   {
-   *     address: 'address',
-   *     chain_type: 'ethereum',
-   *     type: 'wallet',
-   *   },
-   * );
-   * ```
-   */
-  updateLinkedAccount(
-    userID: string,
-    body: UserUpdateLinkedAccountParams,
-    options?: RequestOptions,
-  ): APIPromise<User> {
-    return this._client.post(path`/v1/users/${userID}/accounts`, { body, ...options });
   }
 }
 
@@ -1021,16 +1159,103 @@ export interface UserCreateCustomMetadataParams {
   custom_metadata: { [key: string]: string | number | boolean };
 }
 
+export interface UserGetByCustomAuthIDParams {
+  custom_user_id: string;
+}
+
+export interface UserGetByDiscordUsernameParams {
+  username: string;
+}
+
 export interface UserGetByEmailAddressParams {
   address: string;
 }
 
-export interface UserGetByJwtSubjectIDParams {
-  custom_user_id: string;
+export interface UserGetByFarcasterIDParams {
+  fid: number;
+}
+
+export interface UserGetByGitHubUsernameParams {
+  username: string;
+}
+
+export interface UserGetByPhoneNumberParams {
+  number: string;
+}
+
+export interface UserGetBySmartWalletAddressParams {
+  address: string;
+}
+
+export interface UserGetByTelegramUserIDParams {
+  telegram_user_id: string;
+}
+
+export interface UserGetByTelegramUsernameParams {
+  username: string;
+}
+
+export interface UserGetByTwitterSubjectParams {
+  subject: string;
+}
+
+export interface UserGetByTwitterUsernameParams {
+  username: string;
 }
 
 export interface UserGetByWalletAddressParams {
   address: string;
+}
+
+export interface UserPregenerateWalletsParams {
+  wallets: Array<UserPregenerateWalletsParams.Wallet>;
+}
+
+export namespace UserPregenerateWalletsParams {
+  export interface Wallet {
+    chain_type:
+      | 'cosmos'
+      | 'stellar'
+      | 'sui'
+      | 'tron'
+      | 'bitcoin-segwit'
+      | 'near'
+      | 'ton'
+      | 'starknet'
+      | 'spark'
+      | 'solana'
+      | 'ethereum';
+
+    additional_signers?: Array<Wallet.AdditionalSigner>;
+
+    create_smart_wallet?: boolean;
+
+    policy_ids?: Array<string>;
+  }
+
+  export namespace Wallet {
+    export interface AdditionalSigner {
+      signer_id: string;
+
+      override_policy_ids?: Array<string>;
+    }
+  }
+}
+
+export type UserSearchParams = UserSearchParams.Variant0 | UserSearchParams.Variant1;
+
+export declare namespace UserSearchParams {
+  export interface Variant0 {
+    search_term: string;
+  }
+
+  export interface Variant1 {
+    emails: Array<string>;
+
+    phoneNumbers: Array<string>;
+
+    walletAddresses: Array<string>;
+  }
 }
 
 export interface UserUnlinkLinkedAccountParams {
@@ -1061,188 +1286,6 @@ export interface UserUnlinkLinkedAccountParams {
   provider?: string;
 }
 
-export type UserUpdateLinkedAccountParams =
-  | UserUpdateLinkedAccountParams.LinkedAccountWalletInput
-  | UserUpdateLinkedAccountParams.LinkedAccountEmailInput
-  | UserUpdateLinkedAccountParams.LinkedAccountPhoneInput
-  | UserUpdateLinkedAccountParams.LinkedAccountGoogleInput
-  | UserUpdateLinkedAccountParams.LinkedAccountTwitterInput
-  | UserUpdateLinkedAccountParams.LinkedAccountDiscordInput
-  | UserUpdateLinkedAccountParams.LinkedAccountGitHubInput
-  | UserUpdateLinkedAccountParams.LinkedAccountSpotifyInput
-  | UserUpdateLinkedAccountParams.LinkedAccountInstagramInput
-  | UserUpdateLinkedAccountParams.LinkedAccountTiktokInput
-  | UserUpdateLinkedAccountParams.LinkedAccountLineInput
-  | UserUpdateLinkedAccountParams.LinkedAccountAppleInput
-  | UserUpdateLinkedAccountParams.LinkedAccountLinkedInInput
-  | UserUpdateLinkedAccountParams.LinkedAccountFarcasterInput
-  | UserUpdateLinkedAccountParams.LinkedAccountTelegramInput
-  | UserUpdateLinkedAccountParams.LinkedAccountCustomJwtInput;
-
-export declare namespace UserUpdateLinkedAccountParams {
-  export interface LinkedAccountWalletInput {
-    address: string;
-
-    chain_type: 'ethereum' | 'solana';
-
-    type: 'wallet';
-  }
-
-  export interface LinkedAccountEmailInput {
-    address: string;
-
-    type: 'email';
-  }
-
-  export interface LinkedAccountPhoneInput {
-    number: string;
-
-    type: 'phone';
-  }
-
-  export interface LinkedAccountGoogleInput {
-    email: string;
-
-    name: string;
-
-    subject: string;
-
-    type: 'google_oauth';
-  }
-
-  export interface LinkedAccountTwitterInput {
-    name: string;
-
-    subject: string;
-
-    type: 'twitter_oauth';
-
-    username: string;
-
-    profile_picture_url?: string;
-  }
-
-  export interface LinkedAccountDiscordInput {
-    subject: string;
-
-    type: 'discord_oauth';
-
-    username: string;
-
-    email?: string;
-  }
-
-  export interface LinkedAccountGitHubInput {
-    subject: string;
-
-    type: 'github_oauth';
-
-    username: string;
-
-    email?: string;
-
-    name?: string;
-  }
-
-  export interface LinkedAccountSpotifyInput {
-    subject: string;
-
-    type: 'spotify_oauth';
-
-    email?: string;
-
-    name?: string;
-  }
-
-  export interface LinkedAccountInstagramInput {
-    subject: string;
-
-    type: 'instagram_oauth';
-
-    username: string;
-  }
-
-  export interface LinkedAccountTiktokInput {
-    name: string | null;
-
-    subject: string;
-
-    type: 'tiktok_oauth';
-
-    username: string;
-  }
-
-  export interface LinkedAccountLineInput {
-    subject: string;
-
-    type: 'line_oauth';
-
-    email?: string;
-
-    name?: string;
-
-    profile_picture_url?: string;
-  }
-
-  export interface LinkedAccountAppleInput {
-    subject: string;
-
-    type: 'apple_oauth';
-
-    email?: string;
-  }
-
-  export interface LinkedAccountLinkedInInput {
-    subject: string;
-
-    type: 'linkedin_oauth';
-
-    email?: string;
-
-    name?: string;
-
-    vanityName?: string;
-  }
-
-  export interface LinkedAccountFarcasterInput {
-    fid: number;
-
-    owner_address: string;
-
-    type: 'farcaster';
-
-    bio?: string;
-
-    display_name?: string;
-
-    homepage_url?: string;
-
-    profile_picture_url?: string;
-
-    username?: string;
-  }
-
-  export interface LinkedAccountTelegramInput {
-    telegram_user_id: string;
-
-    type: 'telegram';
-
-    first_name?: string;
-
-    last_name?: string;
-
-    photo_url?: string;
-
-    username?: string;
-  }
-
-  export interface LinkedAccountCustomJwtInput {
-    custom_user_id: string;
-
-    type: 'custom_auth';
-  }
-}
-
 export declare namespace Users {
   export {
     type User as User,
@@ -1250,10 +1293,20 @@ export declare namespace Users {
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
     type UserCreateCustomMetadataParams as UserCreateCustomMetadataParams,
+    type UserGetByCustomAuthIDParams as UserGetByCustomAuthIDParams,
+    type UserGetByDiscordUsernameParams as UserGetByDiscordUsernameParams,
     type UserGetByEmailAddressParams as UserGetByEmailAddressParams,
-    type UserGetByJwtSubjectIDParams as UserGetByJwtSubjectIDParams,
+    type UserGetByFarcasterIDParams as UserGetByFarcasterIDParams,
+    type UserGetByGitHubUsernameParams as UserGetByGitHubUsernameParams,
+    type UserGetByPhoneNumberParams as UserGetByPhoneNumberParams,
+    type UserGetBySmartWalletAddressParams as UserGetBySmartWalletAddressParams,
+    type UserGetByTelegramUserIDParams as UserGetByTelegramUserIDParams,
+    type UserGetByTelegramUsernameParams as UserGetByTelegramUsernameParams,
+    type UserGetByTwitterSubjectParams as UserGetByTwitterSubjectParams,
+    type UserGetByTwitterUsernameParams as UserGetByTwitterUsernameParams,
     type UserGetByWalletAddressParams as UserGetByWalletAddressParams,
+    type UserPregenerateWalletsParams as UserPregenerateWalletsParams,
+    type UserSearchParams as UserSearchParams,
     type UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams,
-    type UserUpdateLinkedAccountParams as UserUpdateLinkedAccountParams,
   };
 }

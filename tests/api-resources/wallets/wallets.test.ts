@@ -57,6 +57,35 @@ describe('resource wallets', () => {
   });
 
   // Prism tests are disabled
+  test.skip('_initImport: only required params', async () => {
+    const responsePromise = client.wallets._initImport({
+      address: 'address',
+      chain_type: 'ethereum',
+      encryption_type: 'HPKE',
+      entropy_type: 'hd',
+      index: 0,
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('_initImport: required and optional params', async () => {
+    const response = await client.wallets._initImport({
+      address: 'address',
+      chain_type: 'ethereum',
+      encryption_type: 'HPKE',
+      entropy_type: 'hd',
+      index: 0,
+    });
+  });
+
+  // Prism tests are disabled
   test.skip('_rawSign: only required params', async () => {
     const responsePromise = client.wallets._rawSign('wallet_id', { params: {} });
     const rawResponse = await responsePromise.asResponse();
@@ -115,6 +144,47 @@ describe('resource wallets', () => {
       chain_type: 'ethereum',
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
+    });
+  });
+
+  // Prism tests are disabled
+  test.skip('_submitImport: only required params', async () => {
+    const responsePromise = client.wallets._submitImport({
+      wallet: {
+        address: '0xF1DBff66C993EE895C8cb176c30b07A559d76496',
+        chain_type: 'ethereum',
+        ciphertext: 'PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9',
+        encapsulated_key:
+          'BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=',
+        encryption_type: 'HPKE',
+        entropy_type: 'private-key',
+      },
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('_submitImport: required and optional params', async () => {
+    const response = await client.wallets._submitImport({
+      wallet: {
+        address: '0xF1DBff66C993EE895C8cb176c30b07A559d76496',
+        chain_type: 'ethereum',
+        ciphertext: 'PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9',
+        encapsulated_key:
+          'BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=',
+        encryption_type: 'HPKE',
+        entropy_type: 'private-key',
+      },
+      additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['string'] }],
+      owner: { user_id: 'user_id' },
+      owner_id: 'rkiz0ivz254drv1xw982v3jq',
+      policy_ids: ['string'],
     });
   });
 

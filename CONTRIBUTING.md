@@ -55,12 +55,12 @@ $ cd node-sdk
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link privy-api-client
+$ yarn link @privy-io/node
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global privy-api-client
+$ pnpm link -—global @privy-io/node
 ```
 
 ## Running tests

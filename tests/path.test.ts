@@ -1,4 +1,4 @@
-import { createPathTagFunction, encodeURIPath } from 'privy-api-client/internal/utils/path';
+import { createPathTagFunction, encodeURIPath } from '@privy-io/node/internal/utils/path';
 import { inspect } from 'node:util';
 import { runInNewContext } from 'node:vm';
 

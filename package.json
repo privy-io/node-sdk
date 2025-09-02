@@ -1,5 +1,5 @@
 {
-  "name": "privy-api-client",
+  "name": "@privy-io/node",
   "version": "0.1.0-alpha.1",
   "description": "The official TypeScript library for the Privy API API",
   "author": "Privy API <support@privy.io>",

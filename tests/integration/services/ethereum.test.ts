@@ -5,6 +5,7 @@ import { Hex, verifyHash, verifyMessage, verifyTypedData } from 'viem';
 import { verifyAuthorization } from 'viem/utils';
 import crypto from 'node:crypto';
 import { WalletRpcParams } from 'privy-api-client/resources';
+import { generateTestJWT } from '../../helpers/jwt-auth';
 
 describe('PrivyEthereumService', () => {
   // Read the required environment variables from .env
@@ -18,6 +19,8 @@ describe('PrivyEthereumService', () => {
   const OWNERLESS_ETHEREUM_WALLET_ADDRESS = process.env['OWNERLESS_ETHEREUM_WALLET_ADDRESS']! as Hex;
   const P256_OWNED_ETHEREUM_WALLET_ID = process.env['P256_OWNED_ETHEREUM_WALLET_ID']!;
   const P256_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['P256_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
+  const USER_OWNED_ETHEREUM_WALLET_ID = process.env['USER_OWNED_ETHEREUM_WALLET_ID']!;
+  const USER_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['USER_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
 
   const p256AuthorizationContext: AuthorizationContext = {
     authorizationPrivateKeys: [P256_PRIVATE_KEY],
@@ -85,6 +88,25 @@ describe('PrivyEthereumService', () => {
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
           address: P256_OWNED_ETHEREUM_WALLET_ADDRESS,
+          message: 'Hello, world!',
+          signature: response.signature as `0x${string}`,
+        });
+        expect(verified).toBe(true);
+      });
+      it('should be able to sign a message with a JWT authorization context', async () => {
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signMessage(USER_OWNED_ETHEREUM_WALLET_ID, {
+            message: 'Hello, world!',
+            authorization_context: {
+              userJwts: [await generateTestJWT()],
+            },
+          });
+
+        expect(response.signature).toBeDefined();
+        const verified = await verifyMessage({
+          address: USER_OWNED_ETHEREUM_WALLET_ADDRESS,
           message: 'Hello, world!',
           signature: response.signature as `0x${string}`,
         });

@@ -6,6 +6,7 @@ import { PrivyKeyQuorumsService } from './services/key-quorums';
 import { PrivyUsersService } from './services/users';
 import { PrivyUtils } from './services/utils';
 import { JwtExchangeService } from '../lib/jwt-exchange';
+import { VERSION } from '../version';
 
 export interface PrivyClientOptions {
   appId: string;
@@ -44,6 +45,10 @@ export class PrivyClient {
       appID: appId,
       appSecret: appSecret,
       baseURL: apiUrl,
+      defaultHeaders: {
+        // Convention is: <client_name>:<semantic_version>
+        'privy-client': `node:${VERSION}`,
+      },
       ...clientOptions,
     });
     this.jwtExchangeService = new JwtExchangeService(

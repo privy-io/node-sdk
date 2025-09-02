@@ -11,8 +11,8 @@ export interface AuthorizationContext {
    * These should be base64-encoded PKCS8-formatted private keys, with no PEM headers.
    */
   authorizationPrivateKeys?: string[];
-  userJwts?: readonly string[];
-  // TODO: signatures?: readonly string[];
+  userJwts?: string[];
+  // TODO: signatures?: string[];
 }
 
 export type WalletApiRequestSignatureInput = {
@@ -69,15 +69,15 @@ export async function generateAuthorizationSignatures(
   const payload = formatRequestForAuthorizationSignature(input);
 
   const userJwts = authorizationContext.userJwts ?? [];
-  let jwtBackedKeys: string[] = [];
+  let userKeys: string[] = [];
   if (userJwts.length > 0) {
-    jwtBackedKeys = await Promise.all(
+    userKeys = await Promise.all(
       userJwts.map((jwt) => client._jwtExchange().exchangeJwtForAuthorizationKey(jwt)),
     );
   }
 
   // TODO: add support for passed in signatures
-  const privateKeys = [...(authorizationContext.authorizationPrivateKeys ?? []), ...jwtBackedKeys];
+  const privateKeys = [...(authorizationContext.authorizationPrivateKeys ?? []), ...userKeys];
 
   return privateKeys.map((sk) =>
     generateAuthorizationSignature({ authorizationPrivateKey: sk, input: payload }),

@@ -19,8 +19,8 @@ describe('PrivyEthereumService', () => {
   const OWNERLESS_ETHEREUM_WALLET_ADDRESS = process.env['OWNERLESS_ETHEREUM_WALLET_ADDRESS']! as Hex;
   const P256_OWNED_ETHEREUM_WALLET_ID = process.env['P256_OWNED_ETHEREUM_WALLET_ID']!;
   const P256_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['P256_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
-  const JWT_OWNED_ETHEREUM_WALLET_ID = process.env['JWT_OWNED_ETHEREUM_WALLET_ID']!;
-  const JWT_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['JWT_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
+  const USER_OWNED_ETHEREUM_WALLET_ID = process.env['USER_OWNED_ETHEREUM_WALLET_ID']!;
+  const USER_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['USER_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
 
   const p256AuthorizationContext: AuthorizationContext = {
     authorizationPrivateKeys: [P256_PRIVATE_KEY],
@@ -97,7 +97,7 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signMessage(JWT_OWNED_ETHEREUM_WALLET_ID, {
+          .signMessage(USER_OWNED_ETHEREUM_WALLET_ID, {
             message: 'Hello, world!',
             authorization_context: {
               userJwts: [await generateTestJWT()],
@@ -106,7 +106,7 @@ describe('PrivyEthereumService', () => {
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
-          address: JWT_OWNED_ETHEREUM_WALLET_ADDRESS,
+          address: USER_OWNED_ETHEREUM_WALLET_ADDRESS,
           message: 'Hello, world!',
           signature: response.signature as `0x${string}`,
         });

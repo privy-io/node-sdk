@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.1.0-alpha.2 (2025-09-02)
+
+Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/privy-io/node-sdk/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
+
+### Features
+
+* adds an internal LRU cache to JwtExchangeService ([#26](https://github.com/privy-io/node-sdk/issues/26)) ([8722dd4](https://github.com/privy-io/node-sdk/commit/8722dd44ca94fd031278077cda1cc328014c00e3))
+* **api:** add missing endpoints for parity with server-auth ([378e8bd](https://github.com/privy-io/node-sdk/commit/378e8bd63581e829c860ded5167bbe0d3f394a37))
+* **api:** api update ([286d925](https://github.com/privy-io/node-sdk/commit/286d925604920573001084a906a66fa11ff4d464))
+* **api:** api update ([ff5f1e0](https://github.com/privy-io/node-sdk/commit/ff5f1e010ec7f02a1267d428d852abbdd3f50393))
+* **api:** api update ([5e9126b](https://github.com/privy-io/node-sdk/commit/5e9126b8c787d1e9bd207a183b74e4cec4406f70))
+* **api:** api update ([a8da4d1](https://github.com/privy-io/node-sdk/commit/a8da4d16b8802f8a9214db86b259461f7b1d3146))
+* **api:** underscore methods that we overload ([939d9e1](https://github.com/privy-io/node-sdk/commit/939d9e1e47361c271cb1cb400a0e98fef956dafe))
+* **api:** underscore methods that we overload ([9f24bd8](https://github.com/privy-io/node-sdk/commit/9f24bd873156ce214b5cf3043861376ebbd61f40))
+* **api:** update endpoint allowlist ([ca3d190](https://github.com/privy-io/node-sdk/commit/ca3d1907bf926fef83085cbf8d1a7da0665fb224))
+* combine body and header as named params in service methods ([#20](https://github.com/privy-io/node-sdk/issues/20)) ([91da6e9](https://github.com/privy-io/node-sdk/commit/91da6e926f82208fbaa5db85e38e53a5791175c0))
+* ethereum secp256k1 sign ([#11](https://github.com/privy-io/node-sdk/issues/11)) ([cd9a1d4](https://github.com/privy-io/node-sdk/commit/cd9a1d467018923525ac7e33118a574cad5a77c1))
+* ethereum send transaction ([#16](https://github.com/privy-io/node-sdk/issues/16)) ([76cce1f](https://github.com/privy-io/node-sdk/commit/76cce1fdfbe2de69326c49a6789a6ca4df02f20c))
+* ethereum sign typed data ([#15](https://github.com/privy-io/node-sdk/issues/15)) ([3520a0d](https://github.com/privy-io/node-sdk/commit/3520a0d102f08705289c3c3d3776c4435b59ee80))
+* ethereum sign7702Authorization ([#12](https://github.com/privy-io/node-sdk/issues/12)) ([b571d88](https://github.com/privy-io/node-sdk/commit/b571d88f07aad16ae57da6bd2ae0eaa86f11851b))
+* ethereum signMessage ([#6](https://github.com/privy-io/node-sdk/issues/6)) ([07c4868](https://github.com/privy-io/node-sdk/commit/07c4868622c3b4902d0aef2e8841c3a3a4fa8bfa))
+* ethereum signTransaction ([#13](https://github.com/privy-io/node-sdk/issues/13)) ([89039d1](https://github.com/privy-io/node-sdk/commit/89039d1186d41cb1975ec851700116e9e79175b4))
+* expose the PrivyUtils class ([#24](https://github.com/privy-io/node-sdk/issues/24)) ([91d15ec](https://github.com/privy-io/node-sdk/commit/91d15ec2f2bbc9edddd409c9826026d8556e5797))
+* exposes the Privy*Service wrappers ([#21](https://github.com/privy-io/node-sdk/issues/21)) ([8411756](https://github.com/privy-io/node-sdk/commit/841175671b4dff311f7769fc1101a099c55c3fc8))
+* jwt based authorization signatures ([#25](https://github.com/privy-io/node-sdk/issues/25)) ([adfaa27](https://github.com/privy-io/node-sdk/commit/adfaa2753deed1856011d206d28944587134a734))
+* key quorums update utility ([#28](https://github.com/privy-io/node-sdk/issues/28)) ([e1a0f89](https://github.com/privy-io/node-sdk/commit/e1a0f89a7dc1a63d41b19920bb0ec5e79c9d399e))
+* p256 authorization context ([#7](https://github.com/privy-io/node-sdk/issues/7)) ([3a664c4](https://github.com/privy-io/node-sdk/commit/3a664c43c9b9330946b943c7fb31d6d02fabc41b))
+* policy update utility ([#27](https://github.com/privy-io/node-sdk/issues/27)) ([55bb4cf](https://github.com/privy-io/node-sdk/commit/55bb4cf86d7f475238d481c0fd64d6c162936dde))
+* PrivyWalletsService update with AuthorizationContext ([#23](https://github.com/privy-io/node-sdk/issues/23)) ([c279d6a](https://github.com/privy-io/node-sdk/commit/c279d6afd63205febe8a7e11c1ef74faf055c007))
+* raw sign ([#8](https://github.com/privy-io/node-sdk/issues/8)) ([ffdceb7](https://github.com/privy-io/node-sdk/commit/ffdceb7d1b548d1ff62fdb8a86414f78519a797a))
+* sets the privy-client header ([#29](https://github.com/privy-io/node-sdk/issues/29)) ([4010041](https://github.com/privy-io/node-sdk/commit/401004118e3cf9129e70cbb0a74e496259f1eb40))
+* should be able to create a new wallet ([#4](https://github.com/privy-io/node-sdk/issues/4)) ([460e638](https://github.com/privy-io/node-sdk/commit/460e6380374c29788e7f7f79c06ffacccc93b047))
+* solana signAndSendTransaction ([#19](https://github.com/privy-io/node-sdk/issues/19)) ([96b0ebc](https://github.com/privy-io/node-sdk/commit/96b0ebc099f91981e054d453792a354482df03ec))
+* solana signMessage ([#17](https://github.com/privy-io/node-sdk/issues/17)) ([dabec59](https://github.com/privy-io/node-sdk/commit/dabec591db908c8084df9bc7a9b0a998f5a33cf0))
+* solana signTransaction ([#18](https://github.com/privy-io/node-sdk/issues/18)) ([825c9a7](https://github.com/privy-io/node-sdk/commit/825c9a78d0021ee1f538edda33f3b191589df3b7))
+* supports privy-idempotency-key ([#10](https://github.com/privy-io/node-sdk/issues/10)) ([701a031](https://github.com/privy-io/node-sdk/commit/701a0318e5a5e5bc9151109088cb6896229768b7))
+
+
+### Chores
+
+* add package to package.json ([9158f2f](https://github.com/privy-io/node-sdk/commit/9158f2f808b8f566de30f191aa78d7af9e62a632))
+* **client:** qualify global Blob ([0a947da](https://github.com/privy-io/node-sdk/commit/0a947da3b05c5534be2d11f6fa90afc392c74990))
+* **internal:** update global Error reference ([385fa40](https://github.com/privy-io/node-sdk/commit/385fa40b545b7cc42c572442266a4733850a1c58))
+* update CI script ([75b7927](https://github.com/privy-io/node-sdk/commit/75b79277c1df400ca66da620fe7b80ee1ae08ffb))
+
 ## 0.1.0-alpha.1 (2025-08-21)
 
 Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/privy-io/node-sdk/compare/v0.0.1-alpha.0...v0.1.0-alpha.1)

@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'privy-api-client/internal/uploads';
-import { toFile } from 'privy-api-client/core/uploads';
+import { multipartFormRequestOptions, createForm } from '@privy-io/node/internal/uploads';
+import { toFile } from '@privy-io/node/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

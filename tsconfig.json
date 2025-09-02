@@ -9,8 +9,8 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "privy-api-client/*": ["src/*"],
-      "privy-api-client": ["src/index.ts"]
+      "@privy-io/node/*": ["src/*"],
+      "@privy-io/node": ["src/index.ts"]
     },
     "noEmit": true,
 

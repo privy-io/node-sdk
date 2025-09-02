@@ -8,8 +8,8 @@ const config: JestConfigWithTsJest = {
   },
   transformIgnorePatterns: ['/node_modules/(?!jose)'],
   moduleNameMapper: {
-    '^privy-api-client$': '<rootDir>/src/index.ts',
-    '^privy-api-client/(.*)$': '<rootDir>/src/$1',
+    '^@privy-io/node$': '<rootDir>/src/index.ts',
+    '^@privy-io/node/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',

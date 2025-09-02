@@ -1,7 +1,7 @@
 import iconv from 'iconv-lite';
-import { stringify } from 'privy-api-client/internal/qs';
-import { encode } from 'privy-api-client/internal/qs/utils';
-import { StringifyOptions } from 'privy-api-client/internal/qs/types';
+import { stringify } from '@privy-io/node/internal/qs';
+import { encode } from '@privy-io/node/internal/qs/utils';
+import { StringifyOptions } from '@privy-io/node/internal/qs/types';
 import { empty_test_cases } from './empty-keys-cases';
 import assert from 'assert';
 

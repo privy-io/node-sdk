@@ -1,5 +1,6 @@
 import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
 import { generateP256KeyPair } from '../../helpers/authorization-keys';
+import { NotFoundError } from '@privy-io/node/error';
 
 describe('PrivyPoliciesService', () => {
   // Read the required environment variables from .env
@@ -71,6 +72,32 @@ describe('PrivyPoliciesService', () => {
         authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
       });
       expect(policy3.owner_id).toBeNull();
+    });
+  });
+  describe('delete', () => {
+    it('should delete a policy', async () => {
+      const keypair = generateP256KeyPair();
+      const createdPolicy = await privyClient.policies().create({
+        version: '1.0',
+        chain_type: 'ethereum',
+        name: 'NodeSDK Policies Delete Test',
+        rules: [],
+        owner: { public_key: keypair.publicKey },
+      });
+      expect(createdPolicy.id).toBeDefined();
+
+      // Check that the policy exists
+      expect(await privyClient.policies().get(createdPolicy.id)).toMatchObject({
+        id: createdPolicy.id,
+      });
+
+      const deletedPolicy = await privyClient.policies().delete(createdPolicy.id, {
+        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+      });
+      expect(deletedPolicy.success).toBe(true);
+
+      // Check that the policy no longer exists
+      await expect(() => privyClient.policies().get(createdPolicy.id)).rejects.toThrow(NotFoundError);
     });
   });
 });

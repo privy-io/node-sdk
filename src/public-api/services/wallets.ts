@@ -1,6 +1,7 @@
 import { PrivyAPI } from '../../client';
+import { PrivyAPIError } from '../../core/error';
 import { generateAuthorizationSignatures } from '../../lib/authorization';
-import { setupHPKE } from '../../lib/cryptography';
+import { setupHPKERecipient, setupHPKESender } from '../../lib/cryptography';
 import {
   Wallet,
   WalletExportParams,
@@ -9,6 +10,7 @@ import {
   WalletRpcParams,
   WalletRpcResponse,
   Wallets,
+  WalletSubmitImportParams,
   WalletUpdateParams,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
@@ -129,7 +131,7 @@ export class PrivyWalletsService extends Wallets {
     walletId: string,
     { authorization_context: authorizationContext = {}, ...outerParams }: PrivyWalletsService.ExportInput,
   ): Promise<PrivyWalletsService.ExportResponse> {
-    const { publicKeySpki, decryptPayload } = await setupHPKE();
+    const { publicKeySpki, decryptPayload } = await setupHPKERecipient();
 
     const params: WalletExportParams = {
       ...outerParams,
@@ -164,6 +166,40 @@ export class PrivyWalletsService extends Wallets {
 
     return { private_key: privateKey };
   }
+
+  public async import({
+    wallet: { private_key, ...wallet },
+    ...params
+  }: PrivyWalletsService.ImportInput): Promise<Wallet> {
+    const hpkeSender = await setupHPKESender();
+
+    const initResponse = await this._initImport({
+      ...wallet,
+      encryption_type: 'HPKE',
+    });
+
+    if (initResponse.encryption_type !== 'HPKE') {
+      throw new PrivyAPIError(`Invalid encryption type: ${initResponse.encryption_type}`);
+    }
+
+    // We fall back to `Buffer` here as Uint8Array.fromBase64 is not widely supported yet
+    const encryptionPublicKey = Buffer.from(initResponse.encryption_public_key, 'base64');
+
+    const { encapsulatedKey, ciphertext } = await hpkeSender.encryptPayload(encryptionPublicKey, private_key);
+
+    const submitResponse = await this._submitImport({
+      ...params,
+      wallet: {
+        ...wallet,
+        encryption_type: 'HPKE',
+        // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
+        encapsulated_key: Buffer.from(encapsulatedKey).toString('base64'),
+        ciphertext: Buffer.from(ciphertext).toString('base64'),
+      },
+    });
+
+    return submitResponse;
+  }
 }
 
 // prettier-ignore
@@ -182,6 +218,16 @@ export namespace PrivyWalletsService {
   export type ExportInput = Prettify<WithAuthorization<Omit<WalletExportParams, 'encryption_type' | 'recipient_public_key'>>>;
   /** The response type for the {@link PrivyWalletsService.export} method. */
   export type ExportResponse = { private_key: string };
+  export type ImportInputWallet = Prettify<
+    (
+      | Omit<WalletSubmitImportParams.HDSubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
+      | Omit<WalletSubmitImportParams.PrivateKeySubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
+    ) & { private_key: Uint8Array }
+  >;
+  /** The input type for the {@link PrivyWalletsService.import} method. */
+  export type ImportInput = Prettify<
+    Omit<WalletSubmitImportParams, 'wallet'> &  {wallet: ImportInputWallet; }
+  >;
 }
 
 // prettier-ignore

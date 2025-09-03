@@ -57,6 +57,32 @@ describe('resource wallets', () => {
   });
 
   // Prism tests are disabled
+  test.skip('_export: only required params', async () => {
+    const responsePromise = client.wallets._export('wallet_id', {
+      encryption_type: 'HPKE',
+      recipient_public_key:
+        'BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('_export: required and optional params', async () => {
+    const response = await client.wallets._export('wallet_id', {
+      encryption_type: 'HPKE',
+      recipient_public_key:
+        'BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=',
+      'privy-authorization-signature': 'privy-authorization-signature',
+    });
+  });
+
+  // Prism tests are disabled
   test.skip('_initImport: only required params', async () => {
     const responsePromise = client.wallets._initImport({
       address: 'address',

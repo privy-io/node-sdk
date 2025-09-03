@@ -39,6 +39,12 @@ export type WalletApiRequestSignatureInput = {
  * @return The raw bytes representing the authorization payload.
  */
 export function formatRequestForAuthorizationSignature(input: WalletApiRequestSignatureInput): Uint8Array {
+  const body: unknown = input.body;
+  if (typeof body === 'object' && body !== null && Object.keys(body).length === 0) {
+    // This is a special case, where if the body is empty, we want to serialize it
+    // as an empty string.
+    input.body = '';
+  }
   const serializedInput = canonicalize(input);
   if (!serializedInput) {
     throw new PrivyAPIError('Failed to serialize request for authorization signature');

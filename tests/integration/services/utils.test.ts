@@ -61,6 +61,23 @@ describe('PrivyUtils', () => {
           `{"body":{"baz":1,"foo":"bar","qux":true},"headers":{"privy-app-id":"${TEST_APP_ID}"},"method":"POST","url":"/api/v1/wallets","version":1}`,
         );
       });
+      it('should format empty bodies as an empty string', async () => {
+        const result = await privyClient.utils().formatRequestForAuthorizationSignature({
+          version: 1,
+          method: 'POST',
+          url: '/api/v1/wallets',
+          body: {},
+          headers: {
+            'privy-app-id': TEST_APP_ID,
+          },
+        });
+        expect(result).toBeDefined();
+        expect(result.length).toBeGreaterThan(0);
+        const resultString = new TextDecoder().decode(result);
+        expect(resultString).toBe(
+          `{"body":"","headers":{"privy-app-id":"${TEST_APP_ID}"},"method":"POST","url":"/api/v1/wallets","version":1}`,
+        );
+      });
     });
     describe('generateAuthorizationSignature', () => {
       it('generates p256 signatures over the request payload', async () => {

@@ -1,8 +1,12 @@
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { AuthorizationContext } from '@privy-io/node/lib/authorization';
 import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
-import { hexToBytes } from 'viem';
+import { base58 } from '@scure/base';
 import crypto from 'node:crypto';
+import nacl from 'tweetnacl';
+import { hexToBytes } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { generateP256KeyPair } from '../../helpers/authorization-keys';
 
 describe('PrivyWalletsService', () => {
   // Read the required environment variables from .env
@@ -79,6 +83,65 @@ describe('PrivyWalletsService', () => {
         authorization_context: p256AuthorizationContext,
       });
       expect(wallet3.owner_id).toBeNull();
+    });
+  });
+  describe('export', () => {
+    it('should be able to export an Ethereum wallet', async () => {
+      const keypair = generateP256KeyPair();
+      const wallet = await privyClient.wallets().create({
+        chain_type: 'ethereum',
+        owner: { public_key: keypair.publicKey },
+      });
+      expect(wallet.id).toBeDefined();
+      expect(wallet.chain_type).toBe('ethereum');
+
+      const exported = await privyClient.wallets().export(wallet.id, {
+        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+      });
+      expect(exported.wallet_private_key).toBeDefined();
+      expect(exported.wallet_private_key.length).toBe(64);
+      // Private key is returned as hex without 0x prefix
+      expect(exported.wallet_private_key).toMatch(/^[0-9a-f]{64}$/);
+
+      const viemWallet = privateKeyToAccount(`0x${exported.wallet_private_key}`);
+      expect(viemWallet.address).toBe(wallet.address);
+    });
+    it('should be able to export a Solana wallet', async () => {
+      const keypair = generateP256KeyPair();
+      const wallet = await privyClient.wallets().create({
+        chain_type: 'solana',
+        owner: { public_key: keypair.publicKey },
+      });
+      expect(wallet.id).toBeDefined();
+      expect(wallet.chain_type).toBe('solana');
+
+      const exported = await privyClient.wallets().export(wallet.id, {
+        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+      });
+      expect(exported.wallet_private_key).toBeDefined();
+      const privateKey = base58.decode(exported.wallet_private_key);
+      expect(privateKey.length).toBe(64);
+
+      // Validate a signature with the key corresponds to the wallet address
+      const message = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      const signature = nacl.sign.detached(message, privateKey);
+      const verified = nacl.sign.detached.verify(message, signature, base58.decode(wallet.address));
+      expect(verified).toBe(true);
+    });
+    it('should not be able to export a Tier 2 wallet', async () => {
+      const keypair = generateP256KeyPair();
+      const wallet = await privyClient.wallets().create({
+        chain_type: 'tron',
+        owner: { public_key: keypair.publicKey },
+      });
+      expect(wallet.id).toBeDefined();
+      expect(wallet.chain_type).toBe('tron');
+
+      await expect(
+        privyClient.wallets().export(wallet.id, {
+          authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        }),
+      ).rejects.toThrow(`400 {"error":"Invalid chain type","code":"invalid_data"}`);
     });
   });
   describe('other chains', () => {

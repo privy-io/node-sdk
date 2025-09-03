@@ -1,7 +1,7 @@
+import { LRUCache } from 'lru-cache';
 import { PrivyAPIError } from '../core/error';
 import { Wallets } from '../resources';
 import { HPKERecipient, setupHPKE } from './cryptography';
-import { LRUCache } from 'lru-cache';
 
 export class JwtExchangeService {
   private _hpkeRecipient: HPKERecipient | null = null;
@@ -38,6 +38,7 @@ export class JwtExchangeService {
     const signer = await this.walletsService.authenticateWithJwt({
       user_jwt: jwt,
       encryption_type: 'HPKE',
+      // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
       recipient_public_key: Buffer.from(publicKeySpki).toString('base64'),
     });
     if (

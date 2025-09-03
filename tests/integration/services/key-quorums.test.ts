@@ -1,5 +1,6 @@
 import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
-import { derPublicKeyToPem, generateP256KeyPair } from '../../helpers/authorization-keys';
+import { generateP256KeyPair } from '../../helpers/authorization-keys';
+import { NotFoundError } from '@privy-io/node/error';
 
 describe('PrivyKeyQuorumsService', () => {
   // Read the required environment variables from .env
@@ -20,7 +21,7 @@ describe('PrivyKeyQuorumsService', () => {
       const keyPair = generateP256KeyPair();
       const keyPair2 = generateP256KeyPair();
       const keyQuorum = await privyClient.keyQuorums().create({
-        public_keys: [derPublicKeyToPem(keyPair.publicKey), derPublicKeyToPem(keyPair2.publicKey)],
+        public_keys: [keyPair.publicKey, keyPair2.publicKey],
         display_name: '2 of 2 Test Key Quorum',
         authorization_threshold: 2,
       });
@@ -41,7 +42,7 @@ describe('PrivyKeyQuorumsService', () => {
 
       // Create a 2-of-2 key quorum
       const keyQuorum = await privyClient.keyQuorums().create({
-        public_keys: [derPublicKeyToPem(keypair1.publicKey), derPublicKeyToPem(keypair2.publicKey)],
+        public_keys: [keypair1.publicKey, keypair2.publicKey],
         display_name: 'NodeSDK KeyQuorums Update Test',
         authorization_threshold: 2,
       });
@@ -64,6 +65,30 @@ describe('PrivyKeyQuorumsService', () => {
       });
       expect(keyQuorum3.id).toEqual(keyQuorum.id);
       expect(keyQuorum3.authorization_threshold).toBe(2);
+    });
+  });
+  describe('delete', () => {
+    it('should delete a key quorum', async () => {
+      const keypair = generateP256KeyPair();
+      const createdKeyQuorum = await privyClient.keyQuorums().create({
+        public_keys: [keypair.publicKey],
+        display_name: 'NodeSDK KeyQuorums Delete Test',
+        authorization_threshold: 1,
+      });
+      expect(createdKeyQuorum.id).toBeDefined();
+
+      // Check that the key quorum exists
+      expect(await privyClient.keyQuorums().get(createdKeyQuorum.id)).toMatchObject({
+        id: createdKeyQuorum.id,
+      });
+
+      const deletedKeyQuorum = await privyClient.keyQuorums().delete(createdKeyQuorum.id, {
+        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+      });
+      expect(deletedKeyQuorum.success).toBe(true);
+
+      // Check that the key quorum no longer exists
+      await expect(() => privyClient.keyQuorums().get(createdKeyQuorum.id)).rejects.toThrow(NotFoundError);
     });
   });
 });

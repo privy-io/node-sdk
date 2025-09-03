@@ -57,6 +57,38 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Export a wallet's private key
+   *
+   * @example
+   * ```ts
+   * const response = await client.wallets._export('wallet_id', {
+   *   encryption_type: 'HPKE',
+   *   recipient_public_key:
+   *     'BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=',
+   * });
+   * ```
+   */
+  _export(
+    walletID: string,
+    params: WalletExportParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletExportResponse> {
+    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/export`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Initialize a wallet import. Complete by submitting the import.
    *
    * @example
@@ -307,6 +339,24 @@ export namespace Wallet {
 
     signer_id: string;
   }
+}
+
+export interface WalletExportResponse {
+  /**
+   * The encrypted private key.
+   */
+  ciphertext: string;
+
+  /**
+   * The base64-encoded encapsulated key that was generated during encryption, for
+   * use during decryption.
+   */
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: 'HPKE';
 }
 
 export interface WalletInitImportResponse {
@@ -700,6 +750,26 @@ export interface WalletListParams extends CursorParams {
     | 'ethereum';
 
   user_id?: string;
+}
+
+export interface WalletExportParams {
+  /**
+   * Body param: The encryption type of the wallet to import. Currently only supports
+   * `HPKE`.
+   */
+  encryption_type: 'HPKE';
+
+  /**
+   * Body param: The base64-encoded encryption public key to encrypt the wallet
+   * private key with.
+   */
+  recipient_public_key: string;
+
+  /**
+   * Header param: Request authorization signature. If multiple signatures are
+   * required, they should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
 }
 
 export type WalletInitImportParams =
@@ -1506,6 +1576,7 @@ Wallets.Balance = Balance;
 export declare namespace Wallets {
   export {
     type Wallet as Wallet,
+    type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
     type WalletRpcResponse as WalletRpcResponse,
@@ -1514,6 +1585,7 @@ export declare namespace Wallets {
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
     type WalletListParams as WalletListParams,
+    type WalletExportParams as WalletExportParams,
     type WalletInitImportParams as WalletInitImportParams,
     type WalletRawSignParams as WalletRawSignParams,
     type WalletRpcParams as WalletRpcParams,

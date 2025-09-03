@@ -43,6 +43,7 @@ export {
 export {
   Wallets,
   type Wallet,
+  type WalletExportResponse,
   type WalletInitImportResponse,
   type WalletRawSignResponse,
   type WalletRpcResponse,
@@ -50,6 +51,7 @@ export {
   type WalletCreateWalletsWithRecoveryResponse,
   type WalletCreateParams,
   type WalletListParams,
+  type WalletExportParams,
   type WalletInitImportParams,
   type WalletRawSignParams,
   type WalletRpcParams,

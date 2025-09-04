@@ -98,12 +98,12 @@ describe('PrivyWalletsService', () => {
       const exported = await privyClient.wallets().export(wallet.id, {
         authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
       });
-      expect(exported.wallet_private_key).toBeDefined();
-      expect(exported.wallet_private_key.length).toBe(64);
+      expect(exported.private_key).toBeDefined();
+      expect(exported.private_key.length).toBe(64);
       // Private key is returned as hex without 0x prefix
-      expect(exported.wallet_private_key).toMatch(/^[0-9a-f]{64}$/);
+      expect(exported.private_key).toMatch(/^[0-9a-f]{64}$/);
 
-      const viemWallet = privateKeyToAccount(`0x${exported.wallet_private_key}`);
+      const viemWallet = privateKeyToAccount(`0x${exported.private_key}`);
       expect(viemWallet.address).toBe(wallet.address);
     });
     it('should be able to export a Solana wallet', async () => {
@@ -118,8 +118,8 @@ describe('PrivyWalletsService', () => {
       const exported = await privyClient.wallets().export(wallet.id, {
         authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
       });
-      expect(exported.wallet_private_key).toBeDefined();
-      const privateKey = base58.decode(exported.wallet_private_key);
+      expect(exported.private_key).toBeDefined();
+      const privateKey = base58.decode(exported.private_key);
       expect(privateKey.length).toBe(64);
 
       // Validate a signature with the key corresponds to the wallet address

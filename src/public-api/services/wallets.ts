@@ -155,14 +155,14 @@ export class PrivyWalletsService extends Wallets {
       ...params,
       'privy-authorization-signature': authorizationSignaturesHeader.join(','),
     });
-    const decryptedWalletPrivateKey = await decryptPayload(
+    const decryptedPrivateKey = await decryptPayload(
       // We fall back to `Buffer` here as Uint8Array.fromBase64 is not widely supported yet
       Buffer.from(response.encapsulated_key, 'base64'),
       Buffer.from(response.ciphertext, 'base64'),
     );
-    const walletPrivateKey = new TextDecoder().decode(decryptedWalletPrivateKey);
+    const privateKey = new TextDecoder().decode(decryptedPrivateKey);
 
-    return { wallet_private_key: walletPrivateKey };
+    return { private_key: privateKey };
   }
 }
 
@@ -181,7 +181,7 @@ export namespace PrivyWalletsService {
   /** The input type for the {@link PrivyWalletsService.export} method. */
   export type ExportInput = Prettify<WithAuthorization<Omit<WalletExportParams, 'encryption_type' | 'recipient_public_key'>>>;
   /** The response type for the {@link PrivyWalletsService.export} method. */
-  export type ExportResponse = { wallet_private_key: string };
+  export type ExportResponse = { private_key: string };
 }
 
 // prettier-ignore

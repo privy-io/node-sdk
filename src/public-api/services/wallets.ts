@@ -1,7 +1,9 @@
 import { PrivyAPI } from '../../client';
 import { generateAuthorizationSignatures } from '../../lib/authorization';
+import { setupHPKE } from '../../lib/cryptography';
 import {
   Wallet,
+  WalletExportParams,
   WalletRawSignParams,
   WalletRawSignResponse,
   WalletRpcParams,
@@ -122,8 +124,49 @@ export class PrivyWalletsService extends Wallets {
 
     return response;
   }
+
+  public async export(
+    walletId: string,
+    { authorization_context: authorizationContext = {}, ...outerParams }: PrivyWalletsService.ExportInput,
+  ): Promise<PrivyWalletsService.ExportResponse> {
+    const { publicKeySpki, decryptPayload } = await setupHPKE();
+
+    const params: WalletExportParams = {
+      ...outerParams,
+      encryption_type: 'HPKE',
+      // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
+      recipient_public_key: Buffer.from(publicKeySpki).toString('base64'),
+    };
+
+    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+      authorizationContext,
+      input: {
+        version: 1,
+        method: 'POST',
+        url: `${this._client.baseURL}/v1/wallets/${walletId}/export`,
+        body: params,
+        headers: {
+          'privy-app-id': this._client.appID,
+        },
+      },
+    });
+
+    const response = await this._export(walletId, {
+      ...params,
+      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
+    });
+    const decryptedPrivateKey = await decryptPayload(
+      // We fall back to `Buffer` here as Uint8Array.fromBase64 is not widely supported yet
+      Buffer.from(response.encapsulated_key, 'base64'),
+      Buffer.from(response.ciphertext, 'base64'),
+    );
+    const privateKey = new TextDecoder().decode(decryptedPrivateKey);
+
+    return { private_key: privateKey };
+  }
 }
 
+// prettier-ignore
 /**
  * The namespace for types related to the Wallets service class.
  * @see {@link PrivyWalletsService} class.
@@ -135,6 +178,10 @@ export namespace PrivyWalletsService {
   export type RawSignInput = Prettify<WithIdempotency<WithAuthorization<WalletRawSignParams>>>;
   /** The input type for the {@link PrivyWalletsService.update} method. */
   export type UpdateInput = Prettify<WithAuthorization<WalletUpdateParams>>;
+  /** The input type for the {@link PrivyWalletsService.export} method. */
+  export type ExportInput = Prettify<WithAuthorization<Omit<WalletExportParams, 'encryption_type' | 'recipient_public_key'>>>;
+  /** The response type for the {@link PrivyWalletsService.export} method. */
+  export type ExportResponse = { private_key: string };
 }
 
 // prettier-ignore

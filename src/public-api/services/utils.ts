@@ -15,8 +15,26 @@ export class PrivyUtils {
   // Expose these as methods here for convenience
   public formatRequestForAuthorizationSignature = formatRequestForAuthorizationSignature;
   public generateAuthorizationSignature = generateAuthorizationSignature;
-  public get generateAuthorizationSignatures() {
+  public generateAuthorizationSignatures(...input: PrivyUtils.GenerateAuthorizationSignaturesInput) {
     // Pre-populates the client instance for the function
-    return generateAuthorizationSignatures.bind(null, this.privyClient);
+    return generateAuthorizationSignatures(this.privyClient, ...input);
   }
 }
+
+// prettier-ignore
+export namespace PrivyUtils {
+  export type GenerateAuthorizationSignaturesInput = ParametersExceptFirst<typeof generateAuthorizationSignatures>;
+}
+
+/**
+ * Utility type similar to `Parameters` but excluding the first argument.
+ * This is used to get the types of the remaining arguments of a function, excluding the first one.
+ *
+ * @example
+ * ```ts
+ * type MyFunction = (arg0: string, arg1: number, arg2: boolean) => any;
+ * type MyFunctionParameters = ParametersExceptFirst<MyFunction>;
+ * // type MyFunctionParameters = [number, boolean]
+ * ```
+ */
+type ParametersExceptFirst<F> = F extends (arg0: any, ...rest: infer R) => any ? R : never;

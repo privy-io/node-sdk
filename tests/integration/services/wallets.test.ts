@@ -5,7 +5,13 @@ import { base58, base64 } from '@scure/base';
 import crypto from 'node:crypto';
 import nacl from 'tweetnacl';
 import { hexToBytes, verifyMessage } from 'viem';
-import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
+import {
+  english,
+  generateMnemonic,
+  generatePrivateKey,
+  mnemonicToAccount,
+  privateKeyToAccount,
+} from 'viem/accounts';
 import { generateP256KeyPair } from '../../helpers/authorization-keys';
 
 describe('PrivyWalletsService', () => {
@@ -159,6 +165,46 @@ describe('PrivyWalletsService', () => {
           chain_type: 'ethereum',
           address: viemWallet.address,
           private_key: hexToBytes(walletPrivateKey),
+        },
+        owner: { public_key: keypair.publicKey },
+      });
+
+      expect(wallet.id).toBeDefined();
+      expect(wallet.chain_type).toBe('ethereum');
+      expect(wallet.address).toBe(viemWallet.address);
+
+      const { signature } = await privyClient
+        .wallets()
+        .ethereum()
+        .signMessage(wallet.id, {
+          message: 'Hello, world!',
+          authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        });
+      expect(signature).toBeDefined();
+      expect(signature).toMatch(/^0x[0-9a-f]+$/);
+
+      const verified = await verifyMessage({
+        address: viemWallet.address,
+        message: 'Hello, world!',
+        signature: signature as `0x${string}`,
+      });
+      expect(verified).toBe(true);
+    });
+    it('should be able to import an Ethereum wallet by mnemonic and HD index', async () => {
+      // Generate an ethereum wallet external to Privy
+      const mnemonic = generateMnemonic(english);
+      const viemWallet = mnemonicToAccount(mnemonic, { addressIndex: 2 });
+
+      // Generate a p256 keypair to own the wallet
+      const keypair = generateP256KeyPair();
+
+      const wallet = await privyClient.wallets().import({
+        wallet: {
+          entropy_type: 'hd',
+          chain_type: 'ethereum',
+          address: viemWallet.address,
+          private_key: mnemonic,
+          index: 2,
         },
         owner: { public_key: keypair.publicKey },
       });

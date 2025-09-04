@@ -2,6 +2,7 @@ import { PrivyAPI } from '../../client';
 import { PrivyAPIError } from '../../core/error';
 import { generateAuthorizationSignatures } from '../../lib/authorization';
 import { setupHPKERecipient, setupHPKESender } from '../../lib/cryptography';
+import { entropyToBytes } from '../../lib/wallet-entropy';
 import {
   Wallet,
   WalletExportParams,
@@ -173,6 +174,12 @@ export class PrivyWalletsService extends Wallets {
   }: PrivyWalletsService.ImportInput): Promise<Wallet> {
     const hpkeSender = await setupHPKESender();
 
+    const privateKeyBytes = entropyToBytes({
+      entropy: private_key,
+      entropyType: wallet.entropy_type,
+      chainType: wallet.chain_type,
+    });
+
     const initResponse = await this._initImport({
       ...wallet,
       encryption_type: 'HPKE',
@@ -185,7 +192,10 @@ export class PrivyWalletsService extends Wallets {
     // We fall back to `Buffer` here as Uint8Array.fromBase64 is not widely supported yet
     const encryptionPublicKey = Buffer.from(initResponse.encryption_public_key, 'base64');
 
-    const { encapsulatedKey, ciphertext } = await hpkeSender.encryptPayload(encryptionPublicKey, private_key);
+    const { encapsulatedKey, ciphertext } = await hpkeSender.encryptPayload(
+      encryptionPublicKey,
+      privateKeyBytes,
+    );
 
     const submitResponse = await this._submitImport({
       ...params,
@@ -222,7 +232,7 @@ export namespace PrivyWalletsService {
     (
       | Omit<WalletSubmitImportParams.HDSubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
       | Omit<WalletSubmitImportParams.PrivateKeySubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
-    ) & { private_key: Uint8Array }
+    ) & { private_key: Uint8Array | string }
   >;
   /** The input type for the {@link PrivyWalletsService.import} method. */
   export type ImportInput = Prettify<

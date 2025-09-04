@@ -46,35 +46,6 @@ async function postprocess() {
     },
   };
 
-  for (const entry of await fs.promises.readdir(distDir, { withFileTypes: true })) {
-    if (entry.isDirectory() && entry.name !== 'src' && entry.name !== 'internal' && entry.name !== 'bin') {
-      const subpath = './' + entry.name;
-      newExports[subpath + '/*.mjs'] = {
-        default: subpath + '/*.mjs',
-      };
-      newExports[subpath + '/*.js'] = {
-        default: subpath + '/*.js',
-      };
-      newExports[subpath + '/*'] = {
-        import: subpath + '/*.mjs',
-        require: subpath + '/*.js',
-      };
-    } else if (entry.isFile() && /\.[cm]?js$/.test(entry.name)) {
-      const { name, ext } = path.parse(entry.name);
-      const subpathWithoutExt = './' + name;
-      const subpath = './' + entry.name;
-      newExports[subpathWithoutExt] ||= { import: undefined, require: undefined };
-      const isModule = ext[1] === 'm';
-      if (isModule) {
-        newExports[subpathWithoutExt].import = subpath;
-      } else {
-        newExports[subpathWithoutExt].require = subpath;
-      }
-      newExports[subpath] = {
-        default: subpath,
-      };
-    }
-  }
   await fs.promises.writeFile(
     'dist/package.json',
     JSON.stringify(

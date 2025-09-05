@@ -309,6 +309,7 @@ export namespace Policy {
       | Rule.SolanaProgramInstructionCondition
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
+      | Rule.SystemCondition
     >;
 
     /**
@@ -463,6 +464,19 @@ export namespace Policy {
 
       value: string | Array<string>;
     }
+
+    /**
+     * System attributes, including current unix timestamp (in seconds).
+     */
+    export interface SystemCondition {
+      field: 'current_unix_timestamp';
+
+      field_source: 'system';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+      value: string | Array<string>;
+    }
   }
 }
 
@@ -487,6 +501,7 @@ export interface PolicyCreateRuleResponse {
     | PolicyCreateRuleResponse.SolanaProgramInstructionCondition
     | PolicyCreateRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyCreateRuleResponse.SolanaTokenProgramInstructionCondition
+    | PolicyCreateRuleResponse.SystemCondition
   >;
 
   /**
@@ -641,6 +656,19 @@ export namespace PolicyCreateRuleResponse {
 
     value: string | Array<string>;
   }
+
+  /**
+   * System attributes, including current unix timestamp (in seconds).
+   */
+  export interface SystemCondition {
+    field: 'current_unix_timestamp';
+
+    field_source: 'system';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+    value: string | Array<string>;
+  }
 }
 
 export interface PolicyDeleteResponse {
@@ -674,6 +702,7 @@ export interface PolicyUpdateRuleResponse {
     | PolicyUpdateRuleResponse.SolanaProgramInstructionCondition
     | PolicyUpdateRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyUpdateRuleResponse.SolanaTokenProgramInstructionCondition
+    | PolicyUpdateRuleResponse.SystemCondition
   >;
 
   /**
@@ -828,6 +857,19 @@ export namespace PolicyUpdateRuleResponse {
 
     value: string | Array<string>;
   }
+
+  /**
+   * System attributes, including current unix timestamp (in seconds).
+   */
+  export interface SystemCondition {
+    field: 'current_unix_timestamp';
+
+    field_source: 'system';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+    value: string | Array<string>;
+  }
 }
 
 /**
@@ -851,6 +893,7 @@ export interface PolicyGetRuleResponse {
     | PolicyGetRuleResponse.SolanaProgramInstructionCondition
     | PolicyGetRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyGetRuleResponse.SolanaTokenProgramInstructionCondition
+    | PolicyGetRuleResponse.SystemCondition
   >;
 
   /**
@@ -1005,6 +1048,19 @@ export namespace PolicyGetRuleResponse {
 
     value: string | Array<string>;
   }
+
+  /**
+   * System attributes, including current unix timestamp (in seconds).
+   */
+  export interface SystemCondition {
+    field: 'current_unix_timestamp';
+
+    field_source: 'system';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+    value: string | Array<string>;
+  }
 }
 
 export interface PolicyCreateParams {
@@ -1067,6 +1123,7 @@ export namespace PolicyCreateParams {
       | Rule.SolanaProgramInstructionCondition
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
+      | Rule.SystemCondition
     >;
 
     /**
@@ -1221,6 +1278,19 @@ export namespace PolicyCreateParams {
 
       value: string | Array<string>;
     }
+
+    /**
+     * System attributes, including current unix timestamp (in seconds).
+     */
+    export interface SystemCondition {
+      field: 'current_unix_timestamp';
+
+      field_source: 'system';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+      value: string | Array<string>;
+    }
   }
 
   /**
@@ -1259,6 +1329,7 @@ export interface PolicyCreateRuleParams {
     | PolicyCreateRuleParams.SolanaProgramInstructionCondition
     | PolicyCreateRuleParams.SolanaSystemProgramInstructionCondition
     | PolicyCreateRuleParams.SolanaTokenProgramInstructionCondition
+    | PolicyCreateRuleParams.SystemCondition
   >;
 
   /**
@@ -1422,6 +1493,19 @@ export namespace PolicyCreateRuleParams {
 
     value: string | Array<string>;
   }
+
+  /**
+   * System attributes, including current unix timestamp (in seconds).
+   */
+  export interface SystemCondition {
+    field: 'current_unix_timestamp';
+
+    field_source: 'system';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+    value: string | Array<string>;
+  }
 }
 
 export interface PolicyDeleteParams {
@@ -1512,6 +1596,7 @@ export namespace PolicyUpdateParams {
       | Rule.SolanaProgramInstructionCondition
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
+      | Rule.SystemCondition
     >;
 
     /**
@@ -1666,6 +1751,19 @@ export namespace PolicyUpdateParams {
 
       value: string | Array<string>;
     }
+
+    /**
+     * System attributes, including current unix timestamp (in seconds).
+     */
+    export interface SystemCondition {
+      field: 'current_unix_timestamp';
+
+      field_source: 'system';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+      value: string | Array<string>;
+    }
   }
 }
 
@@ -1692,6 +1790,7 @@ export interface PolicyUpdateRuleParams {
     | PolicyUpdateRuleParams.SolanaProgramInstructionCondition
     | PolicyUpdateRuleParams.SolanaSystemProgramInstructionCondition
     | PolicyUpdateRuleParams.SolanaTokenProgramInstructionCondition
+    | PolicyUpdateRuleParams.SystemCondition
   >;
 
   /**
@@ -1850,6 +1949,19 @@ export namespace PolicyUpdateRuleParams {
       | 'TransferChecked.mint';
 
     field_source: 'solana_token_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * System attributes, including current unix timestamp (in seconds).
+   */
+  export interface SystemCondition {
+    field: 'current_unix_timestamp';
+
+    field_source: 'system';
 
     operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
 

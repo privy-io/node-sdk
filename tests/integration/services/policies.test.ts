@@ -8,8 +8,6 @@ describe('PrivyPoliciesService', () => {
   const TEST_APP_SECRET = process.env['TEST_APP_SECRET']!;
   const TEST_API_URL = process.env['TEST_API_URL']!;
 
-  const OWNERLESS_ETHEREUM_POLICY_ID = process.env['OWNERLESS_ETHEREUM_POLICY_ID']!;
-
   let privyClient: PrivyClient;
   beforeEach(() => {
     privyClient = new PrivyClient({
@@ -56,18 +54,25 @@ describe('PrivyPoliciesService', () => {
     it('should be able to change the owner on a policy', async () => {
       const keypair = generateP256KeyPair();
 
-      // Check the policy is ownerless initially
-      const policy1 = await privyClient.policies().get(OWNERLESS_ETHEREUM_POLICY_ID);
-      expect(policy1.owner_id).toBeNull();
+      // Start with an ownerless policy
+      const policy = await privyClient.policies().create({
+        version: '1.0',
+        chain_type: 'ethereum',
+        name: 'NodeSDK Policies Update Test',
+        rules: [],
+      });
+      expect(policy.id).toBeDefined();
+      expect(policy.owner_id).toBeNull();
+      const policyId = policy.id;
 
       // Update the owner field to a p256 key
-      const policy2 = await privyClient.policies().update(OWNERLESS_ETHEREUM_POLICY_ID, {
+      const policy2 = await privyClient.policies().update(policyId, {
         owner: { public_key: keypair.publicKey },
       });
       expect(policy2.owner_id).toBeDefined();
 
       // Update the policy back to ownerless
-      const policy3 = await privyClient.policies().update(OWNERLESS_ETHEREUM_POLICY_ID, {
+      const policy3 = await privyClient.policies().update(policyId, {
         owner: null,
         authorization_context: { authorization_private_keys: [keypair.privateKey] },
       });

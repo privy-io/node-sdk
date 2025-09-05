@@ -31,7 +31,7 @@ describe('PrivyWalletsService', () => {
   const P256_OWNED_TRON_WALLET_PK = process.env['P256_OWNED_TRON_WALLET_PK']!;
 
   const p256AuthorizationContext: AuthorizationContext = {
-    authorizationPrivateKeys: [P256_PRIVATE_KEY],
+    authorization_private_keys: [P256_PRIVATE_KEY],
   };
 
   let privyClient: PrivyClient;
@@ -102,7 +102,7 @@ describe('PrivyWalletsService', () => {
       expect(wallet.chain_type).toBe('ethereum');
 
       const exported = await privyClient.wallets().export(wallet.id, {
-        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
       });
       expect(exported.private_key).toBeDefined();
       expect(exported.private_key.length).toBe(64);
@@ -122,7 +122,7 @@ describe('PrivyWalletsService', () => {
       expect(wallet.chain_type).toBe('solana');
 
       const exported = await privyClient.wallets().export(wallet.id, {
-        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
       });
       expect(exported.private_key).toBeDefined();
       const privateKey = base58.decode(exported.private_key);
@@ -145,7 +145,7 @@ describe('PrivyWalletsService', () => {
 
       await expect(
         privyClient.wallets().export(wallet.id, {
-          authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+          authorization_context: { authorization_private_keys: [keypair.privateKey] },
         }),
       ).rejects.toThrow(`400 {"error":"Invalid chain type","code":"invalid_data"}`);
     });
@@ -178,7 +178,7 @@ describe('PrivyWalletsService', () => {
         .ethereum()
         .signMessage(wallet.id, {
           message: 'Hello, world!',
-          authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+          authorization_context: { authorization_private_keys: [keypair.privateKey] },
         });
       expect(signature).toBeDefined();
       expect(signature).toMatch(/^0x[0-9a-f]+$/);
@@ -218,7 +218,7 @@ describe('PrivyWalletsService', () => {
         .ethereum()
         .signMessage(wallet.id, {
           message: 'Hello, world!',
-          authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+          authorization_context: { authorization_private_keys: [keypair.privateKey] },
         });
       expect(signature).toBeDefined();
       expect(signature).toMatch(/^0x[0-9a-f]+$/);
@@ -259,7 +259,7 @@ describe('PrivyWalletsService', () => {
         .solana()
         .signMessage(wallet.id, {
           message,
-          authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+          authorization_context: { authorization_private_keys: [keypair.privateKey] },
         });
       expect(signature).toBeDefined();
 

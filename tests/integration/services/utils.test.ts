@@ -130,7 +130,7 @@ describe('PrivyUtils', () => {
         const formattedInput = privyClient.utils().formatRequestForAuthorizationSignature(input);
         const result = await privyClient.utils().generateAuthorizationSignatures({
           authorizationContext: {
-            authorizationPrivateKeys: [keypair.privateKey, keypair2.privateKey, keypair3.privateKey],
+            authorization_private_keys: [keypair.privateKey, keypair2.privateKey, keypair3.privateKey],
           },
           input,
         });

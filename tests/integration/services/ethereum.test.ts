@@ -5,6 +5,7 @@ import { Hex, verifyHash, verifyMessage, verifyTypedData } from 'viem';
 import { verifyAuthorization } from 'viem/utils';
 import crypto from 'node:crypto';
 import { generateTestJWT } from '../../helpers/jwt-auth';
+import { generateP256KeyPair } from '../../helpers/authorization-keys';
 
 describe('PrivyEthereumService', () => {
   // Read the required environment variables from .env
@@ -22,7 +23,7 @@ describe('PrivyEthereumService', () => {
   const USER_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['USER_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
 
   const p256AuthorizationContext: AuthorizationContext = {
-    authorizationPrivateKeys: [P256_PRIVATE_KEY],
+    authorization_private_keys: [P256_PRIVATE_KEY],
   };
 
   let privyClient: PrivyClient;
@@ -92,6 +93,51 @@ describe('PrivyEthereumService', () => {
         });
         expect(verified).toBe(true);
       });
+      it('should be able to sign a message with a signature provided in the authorization context', async () => {
+        const keypair = generateP256KeyPair();
+
+        const wallet = await privyClient.wallets().create({
+          chain_type: 'ethereum',
+          owner: { public_key: keypair.publicKey },
+        });
+
+        const payload = await privyClient.utils().formatRequestForAuthorizationSignature({
+          version: 1,
+          method: 'POST',
+          url: `${TEST_API_URL}/v1/wallets/${wallet.id}/rpc`,
+          body: {
+            params: { message: 'Hello, world!', encoding: 'utf-8' },
+            method: 'personal_sign',
+            chain_type: 'ethereum',
+          },
+          headers: {
+            'privy-app-id': TEST_APP_ID,
+          },
+        });
+
+        const privateKey = crypto.createPrivateKey({
+          key: Buffer.from(keypair.privateKey, 'base64'),
+          format: 'der',
+          type: 'pkcs8',
+        });
+        const signature = crypto.sign('sha256', payload, privateKey).toString('base64');
+
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signMessage(wallet.id, {
+            message: 'Hello, world!',
+            authorization_context: { signatures: [signature] },
+          });
+
+        expect(response.signature).toBeDefined();
+        const verified = await verifyMessage({
+          address: wallet.address as Hex,
+          message: 'Hello, world!',
+          signature: response.signature as `0x${string}`,
+        });
+        expect(verified).toBe(true);
+      });
       it('should be able to sign a message with a JWT authorization context', async () => {
         const response = await privyClient
           .wallets()
@@ -99,7 +145,7 @@ describe('PrivyEthereumService', () => {
           .signMessage(USER_OWNED_ETHEREUM_WALLET_ID, {
             message: 'Hello, world!',
             authorization_context: {
-              userJwts: [await generateTestJWT()],
+              user_jwts: [await generateTestJWT()],
             },
           });
 

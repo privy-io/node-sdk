@@ -34,7 +34,6 @@ export class JwtExchangeService {
 
     const { publicKeySpki, decryptPayload } = await this.getHpkeRecipient();
 
-    // FIXME: replace with the /wallets/authenticate endpoint instead in Stainless
     const signer = await this.walletsService.authenticateWithJwt({
       user_jwt: jwt,
       encryption_type: 'HPKE',

@@ -1,7 +1,7 @@
 import { LRUCache } from 'lru-cache';
 import { PrivyAPIError } from '../core/error';
 import { Wallets } from '../resources';
-import { HPKERecipient, setupHPKE } from './cryptography';
+import { HPKERecipient, setupHPKERecipient } from './cryptography';
 
 export class JwtExchangeService {
   private _hpkeRecipient: HPKERecipient | null = null;
@@ -15,7 +15,7 @@ export class JwtExchangeService {
 
   private async getHpkeRecipient(): Promise<HPKERecipient> {
     if (!this._hpkeRecipient) {
-      this._hpkeRecipient = await setupHPKE();
+      this._hpkeRecipient = await setupHPKERecipient();
     }
     return this._hpkeRecipient;
   }

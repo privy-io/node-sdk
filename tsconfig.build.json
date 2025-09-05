@@ -11,6 +11,7 @@
     "noEmit": false,
     "declaration": true,
     "declarationMap": true,
+    "stripInternal": true,
     "outDir": "dist",
     "pretty": true,
     "sourceMap": true

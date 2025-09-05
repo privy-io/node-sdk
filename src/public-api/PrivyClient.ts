@@ -8,13 +8,13 @@ import { PrivyUtils } from './services/utils';
 import { JwtExchangeService } from '../lib/jwt-exchange';
 import { VERSION } from '../version';
 
-export interface PrivyClientOptions {
+type InternalClientOptions = Omit<ClientOptions, 'appID' | 'appSecret' | 'baseUrl'>;
+
+export interface PrivyClientOptions extends InternalClientOptions {
   appId: string;
   appSecret: string;
   apiUrl?: string;
   authorizationKeyCacheMaxCapacity?: number;
-  logLevel?: ClientOptions['logLevel'];
-  fetch?: ClientOptions['fetch'];
 }
 
 const DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY = 1000;
@@ -39,17 +39,19 @@ export class PrivyClient {
     appSecret,
     apiUrl,
     authorizationKeyCacheMaxCapacity = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
+    defaultHeaders,
     ...clientOptions
   }: PrivyClientOptions) {
     this.privyApiClient = new PrivyAPI({
+      ...clientOptions,
       appID: appId,
       appSecret: appSecret,
       baseURL: apiUrl,
       defaultHeaders: {
+        ...defaultHeaders,
         // Convention is: <client_name>:<semantic_version>
         'privy-client': `node:${VERSION}`,
       },
-      ...clientOptions,
     });
     this.jwtExchangeService = new JwtExchangeService(
       this.privyApiClient.wallets,

@@ -1,7 +1,7 @@
 import { p256 } from '@noble/curves/nist';
 import { sha256 } from '@noble/hashes/sha2';
 import { importPKCS8PrivateKey } from '@privy-io/node/lib/cryptography';
-import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
+import { PrivyClient } from '@privy-io/node';
 import { generateP256KeyPair } from '../../helpers/authorization-keys';
 
 describe('PrivyUtils', () => {

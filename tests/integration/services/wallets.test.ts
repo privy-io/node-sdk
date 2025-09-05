@@ -1,6 +1,6 @@
 import { secp256k1 } from '@noble/curves/secp256k1';
-import { AuthorizationContext } from '@privy-io/node/lib/authorization';
-import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
+import { AuthorizationContext } from '@privy-io/node';
+import { PrivyClient } from '@privy-io/node';
 import { base58, base64 } from '@scure/base';
 import crypto from 'node:crypto';
 import nacl from 'tweetnacl';

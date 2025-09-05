@@ -1,10 +1,9 @@
 import { PrivyAPI } from '@privy-io/node/client';
-import { AuthorizationContext } from '@privy-io/node/lib/authorization';
-import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
+import { AuthorizationContext, PrivyEthereumService } from '@privy-io/node';
+import { PrivyClient } from '@privy-io/node';
 import { Hex, verifyHash, verifyMessage, verifyTypedData } from 'viem';
 import { verifyAuthorization } from 'viem/utils';
 import crypto from 'node:crypto';
-import { WalletRpcParams } from '@privy-io/node/resources';
 import { generateTestJWT } from '../../helpers/jwt-auth';
 
 describe('PrivyEthereumService', () => {
@@ -229,7 +228,7 @@ describe('PrivyEthereumService', () => {
       });
     });
     describe('7702 authorization signing', () => {
-      const authorization7702: WalletRpcParams.EthereumSign7702AuthorizationRpcInput.Params = {
+      const authorization7702: PrivyEthereumService.Sign7702AuthorizationInput['params'] = {
         contract: '0x1234567890123456789012345678901234567890',
         chain_id: 1,
         nonce: 1,
@@ -332,7 +331,7 @@ describe('PrivyEthereumService', () => {
       });
     });
     describe('transaction signing', () => {
-      const transaction: WalletRpcParams.EthereumSignTransactionRpcInput.Params.Transaction = {
+      const transaction: PrivyEthereumService.SignTransactionInput['params']['transaction'] = {
         type: 2,
         chain_id: 1,
         to: '0x742d35Cc6634C0532925a3b8D1A8a9ff1e7a7A4C',
@@ -402,7 +401,7 @@ describe('PrivyEthereumService', () => {
       });
     });
     describe('typed data signing', () => {
-      const typedData: WalletRpcParams.EthereumSignTypedDataRpcInput.Params.TypedData = {
+      const typedData: PrivyEthereumService.SignTypedDataInput['params']['typed_data'] = {
         domain: {
           name: 'Test',
           version: '1',
@@ -506,7 +505,7 @@ describe('PrivyEthereumService', () => {
     });
     // Skipped to not waste funds. Logic is shared with signing transactions so safe to not frequently test.
     describe.skip('transaction sending', () => {
-      const transaction: WalletRpcParams.EthereumSendTransactionRpcInput.Params.Transaction = {
+      const transaction: PrivyEthereumService.SendTransactionInput['params']['transaction'] = {
         to: '0x429c8e85D3A18F9F0a64a7A851777e24D591485C', // Some ethereum address
         value: '0x1', // 1 wei
         chain_id: 11_155_111, // sepolia testnet

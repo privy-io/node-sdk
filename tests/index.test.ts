@@ -3,7 +3,7 @@
 import { APIPromise } from '@privy-io/node/core/api-promise';
 
 import util from 'node:util';
-import PrivyAPI from '@privy-io/node';
+import { PrivyAPI } from '@privy-io/node/client';
 import { APIUserAbortError } from '@privy-io/node';
 const defaultFetch = fetch;
 

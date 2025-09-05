@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { PrivyAPI } from '@privy-io/node';
+import { PrivyAPI } from '@privy-io/node/client';
 
 const { stringifyQuery } = PrivyAPI.prototype as any;
 

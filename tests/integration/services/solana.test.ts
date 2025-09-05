@@ -8,8 +8,8 @@ import {
 } from '@solana/web3.js';
 import { base58 } from '@scure/base';
 import nacl from 'tweetnacl';
-import { AuthorizationContext } from '@privy-io/node/lib/authorization';
-import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
+import { AuthorizationContext } from '@privy-io/node';
+import { PrivyClient } from '@privy-io/node';
 
 describe('PrivySolanaService', () => {
   // Read the required environment variables from .env

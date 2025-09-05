@@ -1,6 +1,6 @@
-import { PrivyClient } from '@privy-io/node/public-api/PrivyClient';
+import { PrivyClient } from '@privy-io/node';
 import { generateP256KeyPair } from '../../helpers/authorization-keys';
-import { NotFoundError } from '@privy-io/node/error';
+import { NotFoundError } from '@privy-io/node';
 
 describe('PrivyKeyQuorumsService', () => {
   // Read the required environment variables from .env

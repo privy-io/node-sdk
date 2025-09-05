@@ -25,7 +25,7 @@ describe('PrivySolanaService', () => {
   const P256_OWNED_SOLANA_WALLET_ADDRESS = process.env['P256_OWNED_SOLANA_WALLET_ADDRESS']!;
 
   const p256AuthorizationContext: AuthorizationContext = {
-    authorizationPrivateKeys: [P256_PRIVATE_KEY],
+    authorization_private_keys: [P256_PRIVATE_KEY],
   };
 
   let privyClient: PrivyClient;

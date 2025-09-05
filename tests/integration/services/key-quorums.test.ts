@@ -52,7 +52,7 @@ describe('PrivyKeyQuorumsService', () => {
       // Update into a 1-of-2 key quorums
       const keyQuorum2 = await privyClient.keyQuorums().update(keyQuorum.id, {
         authorization_threshold: 1,
-        authorization_context: { authorizationPrivateKeys: [keypair1.privateKey, keypair2.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair1.privateKey, keypair2.privateKey] },
       });
       expect(keyQuorum2.id).toEqual(keyQuorum.id);
       expect(keyQuorum2.authorization_threshold).toBe(1);
@@ -61,7 +61,7 @@ describe('PrivyKeyQuorumsService', () => {
       const keyQuorum3 = await privyClient.keyQuorums().update(keyQuorum.id, {
         authorization_threshold: 2,
         // A single key is sufficient since it's a 1-of-2 key quorum before this update
-        authorization_context: { authorizationPrivateKeys: [keypair1.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair1.privateKey] },
       });
       expect(keyQuorum3.id).toEqual(keyQuorum.id);
       expect(keyQuorum3.authorization_threshold).toBe(2);
@@ -83,7 +83,7 @@ describe('PrivyKeyQuorumsService', () => {
       });
 
       const deletedKeyQuorum = await privyClient.keyQuorums().delete(createdKeyQuorum.id, {
-        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
       });
       expect(deletedKeyQuorum.success).toBe(true);
 

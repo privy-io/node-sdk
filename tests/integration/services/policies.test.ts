@@ -69,7 +69,7 @@ describe('PrivyPoliciesService', () => {
       // Update the policy back to ownerless
       const policy3 = await privyClient.policies().update(OWNERLESS_ETHEREUM_POLICY_ID, {
         owner: null,
-        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
       });
       expect(policy3.owner_id).toBeNull();
     });
@@ -92,7 +92,7 @@ describe('PrivyPoliciesService', () => {
       });
 
       const deletedPolicy = await privyClient.policies().delete(createdPolicy.id, {
-        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
       });
       expect(deletedPolicy.success).toBe(true);
 
@@ -132,7 +132,7 @@ describe('PrivyPoliciesService', () => {
     });
     afterEach(async () => {
       await privyClient.policies().delete(policyId, {
-        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
       });
     });
     it('should be able to get a rule', async () => {
@@ -157,7 +157,7 @@ describe('PrivyPoliciesService', () => {
     });
     it('should be able to delete a rule', async () => {
       const response = await privyClient.policies().deleteRule(ruleId, {
-        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
         policy_id: policyId,
       });
       expect(response.success).toBe(true);
@@ -167,7 +167,7 @@ describe('PrivyPoliciesService', () => {
     });
     it('should be able to create a rule', async () => {
       const response = await privyClient.policies().createRule(policyId, {
-        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
         name: 'name',
         method: 'eth_sendTransaction',
         action: 'ALLOW',
@@ -196,7 +196,7 @@ describe('PrivyPoliciesService', () => {
     });
     it('should be able to update a rule', async () => {
       const response = await privyClient.policies().updateRule(ruleId, {
-        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
         policy_id: policyId,
         name: 'name',
         method: 'eth_sendTransaction',

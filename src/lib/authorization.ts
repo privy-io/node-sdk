@@ -5,14 +5,31 @@ import { PrivyAPIError } from '../core/error';
 import { importPKCS8PrivateKey } from './cryptography';
 import { PrivyClient } from '../public-api/PrivyClient';
 
+/**
+ * The authorization context should contain:
+ * - Any authorization private keys that must sign the request
+ * - The JWTs for any users that must sign the request
+ * - Any additional signatures you have computed for the request
+ *
+ * The Privy client will accept the authorization context, sign the request given the parameters,
+ * and include all signatures in the privy-authorization-signature header to the API.
+ */
 export interface AuthorizationContext {
   /**
    * The private keys to use for authorization.
    * These should be base64-encoded PKCS8-formatted private keys, with no PEM headers.
    */
-  authorizationPrivateKeys?: string[];
-  userJwts?: string[];
-  // TODO: signatures?: string[];
+  authorization_private_keys?: string[];
+  /**
+   * The JWTs for the users that should sign the request authorization.
+   * These should be valid JWTs for the user.
+   */
+  user_jwts?: string[];
+  /**
+   * The signatures that should be used for authorization.
+   * These should be base64-encoded signatures.
+   */
+  signatures?: string[];
 }
 
 export type WalletApiRequestSignatureInput = {
@@ -74,7 +91,7 @@ export async function generateAuthorizationSignatures(
 ): Promise<string[]> {
   const payload = formatRequestForAuthorizationSignature(input);
 
-  const userJwts = authorizationContext.userJwts ?? [];
+  const userJwts = authorizationContext.user_jwts ?? [];
   let userKeys: string[] = [];
   if (userJwts.length > 0) {
     userKeys = await Promise.all(
@@ -82,12 +99,18 @@ export async function generateAuthorizationSignatures(
     );
   }
 
-  // TODO: add support for passed in signatures
-  const privateKeys = [...(authorizationContext.authorizationPrivateKeys ?? []), ...userKeys];
+  /** These are the private keys provided by the caller, either directly or via JWT exchange */
+  const privateKeys = [...(authorizationContext.authorization_private_keys ?? []), ...userKeys];
 
-  return privateKeys.map((sk) =>
+  /** These are the signatures calculated from the private keys */
+  const calculatedSignatures = privateKeys.map((sk) =>
     generateAuthorizationSignature({ authorizationPrivateKey: sk, input: payload }),
   );
+
+  /** These are the signatures provided directly by the caller */
+  const providedRawSignatures = authorizationContext.signatures ?? [];
+
+  return [...providedRawSignatures, ...calculatedSignatures];
 }
 
 /**

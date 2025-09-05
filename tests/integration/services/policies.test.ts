@@ -100,4 +100,127 @@ describe('PrivyPoliciesService', () => {
       await expect(() => privyClient.policies().get(createdPolicy.id)).rejects.toThrow(NotFoundError);
     });
   });
+  describe('rules', () => {
+    let policyId: string;
+    let ruleId: string;
+    let keypair: ReturnType<typeof generateP256KeyPair>;
+    beforeEach(async () => {
+      keypair = generateP256KeyPair();
+      const policy = await privyClient.policies().create({
+        version: '1.0',
+        name: 'NodeSDK Policies Rules Test',
+        chain_type: 'ethereum',
+        rules: [
+          {
+            name: 'Restrict ETH transfers to a maximum value',
+            method: 'eth_sendTransaction',
+            conditions: [
+              {
+                field_source: 'ethereum_transaction',
+                field: 'value',
+                operator: 'lte',
+                value: '0x2386F26FC10000',
+              },
+            ],
+            action: 'ALLOW',
+          },
+        ],
+        owner: { public_key: keypair.publicKey },
+      });
+      policyId = policy.id;
+      ruleId = policy.rules[0]!.id;
+    });
+    afterEach(async () => {
+      await privyClient.policies().delete(policyId, {
+        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+      });
+    });
+    it('should be able to get a rule', async () => {
+      const response = await privyClient.policies().getRule(ruleId, {
+        policy_id: policyId,
+      });
+
+      expect(response).toMatchObject({
+        id: ruleId,
+        name: 'Restrict ETH transfers to a maximum value',
+        method: 'eth_sendTransaction',
+        action: 'ALLOW',
+        conditions: [
+          {
+            field: 'value',
+            field_source: 'ethereum_transaction',
+            operator: 'lte',
+            value: '0x2386F26FC10000',
+          },
+        ],
+      });
+    });
+    it('should be able to delete a rule', async () => {
+      const response = await privyClient.policies().deleteRule(ruleId, {
+        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        policy_id: policyId,
+      });
+      expect(response.success).toBe(true);
+
+      const policy = await privyClient.policies().get(policyId);
+      expect(policy.rules).toEqual([]);
+    });
+    it('should be able to create a rule', async () => {
+      const response = await privyClient.policies().createRule(policyId, {
+        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        name: 'name',
+        method: 'eth_sendTransaction',
+        action: 'ALLOW',
+        conditions: [
+          {
+            field: 'to',
+            field_source: 'ethereum_transaction',
+            operator: 'eq',
+            value: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+          },
+        ],
+      });
+      expect(response.id).toBeDefined();
+
+      const policy = await privyClient.policies().get(policyId);
+      expect(policy.rules).toEqual([
+        expect.objectContaining({
+          id: ruleId,
+          name: 'Restrict ETH transfers to a maximum value',
+        }),
+        expect.objectContaining({
+          id: response.id,
+          name: 'name',
+        }),
+      ]);
+    });
+    it('should be able to update a rule', async () => {
+      const response = await privyClient.policies().updateRule(ruleId, {
+        authorization_context: { authorizationPrivateKeys: [keypair.privateKey] },
+        policy_id: policyId,
+        name: 'name',
+        method: 'eth_sendTransaction',
+        action: 'DENY',
+        conditions: [
+          {
+            field: 'to',
+            field_source: 'ethereum_transaction',
+            operator: 'eq',
+            value: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+          },
+        ],
+      });
+
+      expect(response.id).toBe(ruleId);
+
+      const policy = await privyClient.policies().get(policyId);
+      expect(policy.rules).toEqual([
+        expect.objectContaining({
+          id: ruleId,
+          name: 'name',
+          action: 'DENY',
+        }),
+      ]);
+    });
+  });
 });

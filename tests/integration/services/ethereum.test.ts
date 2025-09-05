@@ -138,6 +138,41 @@ describe('PrivyEthereumService', () => {
         });
         expect(verified).toBe(true);
       });
+      it('should be able to sign a message with a sign function in the authorization context', async () => {
+        const keypair = generateP256KeyPair();
+
+        const wallet = await privyClient.wallets().create({
+          chain_type: 'ethereum',
+          owner: { public_key: keypair.publicKey },
+        });
+
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signMessage(wallet.id, {
+            message: 'Hello, world!',
+            authorization_context: {
+              sign_fns: [
+                async (payload) => {
+                  const privateKey = crypto.createPrivateKey({
+                    key: Buffer.from(keypair.privateKey, 'base64'),
+                    format: 'der',
+                    type: 'pkcs8',
+                  });
+                  return crypto.sign('sha256', payload, privateKey).toString('base64');
+                },
+              ],
+            },
+          });
+
+        expect(response.signature).toBeDefined();
+        const verified = await verifyMessage({
+          address: wallet.address as Hex,
+          message: 'Hello, world!',
+          signature: response.signature as `0x${string}`,
+        });
+        expect(verified).toBe(true);
+      });
       it('should be able to sign a message with a JWT authorization context', async () => {
         const response = await privyClient
           .wallets()

@@ -30,6 +30,18 @@ export interface AuthorizationContext {
    * These should be base64-encoded signatures.
    */
   signatures?: string[];
+  /**
+   * Sign functions can be used to sign requests directly, by managing the private keys and signing
+   * logic externally.
+   *
+   * Sign functions should perform an ECDSA P-256 signature on the payload received, and return the
+   * base64-encoded signature.
+   */
+  sign_fns?: AuthorizationContext.SignFn[];
+}
+
+export namespace AuthorizationContext {
+  export type SignFn = (payload: Uint8Array) => Promise<string>;
 }
 
 export type WalletApiRequestSignatureInput = {
@@ -107,10 +119,15 @@ export async function generateAuthorizationSignatures(
     generateAuthorizationSignature({ authorizationPrivateKey: sk, input: payload }),
   );
 
+  /** These are the signatures calculated externally from the given sign functions */
+  const signFnSignatures = await Promise.all(
+    (authorizationContext.sign_fns ?? []).map((signFn) => signFn(payload)),
+  );
+
   /** These are the signatures provided directly by the caller */
   const providedRawSignatures = authorizationContext.signatures ?? [];
 
-  return [...providedRawSignatures, ...calculatedSignatures];
+  return [...providedRawSignatures, ...calculatedSignatures, ...signFnSignatures];
 }
 
 /**

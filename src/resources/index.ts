@@ -11,11 +11,19 @@ export {
 export {
   Policies,
   type Policy,
+  type PolicyCreateRuleResponse,
   type PolicyDeleteResponse,
+  type PolicyDeleteRuleResponse,
+  type PolicyUpdateRuleResponse,
+  type PolicyGetRuleResponse,
   type PolicyCreateParams,
+  type PolicyCreateRuleParams,
   type PolicyDeleteParams,
+  type PolicyDeleteRuleParams,
   type PolicyUpdateParams,
-} from './policies/policies';
+  type PolicyUpdateRuleParams,
+  type PolicyGetRuleParams,
+} from './policies';
 export { Transactions, type TransactionGetResponse } from './transactions';
 export {
   Users,

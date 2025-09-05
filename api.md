@@ -77,31 +77,23 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/policies/policies.ts">Policy</a></code>
-- <code><a href="./src/resources/policies/policies.ts">PolicyDeleteResponse</a></code>
+- <code><a href="./src/resources/policies.ts">Policy</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyCreateRuleResponse</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyDeleteResponse</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyDeleteRuleResponse</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyUpdateRuleResponse</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyGetRuleResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/policies">client.policies.<a href="./src/resources/policies/policies.ts">create</a>({ ...params }) -> Policy</code>
-- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies/policies.ts">\_delete</a>(policyID, { ...params }) -> PolicyDeleteResponse</code>
-- <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
-- <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies/policies.ts">get</a>(policyID) -> Policy</code>
-
-## Rules
-
-Types:
-
-- <code><a href="./src/resources/policies/rules.ts">RuleCreateResponse</a></code>
-- <code><a href="./src/resources/policies/rules.ts">RuleDeleteResponse</a></code>
-- <code><a href="./src/resources/policies/rules.ts">RuleUpdateResponse</a></code>
-- <code><a href="./src/resources/policies/rules.ts">RuleGetResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/policies/{policy_id}/rules">client.policies.rules.<a href="./src/resources/policies/rules.ts">\_create</a>(policyID, { ...params }) -> RuleCreateResponse</code>
-- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.rules.<a href="./src/resources/policies/rules.ts">\_delete</a>(ruleID, { ...params }) -> RuleDeleteResponse</code>
-- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.rules.<a href="./src/resources/policies/rules.ts">\_update</a>(ruleID, { ...params }) -> RuleUpdateResponse</code>
-- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.rules.<a href="./src/resources/policies/rules.ts">get</a>(ruleID, { ...params }) -> RuleGetResponse</code>
+- <code title="post /v1/policies">client.policies.<a href="./src/resources/policies.ts">create</a>({ ...params }) -> Policy</code>
+- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/resources/policies.ts">\_createRule</a>(policyID, { ...params }) -> PolicyCreateRuleResponse</code>
+- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_delete</a>(policyID, { ...params }) -> PolicyDeleteResponse</code>
+- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_deleteRule</a>(ruleID, { ...params }) -> PolicyDeleteRuleResponse</code>
+- <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
+- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_updateRule</a>(ruleID, { ...params }) -> PolicyUpdateRuleResponse</code>
+- <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">get</a>(policyID) -> Policy</code>
+- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">getRule</a>(ruleID, { ...params }) -> PolicyGetRuleResponse</code>
 
 # Transactions
 

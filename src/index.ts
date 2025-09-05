@@ -1,11 +1,22 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+export { PrivyClient, type PrivyClientOptions } from './public-api/PrivyClient';
+export { type PrivyWalletsService } from './public-api/services/wallets';
+export { type PrivyEthereumService } from './public-api/services/ethereum';
+export { type PrivySolanaService } from './public-api/services/solana';
+export { type PrivyPoliciesService } from './public-api/services/policies';
+export { type PrivyTransactionsService } from './public-api/services/transactions';
+export { type PrivyKeyQuorumsService } from './public-api/services/key-quorums';
+export { type PrivyUsersService } from './public-api/services/users';
+export { type PrivyUtils } from './public-api/services/utils';
 
-export { PrivyAPI as default } from './client';
+export {
+  type AuthorizationContext,
+  type WalletApiRequestSignatureInput,
+  formatRequestForAuthorizationSignature,
+  generateAuthorizationSignature,
+  generateAuthorizationSignatures,
+} from './lib/authorization';
 
-export { type Uploadable, toFile } from './core/uploads';
 export { APIPromise } from './core/api-promise';
-export { PrivyAPI, type ClientOptions } from './client';
-export { PagePromise } from './core/pagination';
 export {
   PrivyAPIError,
   APIError,

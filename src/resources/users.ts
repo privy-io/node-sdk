@@ -76,6 +76,241 @@ export class Users extends APIResource {
   ): APIPromise<User> {
     return this._client.post(path`/v1/users/${userID}/custom_metadata`, { body, ...options });
   }
+
+  /**
+   * Get a user by user ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.get('user_id');
+   * ```
+   */
+  get(userID: string, options?: RequestOptions): APIPromise<User> {
+    return this._client.get(path`/v1/users/${userID}`, options);
+  }
+
+  /**
+   * Looks up a user by their custom auth ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByCustomAuthID({
+   *   custom_user_id: 'custom_user_id',
+   * });
+   * ```
+   */
+  getByCustomAuthID(body: UserGetByCustomAuthIDParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/custom_auth/id', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Discord username.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByDiscordUsername({
+   *   username: 'username',
+   * });
+   * ```
+   */
+  getByDiscordUsername(body: UserGetByDiscordUsernameParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/discord/username', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their email address.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByEmailAddress({
+   *   address: 'dev@stainless.com',
+   * });
+   * ```
+   */
+  getByEmailAddress(body: UserGetByEmailAddressParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/email/address', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Farcaster ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByFarcasterID({
+   *   fid: 0,
+   * });
+   * ```
+   */
+  getByFarcasterID(body: UserGetByFarcasterIDParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/farcaster/fid', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Github username.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByGitHubUsername({
+   *   username: 'username',
+   * });
+   * ```
+   */
+  getByGitHubUsername(body: UserGetByGitHubUsernameParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/github/username', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their phone number.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByPhoneNumber({
+   *   number: 'number',
+   * });
+   * ```
+   */
+  getByPhoneNumber(body: UserGetByPhoneNumberParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/phone/number', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their smart wallet address.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getBySmartWalletAddress({
+   *   address: 'address',
+   * });
+   * ```
+   */
+  getBySmartWalletAddress(
+    body: UserGetBySmartWalletAddressParams,
+    options?: RequestOptions,
+  ): APIPromise<User> {
+    return this._client.post('/v1/users/smart_wallet/address', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Telegram user ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByTelegramUserID({
+   *   telegram_user_id: 'telegram_user_id',
+   * });
+   * ```
+   */
+  getByTelegramUserID(body: UserGetByTelegramUserIDParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/telegram/telegram_user_id', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Telegram username.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByTelegramUsername({
+   *   username: 'username',
+   * });
+   * ```
+   */
+  getByTelegramUsername(body: UserGetByTelegramUsernameParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/telegram/username', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Twitter subject.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByTwitterSubject({
+   *   subject: 'subject',
+   * });
+   * ```
+   */
+  getByTwitterSubject(body: UserGetByTwitterSubjectParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/twitter/subject', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their Twitter username.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByTwitterUsername({
+   *   username: 'username',
+   * });
+   * ```
+   */
+  getByTwitterUsername(body: UserGetByTwitterUsernameParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/twitter/username', { body, ...options });
+  }
+
+  /**
+   * Looks up a user by their wallet address.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.getByWalletAddress({
+   *   address: 'address',
+   * });
+   * ```
+   */
+  getByWalletAddress(body: UserGetByWalletAddressParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/wallet/address', { body, ...options });
+  }
+
+  /**
+   * Creates an embedded wallet for an existing user.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.pregenerateWallets(
+   *   'user_id',
+   *   { wallets: [{ chain_type: 'ethereum' }] },
+   * );
+   * ```
+   */
+  pregenerateWallets(
+    userID: string,
+    body: UserPregenerateWalletsParams,
+    options?: RequestOptions,
+  ): APIPromise<User> {
+    return this._client.post(path`/v1/users/${userID}/wallets`, { body, ...options });
+  }
+
+  /**
+   * Search users by search term, emails, phone numbers, or wallet addresses.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.search({
+   *   search_term: 'search_term',
+   * });
+   * ```
+   */
+  search(body: UserSearchParams, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/users/search', { body, ...options });
+  }
+
+  /**
+   * Unlinks a user linked account.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.unlinkLinkedAccount(
+   *   'user_id',
+   *   { handle: 'test@test.com', type: 'email' },
+   * );
+   * ```
+   */
+  unlinkLinkedAccount(
+    userID: string,
+    body: UserUnlinkLinkedAccountParams,
+    options?: RequestOptions,
+  ): APIPromise<User> {
+    return this._client.post(path`/v1/users/${userID}/accounts/unlink`, { body, ...options });
+  }
 }
 
 export type UsersCursor = Cursor<User>;
@@ -877,7 +1112,8 @@ export namespace UserCreateParams {
       | 'bitcoin-segwit'
       | 'near'
       | 'spark'
-      | 'ton';
+      | 'ton'
+      | 'starknet';
 
     /**
      * Additional signers for the wallet.
@@ -923,6 +1159,133 @@ export interface UserCreateCustomMetadataParams {
   custom_metadata: { [key: string]: string | number | boolean };
 }
 
+export interface UserGetByCustomAuthIDParams {
+  custom_user_id: string;
+}
+
+export interface UserGetByDiscordUsernameParams {
+  username: string;
+}
+
+export interface UserGetByEmailAddressParams {
+  address: string;
+}
+
+export interface UserGetByFarcasterIDParams {
+  fid: number;
+}
+
+export interface UserGetByGitHubUsernameParams {
+  username: string;
+}
+
+export interface UserGetByPhoneNumberParams {
+  number: string;
+}
+
+export interface UserGetBySmartWalletAddressParams {
+  address: string;
+}
+
+export interface UserGetByTelegramUserIDParams {
+  telegram_user_id: string;
+}
+
+export interface UserGetByTelegramUsernameParams {
+  username: string;
+}
+
+export interface UserGetByTwitterSubjectParams {
+  subject: string;
+}
+
+export interface UserGetByTwitterUsernameParams {
+  username: string;
+}
+
+export interface UserGetByWalletAddressParams {
+  address: string;
+}
+
+export interface UserPregenerateWalletsParams {
+  wallets: Array<UserPregenerateWalletsParams.Wallet>;
+}
+
+export namespace UserPregenerateWalletsParams {
+  export interface Wallet {
+    chain_type:
+      | 'cosmos'
+      | 'stellar'
+      | 'sui'
+      | 'tron'
+      | 'bitcoin-segwit'
+      | 'near'
+      | 'ton'
+      | 'starknet'
+      | 'spark'
+      | 'solana'
+      | 'ethereum';
+
+    additional_signers?: Array<Wallet.AdditionalSigner>;
+
+    create_smart_wallet?: boolean;
+
+    policy_ids?: Array<string>;
+  }
+
+  export namespace Wallet {
+    export interface AdditionalSigner {
+      signer_id: string;
+
+      override_policy_ids?: Array<string>;
+    }
+  }
+}
+
+export type UserSearchParams = UserSearchParams.Variant0 | UserSearchParams.Variant1;
+
+export declare namespace UserSearchParams {
+  export interface Variant0 {
+    search_term: string;
+  }
+
+  export interface Variant1 {
+    emails: Array<string>;
+
+    phoneNumbers: Array<string>;
+
+    walletAddresses: Array<string>;
+  }
+}
+
+export interface UserUnlinkLinkedAccountParams {
+  handle: string;
+
+  type:
+    | 'email'
+    | 'wallet'
+    | 'smart_wallet'
+    | 'farcaster'
+    | 'passkey'
+    | 'phone'
+    | 'google_oauth'
+    | 'discord_oauth'
+    | 'twitter_oauth'
+    | 'github_oauth'
+    | 'linkedin_oauth'
+    | 'apple_oauth'
+    | 'spotify_oauth'
+    | 'instagram_oauth'
+    | 'tiktok_oauth'
+    | 'line_oauth'
+    | 'custom_auth'
+    | 'telegram'
+    | 'cross_app'
+    | 'guest';
+
+  provider?: string;
+}
+
 export declare namespace Users {
   export {
     type User as User,
@@ -930,5 +1293,20 @@ export declare namespace Users {
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
     type UserCreateCustomMetadataParams as UserCreateCustomMetadataParams,
+    type UserGetByCustomAuthIDParams as UserGetByCustomAuthIDParams,
+    type UserGetByDiscordUsernameParams as UserGetByDiscordUsernameParams,
+    type UserGetByEmailAddressParams as UserGetByEmailAddressParams,
+    type UserGetByFarcasterIDParams as UserGetByFarcasterIDParams,
+    type UserGetByGitHubUsernameParams as UserGetByGitHubUsernameParams,
+    type UserGetByPhoneNumberParams as UserGetByPhoneNumberParams,
+    type UserGetBySmartWalletAddressParams as UserGetBySmartWalletAddressParams,
+    type UserGetByTelegramUserIDParams as UserGetByTelegramUserIDParams,
+    type UserGetByTelegramUsernameParams as UserGetByTelegramUsernameParams,
+    type UserGetByTwitterSubjectParams as UserGetByTwitterSubjectParams,
+    type UserGetByTwitterUsernameParams as UserGetByTwitterUsernameParams,
+    type UserGetByWalletAddressParams as UserGetByWalletAddressParams,
+    type UserPregenerateWalletsParams as UserPregenerateWalletsParams,
+    type UserSearchParams as UserSearchParams,
+    type UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams,
   };
 }

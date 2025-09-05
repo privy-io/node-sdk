@@ -5,12 +5,13 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "privy-api-client/*": ["dist/src/*"],
-      "privy-api-client": ["dist/src/index.ts"]
+      "@privy-io/node/*": ["dist/src/*"],
+      "@privy-io/node": ["dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
     "declarationMap": true,
+    "stripInternal": true,
     "outDir": "dist",
     "pretty": true,
     "sourceMap": true

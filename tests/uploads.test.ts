@@ -1,6 +1,6 @@
 import fs from 'fs';
-import type { ResponseLike } from 'privy-api-client/internal/to-file';
-import { toFile } from 'privy-api-client/core/uploads';
+import type { ResponseLike } from '@privy-io/node/internal/to-file';
+import { toFile } from '@privy-io/node/core/uploads';
 import { File } from 'node:buffer';
 
 class MyClass {
@@ -97,7 +97,7 @@ describe('missing File error message', () => {
   });
 
   test('is thrown', async () => {
-    const uploads = await import('privy-api-client/core/uploads');
+    const uploads = await import('@privy-io/node/core/uploads');
     await expect(
       uploads.toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
     ).rejects.toMatchInlineSnapshot(

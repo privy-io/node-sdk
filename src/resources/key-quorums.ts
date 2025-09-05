@@ -20,16 +20,45 @@ export class KeyQuorums extends APIResource {
   }
 
   /**
-   * Update a key quorum by key quorum ID.
+   * Delete a key quorum by key quorum ID.
    *
    * @example
    * ```ts
-   * const keyQuorum = await client.keyQuorums.update(
+   * const response = await client.keyQuorums._delete(
    *   'key_quorum_id',
    * );
    * ```
    */
-  update(
+  _delete(
+    keyQuorumID: string,
+    params: KeyQuorumDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<KeyQuorumDeleteResponse> {
+    const { 'privy-authorization-signature': privyAuthorizationSignature } = params ?? {};
+    return this._client.delete(path`/v1/key_quorums/${keyQuorumID}`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Update a key quorum by key quorum ID.
+   *
+   * @example
+   * ```ts
+   * const keyQuorum = await client.keyQuorums._update(
+   *   'key_quorum_id',
+   * );
+   * ```
+   */
+  _update(
     keyQuorumID: string,
     params: KeyQuorumUpdateParams,
     options?: RequestOptions,
@@ -50,32 +79,17 @@ export class KeyQuorums extends APIResource {
   }
 
   /**
-   * Delete a key quorum by key quorum ID.
+   * Get a key quorum by ID.
    *
    * @example
    * ```ts
-   * const keyQuorum = await client.keyQuorums.delete(
+   * const keyQuorum = await client.keyQuorums.get(
    *   'key_quorum_id',
    * );
    * ```
    */
-  delete(
-    keyQuorumID: string,
-    params: KeyQuorumDeleteParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<KeyQuorum> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature } = params ?? {};
-    return this._client.delete(path`/v1/key_quorums/${keyQuorumID}`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(privyAuthorizationSignature != null ?
-            { 'privy-authorization-signature': privyAuthorizationSignature }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  get(keyQuorumID: string, options?: RequestOptions): APIPromise<KeyQuorum> {
+    return this._client.get(path`/v1/key_quorums/${keyQuorumID}`, options);
   }
 }
 
@@ -99,6 +113,13 @@ export namespace KeyQuorum {
   }
 }
 
+export interface KeyQuorumDeleteResponse {
+  /**
+   * Whether the key quorum was deleted successfully.
+   */
+  success: boolean;
+}
+
 export interface KeyQuorumCreateParams {
   authorization_threshold?: number;
 
@@ -107,6 +128,14 @@ export interface KeyQuorumCreateParams {
   public_keys?: Array<string>;
 
   user_ids?: Array<string>;
+}
+
+export interface KeyQuorumDeleteParams {
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
 }
 
 export interface KeyQuorumUpdateParams {
@@ -137,19 +166,12 @@ export interface KeyQuorumUpdateParams {
   'privy-authorization-signature'?: string;
 }
 
-export interface KeyQuorumDeleteParams {
-  /**
-   * Request authorization signature. If multiple signatures are required, they
-   * should be comma separated.
-   */
-  'privy-authorization-signature'?: string;
-}
-
 export declare namespace KeyQuorums {
   export {
     type KeyQuorum as KeyQuorum,
+    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
-    type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
+    type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
   };
 }

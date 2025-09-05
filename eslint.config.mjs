@@ -25,7 +25,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^privy-api-client(/.*)?',
+              regex: '^@privy-io/node(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],

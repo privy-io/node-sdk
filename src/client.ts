@@ -11,6 +11,7 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
+import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
@@ -22,6 +23,7 @@ import {
   KeyQuorum,
   KeyQuorumCreateParams,
   KeyQuorumDeleteParams,
+  KeyQuorumDeleteResponse,
   KeyQuorumUpdateParams,
   KeyQuorums,
 } from './resources/key-quorums';
@@ -29,16 +31,39 @@ import {
   Policies,
   Policy,
   PolicyCreateParams,
+  PolicyCreateRuleParams,
+  PolicyCreateRuleResponse,
   PolicyDeleteParams,
   PolicyDeleteResponse,
+  PolicyDeleteRuleParams,
+  PolicyDeleteRuleResponse,
+  PolicyGetRuleParams,
+  PolicyGetRuleResponse,
   PolicyUpdateParams,
+  PolicyUpdateRuleParams,
+  PolicyUpdateRuleResponse,
 } from './resources/policies';
-import { Transactions } from './resources/transactions';
+import { TransactionGetResponse, Transactions } from './resources/transactions';
 import {
   User,
   UserCreateCustomMetadataParams,
   UserCreateParams,
+  UserGetByCustomAuthIDParams,
+  UserGetByDiscordUsernameParams,
+  UserGetByEmailAddressParams,
+  UserGetByFarcasterIDParams,
+  UserGetByGitHubUsernameParams,
+  UserGetByPhoneNumberParams,
+  UserGetBySmartWalletAddressParams,
+  UserGetByTelegramUserIDParams,
+  UserGetByTelegramUsernameParams,
+  UserGetByTwitterSubjectParams,
+  UserGetByTwitterUsernameParams,
+  UserGetByWalletAddressParams,
   UserListParams,
+  UserPregenerateWalletsParams,
+  UserSearchParams,
+  UserUnlinkLinkedAccountParams,
   Users,
   UsersCursor,
 } from './resources/users';
@@ -49,15 +74,20 @@ import {
   WalletCreateParams,
   WalletCreateWalletsWithRecoveryParams,
   WalletCreateWalletsWithRecoveryResponse,
+  WalletExportParams,
+  WalletExportResponse,
+  WalletInitImportParams,
+  WalletInitImportResponse,
   WalletListParams,
   WalletRawSignParams,
   WalletRawSignResponse,
   WalletRpcParams,
   WalletRpcResponse,
+  WalletSubmitImportParams,
   WalletUpdateParams,
   Wallets,
   WalletsCursor,
-} from './resources/wallets';
+} from './resources/wallets/wallets';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -309,24 +339,8 @@ export class PrivyAPI {
     return buildHeaders([{ Authorization }]);
   }
 
-  /**
-   * Basic re-implementation of `qs.stringify` for primitive types.
-   */
   protected stringifyQuery(query: Record<string, unknown>): string {
-    return Object.entries(query)
-      .filter(([_, value]) => typeof value !== 'undefined')
-      .map(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        }
-        if (value === null) {
-          return `${encodeURIComponent(key)}=`;
-        }
-        throw new Errors.PrivyAPIError(
-          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
-        );
-      })
-      .join('&');
+    return qs.stringify(query, { arrayFormat: 'comma' });
   }
 
   private getUserAgent(): string {
@@ -467,7 +481,7 @@ export class PrivyAPI {
     const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
     const headersTime = Date.now();
 
-    if (response instanceof Error) {
+    if (response instanceof globalThis.Error) {
       const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
       if (options.signal?.aborted) {
         throw new Errors.APIUserAbortError();
@@ -794,7 +808,7 @@ export class PrivyAPI {
         // Preserve legacy string encoding behavior for now
         headers.values.has('content-type')) ||
       // `Blob` is superset of `File`
-      body instanceof Blob ||
+      ((globalThis as any).Blob && body instanceof (globalThis as any).Blob) ||
       // `FormData` -> `multipart/form-data`
       body instanceof FormData ||
       // `URLSearchParams` -> `application/x-www-form-urlencoded`
@@ -855,18 +869,23 @@ export declare namespace PrivyAPI {
   export {
     Wallets as Wallets,
     type Wallet as Wallet,
-    type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
-    type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
+    type WalletExportResponse as WalletExportResponse,
+    type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
     type WalletRpcResponse as WalletRpcResponse,
+    type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
+    type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
-    type WalletUpdateParams as WalletUpdateParams,
     type WalletListParams as WalletListParams,
-    type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
-    type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
+    type WalletExportParams as WalletExportParams,
+    type WalletInitImportParams as WalletInitImportParams,
     type WalletRawSignParams as WalletRawSignParams,
     type WalletRpcParams as WalletRpcParams,
+    type WalletSubmitImportParams as WalletSubmitImportParams,
+    type WalletUpdateParams as WalletUpdateParams,
+    type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
+    type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
   };
 
   export {
@@ -876,24 +895,48 @@ export declare namespace PrivyAPI {
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
     type UserCreateCustomMetadataParams as UserCreateCustomMetadataParams,
+    type UserGetByCustomAuthIDParams as UserGetByCustomAuthIDParams,
+    type UserGetByDiscordUsernameParams as UserGetByDiscordUsernameParams,
+    type UserGetByEmailAddressParams as UserGetByEmailAddressParams,
+    type UserGetByFarcasterIDParams as UserGetByFarcasterIDParams,
+    type UserGetByGitHubUsernameParams as UserGetByGitHubUsernameParams,
+    type UserGetByPhoneNumberParams as UserGetByPhoneNumberParams,
+    type UserGetBySmartWalletAddressParams as UserGetBySmartWalletAddressParams,
+    type UserGetByTelegramUserIDParams as UserGetByTelegramUserIDParams,
+    type UserGetByTelegramUsernameParams as UserGetByTelegramUsernameParams,
+    type UserGetByTwitterSubjectParams as UserGetByTwitterSubjectParams,
+    type UserGetByTwitterUsernameParams as UserGetByTwitterUsernameParams,
+    type UserGetByWalletAddressParams as UserGetByWalletAddressParams,
+    type UserPregenerateWalletsParams as UserPregenerateWalletsParams,
+    type UserSearchParams as UserSearchParams,
+    type UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams,
   };
 
   export {
     Policies as Policies,
     type Policy as Policy,
+    type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
     type PolicyDeleteResponse as PolicyDeleteResponse,
+    type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,
+    type PolicyUpdateRuleResponse as PolicyUpdateRuleResponse,
+    type PolicyGetRuleResponse as PolicyGetRuleResponse,
     type PolicyCreateParams as PolicyCreateParams,
-    type PolicyUpdateParams as PolicyUpdateParams,
+    type PolicyCreateRuleParams as PolicyCreateRuleParams,
     type PolicyDeleteParams as PolicyDeleteParams,
+    type PolicyDeleteRuleParams as PolicyDeleteRuleParams,
+    type PolicyUpdateParams as PolicyUpdateParams,
+    type PolicyUpdateRuleParams as PolicyUpdateRuleParams,
+    type PolicyGetRuleParams as PolicyGetRuleParams,
   };
 
-  export { Transactions as Transactions };
+  export { Transactions as Transactions, type TransactionGetResponse as TransactionGetResponse };
 
   export {
     KeyQuorums as KeyQuorums,
     type KeyQuorum as KeyQuorum,
+    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
-    type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
+    type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
   };
 }

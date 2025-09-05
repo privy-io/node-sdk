@@ -6,9 +6,10 @@ const config: JestConfigWithTsJest = {
   transform: {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
+  transformIgnorePatterns: ['/node_modules/(?!jose)'],
   moduleNameMapper: {
-    '^privy-api-client$': '<rootDir>/src/index.ts',
-    '^privy-api-client/(.*)$': '<rootDir>/src/$1',
+    '^@privy-io/node$': '<rootDir>/src/index.ts',
+    '^@privy-io/node/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',
@@ -17,6 +18,7 @@ const config: JestConfigWithTsJest = {
     '<rootDir>/deno_tests/',
     '<rootDir>/packages/',
   ],
+  setupFilesAfterEnv: ['dotenv/config'],
   testPathIgnorePatterns: ['scripts'],
 };
 

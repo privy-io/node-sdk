@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from 'privy-api-client/core/api-promise';
+import { APIPromise } from '@privy-io/node/core/api-promise';
 
 import util from 'node:util';
-import PrivyAPI from 'privy-api-client';
-import { APIUserAbortError } from 'privy-api-client';
+import { PrivyAPI } from '@privy-io/node/client';
+import { APIUserAbortError } from '@privy-io/node';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {

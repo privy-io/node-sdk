@@ -27,6 +27,22 @@ import {
   KeyQuorumUpdateParams,
   KeyQuorums,
 } from './resources/key-quorums';
+import {
+  Policies,
+  Policy,
+  PolicyCreateParams,
+  PolicyCreateRuleParams,
+  PolicyCreateRuleResponse,
+  PolicyDeleteParams,
+  PolicyDeleteResponse,
+  PolicyDeleteRuleParams,
+  PolicyDeleteRuleResponse,
+  PolicyGetRuleParams,
+  PolicyGetRuleResponse,
+  PolicyUpdateParams,
+  PolicyUpdateRuleParams,
+  PolicyUpdateRuleResponse,
+} from './resources/policies';
 import { TransactionGetResponse, Transactions } from './resources/transactions';
 import {
   User,
@@ -51,14 +67,6 @@ import {
   Users,
   UsersCursor,
 } from './resources/users';
-import {
-  Policies,
-  Policy,
-  PolicyCreateParams,
-  PolicyDeleteParams,
-  PolicyDeleteResponse,
-  PolicyUpdateParams,
-} from './resources/policies/policies';
 import {
   Wallet,
   WalletAuthenticateWithJwtParams,
@@ -907,10 +915,18 @@ export declare namespace PrivyAPI {
   export {
     Policies as Policies,
     type Policy as Policy,
+    type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
     type PolicyDeleteResponse as PolicyDeleteResponse,
+    type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,
+    type PolicyUpdateRuleResponse as PolicyUpdateRuleResponse,
+    type PolicyGetRuleResponse as PolicyGetRuleResponse,
     type PolicyCreateParams as PolicyCreateParams,
+    type PolicyCreateRuleParams as PolicyCreateRuleParams,
     type PolicyDeleteParams as PolicyDeleteParams,
+    type PolicyDeleteRuleParams as PolicyDeleteRuleParams,
     type PolicyUpdateParams as PolicyUpdateParams,
+    type PolicyUpdateRuleParams as PolicyUpdateRuleParams,
+    type PolicyGetRuleParams as PolicyGetRuleParams,
   };
 
   export { Transactions as Transactions, type TransactionGetResponse as TransactionGetResponse };

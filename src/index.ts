@@ -7,6 +7,7 @@ export { type PrivyTransactionsService } from './public-api/services/transaction
 export { type PrivyKeyQuorumsService } from './public-api/services/key-quorums';
 export { type PrivyUsersService } from './public-api/services/users';
 export { type PrivyUtils } from './public-api/services/utils';
+export { InvalidAuthTokenError } from './public-api/services/utils/auth';
 
 export {
   type AuthorizationContext,

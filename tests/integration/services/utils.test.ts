@@ -1,17 +1,15 @@
 import { p256 } from '@noble/curves/nist';
 import { sha256 } from '@noble/hashes/sha2';
 import { importPKCS8PrivateKey } from '@privy-io/node/lib/cryptography';
-import { PrivyClient } from '@privy-io/node';
+import { InvalidAuthTokenError, PrivyClient } from '@privy-io/node';
 import { generateP256KeyPair } from '../../helpers/authorization-keys';
+import { generateTestJWT, generatePrivyJWT } from '../../helpers/jwt-auth';
 
 describe('PrivyUtils', () => {
   // Read the required environment variables from .env
   const TEST_APP_ID = process.env['TEST_APP_ID']!;
   const TEST_APP_SECRET = process.env['TEST_APP_SECRET']!;
   const TEST_API_URL = process.env['TEST_API_URL']!;
-
-  const P256_PRIVATE_KEY = process.env['P256_PRIVATE_KEY']!;
-  const P256_PUBLIC_KEY = process.env['P256_PUBLIC_KEY']!;
 
   let privyClient: PrivyClient;
   beforeEach(() => {
@@ -24,15 +22,18 @@ describe('PrivyUtils', () => {
   describe('utils', () => {
     describe('formatRequestForAuthorizationSignature', () => {
       it('should be able to format a minimal request', async () => {
-        const result = await privyClient.utils().formatRequestForAuthorizationSignature({
-          version: 1,
-          method: 'POST',
-          url: '/api/v1/wallets',
-          body: undefined,
-          headers: {
-            'privy-app-id': TEST_APP_ID,
-          },
-        });
+        const result = await privyClient
+          .utils()
+          .requestFormatter()
+          .formatRequestForAuthorizationSignature({
+            version: 1,
+            method: 'POST',
+            url: '/api/v1/wallets',
+            body: undefined,
+            headers: {
+              'privy-app-id': TEST_APP_ID,
+            },
+          });
         expect(result).toBeDefined();
         expect(result.length).toBeGreaterThan(0);
         const resultString = new TextDecoder().decode(result);
@@ -41,19 +42,22 @@ describe('PrivyUtils', () => {
         );
       });
       it('should be able to format a request with a body', async () => {
-        const result = await privyClient.utils().formatRequestForAuthorizationSignature({
-          version: 1,
-          method: 'POST',
-          url: '/api/v1/wallets',
-          body: {
-            foo: 'bar',
-            baz: 1,
-            qux: true,
-          },
-          headers: {
-            'privy-app-id': TEST_APP_ID,
-          },
-        });
+        const result = await privyClient
+          .utils()
+          .requestFormatter()
+          .formatRequestForAuthorizationSignature({
+            version: 1,
+            method: 'POST',
+            url: '/api/v1/wallets',
+            body: {
+              foo: 'bar',
+              baz: 1,
+              qux: true,
+            },
+            headers: {
+              'privy-app-id': TEST_APP_ID,
+            },
+          });
         expect(result).toBeDefined();
         expect(result.length).toBeGreaterThan(0);
         const resultString = new TextDecoder().decode(result);
@@ -62,15 +66,18 @@ describe('PrivyUtils', () => {
         );
       });
       it('should format empty bodies as an empty string', async () => {
-        const result = await privyClient.utils().formatRequestForAuthorizationSignature({
-          version: 1,
-          method: 'POST',
-          url: '/api/v1/wallets',
-          body: {},
-          headers: {
-            'privy-app-id': TEST_APP_ID,
-          },
-        });
+        const result = await privyClient
+          .utils()
+          .requestFormatter()
+          .formatRequestForAuthorizationSignature({
+            version: 1,
+            method: 'POST',
+            url: '/api/v1/wallets',
+            body: {},
+            headers: {
+              'privy-app-id': TEST_APP_ID,
+            },
+          });
         expect(result).toBeDefined();
         expect(result.length).toBeGreaterThan(0);
         const resultString = new TextDecoder().decode(result);
@@ -92,8 +99,11 @@ describe('PrivyUtils', () => {
             'privy-app-id': TEST_APP_ID,
           },
         } as const;
-        const formattedInput = privyClient.utils().formatRequestForAuthorizationSignature(input);
-        const result = await privyClient.utils().generateAuthorizationSignature({
+        const formattedInput = privyClient
+          .utils()
+          .requestFormatter()
+          .formatRequestForAuthorizationSignature(input);
+        const result = await privyClient.utils().requestSigner().generateAuthorizationSignature({
           authorizationPrivateKey: keypair.privateKey,
           input,
         });
@@ -127,18 +137,43 @@ describe('PrivyUtils', () => {
             'privy-app-id': TEST_APP_ID,
           },
         } as const;
-        const formattedInput = privyClient.utils().formatRequestForAuthorizationSignature(input);
-        const result = await privyClient.utils().generateAuthorizationSignatures({
-          authorizationContext: {
-            authorization_private_keys: [keypair.privateKey, keypair2.privateKey, keypair3.privateKey],
-          },
-          input,
-        });
+        const formattedInput = privyClient
+          .utils()
+          .requestFormatter()
+          .formatRequestForAuthorizationSignature(input);
+        const result = await privyClient
+          .utils()
+          .requestSigner()
+          .generateAuthorizationSignatures({
+            authorizationContext: {
+              authorization_private_keys: [keypair.privateKey, keypair2.privateKey, keypair3.privateKey],
+            },
+            input,
+          });
         expect(result).toBeDefined();
         expect(result.length).toEqual(3);
         expect(p256.verify(Buffer.from(result[0]!, 'base64'), sha256(formattedInput), publicKey)).toBe(true);
         expect(p256.verify(Buffer.from(result[1]!, 'base64'), sha256(formattedInput), publicKey2)).toBe(true);
         expect(p256.verify(Buffer.from(result[2]!, 'base64'), sha256(formattedInput), publicKey3)).toBe(true);
+      });
+    });
+  });
+  describe('verifyAuthToken', () => {
+    it('should throw an error if the access token passed is a custom JWT', async () => {
+      const jwt = await generateTestJWT();
+      await expect(privyClient.utils().auth().verifyAuthToken(jwt)).rejects.toThrow(InvalidAuthTokenError);
+    });
+    it('should validate a freshly authenticated email account', async () => {
+      const privyToken = await generatePrivyJWT();
+
+      const verifiedToken = await privyClient.utils().auth().verifyAuthToken(privyToken);
+      expect(verifiedToken).toEqual({
+        appId: TEST_APP_ID,
+        issuer: 'privy.io',
+        issuedAt: expect.any(Number),
+        expiration: expect.any(Number),
+        sessionId: expect.any(String),
+        userId: expect.any(String),
       });
     });
   });

@@ -36,6 +36,14 @@
     "canonicalize": "^2.1.0",
     "lru-cache": "^11.1.0"
   },
+  "peerDependencies": {
+    "viem": "^2.24.1"
+  },
+  "peerDependenciesMeta": {
+    "viem": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
     "@solana/web3.js": "^1.98.4",
@@ -73,6 +81,16 @@
       "require": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
+      }
+    },
+    "./viem": {
+      "import": {
+        "types": "./dist/viem.d.mts",
+        "default": "./dist/viem.mjs"
+      },
+      "require": {
+        "types": "./dist/viem.d.ts",
+        "default": "./dist/viem.js"
       }
     }
   }

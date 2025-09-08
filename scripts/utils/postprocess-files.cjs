@@ -44,6 +44,14 @@ async function postprocess() {
       types: './index.d.mts',
       default: './index.mjs',
     },
+    './viem': {
+      require: {
+        types: './viem.d.ts',
+        default: './viem.js',
+      },
+      types: './viem.d.mts',
+      default: './viem.mjs',
+    },
   };
 
   await fs.promises.writeFile(

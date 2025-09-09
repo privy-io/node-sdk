@@ -59,25 +59,6 @@ export class Users extends APIResource {
   }
 
   /**
-   * Adds custom metadata to a user by user ID.
-   *
-   * @example
-   * ```ts
-   * const user = await client.users.createCustomMetadata(
-   *   'user_id',
-   *   { custom_metadata: { key: 'value' } },
-   * );
-   * ```
-   */
-  createCustomMetadata(
-    userID: string,
-    body: UserCreateCustomMetadataParams,
-    options?: RequestOptions,
-  ): APIPromise<User> {
-    return this._client.post(path`/v1/users/${userID}/custom_metadata`, { body, ...options });
-  }
-
-  /**
    * Get a user by user ID.
    *
    * @example
@@ -291,6 +272,25 @@ export class Users extends APIResource {
    */
   search(body: UserSearchParams, options?: RequestOptions): APIPromise<User> {
     return this._client.post('/v1/users/search', { body, ...options });
+  }
+
+  /**
+   * Adds custom metadata to a user by user ID.
+   *
+   * @example
+   * ```ts
+   * const user = await client.users.setCustomMetadata(
+   *   'user_id',
+   *   { custom_metadata: { key: 'value' } },
+   * );
+   * ```
+   */
+  setCustomMetadata(
+    userID: string,
+    body: UserSetCustomMetadataParams,
+    options?: RequestOptions,
+  ): APIPromise<User> {
+    return this._client.post(path`/v1/users/${userID}/custom_metadata`, { body, ...options });
   }
 
   /**
@@ -1152,13 +1152,6 @@ export namespace UserCreateParams {
 
 export interface UserListParams extends CursorParams {}
 
-export interface UserCreateCustomMetadataParams {
-  /**
-   * Custom metadata associated with the user.
-   */
-  custom_metadata: { [key: string]: string | number | boolean };
-}
-
 export interface UserGetByCustomAuthIDParams {
   custom_user_id: string;
 }
@@ -1258,6 +1251,13 @@ export declare namespace UserSearchParams {
   }
 }
 
+export interface UserSetCustomMetadataParams {
+  /**
+   * Custom metadata associated with the user.
+   */
+  custom_metadata: { [key: string]: string | number | boolean };
+}
+
 export interface UserUnlinkLinkedAccountParams {
   handle: string;
 
@@ -1292,7 +1292,6 @@ export declare namespace Users {
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
-    type UserCreateCustomMetadataParams as UserCreateCustomMetadataParams,
     type UserGetByCustomAuthIDParams as UserGetByCustomAuthIDParams,
     type UserGetByDiscordUsernameParams as UserGetByDiscordUsernameParams,
     type UserGetByEmailAddressParams as UserGetByEmailAddressParams,
@@ -1307,6 +1306,7 @@ export declare namespace Users {
     type UserGetByWalletAddressParams as UserGetByWalletAddressParams,
     type UserPregenerateWalletsParams as UserPregenerateWalletsParams,
     type UserSearchParams as UserSearchParams,
+    type UserSetCustomMetadataParams as UserSetCustomMetadataParams,
     type UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams,
   };
 }

@@ -72,27 +72,6 @@ describe('resource users', () => {
   });
 
   // Prism tests are disabled
-  test.skip('createCustomMetadata: only required params', async () => {
-    const responsePromise = client.users.createCustomMetadata('user_id', {
-      custom_metadata: { key: 'value' },
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('createCustomMetadata: required and optional params', async () => {
-    const response = await client.users.createCustomMetadata('user_id', {
-      custom_metadata: { key: 'value' },
-    });
-  });
-
-  // Prism tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.users.get('user_id');
     const rawResponse = await responsePromise.asResponse();
@@ -351,6 +330,23 @@ describe('resource users', () => {
   // Prism tests are disabled
   test.skip('search: required and optional params', async () => {
     const response = await client.users.search({ search_term: 'search_term' });
+  });
+
+  // Prism tests are disabled
+  test.skip('setCustomMetadata: only required params', async () => {
+    const responsePromise = client.users.setCustomMetadata('user_id', { custom_metadata: { key: 'value' } });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('setCustomMetadata: required and optional params', async () => {
+    const response = await client.users.setCustomMetadata('user_id', { custom_metadata: { key: 'value' } });
   });
 
   // Prism tests are disabled

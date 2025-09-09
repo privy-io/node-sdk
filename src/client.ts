@@ -46,7 +46,6 @@ import {
 import { TransactionGetResponse, Transactions } from './resources/transactions';
 import {
   User,
-  UserCreateCustomMetadataParams,
   UserCreateParams,
   UserGetByCustomAuthIDParams,
   UserGetByDiscordUsernameParams,
@@ -63,6 +62,7 @@ import {
   UserListParams,
   UserPregenerateWalletsParams,
   UserSearchParams,
+  UserSetCustomMetadataParams,
   UserUnlinkLinkedAccountParams,
   Users,
   UsersCursor,
@@ -894,7 +894,6 @@ export declare namespace PrivyAPI {
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
-    type UserCreateCustomMetadataParams as UserCreateCustomMetadataParams,
     type UserGetByCustomAuthIDParams as UserGetByCustomAuthIDParams,
     type UserGetByDiscordUsernameParams as UserGetByDiscordUsernameParams,
     type UserGetByEmailAddressParams as UserGetByEmailAddressParams,
@@ -909,6 +908,7 @@ export declare namespace PrivyAPI {
     type UserGetByWalletAddressParams as UserGetByWalletAddressParams,
     type UserPregenerateWalletsParams as UserPregenerateWalletsParams,
     type UserSearchParams as UserSearchParams,
+    type UserSetCustomMetadataParams as UserSetCustomMetadataParams,
     type UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams,
   };
 

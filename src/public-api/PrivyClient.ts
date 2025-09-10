@@ -7,6 +7,7 @@ import { PrivyUsersService } from './services/users';
 import { PrivyUtils } from './services/utils';
 import { JwtExchangeService } from '../lib/jwt-exchange';
 import { VERSION } from '../version';
+import { createPrivyAppJWKS } from '../lib/auth';
 
 type InternalClientOptions = Omit<ClientOptions, 'appID' | 'appSecret' | 'baseUrl'>;
 
@@ -15,6 +16,7 @@ export interface PrivyClientOptions extends InternalClientOptions {
   appSecret: string;
   apiUrl?: string;
   authorizationKeyCacheMaxCapacity?: number;
+  jwtVerificationKeyOverride?: string;
 }
 
 const DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY = 1000;
@@ -40,6 +42,7 @@ export class PrivyClient {
     apiUrl,
     authorizationKeyCacheMaxCapacity = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
     defaultHeaders,
+    jwtVerificationKeyOverride,
     ...clientOptions
   }: PrivyClientOptions) {
     this.privyApiClient = new PrivyAPI({
@@ -53,6 +56,13 @@ export class PrivyClient {
         'privy-client': `node:${VERSION}`,
       },
     });
+    const appJwks = createPrivyAppJWKS({
+      appId: this.privyApiClient.appID,
+      apiUrl: this.privyApiClient.baseURL,
+      headers: { 'privy-client': `node:${VERSION}` },
+      verificationKeyOverride: jwtVerificationKeyOverride,
+    });
+
     this.jwtExchangeService = new JwtExchangeService(
       this.privyApiClient.wallets,
       authorizationKeyCacheMaxCapacity,
@@ -61,8 +71,8 @@ export class PrivyClient {
     this.policiesService = new PrivyPoliciesService(this.privyApiClient, this);
     this.transactionsService = new PrivyTransactionsService(this.privyApiClient);
     this.keyQuorumsService = new PrivyKeyQuorumsService(this.privyApiClient, this);
-    this.usersService = new PrivyUsersService(this.privyApiClient);
-    this.utilsService = new PrivyUtils(this.privyApiClient, this);
+    this.usersService = new PrivyUsersService(this.privyApiClient, appJwks);
+    this.utilsService = new PrivyUtils(this.privyApiClient, this, appJwks);
   }
 
   public wallets(): PrivyWalletsService {

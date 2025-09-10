@@ -72,8 +72,8 @@ describe('resource users', () => {
   });
 
   // Prism tests are disabled
-  test.skip('get', async () => {
-    const responsePromise = client.users.get('user_id');
+  test.skip('_get', async () => {
+    const responsePromise = client.users._get('user_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

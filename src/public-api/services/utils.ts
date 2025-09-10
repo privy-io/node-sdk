@@ -1,40 +1,29 @@
-import {
-  formatRequestForAuthorizationSignature,
-  generateAuthorizationSignature,
-  generateAuthorizationSignatures,
-} from '../../lib/authorization';
+import { PrivyAPI } from '../../client';
 import { PrivyClient } from '../PrivyClient';
+import { PrivyAuthUtils } from './utils/auth';
+import { PrivyRequestFormatter } from './utils/request-formatter';
+import { PrivyRequestSigner } from './utils/request-signer';
 
 export class PrivyUtils {
-  private privyClient: PrivyClient;
+  private _requestSigner: PrivyRequestSigner;
+  private _requestFormatter: PrivyRequestFormatter;
+  private _auth: PrivyAuthUtils;
 
-  constructor(privyClient: PrivyClient) {
-    this.privyClient = privyClient;
+  constructor(privyApiClient: PrivyAPI, privyClient: PrivyClient) {
+    this._requestSigner = new PrivyRequestSigner(privyClient);
+    this._requestFormatter = new PrivyRequestFormatter();
+    this._auth = new PrivyAuthUtils(privyApiClient);
   }
 
-  // Expose these as methods here for convenience
-  public formatRequestForAuthorizationSignature = formatRequestForAuthorizationSignature;
-  public generateAuthorizationSignature = generateAuthorizationSignature;
-  public generateAuthorizationSignatures(...input: PrivyUtils.GenerateAuthorizationSignaturesInput) {
-    // Pre-populates the client instance for the function
-    return generateAuthorizationSignatures(this.privyClient, ...input);
+  public requestSigner(): PrivyRequestSigner {
+    return this._requestSigner;
+  }
+
+  public requestFormatter(): PrivyRequestFormatter {
+    return this._requestFormatter;
+  }
+
+  public auth(): PrivyAuthUtils {
+    return this._auth;
   }
 }
-
-// prettier-ignore
-export namespace PrivyUtils {
-  export type GenerateAuthorizationSignaturesInput = ParametersExceptFirst<typeof generateAuthorizationSignatures>;
-}
-
-/**
- * Utility type similar to `Parameters` but excluding the first argument.
- * This is used to get the types of the remaining arguments of a function, excluding the first one.
- *
- * @example
- * ```ts
- * type MyFunction = (arg0: string, arg1: number, arg2: boolean) => any;
- * type MyFunctionParameters = ParametersExceptFirst<MyFunction>;
- * // type MyFunctionParameters = [number, boolean]
- * ```
- */
-type ParametersExceptFirst<F> = F extends (arg0: any, ...rest: infer R) => any ? R : never;

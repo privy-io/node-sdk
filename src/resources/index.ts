@@ -30,7 +30,6 @@ export {
   type User,
   type UserCreateParams,
   type UserListParams,
-  type UserCreateCustomMetadataParams,
   type UserGetByCustomAuthIDParams,
   type UserGetByDiscordUsernameParams,
   type UserGetByEmailAddressParams,
@@ -45,6 +44,7 @@ export {
   type UserGetByWalletAddressParams,
   type UserPregenerateWalletsParams,
   type UserSearchParams,
+  type UserSetCustomMetadataParams,
   type UserUnlinkLinkedAccountParams,
   type UsersCursor,
 } from './users';

@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.1.0-alpha.3 (2025-09-10)
+
+Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/privy-io/node-sdk/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
+
+### Features
+
+* adds support for creating a viem account ([#47](https://github.com/privy-io/node-sdk/issues/47)) ([30d3d40](https://github.com/privy-io/node-sdk/commit/30d3d402995f6e28fd06d3e02a51d62ba63bdaf8))
+* adds support for verifying an auth token ([#46](https://github.com/privy-io/node-sdk/issues/46)) ([2c67e09](https://github.com/privy-io/node-sdk/commit/2c67e09d908492c21f6ac35b7bce47add1893052))
+
+
+### Bug Fixes
+
+* adds the missing @scure/base dependency ([#43](https://github.com/privy-io/node-sdk/issues/43)) ([190695e](https://github.com/privy-io/node-sdk/commit/190695e7790c9d4555c9cf8803d40f3fbcfd4aea))
+* coerce nullable values to undefined ([cae9323](https://github.com/privy-io/node-sdk/commit/cae9323ea0c0bfd47bb4d8a91e9e2d37d1630e35))
+
+
+### Chores
+
+* ci build action ([d598ef0](https://github.com/privy-io/node-sdk/commit/d598ef0cd8da1f214667121163aba086e0355ce5))
+
 ## 0.1.0-alpha.2 (2025-09-05)
 
 Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/privy-io/node-sdk/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)

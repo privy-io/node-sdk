@@ -63,10 +63,10 @@ export class Users extends APIResource {
    *
    * @example
    * ```ts
-   * const user = await client.users.get('user_id');
+   * const user = await client.users._get('user_id');
    * ```
    */
-  get(userID: string, options?: RequestOptions): APIPromise<User> {
+  _get(userID: string, options?: RequestOptions): APIPromise<User> {
     return this._client.get(path`/v1/users/${userID}`, options);
   }
 

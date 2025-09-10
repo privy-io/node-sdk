@@ -101,19 +101,22 @@ describe('PrivyEthereumService', () => {
           owner: { public_key: keypair.publicKey },
         });
 
-        const payload = await privyClient.utils().formatRequestForAuthorizationSignature({
-          version: 1,
-          method: 'POST',
-          url: `${TEST_API_URL}/v1/wallets/${wallet.id}/rpc`,
-          body: {
-            params: { message: 'Hello, world!', encoding: 'utf-8' },
-            method: 'personal_sign',
-            chain_type: 'ethereum',
-          },
-          headers: {
-            'privy-app-id': TEST_APP_ID,
-          },
-        });
+        const payload = await privyClient
+          .utils()
+          .requestFormatter()
+          .formatRequestForAuthorizationSignature({
+            version: 1,
+            method: 'POST',
+            url: `${TEST_API_URL}/v1/wallets/${wallet.id}/rpc`,
+            body: {
+              params: { message: 'Hello, world!', encoding: 'utf-8' },
+              method: 'personal_sign',
+              chain_type: 'ethereum',
+            },
+            headers: {
+              'privy-app-id': TEST_APP_ID,
+            },
+          });
 
         const privateKey = crypto.createPrivateKey({
           key: Buffer.from(keypair.privateKey, 'base64'),

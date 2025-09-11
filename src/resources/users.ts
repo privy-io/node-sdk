@@ -352,6 +352,7 @@ export interface User {
     | User.LinkedAccountSmartWallet
     | User.LinkedAccountPasskey
     | User.LinkedAccountFarcaster
+    | User.LinkedAccountTelegram
     | User.LinkedAccountEthereum
     | User.LinkedAccountEthereumEmbeddedWallet
     | User.LinkedAccountSolana
@@ -683,6 +684,26 @@ export namespace User {
     signer_public_key?: string;
 
     username?: string;
+  }
+
+  export interface LinkedAccountTelegram {
+    first_verified_at: number | null;
+
+    latest_verified_at: number | null;
+
+    telegram_user_id: string;
+
+    type: 'telegram';
+
+    verified_at: number;
+
+    first_name?: string | null;
+
+    last_name?: string | null;
+
+    photo_url?: string | null;
+
+    username?: string | null;
   }
 
   export interface LinkedAccountEthereum {

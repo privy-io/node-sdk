@@ -23,9 +23,9 @@ export class PrivyUsersService extends Users {
    */
   public async get({ id_token }: PrivyUsersService.GetInput): Promise<User> {
     return verifyIdentityToken({
-      identityToken: id_token,
-      appId: this._client.appID,
-      verificationKey: this.appJwks,
+      identity_token: id_token,
+      app_id: this._client.appID,
+      verification_key: this.appJwks,
     });
   }
 }

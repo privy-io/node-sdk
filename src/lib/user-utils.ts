@@ -2,6 +2,12 @@ import type { User } from '../resources/users';
 
 export type LinkedAccount = User['linked_accounts'][number];
 
+// prettier-ignore
+export type ExternalWalletLinkedAccount = Exclude<
+  Extract<LinkedAccount, { type: 'wallet' }>,
+  EmbeddedWalletLinkedAccount
+>;
+
 /**
  * An embedded wallet linked account is a wallet owned by the user that can be used with the Privy API.
  */

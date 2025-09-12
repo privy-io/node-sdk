@@ -8,7 +8,7 @@ import {
   JWTVerifyResult,
 } from 'jose';
 import { PrivyAPIError } from '../core/error';
-import { mapIdentityTokenPayloadToUser } from './identity-token';
+import { parseUserFromIdentityTokenPayload } from './identity-token';
 import { User } from '../resources';
 
 const JWT_ALGORITHM = 'ES256';
@@ -16,31 +16,31 @@ const JWT_ISSUER = 'privy.io';
 
 export type VerifyAuthTokenInput = {
   /** The authentication token to verify. */
-  authToken: string;
+  auth_token: string;
   /** The Privy app ID to verify the token against. */
-  appId: string;
+  app_id: string;
   /**
    * The verification key to use to verify the token, or a mechanism to get the it such as via JWKS.
    * You can find this verification key (or a JWKS endpoint) in the Privy dashboard.
    * @see {@link createRemoteJWKSet}
    * @see {@link importSPKI}
    */
-  verificationKey: CryptoKey | JWTVerifyGetKey;
+  verification_key: CryptoKey | JWTVerifyGetKey | string;
 };
 
 export type VerifyAuthTokenResponse = {
   /** The Privy app ID for which the token was issued. */
-  appId: string;
+  app_id: string;
   /** The issuer of the token. */
   issuer: string;
   /** The issued at unix timestamp of the token. */
-  issuedAt: number;
+  issued_at: number;
   /** The expiration unix timestamp of the token. */
   expiration: number;
   /** The ID of the session for which the token was issued. */
-  sessionId: string;
+  session_id: string;
   /** The ID of the user for which the token was issued. */
-  userId: string;
+  user_id: string;
 };
 
 /**
@@ -82,47 +82,61 @@ async function verifyPrivyIssuedJwt(
  * @throws If the token is invalid.
  */
 export async function verifyAuthToken({
-  authToken,
-  appId,
-  verificationKey,
+  auth_token: authToken,
+  app_id: appId,
+  verification_key: verificationKeyOrString,
 }: VerifyAuthTokenInput): Promise<VerifyAuthTokenResponse> {
+  const verificationKey =
+    typeof verificationKeyOrString === 'string' ?
+      await importSPKI(verificationKeyOrString, JWT_ALGORITHM)
+    : verificationKeyOrString;
   const verifiedToken = await verifyPrivyIssuedJwt(authToken, appId, verificationKey);
   return {
-    appId: throwIfNotString(verifiedToken.payload.aud),
+    app_id: throwIfNotString(verifiedToken.payload.aud),
     issuer: throwIfNotString(verifiedToken.payload.iss),
-    issuedAt: throwIfNotNumber(verifiedToken.payload.iat),
+    issued_at: throwIfNotNumber(verifiedToken.payload.iat),
     expiration: throwIfNotNumber(verifiedToken.payload.exp),
-    sessionId: throwIfNotString(verifiedToken.payload['sid']),
-    userId: throwIfNotString(verifiedToken.payload.sub),
+    session_id: throwIfNotString(verifiedToken.payload['sid']),
+    user_id: throwIfNotString(verifiedToken.payload.sub),
   };
 }
 
 export type VerifyIdentityTokenInput = {
   /** The identity token to verify. */
-  identityToken: string;
+  identity_token: string;
   /** The Privy app ID to verify the token against. */
-  appId: string;
+  app_id: string;
   /**
    * The verification key to use to verify the token, or a mechanism to get the it such as via JWKS.
    * You can find this verification key (or a JWKS endpoint) in the Privy dashboard.
    * @see {@link createRemoteJWKSet}
    * @see {@link importSPKI}
    */
-  verificationKey: CryptoKey | JWTVerifyGetKey;
+  verification_key: CryptoKey | JWTVerifyGetKey | string;
 };
 
+/**
+ * Verifies an identity token, parsing it into a `User` object if it is valid.
+ *
+ * @returns The user object parsed from the identity token.
+ * @throws If the token or its payload is invalid.
+ */
 export async function verifyIdentityToken({
-  identityToken,
-  appId,
-  verificationKey,
+  identity_token: identityToken,
+  app_id: appId,
+  verification_key: verificationKeyOrString,
 }: VerifyIdentityTokenInput): Promise<User> {
+  const verificationKey =
+    typeof verificationKeyOrString === 'string' ?
+      await importSPKI(verificationKeyOrString, JWT_ALGORITHM)
+    : verificationKeyOrString;
   const verifiedToken = await verifyPrivyIssuedJwt(identityToken, appId, verificationKey);
 
   if (!verifiedToken.payload) {
     throw new InvalidAuthTokenError('Unable to parse identity token');
   }
 
-  return mapIdentityTokenPayloadToUser(verifiedToken.payload);
+  return parseUserFromIdentityTokenPayload(verifiedToken.payload);
 }
 
 export class InvalidAuthTokenError extends PrivyAPIError {}

@@ -1,9 +1,17 @@
 import { JWTPayload } from 'jose';
 import { User } from '../resources';
 import { PrivyAPIError } from '../error';
-import { LinkedAccount } from './user-utils';
+import { EmbeddedWalletLinkedAccount, ExternalWalletLinkedAccount } from './user-utils';
 
-export function mapIdentityTokenPayloadToUser(payload: JWTPayload): User {
+/**
+ * Parses the payload of an identity token (JWT) into a `User` object.
+ * Note that the user object may be incomplete due to the size constraints of the identity token.
+ *
+ * @param payload The payload of the identity token.
+ * @returns The user object parsed from the identity token.
+ * @throws If the payload is invalid.
+ */
+export function parseUserFromIdentityTokenPayload(payload: JWTPayload): User {
   const customMetadata = parseCustomMetadataClaim(payload);
 
   return {
@@ -27,10 +35,12 @@ function parseLinkedAccountsClaim(payload: JWTPayload): User['linked_accounts'] 
     throw new InvalidIdentityTokenError('Unable to parse identity token');
   }
 
-  return parsedLinkedAccounts.map(mapIdLinkedAccountToUserLinkedAccount);
+  return parsedLinkedAccounts
+    .map(mapIdLinkedAccountToUserLinkedAccount)
+    .filter((account) => account !== null);
 }
 
-function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accounts'][number] {
+function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accounts'][number] | null {
   if (account.type === 'email') {
     return {
       type: 'email',
@@ -52,16 +62,37 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
 
   // Parses all wallet types
   if (account.type === 'wallet') {
+    if (account.wallet_client_type === 'privy') {
+      return {
+        type: 'wallet',
+        wallet_client_type: 'privy',
+        wallet_client: 'privy',
+        connector_type: 'embedded',
+        id: account.id,
+        address: account.address,
+        chain_type: account.chain_type,
+        first_verified_at: null,
+        verified_at: account.lv,
+        latest_verified_at: account.lv,
+        // The following fields are not present in the identity token,
+        // but are required. We set them to some safe defaults.
+        chain_id: '',
+        delegated: false,
+        imported: false,
+        public_key: '',
+        wallet_index: 0,
+        recovery_method: account.id ? 'privy-v2' : 'privy',
+      } satisfies EmbeddedWalletLinkedAccount;
+    }
     return {
       type: 'wallet',
-      id: account.id,
+      wallet_client: 'unknown',
       address: account.address,
       chain_type: account.chain_type,
-      wallet_client_type: account.wallet_client_type,
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } as Extract<LinkedAccount, { type: 'wallet' }>;
+    } satisfies ExternalWalletLinkedAccount;
   }
   if (account.type === 'smart_wallet') {
     return {
@@ -224,10 +255,10 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } as any; // FIXME: No telegram type in the openapi spec
+    } satisfies User.LinkedAccountTelegram;
   }
 
-  throw new Error('Not implemented');
+  return null;
 }
 
 function parseCustomMetadataClaim(payload: JWTPayload): User['custom_metadata'] {

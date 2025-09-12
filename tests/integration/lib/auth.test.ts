@@ -7,6 +7,7 @@ import {
 } from '@privy-io/node/lib/auth';
 import { randomInt, randomUUID } from 'node:crypto';
 import { User } from '@privy-io/node/resources';
+import { generatePrivyJWT } from '../../helpers/jwt-auth';
 
 describe('auth library', () => {
   const TEST_APP_ID = process.env['TEST_APP_ID']!;
@@ -26,6 +27,34 @@ describe('auth library', () => {
   });
 
   describe('verifyAuthToken', () => {
+    it('should verify an authentication token with a fixed verification key', async () => {
+      const sessionId = `session:${randomUUID()}`;
+      const userId = `user:${randomUUID()}`;
+
+      const authToken = await new jose.SignJWT({ sid: sessionId })
+        .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
+        .setIssuer('privy.io')
+        .setIssuedAt()
+        .setAudience(TEST_APP_ID)
+        .setSubject(userId)
+        .setExpirationTime('1h')
+        .sign(keypair.privateKey);
+
+      const verifiedAuthToken = await verifyAuthToken({
+        app_id: TEST_APP_ID,
+        verification_key: keypair.publicKey,
+        auth_token: authToken,
+      });
+
+      expect(verifiedAuthToken).toEqual({
+        app_id: TEST_APP_ID,
+        issuer: 'privy.io',
+        issued_at: expect.any(Number),
+        expiration: expect.any(Number),
+        session_id: sessionId,
+        user_id: userId,
+      });
+    });
     it('should verify an authentication token with an override', async () => {
       const sessionId = `session:${randomUUID()}`;
       const userId = `user:${randomUUID()}`;
@@ -40,18 +69,38 @@ describe('auth library', () => {
         .sign(keypair.privateKey);
 
       const verifiedAuthToken = await verifyAuthToken({
-        appId: TEST_APP_ID,
-        verificationKey: appJwks,
-        authToken: authToken,
+        app_id: TEST_APP_ID,
+        verification_key: appJwks,
+        auth_token: authToken,
       });
 
       expect(verifiedAuthToken).toEqual({
-        appId: TEST_APP_ID,
+        app_id: TEST_APP_ID,
         issuer: 'privy.io',
-        issuedAt: expect.any(Number),
+        issued_at: expect.any(Number),
         expiration: expect.any(Number),
-        sessionId: sessionId,
-        userId: userId,
+        session_id: sessionId,
+        user_id: userId,
+      });
+    });
+    it('should verify an authentication token against a JWKS endpoint', async () => {
+      const authToken = await generatePrivyJWT();
+
+      const verifiedAuthToken = await verifyAuthToken({
+        app_id: TEST_APP_ID,
+        verification_key: jose.createRemoteJWKSet(
+          new URL(`${TEST_API_URL}/v1/apps/${TEST_APP_ID}/jwks.json`),
+        ),
+        auth_token: authToken,
+      });
+
+      expect(verifiedAuthToken).toEqual({
+        app_id: TEST_APP_ID,
+        issuer: 'privy.io',
+        issued_at: expect.any(Number),
+        expiration: expect.any(Number),
+        session_id: expect.any(String),
+        user_id: expect.any(String),
       });
     });
   });
@@ -86,9 +135,9 @@ describe('auth library', () => {
         .sign(keypair.privateKey);
 
       const user = await verifyIdentityToken({
-        appId: TEST_APP_ID,
-        verificationKey: appJwks,
-        identityToken,
+        app_id: TEST_APP_ID,
+        verification_key: appJwks,
+        identity_token: identityToken,
       });
 
       expect(user).toMatchObject({

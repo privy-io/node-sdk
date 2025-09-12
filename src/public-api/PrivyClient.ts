@@ -16,7 +16,7 @@ export interface PrivyClientOptions extends InternalClientOptions {
   appSecret: string;
   apiUrl?: string;
   authorizationKeyCacheMaxCapacity?: number;
-  jwtVerificationKeyOverride?: string;
+  jwtVerificationKey?: string;
 }
 
 const DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY = 1000;
@@ -42,7 +42,7 @@ export class PrivyClient {
     apiUrl,
     authorizationKeyCacheMaxCapacity = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
     defaultHeaders,
-    jwtVerificationKeyOverride,
+    jwtVerificationKey,
     ...clientOptions
   }: PrivyClientOptions) {
     this.privyApiClient = new PrivyAPI({
@@ -60,7 +60,7 @@ export class PrivyClient {
       appId: this.privyApiClient.appID,
       apiUrl: this.privyApiClient.baseURL,
       headers: { 'privy-client': `node:${VERSION}` },
-      verificationKeyOverride: jwtVerificationKeyOverride,
+      verificationKeyOverride: jwtVerificationKey,
     });
 
     this.jwtExchangeService = new JwtExchangeService(

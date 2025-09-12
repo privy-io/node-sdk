@@ -25,17 +25,17 @@ export class PrivyAuthUtils {
    */
   public async verifyAuthToken(authToken: string): Promise<VerifyAuthTokenResponse> {
     return verifyAuthToken({
-      authToken,
-      appId: this.privyAppID,
-      verificationKey: this.appJwks,
+      auth_token: authToken,
+      app_id: this.privyAppID,
+      verification_key: this.appJwks,
     });
   }
 
   public async verifyIdentityToken(identityToken: string): Promise<User> {
     return verifyIdentityToken({
-      identityToken,
-      appId: this.privyAppID,
-      verificationKey: this.appJwks,
+      identity_token: identityToken,
+      app_id: this.privyAppID,
+      verification_key: this.appJwks,
     });
   }
 }

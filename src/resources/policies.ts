@@ -290,7 +290,8 @@ export interface Policy {
 
 export namespace Policy {
   /**
-   * The rules that apply to each method the policy covers.
+   * A rule that defines the conditions and action to take if the conditions are
+   * true.
    */
   export interface Rule {
     id: string;

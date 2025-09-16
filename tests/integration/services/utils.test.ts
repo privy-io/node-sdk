@@ -168,12 +168,12 @@ describe('PrivyUtils', () => {
 
       const verifiedToken = await privyClient.utils().auth().verifyAuthToken(privyToken);
       expect(verifiedToken).toEqual({
-        appId: TEST_APP_ID,
+        app_id: TEST_APP_ID,
         issuer: 'privy.io',
-        issuedAt: expect.any(Number),
+        issued_at: expect.any(Number),
         expiration: expect.any(Number),
-        sessionId: expect.any(String),
-        userId: expect.any(String),
+        session_id: expect.any(String),
+        user_id: expect.any(String),
       });
     });
   });

@@ -105,7 +105,7 @@ import { isEmptyObj } from './internal/utils/values';
 
 const environments = {
   production: 'https://api.privy.io',
-  staging: 'https://auth.staging.privy.io',
+  staging: 'https://api.staging.privy.io',
 };
 type Environment = keyof typeof environments;
 
@@ -125,7 +125,7 @@ export interface ClientOptions {
    *
    * Each environment maps to a different base URL:
    * - `production` corresponds to `https://api.privy.io`
-   * - `staging` corresponds to `https://auth.staging.privy.io`
+   * - `staging` corresponds to `https://api.staging.privy.io`
    */
   environment?: Environment | undefined;
 

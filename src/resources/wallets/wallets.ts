@@ -410,11 +410,9 @@ export namespace WalletRpcResponse {
   }
 
   export interface SolanaSignAndSendTransactionRpcResponse {
+    data: SolanaSignAndSendTransactionRpcResponse.Data;
+
     method: 'signAndSendTransaction';
-
-    data?: SolanaSignAndSendTransactionRpcResponse.Data;
-
-    error?: SolanaSignAndSendTransactionRpcResponse.Error;
   }
 
   export namespace SolanaSignAndSendTransactionRpcResponse {
@@ -424,12 +422,6 @@ export namespace WalletRpcResponse {
       hash: string;
 
       transaction_id?: string;
-    }
-
-    export interface Error {
-      code: string;
-
-      message: string;
     }
   }
 
@@ -462,11 +454,9 @@ export namespace WalletRpcResponse {
   }
 
   export interface EthereumSendTransactionRpcResponse {
+    data: EthereumSendTransactionRpcResponse.Data;
+
     method: 'eth_sendTransaction';
-
-    data?: EthereumSendTransactionRpcResponse.Data;
-
-    error?: EthereumSendTransactionRpcResponse.Error;
   }
 
   export namespace EthereumSendTransactionRpcResponse {
@@ -504,12 +494,6 @@ export namespace WalletRpcResponse {
 
         value?: string | number;
       }
-    }
-
-    export interface Error {
-      code: string;
-
-      message: string;
     }
   }
 

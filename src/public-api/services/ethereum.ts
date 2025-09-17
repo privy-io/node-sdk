@@ -57,10 +57,6 @@ export class PrivyEthereumService {
       chain_type: 'ethereum',
     });
 
-    if (!response.data) {
-      throw new Error(response.error?.message ?? 'Unexpected response from Privy API');
-    }
-
     return response.data;
   }
 
@@ -99,10 +95,6 @@ export class PrivyEthereumService {
       method: 'eth_sendTransaction',
       chain_type: 'ethereum',
     });
-
-    if (!response.data) {
-      throw new Error(response.error?.message ?? 'Unexpected response from Privy API');
-    }
 
     return response.data;
   }

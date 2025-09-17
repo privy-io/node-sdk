@@ -75,10 +75,6 @@ export class PrivySolanaService {
       params,
     });
 
-    if (!response.data) {
-      throw new Error(response.error?.message ?? 'Unexpected response from Privy API');
-    }
-
     return response.data;
   }
 }

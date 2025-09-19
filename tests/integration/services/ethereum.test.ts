@@ -6,32 +6,25 @@ import { verifyAuthorization } from 'viem/utils';
 import crypto from 'node:crypto';
 import { generateTestJWT } from '../../helpers/jwt-auth';
 import { generateP256KeyPair } from '../../helpers/authorization-keys';
+import {
+  TEST_APP,
+  P256_KEYPAIR,
+  OWNERLESS_ETHEREUM_WALLET,
+  P256_OWNED_ETHEREUM_WALLET,
+  USER_OWNED_ETHEREUM_WALLET,
+} from '../test-config';
 
 describe('PrivyEthereumService', () => {
-  // Read the required environment variables from .env
-  const TEST_APP_ID = process.env['TEST_APP_ID']!;
-  const TEST_APP_SECRET = process.env['TEST_APP_SECRET']!;
-  const TEST_API_URL = process.env['TEST_API_URL']!;
-
-  const P256_PRIVATE_KEY = process.env['P256_PRIVATE_KEY']!;
-
-  const OWNERLESS_ETHEREUM_WALLET_ID = process.env['OWNERLESS_ETHEREUM_WALLET_ID']!;
-  const OWNERLESS_ETHEREUM_WALLET_ADDRESS = process.env['OWNERLESS_ETHEREUM_WALLET_ADDRESS']! as Hex;
-  const P256_OWNED_ETHEREUM_WALLET_ID = process.env['P256_OWNED_ETHEREUM_WALLET_ID']!;
-  const P256_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['P256_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
-  const USER_OWNED_ETHEREUM_WALLET_ID = process.env['USER_OWNED_ETHEREUM_WALLET_ID']!;
-  const USER_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['USER_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
-
   const p256AuthorizationContext: AuthorizationContext = {
-    authorization_private_keys: [P256_PRIVATE_KEY],
+    authorization_private_keys: [P256_KEYPAIR.privateKey],
   };
 
   let privyClient: PrivyClient;
   beforeEach(() => {
     privyClient = new PrivyClient({
-      appId: TEST_APP_ID,
-      appSecret: TEST_APP_SECRET,
-      apiUrl: TEST_API_URL,
+      appId: TEST_APP.id,
+      appSecret: TEST_APP.secret,
+      apiUrl: TEST_APP.apiUrl,
     });
   });
   describe('ethereum', () => {
@@ -40,11 +33,11 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signMessage(OWNERLESS_ETHEREUM_WALLET_ID, { message: 'Hello, world!' });
+          .signMessage(OWNERLESS_ETHEREUM_WALLET.id, { message: 'Hello, world!' });
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
-          address: OWNERLESS_ETHEREUM_WALLET_ADDRESS,
+          address: OWNERLESS_ETHEREUM_WALLET.address,
           message: 'Hello, world!',
           signature: response.signature as `0x${string}`,
         });
@@ -54,11 +47,11 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signMessage(OWNERLESS_ETHEREUM_WALLET_ID, { message: '0x1234567890' });
+          .signMessage(OWNERLESS_ETHEREUM_WALLET.id, { message: '0x1234567890' });
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
-          address: OWNERLESS_ETHEREUM_WALLET_ADDRESS,
+          address: OWNERLESS_ETHEREUM_WALLET.address,
           message: { raw: '0x1234567890' },
           signature: response.signature as `0x${string}`,
         });
@@ -69,25 +62,25 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signMessage(OWNERLESS_ETHEREUM_WALLET_ID, { message });
+          .signMessage(OWNERLESS_ETHEREUM_WALLET.id, { message });
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
-          address: OWNERLESS_ETHEREUM_WALLET_ADDRESS,
+          address: OWNERLESS_ETHEREUM_WALLET.address,
           message: { raw: message },
           signature: response.signature as `0x${string}`,
         });
         expect(verified).toBe(true);
       });
       it('should be able to sign a message with an authorization context', async () => {
-        const response = await privyClient.wallets().ethereum().signMessage(P256_OWNED_ETHEREUM_WALLET_ID, {
+        const response = await privyClient.wallets().ethereum().signMessage(P256_OWNED_ETHEREUM_WALLET.id, {
           message: 'Hello, world!',
           authorization_context: p256AuthorizationContext,
         });
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
-          address: P256_OWNED_ETHEREUM_WALLET_ADDRESS,
+          address: P256_OWNED_ETHEREUM_WALLET.address,
           message: 'Hello, world!',
           signature: response.signature as `0x${string}`,
         });
@@ -107,14 +100,14 @@ describe('PrivyEthereumService', () => {
           .formatRequestForAuthorizationSignature({
             version: 1,
             method: 'POST',
-            url: `${TEST_API_URL}/v1/wallets/${wallet.id}/rpc`,
+            url: `${TEST_APP.apiUrl}/v1/wallets/${wallet.id}/rpc`,
             body: {
               params: { message: 'Hello, world!', encoding: 'utf-8' },
               method: 'personal_sign',
               chain_type: 'ethereum',
             },
             headers: {
-              'privy-app-id': TEST_APP_ID,
+              'privy-app-id': TEST_APP.id,
             },
           });
 
@@ -180,7 +173,7 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signMessage(USER_OWNED_ETHEREUM_WALLET_ID, {
+          .signMessage(USER_OWNED_ETHEREUM_WALLET.id, {
             message: 'Hello, world!',
             authorization_context: {
               user_jwts: [await generateTestJWT()],
@@ -189,7 +182,7 @@ describe('PrivyEthereumService', () => {
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
-          address: USER_OWNED_ETHEREUM_WALLET_ADDRESS,
+          address: USER_OWNED_ETHEREUM_WALLET.address,
           message: 'Hello, world!',
           signature: response.signature as `0x${string}`,
         });
@@ -201,24 +194,24 @@ describe('PrivyEthereumService', () => {
           privyClient
             .wallets()
             .ethereum()
-            .signMessage(P256_OWNED_ETHEREUM_WALLET_ID, { message: 'Hello, world!' }),
+            .signMessage(P256_OWNED_ETHEREUM_WALLET.id, { message: 'Hello, world!' }),
         ).rejects.toThrow(PrivyAPI.AuthenticationError);
       });
       it('will succeed if the idempotency key is reused with the same body', async () => {
         const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().ethereum().signMessage(OWNERLESS_ETHEREUM_WALLET_ID, {
+        await privyClient.wallets().ethereum().signMessage(OWNERLESS_ETHEREUM_WALLET.id, {
           message: 'Hello, world!',
           idempotency_key: idempotencyKey,
         });
 
-        const response = await privyClient.wallets().ethereum().signMessage(OWNERLESS_ETHEREUM_WALLET_ID, {
+        const response = await privyClient.wallets().ethereum().signMessage(OWNERLESS_ETHEREUM_WALLET.id, {
           message: 'Hello, world!',
           idempotency_key: idempotencyKey,
         });
 
         expect(response.signature).toBeDefined();
         const verified = await verifyMessage({
-          address: OWNERLESS_ETHEREUM_WALLET_ADDRESS,
+          address: OWNERLESS_ETHEREUM_WALLET.address,
           message: 'Hello, world!',
           signature: response.signature as `0x${string}`,
         });
@@ -226,13 +219,13 @@ describe('PrivyEthereumService', () => {
       });
       it('will fail if the idempotency key is reused with a different body', async () => {
         const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().ethereum().signMessage(OWNERLESS_ETHEREUM_WALLET_ID, {
+        await privyClient.wallets().ethereum().signMessage(OWNERLESS_ETHEREUM_WALLET.id, {
           message: 'Hello, world!',
           idempotency_key: idempotencyKey,
         });
 
         await expect(
-          privyClient.wallets().ethereum().signMessage(OWNERLESS_ETHEREUM_WALLET_ID, {
+          privyClient.wallets().ethereum().signMessage(OWNERLESS_ETHEREUM_WALLET.id, {
             message: 'Goodbye, world!',
             idempotency_key: idempotencyKey,
           }),
@@ -247,17 +240,17 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, { params: { hash } });
+          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET.id, { params: { hash } });
 
         expect(response.signature).toBeDefined();
         const signature = response.signature as Hex;
 
-        const verified = await verifyHash({ hash, signature, address: OWNERLESS_ETHEREUM_WALLET_ADDRESS });
+        const verified = await verifyHash({ hash, signature, address: OWNERLESS_ETHEREUM_WALLET.address });
         expect(verified).toBe(true);
       });
       it('should be able to sign a hash with an authorization context', async () => {
         const hash = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
-        const response = await privyClient.wallets().ethereum().signSecp256k1(P256_OWNED_ETHEREUM_WALLET_ID, {
+        const response = await privyClient.wallets().ethereum().signSecp256k1(P256_OWNED_ETHEREUM_WALLET.id, {
           params: { hash },
           authorization_context: p256AuthorizationContext,
         });
@@ -265,7 +258,7 @@ describe('PrivyEthereumService', () => {
         expect(response.signature).toBeDefined();
         const signature = response.signature as Hex;
 
-        const verified = await verifyHash({ hash, signature, address: P256_OWNED_ETHEREUM_WALLET_ADDRESS });
+        const verified = await verifyHash({ hash, signature, address: P256_OWNED_ETHEREUM_WALLET.address });
         expect(verified).toBe(true);
       });
       it('will succeed if the idempotency key is reused with the same body', async () => {
@@ -274,16 +267,16 @@ describe('PrivyEthereumService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, { params: { hash }, idempotency_key: idempotencyKey });
+          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET.id, { params: { hash }, idempotency_key: idempotencyKey });
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, { params: { hash }, idempotency_key: idempotencyKey });
+          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET.id, { params: { hash }, idempotency_key: idempotencyKey });
 
         expect(response.signature).toBeDefined();
         const signature = response.signature as Hex;
 
-        const verified = await verifyHash({ hash, signature, address: OWNERLESS_ETHEREUM_WALLET_ADDRESS });
+        const verified = await verifyHash({ hash, signature, address: OWNERLESS_ETHEREUM_WALLET.address });
         expect(verified).toBe(true);
       });
       it('will fail if the idempotency key is reused with a different body', async () => {
@@ -292,7 +285,7 @@ describe('PrivyEthereumService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, {
+          .signSecp256k1(OWNERLESS_ETHEREUM_WALLET.id, {
             params: { hash: hash1 },
             idempotency_key: idempotencyKey,
           });
@@ -302,7 +295,7 @@ describe('PrivyEthereumService', () => {
           privyClient
             .wallets()
             .ethereum()
-            .signSecp256k1(OWNERLESS_ETHEREUM_WALLET_ID, {
+            .signSecp256k1(OWNERLESS_ETHEREUM_WALLET.id, {
               params: { hash: hash2 },
               idempotency_key: idempotencyKey,
             }),
@@ -321,13 +314,13 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, { params: authorization7702 });
+          .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET.id, { params: authorization7702 });
 
         expect(response.authorization).toBeDefined();
         const signedAuthorization = response.authorization;
 
         const verified = await verifyAuthorization({
-          address: OWNERLESS_ETHEREUM_WALLET_ADDRESS,
+          address: OWNERLESS_ETHEREUM_WALLET.address,
           authorization: {
             chainId: signedAuthorization.chain_id as number,
             address: signedAuthorization.contract as Hex,
@@ -343,7 +336,7 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .sign7702Authorization(P256_OWNED_ETHEREUM_WALLET_ID, {
+          .sign7702Authorization(P256_OWNED_ETHEREUM_WALLET.id, {
             params: authorization7702,
             authorization_context: p256AuthorizationContext,
           });
@@ -352,7 +345,7 @@ describe('PrivyEthereumService', () => {
         const signedAuthorization = response.authorization;
 
         const verified = await verifyAuthorization({
-          address: P256_OWNED_ETHEREUM_WALLET_ADDRESS,
+          address: P256_OWNED_ETHEREUM_WALLET.address,
           authorization: {
             chainId: signedAuthorization.chain_id as number,
             address: signedAuthorization.contract as Hex,
@@ -366,14 +359,14 @@ describe('PrivyEthereumService', () => {
       });
       it('will succeed if the idempotency key is reused with the same body', async () => {
         const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().ethereum().sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, {
+        await privyClient.wallets().ethereum().sign7702Authorization(OWNERLESS_ETHEREUM_WALLET.id, {
           params: authorization7702,
           idempotency_key: idempotencyKey,
         });
         const response = await privyClient
           .wallets()
           .ethereum()
-          .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, {
+          .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET.id, {
             params: authorization7702,
             idempotency_key: idempotencyKey,
           });
@@ -382,7 +375,7 @@ describe('PrivyEthereumService', () => {
         const signedAuthorization = response.authorization;
 
         const verified = await verifyAuthorization({
-          address: OWNERLESS_ETHEREUM_WALLET_ADDRESS,
+          address: OWNERLESS_ETHEREUM_WALLET.address,
           authorization: {
             chainId: signedAuthorization.chain_id as number,
             address: signedAuthorization.contract as Hex,
@@ -396,7 +389,7 @@ describe('PrivyEthereumService', () => {
       });
       it('will fail if the idempotency key is reused with a different body', async () => {
         const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().ethereum().sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, {
+        await privyClient.wallets().ethereum().sign7702Authorization(OWNERLESS_ETHEREUM_WALLET.id, {
           params: authorization7702,
           idempotency_key: idempotencyKey,
         });
@@ -405,7 +398,7 @@ describe('PrivyEthereumService', () => {
           privyClient
             .wallets()
             .ethereum()
-            .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET_ID, {
+            .sign7702Authorization(OWNERLESS_ETHEREUM_WALLET.id, {
               params: { ...authorization7702, contract: '0xabcdef1234abcdef1234abcdef1234abcdef1234' },
               idempotency_key: idempotencyKey,
             }),
@@ -427,7 +420,7 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, { params: { transaction } });
+          .signTransaction(OWNERLESS_ETHEREUM_WALLET.id, { params: { transaction } });
 
         expect(response.signed_transaction).toBeDefined();
         expect(response.encoding).toBe('rlp');
@@ -437,7 +430,7 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signTransaction(P256_OWNED_ETHEREUM_WALLET_ID, {
+          .signTransaction(P256_OWNED_ETHEREUM_WALLET.id, {
             params: { transaction },
             authorization_context: p256AuthorizationContext,
           });
@@ -448,14 +441,14 @@ describe('PrivyEthereumService', () => {
       });
       it('will succeed if the idempotency key is reused with the same body', async () => {
         const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().ethereum().signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, {
+        await privyClient.wallets().ethereum().signTransaction(OWNERLESS_ETHEREUM_WALLET.id, {
           params: { transaction },
           idempotency_key: idempotencyKey,
         });
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, {
+          .signTransaction(OWNERLESS_ETHEREUM_WALLET.id, {
             params: { transaction },
             idempotency_key: idempotencyKey,
           });
@@ -466,7 +459,7 @@ describe('PrivyEthereumService', () => {
       });
       it('will fail if the idempotency key is reused with a different body', async () => {
         const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().ethereum().signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, {
+        await privyClient.wallets().ethereum().signTransaction(OWNERLESS_ETHEREUM_WALLET.id, {
           params: { transaction },
           idempotency_key: idempotencyKey,
         });
@@ -475,7 +468,7 @@ describe('PrivyEthereumService', () => {
           privyClient
             .wallets()
             .ethereum()
-            .signTransaction(OWNERLESS_ETHEREUM_WALLET_ID, {
+            .signTransaction(OWNERLESS_ETHEREUM_WALLET.id, {
               params: { transaction: { ...transaction, to: '0xabcdef1234abcdef1234abcdef1234abcdef1234' } },
               idempotency_key: idempotencyKey,
             }),
@@ -500,13 +493,13 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, { params: { typed_data: typedData } });
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET.id, { params: { typed_data: typedData } });
 
         expect(response.signature).toBeDefined();
         expect(response.encoding).toBe('hex');
         const verified = await verifyTypedData({
           signature: response.signature as Hex,
-          address: OWNERLESS_ETHEREUM_WALLET_ADDRESS,
+          address: OWNERLESS_ETHEREUM_WALLET.address,
           domain: typedData.domain,
           types: typedData.types,
           primaryType: typedData.primary_type,
@@ -518,7 +511,7 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signTypedData(P256_OWNED_ETHEREUM_WALLET_ID, {
+          .signTypedData(P256_OWNED_ETHEREUM_WALLET.id, {
             params: { typed_data: typedData },
             authorization_context: p256AuthorizationContext,
           });
@@ -527,7 +520,7 @@ describe('PrivyEthereumService', () => {
         expect(response.encoding).toBe('hex');
         const verified = await verifyTypedData({
           signature: response.signature as Hex,
-          address: P256_OWNED_ETHEREUM_WALLET_ADDRESS,
+          address: P256_OWNED_ETHEREUM_WALLET.address,
           domain: typedData.domain,
           types: typedData.types,
           primaryType: typedData.primary_type,
@@ -540,14 +533,14 @@ describe('PrivyEthereumService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, {
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET.id, {
             params: { typed_data: typedData },
             idempotency_key: idempotencyKey,
           });
         const response = await privyClient
           .wallets()
           .ethereum()
-          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, {
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET.id, {
             params: { typed_data: typedData },
             idempotency_key: idempotencyKey,
           });
@@ -556,7 +549,7 @@ describe('PrivyEthereumService', () => {
         expect(response.encoding).toBe('hex');
         const verified = await verifyTypedData({
           signature: response.signature as Hex,
-          address: OWNERLESS_ETHEREUM_WALLET_ADDRESS,
+          address: OWNERLESS_ETHEREUM_WALLET.address,
           domain: typedData.domain,
           types: typedData.types,
           primaryType: typedData.primary_type,
@@ -569,7 +562,7 @@ describe('PrivyEthereumService', () => {
         await privyClient
           .wallets()
           .ethereum()
-          .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, {
+          .signTypedData(OWNERLESS_ETHEREUM_WALLET.id, {
             params: { typed_data: typedData },
             idempotency_key: idempotencyKey,
           });
@@ -578,7 +571,7 @@ describe('PrivyEthereumService', () => {
           privyClient
             .wallets()
             .ethereum()
-            .signTypedData(OWNERLESS_ETHEREUM_WALLET_ID, {
+            .signTypedData(OWNERLESS_ETHEREUM_WALLET.id, {
               params: { typed_data: { ...typedData, message: { content: 'A different message' } } },
               idempotency_key: idempotencyKey,
             }),
@@ -598,7 +591,7 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .sendTransaction(OWNERLESS_ETHEREUM_WALLET_ID, {
+          .sendTransaction(OWNERLESS_ETHEREUM_WALLET.id, {
             caip2: 'eip155:11155111',
             params: { transaction },
           });
@@ -611,7 +604,7 @@ describe('PrivyEthereumService', () => {
         const response = await privyClient
           .wallets()
           .ethereum()
-          .sendTransaction(P256_OWNED_ETHEREUM_WALLET_ID, {
+          .sendTransaction(P256_OWNED_ETHEREUM_WALLET.id, {
             caip2: 'eip155:11155111',
             params: { transaction },
             authorization_context: p256AuthorizationContext,
@@ -623,7 +616,7 @@ describe('PrivyEthereumService', () => {
       });
       it('will succeed if the idempotency key is reused with the same body', async () => {
         const idempotencyKey = crypto.randomUUID();
-        const firstTx = await privyClient.wallets().ethereum().sendTransaction(OWNERLESS_ETHEREUM_WALLET_ID, {
+        const firstTx = await privyClient.wallets().ethereum().sendTransaction(OWNERLESS_ETHEREUM_WALLET.id, {
           caip2: 'eip155:11155111',
           params: { transaction },
           idempotency_key: idempotencyKey,
@@ -632,7 +625,7 @@ describe('PrivyEthereumService', () => {
         const secondTx = await privyClient
           .wallets()
           .ethereum()
-          .sendTransaction(OWNERLESS_ETHEREUM_WALLET_ID, {
+          .sendTransaction(OWNERLESS_ETHEREUM_WALLET.id, {
             caip2: 'eip155:11155111',
             params: { transaction },
             idempotency_key: idempotencyKey,

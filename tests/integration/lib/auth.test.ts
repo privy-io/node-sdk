@@ -8,19 +8,17 @@ import {
 import { randomInt, randomUUID } from 'node:crypto';
 import { User } from '@privy-io/node/resources';
 import { generatePrivyJWT } from '../../helpers/jwt-auth';
+import { TEST_APP } from '../test-config';
 
 describe('auth library', () => {
-  const TEST_APP_ID = process.env['TEST_APP_ID']!;
-  const TEST_API_URL = process.env['TEST_API_URL']!;
-
   let keypair: jose.GenerateKeyPairResult;
   let appJwks: PrivyAppJWKS;
   beforeAll(async () => {
     keypair = await jose.generateKeyPair('ES256');
     const publicKey = await jose.exportSPKI(keypair.publicKey);
     appJwks = createPrivyAppJWKS({
-      appId: TEST_APP_ID,
-      apiUrl: TEST_API_URL,
+      appId: TEST_APP.id,
+      apiUrl: TEST_APP.apiUrl,
       headers: {},
       verificationKeyOverride: publicKey,
     });
@@ -35,19 +33,19 @@ describe('auth library', () => {
         .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
         .setIssuer('privy.io')
         .setIssuedAt()
-        .setAudience(TEST_APP_ID)
+        .setAudience(TEST_APP.id)
         .setSubject(userId)
         .setExpirationTime('1h')
         .sign(keypair.privateKey);
 
       const verifiedAuthToken = await verifyAuthToken({
-        app_id: TEST_APP_ID,
+        app_id: TEST_APP.id,
         verification_key: keypair.publicKey,
         auth_token: authToken,
       });
 
       expect(verifiedAuthToken).toEqual({
-        app_id: TEST_APP_ID,
+        app_id: TEST_APP.id,
         issuer: 'privy.io',
         issued_at: expect.any(Number),
         expiration: expect.any(Number),
@@ -63,19 +61,19 @@ describe('auth library', () => {
         .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
         .setIssuer('privy.io')
         .setIssuedAt()
-        .setAudience(TEST_APP_ID)
+        .setAudience(TEST_APP.id)
         .setSubject(userId)
         .setExpirationTime('1h')
         .sign(keypair.privateKey);
 
       const verifiedAuthToken = await verifyAuthToken({
-        app_id: TEST_APP_ID,
+        app_id: TEST_APP.id,
         verification_key: appJwks,
         auth_token: authToken,
       });
 
       expect(verifiedAuthToken).toEqual({
-        app_id: TEST_APP_ID,
+        app_id: TEST_APP.id,
         issuer: 'privy.io',
         issued_at: expect.any(Number),
         expiration: expect.any(Number),
@@ -87,15 +85,15 @@ describe('auth library', () => {
       const authToken = await generatePrivyJWT();
 
       const verifiedAuthToken = await verifyAuthToken({
-        app_id: TEST_APP_ID,
+        app_id: TEST_APP.id,
         verification_key: jose.createRemoteJWKSet(
-          new URL(`${TEST_API_URL}/v1/apps/${TEST_APP_ID}/jwks.json`),
+          new URL(`${TEST_APP.apiUrl}/v1/apps/${TEST_APP.id}/jwks.json`),
         ),
         auth_token: authToken,
       });
 
       expect(verifiedAuthToken).toEqual({
-        app_id: TEST_APP_ID,
+        app_id: TEST_APP.id,
         issuer: 'privy.io',
         issued_at: expect.any(Number),
         expiration: expect.any(Number),
@@ -129,13 +127,13 @@ describe('auth library', () => {
         .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
         .setIssuer('privy.io')
         .setIssuedAt()
-        .setAudience(TEST_APP_ID)
+        .setAudience(TEST_APP.id)
         .setSubject(userId)
         .setExpirationTime('1h')
         .sign(keypair.privateKey);
 
       const user = await verifyIdentityToken({
-        app_id: TEST_APP_ID,
+        app_id: TEST_APP.id,
         verification_key: appJwks,
         identity_token: identityToken,
       });

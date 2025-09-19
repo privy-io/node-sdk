@@ -4,19 +4,15 @@ import { importPKCS8PrivateKey } from '@privy-io/node/lib/cryptography';
 import { InvalidAuthTokenError, PrivyClient } from '@privy-io/node';
 import { generateP256KeyPair } from '../../helpers/authorization-keys';
 import { generateTestJWT, generatePrivyJWT } from '../../helpers/jwt-auth';
+import { TEST_APP } from '../test-config';
 
 describe('PrivyUtils', () => {
-  // Read the required environment variables from .env
-  const TEST_APP_ID = process.env['TEST_APP_ID']!;
-  const TEST_APP_SECRET = process.env['TEST_APP_SECRET']!;
-  const TEST_API_URL = process.env['TEST_API_URL']!;
-
   let privyClient: PrivyClient;
   beforeEach(() => {
     privyClient = new PrivyClient({
-      appId: TEST_APP_ID,
-      appSecret: TEST_APP_SECRET,
-      apiUrl: TEST_API_URL,
+      appId: TEST_APP.id,
+      appSecret: TEST_APP.secret,
+      apiUrl: TEST_APP.apiUrl,
     });
   });
   describe('utils', () => {
@@ -31,14 +27,14 @@ describe('PrivyUtils', () => {
             url: '/api/v1/wallets',
             body: undefined,
             headers: {
-              'privy-app-id': TEST_APP_ID,
+              'privy-app-id': TEST_APP.id,
             },
           });
         expect(result).toBeDefined();
         expect(result.length).toBeGreaterThan(0);
         const resultString = new TextDecoder().decode(result);
         expect(resultString).toBe(
-          `{"headers":{"privy-app-id":"${TEST_APP_ID}"},"method":"POST","url":"/api/v1/wallets","version":1}`,
+          `{"headers":{"privy-app-id":"${TEST_APP.id}"},"method":"POST","url":"/api/v1/wallets","version":1}`,
         );
       });
       it('should be able to format a request with a body', async () => {
@@ -55,14 +51,14 @@ describe('PrivyUtils', () => {
               qux: true,
             },
             headers: {
-              'privy-app-id': TEST_APP_ID,
+              'privy-app-id': TEST_APP.id,
             },
           });
         expect(result).toBeDefined();
         expect(result.length).toBeGreaterThan(0);
         const resultString = new TextDecoder().decode(result);
         expect(resultString).toBe(
-          `{"body":{"baz":1,"foo":"bar","qux":true},"headers":{"privy-app-id":"${TEST_APP_ID}"},"method":"POST","url":"/api/v1/wallets","version":1}`,
+          `{"body":{"baz":1,"foo":"bar","qux":true},"headers":{"privy-app-id":"${TEST_APP.id}"},"method":"POST","url":"/api/v1/wallets","version":1}`,
         );
       });
       it('should format empty bodies as an empty string', async () => {
@@ -75,14 +71,14 @@ describe('PrivyUtils', () => {
             url: '/api/v1/wallets',
             body: {},
             headers: {
-              'privy-app-id': TEST_APP_ID,
+              'privy-app-id': TEST_APP.id,
             },
           });
         expect(result).toBeDefined();
         expect(result.length).toBeGreaterThan(0);
         const resultString = new TextDecoder().decode(result);
         expect(resultString).toBe(
-          `{"body":"","headers":{"privy-app-id":"${TEST_APP_ID}"},"method":"POST","url":"/api/v1/wallets","version":1}`,
+          `{"body":"","headers":{"privy-app-id":"${TEST_APP.id}"},"method":"POST","url":"/api/v1/wallets","version":1}`,
         );
       });
     });
@@ -96,7 +92,7 @@ describe('PrivyUtils', () => {
           url: '/api/v1/wallets',
           body: { foo: 'bar' },
           headers: {
-            'privy-app-id': TEST_APP_ID,
+            'privy-app-id': TEST_APP.id,
           },
         } as const;
         const formattedInput = privyClient
@@ -134,7 +130,7 @@ describe('PrivyUtils', () => {
           url: '/api/v1/wallets',
           body: { foo: 'bar' },
           headers: {
-            'privy-app-id': TEST_APP_ID,
+            'privy-app-id': TEST_APP.id,
           },
         } as const;
         const formattedInput = privyClient
@@ -168,12 +164,12 @@ describe('PrivyUtils', () => {
 
       const verifiedToken = await privyClient.utils().auth().verifyAuthToken(privyToken);
       expect(verifiedToken).toEqual({
-        appId: TEST_APP_ID,
+        app_id: TEST_APP.id,
         issuer: 'privy.io',
-        issuedAt: expect.any(Number),
+        issued_at: expect.any(Number),
         expiration: expect.any(Number),
-        sessionId: expect.any(String),
-        userId: expect.any(String),
+        session_id: expect.any(String),
+        user_id: expect.any(String),
       });
     });
   });

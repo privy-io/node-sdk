@@ -19,36 +19,29 @@ import {
   verifyTypedData,
 } from 'viem/utils';
 import { generateTestJWT } from '../helpers/jwt-auth';
+import {
+  TEST_APP,
+  P256_KEYPAIR,
+  OWNERLESS_ETHEREUM_WALLET,
+  P256_OWNED_ETHEREUM_WALLET,
+  USER_OWNED_ETHEREUM_WALLET,
+} from './test-config';
 
 describe('viem utils', () => {
-  // Read the required environment variables from .env
-  const TEST_APP_ID = process.env['TEST_APP_ID']!;
-  const TEST_APP_SECRET = process.env['TEST_APP_SECRET']!;
-  const TEST_API_URL = process.env['TEST_API_URL']!;
-
-  const P256_PRIVATE_KEY = process.env['P256_PRIVATE_KEY']!;
-
-  const OWNERLESS_ETHEREUM_WALLET_ID = process.env['OWNERLESS_ETHEREUM_WALLET_ID']!;
-  const OWNERLESS_ETHEREUM_WALLET_ADDRESS = process.env['OWNERLESS_ETHEREUM_WALLET_ADDRESS']! as Hex;
-  const P256_OWNED_ETHEREUM_WALLET_ID = process.env['P256_OWNED_ETHEREUM_WALLET_ID']!;
-  const P256_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['P256_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
-  const USER_OWNED_ETHEREUM_WALLET_ID = process.env['USER_OWNED_ETHEREUM_WALLET_ID']!;
-  const USER_OWNED_ETHEREUM_WALLET_ADDRESS = process.env['USER_OWNED_ETHEREUM_WALLET_ADDRESS']! as Hex;
-
   let privyClient: PrivyClient;
   beforeEach(() => {
     privyClient = new PrivyClient({
-      appId: TEST_APP_ID,
-      appSecret: TEST_APP_SECRET,
-      apiUrl: TEST_API_URL,
+      appId: TEST_APP.id,
+      appSecret: TEST_APP.secret,
+      apiUrl: TEST_APP.apiUrl,
     });
   });
 
   describe('createViemAccount', () => {
     describe.each([
-      { owner: null, walletId: OWNERLESS_ETHEREUM_WALLET_ID, address: OWNERLESS_ETHEREUM_WALLET_ADDRESS },
-      { owner: 'p256', walletId: P256_OWNED_ETHEREUM_WALLET_ID, address: P256_OWNED_ETHEREUM_WALLET_ADDRESS },
-      { owner: 'user', walletId: USER_OWNED_ETHEREUM_WALLET_ID, address: USER_OWNED_ETHEREUM_WALLET_ADDRESS },
+      { owner: null, walletId: OWNERLESS_ETHEREUM_WALLET.id, address: OWNERLESS_ETHEREUM_WALLET.address },
+      { owner: 'p256', walletId: P256_OWNED_ETHEREUM_WALLET.id, address: P256_OWNED_ETHEREUM_WALLET.address },
+      { owner: 'user', walletId: USER_OWNED_ETHEREUM_WALLET.id, address: USER_OWNED_ETHEREUM_WALLET.address },
     ] as const)('for a wallet with owner:$owner', ({ owner, walletId, address }) => {
       let account: LocalAccount;
       beforeEach(async () => {
@@ -56,7 +49,7 @@ describe('viem utils', () => {
           walletId,
           address,
           authorizationContext: {
-            ...(owner === 'p256' ? { authorization_private_keys: [P256_PRIVATE_KEY] } : {}),
+            ...(owner === 'p256' ? { authorization_private_keys: [P256_KEYPAIR.privateKey] } : {}),
             ...(owner === 'user' ? { user_jwts: [await generateTestJWT()] } : {}),
           },
         });

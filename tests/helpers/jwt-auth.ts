@@ -1,12 +1,11 @@
 import * as jose from 'jose';
-export async function generateTestJWT() {
-  const JWT_AUTH_SK = process.env['JWT_AUTH_SK']!;
-  const JWT_AUTH_SUBJECT = process.env['JWT_AUTH_SUBJECT']!;
+import { APP_TEST_ACCOUNT, JWT_AUTH, TEST_APP } from '../integration/test-config';
 
-  const key = await jose.importPKCS8(JWT_AUTH_SK, 'RS256');
+export async function generateTestJWT(subject: string = JWT_AUTH.subject) {
+  const key = await jose.importPKCS8(JWT_AUTH.sk, 'RS256');
   const jwt = await new jose.SignJWT({})
     .setProtectedHeader({ alg: 'RS256', typ: 'JWT' })
-    .setSubject(JWT_AUTH_SUBJECT)
+    .setSubject(subject)
     .setExpirationTime('1h')
     .sign(key);
 
@@ -14,21 +13,15 @@ export async function generateTestJWT() {
 }
 
 export async function generatePrivyJWT() {
-  const TEST_API_URL = process.env['TEST_API_URL']!;
-  const TEST_APP_ID = process.env['TEST_APP_ID']!;
-  const TEST_APP_SECRET = process.env['TEST_APP_SECRET']!;
-  const TEST_APP_TEST_ACCOUNT_EMAIL = process.env['TEST_APP_TEST_ACCOUNT_EMAIL']!;
-  const TEST_APP_TEST_ACCOUNT_OTP = process.env['TEST_APP_TEST_ACCOUNT_OTP']!;
-
-  const response = await fetch(`${TEST_API_URL.replace('api', 'auth')}/api/v1/passwordless/authenticate`, {
+  const response = await fetch(`${TEST_APP.apiUrl.replace('api', 'auth')}/api/v1/passwordless/authenticate`, {
     body: JSON.stringify({
-      email: TEST_APP_TEST_ACCOUNT_EMAIL,
-      code: TEST_APP_TEST_ACCOUNT_OTP,
+      email: APP_TEST_ACCOUNT.email,
+      code: APP_TEST_ACCOUNT.otp,
     }),
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'privy-app-id': TEST_APP_ID,
+      'privy-app-id': TEST_APP.id,
       // Fake the origin to avoid origin checks
       Origin: 'http://localhost:3000',
     },

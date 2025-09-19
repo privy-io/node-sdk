@@ -7,7 +7,19 @@ export { type PrivyTransactionsService } from './public-api/services/transaction
 export { type PrivyKeyQuorumsService } from './public-api/services/key-quorums';
 export { type PrivyUsersService } from './public-api/services/users';
 export { type PrivyUtils } from './public-api/services/utils';
-export { InvalidAuthTokenError } from './public-api/services/utils/auth';
+export {
+  InvalidAuthTokenError,
+  verifyAuthToken,
+  type VerifyAuthTokenResponse,
+  type VerifyAuthTokenInput,
+  verifyIdentityToken,
+  type VerifyIdentityTokenInput,
+} from './lib/auth';
+
+export { type User } from './resources/users';
+export { type Wallet } from './resources/wallets';
+export { type Policy } from './resources/policies';
+export { type KeyQuorum } from './resources/key-quorums';
 
 export {
   type AuthorizationContext,
@@ -16,6 +28,8 @@ export {
   generateAuthorizationSignature,
   generateAuthorizationSignatures,
 } from './lib/authorization';
+
+export { type EmbeddedWalletLinkedAccount, isEmbeddedWalletLinkedAccount } from './lib/user-utils';
 
 export { APIPromise } from './core/api-promise';
 export {

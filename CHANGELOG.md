@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.1.0 (2025-09-19)
+
+Full Changelog: [v0.1.0-alpha.3...v0.1.0](https://github.com/privy-io/node-sdk/compare/v0.1.0-alpha.3...v0.1.0)
+
+### Features
+
+* adds an isEmbeddedWalletLinkedAccount type predicate for better filters ([#48](https://github.com/privy-io/node-sdk/issues/48)) ([c435034](https://github.com/privy-io/node-sdk/commit/c4350342bec1543aa55126b592d19e0025dab088))
+* adds get({ idToken }) to the users() interface ([#50](https://github.com/privy-io/node-sdk/issues/50)) ([21cbd64](https://github.com/privy-io/node-sdk/commit/21cbd64013729a77bb08bcdc035ad80e350e0699))
+* **api:** api update ([99814e1](https://github.com/privy-io/node-sdk/commit/99814e1bf7d78099cb1f68f3ea2c169505d4b53d))
+* **api:** api update ([db6c469](https://github.com/privy-io/node-sdk/commit/db6c469b5e1a601b4066951e738684e3cbdd9c5e))
+* **api:** api update ([5160799](https://github.com/privy-io/node-sdk/commit/51607995a8ec849fe3115ee4b5cf44dbb25519e9))
+* **api:** api update ([b95b36f](https://github.com/privy-io/node-sdk/commit/b95b36f4e6cc954e3d68c94e79910d659199b9e8))
+* **api:** hides GET /v1/users/:id in Node/TS ([b61a468](https://github.com/privy-io/node-sdk/commit/b61a468c58cb01deba21fed338e3d84e32713b3c))
+
+
+### Bug Fixes
+
+* **api:** rpc responses no longer have an error case ([#51](https://github.com/privy-io/node-sdk/issues/51)) ([b81ddfa](https://github.com/privy-io/node-sdk/commit/b81ddfa27adb130490f9f0c4c24b4ebe99a19ba4))
+* **api:** updates the 'staging' environment url ([6e5d833](https://github.com/privy-io/node-sdk/commit/6e5d833162de5da6416803c79be0702262562d61))
+
 ## 0.1.0-alpha.3 (2025-09-10)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/privy-io/node-sdk/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)

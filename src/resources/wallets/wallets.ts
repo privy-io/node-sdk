@@ -297,7 +297,8 @@ export interface Wallet {
     | 'near'
     | 'spark'
     | 'ton'
-    | 'starknet';
+    | 'starknet'
+    | 'movement';
 
   /**
    * Unix timestamp of when the wallet was created in milliseconds.
@@ -653,7 +654,8 @@ export interface WalletCreateParams {
     | 'near'
     | 'spark'
     | 'ton'
-    | 'starknet';
+    | 'starknet'
+    | 'movement';
 
   /**
    * Body param: Additional signers for the wallet.
@@ -716,6 +718,8 @@ export interface WalletListParams extends CursorParams {
     | 'cosmos'
     | 'stellar'
     | 'sui'
+    | 'aptos'
+    | 'movement'
     | 'tron'
     | 'bitcoin-segwit'
     | 'near'
@@ -1536,7 +1540,8 @@ export namespace WalletCreateWalletsWithRecoveryParams {
       | 'near'
       | 'spark'
       | 'ton'
-      | 'starknet';
+      | 'starknet'
+      | 'movement';
 
     /**
      * List of policy IDs for policies that should be enforced on the wallet.

@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.0 (2025-09-23)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/privy-io/node-sdk/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** api update ([be1cfa2](https://github.com/privy-io/node-sdk/commit/be1cfa236a62f31efba227ff395b3865fb37aac6))
+
+
+### Bug Fixes
+
+* removes the prefix for private keys during import ([#54](https://github.com/privy-io/node-sdk/issues/54)) ([782093c](https://github.com/privy-io/node-sdk/commit/782093c421650ac0f15ddc0bfe31c9790563b52d))
+
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([fd5a84e](https://github.com/privy-io/node-sdk/commit/fd5a84ea8d0fcea2e7eccd5cba74444ead73c17f))
+
 ## 0.1.0 (2025-09-19)
 
 Full Changelog: [v0.1.0-alpha.3...v0.1.0](https://github.com/privy-io/node-sdk/compare/v0.1.0-alpha.3...v0.1.0)

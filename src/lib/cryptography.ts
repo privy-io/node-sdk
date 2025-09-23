@@ -11,8 +11,12 @@ import type { PrivKey } from '@noble/curves/utils';
  * @internal
  */
 export function importPKCS8PrivateKey(privateKey: string): PrivKey {
+  const strippedPrivateKey = privateKey
+    .replace(AUTHORIZATION_PRIVATE_KEY_PREFIX, '')
+    .replace(WALLET_API_PRIVATE_KEY_PREFIX, '');
+
   // We fall back to `Buffer` here as Uint8Array.fromBase64 is not widely supported yet
-  const pkcs8Bytes = Buffer.from(privateKey, 'base64');
+  const pkcs8Bytes = Buffer.from(strippedPrivateKey, 'base64');
   const privateKeyStart = pkcs8Bytes.indexOf(Buffer.from([0x04, 0x20]));
 
   if (privateKeyStart === -1) {
@@ -107,3 +111,7 @@ export async function setupHPKESender(): Promise<HPKESender> {
     },
   };
 }
+
+/** This prefix is no longer used, but we need to support existing keys */
+export const WALLET_API_PRIVATE_KEY_PREFIX = 'wallet-api:';
+export const AUTHORIZATION_PRIVATE_KEY_PREFIX = 'wallet-auth:';

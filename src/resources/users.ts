@@ -1134,7 +1134,8 @@ export namespace UserCreateParams {
       | 'near'
       | 'spark'
       | 'ton'
-      | 'starknet';
+      | 'starknet'
+      | 'movement';
 
     /**
      * Additional signers for the wallet.
@@ -1231,6 +1232,8 @@ export namespace UserPregenerateWalletsParams {
       | 'cosmos'
       | 'stellar'
       | 'sui'
+      | 'aptos'
+      | 'movement'
       | 'tron'
       | 'bitcoin-segwit'
       | 'near'

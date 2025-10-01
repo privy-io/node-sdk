@@ -28,7 +28,7 @@ export interface BalanceGetResponse {
 
 export namespace BalanceGetResponse {
   export interface Balance {
-    asset: 'usdc' | 'eth' | 'pol' | 'sol';
+    asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
 
     chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'zksync_era';
 
@@ -41,7 +41,7 @@ export namespace BalanceGetResponse {
 }
 
 export interface BalanceGetParams {
-  asset: 'usdc' | 'eth' | 'pol' | 'sol' | Array<'usdc' | 'eth' | 'pol' | 'sol'>;
+  asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol' | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'sol'>;
 
   chain:
     | 'ethereum'

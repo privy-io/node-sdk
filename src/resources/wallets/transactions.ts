@@ -42,7 +42,7 @@ export namespace TransactionGetResponse {
 
     privy_transaction_id: string;
 
-    status: 'broadcasted' | 'confirmed' | 'execution_reverted' | 'failed' | 'replaced';
+    status: 'broadcasted' | 'confirmed' | 'execution_reverted' | 'failed' | 'replaced' | 'finalized';
 
     transaction_hash: string | null;
 

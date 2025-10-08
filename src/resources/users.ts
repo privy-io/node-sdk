@@ -1305,7 +1305,8 @@ export interface UserUnlinkLinkedAccountParams {
     | 'custom_auth'
     | 'telegram'
     | 'cross_app'
-    | 'guest';
+    | 'guest'
+    | (string & {});
 
   provider?: string;
 }

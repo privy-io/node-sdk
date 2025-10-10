@@ -348,6 +348,7 @@ export interface User {
     | User.LinkedAccountSpotifyOAuth
     | User.LinkedAccountTiktokOAuth
     | User.LinkedAccountLineOAuth
+    | User.LinkedAccountTwitchOAuth
     | User.LinkedAccountTwitterOAuth
     | User.LinkedAccountSmartWallet
     | User.LinkedAccountPasskey
@@ -590,6 +591,20 @@ export namespace User {
     subject: string;
 
     type: 'line_oauth';
+
+    verified_at: number;
+  }
+
+  export interface LinkedAccountTwitchOAuth {
+    first_verified_at: number | null;
+
+    latest_verified_at: number | null;
+
+    subject: string;
+
+    type: 'twitch_oauth';
+
+    username: string | null;
 
     verified_at: number;
   }
@@ -938,6 +953,7 @@ export interface UserCreateParams {
     | UserCreateParams.LinkedAccountInstagramInput
     | UserCreateParams.LinkedAccountTiktokInput
     | UserCreateParams.LinkedAccountLineInput
+    | UserCreateParams.LinkedAccountTwitchInput
     | UserCreateParams.LinkedAccountAppleInput
     | UserCreateParams.LinkedAccountLinkedInInput
     | UserCreateParams.LinkedAccountFarcasterInput
@@ -1059,6 +1075,14 @@ export namespace UserCreateParams {
     name?: string;
 
     profile_picture_url?: string;
+  }
+
+  export interface LinkedAccountTwitchInput {
+    subject: string;
+
+    type: 'twitch_oauth';
+
+    username?: string;
   }
 
   export interface LinkedAccountAppleInput {
@@ -1302,6 +1326,7 @@ export interface UserUnlinkLinkedAccountParams {
     | 'instagram_oauth'
     | 'tiktok_oauth'
     | 'line_oauth'
+    | 'twitch_oauth'
     | 'custom_auth'
     | 'telegram'
     | 'cross_app'

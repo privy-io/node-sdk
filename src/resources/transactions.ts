@@ -28,7 +28,14 @@ export interface TransactionGetResponse {
 
   created_at: number;
 
-  status: 'broadcasted' | 'confirmed' | 'execution_reverted' | 'failed' | 'replaced' | 'finalized';
+  status:
+    | 'broadcasted'
+    | 'confirmed'
+    | 'execution_reverted'
+    | 'failed'
+    | 'replaced'
+    | 'finalized'
+    | 'pending';
 
   transaction_hash: string | null;
 

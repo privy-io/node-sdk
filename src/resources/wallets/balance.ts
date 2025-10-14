@@ -30,7 +30,21 @@ export namespace BalanceGetResponse {
   export interface Balance {
     asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
 
-    chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'zksync_era';
+    chain:
+      | 'ethereum'
+      | 'arbitrum'
+      | 'base'
+      | 'linea'
+      | 'optimism'
+      | 'polygon'
+      | 'solana'
+      | 'zksync_era'
+      | 'sepolia'
+      | 'arbitrum_sepolia'
+      | 'base_sepolia'
+      | 'linea_testnet'
+      | 'optimism_sepolia'
+      | 'polygon_amoy';
 
     display_values: { [key: string]: string };
 
@@ -52,7 +66,28 @@ export interface BalanceGetParams {
     | 'polygon'
     | 'solana'
     | 'zksync_era'
-    | Array<'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'zksync_era'>;
+    | 'sepolia'
+    | 'arbitrum_sepolia'
+    | 'base_sepolia'
+    | 'linea_testnet'
+    | 'optimism_sepolia'
+    | 'polygon_amoy'
+    | Array<
+        | 'ethereum'
+        | 'arbitrum'
+        | 'base'
+        | 'linea'
+        | 'optimism'
+        | 'polygon'
+        | 'solana'
+        | 'zksync_era'
+        | 'sepolia'
+        | 'arbitrum_sepolia'
+        | 'base_sepolia'
+        | 'linea_testnet'
+        | 'optimism_sepolia'
+        | 'polygon_amoy'
+      >;
 
   include_currency?: 'usd';
 }

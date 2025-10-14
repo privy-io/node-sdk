@@ -55,7 +55,21 @@ export namespace TransactionGetResponse {
     export interface UnionMember0 {
       asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
 
-      chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'zksync_era';
+      chain:
+        | 'ethereum'
+        | 'arbitrum'
+        | 'base'
+        | 'linea'
+        | 'optimism'
+        | 'polygon'
+        | 'solana'
+        | 'zksync_era'
+        | 'sepolia'
+        | 'arbitrum_sepolia'
+        | 'base_sepolia'
+        | 'linea_testnet'
+        | 'optimism_sepolia'
+        | 'polygon_amoy';
 
       display_values: { [key: string]: string };
 
@@ -77,7 +91,21 @@ export namespace TransactionGetResponse {
     export interface UnionMember1 {
       asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
 
-      chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'zksync_era';
+      chain:
+        | 'ethereum'
+        | 'arbitrum'
+        | 'base'
+        | 'linea'
+        | 'optimism'
+        | 'polygon'
+        | 'solana'
+        | 'zksync_era'
+        | 'sepolia'
+        | 'arbitrum_sepolia'
+        | 'base_sepolia'
+        | 'linea_testnet'
+        | 'optimism_sepolia'
+        | 'polygon_amoy';
 
       display_values: { [key: string]: string };
 

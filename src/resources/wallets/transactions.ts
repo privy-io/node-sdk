@@ -49,6 +49,7 @@ export namespace TransactionGetResponse {
       | 'failed'
       | 'replaced'
       | 'finalized'
+      | 'provider_error'
       | 'pending';
 
     transaction_hash: string | null;

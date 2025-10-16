@@ -7,6 +7,7 @@ import {
   JWTVerifyGetKey,
   JWTVerifyResult,
 } from 'jose';
+import { Webhook } from 'svix';
 import { PrivyAPIError } from '../core/error';
 import { parseUserFromIdentityTokenPayload } from './identity-token';
 import { User } from '../resources';
@@ -115,6 +116,24 @@ export type VerifyIdentityTokenInput = {
   verification_key: CryptoKey | JWTVerifyGetKey | string;
 };
 
+export type WebhookVerificationHeaderInput = {
+  /** The svix-id header value. */
+  id: string;
+  /** The svix-timestamp header value. */
+  timestamp: string;
+  /** The svix-signature header value. */
+  signature: string;
+};
+
+export type VerifyWebhookInput = {
+  /** The webhook payload to verify. */
+  payload: object;
+  /** The webhook headers containing svix verification data. */
+  headers: WebhookVerificationHeaderInput;
+  /** The webhook signing secret from your Privy dashboard. */
+  secret: string;
+};
+
 /**
  * Verifies an identity token, parsing it into a `User` object if it is valid.
  *
@@ -139,7 +158,30 @@ export async function verifyIdentityToken({
   return parseUserFromIdentityTokenPayload(verifiedToken.payload);
 }
 
+/**
+ * Verifies a webhook payload using the provided headers and secret.
+ *
+ * @returns The verified payload if it is valid.
+ * @throws If the webhook verification fails.
+ */
+export function verifyWebhook({ payload, headers, secret }: VerifyWebhookInput): unknown {
+  try {
+    const webhook = new Webhook(secret);
+    const stringPayload = JSON.stringify(payload);
+    const svixHeaders = {
+      'svix-id': headers.id,
+      'svix-timestamp': headers.timestamp,
+      'svix-signature': headers.signature,
+    };
+    return webhook.verify(stringPayload, svixHeaders);
+  } catch (error) {
+    throw new WebhookVerificationError('Webhook verification failed');
+  }
+}
+
 export class InvalidAuthTokenError extends PrivyAPIError {}
+
+export class WebhookVerificationError extends PrivyAPIError {}
 
 /** Used for asserting the values in the token payload are strings. */
 function throwIfNotString(value: unknown): string {

@@ -14,6 +14,10 @@ export {
   type VerifyAuthTokenInput,
   verifyIdentityToken,
   type VerifyIdentityTokenInput,
+  verifyWebhook,
+  type VerifyWebhookInput,
+  type WebhookVerificationHeaderInput,
+  WebhookVerificationError,
 } from './lib/auth';
 
 export { type User } from './resources/users';

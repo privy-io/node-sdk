@@ -1,4 +1,5 @@
 import { ClientOptions, PrivyAPI } from '../client';
+import { PrivyWebhooksService } from './services/webhooks';
 import { PrivyWalletsService } from './services/wallets';
 import { PrivyPoliciesService } from './services/policies';
 import { PrivyTransactionsService } from './services/transactions';
@@ -17,12 +18,14 @@ export interface PrivyClientOptions extends InternalClientOptions {
   apiUrl?: string;
   authorizationKeyCacheMaxCapacity?: number;
   jwtVerificationKey?: string;
+  webhookSigningSecret?: string;
 }
 
 const DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY = 1000;
 
 export class PrivyClient {
   private privyApiClient: PrivyAPI;
+  private webhooksService: PrivyWebhooksService;
   private walletsService: PrivyWalletsService;
   private policiesService: PrivyPoliciesService;
   private transactionsService: PrivyTransactionsService;
@@ -43,6 +46,7 @@ export class PrivyClient {
     authorizationKeyCacheMaxCapacity = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
     defaultHeaders,
     jwtVerificationKey,
+    webhookSigningSecret,
     ...clientOptions
   }: PrivyClientOptions) {
     this.privyApiClient = new PrivyAPI({
@@ -73,6 +77,11 @@ export class PrivyClient {
     this.keyQuorumsService = new PrivyKeyQuorumsService(this.privyApiClient, this);
     this.usersService = new PrivyUsersService(this.privyApiClient, appJwks);
     this.utilsService = new PrivyUtils(this.privyApiClient, this, appJwks);
+    this.webhooksService = new PrivyWebhooksService(webhookSigningSecret);
+  }
+
+  public webhooks(): PrivyWebhooksService {
+    return this.webhooksService;
   }
 
   public wallets(): PrivyWalletsService {

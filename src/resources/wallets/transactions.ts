@@ -42,7 +42,15 @@ export namespace TransactionGetResponse {
 
     privy_transaction_id: string;
 
-    status: 'broadcasted' | 'confirmed' | 'execution_reverted' | 'failed' | 'replaced';
+    status:
+      | 'broadcasted'
+      | 'confirmed'
+      | 'execution_reverted'
+      | 'failed'
+      | 'replaced'
+      | 'finalized'
+      | 'provider_error'
+      | 'pending';
 
     transaction_hash: string | null;
 
@@ -53,9 +61,23 @@ export namespace TransactionGetResponse {
 
   export namespace Transaction {
     export interface UnionMember0 {
-      asset: 'usdc' | 'eth' | 'pol' | 'sol';
+      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
 
-      chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'zksync_era';
+      chain:
+        | 'ethereum'
+        | 'arbitrum'
+        | 'base'
+        | 'linea'
+        | 'optimism'
+        | 'polygon'
+        | 'solana'
+        | 'zksync_era'
+        | 'sepolia'
+        | 'arbitrum_sepolia'
+        | 'base_sepolia'
+        | 'linea_testnet'
+        | 'optimism_sepolia'
+        | 'polygon_amoy';
 
       display_values: { [key: string]: string };
 
@@ -75,9 +97,23 @@ export namespace TransactionGetResponse {
     }
 
     export interface UnionMember1 {
-      asset: 'usdc' | 'eth' | 'pol' | 'sol';
+      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
 
-      chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'zksync_era';
+      chain:
+        | 'ethereum'
+        | 'arbitrum'
+        | 'base'
+        | 'linea'
+        | 'optimism'
+        | 'polygon'
+        | 'solana'
+        | 'zksync_era'
+        | 'sepolia'
+        | 'arbitrum_sepolia'
+        | 'base_sepolia'
+        | 'linea_testnet'
+        | 'optimism_sepolia'
+        | 'polygon_amoy';
 
       display_values: { [key: string]: string };
 
@@ -99,7 +135,7 @@ export namespace TransactionGetResponse {
 }
 
 export interface TransactionGetParams {
-  asset: 'usdc' | 'eth' | 'pol' | 'sol' | Array<'usdc' | 'eth' | 'pol' | 'sol'>;
+  asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol' | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'sol'>;
 
   chain: 'base';
 

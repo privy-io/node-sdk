@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.3.0 (2025-10-16)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/privy-io/node-sdk/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** api update ([f002c78](https://github.com/privy-io/node-sdk/commit/f002c78e8a1249dc1c6a69495e02a0efbfcdc905))
+* **api:** api update ([34caf43](https://github.com/privy-io/node-sdk/commit/34caf439505182b862b774e4b771dcaaa14d776f))
+* **api:** api update ([5d63231](https://github.com/privy-io/node-sdk/commit/5d632315153f3f648bd3f453f5348ca35f25401e))
+* **api:** api update ([284162a](https://github.com/privy-io/node-sdk/commit/284162a91efb679a5dcf030bc2e6a68a5fdb3693))
+* **api:** api update ([a7b5ec5](https://github.com/privy-io/node-sdk/commit/a7b5ec5f0f10ce1c44a40f70524268c6aea33886))
+* **api:** api update ([4055914](https://github.com/privy-io/node-sdk/commit/40559144da70a5afc0b9b997823cf05165e51bca))
+* **api:** api update ([b6f4d6e](https://github.com/privy-io/node-sdk/commit/b6f4d6eebd43c468be00579f7f8f870320daf314))
+* webhooks.verify util ([#56](https://github.com/privy-io/node-sdk/issues/56)) ([0f23e53](https://github.com/privy-io/node-sdk/commit/0f23e5366faca133b3655e965628791cad8b5305))
+
+
+### Performance Improvements
+
+* faster formatting ([b866fe0](https://github.com/privy-io/node-sdk/commit/b866fe05ec73a5485dcb332f8b2e815cc422b788))
+
+
+### Chores
+
+* **internal:** codegen related update ([35154ff](https://github.com/privy-io/node-sdk/commit/35154ffa8c784ae104047cfeab8221f6cb8c4155))
+* **internal:** fix incremental formatting in some cases ([b611502](https://github.com/privy-io/node-sdk/commit/b611502b9fad07ce41aa3eaf15a141b0bcbc353f))
+* **internal:** ignore .eslintcache ([6909614](https://github.com/privy-io/node-sdk/commit/6909614915d431bff125c77e111ca835e986459d))
+* **internal:** remove .eslintcache ([be2bf39](https://github.com/privy-io/node-sdk/commit/be2bf399ee42f898e975297895ccb40a55fa0137))
+* **internal:** remove deprecated `compilerOptions.baseUrl` from tsconfig.json ([5757b21](https://github.com/privy-io/node-sdk/commit/5757b21bfba758c87f3e1f9ee36e563600900fdf))
+* **internal:** use npm pack for build uploads ([828cc5f](https://github.com/privy-io/node-sdk/commit/828cc5fbad880e4f6a313f4040f9dc81176152eb))
+* **jsdoc:** fix [@link](https://github.com/link) annotations to refer only to parts of the package‘s public interface ([bb24639](https://github.com/privy-io/node-sdk/commit/bb246393ecae0eb043149ddb4cb07f25d4833e52))
+
 ## 0.2.0 (2025-09-23)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/privy-io/node-sdk/compare/v0.1.0...v0.2.0)

@@ -28,6 +28,7 @@ export { Transactions, type TransactionGetResponse } from './transactions';
 export {
   Users,
   type AuthenticatedUser,
+  type LinkedAccount,
   type User,
   type UserCreateParams,
   type UserListParams,
@@ -51,7 +52,10 @@ export {
 } from './users';
 export {
   Wallets,
+  type CurveSigningChainType,
+  type FirstClassChainType,
   type Wallet,
+  type WalletChainType,
   type WalletExportResponse,
   type WalletInitImportResponse,
   type WalletRawSignResponse,

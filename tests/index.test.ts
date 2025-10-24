@@ -3,7 +3,7 @@
 import { APIPromise } from '@privy-io/node/core/api-promise';
 
 import util from 'node:util';
-import PrivyAPI from '@privy-io/node';
+import Privy from '@privy-io/node';
 import { APIUserAbortError } from '@privy-io/node';
 const defaultFetch = fetch;
 
@@ -20,7 +20,7 @@ describe('instantiate client', () => {
   });
 
   describe('defaultHeaders', () => {
-    const client = new PrivyAPI({
+    const client = new Privy({
       baseURL: 'http://localhost:5000/',
       defaultHeaders: { 'X-My-Default-Header': '2' },
       appID: 'My App ID',
@@ -55,14 +55,14 @@ describe('instantiate client', () => {
 
     beforeEach(() => {
       process.env = { ...env };
-      process.env['PRIVY_API_LOG'] = undefined;
+      process.env['PRIVY_LOG'] = undefined;
     });
 
     afterEach(() => {
       process.env = env;
     });
 
-    const forceAPIResponseForClient = async (client: PrivyAPI) => {
+    const forceAPIResponseForClient = async (client: Privy) => {
       await new APIPromise(
         client,
         Promise.resolve({
@@ -88,7 +88,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new PrivyAPI({
+      const client = new Privy({
         logger: logger,
         logLevel: 'debug',
         appID: 'My App ID',
@@ -100,7 +100,7 @@ describe('instantiate client', () => {
     });
 
     test('default logLevel is warn', async () => {
-      const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret' });
+      const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret' });
       expect(client.logLevel).toBe('warn');
     });
 
@@ -113,7 +113,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new PrivyAPI({
+      const client = new Privy({
         logger: logger,
         logLevel: 'info',
         appID: 'My App ID',
@@ -133,8 +133,8 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['PRIVY_API_LOG'] = 'debug';
-      const client = new PrivyAPI({ logger: logger, appID: 'My App ID', appSecret: 'My App Secret' });
+      process.env['PRIVY_LOG'] = 'debug';
+      const client = new Privy({ logger: logger, appID: 'My App ID', appSecret: 'My App Secret' });
       expect(client.logLevel).toBe('debug');
 
       await forceAPIResponseForClient(client);
@@ -150,11 +150,11 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['PRIVY_API_LOG'] = 'not a log level';
-      const client = new PrivyAPI({ logger: logger, appID: 'My App ID', appSecret: 'My App Secret' });
+      process.env['PRIVY_LOG'] = 'not a log level';
+      const client = new Privy({ logger: logger, appID: 'My App ID', appSecret: 'My App Secret' });
       expect(client.logLevel).toBe('warn');
       expect(warnMock).toHaveBeenCalledWith(
-        'process.env[\'PRIVY_API_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
+        'process.env[\'PRIVY_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
       );
     });
 
@@ -167,8 +167,8 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['PRIVY_API_LOG'] = 'debug';
-      const client = new PrivyAPI({
+      process.env['PRIVY_LOG'] = 'debug';
+      const client = new Privy({
         logger: logger,
         logLevel: 'off',
         appID: 'My App ID',
@@ -188,8 +188,8 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['PRIVY_API_LOG'] = 'not a log level';
-      const client = new PrivyAPI({
+      process.env['PRIVY_LOG'] = 'not a log level';
+      const client = new Privy({
         logger: logger,
         logLevel: 'debug',
         appID: 'My App ID',
@@ -202,7 +202,7 @@ describe('instantiate client', () => {
 
   describe('defaultQuery', () => {
     test('with null query params given', () => {
-      const client = new PrivyAPI({
+      const client = new Privy({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo' },
         appID: 'My App ID',
@@ -212,7 +212,7 @@ describe('instantiate client', () => {
     });
 
     test('multiple default query params', () => {
-      const client = new PrivyAPI({
+      const client = new Privy({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo', hello: 'world' },
         appID: 'My App ID',
@@ -222,7 +222,7 @@ describe('instantiate client', () => {
     });
 
     test('overriding with `undefined`', () => {
-      const client = new PrivyAPI({
+      const client = new Privy({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { hello: 'world' },
         appID: 'My App ID',
@@ -233,7 +233,7 @@ describe('instantiate client', () => {
   });
 
   test('custom fetch', async () => {
-    const client = new PrivyAPI({
+    const client = new Privy({
       baseURL: 'http://localhost:5000/',
       appID: 'My App ID',
       appSecret: 'My App Secret',
@@ -252,7 +252,7 @@ describe('instantiate client', () => {
 
   test('explicit global fetch', async () => {
     // make sure the global fetch type is assignable to our Fetch type
-    const client = new PrivyAPI({
+    const client = new Privy({
       baseURL: 'http://localhost:5000/',
       appID: 'My App ID',
       appSecret: 'My App Secret',
@@ -261,7 +261,7 @@ describe('instantiate client', () => {
   });
 
   test('custom signal', async () => {
-    const client = new PrivyAPI({
+    const client = new Privy({
       baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
       appID: 'My App ID',
       appSecret: 'My App Secret',
@@ -294,7 +294,7 @@ describe('instantiate client', () => {
       return new Response(JSON.stringify({}), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new PrivyAPI({
+    const client = new Privy({
       baseURL: 'http://localhost:5000/',
       appID: 'My App ID',
       appSecret: 'My App Secret',
@@ -307,7 +307,7 @@ describe('instantiate client', () => {
 
   describe('baseUrl', () => {
     test('trailing slash', () => {
-      const client = new PrivyAPI({
+      const client = new Privy({
         baseURL: 'http://localhost:5000/custom/path/',
         appID: 'My App ID',
         appSecret: 'My App Secret',
@@ -316,7 +316,7 @@ describe('instantiate client', () => {
     });
 
     test('no trailing slash', () => {
-      const client = new PrivyAPI({
+      const client = new Privy({
         baseURL: 'http://localhost:5000/custom/path',
         appID: 'My App ID',
         appSecret: 'My App Secret',
@@ -325,11 +325,11 @@ describe('instantiate client', () => {
     });
 
     afterEach(() => {
-      process.env['PRIVY_API_BASE_URL'] = undefined;
+      process.env['PRIVY_BASE_URL'] = undefined;
     });
 
     test('explicit option', () => {
-      const client = new PrivyAPI({
+      const client = new Privy({
         baseURL: 'https://example.com',
         appID: 'My App ID',
         appSecret: 'My App Secret',
@@ -338,33 +338,33 @@ describe('instantiate client', () => {
     });
 
     test('env variable', () => {
-      process.env['PRIVY_API_BASE_URL'] = 'https://example.com/from_env';
-      const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret' });
+      process.env['PRIVY_BASE_URL'] = 'https://example.com/from_env';
+      const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret' });
       expect(client.baseURL).toEqual('https://example.com/from_env');
     });
 
     test('empty env variable', () => {
-      process.env['PRIVY_API_BASE_URL'] = ''; // empty
-      const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret' });
+      process.env['PRIVY_BASE_URL'] = ''; // empty
+      const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret' });
       expect(client.baseURL).toEqual('https://api.privy.io');
     });
 
     test('blank env variable', () => {
-      process.env['PRIVY_API_BASE_URL'] = '  '; // blank
-      const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret' });
+      process.env['PRIVY_BASE_URL'] = '  '; // blank
+      const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret' });
       expect(client.baseURL).toEqual('https://api.privy.io');
     });
 
     test('env variable with environment', () => {
-      process.env['PRIVY_API_BASE_URL'] = 'https://example.com/from_env';
+      process.env['PRIVY_BASE_URL'] = 'https://example.com/from_env';
 
       expect(
-        () => new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret', environment: 'production' }),
+        () => new Privy({ appID: 'My App ID', appSecret: 'My App Secret', environment: 'production' }),
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Ambiguous URL; The \`baseURL\` option (or PRIVY_API_BASE_URL env var) and the \`environment\` option are given. If you want to use the environment you must pass baseURL: null"`,
+        `"Ambiguous URL; The \`baseURL\` option (or PRIVY_BASE_URL env var) and the \`environment\` option are given. If you want to use the environment you must pass baseURL: null"`,
       );
 
-      const client = new PrivyAPI({
+      const client = new Privy({
         appID: 'My App ID',
         appSecret: 'My App Secret',
         baseURL: null,
@@ -374,14 +374,14 @@ describe('instantiate client', () => {
     });
 
     test('in request options', () => {
-      const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret' });
+      const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret' });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
         'http://localhost:5000/option/foo',
       );
     });
 
     test('in request options overridden by client options', () => {
-      const client = new PrivyAPI({
+      const client = new Privy({
         appID: 'My App ID',
         appSecret: 'My App Secret',
         baseURL: 'http://localhost:5000/client',
@@ -392,8 +392,8 @@ describe('instantiate client', () => {
     });
 
     test('in request options overridden by env variable', () => {
-      process.env['PRIVY_API_BASE_URL'] = 'http://localhost:5000/env';
-      const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret' });
+      process.env['PRIVY_BASE_URL'] = 'http://localhost:5000/env';
+      const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret' });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
         'http://localhost:5000/env/foo',
       );
@@ -401,17 +401,17 @@ describe('instantiate client', () => {
   });
 
   test('maxRetries option is correctly set', () => {
-    const client = new PrivyAPI({ maxRetries: 4, appID: 'My App ID', appSecret: 'My App Secret' });
+    const client = new Privy({ maxRetries: 4, appID: 'My App ID', appSecret: 'My App Secret' });
     expect(client.maxRetries).toEqual(4);
 
     // default
-    const client2 = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret' });
+    const client2 = new Privy({ appID: 'My App ID', appSecret: 'My App Secret' });
     expect(client2.maxRetries).toEqual(2);
   });
 
   describe('withOptions', () => {
     test('creates a new client with overridden options', async () => {
-      const client = new PrivyAPI({
+      const client = new Privy({
         baseURL: 'http://localhost:5000/',
         maxRetries: 3,
         appID: 'My App ID',
@@ -437,7 +437,7 @@ describe('instantiate client', () => {
     });
 
     test('inherits options from the parent client', async () => {
-      const client = new PrivyAPI({
+      const client = new Privy({
         baseURL: 'http://localhost:5000/',
         defaultHeaders: { 'X-Test-Header': 'test-value' },
         defaultQuery: { 'test-param': 'test-value' },
@@ -457,7 +457,7 @@ describe('instantiate client', () => {
     });
 
     test('respects runtime property changes when creating new client', () => {
-      const client = new PrivyAPI({
+      const client = new Privy({
         baseURL: 'http://localhost:5000/',
         timeout: 1000,
         appID: 'My App ID',
@@ -492,7 +492,7 @@ describe('instantiate client', () => {
     // set options via env var
     process.env['PRIVY_APP_ID'] = 'My App ID';
     process.env['PRIVY_APP_SECRET'] = 'My App Secret';
-    const client = new PrivyAPI();
+    const client = new Privy();
     expect(client.appID).toBe('My App ID');
     expect(client.appSecret).toBe('My App Secret');
   });
@@ -501,14 +501,14 @@ describe('instantiate client', () => {
     // set options via env var
     process.env['PRIVY_APP_ID'] = 'another My App ID';
     process.env['PRIVY_APP_SECRET'] = 'another My App Secret';
-    const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret' });
+    const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret' });
     expect(client.appID).toBe('My App ID');
     expect(client.appSecret).toBe('My App Secret');
   });
 });
 
 describe('request building', () => {
-  const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret' });
+  const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret' });
 
   describe('custom headers', () => {
     test('handles undefined', async () => {
@@ -527,7 +527,7 @@ describe('request building', () => {
 });
 
 describe('default encoder', () => {
-  const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret' });
+  const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret' });
 
   class Serializable {
     toJSON() {
@@ -612,7 +612,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new PrivyAPI({
+    const client = new Privy({
       appID: 'My App ID',
       appSecret: 'My App Secret',
       timeout: 10,
@@ -647,7 +647,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new PrivyAPI({
+    const client = new Privy({
       appID: 'My App ID',
       appSecret: 'My App Secret',
       fetch: testFetch,
@@ -676,7 +676,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new PrivyAPI({
+    const client = new Privy({
       appID: 'My App ID',
       appSecret: 'My App Secret',
       fetch: testFetch,
@@ -710,7 +710,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new PrivyAPI({
+    const client = new Privy({
       appID: 'My App ID',
       appSecret: 'My App Secret',
       fetch: testFetch,
@@ -744,7 +744,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new PrivyAPI({
+    const client = new Privy({
       appID: 'My App ID',
       appSecret: 'My App Secret',
       fetch: testFetch,
@@ -779,7 +779,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret', fetch: testFetch });
+    const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret', fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
@@ -809,7 +809,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new PrivyAPI({ appID: 'My App ID', appSecret: 'My App Secret', fetch: testFetch });
+    const client = new Privy({ appID: 'My App ID', appSecret: 'My App Secret', fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);

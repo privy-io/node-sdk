@@ -2,7 +2,10 @@
 
 Types:
 
+- <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRawSignResponse</a></code>
@@ -49,6 +52,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccount</a></code>
 - <code><a href="./src/resources/users.ts">User</a></code>
 
 Methods:

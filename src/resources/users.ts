@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
@@ -361,62 +362,38 @@ export namespace AuthenticatedUser {
   }
 }
 
-export interface User {
-  id: string;
+/**
+ * A linked account for the user.
+ */
+export type LinkedAccount =
+  | LinkedAccount.LinkedAccountEmail
+  | LinkedAccount.LinkedAccountPhone
+  | LinkedAccount.LinkedAccountCrossApp
+  | LinkedAccount.LinkedAccountAuthorizationKey
+  | LinkedAccount.LinkedAccountCustomJwt
+  | LinkedAccount.LinkedAccountAppleOAuth
+  | LinkedAccount.LinkedAccountDiscordOAuth
+  | LinkedAccount.LinkedAccountGitHubOAuth
+  | LinkedAccount.LinkedAccountGoogleOAuth
+  | LinkedAccount.LinkedAccountInstagramOAuth
+  | LinkedAccount.LinkedAccountLinkedInOAuth
+  | LinkedAccount.LinkedAccountSpotifyOAuth
+  | LinkedAccount.LinkedAccountTiktokOAuth
+  | LinkedAccount.LinkedAccountLineOAuth
+  | LinkedAccount.LinkedAccountTwitchOAuth
+  | LinkedAccount.LinkedAccountTwitterOAuth
+  | LinkedAccount.LinkedAccountSmartWallet
+  | LinkedAccount.LinkedAccountPasskey
+  | LinkedAccount.LinkedAccountFarcaster
+  | LinkedAccount.LinkedAccountTelegram
+  | LinkedAccount.LinkedAccountEthereum
+  | LinkedAccount.LinkedAccountEthereumEmbeddedWallet
+  | LinkedAccount.LinkedAccountSolana
+  | LinkedAccount.LinkedAccountSolanaEmbeddedWallet
+  | LinkedAccount.LinkedAccountBitcoinSegwitEmbeddedWallet
+  | LinkedAccount.LinkedAccountBitcoinTaprootEmbeddedWallet;
 
-  /**
-   * Unix timestamp of when the user was created in milliseconds.
-   */
-  created_at: number;
-
-  /**
-   * Indicates if the user has accepted the terms of service.
-   */
-  has_accepted_terms: boolean;
-
-  /**
-   * Indicates if the user is a guest account user.
-   */
-  is_guest: boolean;
-
-  linked_accounts: Array<
-    | User.LinkedAccountEmail
-    | User.LinkedAccountPhone
-    | User.LinkedAccountCrossApp
-    | User.LinkedAccountAuthorizationKey
-    | User.LinkedAccountCustomJwt
-    | User.LinkedAccountAppleOAuth
-    | User.LinkedAccountDiscordOAuth
-    | User.LinkedAccountGitHubOAuth
-    | User.LinkedAccountGoogleOAuth
-    | User.LinkedAccountInstagramOAuth
-    | User.LinkedAccountLinkedInOAuth
-    | User.LinkedAccountSpotifyOAuth
-    | User.LinkedAccountTiktokOAuth
-    | User.LinkedAccountLineOAuth
-    | User.LinkedAccountTwitchOAuth
-    | User.LinkedAccountTwitterOAuth
-    | User.LinkedAccountSmartWallet
-    | User.LinkedAccountPasskey
-    | User.LinkedAccountFarcaster
-    | User.LinkedAccountTelegram
-    | User.LinkedAccountEthereum
-    | User.LinkedAccountEthereumEmbeddedWallet
-    | User.LinkedAccountSolana
-    | User.LinkedAccountSolanaEmbeddedWallet
-    | User.LinkedAccountBitcoinSegwitEmbeddedWallet
-    | User.LinkedAccountBitcoinTaprootEmbeddedWallet
-  >;
-
-  mfa_methods: Array<User.PasskeyMfaMethod | User.SMSMfaMethod | User.TotpMfaMethod>;
-
-  /**
-   * Custom metadata associated with the user.
-   */
-  custom_metadata?: { [key: string]: string | number | boolean };
-}
-
-export namespace User {
+export namespace LinkedAccount {
   export interface LinkedAccountEmail {
     address: string;
 
@@ -966,7 +943,37 @@ export namespace User {
 
     wallet_index: number;
   }
+}
 
+export interface User {
+  id: string;
+
+  /**
+   * Unix timestamp of when the user was created in milliseconds.
+   */
+  created_at: number;
+
+  /**
+   * Indicates if the user has accepted the terms of service.
+   */
+  has_accepted_terms: boolean;
+
+  /**
+   * Indicates if the user is a guest account user.
+   */
+  is_guest: boolean;
+
+  linked_accounts: Array<LinkedAccount>;
+
+  mfa_methods: Array<User.PasskeyMfaMethod | User.SMSMfaMethod | User.TotpMfaMethod>;
+
+  /**
+   * Custom metadata associated with the user.
+   */
+  custom_metadata?: { [key: string]: string | number | boolean };
+}
+
+export namespace User {
   export interface PasskeyMfaMethod {
     type: 'passkey';
 
@@ -1193,20 +1200,7 @@ export namespace UserCreateParams {
     /**
      * The wallet chain types.
      */
-    chain_type:
-      | 'solana'
-      | 'ethereum'
-      | 'cosmos'
-      | 'stellar'
-      | 'sui'
-      | 'aptos'
-      | 'movement'
-      | 'tron'
-      | 'bitcoin-segwit'
-      | 'near'
-      | 'ton'
-      | 'starknet'
-      | 'spark';
+    chain_type: WalletsAPI.WalletChainType;
 
     /**
      * Additional signers for the wallet.
@@ -1386,6 +1380,7 @@ export interface UserUnlinkLinkedAccountParams {
 export declare namespace Users {
   export {
     type AuthenticatedUser as AuthenticatedUser,
+    type LinkedAccount as LinkedAccount,
     type User as User,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,

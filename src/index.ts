@@ -33,7 +33,7 @@ export { type EmbeddedWalletLinkedAccount, isEmbeddedWalletLinkedAccount } from 
 
 export { APIPromise } from './core/api-promise';
 export {
-  PrivyError,
+  PrivyAPIError,
   APIError,
   APIConnectionError,
   APIConnectionTimeoutError,

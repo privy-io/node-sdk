@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Privy } from '@privy-io/node/client';
+import { PrivyAPI } from '@privy-io/node/client';
 
-const client = new Privy({
+const client = new PrivyAPI({
   appID: 'My App ID',
   appSecret: 'My App Secret',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
@@ -56,7 +56,7 @@ describe('resource users', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.users.list({ cursor: 'x', limit: 100 }, { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(Privy.NotFoundError);
+    ).rejects.toThrow(PrivyAPI.NotFoundError);
   });
 
   // Prism tests are disabled

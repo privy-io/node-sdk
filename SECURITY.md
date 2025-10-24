@@ -16,9 +16,9 @@ before making any information public.
 ## Reporting Non-SDK Related Security Issues
 
 If you encounter security issues that are not directly related to SDKs but pertain to the services
-or products provided by Privy, please follow the respective company's security reporting guidelines.
+or products provided by Privy API, please follow the respective company's security reporting guidelines.
 
-### Privy Terms and Policies
+### Privy API Terms and Policies
 
 Please contact security@privy.io for any questions or concerns regarding the security of our services.
 

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { type Privy } from '../client';
+import { type PrivyAPI } from '../client';
 
 import { type PromiseOrValue } from '../internal/types';
 import { APIResponseProps, defaultParseResponse } from '../internal/parse';
@@ -11,13 +11,13 @@ import { APIResponseProps, defaultParseResponse } from '../internal/parse';
  */
 export class APIPromise<T> extends Promise<T> {
   private parsedPromise: Promise<T> | undefined;
-  #client: Privy;
+  #client: PrivyAPI;
 
   constructor(
-    client: Privy,
+    client: PrivyAPI,
     private responsePromise: Promise<APIResponseProps>,
     private parseResponse: (
-      client: Privy,
+      client: PrivyAPI,
       props: APIResponseProps,
     ) => PromiseOrValue<T> = defaultParseResponse,
   ) {

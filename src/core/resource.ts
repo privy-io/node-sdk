@@ -1,11 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { PrivyAPI } from '../client';
+import type { Privy } from '../client';
 
 export abstract class APIResource {
-  protected _client: PrivyAPI;
+  protected _client: Privy;
 
-  constructor(client: PrivyAPI) {
+  constructor(client: Privy) {
     this._client = client;
   }
 }

@@ -266,6 +266,26 @@ export class Wallets extends APIResource {
 
 export type WalletsCursor = Cursor<Wallet>;
 
+/**
+ * The wallet chain types that support curve-based signing.
+ */
+export type CurveSigningChainType =
+  | 'cosmos'
+  | 'stellar'
+  | 'sui'
+  | 'aptos'
+  | 'movement'
+  | 'tron'
+  | 'bitcoin-segwit'
+  | 'near'
+  | 'ton'
+  | 'starknet';
+
+/**
+ * The wallet chain types that offer first class support.
+ */
+export type FirstClassChainType = 'solana' | 'ethereum';
+
 export interface Wallet {
   /**
    * Unique ID of the wallet. This will be the primary identifier when using the
@@ -286,20 +306,7 @@ export interface Wallet {
   /**
    * The wallet chain types.
    */
-  chain_type:
-    | 'solana'
-    | 'ethereum'
-    | 'cosmos'
-    | 'stellar'
-    | 'sui'
-    | 'aptos'
-    | 'movement'
-    | 'tron'
-    | 'bitcoin-segwit'
-    | 'near'
-    | 'ton'
-    | 'starknet'
-    | 'spark';
+  chain_type: WalletChainType;
 
   /**
    * Unix timestamp of when the wallet was created in milliseconds.
@@ -342,6 +349,24 @@ export namespace Wallet {
     signer_id: string;
   }
 }
+
+/**
+ * The wallet chain types.
+ */
+export type WalletChainType =
+  | 'solana'
+  | 'ethereum'
+  | 'cosmos'
+  | 'stellar'
+  | 'sui'
+  | 'aptos'
+  | 'movement'
+  | 'tron'
+  | 'bitcoin-segwit'
+  | 'near'
+  | 'ton'
+  | 'starknet'
+  | 'spark';
 
 export interface WalletExportResponse {
   /**
@@ -644,20 +669,7 @@ export interface WalletCreateParams {
   /**
    * Body param: The wallet chain types.
    */
-  chain_type:
-    | 'solana'
-    | 'ethereum'
-    | 'cosmos'
-    | 'stellar'
-    | 'sui'
-    | 'aptos'
-    | 'movement'
-    | 'tron'
-    | 'bitcoin-segwit'
-    | 'near'
-    | 'ton'
-    | 'starknet'
-    | 'spark';
+  chain_type: WalletChainType;
 
   /**
    * Body param: Additional signers for the wallet.
@@ -1531,20 +1543,7 @@ export namespace WalletCreateWalletsWithRecoveryParams {
     /**
      * The wallet chain types.
      */
-    chain_type:
-      | 'solana'
-      | 'ethereum'
-      | 'cosmos'
-      | 'stellar'
-      | 'sui'
-      | 'aptos'
-      | 'movement'
-      | 'tron'
-      | 'bitcoin-segwit'
-      | 'near'
-      | 'ton'
-      | 'starknet'
-      | 'spark';
+    chain_type: WalletsAPI.WalletChainType;
 
     /**
      * List of policy IDs for policies that should be enforced on the wallet.
@@ -1559,7 +1558,10 @@ Wallets.Balance = Balance;
 
 export declare namespace Wallets {
   export {
+    type CurveSigningChainType as CurveSigningChainType,
+    type FirstClassChainType as FirstClassChainType,
     type Wallet as Wallet,
+    type WalletChainType as WalletChainType,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,

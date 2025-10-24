@@ -4,7 +4,10 @@ export { Balance, type BalanceGetResponse, type BalanceGetParams } from './balan
 export { Transactions, type TransactionGetResponse, type TransactionGetParams } from './transactions';
 export {
   Wallets,
+  type CurveSigningChainType,
+  type FirstClassChainType,
   type Wallet,
+  type WalletChainType,
   type WalletExportResponse,
   type WalletInitImportResponse,
   type WalletRawSignResponse,

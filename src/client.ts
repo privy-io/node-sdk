@@ -46,6 +46,7 @@ import {
 import { TransactionGetResponse, Transactions } from './resources/transactions';
 import {
   AuthenticatedUser,
+  LinkedAccount,
   User,
   UserCreateParams,
   UserGetByCustomAuthIDParams,
@@ -69,9 +70,12 @@ import {
   UsersCursor,
 } from './resources/users';
 import {
+  CurveSigningChainType,
+  FirstClassChainType,
   Wallet,
   WalletAuthenticateWithJwtParams,
   WalletAuthenticateWithJwtResponse,
+  WalletChainType,
   WalletCreateParams,
   WalletCreateWalletsWithRecoveryParams,
   WalletCreateWalletsWithRecoveryResponse,
@@ -133,7 +137,7 @@ export interface ClientOptions {
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['PRIVY_API_BASE_URL'].
+   * Defaults to process.env['PRIVY_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -187,7 +191,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['PRIVY_API_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['PRIVY_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -200,9 +204,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Privy API API.
+ * API Client for interfacing with the Privy API.
  */
-export class PrivyAPI {
+export class Privy {
   appID: string;
   appSecret: string;
 
@@ -219,12 +223,12 @@ export class PrivyAPI {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Privy API API.
+   * API Client for interfacing with the Privy API.
    *
    * @param {string | undefined} [opts.appID=process.env['PRIVY_APP_ID'] ?? undefined]
    * @param {string | undefined} [opts.appSecret=process.env['PRIVY_APP_SECRET'] ?? undefined]
    * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
-   * @param {string} [opts.baseURL=process.env['PRIVY_API_BASE_URL'] ?? https://api.privy.io] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['PRIVY_BASE_URL'] ?? https://api.privy.io] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -233,19 +237,19 @@ export class PrivyAPI {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('PRIVY_API_BASE_URL'),
+    baseURL = readEnv('PRIVY_BASE_URL'),
     appID = readEnv('PRIVY_APP_ID'),
     appSecret = readEnv('PRIVY_APP_SECRET'),
     ...opts
   }: ClientOptions = {}) {
     if (appID === undefined) {
-      throw new Errors.PrivyAPIError(
-        "The PRIVY_APP_ID environment variable is missing or empty; either provide it, or instantiate the PrivyAPI client with an appID option, like new PrivyAPI({ appID: 'My App ID' }).",
+      throw new Errors.PrivyError(
+        "The PRIVY_APP_ID environment variable is missing or empty; either provide it, or instantiate the Privy client with an appID option, like new Privy({ appID: 'My App ID' }).",
       );
     }
     if (appSecret === undefined) {
-      throw new Errors.PrivyAPIError(
-        "The PRIVY_APP_SECRET environment variable is missing or empty; either provide it, or instantiate the PrivyAPI client with an appSecret option, like new PrivyAPI({ appSecret: 'My App Secret' }).",
+      throw new Errors.PrivyError(
+        "The PRIVY_APP_SECRET environment variable is missing or empty; either provide it, or instantiate the Privy client with an appSecret option, like new Privy({ appSecret: 'My App Secret' }).",
       );
     }
 
@@ -258,26 +262,26 @@ export class PrivyAPI {
     };
 
     if (isRunningInBrowser()) {
-      throw new Errors.PrivyAPIError(
+      throw new Errors.PrivyError(
         "It looks like you're running in a browser-like environment, which is disabled to protect your secret API credentials from attackers. If you have a strong business need for client-side use of this API, please open a GitHub issue with your use-case and security mitigations.",
       );
     }
 
     if (baseURL && opts.environment) {
-      throw new Errors.PrivyAPIError(
-        'Ambiguous URL; The `baseURL` option (or PRIVY_API_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
+      throw new Errors.PrivyError(
+        'Ambiguous URL; The `baseURL` option (or PRIVY_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
       );
     }
 
     this.baseURL = options.baseURL || environments[options.environment || 'production'];
-    this.timeout = options.timeout ?? PrivyAPI.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? Privy.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('PRIVY_API_LOG'), "process.env['PRIVY_API_LOG']", this) ??
+      parseLogLevel(readEnv('PRIVY_LOG'), "process.env['PRIVY_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -612,7 +616,7 @@ export class PrivyAPI {
     options: FinalRequestOptions,
   ): Pagination.PagePromise<PageClass, Item> {
     const request = this.makeRequest(options, null, undefined);
-    return new Pagination.PagePromise<PageClass, Item>(this as any as PrivyAPI, request, Page);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as Privy, request, Page);
   }
 
   async fetchWithTimeout(
@@ -829,10 +833,10 @@ export class PrivyAPI {
     }
   }
 
-  static PrivyAPI = this;
+  static Privy = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static PrivyAPIError = Errors.PrivyAPIError;
+  static PrivyError = Errors.PrivyError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -855,13 +859,13 @@ export class PrivyAPI {
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
 }
 
-PrivyAPI.Wallets = Wallets;
-PrivyAPI.Users = Users;
-PrivyAPI.Policies = Policies;
-PrivyAPI.Transactions = Transactions;
-PrivyAPI.KeyQuorums = KeyQuorums;
+Privy.Wallets = Wallets;
+Privy.Users = Users;
+Privy.Policies = Policies;
+Privy.Transactions = Transactions;
+Privy.KeyQuorums = KeyQuorums;
 
-export declare namespace PrivyAPI {
+export declare namespace Privy {
   export type RequestOptions = Opts.RequestOptions;
 
   export import Cursor = Pagination.Cursor;
@@ -869,7 +873,10 @@ export declare namespace PrivyAPI {
 
   export {
     Wallets as Wallets,
+    type CurveSigningChainType as CurveSigningChainType,
+    type FirstClassChainType as FirstClassChainType,
     type Wallet as Wallet,
+    type WalletChainType as WalletChainType,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
@@ -892,6 +899,7 @@ export declare namespace PrivyAPI {
   export {
     Users as Users,
     type AuthenticatedUser as AuthenticatedUser,
+    type LinkedAccount as LinkedAccount,
     type User as User,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,

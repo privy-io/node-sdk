@@ -48,6 +48,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
 - <code><a href="./src/resources/users.ts">User</a></code>
 
 Methods:

@@ -284,7 +284,7 @@ export interface Wallet {
   address: string;
 
   /**
-   * Chain type of the wallet
+   * The wallet chain types.
    */
   chain_type:
     | 'solana'
@@ -292,13 +292,14 @@ export interface Wallet {
     | 'cosmos'
     | 'stellar'
     | 'sui'
+    | 'aptos'
+    | 'movement'
     | 'tron'
     | 'bitcoin-segwit'
     | 'near'
-    | 'spark'
     | 'ton'
     | 'starknet'
-    | 'movement';
+    | 'spark';
 
   /**
    * Unix timestamp of when the wallet was created in milliseconds.
@@ -641,7 +642,7 @@ export interface WalletCreateWalletsWithRecoveryResponse {
 
 export interface WalletCreateParams {
   /**
-   * Body param: Chain type of the wallet
+   * Body param: The wallet chain types.
    */
   chain_type:
     | 'solana'
@@ -649,13 +650,14 @@ export interface WalletCreateParams {
     | 'cosmos'
     | 'stellar'
     | 'sui'
+    | 'aptos'
+    | 'movement'
     | 'tron'
     | 'bitcoin-segwit'
     | 'near'
-    | 'spark'
     | 'ton'
     | 'starknet'
-    | 'movement';
+    | 'spark';
 
   /**
    * Body param: Additional signers for the wallet.
@@ -1527,7 +1529,7 @@ export namespace WalletCreateWalletsWithRecoveryParams {
 
   export interface Wallet {
     /**
-     * Chain type of the wallet
+     * The wallet chain types.
      */
     chain_type:
       | 'solana'
@@ -1535,13 +1537,14 @@ export namespace WalletCreateWalletsWithRecoveryParams {
       | 'cosmos'
       | 'stellar'
       | 'sui'
+      | 'aptos'
+      | 'movement'
       | 'tron'
       | 'bitcoin-segwit'
       | 'near'
-      | 'spark'
       | 'ton'
       | 'starknet'
-      | 'movement';
+      | 'spark';
 
     /**
      * List of policy IDs for policies that should be enforced on the wallet.

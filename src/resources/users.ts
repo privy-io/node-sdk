@@ -315,6 +315,52 @@ export class Users extends APIResource {
 
 export type UsersCursor = Cursor<User>;
 
+/**
+ * The authenticated user.
+ */
+export interface AuthenticatedUser {
+  token: string | null;
+
+  privy_access_token: string | null;
+
+  refresh_token: string | null;
+
+  /**
+   * Instructs the client on how to handle tokens received
+   */
+  session_update_action: 'set' | 'ignore' | 'clear';
+
+  user: User;
+
+  identity_token?: string;
+
+  is_new_user?: boolean;
+
+  /**
+   * OAuth tokens associated with the user.
+   */
+  oauth_tokens?: AuthenticatedUser.OAuthTokens;
+}
+
+export namespace AuthenticatedUser {
+  /**
+   * OAuth tokens associated with the user.
+   */
+  export interface OAuthTokens {
+    access_token: string;
+
+    provider: string;
+
+    access_token_expires_in_seconds?: number;
+
+    refresh_token?: string;
+
+    refresh_token_expires_in_seconds?: number;
+
+    scopes?: Array<string>;
+  }
+}
+
 export interface User {
   id: string;
 
@@ -1145,7 +1191,7 @@ export namespace UserCreateParams {
 
   export interface Wallet {
     /**
-     * Chain type of the wallet
+     * The wallet chain types.
      */
     chain_type:
       | 'solana'
@@ -1153,13 +1199,14 @@ export namespace UserCreateParams {
       | 'cosmos'
       | 'stellar'
       | 'sui'
+      | 'aptos'
+      | 'movement'
       | 'tron'
       | 'bitcoin-segwit'
       | 'near'
-      | 'spark'
       | 'ton'
       | 'starknet'
-      | 'movement';
+      | 'spark';
 
     /**
      * Additional signers for the wallet.
@@ -1338,6 +1385,7 @@ export interface UserUnlinkLinkedAccountParams {
 
 export declare namespace Users {
   export {
+    type AuthenticatedUser as AuthenticatedUser,
     type User as User,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,

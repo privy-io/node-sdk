@@ -14,7 +14,7 @@ export class Policies extends APIResource {
    * ```ts
    * const policy = await client.policies.create({
    *   chain_type: 'ethereum',
-   *   name: 'name',
+   *   name: 'x',
    *   rules: [
    *     {
    *       action: 'ALLOW',
@@ -27,7 +27,7 @@ export class Policies extends APIResource {
    *         },
    *       ],
    *       method: 'eth_sendTransaction',
-   *       name: 'name',
+   *       name: 'x',
    *     },
    *   ],
    *   version: '1.0',
@@ -64,7 +64,7 @@ export class Policies extends APIResource {
    *       },
    *     ],
    *     method: 'eth_sendTransaction',
-   *     name: 'name',
+   *     name: 'x',
    *   },
    * );
    * ```
@@ -193,7 +193,7 @@ export class Policies extends APIResource {
    *       },
    *     ],
    *     method: 'eth_sendTransaction',
-   *     name: 'name',
+   *     name: 'x',
    *   },
    * );
    * ```

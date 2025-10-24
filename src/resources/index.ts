@@ -27,6 +27,7 @@ export {
 export { Transactions, type TransactionGetResponse } from './transactions';
 export {
   Users,
+  type AuthenticatedUser,
   type User,
   type UserCreateParams,
   type UserListParams,

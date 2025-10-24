@@ -45,6 +45,7 @@ import {
 } from './resources/policies';
 import { TransactionGetResponse, Transactions } from './resources/transactions';
 import {
+  AuthenticatedUser,
   User,
   UserCreateParams,
   UserGetByCustomAuthIDParams,
@@ -890,6 +891,7 @@ export declare namespace PrivyAPI {
 
   export {
     Users as Users,
+    type AuthenticatedUser as AuthenticatedUser,
     type User as User,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,

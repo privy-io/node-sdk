@@ -54,6 +54,15 @@ Types:
 - <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccount</a></code>
 - <code><a href="./src/resources/users.ts">User</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountEthereumEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountSolanaEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountBitcoinSegwitEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountBitcoinTaprootEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountCurveSigningEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountEmbeddedWalletWithID</a></code>
+- <code><a href="./src/resources/users.ts">SmartWalletType</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountSmartWallet</a></code>
 
 Methods:
 

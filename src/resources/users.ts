@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as UsersAPI from './users';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
@@ -382,16 +383,17 @@ export type LinkedAccount =
   | LinkedAccount.LinkedAccountLineOAuth
   | LinkedAccount.LinkedAccountTwitchOAuth
   | LinkedAccount.LinkedAccountTwitterOAuth
-  | LinkedAccount.LinkedAccountSmartWallet
+  | LinkedAccountSmartWallet
   | LinkedAccount.LinkedAccountPasskey
   | LinkedAccount.LinkedAccountFarcaster
   | LinkedAccount.LinkedAccountTelegram
   | LinkedAccount.LinkedAccountEthereum
-  | LinkedAccount.LinkedAccountEthereumEmbeddedWallet
+  | LinkedAccountEthereumEmbeddedWallet
   | LinkedAccount.LinkedAccountSolana
-  | LinkedAccount.LinkedAccountSolanaEmbeddedWallet
-  | LinkedAccount.LinkedAccountBitcoinSegwitEmbeddedWallet
-  | LinkedAccount.LinkedAccountBitcoinTaprootEmbeddedWallet;
+  | LinkedAccountSolanaEmbeddedWallet
+  | LinkedAccountBitcoinSegwitEmbeddedWallet
+  | LinkedAccountBitcoinTaprootEmbeddedWallet
+  | LinkedAccountCurveSigningEmbeddedWallet;
 
 export namespace LinkedAccount {
   export interface LinkedAccountEmail {
@@ -650,28 +652,6 @@ export namespace LinkedAccount {
     verified_at: number;
   }
 
-  export interface LinkedAccountSmartWallet {
-    address: string;
-
-    first_verified_at: number | null;
-
-    latest_verified_at: number | null;
-
-    smart_wallet_type:
-      | 'safe'
-      | 'kernel'
-      | 'biconomy'
-      | 'light_account'
-      | 'coinbase_smart_wallet'
-      | 'thirdweb';
-
-    type: 'smart_wallet';
-
-    verified_at: number;
-
-    smart_wallet_version?: string;
-  }
-
   export interface LinkedAccountPasskey {
     credential_id: string;
 
@@ -766,44 +746,6 @@ export namespace LinkedAccount {
     wallet_client_type?: string;
   }
 
-  export interface LinkedAccountEthereumEmbeddedWallet {
-    id: string | null;
-
-    address: string;
-
-    chain_id: string;
-
-    chain_type: 'ethereum';
-
-    connector_type: 'embedded';
-
-    delegated: boolean;
-
-    first_verified_at: number | null;
-
-    imported: boolean;
-
-    latest_verified_at: number | null;
-
-    recovery_method:
-      | 'privy'
-      | 'user-passcode'
-      | 'google-drive'
-      | 'icloud'
-      | 'recovery-encryption-key'
-      | 'privy-v2';
-
-    type: 'wallet';
-
-    verified_at: number;
-
-    wallet_client: 'privy';
-
-    wallet_client_type: 'privy';
-
-    wallet_index: number;
-  }
-
   export interface LinkedAccountSolana {
     address: string;
 
@@ -822,126 +764,6 @@ export namespace LinkedAccount {
     connector_type?: string;
 
     wallet_client_type?: string;
-  }
-
-  export interface LinkedAccountSolanaEmbeddedWallet {
-    id: string | null;
-
-    address: string;
-
-    chain_id: string;
-
-    chain_type: 'solana';
-
-    connector_type: 'embedded';
-
-    delegated: boolean;
-
-    first_verified_at: number | null;
-
-    imported: boolean;
-
-    latest_verified_at: number | null;
-
-    public_key: string;
-
-    recovery_method:
-      | 'privy'
-      | 'user-passcode'
-      | 'google-drive'
-      | 'icloud'
-      | 'recovery-encryption-key'
-      | 'privy-v2';
-
-    type: 'wallet';
-
-    verified_at: number;
-
-    wallet_client: 'privy';
-
-    wallet_client_type: 'privy';
-
-    wallet_index: number;
-  }
-
-  export interface LinkedAccountBitcoinSegwitEmbeddedWallet {
-    id: string | null;
-
-    address: string;
-
-    chain_id: string;
-
-    chain_type: 'bitcoin-segwit';
-
-    connector_type: 'embedded';
-
-    delegated: boolean;
-
-    first_verified_at: number | null;
-
-    imported: boolean;
-
-    latest_verified_at: number | null;
-
-    public_key: string;
-
-    recovery_method:
-      | 'privy'
-      | 'user-passcode'
-      | 'google-drive'
-      | 'icloud'
-      | 'recovery-encryption-key'
-      | 'privy-v2';
-
-    type: 'wallet';
-
-    verified_at: number;
-
-    wallet_client: 'privy';
-
-    wallet_client_type: 'privy';
-
-    wallet_index: number;
-  }
-
-  export interface LinkedAccountBitcoinTaprootEmbeddedWallet {
-    id: string | null;
-
-    address: string;
-
-    chain_id: string;
-
-    chain_type: 'bitcoin-taproot';
-
-    connector_type: 'embedded';
-
-    delegated: boolean;
-
-    first_verified_at: number | null;
-
-    imported: boolean;
-
-    latest_verified_at: number | null;
-
-    public_key: string;
-
-    recovery_method:
-      | 'privy'
-      | 'user-passcode'
-      | 'google-drive'
-      | 'icloud'
-      | 'recovery-encryption-key'
-      | 'privy-v2';
-
-    type: 'wallet';
-
-    verified_at: number;
-
-    wallet_client: 'privy';
-
-    wallet_client_type: 'privy';
-
-    wallet_index: number;
   }
 }
 
@@ -991,6 +813,282 @@ export namespace User {
 
     verified_at: number;
   }
+}
+
+export interface LinkedAccountEthereumEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  chain_type: 'ethereum';
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  recovery_method:
+    | 'privy'
+    | 'user-passcode'
+    | 'google-drive'
+    | 'icloud'
+    | 'recovery-encryption-key'
+    | 'privy-v2';
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+export interface LinkedAccountSolanaEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  chain_type: 'solana';
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  public_key: string;
+
+  recovery_method:
+    | 'privy'
+    | 'user-passcode'
+    | 'google-drive'
+    | 'icloud'
+    | 'recovery-encryption-key'
+    | 'privy-v2';
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+export interface LinkedAccountBitcoinSegwitEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  chain_type: 'bitcoin-segwit';
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  public_key: string;
+
+  recovery_method:
+    | 'privy'
+    | 'user-passcode'
+    | 'google-drive'
+    | 'icloud'
+    | 'recovery-encryption-key'
+    | 'privy-v2';
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+export interface LinkedAccountBitcoinTaprootEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  chain_type: 'bitcoin-taproot';
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  public_key: string;
+
+  recovery_method:
+    | 'privy'
+    | 'user-passcode'
+    | 'google-drive'
+    | 'icloud'
+    | 'recovery-encryption-key'
+    | 'privy-v2';
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+export interface LinkedAccountCurveSigningEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  /**
+   * The wallet chain types that support curve-based signing.
+   */
+  chain_type: WalletsAPI.CurveSigningChainType;
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  public_key: string;
+
+  recovery_method:
+    | 'privy'
+    | 'user-passcode'
+    | 'google-drive'
+    | 'icloud'
+    | 'recovery-encryption-key'
+    | 'privy-v2';
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+export type LinkedAccountEmbeddedWallet =
+  | LinkedAccountEthereumEmbeddedWallet
+  | LinkedAccountSolanaEmbeddedWallet
+  | LinkedAccountBitcoinSegwitEmbeddedWallet
+  | LinkedAccountBitcoinTaprootEmbeddedWallet
+  | LinkedAccountCurveSigningEmbeddedWallet;
+
+export type LinkedAccountEmbeddedWalletWithID =
+  | LinkedAccountEmbeddedWalletWithID.LinkedAccountEthereumEmbeddedWallet
+  | LinkedAccountEmbeddedWalletWithID.LinkedAccountSolanaEmbeddedWallet
+  | LinkedAccountEmbeddedWalletWithID.LinkedAccountBitcoinSegwitEmbeddedWallet
+  | LinkedAccountEmbeddedWalletWithID.LinkedAccountBitcoinTaprootEmbeddedWallet
+  | LinkedAccountEmbeddedWalletWithID.LinkedAccountCurveSigningEmbeddedWallet;
+
+export namespace LinkedAccountEmbeddedWalletWithID {
+  export interface LinkedAccountEthereumEmbeddedWallet
+    extends Omit<UsersAPI.LinkedAccountEthereumEmbeddedWallet, 'id' | 'recovery_method'> {
+    id: string;
+
+    recovery_method: 'privy-v2';
+  }
+
+  export interface LinkedAccountSolanaEmbeddedWallet
+    extends Omit<UsersAPI.LinkedAccountSolanaEmbeddedWallet, 'id' | 'recovery_method'> {
+    id: string;
+
+    recovery_method: 'privy-v2';
+  }
+
+  export interface LinkedAccountBitcoinSegwitEmbeddedWallet
+    extends Omit<UsersAPI.LinkedAccountBitcoinSegwitEmbeddedWallet, 'id' | 'recovery_method'> {
+    id: string;
+
+    recovery_method: 'privy-v2';
+  }
+
+  export interface LinkedAccountBitcoinTaprootEmbeddedWallet
+    extends Omit<UsersAPI.LinkedAccountBitcoinTaprootEmbeddedWallet, 'id' | 'recovery_method'> {
+    id: string;
+
+    recovery_method: 'privy-v2';
+  }
+
+  export interface LinkedAccountCurveSigningEmbeddedWallet
+    extends Omit<UsersAPI.LinkedAccountCurveSigningEmbeddedWallet, 'id' | 'recovery_method'> {
+    id: string;
+
+    recovery_method: 'privy-v2';
+  }
+}
+
+export type SmartWalletType =
+  | 'safe'
+  | 'kernel'
+  | 'biconomy'
+  | 'light_account'
+  | 'coinbase_smart_wallet'
+  | 'thirdweb';
+
+export interface LinkedAccountSmartWallet {
+  address: string;
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  smart_wallet_type: SmartWalletType;
+
+  type: 'smart_wallet';
+
+  verified_at: number;
+
+  smart_wallet_version?: string;
 }
 
 export interface UserCreateParams {
@@ -1382,6 +1480,15 @@ export declare namespace Users {
     type AuthenticatedUser as AuthenticatedUser,
     type LinkedAccount as LinkedAccount,
     type User as User,
+    type LinkedAccountEthereumEmbeddedWallet as LinkedAccountEthereumEmbeddedWallet,
+    type LinkedAccountSolanaEmbeddedWallet as LinkedAccountSolanaEmbeddedWallet,
+    type LinkedAccountBitcoinSegwitEmbeddedWallet as LinkedAccountBitcoinSegwitEmbeddedWallet,
+    type LinkedAccountBitcoinTaprootEmbeddedWallet as LinkedAccountBitcoinTaprootEmbeddedWallet,
+    type LinkedAccountCurveSigningEmbeddedWallet as LinkedAccountCurveSigningEmbeddedWallet,
+    type LinkedAccountEmbeddedWallet as LinkedAccountEmbeddedWallet,
+    type LinkedAccountEmbeddedWalletWithID as LinkedAccountEmbeddedWalletWithID,
+    type SmartWalletType as SmartWalletType,
+    type LinkedAccountSmartWallet as LinkedAccountSmartWallet,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,

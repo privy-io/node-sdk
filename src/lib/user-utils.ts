@@ -1,20 +1,16 @@
-import type { User } from '../resources/users';
-
-export type LinkedAccount = User['linked_accounts'][number];
+import type { LinkedAccount, LinkedAccountEmbeddedWallet } from '../resources/users';
 
 // prettier-ignore
 export type ExternalWalletLinkedAccount = Exclude<
   Extract<LinkedAccount, { type: 'wallet' }>,
-  EmbeddedWalletLinkedAccount
+  LinkedAccountEmbeddedWallet
 >;
 
 /**
  * An embedded wallet linked account is a wallet owned by the user that can be used with the Privy API.
+ * @deprecated Use `LinkedAccountEmbeddedWallet` instead.
  */
-export type EmbeddedWalletLinkedAccount = Extract<
-  LinkedAccount,
-  { type: 'wallet'; wallet_client_type: 'privy'; connector_type: 'embedded' }
->;
+export type EmbeddedWalletLinkedAccount = LinkedAccountEmbeddedWallet;
 
 /**
  * Determines if a given linked account is an embedded wallet account.
@@ -24,8 +20,8 @@ export type EmbeddedWalletLinkedAccount = Extract<
  * @returns whether the account is an embedded wallet account
  */
 export const isEmbeddedWalletLinkedAccount = (
-  account: User['linked_accounts'][number],
-): account is EmbeddedWalletLinkedAccount =>
+  account: LinkedAccount,
+): account is LinkedAccountEmbeddedWallet =>
   account.type === 'wallet' &&
   account.wallet_client_type === 'privy' &&
   account.connector_type === 'embedded';

@@ -1,7 +1,7 @@
 import { JWTPayload } from 'jose';
-import { User, LinkedAccount } from '../resources';
+import { User, LinkedAccount, LinkedAccountSmartWallet, LinkedAccountEmbeddedWallet } from '../resources';
 import { PrivyAPIError } from '../error';
-import { EmbeddedWalletLinkedAccount, ExternalWalletLinkedAccount } from './user-utils';
+import { ExternalWalletLinkedAccount } from './user-utils';
 
 /**
  * Parses the payload of an identity token (JWT) into a `User` object.
@@ -82,7 +82,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): LinkedAccount | nu
         public_key: '',
         wallet_index: 0,
         recovery_method: account.id ? 'privy-v2' : 'privy',
-      } satisfies EmbeddedWalletLinkedAccount;
+      } satisfies LinkedAccountEmbeddedWallet;
     }
     return {
       type: 'wallet',
@@ -102,7 +102,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): LinkedAccount | nu
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies LinkedAccount.LinkedAccountSmartWallet;
+    } satisfies LinkedAccountSmartWallet;
   }
   if (account.type === 'farcaster') {
     return {

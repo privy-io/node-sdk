@@ -44,7 +44,9 @@ export namespace BalanceGetResponse {
       | 'base_sepolia'
       | 'linea_testnet'
       | 'optimism_sepolia'
-      | 'polygon_amoy';
+      | 'polygon_amoy'
+      | 'solana_devnet'
+      | 'solana_testnet';
 
     display_values: { [key: string]: string };
 
@@ -72,6 +74,8 @@ export interface BalanceGetParams {
     | 'linea_testnet'
     | 'optimism_sepolia'
     | 'polygon_amoy'
+    | 'solana_devnet'
+    | 'solana_testnet'
     | Array<
         | 'ethereum'
         | 'arbitrum'
@@ -87,6 +91,8 @@ export interface BalanceGetParams {
         | 'linea_testnet'
         | 'optimism_sepolia'
         | 'polygon_amoy'
+        | 'solana_devnet'
+        | 'solana_testnet'
       >;
 
   include_currency?: 'usd';

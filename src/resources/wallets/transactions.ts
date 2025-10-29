@@ -77,7 +77,9 @@ export namespace TransactionGetResponse {
         | 'base_sepolia'
         | 'linea_testnet'
         | 'optimism_sepolia'
-        | 'polygon_amoy';
+        | 'polygon_amoy'
+        | 'solana_devnet'
+        | 'solana_testnet';
 
       display_values: { [key: string]: string };
 
@@ -113,7 +115,9 @@ export namespace TransactionGetResponse {
         | 'base_sepolia'
         | 'linea_testnet'
         | 'optimism_sepolia'
-        | 'polygon_amoy';
+        | 'polygon_amoy'
+        | 'solana_devnet'
+        | 'solana_testnet';
 
       display_values: { [key: string]: string };
 

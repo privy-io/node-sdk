@@ -20,6 +20,13 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
+  ClientAuth,
+  CustomOAuthProviderID,
+  ExternalOAuthProviderID,
+  OAuthProviderID,
+  PrivyOAuthProviderID,
+} from './resources/client-auth';
+import {
   KeyQuorum,
   KeyQuorumCreateParams,
   KeyQuorumDeleteParams,
@@ -866,6 +873,7 @@ export class PrivyAPI {
   policies: API.Policies = new API.Policies(this);
   transactions: API.Transactions = new API.Transactions(this);
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
+  clientAuth: API.ClientAuth = new API.ClientAuth(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -873,6 +881,7 @@ PrivyAPI.Users = Users;
 PrivyAPI.Policies = Policies;
 PrivyAPI.Transactions = Transactions;
 PrivyAPI.KeyQuorums = KeyQuorums;
+PrivyAPI.ClientAuth = ClientAuth;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -966,5 +975,13 @@ export declare namespace PrivyAPI {
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
+  };
+
+  export {
+    ClientAuth as ClientAuth,
+    type ExternalOAuthProviderID as ExternalOAuthProviderID,
+    type PrivyOAuthProviderID as PrivyOAuthProviderID,
+    type CustomOAuthProviderID as CustomOAuthProviderID,
+    type OAuthProviderID as OAuthProviderID,
   };
 }

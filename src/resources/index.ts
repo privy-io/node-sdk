@@ -1,6 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
+  ClientAuth,
+  type ExternalOAuthProviderID,
+  type PrivyOAuthProviderID,
+  type CustomOAuthProviderID,
+  type OAuthProviderID,
+} from './client-auth';
+export {
   KeyQuorums,
   type KeyQuorum,
   type KeyQuorumDeleteResponse,

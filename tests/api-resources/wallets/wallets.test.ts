@@ -25,7 +25,7 @@ describe('resource wallets', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.wallets.create({
       chain_type: 'ethereum',
-      additional_signers: [{ override_policy_ids: ['string'], signer_id: 'signer_id' }],
+      additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['string'] }],
       owner: { public_key: 'public_key' },
       owner_id: 'owner_id',
       policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],

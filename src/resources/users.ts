@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as UsersAPI from './users';
+import * as ClientAuthAPI from './client-auth';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
@@ -393,7 +394,8 @@ export type LinkedAccount =
   | LinkedAccountSolanaEmbeddedWallet
   | LinkedAccountBitcoinSegwitEmbeddedWallet
   | LinkedAccountBitcoinTaprootEmbeddedWallet
-  | LinkedAccountCurveSigningEmbeddedWallet;
+  | LinkedAccountCurveSigningEmbeddedWallet
+  | LinkedAccount.LinkedAccountCustomOAuth;
 
 export namespace LinkedAccount {
   export interface LinkedAccountEmail {
@@ -711,11 +713,15 @@ export namespace LinkedAccount {
 
     telegram_user_id: string;
 
+    telegramUserId: string;
+
     type: 'telegram';
 
     verified_at: number;
 
     first_name?: string | null;
+
+    firstName?: string | null;
 
     last_name?: string | null;
 
@@ -764,6 +770,30 @@ export namespace LinkedAccount {
     connector_type?: string;
 
     wallet_client_type?: string;
+  }
+
+  export interface LinkedAccountCustomOAuth {
+    first_verified_at: number | null;
+
+    latest_verified_at: number | null;
+
+    subject: string;
+
+    /**
+     * The ID of a custom OAuth provider, set up for this app. Must start with
+     * "custom:".
+     */
+    type: ClientAuthAPI.CustomOAuthProviderID;
+
+    verified_at: number;
+
+    email?: string;
+
+    name?: string;
+
+    profile_picture_url?: string;
+
+    username?: string;
   }
 }
 

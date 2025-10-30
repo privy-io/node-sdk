@@ -326,14 +326,14 @@ export interface Wallet {
   imported_at: number | null;
 
   /**
+   * The key quorum ID of the owner of the wallet.
+   */
+  owner_id: string | null;
+
+  /**
    * List of policy IDs for policies that are enforced on the wallet.
    */
   policy_ids: Array<string>;
-
-  /**
-   * The key quorum ID of the owner of the wallet.
-   */
-  owner_id?: string;
 
   /**
    * The compressed, raw public key for the wallet along the chain cryptographic
@@ -344,9 +344,13 @@ export interface Wallet {
 
 export namespace Wallet {
   export interface AdditionalSigner {
-    override_policy_ids: Array<string>;
-
     signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
   }
 }
 
@@ -704,9 +708,13 @@ export interface WalletCreateParams {
 
 export namespace WalletCreateParams {
   export interface AdditionalSigner {
-    override_policy_ids: Array<string>;
-
     signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
   }
 
   /**
@@ -1457,9 +1465,13 @@ export interface WalletUpdateParams {
 
 export namespace WalletUpdateParams {
   export interface AdditionalSigner {
-    override_policy_ids: Array<string>;
-
     signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
   }
 
   /**

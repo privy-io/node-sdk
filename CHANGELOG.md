@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.4.0 (2025-10-31)
+
+Full Changelog: [v0.3.0...v0.4.0](https://github.com/privy-io/node-sdk/compare/v0.3.0...v0.4.0)
+
+### Features
+
+* **api:** api update ([28eb8cc](https://github.com/privy-io/node-sdk/commit/28eb8cc2f92bf0ef5ff76d8d6f95c6bcf1d75c6c))
+* **api:** api update ([794eb37](https://github.com/privy-io/node-sdk/commit/794eb37aa0fdb1d46db990b24a9a7e6af083b006))
+* **api:** api update ([019435d](https://github.com/privy-io/node-sdk/commit/019435dfb6768969a1d0cb6c62a251f6fa101913))
+* **api:** api update ([14e8ece](https://github.com/privy-io/node-sdk/commit/14e8ece32ffb2b3be34ba7ebc75facdd8cf47b23))
+* **api:** api update ([f544b69](https://github.com/privy-io/node-sdk/commit/f544b696dd8d657242aa610886929a582605091e))
+* **api:** manual updates ([e176edd](https://github.com/privy-io/node-sdk/commit/e176edd851e00b3735139d60501e1577b377d5bc))
+* **api:** manual updates ([4ab751b](https://github.com/privy-io/node-sdk/commit/4ab751b070e3ecc7cffab440ea27f22525f1a3e4))
+* introduce proper LinkedAccountEmbeddedWallet and LinkedAccountSmartWallet types ([#60](https://github.com/privy-io/node-sdk/issues/60)) ([00b8180](https://github.com/privy-io/node-sdk/commit/00b81807f8064ffffbdc4af6e0da7e68a3a433e9))
+
+
+### Bug Fixes
+
+* fixes the types for ID token parsing ([#59](https://github.com/privy-io/node-sdk/issues/59)) ([247140c](https://github.com/privy-io/node-sdk/commit/247140c5e11d08ebb7c18f00cdaa8b91d052f60d))
+* template literals for CustomOAuthProviderID and PrivyOAuthProviderID ([#61](https://github.com/privy-io/node-sdk/issues/61)) ([be1134b](https://github.com/privy-io/node-sdk/commit/be1134bb61bfe1caeb7f4283a5f3d5b223df4bf6))
+
+
+### Chores
+
+* update SDK settings ([26851c2](https://github.com/privy-io/node-sdk/commit/26851c24cd5ab32a5aad7590cf19cf8615aacf72))
+
 ## 0.3.0 (2025-10-16)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/privy-io/node-sdk/compare/v0.2.0...v0.3.0)

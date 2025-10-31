@@ -255,6 +255,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): LinkedAccount | nu
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
+      telegramUserId: account.telegram_user_id,
     } satisfies LinkedAccount.LinkedAccountTelegram;
   }
 

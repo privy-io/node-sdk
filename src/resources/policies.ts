@@ -1295,8 +1295,9 @@ export namespace PolicyCreateParams {
   }
 
   /**
-   * The P-256 public key of the owner of the resource. If you provide this, do not
-   * specify an owner_id as it will be generated automatically.
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
    */
   export interface PublicKeyOwner {
     public_key: string;
@@ -1563,8 +1564,9 @@ export interface PolicyUpdateParams {
 
 export namespace PolicyUpdateParams {
   /**
-   * The P-256 public key of the owner of the resource. If you provide this, do not
-   * specify an owner_id as it will be generated automatically.
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
    */
   export interface PublicKeyOwner {
     public_key: string;

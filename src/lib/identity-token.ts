@@ -1,7 +1,7 @@
 import { JWTPayload } from 'jose';
-import { User } from '../resources';
+import { User, LinkedAccount, LinkedAccountSmartWallet, LinkedAccountEmbeddedWallet } from '../resources';
 import { PrivyAPIError } from '../error';
-import { EmbeddedWalletLinkedAccount, ExternalWalletLinkedAccount } from './user-utils';
+import { ExternalWalletLinkedAccount } from './user-utils';
 
 /**
  * Parses the payload of an identity token (JWT) into a `User` object.
@@ -25,7 +25,7 @@ export function parseUserFromIdentityTokenPayload(payload: JWTPayload): User {
   };
 }
 
-function parseLinkedAccountsClaim(payload: JWTPayload): User['linked_accounts'] {
+function parseLinkedAccountsClaim(payload: JWTPayload): LinkedAccount[] {
   const linkedAccountsClaim = payload['linked_accounts'];
   if (typeof linkedAccountsClaim !== 'string') {
     throw new InvalidIdentityTokenError('Unable to parse identity token');
@@ -40,7 +40,7 @@ function parseLinkedAccountsClaim(payload: JWTPayload): User['linked_accounts'] 
     .filter((account) => account !== null);
 }
 
-function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accounts'][number] | null {
+function mapIdLinkedAccountToUserLinkedAccount(account: any): LinkedAccount | null {
   if (account.type === 'email') {
     return {
       type: 'email',
@@ -48,7 +48,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountEmail;
+    } satisfies LinkedAccount.LinkedAccountEmail;
   }
   if (account.type === 'phone') {
     return {
@@ -57,7 +57,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountPhone;
+    } satisfies LinkedAccount.LinkedAccountPhone;
   }
 
   // Parses all wallet types
@@ -82,7 +82,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
         public_key: '',
         wallet_index: 0,
         recovery_method: account.id ? 'privy-v2' : 'privy',
-      } satisfies EmbeddedWalletLinkedAccount;
+      } satisfies LinkedAccountEmbeddedWallet;
     }
     return {
       type: 'wallet',
@@ -102,7 +102,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountSmartWallet;
+    } satisfies LinkedAccountSmartWallet;
   }
   if (account.type === 'farcaster') {
     return {
@@ -113,7 +113,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       verified_at: account.lv,
       latest_verified_at: account.lv,
       owner_address: account.oa,
-    } satisfies User.LinkedAccountFarcaster;
+    } satisfies LinkedAccount.LinkedAccountFarcaster;
   }
   if (account.type === 'google_oauth') {
     return {
@@ -124,7 +124,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountGoogleOAuth;
+    } satisfies LinkedAccount.LinkedAccountGoogleOAuth;
   }
   if (account.type === 'twitter_oauth') {
     // We send along three potential URL shapes here based on possible profile picture URLs, all
@@ -148,7 +148,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountTwitterOAuth;
+    } satisfies LinkedAccount.LinkedAccountTwitterOAuth;
   }
   if (account.type === 'discord_oauth') {
     return {
@@ -159,7 +159,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountDiscordOAuth;
+    } satisfies LinkedAccount.LinkedAccountDiscordOAuth;
   }
   if (account.type === 'github_oauth') {
     return {
@@ -171,7 +171,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountGitHubOAuth;
+    } satisfies LinkedAccount.LinkedAccountGitHubOAuth;
   }
   if (account.type === 'spotify_oauth') {
     return {
@@ -182,7 +182,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountSpotifyOAuth;
+    } satisfies LinkedAccount.LinkedAccountSpotifyOAuth;
   }
   if (account.type === 'instagram_oauth') {
     return {
@@ -192,7 +192,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountInstagramOAuth;
+    } satisfies LinkedAccount.LinkedAccountInstagramOAuth;
   }
   if (account.type === 'tiktok_oauth') {
     return {
@@ -203,7 +203,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountTiktokOAuth;
+    } satisfies LinkedAccount.LinkedAccountTiktokOAuth;
   }
   if (account.type === 'linkedin_oauth') {
     return {
@@ -213,7 +213,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountLinkedInOAuth;
+    } satisfies LinkedAccount.LinkedAccountLinkedInOAuth;
   }
   if (account.type === 'apple_oauth') {
     return {
@@ -223,7 +223,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountAppleOAuth;
+    } satisfies LinkedAccount.LinkedAccountAppleOAuth;
   }
   if (account.type === 'cross_app') {
     return {
@@ -235,7 +235,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountCrossApp;
+    } satisfies LinkedAccount.LinkedAccountCrossApp;
   }
   if (account.type === 'custom_auth') {
     return {
@@ -244,7 +244,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountCustomJwt;
+    } satisfies LinkedAccount.LinkedAccountCustomJwt;
   }
 
   if (account.type === 'telegram') {
@@ -255,7 +255,8 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): User['linked_accou
       first_verified_at: null,
       verified_at: account.lv,
       latest_verified_at: account.lv,
-    } satisfies User.LinkedAccountTelegram;
+      telegramUserId: account.telegram_user_id,
+    } satisfies LinkedAccount.LinkedAccountTelegram;
   }
 
   return null;

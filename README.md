@@ -2,7 +2,7 @@
 
 [![NPM version](<https://img.shields.io/npm/v/@privy-io/node.svg?label=npm%20(stable)>)](https://npmjs.org/package/@privy-io/node) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@privy-io/node)
 
-This library provides convenient access to the Privy API REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Privy REST API from server-side TypeScript or JavaScript.
 
 The REST API documentation can be found on [docs.privy.io](https://docs.privy.io).
 

@@ -266,6 +266,26 @@ export class Wallets extends APIResource {
 
 export type WalletsCursor = Cursor<Wallet>;
 
+/**
+ * The wallet chain types that support curve-based signing.
+ */
+export type CurveSigningChainType =
+  | 'cosmos'
+  | 'stellar'
+  | 'sui'
+  | 'aptos'
+  | 'movement'
+  | 'tron'
+  | 'bitcoin-segwit'
+  | 'near'
+  | 'ton'
+  | 'starknet';
+
+/**
+ * The wallet chain types that offer first class support.
+ */
+export type FirstClassChainType = 'solana' | 'ethereum';
+
 export interface Wallet {
   /**
    * Unique ID of the wallet. This will be the primary identifier when using the
@@ -284,21 +304,9 @@ export interface Wallet {
   address: string;
 
   /**
-   * Chain type of the wallet
+   * The wallet chain types.
    */
-  chain_type:
-    | 'solana'
-    | 'ethereum'
-    | 'cosmos'
-    | 'stellar'
-    | 'sui'
-    | 'tron'
-    | 'bitcoin-segwit'
-    | 'near'
-    | 'spark'
-    | 'ton'
-    | 'starknet'
-    | 'movement';
+  chain_type: WalletChainType;
 
   /**
    * Unix timestamp of when the wallet was created in milliseconds.
@@ -318,14 +326,14 @@ export interface Wallet {
   imported_at: number | null;
 
   /**
+   * The key quorum ID of the owner of the wallet.
+   */
+  owner_id: string | null;
+
+  /**
    * List of policy IDs for policies that are enforced on the wallet.
    */
   policy_ids: Array<string>;
-
-  /**
-   * The key quorum ID of the owner of the wallet.
-   */
-  owner_id?: string;
 
   /**
    * The compressed, raw public key for the wallet along the chain cryptographic
@@ -336,11 +344,33 @@ export interface Wallet {
 
 export namespace Wallet {
   export interface AdditionalSigner {
-    override_policy_ids: Array<string>;
-
     signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
   }
 }
+
+/**
+ * The wallet chain types.
+ */
+export type WalletChainType =
+  | 'solana'
+  | 'ethereum'
+  | 'cosmos'
+  | 'stellar'
+  | 'sui'
+  | 'aptos'
+  | 'movement'
+  | 'tron'
+  | 'bitcoin-segwit'
+  | 'near'
+  | 'ton'
+  | 'starknet'
+  | 'spark';
 
 export interface WalletExportResponse {
   /**
@@ -641,21 +671,9 @@ export interface WalletCreateWalletsWithRecoveryResponse {
 
 export interface WalletCreateParams {
   /**
-   * Body param: Chain type of the wallet
+   * Body param: The wallet chain types.
    */
-  chain_type:
-    | 'solana'
-    | 'ethereum'
-    | 'cosmos'
-    | 'stellar'
-    | 'sui'
-    | 'tron'
-    | 'bitcoin-segwit'
-    | 'near'
-    | 'spark'
-    | 'ton'
-    | 'starknet'
-    | 'movement';
+  chain_type: WalletChainType;
 
   /**
    * Body param: Additional signers for the wallet.
@@ -690,9 +708,13 @@ export interface WalletCreateParams {
 
 export namespace WalletCreateParams {
   export interface AdditionalSigner {
-    override_policy_ids: Array<string>;
-
     signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
   }
 
   /**
@@ -1443,9 +1465,13 @@ export interface WalletUpdateParams {
 
 export namespace WalletUpdateParams {
   export interface AdditionalSigner {
-    override_policy_ids: Array<string>;
-
     signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
   }
 
   /**
@@ -1527,21 +1553,9 @@ export namespace WalletCreateWalletsWithRecoveryParams {
 
   export interface Wallet {
     /**
-     * Chain type of the wallet
+     * The wallet chain types.
      */
-    chain_type:
-      | 'solana'
-      | 'ethereum'
-      | 'cosmos'
-      | 'stellar'
-      | 'sui'
-      | 'tron'
-      | 'bitcoin-segwit'
-      | 'near'
-      | 'spark'
-      | 'ton'
-      | 'starknet'
-      | 'movement';
+    chain_type: WalletsAPI.WalletChainType;
 
     /**
      * List of policy IDs for policies that should be enforced on the wallet.
@@ -1556,7 +1570,10 @@ Wallets.Balance = Balance;
 
 export declare namespace Wallets {
   export {
+    type CurveSigningChainType as CurveSigningChainType,
+    type FirstClassChainType as FirstClassChainType,
     type Wallet as Wallet,
+    type WalletChainType as WalletChainType,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,

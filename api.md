@@ -2,7 +2,10 @@
 
 Types:
 
+- <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRawSignResponse</a></code>
@@ -48,7 +51,18 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccount</a></code>
 - <code><a href="./src/resources/users.ts">User</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountEthereumEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountSolanaEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountBitcoinSegwitEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountBitcoinTaprootEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountCurveSigningEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountEmbeddedWalletWithID</a></code>
+- <code><a href="./src/resources/users.ts">SmartWalletType</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountSmartWallet</a></code>
 
 Methods:
 
@@ -118,3 +132,12 @@ Methods:
 - <code title="delete /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_delete</a>(keyQuorumID, { ...params }) -> KeyQuorumDeleteResponse</code>
 - <code title="patch /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_update</a>(keyQuorumID, { ...params }) -> KeyQuorum</code>
 - <code title="get /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">get</a>(keyQuorumID) -> KeyQuorum</code>
+
+# ClientAuth
+
+Types:
+
+- <code><a href="./src/resources/client-auth.ts">ExternalOAuthProviderID</a></code>
+- <code><a href="./src/resources/client-auth.ts">PrivyOAuthProviderID</a></code>
+- <code><a href="./src/resources/client-auth.ts">CustomOAuthProviderID</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthProviderID</a></code>

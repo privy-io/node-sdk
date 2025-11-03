@@ -20,6 +20,13 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
+  ClientAuth,
+  CustomOAuthProviderID,
+  ExternalOAuthProviderID,
+  OAuthProviderID,
+  PrivyOAuthProviderID,
+} from './resources/client-auth';
+import {
   KeyQuorum,
   KeyQuorumCreateParams,
   KeyQuorumDeleteParams,
@@ -45,6 +52,17 @@ import {
 } from './resources/policies';
 import { TransactionGetResponse, Transactions } from './resources/transactions';
 import {
+  AuthenticatedUser,
+  LinkedAccount,
+  LinkedAccountBitcoinSegwitEmbeddedWallet,
+  LinkedAccountBitcoinTaprootEmbeddedWallet,
+  LinkedAccountCurveSigningEmbeddedWallet,
+  LinkedAccountEmbeddedWallet,
+  LinkedAccountEmbeddedWalletWithID,
+  LinkedAccountEthereumEmbeddedWallet,
+  LinkedAccountSmartWallet,
+  LinkedAccountSolanaEmbeddedWallet,
+  SmartWalletType,
   User,
   UserCreateParams,
   UserGetByCustomAuthIDParams,
@@ -68,9 +86,12 @@ import {
   UsersCursor,
 } from './resources/users';
 import {
+  CurveSigningChainType,
+  FirstClassChainType,
   Wallet,
   WalletAuthenticateWithJwtParams,
   WalletAuthenticateWithJwtResponse,
+  WalletChainType,
   WalletCreateParams,
   WalletCreateWalletsWithRecoveryParams,
   WalletCreateWalletsWithRecoveryResponse,
@@ -852,6 +873,7 @@ export class PrivyAPI {
   policies: API.Policies = new API.Policies(this);
   transactions: API.Transactions = new API.Transactions(this);
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
+  clientAuth: API.ClientAuth = new API.ClientAuth(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -859,6 +881,7 @@ PrivyAPI.Users = Users;
 PrivyAPI.Policies = Policies;
 PrivyAPI.Transactions = Transactions;
 PrivyAPI.KeyQuorums = KeyQuorums;
+PrivyAPI.ClientAuth = ClientAuth;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -868,7 +891,10 @@ export declare namespace PrivyAPI {
 
   export {
     Wallets as Wallets,
+    type CurveSigningChainType as CurveSigningChainType,
+    type FirstClassChainType as FirstClassChainType,
     type Wallet as Wallet,
+    type WalletChainType as WalletChainType,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
@@ -890,7 +916,18 @@ export declare namespace PrivyAPI {
 
   export {
     Users as Users,
+    type AuthenticatedUser as AuthenticatedUser,
+    type LinkedAccount as LinkedAccount,
     type User as User,
+    type LinkedAccountEthereumEmbeddedWallet as LinkedAccountEthereumEmbeddedWallet,
+    type LinkedAccountSolanaEmbeddedWallet as LinkedAccountSolanaEmbeddedWallet,
+    type LinkedAccountBitcoinSegwitEmbeddedWallet as LinkedAccountBitcoinSegwitEmbeddedWallet,
+    type LinkedAccountBitcoinTaprootEmbeddedWallet as LinkedAccountBitcoinTaprootEmbeddedWallet,
+    type LinkedAccountCurveSigningEmbeddedWallet as LinkedAccountCurveSigningEmbeddedWallet,
+    type LinkedAccountEmbeddedWallet as LinkedAccountEmbeddedWallet,
+    type LinkedAccountEmbeddedWalletWithID as LinkedAccountEmbeddedWalletWithID,
+    type SmartWalletType as SmartWalletType,
+    type LinkedAccountSmartWallet as LinkedAccountSmartWallet,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
@@ -938,5 +975,13 @@ export declare namespace PrivyAPI {
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
+  };
+
+  export {
+    ClientAuth as ClientAuth,
+    type ExternalOAuthProviderID as ExternalOAuthProviderID,
+    type PrivyOAuthProviderID as PrivyOAuthProviderID,
+    type CustomOAuthProviderID as CustomOAuthProviderID,
+    type OAuthProviderID as OAuthProviderID,
   };
 }

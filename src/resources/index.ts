@@ -1,6 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
+  ClientAuth,
+  type ExternalOAuthProviderID,
+  type PrivyOAuthProviderID,
+  type CustomOAuthProviderID,
+  type OAuthProviderID,
+} from './client-auth';
+export {
   KeyQuorums,
   type KeyQuorum,
   type KeyQuorumDeleteResponse,
@@ -27,7 +34,18 @@ export {
 export { Transactions, type TransactionGetResponse } from './transactions';
 export {
   Users,
+  type AuthenticatedUser,
+  type LinkedAccount,
   type User,
+  type LinkedAccountEthereumEmbeddedWallet,
+  type LinkedAccountSolanaEmbeddedWallet,
+  type LinkedAccountBitcoinSegwitEmbeddedWallet,
+  type LinkedAccountBitcoinTaprootEmbeddedWallet,
+  type LinkedAccountCurveSigningEmbeddedWallet,
+  type LinkedAccountEmbeddedWallet,
+  type LinkedAccountEmbeddedWalletWithID,
+  type SmartWalletType,
+  type LinkedAccountSmartWallet,
   type UserCreateParams,
   type UserListParams,
   type UserGetByCustomAuthIDParams,
@@ -50,7 +68,10 @@ export {
 } from './users';
 export {
   Wallets,
+  type CurveSigningChainType,
+  type FirstClassChainType,
   type Wallet,
+  type WalletChainType,
   type WalletExportResponse,
   type WalletInitImportResponse,
   type WalletRawSignResponse,

@@ -1,6 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as UsersAPI from './users';
+import * as ClientAuthAPI from './client-auth';
+import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
@@ -315,62 +318,86 @@ export class Users extends APIResource {
 
 export type UsersCursor = Cursor<User>;
 
-export interface User {
-  id: string;
+/**
+ * The authenticated user.
+ */
+export interface AuthenticatedUser {
+  token: string | null;
+
+  privy_access_token: string | null;
+
+  refresh_token: string | null;
 
   /**
-   * Unix timestamp of when the user was created in milliseconds.
+   * Instructs the client on how to handle tokens received
    */
-  created_at: number;
+  session_update_action: 'set' | 'ignore' | 'clear';
+
+  user: User;
+
+  identity_token?: string;
+
+  is_new_user?: boolean;
 
   /**
-   * Indicates if the user has accepted the terms of service.
+   * OAuth tokens associated with the user.
    */
-  has_accepted_terms: boolean;
-
-  /**
-   * Indicates if the user is a guest account user.
-   */
-  is_guest: boolean;
-
-  linked_accounts: Array<
-    | User.LinkedAccountEmail
-    | User.LinkedAccountPhone
-    | User.LinkedAccountCrossApp
-    | User.LinkedAccountAuthorizationKey
-    | User.LinkedAccountCustomJwt
-    | User.LinkedAccountAppleOAuth
-    | User.LinkedAccountDiscordOAuth
-    | User.LinkedAccountGitHubOAuth
-    | User.LinkedAccountGoogleOAuth
-    | User.LinkedAccountInstagramOAuth
-    | User.LinkedAccountLinkedInOAuth
-    | User.LinkedAccountSpotifyOAuth
-    | User.LinkedAccountTiktokOAuth
-    | User.LinkedAccountLineOAuth
-    | User.LinkedAccountTwitchOAuth
-    | User.LinkedAccountTwitterOAuth
-    | User.LinkedAccountSmartWallet
-    | User.LinkedAccountPasskey
-    | User.LinkedAccountFarcaster
-    | User.LinkedAccountTelegram
-    | User.LinkedAccountEthereum
-    | User.LinkedAccountEthereumEmbeddedWallet
-    | User.LinkedAccountSolana
-    | User.LinkedAccountSolanaEmbeddedWallet
-    | User.LinkedAccountBitcoinSegwitEmbeddedWallet
-    | User.LinkedAccountBitcoinTaprootEmbeddedWallet
-  >;
-
-  mfa_methods: Array<User.PasskeyMfaMethod | User.SMSMfaMethod | User.TotpMfaMethod>;
-
-  /**
-   * Custom metadata associated with the user.
-   */
-  custom_metadata?: { [key: string]: string | number | boolean };
+  oauth_tokens?: AuthenticatedUser.OAuthTokens;
 }
 
-export namespace User {
+export namespace AuthenticatedUser {
+  /**
+   * OAuth tokens associated with the user.
+   */
+  export interface OAuthTokens {
+    access_token: string;
+
+    provider: string;
+
+    access_token_expires_in_seconds?: number;
+
+    refresh_token?: string;
+
+    refresh_token_expires_in_seconds?: number;
+
+    scopes?: Array<string>;
+  }
+}
+
+/**
+ * A linked account for the user.
+ */
+export type LinkedAccount =
+  | LinkedAccount.LinkedAccountEmail
+  | LinkedAccount.LinkedAccountPhone
+  | LinkedAccount.LinkedAccountCrossApp
+  | LinkedAccount.LinkedAccountAuthorizationKey
+  | LinkedAccount.LinkedAccountCustomJwt
+  | LinkedAccount.LinkedAccountAppleOAuth
+  | LinkedAccount.LinkedAccountDiscordOAuth
+  | LinkedAccount.LinkedAccountGitHubOAuth
+  | LinkedAccount.LinkedAccountGoogleOAuth
+  | LinkedAccount.LinkedAccountInstagramOAuth
+  | LinkedAccount.LinkedAccountLinkedInOAuth
+  | LinkedAccount.LinkedAccountSpotifyOAuth
+  | LinkedAccount.LinkedAccountTiktokOAuth
+  | LinkedAccount.LinkedAccountLineOAuth
+  | LinkedAccount.LinkedAccountTwitchOAuth
+  | LinkedAccount.LinkedAccountTwitterOAuth
+  | LinkedAccountSmartWallet
+  | LinkedAccount.LinkedAccountPasskey
+  | LinkedAccount.LinkedAccountFarcaster
+  | LinkedAccount.LinkedAccountTelegram
+  | LinkedAccount.LinkedAccountEthereum
+  | LinkedAccountEthereumEmbeddedWallet
+  | LinkedAccount.LinkedAccountSolana
+  | LinkedAccountSolanaEmbeddedWallet
+  | LinkedAccountBitcoinSegwitEmbeddedWallet
+  | LinkedAccountBitcoinTaprootEmbeddedWallet
+  | LinkedAccountCurveSigningEmbeddedWallet
+  | LinkedAccount.LinkedAccountCustomOAuth;
+
+export namespace LinkedAccount {
   export interface LinkedAccountEmail {
     address: string;
 
@@ -627,28 +654,6 @@ export namespace User {
     verified_at: number;
   }
 
-  export interface LinkedAccountSmartWallet {
-    address: string;
-
-    first_verified_at: number | null;
-
-    latest_verified_at: number | null;
-
-    smart_wallet_type:
-      | 'safe'
-      | 'kernel'
-      | 'biconomy'
-      | 'light_account'
-      | 'coinbase_smart_wallet'
-      | 'thirdweb';
-
-    type: 'smart_wallet';
-
-    verified_at: number;
-
-    smart_wallet_version?: string;
-  }
-
   export interface LinkedAccountPasskey {
     credential_id: string;
 
@@ -708,11 +713,15 @@ export namespace User {
 
     telegram_user_id: string;
 
+    telegramUserId: string;
+
     type: 'telegram';
 
     verified_at: number;
 
     first_name?: string | null;
+
+    firstName?: string | null;
 
     last_name?: string | null;
 
@@ -743,44 +752,6 @@ export namespace User {
     wallet_client_type?: string;
   }
 
-  export interface LinkedAccountEthereumEmbeddedWallet {
-    id: string | null;
-
-    address: string;
-
-    chain_id: string;
-
-    chain_type: 'ethereum';
-
-    connector_type: 'embedded';
-
-    delegated: boolean;
-
-    first_verified_at: number | null;
-
-    imported: boolean;
-
-    latest_verified_at: number | null;
-
-    recovery_method:
-      | 'privy'
-      | 'user-passcode'
-      | 'google-drive'
-      | 'icloud'
-      | 'recovery-encryption-key'
-      | 'privy-v2';
-
-    type: 'wallet';
-
-    verified_at: number;
-
-    wallet_client: 'privy';
-
-    wallet_client_type: 'privy';
-
-    wallet_index: number;
-  }
-
   export interface LinkedAccountSolana {
     address: string;
 
@@ -801,126 +772,60 @@ export namespace User {
     wallet_client_type?: string;
   }
 
-  export interface LinkedAccountSolanaEmbeddedWallet {
-    id: string | null;
-
-    address: string;
-
-    chain_id: string;
-
-    chain_type: 'solana';
-
-    connector_type: 'embedded';
-
-    delegated: boolean;
-
+  export interface LinkedAccountCustomOAuth {
     first_verified_at: number | null;
-
-    imported: boolean;
 
     latest_verified_at: number | null;
 
-    public_key: string;
+    subject: string;
 
-    recovery_method:
-      | 'privy'
-      | 'user-passcode'
-      | 'google-drive'
-      | 'icloud'
-      | 'recovery-encryption-key'
-      | 'privy-v2';
-
-    type: 'wallet';
+    /**
+     * The ID of a custom OAuth provider, set up for this app. Must start with
+     * "custom:".
+     */
+    type: ClientAuthAPI.CustomOAuthProviderID;
 
     verified_at: number;
 
-    wallet_client: 'privy';
+    email?: string;
 
-    wallet_client_type: 'privy';
+    name?: string;
 
-    wallet_index: number;
+    profile_picture_url?: string;
+
+    username?: string;
   }
+}
 
-  export interface LinkedAccountBitcoinSegwitEmbeddedWallet {
-    id: string | null;
+export interface User {
+  id: string;
 
-    address: string;
+  /**
+   * Unix timestamp of when the user was created in milliseconds.
+   */
+  created_at: number;
 
-    chain_id: string;
+  /**
+   * Indicates if the user has accepted the terms of service.
+   */
+  has_accepted_terms: boolean;
 
-    chain_type: 'bitcoin-segwit';
+  /**
+   * Indicates if the user is a guest account user.
+   */
+  is_guest: boolean;
 
-    connector_type: 'embedded';
+  linked_accounts: Array<LinkedAccount>;
 
-    delegated: boolean;
+  mfa_methods: Array<User.PasskeyMfaMethod | User.SMSMfaMethod | User.TotpMfaMethod>;
 
-    first_verified_at: number | null;
+  /**
+   * Custom metadata associated with the user.
+   */
+  custom_metadata?: { [key: string]: string | number | boolean };
+}
 
-    imported: boolean;
-
-    latest_verified_at: number | null;
-
-    public_key: string;
-
-    recovery_method:
-      | 'privy'
-      | 'user-passcode'
-      | 'google-drive'
-      | 'icloud'
-      | 'recovery-encryption-key'
-      | 'privy-v2';
-
-    type: 'wallet';
-
-    verified_at: number;
-
-    wallet_client: 'privy';
-
-    wallet_client_type: 'privy';
-
-    wallet_index: number;
-  }
-
-  export interface LinkedAccountBitcoinTaprootEmbeddedWallet {
-    id: string | null;
-
-    address: string;
-
-    chain_id: string;
-
-    chain_type: 'bitcoin-taproot';
-
-    connector_type: 'embedded';
-
-    delegated: boolean;
-
-    first_verified_at: number | null;
-
-    imported: boolean;
-
-    latest_verified_at: number | null;
-
-    public_key: string;
-
-    recovery_method:
-      | 'privy'
-      | 'user-passcode'
-      | 'google-drive'
-      | 'icloud'
-      | 'recovery-encryption-key'
-      | 'privy-v2';
-
-    type: 'wallet';
-
-    verified_at: number;
-
-    wallet_client: 'privy';
-
-    wallet_client_type: 'privy';
-
-    wallet_index: number;
-  }
-
+export namespace User {
   export interface PasskeyMfaMethod {
     type: 'passkey';
 
@@ -938,6 +843,282 @@ export namespace User {
 
     verified_at: number;
   }
+}
+
+export interface LinkedAccountEthereumEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  chain_type: 'ethereum';
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  recovery_method:
+    | 'privy'
+    | 'user-passcode'
+    | 'google-drive'
+    | 'icloud'
+    | 'recovery-encryption-key'
+    | 'privy-v2';
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+export interface LinkedAccountSolanaEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  chain_type: 'solana';
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  public_key: string;
+
+  recovery_method:
+    | 'privy'
+    | 'user-passcode'
+    | 'google-drive'
+    | 'icloud'
+    | 'recovery-encryption-key'
+    | 'privy-v2';
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+export interface LinkedAccountBitcoinSegwitEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  chain_type: 'bitcoin-segwit';
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  public_key: string;
+
+  recovery_method:
+    | 'privy'
+    | 'user-passcode'
+    | 'google-drive'
+    | 'icloud'
+    | 'recovery-encryption-key'
+    | 'privy-v2';
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+export interface LinkedAccountBitcoinTaprootEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  chain_type: 'bitcoin-taproot';
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  public_key: string;
+
+  recovery_method:
+    | 'privy'
+    | 'user-passcode'
+    | 'google-drive'
+    | 'icloud'
+    | 'recovery-encryption-key'
+    | 'privy-v2';
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+export interface LinkedAccountCurveSigningEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  /**
+   * The wallet chain types that support curve-based signing.
+   */
+  chain_type: WalletsAPI.CurveSigningChainType;
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  public_key: string;
+
+  recovery_method:
+    | 'privy'
+    | 'user-passcode'
+    | 'google-drive'
+    | 'icloud'
+    | 'recovery-encryption-key'
+    | 'privy-v2';
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+export type LinkedAccountEmbeddedWallet =
+  | LinkedAccountEthereumEmbeddedWallet
+  | LinkedAccountSolanaEmbeddedWallet
+  | LinkedAccountBitcoinSegwitEmbeddedWallet
+  | LinkedAccountBitcoinTaprootEmbeddedWallet
+  | LinkedAccountCurveSigningEmbeddedWallet;
+
+export type LinkedAccountEmbeddedWalletWithID =
+  | LinkedAccountEmbeddedWalletWithID.LinkedAccountEthereumEmbeddedWallet
+  | LinkedAccountEmbeddedWalletWithID.LinkedAccountSolanaEmbeddedWallet
+  | LinkedAccountEmbeddedWalletWithID.LinkedAccountBitcoinSegwitEmbeddedWallet
+  | LinkedAccountEmbeddedWalletWithID.LinkedAccountBitcoinTaprootEmbeddedWallet
+  | LinkedAccountEmbeddedWalletWithID.LinkedAccountCurveSigningEmbeddedWallet;
+
+export namespace LinkedAccountEmbeddedWalletWithID {
+  export interface LinkedAccountEthereumEmbeddedWallet
+    extends Omit<UsersAPI.LinkedAccountEthereumEmbeddedWallet, 'id' | 'recovery_method'> {
+    id: string;
+
+    recovery_method: 'privy-v2';
+  }
+
+  export interface LinkedAccountSolanaEmbeddedWallet
+    extends Omit<UsersAPI.LinkedAccountSolanaEmbeddedWallet, 'id' | 'recovery_method'> {
+    id: string;
+
+    recovery_method: 'privy-v2';
+  }
+
+  export interface LinkedAccountBitcoinSegwitEmbeddedWallet
+    extends Omit<UsersAPI.LinkedAccountBitcoinSegwitEmbeddedWallet, 'id' | 'recovery_method'> {
+    id: string;
+
+    recovery_method: 'privy-v2';
+  }
+
+  export interface LinkedAccountBitcoinTaprootEmbeddedWallet
+    extends Omit<UsersAPI.LinkedAccountBitcoinTaprootEmbeddedWallet, 'id' | 'recovery_method'> {
+    id: string;
+
+    recovery_method: 'privy-v2';
+  }
+
+  export interface LinkedAccountCurveSigningEmbeddedWallet
+    extends Omit<UsersAPI.LinkedAccountCurveSigningEmbeddedWallet, 'id' | 'recovery_method'> {
+    id: string;
+
+    recovery_method: 'privy-v2';
+  }
+}
+
+export type SmartWalletType =
+  | 'safe'
+  | 'kernel'
+  | 'biconomy'
+  | 'light_account'
+  | 'coinbase_smart_wallet'
+  | 'thirdweb';
+
+export interface LinkedAccountSmartWallet {
+  address: string;
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  smart_wallet_type: SmartWalletType;
+
+  type: 'smart_wallet';
+
+  verified_at: number;
+
+  smart_wallet_version?: string;
 }
 
 export interface UserCreateParams {
@@ -1145,21 +1326,9 @@ export namespace UserCreateParams {
 
   export interface Wallet {
     /**
-     * Chain type of the wallet
+     * The wallet chain types.
      */
-    chain_type:
-      | 'solana'
-      | 'ethereum'
-      | 'cosmos'
-      | 'stellar'
-      | 'sui'
-      | 'tron'
-      | 'bitcoin-segwit'
-      | 'near'
-      | 'spark'
-      | 'ton'
-      | 'starknet'
-      | 'movement';
+    chain_type: WalletsAPI.WalletChainType;
 
     /**
      * Additional signers for the wallet.
@@ -1338,7 +1507,18 @@ export interface UserUnlinkLinkedAccountParams {
 
 export declare namespace Users {
   export {
+    type AuthenticatedUser as AuthenticatedUser,
+    type LinkedAccount as LinkedAccount,
     type User as User,
+    type LinkedAccountEthereumEmbeddedWallet as LinkedAccountEthereumEmbeddedWallet,
+    type LinkedAccountSolanaEmbeddedWallet as LinkedAccountSolanaEmbeddedWallet,
+    type LinkedAccountBitcoinSegwitEmbeddedWallet as LinkedAccountBitcoinSegwitEmbeddedWallet,
+    type LinkedAccountBitcoinTaprootEmbeddedWallet as LinkedAccountBitcoinTaprootEmbeddedWallet,
+    type LinkedAccountCurveSigningEmbeddedWallet as LinkedAccountCurveSigningEmbeddedWallet,
+    type LinkedAccountEmbeddedWallet as LinkedAccountEmbeddedWallet,
+    type LinkedAccountEmbeddedWalletWithID as LinkedAccountEmbeddedWalletWithID,
+    type SmartWalletType as SmartWalletType,
+    type LinkedAccountSmartWallet as LinkedAccountSmartWallet,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,

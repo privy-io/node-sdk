@@ -43,6 +43,6 @@ If you are interested in other runtime environments, please open or upvote an is
 
 ## Changelog
 
-Our [changelog](https://docs.privy.io/changelogs/nodeJS) contains the latest information about new releases, including features, fixes, and upcoming changes.
+Our [changelog](https://docs.privy.io/changelogs/node) contains the latest information about new releases, including features, fixes, and upcoming changes.
 
 We use [Semantic Versioning](https://semver.org/) to track breaking changes.

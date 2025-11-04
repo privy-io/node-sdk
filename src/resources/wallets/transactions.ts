@@ -146,6 +146,8 @@ export interface TransactionGetParams {
   cursor?: string;
 
   limit?: number | null;
+
+  tx_hash?: string;
 }
 
 export declare namespace Transactions {

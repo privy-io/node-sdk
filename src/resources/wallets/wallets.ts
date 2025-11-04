@@ -113,7 +113,11 @@ export class Wallets extends APIResource {
    * ```ts
    * const response = await client.wallets._rawSign(
    *   'wallet_id',
-   *   { params: {} },
+   *   {
+   *     params: {
+   *       hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e',
+   *     },
+   *   },
    * );
    * ```
    */
@@ -831,9 +835,9 @@ export declare namespace WalletInitImportParams {
 
 export interface WalletRawSignParams {
   /**
-   * Body param:
+   * Body param: Sign a pre-computed hash
    */
-  params: WalletRawSignParams.Params;
+  params: WalletRawSignParams.Hash | WalletRawSignParams.UnionMember1;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are
@@ -849,11 +853,29 @@ export interface WalletRawSignParams {
 }
 
 export namespace WalletRawSignParams {
-  export interface Params {
+  /**
+   * Sign a pre-computed hash
+   */
+  export interface Hash {
     /**
      * The hash to sign. Must start with `0x`.
      */
-    hash?: string;
+    hash: string;
+  }
+
+  /**
+   * Hash and sign bytes (Tron only)
+   */
+  export interface UnionMember1 {
+    /**
+     * The bytes to hash and sign.
+     */
+    bytes: string;
+
+    /**
+     * Encoding scheme. Currently only utf-8 is supported.
+     */
+    encoding: 'utf-8';
   }
 }
 

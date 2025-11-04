@@ -28,6 +28,7 @@ describe('resource transactions', () => {
       chain: 'base',
       cursor: 'x',
       limit: 100,
+      tx_hash: '0x26fBC5dFd7f3',
     });
   });
 });

@@ -1100,8 +1100,8 @@ export namespace LinkedAccountEmbeddedWalletWithID {
 export type SmartWalletType =
   | 'safe'
   | 'kernel'
-  | 'biconomy'
   | 'light_account'
+  | 'biconomy'
   | 'coinbase_smart_wallet'
   | 'thirdweb';
 

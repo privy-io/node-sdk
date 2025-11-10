@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.4.1 (2025-11-10)
+
+Full Changelog: [v0.4.0...v0.4.1](https://github.com/privy-io/node-sdk/compare/v0.4.0...v0.4.1)
+
+### Features
+
+* **api:** api update ([6ecd42c](https://github.com/privy-io/node-sdk/commit/6ecd42cc31f99e8f7013325c59dc1fc2abdc4fa3))
+* **api:** api update ([88f69c6](https://github.com/privy-io/node-sdk/commit/88f69c6f13e08b3c3888b4ce6aead85b4e25ccec))
+* **api:** api update ([b2f947a](https://github.com/privy-io/node-sdk/commit/b2f947a3af8fdbb90742490abe3a87470a494f10))
+* **api:** api update ([ec643d3](https://github.com/privy-io/node-sdk/commit/ec643d358407d68b68c1eadf6773b8b1f8c3b325))
+* **api:** api update ([26c2111](https://github.com/privy-io/node-sdk/commit/26c2111f428e1a7dc1704cc6cca29f477d9636fd))
+* **api:** api update ([e75a349](https://github.com/privy-io/node-sdk/commit/e75a34952634e3230cc158085c341139c48214ec))
+
+
+### Chores
+
+* update changelog link in readme ([bc5654f](https://github.com/privy-io/node-sdk/commit/bc5654ff886b3b214a46314dd610a8c55db4e0f9))
+
 ## 0.4.0 (2025-10-31)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/privy-io/node-sdk/compare/v0.3.0...v0.4.0)

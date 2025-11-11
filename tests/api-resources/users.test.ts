@@ -317,7 +317,7 @@ describe('resource users', () => {
 
   // Prism tests are disabled
   test.skip('search: only required params', async () => {
-    const responsePromise = client.users.search({ search_term: 'search_term' });
+    const responsePromise = client.users.search({ searchTerm: 'searchTerm' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -329,7 +329,7 @@ describe('resource users', () => {
 
   // Prism tests are disabled
   test.skip('search: required and optional params', async () => {
-    const response = await client.users.search({ search_term: 'search_term' });
+    const response = await client.users.search({ searchTerm: 'searchTerm' });
   });
 
   // Prism tests are disabled

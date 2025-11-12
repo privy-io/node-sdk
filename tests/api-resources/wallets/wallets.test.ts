@@ -137,8 +137,8 @@ describe('resource wallets', () => {
   // Prism tests are disabled
   test.skip('_rpc: only required params', async () => {
     const responsePromise = client.wallets._rpc('wallet_id', {
-      method: 'eth_signTransaction',
-      params: { transaction: {} },
+      method: 'personal_sign',
+      params: { encoding: 'utf-8', message: 'message' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -152,22 +152,8 @@ describe('resource wallets', () => {
   // Prism tests are disabled
   test.skip('_rpc: required and optional params', async () => {
     const response = await client.wallets._rpc('wallet_id', {
-      method: 'eth_signTransaction',
-      params: {
-        transaction: {
-          chain_id: 'string',
-          data: 'data',
-          from: 'from',
-          gas_limit: 'string',
-          gas_price: 'string',
-          max_fee_per_gas: 'string',
-          max_priority_fee_per_gas: 'string',
-          nonce: 'string',
-          to: 'to',
-          type: 0,
-          value: 'string',
-        },
-      },
+      method: 'personal_sign',
+      params: { encoding: 'utf-8', message: 'message' },
       address: 'address',
       chain_type: 'ethereum',
       'privy-authorization-signature': 'privy-authorization-signature',

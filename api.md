@@ -10,6 +10,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTypedDataRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSecp256k1SignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcInput</a></code>
@@ -19,6 +20,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTypedDataRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSecp256k1SignRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcResponse</a></code>

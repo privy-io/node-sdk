@@ -269,7 +269,7 @@ export class Users extends APIResource {
    * @example
    * ```ts
    * const user = await client.users.search({
-   *   search_term: 'search_term',
+   *   searchTerm: 'searchTerm',
    * });
    * ```
    */
@@ -1456,7 +1456,7 @@ export type UserSearchParams = UserSearchParams.Variant0 | UserSearchParams.Vari
 
 export declare namespace UserSearchParams {
   export interface Variant0 {
-    search_term: string;
+    searchTerm: string;
   }
 
   export interface Variant1 {

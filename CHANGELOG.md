@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.5.0 (2025-11-13)
+
+Full Changelog: [v0.4.1...v0.5.0](https://github.com/privy-io/node-sdk/compare/v0.4.1...v0.5.0)
+
+### Features
+
+* **api:** api update ([8b7d00f](https://github.com/privy-io/node-sdk/commit/8b7d00f2ea382b1bbed85d8eecacbea6251271fd))
+* **api:** api update ([be7c495](https://github.com/privy-io/node-sdk/commit/be7c495fbd36476c297a8d3fd0cde091e065df1a))
+
+
+### Bug Fixes
+
+* passkey accounts not showing up from identity token parser ([#66](https://github.com/privy-io/node-sdk/issues/66)) ([16ffb82](https://github.com/privy-io/node-sdk/commit/16ffb82af662f2e0a0085d1e89307ea60adf9c08))
+* WalletRpcResponse types are no longer nested ([#65](https://github.com/privy-io/node-sdk/issues/65)) ([132d462](https://github.com/privy-io/node-sdk/commit/132d46237541d15def2d5a6aad4080a028626e29))
+
 ## 0.4.1 (2025-11-10)
 
 Full Changelog: [v0.4.0...v0.4.1](https://github.com/privy-io/node-sdk/compare/v0.4.0...v0.4.1)

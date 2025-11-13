@@ -1,4 +1,9 @@
-import { WalletRpcParams, WalletRpcResponse } from '../../resources';
+import {
+  SolanaSignAndSendTransactionRpcResponse,
+  SolanaSignMessageRpcResponse,
+  SolanaSignTransactionRpcResponse,
+  WalletRpcParams,
+} from '../../resources';
 import { PrivyWalletsService, ReplaceParams } from './wallets';
 import { PrivyWalletsRpcInput } from './wallets';
 
@@ -12,7 +17,7 @@ export class PrivySolanaService {
   public async signMessage(
     walletId: string,
     { message, ...input }: PrivySolanaService.SignMessageInput,
-  ): Promise<WalletRpcResponse.SolanaSignMessageRpcResponse.Data> {
+  ): Promise<SolanaSignMessageRpcResponse.Data> {
     let params: WalletRpcParams.SolanaSignMessageRpcInput.Params;
     if (message instanceof Uint8Array) {
       // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
@@ -35,7 +40,7 @@ export class PrivySolanaService {
   public async signTransaction(
     walletId: string,
     { transaction, ...input }: PrivySolanaService.SignTransactionInput,
-  ): Promise<WalletRpcResponse.SolanaSignTransactionRpcResponse.Data> {
+  ): Promise<SolanaSignTransactionRpcResponse.Data> {
     let params: WalletRpcParams.SolanaSignTransactionRpcInput.Params;
     if (transaction instanceof Uint8Array) {
       // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
@@ -58,7 +63,7 @@ export class PrivySolanaService {
   public async signAndSendTransaction(
     walletId: string,
     { transaction, ...input }: PrivySolanaService.SignAndSendTransactionInput,
-  ): Promise<WalletRpcResponse.SolanaSignAndSendTransactionRpcResponse.Data> {
+  ): Promise<SolanaSignAndSendTransactionRpcResponse.Data> {
     let params: WalletRpcParams.SolanaSignAndSendTransactionRpcInput.Params;
     if (transaction instanceof Uint8Array) {
       // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet

@@ -259,6 +259,17 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): LinkedAccount | nu
     } satisfies LinkedAccount.LinkedAccountTelegram;
   }
 
+  if (account.type === 'passkey') {
+    return {
+      type: 'passkey',
+      credential_id: account.credential_id,
+      first_verified_at: null,
+      verified_at: account.lv,
+      latest_verified_at: account.lv,
+      enrolled_in_mfa: false, // not a part of the identity token
+    } satisfies LinkedAccount.LinkedAccountPasskey;
+  }
+
   return null;
 }
 

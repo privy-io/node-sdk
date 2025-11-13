@@ -259,6 +259,22 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): LinkedAccount | nu
     } satisfies LinkedAccount.LinkedAccountTelegram;
   }
 
+  if (account.type === 'passkey') {
+    return {
+      type: 'passkey',
+      credential_id: account.credential_id,
+      enrolled_in_mfa: account.enrolled_in_mfa,
+      first_verified_at: null,
+      verified_at: account.lv,
+      latest_verified_at: account.lv,
+      ...(account.authenticator_name && { authenticator_name: account.authenticator_name }),
+      ...(account.created_with_browser && { created_with_browser: account.created_with_browser }),
+      ...(account.created_with_device && { created_with_device: account.created_with_device }),
+      ...(account.created_with_os && { created_with_os: account.created_with_os }),
+      ...(account.public_key && { public_key: account.public_key }),
+    } satisfies LinkedAccount.LinkedAccountPasskey;
+  }
+
   return null;
 }
 

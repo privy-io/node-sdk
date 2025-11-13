@@ -532,6 +532,57 @@ export namespace EthereumSignTypedDataRpcInput {
 }
 
 /**
+ * Executes an RPC method to hash and sign a UserOperation.
+ */
+export interface EthereumSignUserOperationRpcInput {
+  method: 'eth_signUserOperation';
+
+  params: EthereumSignUserOperationRpcInput.Params;
+
+  address?: string;
+
+  chain_type?: 'ethereum';
+}
+
+export namespace EthereumSignUserOperationRpcInput {
+  export interface Params {
+    chain_id: string | number;
+
+    contract: string;
+
+    user_operation: Params.UserOperation;
+  }
+
+  export namespace Params {
+    export interface UserOperation {
+      call_data: string;
+
+      call_gas_limit: string;
+
+      max_fee_per_gas: string;
+
+      max_priority_fee_per_gas: string;
+
+      nonce: string;
+
+      paymaster: string;
+
+      paymaster_data: string;
+
+      paymaster_post_op_gas_limit: string;
+
+      paymaster_verification_gas_limit: string;
+
+      pre_verification_gas: string;
+
+      sender: string;
+
+      verification_gas_limit: string;
+    }
+  }
+}
+
+/**
  * Signs an EIP-7702 authorization.
  */
 export interface EthereumSign7702AuthorizationRpcInput {
@@ -740,6 +791,23 @@ export namespace EthereumSignTypedDataRpcResponse {
 }
 
 /**
+ * Response to the EVM `eth_signUserOperation` RPC.
+ */
+export interface EthereumSignUserOperationRpcResponse {
+  data: EthereumSignUserOperationRpcResponse.Data;
+
+  method: 'eth_signUserOperation';
+}
+
+export namespace EthereumSignUserOperationRpcResponse {
+  export interface Data {
+    encoding: 'hex';
+
+    signature: string;
+  }
+}
+
+/**
  * Response to the EVM `eth_sign7702Authorization` RPC.
  */
 export interface EthereumSign7702AuthorizationRpcResponse {
@@ -890,6 +958,7 @@ export type WalletRpcResponse =
   | EthereumSignTypedDataRpcResponse
   | EthereumSignTransactionRpcResponse
   | EthereumSendTransactionRpcResponse
+  | EthereumSignUserOperationRpcResponse
   | EthereumSign7702AuthorizationRpcResponse
   | EthereumSecp256k1SignRpcResponse
   | SolanaSignMessageRpcResponse
@@ -1176,6 +1245,7 @@ export type WalletRpcParams =
   | WalletRpcParams.EthereumPersonalSignRpcInput
   | WalletRpcParams.EthereumSignTypedDataRpcInput
   | WalletRpcParams.EthereumSignTransactionRpcInput
+  | WalletRpcParams.EthereumSignUserOperationRpcInput
   | WalletRpcParams.EthereumSendTransactionRpcInput
   | WalletRpcParams.EthereumSign7702AuthorizationRpcInput
   | WalletRpcParams.EthereumSecp256k1SignRpcInput
@@ -1348,6 +1418,78 @@ export declare namespace WalletRpcParams {
         type?: 0 | 1 | 2;
 
         value?: string | number;
+      }
+    }
+  }
+
+  export interface EthereumSignUserOperationRpcInput {
+    /**
+     * Body param:
+     */
+    method: 'eth_signUserOperation';
+
+    /**
+     * Body param:
+     */
+    params: EthereumSignUserOperationRpcInput.Params;
+
+    /**
+     * Body param:
+     */
+    address?: string;
+
+    /**
+     * Body param:
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace EthereumSignUserOperationRpcInput {
+    export interface Params {
+      chain_id: string | number;
+
+      contract: string;
+
+      user_operation: Params.UserOperation;
+    }
+
+    export namespace Params {
+      export interface UserOperation {
+        call_data: string;
+
+        call_gas_limit: string;
+
+        max_fee_per_gas: string;
+
+        max_priority_fee_per_gas: string;
+
+        nonce: string;
+
+        paymaster: string;
+
+        paymaster_data: string;
+
+        paymaster_post_op_gas_limit: string;
+
+        paymaster_verification_gas_limit: string;
+
+        pre_verification_gas: string;
+
+        sender: string;
+
+        verification_gas_limit: string;
       }
     }
   }
@@ -1895,6 +2037,7 @@ export declare namespace Wallets {
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
     type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,
     type EthereumSignTypedDataRpcInput as EthereumSignTypedDataRpcInput,
+    type EthereumSignUserOperationRpcInput as EthereumSignUserOperationRpcInput,
     type EthereumSign7702AuthorizationRpcInput as EthereumSign7702AuthorizationRpcInput,
     type EthereumSecp256k1SignRpcInput as EthereumSecp256k1SignRpcInput,
     type SolanaSignTransactionRpcInput as SolanaSignTransactionRpcInput,
@@ -1904,6 +2047,7 @@ export declare namespace Wallets {
     type EthereumSendTransactionRpcResponse as EthereumSendTransactionRpcResponse,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
     type EthereumSignTypedDataRpcResponse as EthereumSignTypedDataRpcResponse,
+    type EthereumSignUserOperationRpcResponse as EthereumSignUserOperationRpcResponse,
     type EthereumSign7702AuthorizationRpcResponse as EthereumSign7702AuthorizationRpcResponse,
     type EthereumSecp256k1SignRpcResponse as EthereumSecp256k1SignRpcResponse,
     type SolanaSignTransactionRpcResponse as SolanaSignTransactionRpcResponse,

@@ -6,6 +6,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcInput</a></code>

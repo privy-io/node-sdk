@@ -1205,7 +1205,7 @@ export interface WalletRawSignParams {
   /**
    * Body param: Sign a pre-computed hash
    */
-  params: WalletRawSignParams.Hash | WalletRawSignParams.Bytes;
+  params: WalletRawSignParams.Hash | WalletRawSignParams.UnionMember1;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are
@@ -1232,18 +1232,23 @@ export namespace WalletRawSignParams {
   }
 
   /**
-   * Hash and sign bytes (Tron only)
+   * Hash and sign bytes
    */
-  export interface Bytes {
+  export interface UnionMember1 {
     /**
      * The bytes to hash and sign.
      */
     bytes: string;
 
     /**
-     * Encoding scheme. Currently only utf-8 is supported.
+     * Encoding scheme for the bytes.
      */
-    encoding: 'utf-8';
+    encoding: 'utf-8' | 'hex';
+
+    /**
+     * Hash function to use for the bytes.
+     */
+    hash_function: 'keccak256' | 'sha256';
   }
 }
 

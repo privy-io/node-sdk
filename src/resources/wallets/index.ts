@@ -8,6 +8,7 @@ export {
   type FirstClassChainType,
   type Wallet,
   type WalletChainType,
+  type ExtendedChainType,
   type EthereumPersonalSignRpcInput,
   type EthereumSignTransactionRpcInput,
   type EthereumSendTransactionRpcInput,

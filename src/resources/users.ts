@@ -1421,20 +1421,10 @@ export interface UserPregenerateWalletsParams {
 
 export namespace UserPregenerateWalletsParams {
   export interface Wallet {
-    chain_type:
-      | 'cosmos'
-      | 'stellar'
-      | 'sui'
-      | 'aptos'
-      | 'movement'
-      | 'tron'
-      | 'bitcoin-segwit'
-      | 'near'
-      | 'ton'
-      | 'starknet'
-      | 'spark'
-      | 'solana'
-      | 'ethereum';
+    /**
+     * The wallet chain types.
+     */
+    chain_type: WalletsAPI.WalletChainType;
 
     additional_signers?: Array<Wallet.AdditionalSigner>;
 

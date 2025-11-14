@@ -30,7 +30,7 @@ describe('resource users', () => {
       custom_metadata: { foo: 'string' },
       wallets: [
         {
-          chain_type: 'solana',
+          chain_type: 'ethereum',
           additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
           create_smart_wallet: true,
           policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],

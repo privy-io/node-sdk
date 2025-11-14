@@ -288,7 +288,7 @@ export type CurveSigningChainType =
 /**
  * The wallet chain types that offer first class support.
  */
-export type FirstClassChainType = 'solana' | 'ethereum';
+export type FirstClassChainType = 'ethereum' | 'solana';
 
 export interface Wallet {
   /**
@@ -362,8 +362,24 @@ export namespace Wallet {
  * The wallet chain types.
  */
 export type WalletChainType =
-  | 'solana'
   | 'ethereum'
+  | 'solana'
+  | 'cosmos'
+  | 'stellar'
+  | 'sui'
+  | 'aptos'
+  | 'movement'
+  | 'tron'
+  | 'bitcoin-segwit'
+  | 'near'
+  | 'ton'
+  | 'starknet'
+  | 'spark';
+
+/**
+ * The wallet chain types that are not first class chains.
+ */
+export type ExtendedChainType =
   | 'cosmos'
   | 'stellar'
   | 'sui'
@@ -1103,20 +1119,10 @@ export namespace WalletCreateParams {
 }
 
 export interface WalletListParams extends CursorParams {
-  chain_type?:
-    | 'cosmos'
-    | 'stellar'
-    | 'sui'
-    | 'aptos'
-    | 'movement'
-    | 'tron'
-    | 'bitcoin-segwit'
-    | 'near'
-    | 'ton'
-    | 'starknet'
-    | 'spark'
-    | 'solana'
-    | 'ethereum';
+  /**
+   * The wallet chain types.
+   */
+  chain_type?: WalletChainType;
 
   user_id?: string;
 }
@@ -2033,6 +2039,7 @@ export declare namespace Wallets {
     type FirstClassChainType as FirstClassChainType,
     type Wallet as Wallet,
     type WalletChainType as WalletChainType,
+    type ExtendedChainType as ExtendedChainType,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
     type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,

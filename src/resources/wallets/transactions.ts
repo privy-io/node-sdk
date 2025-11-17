@@ -13,7 +13,7 @@ export class Transactions extends APIResource {
    * ```ts
    * const transaction = await client.wallets.transactions.get(
    *   'wallet_id',
-   *   { asset: 'usdc', chain: 'base' },
+   *   { asset: 'usdc', chain: 'ethereum' },
    * );
    * ```
    */
@@ -141,7 +141,7 @@ export namespace TransactionGetResponse {
 export interface TransactionGetParams {
   asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol' | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'sol'>;
 
-  chain: 'base';
+  chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana';
 
   cursor?: string;
 

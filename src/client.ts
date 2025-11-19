@@ -20,6 +20,7 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Analytics, AnalyticsEventInput } from './resources/analytics';
+import { AppResponse, Apps } from './resources/apps';
 import {
   ClientAuth,
   CustomOAuthProviderID,
@@ -897,6 +898,7 @@ export class PrivyAPI {
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
   analytics: API.Analytics = new API.Analytics(this);
+  apps: API.Apps = new API.Apps(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -906,6 +908,7 @@ PrivyAPI.Transactions = Transactions;
 PrivyAPI.KeyQuorums = KeyQuorums;
 PrivyAPI.ClientAuth = ClientAuth;
 PrivyAPI.Analytics = Analytics;
+PrivyAPI.Apps = Apps;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -1031,4 +1034,6 @@ export declare namespace PrivyAPI {
   };
 
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
+
+  export { Apps as Apps, type AppResponse as AppResponse };
 }

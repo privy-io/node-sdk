@@ -50,7 +50,7 @@ describe('resource wallets', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.wallets.list(
-        { chain_type: 'cosmos', cursor: 'x', limit: 100, user_id: 'user_id' },
+        { chain_type: 'ethereum', cursor: 'x', limit: 100, user_id: 'user_id' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(PrivyAPI.NotFoundError);

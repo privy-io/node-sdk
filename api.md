@@ -162,3 +162,9 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">PrivyOAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">CustomOAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthProviderID</a></code>
+
+# Analytics
+
+Types:
+
+- <code><a href="./src/resources/analytics.ts">AnalyticsEventInput</a></code>

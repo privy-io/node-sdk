@@ -1,4 +1,4 @@
 configured_endpoints: 46
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/privy%2Fprivy-api-client-0a132f582efe7371dad661b0218a59d929ac83220a7626c27ee546ee4a0962eb.yml
-openapi_spec_hash: 2dedb81c529fbcec70192abd8286d90d
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/privy%2Fprivy-api-client-48ef3b687cdef8a587167a67c9184d05c362d28c107a626872d45da23cf5ee2c.yml
+openapi_spec_hash: 6ff144462534d007d03aa544cf566ce3
 config_hash: 6183bb22495efc1dc00d69f838736506

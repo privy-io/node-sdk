@@ -168,3 +168,9 @@ Types:
 Types:
 
 - <code><a href="./src/resources/analytics.ts">AnalyticsEventInput</a></code>
+
+# Apps
+
+Types:
+
+- <code><a href="./src/resources/apps.ts">AppResponse</a></code>

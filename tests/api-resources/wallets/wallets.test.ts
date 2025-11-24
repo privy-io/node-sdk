@@ -113,9 +113,7 @@ describe('resource wallets', () => {
 
   // Prism tests are disabled
   test.skip('_rawSign: only required params', async () => {
-    const responsePromise = client.wallets._rawSign('wallet_id', {
-      params: { hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e' },
-    });
+    const responsePromise = client.wallets._rawSign('wallet_id', { name: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -128,7 +126,9 @@ describe('resource wallets', () => {
   // Prism tests are disabled
   test.skip('_rawSign: required and optional params', async () => {
     const response = await client.wallets._rawSign('wallet_id', {
-      params: { hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e' },
+      name: 'x',
+      owner: { public_key: 'public_key' },
+      owner_id: 'owner_id',
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
     });

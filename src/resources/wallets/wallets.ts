@@ -113,7 +113,11 @@ export class Wallets extends APIResource {
    * ```ts
    * const response = await client.wallets._rawSign(
    *   'wallet_id',
-   *   { name: 'x' },
+   *   {
+   *     params: {
+   *       hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e',
+   *     },
+   *   },
    * );
    * ```
    */
@@ -1201,22 +1205,9 @@ export declare namespace WalletInitImportParams {
 
 export interface WalletRawSignParams {
   /**
-   * Body param: Name to assign to condition set.
+   * Body param: Sign a pre-computed hash
    */
-  name: string;
-
-  /**
-   * Body param: The owner of the resource. If you provide this, do not specify an
-   * owner_id as it will be generated automatically. When updating a wallet, you can
-   * set the owner to null to remove the owner.
-   */
-  owner?: WalletRawSignParams.PublicKeyOwner | WalletRawSignParams.UserOwner | null;
-
-  /**
-   * Body param: The key quorum ID to set as the owner of the resource. If you
-   * provide this, do not specify an owner.
-   */
-  owner_id?: string | null;
+  params: WalletRawSignParams.Hash | WalletRawSignParams.Bytes;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are
@@ -1233,21 +1224,33 @@ export interface WalletRawSignParams {
 
 export namespace WalletRawSignParams {
   /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
+   * Sign a pre-computed hash
    */
-  export interface PublicKeyOwner {
-    public_key: string;
+  export interface Hash {
+    /**
+     * The hash to sign. Must start with `0x`.
+     */
+    hash: string;
   }
 
   /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
+   * Hash and sign bytes using the specified encoding and hash function.
    */
-  export interface UserOwner {
-    user_id: string;
+  export interface Bytes {
+    /**
+     * The bytes to hash and sign.
+     */
+    bytes: string;
+
+    /**
+     * The encoding scheme for the bytes.
+     */
+    encoding: 'utf-8' | 'hex';
+
+    /**
+     * The hash function to hash the bytes.
+     */
+    hash_function: 'keccak256' | 'sha256';
   }
 }
 

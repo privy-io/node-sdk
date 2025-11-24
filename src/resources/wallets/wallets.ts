@@ -393,6 +393,13 @@ export type ExtendedChainType =
   | 'spark';
 
 /**
+ * Information about the custodian managing this wallet.
+ */
+export interface WalletCustodian {
+  name: string;
+}
+
+/**
  * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
  */
 export interface EthereumPersonalSignRpcInput {
@@ -2047,6 +2054,7 @@ export declare namespace Wallets {
     type Wallet as Wallet,
     type WalletChainType as WalletChainType,
     type ExtendedChainType as ExtendedChainType,
+    type WalletCustodian as WalletCustodian,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
     type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,

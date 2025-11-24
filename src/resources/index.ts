@@ -75,6 +75,7 @@ export {
   type Wallet,
   type WalletChainType,
   type ExtendedChainType,
+  type WalletCustodian,
   type EthereumPersonalSignRpcInput,
   type EthereumSignTransactionRpcInput,
   type EthereumSendTransactionRpcInput,

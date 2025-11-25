@@ -393,6 +393,13 @@ export type ExtendedChainType =
   | 'spark';
 
 /**
+ * Information about the custodian managing this wallet.
+ */
+export interface WalletCustodian {
+  name: string;
+}
+
+/**
  * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
  */
 export interface EthereumPersonalSignRpcInput {
@@ -956,6 +963,8 @@ export interface WalletInitImportResponse {
 
 export interface WalletRawSignResponse {
   data: WalletRawSignResponse.Data;
+
+  method: 'raw_sign';
 }
 
 export namespace WalletRawSignResponse {
@@ -1205,7 +1214,7 @@ export interface WalletRawSignParams {
   /**
    * Body param: Sign a pre-computed hash
    */
-  params: WalletRawSignParams.Hash | WalletRawSignParams.UnionMember1;
+  params: WalletRawSignParams.Hash | WalletRawSignParams.Bytes;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are
@@ -1232,21 +1241,21 @@ export namespace WalletRawSignParams {
   }
 
   /**
-   * Hash and sign bytes
+   * Hash and sign bytes using the specified encoding and hash function.
    */
-  export interface UnionMember1 {
+  export interface Bytes {
     /**
      * The bytes to hash and sign.
      */
     bytes: string;
 
     /**
-     * Encoding scheme for the bytes.
+     * The encoding scheme for the bytes.
      */
     encoding: 'utf-8' | 'hex';
 
     /**
-     * Hash function to use for the bytes.
+     * The hash function to hash the bytes.
      */
     hash_function: 'keccak256' | 'sha256';
   }
@@ -2045,6 +2054,7 @@ export declare namespace Wallets {
     type Wallet as Wallet,
     type WalletChainType as WalletChainType,
     type ExtendedChainType as ExtendedChainType,
+    type WalletCustodian as WalletCustodian,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
     type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,

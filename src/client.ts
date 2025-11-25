@@ -19,6 +19,8 @@ import { AbstractPage, type CursorParams, CursorResponse } from './core/paginati
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { Analytics, AnalyticsEventInput } from './resources/analytics';
+import { AppResponse, Apps } from './resources/apps';
 import {
   ClientAuth,
   CustomOAuthProviderID,
@@ -116,6 +118,7 @@ import {
   WalletCreateParams,
   WalletCreateWalletsWithRecoveryParams,
   WalletCreateWalletsWithRecoveryResponse,
+  WalletCustodian,
   WalletExportParams,
   WalletExportResponse,
   WalletInitImportParams,
@@ -895,6 +898,8 @@ export class PrivyAPI {
   transactions: API.Transactions = new API.Transactions(this);
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
+  analytics: API.Analytics = new API.Analytics(this);
+  apps: API.Apps = new API.Apps(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -903,6 +908,8 @@ PrivyAPI.Policies = Policies;
 PrivyAPI.Transactions = Transactions;
 PrivyAPI.KeyQuorums = KeyQuorums;
 PrivyAPI.ClientAuth = ClientAuth;
+PrivyAPI.Analytics = Analytics;
+PrivyAPI.Apps = Apps;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -917,6 +924,7 @@ export declare namespace PrivyAPI {
     type Wallet as Wallet,
     type WalletChainType as WalletChainType,
     type ExtendedChainType as ExtendedChainType,
+    type WalletCustodian as WalletCustodian,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
     type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,
@@ -1026,4 +1034,8 @@ export declare namespace PrivyAPI {
     type CustomOAuthProviderID as CustomOAuthProviderID,
     type OAuthProviderID as OAuthProviderID,
   };
+
+  export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
+
+  export { Apps as Apps, type AppResponse as AppResponse };
 }

@@ -1,5 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+export { Analytics, type AnalyticsEventInput } from './analytics';
+export { Apps, type AppResponse } from './apps';
 export {
   ClientAuth,
   type ExternalOAuthProviderID,
@@ -73,6 +75,7 @@ export {
   type Wallet,
   type WalletChainType,
   type ExtendedChainType,
+  type WalletCustodian,
   type EthereumPersonalSignRpcInput,
   type EthereumSignTransactionRpcInput,
   type EthereumSendTransactionRpcInput,

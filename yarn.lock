@@ -440,10 +440,10 @@
   resolved "https://registry.npmjs.org/@hpke/common/-/common-1.8.1.tgz"
   integrity sha512-PSI4QSxH8XDli0TqAsWycVfrLLCM/bBe+hVlJwtuJJiKIvCaFS3CXX/WtRfJceLJye9NHc2J7GvHVCY9B1BEbA==
 
-"@hpke/core@^1.7.4":
-  version "1.7.4"
-  resolved "https://registry.npmjs.org/@hpke/core/-/core-1.7.4.tgz"
-  integrity sha512-1BfPQB7unq/tNx7eznmoFgmJlMFnymdLNNt2CQX/L8oYOfmc1+cFEItpXZ90mgthW7tB2oksy/G7Xh1t569qzA==
+"@hpke/core@^1.7.5":
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/@hpke/core/-/core-1.7.5.tgz#15f9ee1955ae3643eac703d061ec40921a40fc43"
+  integrity sha512-4xfckZuPaIodeu0HpuTRIdtmajhRHXM/6rjS2N62Ns9aOCkGbbeYRwktqR3bUScuhCwyEBsEQqtIh9f0iLP3WQ==
   dependencies:
     "@hpke/common" "^1.8.1"
 

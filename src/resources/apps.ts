@@ -41,6 +41,8 @@ export interface AppResponse {
 
   embedded_wallet_config: AppResponse.EmbeddedWalletConfig;
 
+  enabled_captcha_provider: 'turnstile' | 'hcaptcha' | null;
+
   enforce_wallet_uis: boolean;
 
   farcaster_auth: boolean;

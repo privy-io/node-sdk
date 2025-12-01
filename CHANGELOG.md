@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.6.2 (2025-12-01)
+
+Full Changelog: [v0.6.1...v0.6.2](https://github.com/privy-io/node-sdk/compare/v0.6.1...v0.6.2)
+
+### Features
+
+* **api:** api update ([e7960bc](https://github.com/privy-io/node-sdk/commit/e7960bc92b6ed466d7948b39861f8013b3dcd6dd))
+
+
+### Chores
+
+* bumps hpke/core in our yarn lock ([8ca2a38](https://github.com/privy-io/node-sdk/commit/8ca2a38b612e961838c9c5fff670ffa18a01cb9e))
+* bumps hpke/core in our yarn lock ([#71](https://github.com/privy-io/node-sdk/issues/71)) ([b6cbc6d](https://github.com/privy-io/node-sdk/commit/b6cbc6db97e0a6ec36e48dbf6c34c73bb51814df))
+
 ## 0.6.1 (2025-11-25)
 
 Full Changelog: [v0.6.0...v0.6.1](https://github.com/privy-io/node-sdk/compare/v0.6.0...v0.6.1)

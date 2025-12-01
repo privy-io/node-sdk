@@ -1,6 +1,6 @@
 {
   "name": "@privy-io/node",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "The official TypeScript library for the Privy API API",
   "author": "Privy API <support@privy.io>",
   "types": "dist/index.d.ts",

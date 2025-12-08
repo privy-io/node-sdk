@@ -8,6 +8,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCustodian</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcInput</a></code>
@@ -28,6 +29,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronTransactionCondition</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRawSignResponse</a></code>
@@ -85,6 +87,8 @@ Types:
 - <code><a href="./src/resources/users.ts">LinkedAccountEmbeddedWalletWithID</a></code>
 - <code><a href="./src/resources/users.ts">SmartWalletType</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountSmartWallet</a></code>
+- <code><a href="./src/resources/users.ts">OAuthTokens</a></code>
+- <code><a href="./src/resources/users.ts">UserWithIdentityToken</a></code>
 
 Methods:
 

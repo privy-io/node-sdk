@@ -342,26 +342,7 @@ export interface AuthenticatedUser {
   /**
    * OAuth tokens associated with the user.
    */
-  oauth_tokens?: AuthenticatedUser.OAuthTokens;
-}
-
-export namespace AuthenticatedUser {
-  /**
-   * OAuth tokens associated with the user.
-   */
-  export interface OAuthTokens {
-    access_token: string;
-
-    provider: string;
-
-    access_token_expires_in_seconds?: number;
-
-    refresh_token?: string;
-
-    refresh_token_expires_in_seconds?: number;
-
-    scopes?: Array<string>;
-  }
+  oauth_tokens?: OAuthTokens;
 }
 
 /**
@@ -1121,6 +1102,32 @@ export interface LinkedAccountSmartWallet {
   smart_wallet_version?: string;
 }
 
+/**
+ * OAuth tokens associated with the user.
+ */
+export interface OAuthTokens {
+  access_token: string;
+
+  provider: string;
+
+  access_token_expires_in_seconds?: number;
+
+  refresh_token?: string;
+
+  refresh_token_expires_in_seconds?: number;
+
+  scopes?: Array<string>;
+}
+
+/**
+ * The user object along their identity token.
+ */
+export interface UserWithIdentityToken {
+  identity_token: string | null;
+
+  user: User;
+}
+
 export interface UserCreateParams {
   linked_accounts: Array<
     | UserCreateParams.LinkedAccountWalletInput
@@ -1509,6 +1516,8 @@ export declare namespace Users {
     type LinkedAccountEmbeddedWalletWithID as LinkedAccountEmbeddedWalletWithID,
     type SmartWalletType as SmartWalletType,
     type LinkedAccountSmartWallet as LinkedAccountSmartWallet,
+    type OAuthTokens as OAuthTokens,
+    type UserWithIdentityToken as UserWithIdentityToken,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,

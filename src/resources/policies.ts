@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -263,7 +264,7 @@ export interface Policy {
   /**
    * The chain type the policy applies to.
    */
-  chain_type: 'ethereum' | 'solana' | 'tron';
+  chain_type: 'ethereum' | 'solana' | 'tron' | 'sui';
 
   /**
    * Unix timestamp of when the policy was created in milliseconds.
@@ -311,7 +312,7 @@ export namespace Policy {
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
-      | Rule.TronTransactionCondition
+      | WalletsAPI.TronTransactionCondition
     >;
 
     /**
@@ -481,29 +482,6 @@ export namespace Policy {
 
       value: string | Array<string>;
     }
-
-    /**
-     * TRON transaction fields for TransferContract and TriggerSmartContract
-     * transaction types.
-     */
-    export interface TronTransactionCondition {
-      /**
-       * Supported TRON transaction fields in format "TransactionType.field_name"
-       */
-      field:
-        | 'TransferContract.to_address'
-        | 'TransferContract.amount'
-        | 'TriggerSmartContract.contract_address'
-        | 'TriggerSmartContract.call_value'
-        | 'TriggerSmartContract.token_id'
-        | 'TriggerSmartContract.call_token_value';
-
-      field_source: 'tron_transaction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
   }
 }
 
@@ -529,7 +507,7 @@ export interface PolicyCreateRuleResponse {
     | PolicyCreateRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyCreateRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyCreateRuleResponse.SystemCondition
-    | PolicyCreateRuleResponse.TronTransactionCondition
+    | WalletsAPI.TronTransactionCondition
   >;
 
   /**
@@ -699,29 +677,6 @@ export namespace PolicyCreateRuleResponse {
 
     value: string | Array<string>;
   }
-
-  /**
-   * TRON transaction fields for TransferContract and TriggerSmartContract
-   * transaction types.
-   */
-  export interface TronTransactionCondition {
-    /**
-     * Supported TRON transaction fields in format "TransactionType.field_name"
-     */
-    field:
-      | 'TransferContract.to_address'
-      | 'TransferContract.amount'
-      | 'TriggerSmartContract.contract_address'
-      | 'TriggerSmartContract.call_value'
-      | 'TriggerSmartContract.token_id'
-      | 'TriggerSmartContract.call_token_value';
-
-    field_source: 'tron_transaction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
 }
 
 export interface PolicyDeleteResponse {
@@ -756,7 +711,7 @@ export interface PolicyUpdateRuleResponse {
     | PolicyUpdateRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyUpdateRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyUpdateRuleResponse.SystemCondition
-    | PolicyUpdateRuleResponse.TronTransactionCondition
+    | WalletsAPI.TronTransactionCondition
   >;
 
   /**
@@ -926,29 +881,6 @@ export namespace PolicyUpdateRuleResponse {
 
     value: string | Array<string>;
   }
-
-  /**
-   * TRON transaction fields for TransferContract and TriggerSmartContract
-   * transaction types.
-   */
-  export interface TronTransactionCondition {
-    /**
-     * Supported TRON transaction fields in format "TransactionType.field_name"
-     */
-    field:
-      | 'TransferContract.to_address'
-      | 'TransferContract.amount'
-      | 'TriggerSmartContract.contract_address'
-      | 'TriggerSmartContract.call_value'
-      | 'TriggerSmartContract.token_id'
-      | 'TriggerSmartContract.call_token_value';
-
-    field_source: 'tron_transaction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
 }
 
 /**
@@ -973,7 +905,7 @@ export interface PolicyGetRuleResponse {
     | PolicyGetRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyGetRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyGetRuleResponse.SystemCondition
-    | PolicyGetRuleResponse.TronTransactionCondition
+    | WalletsAPI.TronTransactionCondition
   >;
 
   /**
@@ -1143,36 +1075,13 @@ export namespace PolicyGetRuleResponse {
 
     value: string | Array<string>;
   }
-
-  /**
-   * TRON transaction fields for TransferContract and TriggerSmartContract
-   * transaction types.
-   */
-  export interface TronTransactionCondition {
-    /**
-     * Supported TRON transaction fields in format "TransactionType.field_name"
-     */
-    field:
-      | 'TransferContract.to_address'
-      | 'TransferContract.amount'
-      | 'TriggerSmartContract.contract_address'
-      | 'TriggerSmartContract.call_value'
-      | 'TriggerSmartContract.token_id'
-      | 'TriggerSmartContract.call_token_value';
-
-    field_source: 'tron_transaction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
 }
 
 export interface PolicyCreateParams {
   /**
    * Body param: The chain type the policy applies to.
    */
-  chain_type: 'ethereum' | 'solana' | 'tron';
+  chain_type: 'ethereum' | 'solana' | 'tron' | 'sui';
 
   /**
    * Body param: Name to assign to policy.
@@ -1229,7 +1138,7 @@ export namespace PolicyCreateParams {
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
-      | Rule.TronTransactionCondition
+      | WalletsAPI.TronTransactionCondition
     >;
 
     /**
@@ -1399,29 +1308,6 @@ export namespace PolicyCreateParams {
 
       value: string | Array<string>;
     }
-
-    /**
-     * TRON transaction fields for TransferContract and TriggerSmartContract
-     * transaction types.
-     */
-    export interface TronTransactionCondition {
-      /**
-       * Supported TRON transaction fields in format "TransactionType.field_name"
-       */
-      field:
-        | 'TransferContract.to_address'
-        | 'TransferContract.amount'
-        | 'TriggerSmartContract.contract_address'
-        | 'TriggerSmartContract.call_value'
-        | 'TriggerSmartContract.token_id'
-        | 'TriggerSmartContract.call_token_value';
-
-      field_source: 'tron_transaction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
   }
 
   /**
@@ -1462,7 +1348,7 @@ export interface PolicyCreateRuleParams {
     | PolicyCreateRuleParams.SolanaSystemProgramInstructionCondition
     | PolicyCreateRuleParams.SolanaTokenProgramInstructionCondition
     | PolicyCreateRuleParams.SystemCondition
-    | PolicyCreateRuleParams.TronTransactionCondition
+    | WalletsAPI.TronTransactionCondition
   >;
 
   /**
@@ -1641,29 +1527,6 @@ export namespace PolicyCreateRuleParams {
 
     value: string | Array<string>;
   }
-
-  /**
-   * TRON transaction fields for TransferContract and TriggerSmartContract
-   * transaction types.
-   */
-  export interface TronTransactionCondition {
-    /**
-     * Supported TRON transaction fields in format "TransactionType.field_name"
-     */
-    field:
-      | 'TransferContract.to_address'
-      | 'TransferContract.amount'
-      | 'TriggerSmartContract.contract_address'
-      | 'TriggerSmartContract.call_value'
-      | 'TriggerSmartContract.token_id'
-      | 'TriggerSmartContract.call_token_value';
-
-    field_source: 'tron_transaction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
 }
 
 export interface PolicyDeleteParams {
@@ -1756,7 +1619,7 @@ export namespace PolicyUpdateParams {
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
-      | Rule.TronTransactionCondition
+      | WalletsAPI.TronTransactionCondition
     >;
 
     /**
@@ -1926,29 +1789,6 @@ export namespace PolicyUpdateParams {
 
       value: string | Array<string>;
     }
-
-    /**
-     * TRON transaction fields for TransferContract and TriggerSmartContract
-     * transaction types.
-     */
-    export interface TronTransactionCondition {
-      /**
-       * Supported TRON transaction fields in format "TransactionType.field_name"
-       */
-      field:
-        | 'TransferContract.to_address'
-        | 'TransferContract.amount'
-        | 'TriggerSmartContract.contract_address'
-        | 'TriggerSmartContract.call_value'
-        | 'TriggerSmartContract.token_id'
-        | 'TriggerSmartContract.call_token_value';
-
-      field_source: 'tron_transaction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
   }
 }
 
@@ -1976,7 +1816,7 @@ export interface PolicyUpdateRuleParams {
     | PolicyUpdateRuleParams.SolanaSystemProgramInstructionCondition
     | PolicyUpdateRuleParams.SolanaTokenProgramInstructionCondition
     | PolicyUpdateRuleParams.SystemCondition
-    | PolicyUpdateRuleParams.TronTransactionCondition
+    | WalletsAPI.TronTransactionCondition
   >;
 
   /**
@@ -2150,29 +1990,6 @@ export namespace PolicyUpdateRuleParams {
     field: 'current_unix_timestamp';
 
     field_source: 'system';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * TRON transaction fields for TransferContract and TriggerSmartContract
-   * transaction types.
-   */
-  export interface TronTransactionCondition {
-    /**
-     * Supported TRON transaction fields in format "TransactionType.field_name"
-     */
-    field:
-      | 'TransferContract.to_address'
-      | 'TransferContract.amount'
-      | 'TriggerSmartContract.contract_address'
-      | 'TriggerSmartContract.call_value'
-      | 'TriggerSmartContract.token_id'
-      | 'TriggerSmartContract.call_token_value';
-
-    field_source: 'tron_transaction';
 
     operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 

@@ -17,7 +17,7 @@ export class Wallets extends APIResource {
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
 
   /**
-   * Create a new wallet.
+   * Creates a new wallet on the requested chain and for the requested owner.
    *
    * @example
    * ```ts
@@ -398,6 +398,11 @@ export type ExtendedChainType =
 export interface WalletCustodian {
   name: string;
 }
+
+/**
+ * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+ */
+export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
 
 /**
  * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
@@ -929,6 +934,29 @@ export namespace SolanaSignMessageRpcResponse {
 
     signature: string;
   }
+}
+
+/**
+ * TRON transaction fields for TransferContract and TriggerSmartContract
+ * transaction types.
+ */
+export interface TronTransactionCondition {
+  /**
+   * Supported TRON transaction fields in format "TransactionType.field_name"
+   */
+  field:
+    | 'TransferContract.to_address'
+    | 'TransferContract.amount'
+    | 'TriggerSmartContract.contract_address'
+    | 'TriggerSmartContract.call_value'
+    | 'TriggerSmartContract.token_id'
+    | 'TriggerSmartContract.call_token_value';
+
+  field_source: 'tron_transaction';
+
+  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+  value: string | Array<string>;
 }
 
 export interface WalletExportResponse {
@@ -2055,6 +2083,7 @@ export declare namespace Wallets {
     type WalletChainType as WalletChainType,
     type ExtendedChainType as ExtendedChainType,
     type WalletCustodian as WalletCustodian,
+    type SuiCommandName as SuiCommandName,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
     type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,
@@ -2075,6 +2104,7 @@ export declare namespace Wallets {
     type SolanaSignTransactionRpcResponse as SolanaSignTransactionRpcResponse,
     type SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
+    type TronTransactionCondition as TronTransactionCondition,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,

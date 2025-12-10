@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as WalletsAPI from './wallets/wallets';
+import * as PoliciesAPI from './policies';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -312,7 +312,7 @@ export namespace Policy {
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
-      | WalletsAPI.TronTransactionCondition
+      | PoliciesAPI.TronTransactionCondition
     >;
 
     /**
@@ -486,6 +486,29 @@ export namespace Policy {
 }
 
 /**
+ * TRON transaction fields for TransferContract and TriggerSmartContract
+ * transaction types.
+ */
+export interface TronTransactionCondition {
+  /**
+   * Supported TRON transaction fields in format "TransactionType.field_name"
+   */
+  field:
+    | 'TransferContract.to_address'
+    | 'TransferContract.amount'
+    | 'TriggerSmartContract.contract_address'
+    | 'TriggerSmartContract.call_value'
+    | 'TriggerSmartContract.token_id'
+    | 'TriggerSmartContract.call_token_value';
+
+  field_source: 'tron_transaction';
+
+  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+  value: string | Array<string>;
+}
+
+/**
  * A rule that defines the conditions and action to take if the conditions are
  * true.
  */
@@ -507,7 +530,7 @@ export interface PolicyCreateRuleResponse {
     | PolicyCreateRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyCreateRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyCreateRuleResponse.SystemCondition
-    | WalletsAPI.TronTransactionCondition
+    | TronTransactionCondition
   >;
 
   /**
@@ -711,7 +734,7 @@ export interface PolicyUpdateRuleResponse {
     | PolicyUpdateRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyUpdateRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyUpdateRuleResponse.SystemCondition
-    | WalletsAPI.TronTransactionCondition
+    | TronTransactionCondition
   >;
 
   /**
@@ -905,7 +928,7 @@ export interface PolicyGetRuleResponse {
     | PolicyGetRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyGetRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyGetRuleResponse.SystemCondition
-    | WalletsAPI.TronTransactionCondition
+    | TronTransactionCondition
   >;
 
   /**
@@ -1138,7 +1161,7 @@ export namespace PolicyCreateParams {
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
-      | WalletsAPI.TronTransactionCondition
+      | PoliciesAPI.TronTransactionCondition
     >;
 
     /**
@@ -1348,7 +1371,7 @@ export interface PolicyCreateRuleParams {
     | PolicyCreateRuleParams.SolanaSystemProgramInstructionCondition
     | PolicyCreateRuleParams.SolanaTokenProgramInstructionCondition
     | PolicyCreateRuleParams.SystemCondition
-    | WalletsAPI.TronTransactionCondition
+    | TronTransactionCondition
   >;
 
   /**
@@ -1619,7 +1642,7 @@ export namespace PolicyUpdateParams {
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
-      | WalletsAPI.TronTransactionCondition
+      | PoliciesAPI.TronTransactionCondition
     >;
 
     /**
@@ -1816,7 +1839,7 @@ export interface PolicyUpdateRuleParams {
     | PolicyUpdateRuleParams.SolanaSystemProgramInstructionCondition
     | PolicyUpdateRuleParams.SolanaTokenProgramInstructionCondition
     | PolicyUpdateRuleParams.SystemCondition
-    | WalletsAPI.TronTransactionCondition
+    | TronTransactionCondition
   >;
 
   /**
@@ -2004,6 +2027,7 @@ export interface PolicyGetRuleParams {
 export declare namespace Policies {
   export {
     type Policy as Policy,
+    type TronTransactionCondition as TronTransactionCondition,
     type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
     type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,

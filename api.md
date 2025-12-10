@@ -29,7 +29,6 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">TronTransactionCondition</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRawSignResponse</a></code>
@@ -118,6 +117,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/policies.ts">Policy</a></code>
+- <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyCreateRuleResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteRuleResponse</a></code>

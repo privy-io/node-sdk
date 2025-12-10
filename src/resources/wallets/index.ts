@@ -31,7 +31,6 @@ export {
   type SolanaSignTransactionRpcResponse,
   type SolanaSignAndSendTransactionRpcResponse,
   type SolanaSignMessageRpcResponse,
-  type TronTransactionCondition,
   type WalletExportResponse,
   type WalletInitImportResponse,
   type WalletRawSignResponse,

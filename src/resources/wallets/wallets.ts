@@ -936,29 +936,6 @@ export namespace SolanaSignMessageRpcResponse {
   }
 }
 
-/**
- * TRON transaction fields for TransferContract and TriggerSmartContract
- * transaction types.
- */
-export interface TronTransactionCondition {
-  /**
-   * Supported TRON transaction fields in format "TransactionType.field_name"
-   */
-  field:
-    | 'TransferContract.to_address'
-    | 'TransferContract.amount'
-    | 'TriggerSmartContract.contract_address'
-    | 'TriggerSmartContract.call_value'
-    | 'TriggerSmartContract.token_id'
-    | 'TriggerSmartContract.call_token_value';
-
-  field_source: 'tron_transaction';
-
-  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-  value: string | Array<string>;
-}
-
 export interface WalletExportResponse {
   /**
    * The encrypted private key.
@@ -2104,7 +2081,6 @@ export declare namespace Wallets {
     type SolanaSignTransactionRpcResponse as SolanaSignTransactionRpcResponse,
     type SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
-    type TronTransactionCondition as TronTransactionCondition,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,

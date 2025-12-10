@@ -51,6 +51,7 @@ import {
   PolicyUpdateParams,
   PolicyUpdateRuleParams,
   PolicyUpdateRuleResponse,
+  TronTransactionCondition,
 } from './resources/policies';
 import { TransactionGetResponse, Transactions } from './resources/transactions';
 import {
@@ -114,7 +115,6 @@ import {
   SolanaSignTransactionRpcInput,
   SolanaSignTransactionRpcResponse,
   SuiCommandName,
-  TronTransactionCondition,
   Wallet,
   WalletAuthenticateWithJwtParams,
   WalletAuthenticateWithJwtResponse,
@@ -950,7 +950,6 @@ export declare namespace PrivyAPI {
     type SolanaSignTransactionRpcResponse as SolanaSignTransactionRpcResponse,
     type SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
-    type TronTransactionCondition as TronTransactionCondition,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
@@ -1010,6 +1009,7 @@ export declare namespace PrivyAPI {
   export {
     Policies as Policies,
     type Policy as Policy,
+    type TronTransactionCondition as TronTransactionCondition,
     type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
     type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,

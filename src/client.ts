@@ -141,6 +141,10 @@ import {
 } from './resources/users';
 import {
   CurveSigningChainType,
+  CustodialWallet,
+  CustodialWalletChainType,
+  CustodialWalletCreateInput,
+  CustodialWalletProvider,
   EthereumPersonalSignRpcInput,
   EthereumPersonalSignRpcResponse,
   EthereumSecp256k1SignRpcInput,
@@ -978,6 +982,10 @@ export declare namespace PrivyAPI {
     type WalletChainType as WalletChainType,
     type ExtendedChainType as ExtendedChainType,
     type WalletCustodian as WalletCustodian,
+    type CustodialWalletProvider as CustodialWalletProvider,
+    type CustodialWalletChainType as CustodialWalletChainType,
+    type CustodialWalletCreateInput as CustodialWalletCreateInput,
+    type CustodialWallet as CustodialWallet,
     type SuiCommandName as SuiCommandName,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,

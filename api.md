@@ -8,6 +8,10 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCustodian</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInput</a></code>

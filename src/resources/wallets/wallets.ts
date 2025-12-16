@@ -400,6 +400,78 @@ export interface WalletCustodian {
 }
 
 /**
+ * The provider of the custodial wallet.
+ */
+export type CustodialWalletProvider = 'bridge';
+
+/**
+ * The chain type of the custodial wallet.
+ */
+export type CustodialWalletChainType = 'ethereum';
+
+/**
+ * The input for creating a custodial wallet.
+ */
+export interface CustodialWalletCreateInput {
+  /**
+   * The chain type of the custodial wallet.
+   */
+  chain_type: CustodialWalletChainType;
+
+  /**
+   * The provider of the custodial wallet.
+   */
+  provider: CustodialWalletProvider;
+
+  /**
+   * The resource ID of the beneficiary of the custodial wallet, given by the
+   * licensing provider.
+   */
+  provider_user_id: string;
+
+  additional_signers?: Array<CustodialWalletCreateInput.AdditionalSigner>;
+
+  owner?: CustodialWalletCreateInput.UserID | CustodialWalletCreateInput.PublicKey | null;
+
+  policy_ids?: Array<string>;
+}
+
+export namespace CustodialWalletCreateInput {
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    override_policy_ids?: Array<string>;
+  }
+
+  export interface UserID {
+    user_id: string;
+  }
+
+  export interface PublicKey {
+    public_key: string;
+  }
+}
+
+/**
+ * Information about a custodial wallet.
+ */
+export interface CustodialWallet {
+  id: string;
+
+  address: string;
+
+  /**
+   * The chain type of the custodial wallet.
+   */
+  chainType: CustodialWalletChainType;
+
+  /**
+   * The provider of the custodial wallet.
+   */
+  provider: CustodialWalletProvider;
+}
+
+/**
  * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
  */
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
@@ -2060,6 +2132,10 @@ export declare namespace Wallets {
     type WalletChainType as WalletChainType,
     type ExtendedChainType as ExtendedChainType,
     type WalletCustodian as WalletCustodian,
+    type CustodialWalletProvider as CustodialWalletProvider,
+    type CustodialWalletChainType as CustodialWalletChainType,
+    type CustodialWalletCreateInput as CustodialWalletCreateInput,
+    type CustodialWallet as CustodialWallet,
     type SuiCommandName as SuiCommandName,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,

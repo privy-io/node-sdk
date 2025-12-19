@@ -194,6 +194,7 @@ describe('resource wallets', () => {
           'BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=',
         encryption_type: 'HPKE',
         entropy_type: 'private-key',
+        hpke_config: { aad: 'aad', aead_algorithm: 'CHACHA20_POLY1305', info: 'info' },
       },
       additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['string'] }],
       owner: { user_id: 'user_id' },

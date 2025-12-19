@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as PoliciesAPI from './policies';
+import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -313,6 +314,8 @@ export namespace Policy {
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
       | PoliciesAPI.TronTransactionCondition
+      | PoliciesAPI.SuiTransactionCommandCondition
+      | PoliciesAPI.SuiTransferObjectsCommandCondition
     >;
 
     /**
@@ -486,6 +489,18 @@ export namespace Policy {
 }
 
 /**
+ * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
+ * supported for command names.
+ */
+export type SuiTransactionCommandOperator = 'eq' | 'in';
+
+/**
+ * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
+ * and 'amount' are supported.
+ */
+export type SuiTransferObjectsCommandField = 'recipient' | 'amount';
+
+/**
  * TRON transaction fields for TransferContract and TriggerSmartContract
  * transaction types.
  */
@@ -502,6 +517,46 @@ export interface TronTransactionCondition {
     | 'TriggerSmartContract.call_token_value';
 
   field_source: 'tron_transaction';
+
+  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+  value: string | Array<string>;
+}
+
+/**
+ * SUI transaction command attributes, enables allowlisting specific command types.
+ * Allowed commands: 'TransferObjects', 'SplitCoins', 'MergeCoins'. Only 'eq' and
+ * 'in' operators are supported.
+ */
+export interface SuiTransactionCommandCondition {
+  field: 'commandName';
+
+  field_source: 'sui_transaction_command';
+
+  /**
+   * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
+   * supported for command names.
+   */
+  operator: SuiTransactionCommandOperator;
+
+  /**
+   * Command name(s) to match. Must be one of: 'TransferObjects', 'SplitCoins',
+   * 'MergeCoins'
+   */
+  value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+}
+
+/**
+ * SUI TransferObjects command attributes, including recipient and amount fields.
+ */
+export interface SuiTransferObjectsCommandCondition {
+  /**
+   * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
+   * and 'amount' are supported.
+   */
+  field: SuiTransferObjectsCommandField;
+
+  field_source: 'sui_transfer_objects_command';
 
   operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
@@ -531,6 +586,8 @@ export interface PolicyCreateRuleResponse {
     | PolicyCreateRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyCreateRuleResponse.SystemCondition
     | TronTransactionCondition
+    | SuiTransactionCommandCondition
+    | SuiTransferObjectsCommandCondition
   >;
 
   /**
@@ -735,6 +792,8 @@ export interface PolicyUpdateRuleResponse {
     | PolicyUpdateRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyUpdateRuleResponse.SystemCondition
     | TronTransactionCondition
+    | SuiTransactionCommandCondition
+    | SuiTransferObjectsCommandCondition
   >;
 
   /**
@@ -929,6 +988,8 @@ export interface PolicyGetRuleResponse {
     | PolicyGetRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyGetRuleResponse.SystemCondition
     | TronTransactionCondition
+    | SuiTransactionCommandCondition
+    | SuiTransferObjectsCommandCondition
   >;
 
   /**
@@ -1162,6 +1223,8 @@ export namespace PolicyCreateParams {
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
       | PoliciesAPI.TronTransactionCondition
+      | PoliciesAPI.SuiTransactionCommandCondition
+      | PoliciesAPI.SuiTransferObjectsCommandCondition
     >;
 
     /**
@@ -1372,6 +1435,8 @@ export interface PolicyCreateRuleParams {
     | PolicyCreateRuleParams.SolanaTokenProgramInstructionCondition
     | PolicyCreateRuleParams.SystemCondition
     | TronTransactionCondition
+    | SuiTransactionCommandCondition
+    | SuiTransferObjectsCommandCondition
   >;
 
   /**
@@ -1643,6 +1708,8 @@ export namespace PolicyUpdateParams {
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
       | PoliciesAPI.TronTransactionCondition
+      | PoliciesAPI.SuiTransactionCommandCondition
+      | PoliciesAPI.SuiTransferObjectsCommandCondition
     >;
 
     /**
@@ -1840,6 +1907,8 @@ export interface PolicyUpdateRuleParams {
     | PolicyUpdateRuleParams.SolanaTokenProgramInstructionCondition
     | PolicyUpdateRuleParams.SystemCondition
     | TronTransactionCondition
+    | SuiTransactionCommandCondition
+    | SuiTransferObjectsCommandCondition
   >;
 
   /**
@@ -2027,7 +2096,11 @@ export interface PolicyGetRuleParams {
 export declare namespace Policies {
   export {
     type Policy as Policy,
+    type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
+    type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
     type TronTransactionCondition as TronTransactionCondition,
+    type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
+    type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
     type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
     type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,

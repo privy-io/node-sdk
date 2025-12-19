@@ -12,6 +12,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInput</a></code>
@@ -81,7 +82,6 @@ Types:
 - <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccount</a></code>
 - <code><a href="./src/resources/users.ts">User</a></code>
-- <code><a href="./src/resources/users.ts">CustomMetadata</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEmail</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountPhone</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountBaseWallet</a></code>
@@ -118,9 +118,7 @@ Types:
 - <code><a href="./src/resources/users.ts">LinkedAccountCrossApp</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountAuthorizationKey</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountType</a></code>
-- <code><a href="./src/resources/users.ts">SMSMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">TotpMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">PasskeyMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">CustomMetadata</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountWalletInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEmailInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountPhoneInput</a></code>
@@ -139,6 +137,11 @@ Types:
 - <code><a href="./src/resources/users.ts">LinkedAccountTelegramInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountCustomJwtInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountInput</a></code>
+- <code><a href="./src/resources/users.ts">UserBatchCreateInput</a></code>
+- <code><a href="./src/resources/users.ts">SMSMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">TotpMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">PasskeyMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">LinkedMfaMethod</a></code>
 - <code><a href="./src/resources/users.ts">OAuthTokens</a></code>
 - <code><a href="./src/resources/users.ts">UserWithIdentityToken</a></code>
 
@@ -170,7 +173,11 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/policies.ts">Policy</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransactionCommandOperator</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
 - <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyCreateRuleResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteRuleResponse</a></code>

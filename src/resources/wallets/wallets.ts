@@ -472,6 +472,31 @@ export interface CustodialWallet {
 }
 
 /**
+ * Optional HPKE configuration for wallet import decryption. These parameters allow
+ * importing wallets encrypted by external providers that use different HPKE
+ * configurations.
+ */
+export interface HpkeImportConfig {
+  /**
+   * Additional Authenticated Data (AAD) used during encryption. Should be
+   * base64-encoded bytes.
+   */
+  aad?: string;
+
+  /**
+   * The AEAD algorithm used for encryption. Defaults to CHACHA20_POLY1305 if not
+   * specified.
+   */
+  aead_algorithm?: 'CHACHA20_POLY1305' | 'AES_GCM256';
+
+  /**
+   * Application-specific context information (INFO) used during HPKE encryption.
+   * Should be base64-encoded bytes.
+   */
+  info?: string;
+}
+
+/**
  * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
  */
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
@@ -1329,12 +1354,12 @@ export namespace WalletRawSignParams {
     /**
      * The encoding scheme for the bytes.
      */
-    encoding: 'utf-8' | 'hex';
+    encoding: 'utf-8' | 'hex' | 'base64';
 
     /**
      * The hash function to hash the bytes.
      */
-    hash_function: 'keccak256' | 'sha256';
+    hash_function: 'keccak256' | 'sha256' | 'blake2b256';
   }
 }
 
@@ -1938,6 +1963,13 @@ export namespace WalletSubmitImportParams {
      * The index of the wallet to import.
      */
     index: number;
+
+    /**
+     * Optional HPKE configuration for wallet import decryption. These parameters allow
+     * importing wallets encrypted by external providers that use different HPKE
+     * configurations.
+     */
+    hpke_config?: WalletsAPI.HpkeImportConfig;
   }
 
   export interface PrivateKeySubmitInput {
@@ -1969,6 +2001,13 @@ export namespace WalletSubmitImportParams {
     encryption_type: 'HPKE';
 
     entropy_type: 'private-key';
+
+    /**
+     * Optional HPKE configuration for wallet import decryption. These parameters allow
+     * importing wallets encrypted by external providers that use different HPKE
+     * configurations.
+     */
+    hpke_config?: WalletsAPI.HpkeImportConfig;
   }
 
   export interface AdditionalSigner {
@@ -2136,6 +2175,7 @@ export declare namespace Wallets {
     type CustodialWalletChainType as CustodialWalletChainType,
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWallet as CustodialWallet,
+    type HpkeImportConfig as HpkeImportConfig,
     type SuiCommandName as SuiCommandName,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,

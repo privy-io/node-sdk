@@ -14,6 +14,7 @@ export {
   type CustodialWalletChainType,
   type CustodialWalletCreateInput,
   type CustodialWallet,
+  type HpkeImportConfig,
   type SuiCommandName,
   type EthereumPersonalSignRpcInput,
   type EthereumSignTransactionRpcInput,

@@ -404,18 +404,13 @@ export interface User {
 
   linked_accounts: Array<LinkedAccount>;
 
-  mfa_methods: Array<SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod>;
+  mfa_methods: Array<LinkedMfaMethod>;
 
   /**
    * Custom metadata associated with the user.
    */
   custom_metadata?: CustomMetadata;
 }
-
-/**
- * Custom metadata associated with the user.
- */
-export type CustomMetadata = { [key: string]: string | number | boolean };
 
 /**
  * An email account linked to the user.
@@ -1234,31 +1229,9 @@ export type LinkedAccountType =
   | ClientAuthAPI.CustomOAuthProviderID;
 
 /**
- * A SMS MFA method.
+ * Custom metadata associated with the user.
  */
-export interface SMSMfaMethod {
-  type: 'sms';
-
-  verified_at: number;
-}
-
-/**
- * A TOTP MFA method.
- */
-export interface TotpMfaMethod {
-  type: 'totp';
-
-  verified_at: number;
-}
-
-/**
- * A Passkey MFA method.
- */
-export interface PasskeyMfaMethod {
-  type: 'passkey';
-
-  verified_at: number;
-}
+export type CustomMetadata = { [key: string]: string | number | boolean };
 
 /**
  * The payload for importing a wallet account.
@@ -1504,6 +1477,93 @@ export type LinkedAccountInput =
   | LinkedAccountCustomJwtInput;
 
 /**
+ * The payload for batch creating users.
+ */
+export interface UserBatchCreateInput {
+  users: Array<UserBatchCreateInput.User>;
+}
+
+export namespace UserBatchCreateInput {
+  export interface User {
+    linked_accounts: Array<UsersAPI.LinkedAccountInput>;
+
+    create_embedded_wallet?: boolean;
+
+    create_ethereum_smart_wallet?: boolean;
+
+    create_ethereum_wallet?: boolean;
+
+    create_n_embedded_wallets?: number;
+
+    create_n_ethereum_wallets?: number;
+
+    create_solana_wallet?: boolean;
+
+    /**
+     * Custom metadata associated with the user.
+     */
+    custom_metadata?: UsersAPI.CustomMetadata;
+
+    wallets?: Array<User.Wallet>;
+  }
+
+  export namespace User {
+    export interface Wallet {
+      /**
+       * The wallet chain types.
+       */
+      chain_type: WalletsAPI.WalletChainType;
+
+      additional_signers?: Array<Wallet.AdditionalSigner>;
+
+      create_smart_wallet?: boolean;
+
+      policy_ids?: Array<string>;
+    }
+
+    export namespace Wallet {
+      export interface AdditionalSigner {
+        signer_id: string;
+
+        override_policy_ids?: Array<string>;
+      }
+    }
+  }
+}
+
+/**
+ * A SMS MFA method.
+ */
+export interface SMSMfaMethod {
+  type: 'sms';
+
+  verified_at: number;
+}
+
+/**
+ * A TOTP MFA method.
+ */
+export interface TotpMfaMethod {
+  type: 'totp';
+
+  verified_at: number;
+}
+
+/**
+ * A Passkey MFA method.
+ */
+export interface PasskeyMfaMethod {
+  type: 'passkey';
+
+  verified_at: number;
+}
+
+/**
+ * A multi-factor authentication method linked to the user.
+ */
+export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod;
+
+/**
  * OAuth tokens associated with the user.
  */
 export interface OAuthTokens {
@@ -1704,7 +1764,6 @@ export declare namespace Users {
     type AuthenticatedUser as AuthenticatedUser,
     type LinkedAccount as LinkedAccount,
     type User as User,
-    type CustomMetadata as CustomMetadata,
     type LinkedAccountEmail as LinkedAccountEmail,
     type LinkedAccountPhone as LinkedAccountPhone,
     type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
@@ -1741,9 +1800,7 @@ export declare namespace Users {
     type LinkedAccountCrossApp as LinkedAccountCrossApp,
     type LinkedAccountAuthorizationKey as LinkedAccountAuthorizationKey,
     type LinkedAccountType as LinkedAccountType,
-    type SMSMfaMethod as SMSMfaMethod,
-    type TotpMfaMethod as TotpMfaMethod,
-    type PasskeyMfaMethod as PasskeyMfaMethod,
+    type CustomMetadata as CustomMetadata,
     type LinkedAccountWalletInput as LinkedAccountWalletInput,
     type LinkedAccountEmailInput as LinkedAccountEmailInput,
     type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
@@ -1762,6 +1819,11 @@ export declare namespace Users {
     type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
     type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
     type LinkedAccountInput as LinkedAccountInput,
+    type UserBatchCreateInput as UserBatchCreateInput,
+    type SMSMfaMethod as SMSMfaMethod,
+    type TotpMfaMethod as TotpMfaMethod,
+    type PasskeyMfaMethod as PasskeyMfaMethod,
+    type LinkedMfaMethod as LinkedMfaMethod,
     type OAuthTokens as OAuthTokens,
     type UserWithIdentityToken as UserWithIdentityToken,
     type UsersCursor as UsersCursor,

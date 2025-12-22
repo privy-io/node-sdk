@@ -14,6 +14,23 @@ import { User } from '../resources';
 const JWT_ALGORITHM = 'ES256';
 const JWT_ISSUER = 'privy.io';
 
+export type VerifyAccessTokenInput = {
+  /** The access token to verify. */
+  access_token: string;
+  /** The Privy app ID to verify the token against. */
+  app_id: string;
+  /**
+   * The verification key to use to verify the token, or a mechanism to get the it such as via JWKS.
+   * You can find this verification key (or a JWKS endpoint) in the Privy dashboard.
+   * @see {@link createRemoteJWKSet}
+   * @see {@link importSPKI}
+   */
+  verification_key: CryptoKey | JWTVerifyGetKey | string;
+};
+
+/**
+ * @deprecated Use `VerifyAccessTokenInput` instead.
+ */
 export type VerifyAuthTokenInput = {
   /** The authentication token to verify. */
   auth_token: string;
@@ -28,7 +45,7 @@ export type VerifyAuthTokenInput = {
   verification_key: CryptoKey | JWTVerifyGetKey | string;
 };
 
-export type VerifyAuthTokenResponse = {
+export type VerifyAccessTokenResponse = {
   /** The Privy app ID for which the token was issued. */
   app_id: string;
   /** The issuer of the token. */
@@ -42,6 +59,11 @@ export type VerifyAuthTokenResponse = {
   /** The ID of the user for which the token was issued. */
   user_id: string;
 };
+
+/**
+ * @deprecated Use `VerifyAccessTokenResponse` instead.
+ */
+export type VerifyAuthTokenResponse = VerifyAccessTokenResponse;
 
 /**
  * Verifies a JWT issued by privy.io for the given app ID.
@@ -76,21 +98,21 @@ async function verifyPrivyIssuedJwt(
 }
 
 /**
- * Verifies a Privy-issued authentication token.
+ * Verifies a Privy-issued access token.
  *
  * @returns The payload of the token if it is valid.
  * @throws If the token is invalid.
  */
-export async function verifyAuthToken({
-  auth_token: authToken,
+export async function verifyAccessToken({
+  access_token: accessToken,
   app_id: appId,
   verification_key: verificationKeyOrString,
-}: VerifyAuthTokenInput): Promise<VerifyAuthTokenResponse> {
+}: VerifyAccessTokenInput): Promise<VerifyAccessTokenResponse> {
   const verificationKey =
     typeof verificationKeyOrString === 'string' ?
       await importSPKI(verificationKeyOrString, JWT_ALGORITHM)
     : verificationKeyOrString;
-  const verifiedToken = await verifyPrivyIssuedJwt(authToken, appId, verificationKey);
+  const verifiedToken = await verifyPrivyIssuedJwt(accessToken, appId, verificationKey);
   return {
     app_id: throwIfNotString(verifiedToken.payload.aud),
     issuer: throwIfNotString(verifiedToken.payload.iss),
@@ -100,6 +122,20 @@ export async function verifyAuthToken({
     user_id: throwIfNotString(verifiedToken.payload.sub),
   };
 }
+
+/**
+ * Verifies a Privy-issued authentication token.
+ *
+ * @returns The payload of the token if it is valid.
+ * @throws If the token is invalid.
+ * @deprecated Use `verifyAccessToken` instead.
+ */
+export const verifyAuthToken = ({
+  auth_token,
+  app_id,
+  verification_key,
+}: VerifyAuthTokenInput): Promise<VerifyAuthTokenResponse> =>
+  verifyAccessToken({ access_token: auth_token, app_id, verification_key });
 
 export type VerifyIdentityTokenInput = {
   /** The identity token to verify. */

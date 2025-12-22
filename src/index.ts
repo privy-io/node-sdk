@@ -9,6 +9,9 @@ export { type PrivyUsersService } from './public-api/services/users';
 export { type PrivyUtils } from './public-api/services/utils';
 export {
   InvalidAuthTokenError,
+  verifyAccessToken,
+  type VerifyAccessTokenResponse,
+  type VerifyAccessTokenInput,
   verifyAuthToken,
   type VerifyAuthTokenResponse,
   type VerifyAuthTokenInput,

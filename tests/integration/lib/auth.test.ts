@@ -2,7 +2,7 @@ import * as jose from 'jose';
 import {
   createPrivyAppJWKS,
   PrivyAppJWKS,
-  verifyAuthToken,
+  verifyAccessToken,
   verifyIdentityToken,
 } from '@privy-io/node/lib/auth';
 import { randomInt, randomUUID } from 'node:crypto';
@@ -24,12 +24,12 @@ describe('auth library', () => {
     });
   });
 
-  describe('verifyAuthToken', () => {
-    it('should verify an authentication token with a fixed verification key', async () => {
+  describe('verifyAccessToken', () => {
+    it('should verify an access token with a fixed verification key', async () => {
       const sessionId = `session:${randomUUID()}`;
       const userId = `user:${randomUUID()}`;
 
-      const authToken = await new jose.SignJWT({ sid: sessionId })
+      const accessToken = await new jose.SignJWT({ sid: sessionId })
         .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
         .setIssuer('privy.io')
         .setIssuedAt()
@@ -38,13 +38,13 @@ describe('auth library', () => {
         .setExpirationTime('1h')
         .sign(keypair.privateKey);
 
-      const verifiedAuthToken = await verifyAuthToken({
+      const verifiedAccessToken = await verifyAccessToken({
         app_id: TEST_APP.id,
         verification_key: keypair.publicKey,
-        auth_token: authToken,
+        access_token: accessToken,
       });
 
-      expect(verifiedAuthToken).toEqual({
+      expect(verifiedAccessToken).toEqual({
         app_id: TEST_APP.id,
         issuer: 'privy.io',
         issued_at: expect.any(Number),
@@ -53,11 +53,11 @@ describe('auth library', () => {
         user_id: userId,
       });
     });
-    it('should verify an authentication token with an override', async () => {
+    it('should verify an access token with an override', async () => {
       const sessionId = `session:${randomUUID()}`;
       const userId = `user:${randomUUID()}`;
 
-      const authToken = await new jose.SignJWT({ sid: sessionId })
+      const accessToken = await new jose.SignJWT({ sid: sessionId })
         .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
         .setIssuer('privy.io')
         .setIssuedAt()
@@ -66,13 +66,13 @@ describe('auth library', () => {
         .setExpirationTime('1h')
         .sign(keypair.privateKey);
 
-      const verifiedAuthToken = await verifyAuthToken({
+      const verifiedAccessToken = await verifyAccessToken({
         app_id: TEST_APP.id,
         verification_key: appJwks,
-        auth_token: authToken,
+        access_token: accessToken,
       });
 
-      expect(verifiedAuthToken).toEqual({
+      expect(verifiedAccessToken).toEqual({
         app_id: TEST_APP.id,
         issuer: 'privy.io',
         issued_at: expect.any(Number),
@@ -81,18 +81,18 @@ describe('auth library', () => {
         user_id: userId,
       });
     });
-    it('should verify an authentication token against a JWKS endpoint', async () => {
-      const authToken = await generatePrivyJWT();
+    it('should verify an access token against a JWKS endpoint', async () => {
+      const accessToken = await generatePrivyJWT();
 
-      const verifiedAuthToken = await verifyAuthToken({
+      const verifiedAccessToken = await verifyAccessToken({
         app_id: TEST_APP.id,
         verification_key: jose.createRemoteJWKSet(
           new URL(`${TEST_APP.apiUrl}/v1/apps/${TEST_APP.id}/jwks.json`),
         ),
-        auth_token: authToken,
+        access_token: accessToken,
       });
 
-      expect(verifiedAuthToken).toEqual({
+      expect(verifiedAccessToken).toEqual({
         app_id: TEST_APP.id,
         issuer: 'privy.io',
         issued_at: expect.any(Number),

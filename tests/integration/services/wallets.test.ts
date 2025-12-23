@@ -12,7 +12,7 @@ import {
   mnemonicToAccount,
   privateKeyToAccount,
 } from 'viem/accounts';
-import { generateP256KeyPair } from '../../helpers/authorization-keys';
+import { generateP256KeyPair } from '@privy-io/node';
 import { OWNERLESS_TRON_WALLET, P256_KEYPAIR, P256_OWNED_TRON_WALLET, TEST_APP } from '../test-config';
 
 describe('PrivyWalletsService', () => {
@@ -79,7 +79,7 @@ describe('PrivyWalletsService', () => {
   });
   describe('export', () => {
     it('should be able to export an Ethereum wallet', async () => {
-      const keypair = generateP256KeyPair();
+      const keypair = await generateP256KeyPair();
       const wallet = await privyClient.wallets().create({
         chain_type: 'ethereum',
         owner: { public_key: keypair.publicKey },
@@ -99,7 +99,7 @@ describe('PrivyWalletsService', () => {
       expect(viemWallet.address).toBe(wallet.address);
     });
     it('should be able to export a Solana wallet', async () => {
-      const keypair = generateP256KeyPair();
+      const keypair = await generateP256KeyPair();
       const wallet = await privyClient.wallets().create({
         chain_type: 'solana',
         owner: { public_key: keypair.publicKey },
@@ -121,7 +121,7 @@ describe('PrivyWalletsService', () => {
       expect(verified).toBe(true);
     });
     it('should not be able to export a Tier 2 wallet', async () => {
-      const keypair = generateP256KeyPair();
+      const keypair = await generateP256KeyPair();
       const wallet = await privyClient.wallets().create({
         chain_type: 'tron',
         owner: { public_key: keypair.publicKey },
@@ -143,7 +143,7 @@ describe('PrivyWalletsService', () => {
       const viemWallet = privateKeyToAccount(walletPrivateKey);
 
       // Generate a p256 keypair to own the wallet
-      const keypair = generateP256KeyPair();
+      const keypair = await generateP256KeyPair();
 
       const wallet = await privyClient.wallets().import({
         wallet: {
@@ -182,7 +182,7 @@ describe('PrivyWalletsService', () => {
       const viemWallet = mnemonicToAccount(mnemonic, { addressIndex: 2 });
 
       // Generate a p256 keypair to own the wallet
-      const keypair = generateP256KeyPair();
+      const keypair = await generateP256KeyPair();
 
       const wallet = await privyClient.wallets().import({
         wallet: {
@@ -223,7 +223,7 @@ describe('PrivyWalletsService', () => {
       const walletAddress = base58.encode(walletKeypair.publicKey);
 
       // Generate a p256 keypair to own the wallet
-      const keypair = generateP256KeyPair();
+      const keypair = await generateP256KeyPair();
 
       const wallet = await privyClient.wallets().import({
         wallet: {

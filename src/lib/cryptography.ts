@@ -2,6 +2,74 @@ import { Chacha20Poly1305 } from '@hpke/chacha20poly1305';
 import { CipherSuite, DhkemP256HkdfSha256, HkdfSha256 } from '@hpke/core';
 import { p256 } from '@noble/curves/nist';
 import type { PrivKey } from '@noble/curves/utils';
+import { toBase64 } from '../internal/utils/base64';
+
+/**
+ * Returns the runtime's `SubtleCrypto` implementation.
+ *
+ * We rely on `globalThis.crypto.subtle` for broad runtime support (Node.js 20+, Deno, Bun, Workers/Edge).
+ *
+ * @internal
+ */
+function getSubtleCrypto(): typeof globalThis.crypto.subtle {
+  const subtle = (globalThis as any).crypto?.subtle;
+  if (!subtle) {
+    throw new Error(
+      '`crypto.subtle` is not defined as a global; Either run in a runtime that provides WebCrypto, or polyfill `globalThis.crypto`',
+    );
+  }
+  return subtle;
+}
+
+export interface P256KeyPair {
+  /**
+   * The base64-encoded SPKI-formatted public key, with no PEM headers.
+   *
+   * This is the format accepted by Privy when specifying a P-256 public key owner.
+   */
+  publicKey: string;
+  /**
+   * The base64-encoded PKCS8-formatted private key, with no PEM headers.
+   *
+   * This is the format accepted by {@link AuthorizationContext.authorization_private_keys} and
+   * {@link generateAuthorizationSignature}.
+   */
+  privateKey: string;
+}
+
+/**
+ * Generates a P-256 key pair suitable for Privy resource ownership and request
+ * authorization signing.
+ *
+ * @returns A P-256 key pair, in base64-encoded DER format.
+ *
+ * @example
+ * const keypair = await generateP256KeyPair();
+ * const wallet = await privy.wallets().create({
+ *   chain_type: '...',
+ *   owner: { public_key: keypair.publicKey },
+ * });
+ * const response = await privy.wallets().rawSign(wallet.id, {
+ *   params: { hash: '...' },
+ *   authorization_context: {
+ *     authorization_private_keys: [keypair.privateKey]
+ *   },
+ * });
+ */
+export async function generateP256KeyPair(): Promise<P256KeyPair> {
+  const subtle = getSubtleCrypto();
+  const keyPair = await subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+
+  const [publicKeyDer, privateKeyDer] = await Promise.all([
+    subtle.exportKey('spki', keyPair.publicKey),
+    subtle.exportKey('pkcs8', keyPair.privateKey),
+  ]);
+
+  return {
+    publicKey: toBase64(new Uint8Array(publicKeyDer)),
+    privateKey: toBase64(new Uint8Array(privateKeyDer)),
+  };
+}
 
 /**
  * Imports a P-256 private key for use with the `@noble/curves` library.
@@ -53,7 +121,8 @@ export async function setupHPKERecipient(): Promise<HPKERecipient> {
   });
 
   const keypair = await suite.kem.generateKeyPair();
-  const publicKeySpki = await crypto.subtle.exportKey('spki', keypair.publicKey);
+  const subtle = getSubtleCrypto();
+  const publicKeySpki = await subtle.exportKey('spki', keypair.publicKey);
 
   return {
     publicKeySpki: new Uint8Array(publicKeySpki),
@@ -113,5 +182,5 @@ export async function setupHPKESender(): Promise<HPKESender> {
 }
 
 /** This prefix is no longer used, but we need to support existing keys */
-export const WALLET_API_PRIVATE_KEY_PREFIX = 'wallet-api:';
-export const AUTHORIZATION_PRIVATE_KEY_PREFIX = 'wallet-auth:';
+const WALLET_API_PRIVATE_KEY_PREFIX = 'wallet-api:';
+const AUTHORIZATION_PRIVATE_KEY_PREFIX = 'wallet-auth:';

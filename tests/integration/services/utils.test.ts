@@ -2,7 +2,7 @@ import { p256 } from '@noble/curves/nist';
 import { sha256 } from '@noble/hashes/sha2';
 import { importPKCS8PrivateKey } from '@privy-io/node/lib/cryptography';
 import { InvalidAuthTokenError, PrivyClient } from '@privy-io/node';
-import { generateP256KeyPair } from '../../helpers/authorization-keys';
+import { generateP256KeyPair } from '@privy-io/node';
 import { generateTestJWT, generatePrivyJWT } from '../../helpers/jwt-auth';
 import { TEST_APP } from '../test-config';
 
@@ -84,7 +84,7 @@ describe('PrivyUtils', () => {
     });
     describe('generateAuthorizationSignature', () => {
       it('generates p256 signatures over the request payload', async () => {
-        const keypair = generateP256KeyPair();
+        const keypair = await generateP256KeyPair();
 
         const input = {
           version: 1,
@@ -112,9 +112,9 @@ describe('PrivyUtils', () => {
     });
     describe('generateAuthorizationSignatures', () => {
       it('generates multiple p256 signatures over the request payload', async () => {
-        const keypair = generateP256KeyPair();
-        const keypair2 = generateP256KeyPair();
-        const keypair3 = generateP256KeyPair();
+        const keypair = await generateP256KeyPair();
+        const keypair2 = await generateP256KeyPair();
+        const keypair3 = await generateP256KeyPair();
 
         const privateKey = importPKCS8PrivateKey(keypair.privateKey);
         const privateKey2 = importPKCS8PrivateKey(keypair2.privateKey);

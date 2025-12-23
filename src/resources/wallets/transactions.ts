@@ -61,7 +61,7 @@ export namespace TransactionGetResponse {
 
   export namespace Transaction {
     export interface UnionMember0 {
-      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
+      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'sol';
 
       chain:
         | 'ethereum'
@@ -99,7 +99,7 @@ export namespace TransactionGetResponse {
     }
 
     export interface UnionMember1 {
-      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
+      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'sol';
 
       chain:
         | 'ethereum'
@@ -139,7 +139,14 @@ export namespace TransactionGetResponse {
 }
 
 export interface TransactionGetParams {
-  asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol' | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'sol'>;
+  asset:
+    | 'usdc'
+    | 'eth'
+    | 'pol'
+    | 'usdt'
+    | 'eurc'
+    | 'sol'
+    | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'sol'>;
 
   chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'sepolia';
 

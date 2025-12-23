@@ -1,5 +1,4 @@
-import { PrivyClient } from '@privy-io/node';
-import { generateP256KeyPair } from '../../helpers/authorization-keys';
+import { PrivyClient, generateP256KeyPair } from '@privy-io/node';
 import { NotFoundError } from '@privy-io/node';
 import { TEST_APP } from '../test-config';
 

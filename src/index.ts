@@ -32,6 +32,8 @@ export {
   generateAuthorizationSignatures,
 } from './lib/authorization';
 
+export { generateP256KeyPair, type P256KeyPair } from './lib/cryptography';
+
 export { type EmbeddedWalletLinkedAccount, isEmbeddedWalletLinkedAccount } from './lib/user-utils';
 
 export { APIPromise } from './core/api-promise';

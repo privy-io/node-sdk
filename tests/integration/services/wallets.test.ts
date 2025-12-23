@@ -12,7 +12,7 @@ import {
   mnemonicToAccount,
   privateKeyToAccount,
 } from 'viem/accounts';
-import { generateP256KeyPair } from '../../helpers/authorization-keys';
+import { generateP256KeyPair } from '@privy-io/node';
 import { OWNERLESS_TRON_WALLET, P256_KEYPAIR, P256_OWNED_TRON_WALLET, TEST_APP } from '../test-config';
 
 describe('PrivyWalletsService', () => {

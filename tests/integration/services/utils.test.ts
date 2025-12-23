@@ -2,7 +2,7 @@ import { p256 } from '@noble/curves/nist';
 import { sha256 } from '@noble/hashes/sha2';
 import { importPKCS8PrivateKey } from '@privy-io/node/lib/cryptography';
 import { InvalidAuthTokenError, PrivyClient } from '@privy-io/node';
-import { generateP256KeyPair } from '../../helpers/authorization-keys';
+import { generateP256KeyPair } from '@privy-io/node';
 import { generateTestJWT, generatePrivyJWT } from '../../helpers/jwt-auth';
 import { TEST_APP } from '../test-config';
 

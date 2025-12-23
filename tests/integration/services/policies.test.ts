@@ -1,4 +1,4 @@
-import { PrivyClient, generateP256KeyPair } from '@privy-io/node';
+import { P256KeyPair, PrivyClient, generateP256KeyPair } from '@privy-io/node';
 import { NotFoundError } from '@privy-io/node';
 import { TEST_APP } from '../test-config';
 
@@ -47,7 +47,7 @@ describe('PrivyPoliciesService', () => {
   });
   describe('update', () => {
     it('should be able to change the owner on a policy', async () => {
-      const keypair = generateP256KeyPair();
+      const keypair = await generateP256KeyPair();
 
       // Start with an ownerless policy
       const policy = await privyClient.policies().create({
@@ -76,7 +76,7 @@ describe('PrivyPoliciesService', () => {
   });
   describe('delete', () => {
     it('should delete a policy', async () => {
-      const keypair = generateP256KeyPair();
+      const keypair = await generateP256KeyPair();
       const createdPolicy = await privyClient.policies().create({
         version: '1.0',
         chain_type: 'ethereum',
@@ -103,9 +103,9 @@ describe('PrivyPoliciesService', () => {
   describe('rules', () => {
     let policyId: string;
     let ruleId: string;
-    let keypair: ReturnType<typeof generateP256KeyPair>;
+    let keypair: P256KeyPair;
     beforeEach(async () => {
-      keypair = generateP256KeyPair();
+      keypair = await generateP256KeyPair();
       const policy = await privyClient.policies().create({
         version: '1.0',
         name: 'NodeSDK Policies Rules Test',

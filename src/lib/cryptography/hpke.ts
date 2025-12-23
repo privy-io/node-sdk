@@ -1,6 +1,6 @@
 import { Chacha20Poly1305 } from '@hpke/chacha20poly1305';
 import { CipherSuite, DhkemP256HkdfSha256, HkdfSha256 } from '@hpke/core';
-import crypto from 'node:crypto';
+import { getSubtleCrypto } from './webcrypto';
 
 /** @internal */
 export interface HPKERecipient {
@@ -29,7 +29,8 @@ export async function setupHPKERecipient(): Promise<HPKERecipient> {
   });
 
   const keypair = await suite.kem.generateKeyPair();
-  const publicKeySpki = await crypto.subtle.exportKey('spki', keypair.publicKey);
+  const subtle = getSubtleCrypto();
+  const publicKeySpki = await subtle.exportKey('spki', keypair.publicKey);
 
   return {
     publicKeySpki: new Uint8Array(publicKeySpki),

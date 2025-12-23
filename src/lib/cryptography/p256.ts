@@ -1,4 +1,5 @@
-import crypto from 'node:crypto';
+import { getSubtleCrypto } from './webcrypto';
+import { toBase64 } from '../../internal/utils/base64';
 
 export interface P256KeyPair {
   /**
@@ -23,7 +24,7 @@ export interface P256KeyPair {
  * @returns A P-256 key pair, in base64-encoded DER format.
  *
  * @example
- * const keypair = generateP256KeyPair();
+ * const keypair = await generateP256KeyPair();
  * const wallet = await privy.wallets().create({
  *   chain_type: '...',
  *   owner: { public_key: keypair.publicKey },
@@ -35,21 +36,17 @@ export interface P256KeyPair {
  *   },
  * });
  */
-export function generateP256KeyPair(): P256KeyPair {
-  const keyPair = crypto.generateKeyPairSync('ec', {
-    namedCurve: 'P-256',
-    publicKeyEncoding: {
-      type: 'spki',
-      format: 'der',
-    },
-    privateKeyEncoding: {
-      type: 'pkcs8',
-      format: 'der',
-    },
-  });
+export async function generateP256KeyPair(): Promise<P256KeyPair> {
+  const subtle = getSubtleCrypto();
+  const keyPair = await subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+
+  const [publicKeyDer, privateKeyDer] = await Promise.all([
+    subtle.exportKey('spki', keyPair.publicKey),
+    subtle.exportKey('pkcs8', keyPair.privateKey),
+  ]);
 
   return {
-    publicKey: keyPair.publicKey.toString('base64'),
-    privateKey: keyPair.privateKey.toString('base64'),
+    publicKey: toBase64(new Uint8Array(publicKeyDer)),
+    privateKey: toBase64(new Uint8Array(privateKeyDer)),
   };
 }

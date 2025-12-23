@@ -87,7 +87,7 @@ describe('PrivyEthereumService', () => {
         expect(verified).toBe(true);
       });
       it('should be able to sign a message with a signature provided in the authorization context', async () => {
-        const keypair = generateP256KeyPair();
+        const keypair = await generateP256KeyPair();
 
         const wallet = await privyClient.wallets().create({
           chain_type: 'ethereum',
@@ -135,7 +135,7 @@ describe('PrivyEthereumService', () => {
         expect(verified).toBe(true);
       });
       it('should be able to sign a message with a sign function in the authorization context', async () => {
-        const keypair = generateP256KeyPair();
+        const keypair = await generateP256KeyPair();
 
         const wallet = await privyClient.wallets().create({
           chain_type: 'ethereum',

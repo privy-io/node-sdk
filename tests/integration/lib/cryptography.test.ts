@@ -7,8 +7,8 @@ import crypto from 'node:crypto';
 describe('cryptography library', () => {
   describe('generateP256KeyPair', () => {
     const someMessage = new TextEncoder().encode('Hello, world!');
-    it('returns base64 DER keys that can be imported to node:crypto used for ECDSA sign/verify', () => {
-      const { publicKey, privateKey } = generateP256KeyPair();
+    it('returns base64 DER keys that can be imported to node:crypto used for ECDSA sign/verify', async () => {
+      const { publicKey, privateKey } = await generateP256KeyPair();
 
       const importedPrivateKey = crypto.createPrivateKey({
         key: Buffer.from(privateKey, 'base64'),
@@ -25,8 +25,8 @@ describe('cryptography library', () => {
       expect(crypto.verify('sha256', someMessage, importedPublicKey, signature)).toBe(true);
     });
 
-    it('produces a private key compatible with importPKCS8PrivateKey + noble p256 signing', () => {
-      const { privateKey } = generateP256KeyPair();
+    it('produces a private key compatible with importPKCS8PrivateKey + noble p256 signing', async () => {
+      const { privateKey } = await generateP256KeyPair();
 
       const noblePrivateKey = importPKCS8PrivateKey(privateKey);
       const noblePublicKey = p256.getPublicKey(noblePrivateKey);
@@ -35,9 +35,9 @@ describe('cryptography library', () => {
       expect(p256.verify(signatureDer, sha256(someMessage), noblePublicKey)).toBe(true);
     });
 
-    it('generates fresh key material on each call', () => {
-      const kp1 = generateP256KeyPair();
-      const kp2 = generateP256KeyPair();
+    it('generates fresh key material on each call', async () => {
+      const kp1 = await generateP256KeyPair();
+      const kp2 = await generateP256KeyPair();
 
       expect(kp1.privateKey).not.toEqual(kp2.privateKey);
       expect(kp1.publicKey).not.toEqual(kp2.publicKey);

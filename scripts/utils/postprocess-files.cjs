@@ -52,6 +52,14 @@ async function postprocess() {
       types: './viem.d.mts',
       default: './viem.mjs',
     },
+    './solana-kit': {
+      require: {
+        types: './solana-kit.d.ts',
+        default: './solana-kit.js',
+      },
+      types: './solana-kit.d.mts',
+      default: './solana-kit.mjs',
+    },
   };
 
   await fs.promises.writeFile(

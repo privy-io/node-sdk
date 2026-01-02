@@ -1,11 +1,11 @@
 import { PrivyAPI } from '@privy-io/node/client';
 import { AuthorizationContext, PrivyEthereumService } from '@privy-io/node';
 import { PrivyClient } from '@privy-io/node';
+import { generateP256KeyPair } from '@privy-io/node';
 import { Hex, verifyHash, verifyMessage, verifyTypedData } from 'viem';
 import { verifyAuthorization } from 'viem/utils';
 import crypto from 'node:crypto';
 import { generateTestJWT } from '../../helpers/jwt-auth';
-import { generateP256KeyPair } from '../../helpers/authorization-keys';
 import {
   TEST_APP,
   P256_KEYPAIR,
@@ -87,7 +87,7 @@ describe('PrivyEthereumService', () => {
         expect(verified).toBe(true);
       });
       it('should be able to sign a message with a signature provided in the authorization context', async () => {
-        const keypair = generateP256KeyPair();
+        const keypair = await generateP256KeyPair();
 
         const wallet = await privyClient.wallets().create({
           chain_type: 'ethereum',
@@ -135,7 +135,7 @@ describe('PrivyEthereumService', () => {
         expect(verified).toBe(true);
       });
       it('should be able to sign a message with a sign function in the authorization context', async () => {
-        const keypair = generateP256KeyPair();
+        const keypair = await generateP256KeyPair();
 
         const wallet = await privyClient.wallets().create({
           chain_type: 'ethereum',

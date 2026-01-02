@@ -1,7 +1,8 @@
 import { PrivyAPI } from '../../../client';
 import {
   PrivyAppJWKS,
-  verifyAuthToken,
+  verifyAccessToken,
+  VerifyAccessTokenResponse,
   VerifyAuthTokenResponse,
   verifyIdentityToken,
 } from '../../../lib/auth';
@@ -17,18 +18,30 @@ export class PrivyAuthUtils {
   }
 
   /**
+   * Verifies the access token, and returns the payload if it is valid.
+   *
+   * @param accessToken - The access token to verify.
+   * @returns The payload of the token if it is valid.
+   * @throws If the token is invalid.
+   */
+  public async verifyAccessToken(accessToken: string): Promise<VerifyAccessTokenResponse> {
+    return verifyAccessToken({
+      access_token: accessToken,
+      app_id: this.privyAppID,
+      verification_key: this.appJwks,
+    });
+  }
+
+  /**
    * Verifies the authentication token, and returns the payload if it is valid.
    *
    * @param authToken - The authentication token to verify.
    * @returns The payload of the token if it is valid.
    * @throws If the token is invalid.
+   * @deprecated Use `verifyAccessToken` instead.
    */
   public async verifyAuthToken(authToken: string): Promise<VerifyAuthTokenResponse> {
-    return verifyAuthToken({
-      auth_token: authToken,
-      app_id: this.privyAppID,
-      verification_key: this.appJwks,
-    });
+    return this.verifyAccessToken(authToken);
   }
 
   public async verifyIdentityToken(identityToken: string): Promise<User> {

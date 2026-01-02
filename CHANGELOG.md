@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.7.0 (2026-01-02)
+
+Full Changelog: [v0.6.2...v0.7.0](https://github.com/privy-io/node-sdk/compare/v0.6.2...v0.7.0)
+
+### Features
+
+* **api:** api update ([40bc785](https://github.com/privy-io/node-sdk/commit/40bc785965bc0cf8f153cb3d93ed6ebb4b951ace))
+* **api:** api update ([fd87e16](https://github.com/privy-io/node-sdk/commit/fd87e165572783e58b70938c0b8cacd6cd6537fd))
+* **api:** api update ([d50dbce](https://github.com/privy-io/node-sdk/commit/d50dbcea4659ac4570300e8bbe474cb2d9e0dd05))
+* **api:** api update ([74c694a](https://github.com/privy-io/node-sdk/commit/74c694a43f3a450de67f53063c9fc7f81592fa8f))
+* **api:** api update ([4be36e7](https://github.com/privy-io/node-sdk/commit/4be36e7c6945d28c29ca5b00ef808807533b755a))
+* introduces the @solana/kit signer ([#78](https://github.com/privy-io/node-sdk/issues/78)) ([c31fdaa](https://github.com/privy-io/node-sdk/commit/c31fdaaa89a0d393bffd35712251274f9fcecc90))
+* introduces the generateP256KeyPair util ([#76](https://github.com/privy-io/node-sdk/issues/76)) ([fbef7e5](https://github.com/privy-io/node-sdk/commit/fbef7e5c8d7b6e2b35ebb2c5189035095eab782f))
+* renames verifyAuthToken to verifyAccessToken ([#75](https://github.com/privy-io/node-sdk/issues/75)) ([169c506](https://github.com/privy-io/node-sdk/commit/169c5064c59211eab4483f04be926623618c9c79))
+
+
+### Bug Fixes
+
+* LinkedAccount is no longer a namespace ([#74](https://github.com/privy-io/node-sdk/issues/74)) ([b621174](https://github.com/privy-io/node-sdk/commit/b621174b645797dff0cc5e06524277b4d522c012))
+* **mcp:** correct code tool API endpoint ([6d22848](https://github.com/privy-io/node-sdk/commit/6d22848550eb84667d2698e1ae9fab0651c53eb8))
+* **mcp:** return correct lines on typescript errors ([cf74799](https://github.com/privy-io/node-sdk/commit/cf74799c28682958a71158e5d9abf60454f6b86b))
+
+
+### Chores
+
+* **client:** fix logger property type ([c074af3](https://github.com/privy-io/node-sdk/commit/c074af3b965fa258500f0994a2ad296e58eaa991))
+* **internal:** codegen related update ([9547b80](https://github.com/privy-io/node-sdk/commit/9547b8017bf0bf2b9a3c98b31146fe7254b006ad))
+* **internal:** codegen related update ([9673054](https://github.com/privy-io/node-sdk/commit/967305425ebda098278c285a328506148af2fd43))
+* **internal:** upgrade eslint ([b4b1323](https://github.com/privy-io/node-sdk/commit/b4b132372fd6c725db152e26b9c1f4e8b971f0ab))
+* moves to @solana/kit ([#77](https://github.com/privy-io/node-sdk/issues/77)) ([d5363f8](https://github.com/privy-io/node-sdk/commit/d5363f84797f0c979534d19a0c810cf2cbbb00b2))
+
 ## 0.6.2 (2025-12-01)
 
 Full Changelog: [v0.6.1...v0.6.2](https://github.com/privy-io/node-sdk/compare/v0.6.1...v0.6.2)

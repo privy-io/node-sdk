@@ -85,6 +85,8 @@ export interface AppResponse {
 
   show_wallet_login_first: boolean;
 
+  smart_wallet_config: AppResponse.Enabled | AppResponse.UnionMember1;
+
   sms_auth: boolean;
 
   solana_wallet_auth: boolean;
@@ -168,6 +170,48 @@ export namespace AppResponse {
 
     export interface Solana {
       create_on_login: 'users-without-wallets' | 'all-users' | 'off';
+    }
+  }
+
+  export interface Enabled {
+    enabled: false;
+  }
+
+  export interface UnionMember1 {
+    configured_networks: Array<UnionMember1.ConfiguredNetwork>;
+
+    enabled: true;
+
+    smart_wallet_type:
+      | 'safe'
+      | 'kernel'
+      | 'light_account'
+      | 'biconomy'
+      | 'coinbase_smart_wallet'
+      | 'thirdweb';
+
+    smart_wallet_version?: string;
+  }
+
+  export namespace UnionMember1 {
+    export interface ConfiguredNetwork {
+      bundler_url: string;
+
+      chain_id: string;
+
+      chain_name?: string;
+
+      paymaster_context?: ConfiguredNetwork.PaymasterContext;
+
+      paymaster_url?: string;
+
+      rpc_url?: string;
+    }
+
+    export namespace ConfiguredNetwork {
+      export interface PaymasterContext {
+        policy_id: string;
+      }
     }
   }
 

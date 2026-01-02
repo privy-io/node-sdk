@@ -9,6 +9,9 @@ export { type PrivyUsersService } from './public-api/services/users';
 export { type PrivyUtils } from './public-api/services/utils';
 export {
   InvalidAuthTokenError,
+  verifyAccessToken,
+  type VerifyAccessTokenResponse,
+  type VerifyAccessTokenInput,
   verifyAuthToken,
   type VerifyAuthTokenResponse,
   type VerifyAuthTokenInput,
@@ -28,6 +31,8 @@ export {
   generateAuthorizationSignature,
   generateAuthorizationSignatures,
 } from './lib/authorization';
+
+export { generateP256KeyPair, type P256KeyPair } from './lib/cryptography';
 
 export { type EmbeddedWalletLinkedAccount, isEmbeddedWalletLinkedAccount } from './lib/user-utils';
 

@@ -8,6 +8,12 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCustodian</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcInput</a></code>
@@ -76,6 +82,17 @@ Types:
 - <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccount</a></code>
 - <code><a href="./src/resources/users.ts">User</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountEmail</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountPhone</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountBaseWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountEthereum</a></code>
+- <code><a href="./src/resources/users.ts">SmartWalletType</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountSmartWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountSolana</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountFarcaster</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountPasskey</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTelegram</a></code>
+- <code><a href="./src/resources/users.ts">EmbeddedWalletRecoveryMethod</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEthereumEmbeddedWallet</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountSolanaEmbeddedWallet</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountBitcoinSegwitEmbeddedWallet</a></code>
@@ -83,8 +100,50 @@ Types:
 - <code><a href="./src/resources/users.ts">LinkedAccountCurveSigningEmbeddedWallet</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEmbeddedWallet</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEmbeddedWalletWithID</a></code>
-- <code><a href="./src/resources/users.ts">SmartWalletType</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountSmartWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountGoogleOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTwitterOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountDiscordOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountGitHubOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountLinkedInOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountSpotifyOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountInstagramOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTiktokOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountLineOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTwitchOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountAppleOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountCustomOAuth</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountCustomJwt</a></code>
+- <code><a href="./src/resources/users.ts">CrossAppEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users.ts">CrossAppSmartWallet</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountCrossApp</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountAuthorizationKey</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountType</a></code>
+- <code><a href="./src/resources/users.ts">CustomMetadata</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountWalletInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountEmailInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountPhoneInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountGoogleInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTwitterInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountDiscordInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountGitHubInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountSpotifyInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountInstagramInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTiktokInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountLineInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTwitchInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountAppleInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountLinkedInInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountFarcasterInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTelegramInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountCustomJwtInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountInput</a></code>
+- <code><a href="./src/resources/users.ts">UserBatchCreateInput</a></code>
+- <code><a href="./src/resources/users.ts">SMSMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">TotpMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">PasskeyMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">LinkedMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">OAuthTokens</a></code>
+- <code><a href="./src/resources/users.ts">UserWithIdentityToken</a></code>
 
 Methods:
 
@@ -114,6 +173,11 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/policies.ts">Policy</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransactionCommandOperator</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
+- <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyCreateRuleResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteRuleResponse</a></code>

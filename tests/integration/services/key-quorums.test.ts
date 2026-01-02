@@ -1,5 +1,4 @@
-import { PrivyClient } from '@privy-io/node';
-import { generateP256KeyPair } from '../../helpers/authorization-keys';
+import { PrivyClient, generateP256KeyPair } from '@privy-io/node';
 import { NotFoundError } from '@privy-io/node';
 import { TEST_APP } from '../test-config';
 
@@ -14,8 +13,8 @@ describe('PrivyKeyQuorumsService', () => {
   });
   describe.skip('create', () => {
     it('should create a key quorum with a two public keys', async () => {
-      const keyPair = generateP256KeyPair();
-      const keyPair2 = generateP256KeyPair();
+      const keyPair = await generateP256KeyPair();
+      const keyPair2 = await generateP256KeyPair();
       const keyQuorum = await privyClient.keyQuorums().create({
         public_keys: [keyPair.publicKey, keyPair2.publicKey],
         display_name: '2 of 2 Test Key Quorum',
@@ -33,8 +32,8 @@ describe('PrivyKeyQuorumsService', () => {
   });
   describe('update', () => {
     it('should update the authorization threshold of a key quorum', async () => {
-      const keypair1 = generateP256KeyPair();
-      const keypair2 = generateP256KeyPair();
+      const keypair1 = await generateP256KeyPair();
+      const keypair2 = await generateP256KeyPair();
 
       // Create a 2-of-2 key quorum
       const keyQuorum = await privyClient.keyQuorums().create({
@@ -65,7 +64,7 @@ describe('PrivyKeyQuorumsService', () => {
   });
   describe('delete', () => {
     it('should delete a key quorum', async () => {
-      const keypair = generateP256KeyPair();
+      const keypair = await generateP256KeyPair();
       const createdKeyQuorum = await privyClient.keyQuorums().create({
         public_keys: [keypair.publicKey],
         display_name: 'NodeSDK KeyQuorums Delete Test',

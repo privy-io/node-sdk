@@ -17,7 +17,7 @@ export class Wallets extends APIResource {
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
 
   /**
-   * Create a new wallet.
+   * Creates a new wallet on the requested chain and for the requested owner.
    *
    * @example
    * ```ts
@@ -398,6 +398,108 @@ export type ExtendedChainType =
 export interface WalletCustodian {
   name: string;
 }
+
+/**
+ * The provider of the custodial wallet.
+ */
+export type CustodialWalletProvider = 'bridge';
+
+/**
+ * The chain type of the custodial wallet.
+ */
+export type CustodialWalletChainType = 'ethereum';
+
+/**
+ * The input for creating a custodial wallet.
+ */
+export interface CustodialWalletCreateInput {
+  /**
+   * The chain type of the custodial wallet.
+   */
+  chain_type: CustodialWalletChainType;
+
+  /**
+   * The provider of the custodial wallet.
+   */
+  provider: CustodialWalletProvider;
+
+  /**
+   * The resource ID of the beneficiary of the custodial wallet, given by the
+   * licensing provider.
+   */
+  provider_user_id: string;
+
+  additional_signers?: Array<CustodialWalletCreateInput.AdditionalSigner>;
+
+  owner?: CustodialWalletCreateInput.UserID | CustodialWalletCreateInput.PublicKey | null;
+
+  policy_ids?: Array<string>;
+}
+
+export namespace CustodialWalletCreateInput {
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    override_policy_ids?: Array<string>;
+  }
+
+  export interface UserID {
+    user_id: string;
+  }
+
+  export interface PublicKey {
+    public_key: string;
+  }
+}
+
+/**
+ * Information about a custodial wallet.
+ */
+export interface CustodialWallet {
+  id: string;
+
+  address: string;
+
+  /**
+   * The chain type of the custodial wallet.
+   */
+  chainType: CustodialWalletChainType;
+
+  /**
+   * The provider of the custodial wallet.
+   */
+  provider: CustodialWalletProvider;
+}
+
+/**
+ * Optional HPKE configuration for wallet import decryption. These parameters allow
+ * importing wallets encrypted by external providers that use different HPKE
+ * configurations.
+ */
+export interface HpkeImportConfig {
+  /**
+   * Additional Authenticated Data (AAD) used during encryption. Should be
+   * base64-encoded bytes.
+   */
+  aad?: string;
+
+  /**
+   * The AEAD algorithm used for encryption. Defaults to CHACHA20_POLY1305 if not
+   * specified.
+   */
+  aead_algorithm?: 'CHACHA20_POLY1305' | 'AES_GCM256';
+
+  /**
+   * Application-specific context information (INFO) used during HPKE encryption.
+   * Should be base64-encoded bytes.
+   */
+  info?: string;
+}
+
+/**
+ * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+ */
+export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
 
 /**
  * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
@@ -1252,12 +1354,12 @@ export namespace WalletRawSignParams {
     /**
      * The encoding scheme for the bytes.
      */
-    encoding: 'utf-8' | 'hex';
+    encoding: 'utf-8' | 'hex' | 'base64';
 
     /**
      * The hash function to hash the bytes.
      */
-    hash_function: 'keccak256' | 'sha256';
+    hash_function: 'keccak256' | 'sha256' | 'blake2b256';
   }
 }
 
@@ -1861,6 +1963,13 @@ export namespace WalletSubmitImportParams {
      * The index of the wallet to import.
      */
     index: number;
+
+    /**
+     * Optional HPKE configuration for wallet import decryption. These parameters allow
+     * importing wallets encrypted by external providers that use different HPKE
+     * configurations.
+     */
+    hpke_config?: WalletsAPI.HpkeImportConfig;
   }
 
   export interface PrivateKeySubmitInput {
@@ -1892,6 +2001,13 @@ export namespace WalletSubmitImportParams {
     encryption_type: 'HPKE';
 
     entropy_type: 'private-key';
+
+    /**
+     * Optional HPKE configuration for wallet import decryption. These parameters allow
+     * importing wallets encrypted by external providers that use different HPKE
+     * configurations.
+     */
+    hpke_config?: WalletsAPI.HpkeImportConfig;
   }
 
   export interface AdditionalSigner {
@@ -2055,6 +2171,12 @@ export declare namespace Wallets {
     type WalletChainType as WalletChainType,
     type ExtendedChainType as ExtendedChainType,
     type WalletCustodian as WalletCustodian,
+    type CustodialWalletProvider as CustodialWalletProvider,
+    type CustodialWalletChainType as CustodialWalletChainType,
+    type CustodialWalletCreateInput as CustodialWalletCreateInput,
+    type CustodialWallet as CustodialWallet,
+    type HpkeImportConfig as HpkeImportConfig,
+    type SuiCommandName as SuiCommandName,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
     type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,

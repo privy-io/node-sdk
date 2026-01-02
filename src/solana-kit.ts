@@ -1,5 +1,4 @@
 import {
-  address as solanaAddress,
   getBase64EncodedWireTransaction,
   getTransactionDecoder,
   type Address,
@@ -13,12 +12,12 @@ import type {
 } from '@solana/signers';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
-import type { LinkedAccountEmbeddedWallet } from './resources/users';
-import type { Wallet } from './resources/wallets/wallets';
 
 export interface CreateSolanaKitSignerInput {
-  /** Wallet to use for signing. */
-  wallet: LinkedAccountEmbeddedWallet | Wallet;
+  /** ID for the wallet. */
+  walletId: string;
+  /** Solana address for the wallet. */
+  address: Address;
   /** Authorization context for the wallet. */
   authorizationContext?: AuthorizationContext;
   /**
@@ -54,24 +53,19 @@ export type SolanaKitSigner = MessagePartialSigner &
  * ```ts
  * import { PrivyClient } from '@privy-io/node';
  * import { createSolanaKitSigner } from '@privy-io/node/solana-kit';
+ * import { address } from '@solana/kit';
  *
  * const client = new PrivyClient({ appId: '...', appSecret: '...' });
- * const wallet = await client.wallets().create({ chain_type: 'solana' });
- * const signer = createSolanaKitSigner(client, { wallet });
+ * const signer = createSolanaKitSigner(client, {
+ *   walletId: 'wallet-id',
+ *   address: address('...'),
+ * });
  * ```
  */
 export function createSolanaKitSigner(
   client: PrivyClient,
-  { wallet, authorizationContext, caip2 }: CreateSolanaKitSignerInput,
+  { walletId, address, authorizationContext, caip2 }: CreateSolanaKitSignerInput,
 ): SolanaKitSigner {
-  const walletId = wallet.id;
-  if (!walletId) {
-    throw new Error('Wallet must have an ID to be used as a signer.');
-  }
-  if (wallet.chain_type !== 'solana') {
-    throw new Error(`Wallet must be a Solana wallet. Received chain_type: '${wallet.chain_type}'.`);
-  }
-  const address = solanaAddress(wallet.address);
   const authCtxOptions = authorizationContext ? { authorization_context: authorizationContext } : {};
   return {
     address,
@@ -126,7 +120,7 @@ export function createSolanaKitSigner(
     async signAndSendTransactions(transactions) {
       if (!caip2) {
         throw new Error(
-          'CAIP-2 is required for sending transactions. Please provide one in the createPrivySigner input.',
+          'CAIP-2 is required for sending transactions. Please provide one in the createSolanaKitSigner input.',
         );
       }
 

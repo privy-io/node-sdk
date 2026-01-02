@@ -1,6 +1,7 @@
-import { PrivyClient, Wallet } from '@privy-io/node';
+import { PrivyClient } from '@privy-io/node';
 import { createSolanaKitSigner, SolanaKitSigner } from '@privy-io/node/solana-kit';
 import {
+  address,
   assertIsTransactionWithinSizeLimit,
   createSignableMessage,
   type Address,
@@ -40,18 +41,25 @@ describe('@solana/kit interop', () => {
   describe('using a Privy wallet as a signer', () => {
     describe.each([
       // Case 1. Ownerless wallet
-      { owner: null, walletId: OWNERLESS_SOLANA_WALLET.id },
+      { owner: null, walletId: OWNERLESS_SOLANA_WALLET.id, walletAddress: OWNERLESS_SOLANA_WALLET.address },
       // Case 2. P256-owned wallet
-      { owner: 'p256', walletId: P256_OWNED_SOLANA_WALLET.id },
+      {
+        owner: 'p256',
+        walletId: P256_OWNED_SOLANA_WALLET.id,
+        walletAddress: P256_OWNED_SOLANA_WALLET.address,
+      },
       // Case 3. User-owned wallet
-      { owner: 'user', walletId: USER_OWNED_SOLANA_WALLET.id },
-    ] as const)('for a wallet with owner:$owner', ({ owner, walletId }) => {
-      let wallet: Wallet;
+      {
+        owner: 'user',
+        walletId: USER_OWNED_SOLANA_WALLET.id,
+        walletAddress: USER_OWNED_SOLANA_WALLET.address,
+      },
+    ] as const)('for a wallet with owner:$owner', ({ owner, walletId, walletAddress }) => {
       let privySigner: SolanaKitSigner;
       beforeEach(async () => {
-        wallet = await privyClient.wallets().get(walletId);
         privySigner = createSolanaKitSigner(privyClient, {
-          wallet,
+          walletId,
+          address: address(walletAddress),
           caip2: SOL_DEVNET_CAIP2,
           authorizationContext: {
             ...(owner === 'p256' ? { authorization_private_keys: [P256_KEYPAIR.privateKey] } : {}),
@@ -74,7 +82,7 @@ describe('@solana/kit interop', () => {
           const verified = nacl.sign.detached.verify(
             message.content,
             signatureBytes,
-            base58.decode(wallet.address),
+            base58.decode(walletAddress),
           );
           expect(verified).toBe(true);
         });
@@ -90,7 +98,7 @@ describe('@solana/kit interop', () => {
 
           // Verify the signature
           const signatureBytes = signatures[privySigner.address as Address] as SignatureBytes;
-          const verified = nacl.sign.detached.verify(content, signatureBytes, base58.decode(wallet.address));
+          const verified = nacl.sign.detached.verify(content, signatureBytes, base58.decode(walletAddress));
           expect(verified).toBe(true);
         });
 
@@ -105,7 +113,7 @@ describe('@solana/kit interop', () => {
           const verified1 = nacl.sign.detached.verify(
             message1.content,
             allSignatures[0]![privySigner.address as Address] as SignatureBytes,
-            base58.decode(wallet.address),
+            base58.decode(walletAddress),
           );
           expect(verified1).toBe(true);
 
@@ -113,7 +121,7 @@ describe('@solana/kit interop', () => {
           const verified2 = nacl.sign.detached.verify(
             message2.content,
             allSignatures[1]![privySigner.address as Address] as SignatureBytes,
-            base58.decode(wallet.address),
+            base58.decode(walletAddress),
           );
           expect(verified2).toBe(true);
         });
@@ -121,7 +129,7 @@ describe('@solana/kit interop', () => {
 
       describe('signTransactions', () => {
         it('should be able to sign a transaction', async () => {
-          const transaction = await createTransferTransaction(wallet.address, 100);
+          const transaction = await createTransferTransaction(walletAddress, 100);
           assertIsTransactionWithinSizeLimit(transaction);
           const allSignatures = await privySigner.signTransactions([transaction]);
           const signatures = allSignatures[0]!;
@@ -134,15 +142,15 @@ describe('@solana/kit interop', () => {
           const verified = nacl.sign.detached.verify(
             new Uint8Array(transaction.messageBytes),
             signatureBytes,
-            base58.decode(wallet.address),
+            base58.decode(walletAddress),
           );
           expect(verified).toBe(true);
         });
 
         it('should be able to sign multiple transactions', async () => {
-          const transaction1 = await createTransferTransaction(wallet.address, 100);
+          const transaction1 = await createTransferTransaction(walletAddress, 100);
           assertIsTransactionWithinSizeLimit(transaction1);
-          const transaction2 = await createTransferTransaction(wallet.address, 200);
+          const transaction2 = await createTransferTransaction(walletAddress, 200);
           assertIsTransactionWithinSizeLimit(transaction2);
           const allSignatures = await privySigner.signTransactions([transaction1, transaction2]);
 
@@ -152,7 +160,7 @@ describe('@solana/kit interop', () => {
           const verified1 = nacl.sign.detached.verify(
             new Uint8Array(transaction1.messageBytes),
             allSignatures[0]![privySigner.address as Address] as SignatureBytes,
-            base58.decode(wallet.address),
+            base58.decode(walletAddress),
           );
           expect(verified1).toBe(true);
 
@@ -160,7 +168,7 @@ describe('@solana/kit interop', () => {
           const verified2 = nacl.sign.detached.verify(
             new Uint8Array(transaction2.messageBytes),
             allSignatures[1]![privySigner.address as Address] as SignatureBytes,
-            base58.decode(wallet.address),
+            base58.decode(walletAddress),
           );
           expect(verified2).toBe(true);
         });
@@ -169,7 +177,7 @@ describe('@solana/kit interop', () => {
       // Skipped to not waste funds. Logic is shared with signing transactions so safe to not frequently test.
       describe.skip('signAndSendTransactions', () => {
         it('should be able to sign and send a transaction', async () => {
-          const transaction = await createTransferTransaction(wallet.address, 100);
+          const transaction = await createTransferTransaction(walletAddress, 100);
           const [signature] = await privySigner.signAndSendTransactions([transaction]);
 
           expect(signature).toBeDefined();

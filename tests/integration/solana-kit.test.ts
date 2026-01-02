@@ -1,5 +1,5 @@
 import { PrivyClient, Wallet } from '@privy-io/node';
-import { createPrivySigner, PrivySigner } from '@privy-io/node/solana-kit';
+import { createSolanaKitSigner, SolanaKitSigner } from '@privy-io/node/solana-kit';
 import {
   assertIsTransactionWithinSizeLimit,
   createSignableMessage,
@@ -47,10 +47,10 @@ describe('@solana/kit interop', () => {
       { owner: 'user', walletId: USER_OWNED_SOLANA_WALLET.id },
     ] as const)('for a wallet with owner:$owner', ({ owner, walletId }) => {
       let wallet: Wallet;
-      let privySigner: PrivySigner;
+      let privySigner: SolanaKitSigner;
       beforeEach(async () => {
         wallet = await privyClient.wallets().get(walletId);
-        privySigner = createPrivySigner(privyClient, {
+        privySigner = createSolanaKitSigner(privyClient, {
           wallet,
           caip2: SOL_DEVNET_CAIP2,
           authorizationContext: {

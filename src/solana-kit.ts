@@ -16,7 +16,7 @@ import type { PrivyClient } from './public-api/PrivyClient';
 import type { LinkedAccountEmbeddedWallet } from './resources/users';
 import type { Wallet } from './resources/wallets/wallets';
 
-export interface CreatePrivySignerInput {
+export interface CreateSolanaKitSignerInput {
   /** Wallet to use for signing. */
   wallet: LinkedAccountEmbeddedWallet | Wallet;
   /** Authorization context for the wallet. */
@@ -35,13 +35,13 @@ export interface CreatePrivySignerInput {
  * and {@link TransactionSendingSigner} interfaces and keeps track of the ID of the
  * wallet used to sign them.
  */
-export type PrivySigner = MessagePartialSigner &
+export type SolanaKitSigner = MessagePartialSigner &
   TransactionPartialSigner &
   TransactionSendingSigner &
   Readonly<{ walletId: string; address: Address }>;
 
 /**
- * Creates a {@link PrivySigner} from a provided Privy wallet ID and authorization context.
+ * Creates a {@link SolanaKitSigner} from a provided Privy wallet and authorization context.
  *
  * The returned signer implements:
  * - {@link MessagePartialSigner} - for signing messages via `signMessages`
@@ -53,17 +53,17 @@ export type PrivySigner = MessagePartialSigner &
  * @example
  * ```ts
  * import { PrivyClient } from '@privy-io/node';
- * import { createPrivySigner } from '@privy-io/node/solana-kit';
+ * import { createSolanaKitSigner } from '@privy-io/node/solana-kit';
  *
  * const client = new PrivyClient({ appId: '...', appSecret: '...' });
- * const wallet = await client.wallets.create({ chain_type: 'solana' });
- * const signer = createPrivySigner(client, { wallet });
+ * const wallet = await client.wallets().create({ chain_type: 'solana' });
+ * const signer = createSolanaKitSigner(client, { wallet });
  * ```
  */
-export function createPrivySigner(
+export function createSolanaKitSigner(
   client: PrivyClient,
-  { wallet, authorizationContext, caip2 }: CreatePrivySignerInput,
-): PrivySigner {
+  { wallet, authorizationContext, caip2 }: CreateSolanaKitSignerInput,
+): SolanaKitSigner {
   const walletId = wallet.id;
   if (!walletId) {
     throw new Error('Wallet must have an ID to be used as a signer.');

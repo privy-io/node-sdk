@@ -1,4 +1,5 @@
 import {
+  address as solanaAddress,
   getBase64EncodedWireTransaction,
   getTransactionDecoder,
   type Address,
@@ -12,12 +13,12 @@ import type {
 } from '@solana/signers';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
+import type { LinkedAccountEmbeddedWallet } from './resources/users';
+import type { Wallet } from './resources/wallets/wallets';
 
-export interface CreatePrivySignerInput<TAddress extends string = string> {
-  /** ID for the wallet. */
-  walletId: string;
-  /** Solana address for the wallet. */
-  address: Address<TAddress>;
+export interface CreatePrivySignerInput {
+  /** Wallet to use for signing. */
+  wallet: LinkedAccountEmbeddedWallet | Wallet;
   /** Authorization context for the wallet. */
   authorizationContext?: AuthorizationContext;
   /**
@@ -33,13 +34,11 @@ export interface CreatePrivySignerInput<TAddress extends string = string> {
  * It implements the {@link MessagePartialSigner}, {@link TransactionPartialSigner},
  * and {@link TransactionSendingSigner} interfaces and keeps track of the ID of the
  * wallet used to sign them.
- *
- * @typeParam TAddress - Supply a string literal to define a signer having a particular address.
  */
-export type PrivySigner<TAddress extends string = string> = MessagePartialSigner<TAddress> &
-  TransactionPartialSigner<TAddress> &
-  TransactionSendingSigner<TAddress> &
-  Readonly<{ walletId: string; address: Address<TAddress> }>;
+export type PrivySigner = MessagePartialSigner &
+  TransactionPartialSigner &
+  TransactionSendingSigner &
+  Readonly<{ walletId: string; address: Address }>;
 
 /**
  * Creates a {@link PrivySigner} from a provided Privy wallet ID and authorization context.
@@ -55,19 +54,24 @@ export type PrivySigner<TAddress extends string = string> = MessagePartialSigner
  * ```ts
  * import { PrivyClient } from '@privy-io/node';
  * import { createPrivySigner } from '@privy-io/node/solana-kit';
- * import { address } from '@solana/kit';
  *
  * const client = new PrivyClient({ appId: '...', appSecret: '...' });
- * const signer = createPrivySigner(client, {
- *   walletId: 'wallet-id',
- *   address: address('...'),
- * });
+ * const wallet = await client.wallets.create({ chain_type: 'solana' });
+ * const signer = createPrivySigner(client, { wallet });
  * ```
  */
-export function createPrivySigner<TAddress extends string = string>(
+export function createPrivySigner(
   client: PrivyClient,
-  { walletId, address, authorizationContext, caip2 }: CreatePrivySignerInput<TAddress>,
-): PrivySigner<TAddress> {
+  { wallet, authorizationContext, caip2 }: CreatePrivySignerInput,
+): PrivySigner {
+  const walletId = wallet.id;
+  if (!walletId) {
+    throw new Error('Wallet must have an ID to be used as a signer.');
+  }
+  if (wallet.chain_type !== 'solana') {
+    throw new Error(`Wallet must be a Solana wallet. Received chain_type: '${wallet.chain_type}'.`);
+  }
+  const address = solanaAddress(wallet.address);
   const authCtxOptions = authorizationContext ? { authorization_context: authorizationContext } : {};
   return {
     address,

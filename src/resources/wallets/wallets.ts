@@ -463,12 +463,26 @@ export interface CustodialWallet {
   /**
    * The chain type of the custodial wallet.
    */
-  chainType: CustodialWalletChainType;
+  chain_type: CustodialWalletChainType;
+
+  owner_id: string | null;
 
   /**
    * The provider of the custodial wallet.
    */
   provider: CustodialWalletProvider;
+
+  additional_signers?: Array<CustodialWallet.AdditionalSigner>;
+
+  policy_ids?: Array<string>;
+}
+
+export namespace CustodialWallet {
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    override_policy_ids?: Array<string>;
+  }
 }
 
 /**

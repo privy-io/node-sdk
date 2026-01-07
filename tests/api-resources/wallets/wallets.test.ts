@@ -50,7 +50,12 @@ describe('resource wallets', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.wallets.list(
-        { chain_type: 'ethereum', cursor: 'x', limit: 100, user_id: 'user_id' },
+        {
+          chain_type: 'ethereum',
+          cursor: 'x',
+          limit: 100,
+          user_id: 'user_id',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(PrivyAPI.NotFoundError);
@@ -194,7 +199,11 @@ describe('resource wallets', () => {
           'BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=',
         encryption_type: 'HPKE',
         entropy_type: 'private-key',
-        hpke_config: { aad: 'aad', aead_algorithm: 'CHACHA20_POLY1305', info: 'info' },
+        hpke_config: {
+          aad: 'aad',
+          aead_algorithm: 'CHACHA20_POLY1305',
+          info: 'info',
+        },
       },
       additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['string'] }],
       owner: { user_id: 'user_id' },

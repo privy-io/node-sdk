@@ -18,7 +18,12 @@ describe('resource policies', () => {
         {
           action: 'ALLOW',
           conditions: [
-            { field: 'to', field_source: 'ethereum_transaction', operator: 'eq', value: 'string' },
+            {
+              field: 'to',
+              field_source: 'ethereum_transaction',
+              operator: 'eq',
+              value: 'string',
+            },
           ],
           method: 'eth_sendTransaction',
           name: 'x',
@@ -44,7 +49,12 @@ describe('resource policies', () => {
         {
           action: 'ALLOW',
           conditions: [
-            { field: 'to', field_source: 'ethereum_transaction', operator: 'eq', value: 'string' },
+            {
+              field: 'to',
+              field_source: 'ethereum_transaction',
+              operator: 'eq',
+              value: 'string',
+            },
           ],
           method: 'eth_sendTransaction',
           name: 'x',
@@ -61,7 +71,14 @@ describe('resource policies', () => {
   test.skip('_createRule: only required params', async () => {
     const responsePromise = client.policies._createRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       action: 'ALLOW',
-      conditions: [{ field: 'to', field_source: 'ethereum_transaction', operator: 'eq', value: 'string' }],
+      conditions: [
+        {
+          field: 'to',
+          field_source: 'ethereum_transaction',
+          operator: 'eq',
+          value: 'string',
+        },
+      ],
       method: 'eth_sendTransaction',
       name: 'x',
     });
@@ -78,7 +95,14 @@ describe('resource policies', () => {
   test.skip('_createRule: required and optional params', async () => {
     const response = await client.policies._createRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       action: 'ALLOW',
-      conditions: [{ field: 'to', field_source: 'ethereum_transaction', operator: 'eq', value: 'string' }],
+      conditions: [
+        {
+          field: 'to',
+          field_source: 'ethereum_transaction',
+          operator: 'eq',
+          value: 'string',
+        },
+      ],
       method: 'eth_sendTransaction',
       name: 'x',
       'privy-authorization-signature': 'privy-authorization-signature',
@@ -148,7 +172,14 @@ describe('resource policies', () => {
     const responsePromise = client.policies._updateRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       action: 'ALLOW',
-      conditions: [{ field: 'to', field_source: 'ethereum_transaction', operator: 'eq', value: 'string' }],
+      conditions: [
+        {
+          field: 'to',
+          field_source: 'ethereum_transaction',
+          operator: 'eq',
+          value: 'string',
+        },
+      ],
       method: 'eth_sendTransaction',
       name: 'x',
     });
@@ -166,7 +197,14 @@ describe('resource policies', () => {
     const response = await client.policies._updateRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       action: 'ALLOW',
-      conditions: [{ field: 'to', field_source: 'ethereum_transaction', operator: 'eq', value: 'string' }],
+      conditions: [
+        {
+          field: 'to',
+          field_source: 'ethereum_transaction',
+          operator: 'eq',
+          value: 'string',
+        },
+      ],
       method: 'eth_sendTransaction',
       name: 'x',
       'privy-authorization-signature': 'privy-authorization-signature',

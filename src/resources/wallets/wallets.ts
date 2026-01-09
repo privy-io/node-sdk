@@ -168,6 +168,7 @@ export class Wallets extends APIResource {
       ...options,
       headers: buildHeaders([
         {
+          'x-vercel-protection-bypass': 'testingblobbydevtestingblobbydev',
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
@@ -240,7 +241,14 @@ export class Wallets extends APIResource {
     body: WalletAuthenticateWithJwtParams,
     options?: RequestOptions,
   ): APIPromise<WalletAuthenticateWithJwtResponse> {
-    return this._client.post('/v1/wallets/authenticate', { body, ...options });
+    return this._client.post('/v1/wallets/authenticate', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { 'x-vercel-protection-bypass': 'testingblobbydevtestingblobbydev' },
+        options?.headers,
+      ]),
+    });
   }
 
   /**

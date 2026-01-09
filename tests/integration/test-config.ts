@@ -3,7 +3,7 @@ import type { Hex } from 'viem';
 export const TEST_APP = {
   id: process.env['TEST_APP_ID'] ?? 'cm8osegv00004r13y7500o2yz',
   secret: process.env['TEST_APP_SECRET']!,
-  apiUrl: process.env['TEST_API_URL'] ?? 'https://api.staging.privy.io',
+  apiUrl: process.env['TEST_API_URL'] ?? 'https://privy-git-taabish-test-always-retry.privy-preview.app/api',
 };
 
 // Details of the custom auth JWT used for resource ownership

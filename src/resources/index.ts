@@ -1,5 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+export {
+  Aggregations,
+  type AggregationMethod,
+  type AggregationMetric,
+  type AggregationWindow,
+  type AggregationGroupBy,
+  type Aggregation,
+} from './aggregations';
 export { Analytics, type AnalyticsEventInput } from './analytics';
 export { Apps, type AppResponse } from './apps';
 export {

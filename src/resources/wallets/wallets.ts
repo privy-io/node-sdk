@@ -556,6 +556,8 @@ export namespace EthereumSignTransactionRpcInput {
 
   export namespace Params {
     export interface Transaction {
+      authorization_list?: Array<Transaction.AuthorizationList>;
+
       chain_id?: string | number;
 
       data?: string;
@@ -574,9 +576,25 @@ export namespace EthereumSignTransactionRpcInput {
 
       to?: string;
 
-      type?: 0 | 1 | 2;
+      type?: 0 | 1 | 2 | 4;
 
       value?: string | number;
+    }
+
+    export namespace Transaction {
+      export interface AuthorizationList {
+        chain_id: string | number;
+
+        contract: string;
+
+        nonce: string | number;
+
+        r: string;
+
+        s: string;
+
+        y_parity: number;
+      }
     }
   }
 }
@@ -605,6 +623,8 @@ export namespace EthereumSendTransactionRpcInput {
 
   export namespace Params {
     export interface Transaction {
+      authorization_list?: Array<Transaction.AuthorizationList>;
+
       chain_id?: string | number;
 
       data?: string;
@@ -623,9 +643,25 @@ export namespace EthereumSendTransactionRpcInput {
 
       to?: string;
 
-      type?: 0 | 1 | 2;
+      type?: 0 | 1 | 2 | 4;
 
       value?: string | number;
+    }
+
+    export namespace Transaction {
+      export interface AuthorizationList {
+        chain_id: string | number;
+
+        contract: string;
+
+        nonce: string | number;
+
+        r: string;
+
+        s: string;
+
+        y_parity: number;
+      }
     }
   }
 }
@@ -866,10 +902,14 @@ export namespace EthereumSendTransactionRpcResponse {
     transaction_id?: string;
 
     transaction_request?: Data.TransactionRequest;
+
+    user_operation_hash?: string;
   }
 
   export namespace Data {
     export interface TransactionRequest {
+      authorization_list?: Array<TransactionRequest.AuthorizationList>;
+
       chain_id?: string | number;
 
       data?: string;
@@ -888,9 +928,25 @@ export namespace EthereumSendTransactionRpcResponse {
 
       to?: string;
 
-      type?: 0 | 1 | 2;
+      type?: 0 | 1 | 2 | 4;
 
       value?: string | number;
+    }
+
+    export namespace TransactionRequest {
+      export interface AuthorizationList {
+        chain_id: string | number;
+
+        contract: string;
+
+        nonce: string | number;
+
+        r: string;
+
+        s: string;
+
+        y_parity: number;
+      }
     }
   }
 }
@@ -1533,6 +1589,8 @@ export declare namespace WalletRpcParams {
 
     export namespace Params {
       export interface Transaction {
+        authorization_list?: Array<Transaction.AuthorizationList>;
+
         chain_id?: string | number;
 
         data?: string;
@@ -1551,9 +1609,25 @@ export declare namespace WalletRpcParams {
 
         to?: string;
 
-        type?: 0 | 1 | 2;
+        type?: 0 | 1 | 2 | 4;
 
         value?: string | number;
+      }
+
+      export namespace Transaction {
+        export interface AuthorizationList {
+          chain_id: string | number;
+
+          contract: string;
+
+          nonce: string | number;
+
+          r: string;
+
+          s: string;
+
+          y_parity: number;
+        }
       }
     }
   }
@@ -1681,6 +1755,8 @@ export declare namespace WalletRpcParams {
 
     export namespace Params {
       export interface Transaction {
+        authorization_list?: Array<Transaction.AuthorizationList>;
+
         chain_id?: string | number;
 
         data?: string;
@@ -1699,9 +1775,25 @@ export declare namespace WalletRpcParams {
 
         to?: string;
 
-        type?: 0 | 1 | 2;
+        type?: 0 | 1 | 2 | 4;
 
         value?: string | number;
+      }
+
+      export namespace Transaction {
+        export interface AuthorizationList {
+          chain_id: string | number;
+
+          contract: string;
+
+          nonce: string | number;
+
+          r: string;
+
+          s: string;
+
+          y_parity: number;
+        }
       }
     }
   }

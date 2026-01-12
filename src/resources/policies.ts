@@ -342,7 +342,7 @@ export namespace Policy {
      * eth_sendTransaction request.
      */
     export interface EthereumTransactionCondition {
-      field: 'to' | 'value';
+      field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
 
@@ -614,7 +614,7 @@ export namespace PolicyCreateRuleResponse {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
@@ -820,7 +820,7 @@ export namespace PolicyUpdateRuleResponse {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
@@ -1016,7 +1016,7 @@ export namespace PolicyGetRuleResponse {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
@@ -1251,7 +1251,7 @@ export namespace PolicyCreateParams {
      * eth_sendTransaction request.
      */
     export interface EthereumTransactionCondition {
-      field: 'to' | 'value';
+      field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
 
@@ -1472,7 +1472,7 @@ export namespace PolicyCreateRuleParams {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
@@ -1736,7 +1736,7 @@ export namespace PolicyUpdateParams {
      * eth_sendTransaction request.
      */
     export interface EthereumTransactionCondition {
-      field: 'to' | 'value';
+      field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
 
@@ -1944,7 +1944,7 @@ export namespace PolicyUpdateRuleParams {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 

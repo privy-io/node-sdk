@@ -28,7 +28,7 @@ export interface BalanceGetResponse {
 
 export namespace BalanceGetResponse {
   export interface Balance {
-    asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'sol';
+    asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
 
     chain:
       | 'ethereum'
@@ -63,8 +63,9 @@ export interface BalanceGetParams {
     | 'pol'
     | 'usdt'
     | 'eurc'
+    | 'usdb'
     | 'sol'
-    | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'sol'>;
+    | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
 
   chain:
     | 'ethereum'

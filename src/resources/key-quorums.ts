@@ -158,7 +158,7 @@ export interface KeyQuorumUpdateParams {
   authorization_threshold?: number;
 
   /**
-   * Body param:
+   * Body param
    */
   display_name?: string;
 

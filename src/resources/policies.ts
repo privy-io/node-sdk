@@ -255,6 +255,9 @@ export class Policies extends APIResource {
   }
 }
 
+/**
+ * A policy for controlling wallet operations.
+ */
 export interface Policy {
   /**
    * Unique ID of the created policy. This will be the primary identifier when using

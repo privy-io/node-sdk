@@ -290,6 +290,9 @@ export type CurveSigningChainType =
  */
 export type FirstClassChainType = 'ethereum' | 'solana';
 
+/**
+ * A wallet managed by Privy's wallet infrastructure.
+ */
 export interface Wallet {
   /**
    * Unique ID of the wallet. This will be the primary identifier when using the

@@ -93,6 +93,9 @@ export class KeyQuorums extends APIResource {
   }
 }
 
+/**
+ * A key quorum for authorizing wallet operations.
+ */
 export interface KeyQuorum {
   id: string;
 

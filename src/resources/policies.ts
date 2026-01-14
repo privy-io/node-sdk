@@ -1173,7 +1173,7 @@ export interface PolicyCreateParams {
   name: string;
 
   /**
-   * Body param:
+   * Body param
    */
   rules: Array<PolicyCreateParams.Rule>;
 
@@ -1422,7 +1422,7 @@ export interface PolicyCreateRuleParams {
   action: 'ALLOW' | 'DENY';
 
   /**
-   * Body param:
+   * Body param
    */
   conditions: Array<
     | PolicyCreateRuleParams.EthereumTransactionCondition
@@ -1455,7 +1455,7 @@ export interface PolicyCreateRuleParams {
     | '*';
 
   /**
-   * Body param:
+   * Body param
    */
   name: string;
 
@@ -1627,7 +1627,7 @@ export interface PolicyDeleteParams {
 
 export interface PolicyDeleteRuleParams {
   /**
-   * Path param:
+   * Path param
    */
   policy_id: string;
 
@@ -1658,7 +1658,7 @@ export interface PolicyUpdateParams {
   owner_id?: string | null;
 
   /**
-   * Body param:
+   * Body param
    */
   rules?: Array<PolicyUpdateParams.Rule>;
 
@@ -1884,7 +1884,7 @@ export namespace PolicyUpdateParams {
 
 export interface PolicyUpdateRuleParams {
   /**
-   * Path param:
+   * Path param
    */
   policy_id: string;
 
@@ -1894,7 +1894,7 @@ export interface PolicyUpdateRuleParams {
   action: 'ALLOW' | 'DENY';
 
   /**
-   * Body param:
+   * Body param
    */
   conditions: Array<
     | PolicyUpdateRuleParams.EthereumTransactionCondition
@@ -1927,7 +1927,7 @@ export interface PolicyUpdateRuleParams {
     | '*';
 
   /**
-   * Body param:
+   * Body param
    */
   name: string;
 

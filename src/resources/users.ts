@@ -1119,6 +1119,12 @@ export interface LinkedAccountCustomOAuth {
 
   subject: string;
 
+  /**
+   * The ID of a custom OAuth provider, set up for this app. Must start with
+   * "custom:".
+   */
+  type: ClientAuthAPI.CustomOAuthProviderID;
+
   verified_at: number;
 
   email?: string;
@@ -1126,12 +1132,6 @@ export interface LinkedAccountCustomOAuth {
   name?: string;
 
   profile_picture_url?: string;
-
-  /**
-   * The ID of a custom OAuth provider, set up for this app. Must start with
-   * "custom:".
-   */
-  type?: ClientAuthAPI.CustomOAuthProviderID;
 
   username?: string;
 }

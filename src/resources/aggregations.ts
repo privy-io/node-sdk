@@ -149,34 +149,9 @@ export interface Aggregation {
   id: string;
 
   /**
-   * Optional conditions to filter events before aggregation.
-   */
-  conditions: Array<
-    | Aggregation.UnionMember0
-    | Aggregation.UnionMember1
-    | Aggregation.UnionMember2
-    | Aggregation.UnionMember3
-    | Aggregation.UnionMember4
-    | Aggregation.UnionMember5
-    | Aggregation.UnionMember6
-    | Aggregation.UnionMember7
-    | Aggregation.UnionMember8
-    | Aggregation.UnionMember9
-    | Aggregation.UnionMember10
-    | Aggregation.UnionMember11
-    | Aggregation.UnionMember12
-    | Aggregation.UnionMember13
-  >;
-
-  /**
    * Unix timestamp of when the aggregation was created in milliseconds.
    */
   created_at: number;
-
-  /**
-   * Optional grouping configuration for bucketing metrics.
-   */
-  group_by: Array<AggregationGroupBy>;
 
   /**
    * The RPC method this aggregation applies to.
@@ -203,6 +178,31 @@ export interface Aggregation {
    * The time window configuration for an aggregation.
    */
   window: AggregationWindow;
+
+  /**
+   * Optional conditions to filter events before aggregation.
+   */
+  conditions?: Array<
+    | Aggregation.UnionMember0
+    | Aggregation.UnionMember1
+    | Aggregation.UnionMember2
+    | Aggregation.UnionMember3
+    | Aggregation.UnionMember4
+    | Aggregation.UnionMember5
+    | Aggregation.UnionMember6
+    | Aggregation.UnionMember7
+    | Aggregation.UnionMember8
+    | Aggregation.UnionMember9
+    | Aggregation.UnionMember10
+    | Aggregation.UnionMember11
+    | Aggregation.UnionMember12
+    | Aggregation.UnionMember13
+  >;
+
+  /**
+   * Optional grouping configuration for bucketing metrics.
+   */
+  group_by?: Array<AggregationGroupBy>;
 }
 
 export namespace Aggregation {

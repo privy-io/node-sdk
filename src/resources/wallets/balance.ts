@@ -103,7 +103,7 @@ export interface BalanceGetParams {
         | 'solana_testnet'
       >;
 
-  include_currency?: 'usd';
+  include_currency?: 'usd' | 'eur';
 }
 
 export declare namespace Balance {

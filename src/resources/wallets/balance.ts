@@ -28,7 +28,7 @@ export interface BalanceGetResponse {
 
 export namespace BalanceGetResponse {
   export interface Balance {
-    asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
+    asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
 
     chain:
       | 'ethereum'
@@ -57,7 +57,15 @@ export namespace BalanceGetResponse {
 }
 
 export interface BalanceGetParams {
-  asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol' | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'sol'>;
+  asset:
+    | 'usdc'
+    | 'eth'
+    | 'pol'
+    | 'usdt'
+    | 'eurc'
+    | 'usdb'
+    | 'sol'
+    | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
 
   chain:
     | 'ethereum'
@@ -95,7 +103,7 @@ export interface BalanceGetParams {
         | 'solana_testnet'
       >;
 
-  include_currency?: 'usd';
+  include_currency?: 'usd' | 'eur';
 }
 
 export declare namespace Balance {

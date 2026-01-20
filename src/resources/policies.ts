@@ -255,6 +255,9 @@ export class Policies extends APIResource {
   }
 }
 
+/**
+ * A policy for controlling wallet operations.
+ */
 export interface Policy {
   /**
    * Unique ID of the created policy. This will be the primary identifier when using
@@ -342,7 +345,7 @@ export namespace Policy {
      * eth_sendTransaction request.
      */
     export interface EthereumTransactionCondition {
-      field: 'to' | 'value';
+      field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
 
@@ -614,7 +617,7 @@ export namespace PolicyCreateRuleResponse {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
@@ -820,7 +823,7 @@ export namespace PolicyUpdateRuleResponse {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
@@ -1016,7 +1019,7 @@ export namespace PolicyGetRuleResponse {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
@@ -1173,7 +1176,7 @@ export interface PolicyCreateParams {
   name: string;
 
   /**
-   * Body param:
+   * Body param
    */
   rules: Array<PolicyCreateParams.Rule>;
 
@@ -1251,7 +1254,7 @@ export namespace PolicyCreateParams {
      * eth_sendTransaction request.
      */
     export interface EthereumTransactionCondition {
-      field: 'to' | 'value';
+      field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
 
@@ -1422,7 +1425,7 @@ export interface PolicyCreateRuleParams {
   action: 'ALLOW' | 'DENY';
 
   /**
-   * Body param:
+   * Body param
    */
   conditions: Array<
     | PolicyCreateRuleParams.EthereumTransactionCondition
@@ -1455,7 +1458,7 @@ export interface PolicyCreateRuleParams {
     | '*';
 
   /**
-   * Body param:
+   * Body param
    */
   name: string;
 
@@ -1472,7 +1475,7 @@ export namespace PolicyCreateRuleParams {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
@@ -1627,7 +1630,7 @@ export interface PolicyDeleteParams {
 
 export interface PolicyDeleteRuleParams {
   /**
-   * Path param:
+   * Path param
    */
   policy_id: string;
 
@@ -1658,7 +1661,7 @@ export interface PolicyUpdateParams {
   owner_id?: string | null;
 
   /**
-   * Body param:
+   * Body param
    */
   rules?: Array<PolicyUpdateParams.Rule>;
 
@@ -1736,7 +1739,7 @@ export namespace PolicyUpdateParams {
      * eth_sendTransaction request.
      */
     export interface EthereumTransactionCondition {
-      field: 'to' | 'value';
+      field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
 
@@ -1884,7 +1887,7 @@ export namespace PolicyUpdateParams {
 
 export interface PolicyUpdateRuleParams {
   /**
-   * Path param:
+   * Path param
    */
   policy_id: string;
 
@@ -1894,7 +1897,7 @@ export interface PolicyUpdateRuleParams {
   action: 'ALLOW' | 'DENY';
 
   /**
-   * Body param:
+   * Body param
    */
   conditions: Array<
     | PolicyUpdateRuleParams.EthereumTransactionCondition
@@ -1927,7 +1930,7 @@ export interface PolicyUpdateRuleParams {
     | '*';
 
   /**
-   * Body param:
+   * Body param
    */
   name: string;
 
@@ -1944,7 +1947,7 @@ export namespace PolicyUpdateRuleParams {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 

@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.8.0 (2026-01-17)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/privy-io/node-sdk/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **api:** api update ([16c49a9](https://github.com/privy-io/node-sdk/commit/16c49a936ae0e18891d7531c81385a5f887346dc))
+* **api:** api update ([25453fe](https://github.com/privy-io/node-sdk/commit/25453fee4719c7b209e8867143603d954ca8952c))
+* **api:** api update ([c3bb702](https://github.com/privy-io/node-sdk/commit/c3bb702c5c9dd87856f2a5baf87a049430db0f88))
+* **api:** api update ([7630b72](https://github.com/privy-io/node-sdk/commit/7630b72bfd4ced575f709ce5319d7e7f091e9749))
+* **api:** api update ([69af40d](https://github.com/privy-io/node-sdk/commit/69af40d84540b2d75974253b7278515e6cb3d657))
+* **api:** api update ([5c3d2ce](https://github.com/privy-io/node-sdk/commit/5c3d2ce401b35d14007d5533b109979f61fe310c))
+* **api:** api update ([e02b2d6](https://github.com/privy-io/node-sdk/commit/e02b2d646f5e5d7376100f2419c5a4058e1a1418))
+* **api:** api update ([5214679](https://github.com/privy-io/node-sdk/commit/5214679fca5913e3937a30d3caa011f2df24e1ef))
+
+
+### Chores
+
+* break long lines in snippets into multiline ([b2e8e04](https://github.com/privy-io/node-sdk/commit/b2e8e04400c4e7b7b153db09215b896c15e46b1b))
+* fix typo in descriptions ([9ce7c49](https://github.com/privy-io/node-sdk/commit/9ce7c49dfa9049d7cef7a7a217d3dd08ffde10a5))
+* **internal:** update `actions/checkout` version ([21fd65f](https://github.com/privy-io/node-sdk/commit/21fd65f518b6ff678e7945565a207dbce44c8c8d))
+* **internal:** upgrade babel, qs, js-yaml ([52a6f89](https://github.com/privy-io/node-sdk/commit/52a6f89adb91a832e6803a2dcbb0d7b008f65c74))
+
+
+### Documentation
+
+* add more examples ([201c705](https://github.com/privy-io/node-sdk/commit/201c705e6f9618ff059c8cbda0de89ddd2344d0f))
+
 ## 0.7.0 (2026-01-02)
 
 Full Changelog: [v0.6.2...v0.7.0](https://github.com/privy-io/node-sdk/compare/v0.6.2...v0.7.0)

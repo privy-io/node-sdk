@@ -239,3 +239,13 @@ Types:
 Types:
 
 - <code><a href="./src/resources/apps.ts">AppResponse</a></code>
+
+# Aggregations
+
+Types:
+
+- <code><a href="./src/resources/aggregations.ts">AggregationMethod</a></code>
+- <code><a href="./src/resources/aggregations.ts">AggregationMetric</a></code>
+- <code><a href="./src/resources/aggregations.ts">AggregationWindow</a></code>
+- <code><a href="./src/resources/aggregations.ts">AggregationGroupBy</a></code>
+- <code><a href="./src/resources/aggregations.ts">Aggregation</a></code>

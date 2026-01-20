@@ -290,6 +290,9 @@ export type CurveSigningChainType =
  */
 export type FirstClassChainType = 'ethereum' | 'solana';
 
+/**
+ * A wallet managed by Privy's wallet infrastructure.
+ */
 export interface Wallet {
   /**
    * Unique ID of the wallet. This will be the primary identifier when using the
@@ -463,12 +466,26 @@ export interface CustodialWallet {
   /**
    * The chain type of the custodial wallet.
    */
-  chainType: CustodialWalletChainType;
+  chain_type: CustodialWalletChainType;
+
+  owner_id: string | null;
 
   /**
    * The provider of the custodial wallet.
    */
   provider: CustodialWalletProvider;
+
+  additional_signers?: Array<CustodialWallet.AdditionalSigner>;
+
+  policy_ids?: Array<string>;
+}
+
+export namespace CustodialWallet {
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    override_policy_ids?: Array<string>;
+  }
 }
 
 /**
@@ -542,6 +559,8 @@ export namespace EthereumSignTransactionRpcInput {
 
   export namespace Params {
     export interface Transaction {
+      authorization_list?: Array<Transaction.AuthorizationList>;
+
       chain_id?: string | number;
 
       data?: string;
@@ -560,9 +579,25 @@ export namespace EthereumSignTransactionRpcInput {
 
       to?: string;
 
-      type?: 0 | 1 | 2;
+      type?: 0 | 1 | 2 | 4;
 
       value?: string | number;
+    }
+
+    export namespace Transaction {
+      export interface AuthorizationList {
+        chain_id: string | number;
+
+        contract: string;
+
+        nonce: string | number;
+
+        r: string;
+
+        s: string;
+
+        y_parity: number;
+      }
     }
   }
 }
@@ -591,6 +626,8 @@ export namespace EthereumSendTransactionRpcInput {
 
   export namespace Params {
     export interface Transaction {
+      authorization_list?: Array<Transaction.AuthorizationList>;
+
       chain_id?: string | number;
 
       data?: string;
@@ -609,9 +646,25 @@ export namespace EthereumSendTransactionRpcInput {
 
       to?: string;
 
-      type?: 0 | 1 | 2;
+      type?: 0 | 1 | 2 | 4;
 
       value?: string | number;
+    }
+
+    export namespace Transaction {
+      export interface AuthorizationList {
+        chain_id: string | number;
+
+        contract: string;
+
+        nonce: string | number;
+
+        r: string;
+
+        s: string;
+
+        y_parity: number;
+      }
     }
   }
 }
@@ -852,10 +905,14 @@ export namespace EthereumSendTransactionRpcResponse {
     transaction_id?: string;
 
     transaction_request?: Data.TransactionRequest;
+
+    user_operation_hash?: string;
   }
 
   export namespace Data {
     export interface TransactionRequest {
+      authorization_list?: Array<TransactionRequest.AuthorizationList>;
+
       chain_id?: string | number;
 
       data?: string;
@@ -874,9 +931,25 @@ export namespace EthereumSendTransactionRpcResponse {
 
       to?: string;
 
-      type?: 0 | 1 | 2;
+      type?: 0 | 1 | 2 | 4;
 
       value?: string | number;
+    }
+
+    export namespace TransactionRequest {
+      export interface AuthorizationList {
+        chain_id: string | number;
+
+        contract: string;
+
+        nonce: string | number;
+
+        r: string;
+
+        s: string;
+
+        y_parity: number;
+      }
     }
   }
 }
@@ -1378,22 +1451,22 @@ export type WalletRpcParams =
 export declare namespace WalletRpcParams {
   export interface EthereumPersonalSignRpcInput {
     /**
-     * Body param:
+     * Body param
      */
     method: 'personal_sign';
 
     /**
-     * Body param:
+     * Body param
      */
     params: EthereumPersonalSignRpcInput.Params;
 
     /**
-     * Body param:
+     * Body param
      */
     address?: string;
 
     /**
-     * Body param:
+     * Body param
      */
     chain_type?: 'ethereum';
 
@@ -1420,22 +1493,22 @@ export declare namespace WalletRpcParams {
 
   export interface EthereumSignTypedDataRpcInput {
     /**
-     * Body param:
+     * Body param
      */
     method: 'eth_signTypedData_v4';
 
     /**
-     * Body param:
+     * Body param
      */
     params: EthereumSignTypedDataRpcInput.Params;
 
     /**
-     * Body param:
+     * Body param
      */
     address?: string;
 
     /**
-     * Body param:
+     * Body param
      */
     chain_type?: 'ethereum';
 
@@ -1480,22 +1553,22 @@ export declare namespace WalletRpcParams {
 
   export interface EthereumSignTransactionRpcInput {
     /**
-     * Body param:
+     * Body param
      */
     method: 'eth_signTransaction';
 
     /**
-     * Body param:
+     * Body param
      */
     params: EthereumSignTransactionRpcInput.Params;
 
     /**
-     * Body param:
+     * Body param
      */
     address?: string;
 
     /**
-     * Body param:
+     * Body param
      */
     chain_type?: 'ethereum';
 
@@ -1519,6 +1592,8 @@ export declare namespace WalletRpcParams {
 
     export namespace Params {
       export interface Transaction {
+        authorization_list?: Array<Transaction.AuthorizationList>;
+
         chain_id?: string | number;
 
         data?: string;
@@ -1537,31 +1612,47 @@ export declare namespace WalletRpcParams {
 
         to?: string;
 
-        type?: 0 | 1 | 2;
+        type?: 0 | 1 | 2 | 4;
 
         value?: string | number;
+      }
+
+      export namespace Transaction {
+        export interface AuthorizationList {
+          chain_id: string | number;
+
+          contract: string;
+
+          nonce: string | number;
+
+          r: string;
+
+          s: string;
+
+          y_parity: number;
+        }
       }
     }
   }
 
   export interface EthereumSignUserOperationRpcInput {
     /**
-     * Body param:
+     * Body param
      */
     method: 'eth_signUserOperation';
 
     /**
-     * Body param:
+     * Body param
      */
     params: EthereumSignUserOperationRpcInput.Params;
 
     /**
-     * Body param:
+     * Body param
      */
     address?: string;
 
     /**
-     * Body param:
+     * Body param
      */
     chain_type?: 'ethereum';
 
@@ -1618,32 +1709,32 @@ export declare namespace WalletRpcParams {
 
   export interface EthereumSendTransactionRpcInput {
     /**
-     * Body param:
+     * Body param
      */
     caip2: string;
 
     /**
-     * Body param:
+     * Body param
      */
     method: 'eth_sendTransaction';
 
     /**
-     * Body param:
+     * Body param
      */
     params: EthereumSendTransactionRpcInput.Params;
 
     /**
-     * Body param:
+     * Body param
      */
     address?: string;
 
     /**
-     * Body param:
+     * Body param
      */
     chain_type?: 'ethereum';
 
     /**
-     * Body param:
+     * Body param
      */
     sponsor?: boolean;
 
@@ -1667,6 +1758,8 @@ export declare namespace WalletRpcParams {
 
     export namespace Params {
       export interface Transaction {
+        authorization_list?: Array<Transaction.AuthorizationList>;
+
         chain_id?: string | number;
 
         data?: string;
@@ -1685,31 +1778,47 @@ export declare namespace WalletRpcParams {
 
         to?: string;
 
-        type?: 0 | 1 | 2;
+        type?: 0 | 1 | 2 | 4;
 
         value?: string | number;
+      }
+
+      export namespace Transaction {
+        export interface AuthorizationList {
+          chain_id: string | number;
+
+          contract: string;
+
+          nonce: string | number;
+
+          r: string;
+
+          s: string;
+
+          y_parity: number;
+        }
       }
     }
   }
 
   export interface EthereumSign7702AuthorizationRpcInput {
     /**
-     * Body param:
+     * Body param
      */
     method: 'eth_sign7702Authorization';
 
     /**
-     * Body param:
+     * Body param
      */
     params: EthereumSign7702AuthorizationRpcInput.Params;
 
     /**
-     * Body param:
+     * Body param
      */
     address?: string;
 
     /**
-     * Body param:
+     * Body param
      */
     chain_type?: 'ethereum';
 
@@ -1738,22 +1847,22 @@ export declare namespace WalletRpcParams {
 
   export interface EthereumSecp256k1SignRpcInput {
     /**
-     * Body param:
+     * Body param
      */
     method: 'secp256k1_sign';
 
     /**
-     * Body param:
+     * Body param
      */
     params: EthereumSecp256k1SignRpcInput.Params;
 
     /**
-     * Body param:
+     * Body param
      */
     address?: string;
 
     /**
-     * Body param:
+     * Body param
      */
     chain_type?: 'ethereum';
 
@@ -1778,22 +1887,22 @@ export declare namespace WalletRpcParams {
 
   export interface SolanaSignMessageRpcInput {
     /**
-     * Body param:
+     * Body param
      */
     method: 'signMessage';
 
     /**
-     * Body param:
+     * Body param
      */
     params: SolanaSignMessageRpcInput.Params;
 
     /**
-     * Body param:
+     * Body param
      */
     address?: string;
 
     /**
-     * Body param:
+     * Body param
      */
     chain_type?: 'solana';
 
@@ -1820,22 +1929,22 @@ export declare namespace WalletRpcParams {
 
   export interface SolanaSignTransactionRpcInput {
     /**
-     * Body param:
+     * Body param
      */
     method: 'signTransaction';
 
     /**
-     * Body param:
+     * Body param
      */
     params: SolanaSignTransactionRpcInput.Params;
 
     /**
-     * Body param:
+     * Body param
      */
     address?: string;
 
     /**
-     * Body param:
+     * Body param
      */
     chain_type?: 'solana';
 
@@ -1862,32 +1971,32 @@ export declare namespace WalletRpcParams {
 
   export interface SolanaSignAndSendTransactionRpcInput {
     /**
-     * Body param:
+     * Body param
      */
     caip2: string;
 
     /**
-     * Body param:
+     * Body param
      */
     method: 'signAndSendTransaction';
 
     /**
-     * Body param:
+     * Body param
      */
     params: SolanaSignAndSendTransactionRpcInput.Params;
 
     /**
-     * Body param:
+     * Body param
      */
     address?: string;
 
     /**
-     * Body param:
+     * Body param
      */
     chain_type?: 'solana';
 
     /**
-     * Body param:
+     * Body param
      */
     sponsor?: boolean;
 

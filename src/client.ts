@@ -19,6 +19,14 @@ import { AbstractPage, type CursorParams, CursorResponse } from './core/paginati
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import {
+  Aggregation,
+  AggregationGroupBy,
+  AggregationMethod,
+  AggregationMetric,
+  AggregationWindow,
+  Aggregations,
+} from './resources/aggregations';
 import { Analytics, AnalyticsEventInput } from './resources/analytics';
 import { AppResponse, Apps } from './resources/apps';
 import {
@@ -964,6 +972,7 @@ export class PrivyAPI {
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
   analytics: API.Analytics = new API.Analytics(this);
   apps: API.Apps = new API.Apps(this);
+  aggregations: API.Aggregations = new API.Aggregations(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -974,6 +983,7 @@ PrivyAPI.KeyQuorums = KeyQuorums;
 PrivyAPI.ClientAuth = ClientAuth;
 PrivyAPI.Analytics = Analytics;
 PrivyAPI.Apps = Apps;
+PrivyAPI.Aggregations = Aggregations;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -1166,4 +1176,13 @@ export declare namespace PrivyAPI {
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
 
   export { Apps as Apps, type AppResponse as AppResponse };
+
+  export {
+    Aggregations as Aggregations,
+    type AggregationMethod as AggregationMethod,
+    type AggregationMetric as AggregationMetric,
+    type AggregationWindow as AggregationWindow,
+    type AggregationGroupBy as AggregationGroupBy,
+    type Aggregation as Aggregation,
+  };
 }

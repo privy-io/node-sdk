@@ -1193,8 +1193,7 @@ export interface PolicyCreateParams {
   owner?: PolicyCreateParams.PublicKeyOwner | PolicyCreateParams.UserOwner | null;
 
   /**
-   * Body param: The key quorum ID to set as the owner of the resource. If you
-   * provide this, do not specify an owner.
+   * Body param
    */
   owner_id?: string | null;
 
@@ -1655,8 +1654,7 @@ export interface PolicyUpdateParams {
   owner?: PolicyUpdateParams.PublicKeyOwner | PolicyUpdateParams.UserOwner | null;
 
   /**
-   * Body param: The key quorum ID to set as the owner of the resource. If you
-   * provide this, do not specify an owner.
+   * Body param
    */
   owner_id?: string | null;
 

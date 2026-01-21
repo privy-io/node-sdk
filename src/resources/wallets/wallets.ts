@@ -2148,8 +2148,7 @@ export interface WalletUpdateParams {
   owner?: WalletUpdateParams.PublicKeyOwner | WalletUpdateParams.UserOwner | null;
 
   /**
-   * Body param: The key quorum ID to set as the owner of the resource. If you
-   * provide this, do not specify an owner.
+   * Body param
    */
   owner_id?: string | null;
 

@@ -101,9 +101,9 @@ export interface KeyQuorum {
 
   authorization_keys: Array<KeyQuorum.AuthorizationKey>;
 
-  authorization_threshold: number | null;
+  authorization_threshold?: number;
 
-  display_name: string | null;
+  display_name?: string;
 
   user_ids?: Array<string>;
 }

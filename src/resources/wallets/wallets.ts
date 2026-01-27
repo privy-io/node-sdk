@@ -1304,10 +1304,20 @@ export namespace WalletCreateParams {
 
 export interface WalletListParams extends CursorParams {
   /**
+   * Filter wallets by authorization public key. Returns wallets owned by key quorums
+   * that include the specified P-256 public key (base64-encoded DER format). Cannot
+   * be used together with user_id.
+   */
+  authorization_key?: string;
+
+  /**
    * The wallet chain types.
    */
   chain_type?: WalletChainType;
 
+  /**
+   * Filter wallets by user ID. Cannot be used together with authorization_key.
+   */
   user_id?: string;
 }
 

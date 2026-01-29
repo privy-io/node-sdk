@@ -61,7 +61,7 @@ export namespace TransactionGetResponse {
 
   export namespace Transaction {
     export interface UnionMember0 {
-      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
       chain:
         | 'ethereum'
@@ -99,7 +99,7 @@ export namespace TransactionGetResponse {
     }
 
     export interface UnionMember1 {
-      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
       chain:
         | 'ethereum'

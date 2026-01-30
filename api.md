@@ -249,3 +249,31 @@ Types:
 - <code><a href="./src/resources/aggregations.ts">AggregationWindow</a></code>
 - <code><a href="./src/resources/aggregations.ts">AggregationGroupBy</a></code>
 - <code><a href="./src/resources/aggregations.ts">Aggregation</a></code>
+
+# Webhooks
+
+Types:
+
+- <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserUnlinkedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserUpdatedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserTransferredAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserWalletCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionBroadcastedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionExecutionRevertedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionStillPendingWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionReplacedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionProviderErrorWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">MfaEnabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationCompletedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationFailedWebhookPayload</a></code>

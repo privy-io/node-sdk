@@ -1,7 +1,7 @@
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { AuthorizationContext } from '@privy-io/node';
 import { PrivyClient } from '@privy-io/node';
-import { base58, base64 } from '@scure/base';
+import { base58, base64, hex } from '@scure/base';
 import crypto from 'node:crypto';
 import nacl from 'tweetnacl';
 import { hexToBytes, verifyMessage } from 'viem';
@@ -120,7 +120,7 @@ describe('PrivyWalletsService', () => {
       const verified = nacl.sign.detached.verify(message, signature, base58.decode(wallet.address));
       expect(verified).toBe(true);
     });
-    it('should not be able to export a Tier 2 wallet', async () => {
+    it('should be able to export a Tier 2 wallet', async () => {
       const keypair = await generateP256KeyPair();
       const wallet = await privyClient.wallets().create({
         chain_type: 'tron',
@@ -128,12 +128,18 @@ describe('PrivyWalletsService', () => {
       });
       expect(wallet.id).toBeDefined();
       expect(wallet.chain_type).toBe('tron');
+      expect(wallet.public_key).toBeDefined();
 
-      await expect(
-        privyClient.wallets().export(wallet.id, {
-          authorization_context: { authorization_private_keys: [keypair.privateKey] },
-        }),
-      ).rejects.toThrow(`400 {"error":"Invalid chain type","code":"invalid_data"}`);
+      const publicKey = hex.decode(wallet.public_key!);
+
+      const exported = await privyClient.wallets().export(wallet.id, {
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
+      });
+      expect(exported.private_key).toBeDefined();
+      const privateKey = hex.decode(exported.private_key);
+
+      // The public_key we got on creation matches what is derived from the exported private_key
+      expect(secp256k1.getPublicKey(privateKey, true)).toEqual(publicKey);
     });
   });
   describe('import', () => {

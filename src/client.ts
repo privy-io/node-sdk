@@ -154,6 +154,32 @@ import {
   UsersCursor,
 } from './resources/users';
 import {
+  FundsDepositedWebhookPayload,
+  FundsWithdrawnWebhookPayload,
+  KrakenEmbedVerificationCompletedWebhookPayload,
+  KrakenEmbedVerificationFailedWebhookPayload,
+  MfaDisabledWebhookPayload,
+  MfaEnabledWebhookPayload,
+  PrivateKeyExportWebhookPayload,
+  TransactionBroadcastedWebhookPayload,
+  TransactionConfirmedWebhookPayload,
+  TransactionExecutionRevertedWebhookPayload,
+  TransactionFailedWebhookPayload,
+  TransactionProviderErrorWebhookPayload,
+  TransactionReplacedWebhookPayload,
+  TransactionStillPendingWebhookPayload,
+  UserAuthenticatedWebhookPayload,
+  UserCreatedWebhookPayload,
+  UserLinkedAccountWebhookPayload,
+  UserTransferredAccountWebhookPayload,
+  UserUnlinkedAccountWebhookPayload,
+  UserUpdatedAccountWebhookPayload,
+  UserWalletCreatedWebhookPayload,
+  WalletRecoveredWebhookPayload,
+  WalletRecoverySetupWebhookPayload,
+  Webhooks,
+} from './resources/webhooks';
+import {
   CurveSigningChainType,
   CustodialWallet,
   CustodialWalletChainType,
@@ -973,6 +999,7 @@ export class PrivyAPI {
   analytics: API.Analytics = new API.Analytics(this);
   apps: API.Apps = new API.Apps(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -984,6 +1011,7 @@ PrivyAPI.ClientAuth = ClientAuth;
 PrivyAPI.Analytics = Analytics;
 PrivyAPI.Apps = Apps;
 PrivyAPI.Aggregations = Aggregations;
+PrivyAPI.Webhooks = Webhooks;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -1184,5 +1212,32 @@ export declare namespace PrivyAPI {
     type AggregationWindow as AggregationWindow,
     type AggregationGroupBy as AggregationGroupBy,
     type Aggregation as Aggregation,
+  };
+
+  export {
+    Webhooks as Webhooks,
+    type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
+    type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
+    type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
+    type UserUnlinkedAccountWebhookPayload as UserUnlinkedAccountWebhookPayload,
+    type UserUpdatedAccountWebhookPayload as UserUpdatedAccountWebhookPayload,
+    type UserTransferredAccountWebhookPayload as UserTransferredAccountWebhookPayload,
+    type UserWalletCreatedWebhookPayload as UserWalletCreatedWebhookPayload,
+    type TransactionBroadcastedWebhookPayload as TransactionBroadcastedWebhookPayload,
+    type TransactionConfirmedWebhookPayload as TransactionConfirmedWebhookPayload,
+    type TransactionExecutionRevertedWebhookPayload as TransactionExecutionRevertedWebhookPayload,
+    type TransactionStillPendingWebhookPayload as TransactionStillPendingWebhookPayload,
+    type TransactionFailedWebhookPayload as TransactionFailedWebhookPayload,
+    type TransactionReplacedWebhookPayload as TransactionReplacedWebhookPayload,
+    type TransactionProviderErrorWebhookPayload as TransactionProviderErrorWebhookPayload,
+    type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
+    type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,
+    type PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload,
+    type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
+    type WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload,
+    type MfaEnabledWebhookPayload as MfaEnabledWebhookPayload,
+    type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
+    type KrakenEmbedVerificationCompletedWebhookPayload as KrakenEmbedVerificationCompletedWebhookPayload,
+    type KrakenEmbedVerificationFailedWebhookPayload as KrakenEmbedVerificationFailedWebhookPayload,
   };
 }

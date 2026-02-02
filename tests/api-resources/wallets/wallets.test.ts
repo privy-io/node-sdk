@@ -25,7 +25,7 @@ describe('resource wallets', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.wallets.create({
       chain_type: 'ethereum',
-      additional_signers: [{ override_policy_ids: ['string'], signer_id: 'signer_id' }],
+      additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['string'] }],
       owner: { public_key: 'public_key' },
       owner_id: 'owner_id',
       policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
@@ -51,7 +51,8 @@ describe('resource wallets', () => {
     await expect(
       client.wallets.list(
         {
-          chain_type: 'cosmos',
+          authorization_key: 's=-/fw-L-+N\n',
+          chain_type: 'ethereum',
           cursor: 'x',
           limit: 100,
           user_id: 'user_id',
@@ -118,7 +119,9 @@ describe('resource wallets', () => {
 
   // Prism tests are disabled
   test.skip('_rawSign: only required params', async () => {
-    const responsePromise = client.wallets._rawSign('wallet_id', { params: {} });
+    const responsePromise = client.wallets._rawSign('wallet_id', {
+      params: { hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e' },
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -140,8 +143,8 @@ describe('resource wallets', () => {
   // Prism tests are disabled
   test.skip('_rpc: only required params', async () => {
     const responsePromise = client.wallets._rpc('wallet_id', {
-      method: 'eth_signTransaction',
-      params: { transaction: {} },
+      method: 'personal_sign',
+      params: { encoding: 'utf-8', message: 'message' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -155,22 +158,8 @@ describe('resource wallets', () => {
   // Prism tests are disabled
   test.skip('_rpc: required and optional params', async () => {
     const response = await client.wallets._rpc('wallet_id', {
-      method: 'eth_signTransaction',
-      params: {
-        transaction: {
-          chain_id: 'string',
-          data: 'data',
-          from: 'from',
-          gas_limit: 'string',
-          gas_price: 'string',
-          max_fee_per_gas: 'string',
-          max_priority_fee_per_gas: 'string',
-          nonce: 'string',
-          to: 'to',
-          type: 0,
-          value: 'string',
-        },
-      },
+      method: 'personal_sign',
+      params: { encoding: 'utf-8', message: 'message' },
       address: 'address',
       chain_type: 'ethereum',
       'privy-authorization-signature': 'privy-authorization-signature',
@@ -211,6 +200,11 @@ describe('resource wallets', () => {
           'BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=',
         encryption_type: 'HPKE',
         entropy_type: 'private-key',
+        hpke_config: {
+          aad: 'aad',
+          aead_algorithm: 'CHACHA20_POLY1305',
+          info: 'info',
+        },
       },
       additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['string'] }],
       owner: { user_id: 'user_id' },

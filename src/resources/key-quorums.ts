@@ -93,6 +93,9 @@ export class KeyQuorums extends APIResource {
   }
 }
 
+/**
+ * A key quorum for authorizing wallet operations.
+ */
 export interface KeyQuorum {
   id: string;
 
@@ -121,12 +124,24 @@ export interface KeyQuorumDeleteResponse {
 }
 
 export interface KeyQuorumCreateParams {
+  /**
+   * The number of keys that must sign for an action to be valid. Must be less than
+   * or equal to total number of key quorum members.
+   */
   authorization_threshold?: number;
 
   display_name?: string;
 
+  /**
+   * List of P-256 public keys of the keys that should be authorized to sign on the
+   * key quorum, in base64-encoded DER format.
+   */
   public_keys?: Array<string>;
 
+  /**
+   * List of user IDs of the users that should be authorized to sign on the key
+   * quorum.
+   */
   user_ids?: Array<string>;
 }
 
@@ -140,7 +155,8 @@ export interface KeyQuorumDeleteParams {
 
 export interface KeyQuorumUpdateParams {
   /**
-   * Body param
+   * Body param: The number of keys that must sign for an action to be valid. Must be
+   * less than or equal to total number of key quorum members.
    */
   authorization_threshold?: number;
 
@@ -150,12 +166,14 @@ export interface KeyQuorumUpdateParams {
   display_name?: string;
 
   /**
-   * Body param
+   * Body param: List of P-256 public keys of the keys that should be authorized to
+   * sign on the key quorum, in base64-encoded DER format.
    */
   public_keys?: Array<string>;
 
   /**
-   * Body param
+   * Body param: List of user IDs of the users that should be authorized to sign on
+   * the key quorum.
    */
   user_ids?: Array<string>;
 

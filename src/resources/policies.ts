@@ -1,6 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as PoliciesAPI from './policies';
+import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -14,7 +16,7 @@ export class Policies extends APIResource {
    * ```ts
    * const policy = await client.policies.create({
    *   chain_type: 'ethereum',
-   *   name: 'name',
+   *   name: 'x',
    *   rules: [
    *     {
    *       action: 'ALLOW',
@@ -27,7 +29,7 @@ export class Policies extends APIResource {
    *         },
    *       ],
    *       method: 'eth_sendTransaction',
-   *       name: 'name',
+   *       name: 'x',
    *     },
    *   ],
    *   version: '1.0',
@@ -64,7 +66,7 @@ export class Policies extends APIResource {
    *       },
    *     ],
    *     method: 'eth_sendTransaction',
-   *     name: 'name',
+   *     name: 'x',
    *   },
    * );
    * ```
@@ -193,7 +195,7 @@ export class Policies extends APIResource {
    *       },
    *     ],
    *     method: 'eth_sendTransaction',
-   *     name: 'name',
+   *     name: 'x',
    *   },
    * );
    * ```
@@ -253,6 +255,9 @@ export class Policies extends APIResource {
   }
 }
 
+/**
+ * A policy for controlling wallet operations.
+ */
 export interface Policy {
   /**
    * Unique ID of the created policy. This will be the primary identifier when using
@@ -263,7 +268,7 @@ export interface Policy {
   /**
    * The chain type the policy applies to.
    */
-  chain_type: 'ethereum' | 'solana';
+  chain_type: 'ethereum' | 'solana' | 'tron' | 'sui';
 
   /**
    * Unix timestamp of when the policy was created in milliseconds.
@@ -311,6 +316,9 @@ export namespace Policy {
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
+      | PoliciesAPI.TronTransactionCondition
+      | PoliciesAPI.SuiTransactionCommandCondition
+      | PoliciesAPI.SuiTransferObjectsCommandCondition
     >;
 
     /**
@@ -319,11 +327,13 @@ export namespace Policy {
     method:
       | 'eth_sendTransaction'
       | 'eth_signTransaction'
+      | 'eth_signUserOperation'
       | 'eth_signTypedData_v4'
       | 'eth_sign7702Authorization'
       | 'signTransaction'
       | 'signAndSendTransaction'
       | 'exportPrivateKey'
+      | 'signTransactionBytes'
       | '*';
 
     name: string;
@@ -335,11 +345,11 @@ export namespace Policy {
      * eth_sendTransaction request.
      */
     export interface EthereumTransactionCondition {
-      field: 'to' | 'value';
+      field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -356,7 +366,7 @@ export namespace Policy {
 
       field_source: 'ethereum_calldata';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -369,7 +379,7 @@ export namespace Policy {
 
       field_source: 'ethereum_typed_data_domain';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -383,7 +393,7 @@ export namespace Policy {
 
       field_source: 'ethereum_typed_data_message';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       typed_data: EthereumTypedDataMessageCondition.TypedData;
 
@@ -414,7 +424,7 @@ export namespace Policy {
 
       field_source: 'ethereum_7702_authorization';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -427,7 +437,7 @@ export namespace Policy {
 
       field_source: 'solana_program_instruction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -441,7 +451,7 @@ export namespace Policy {
 
       field_source: 'solana_system_program_instruction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -461,7 +471,7 @@ export namespace Policy {
 
       field_source: 'solana_token_program_instruction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -474,11 +484,86 @@ export namespace Policy {
 
       field_source: 'system';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
   }
+}
+
+/**
+ * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
+ * supported for command names.
+ */
+export type SuiTransactionCommandOperator = 'eq' | 'in';
+
+/**
+ * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
+ * and 'amount' are supported.
+ */
+export type SuiTransferObjectsCommandField = 'recipient' | 'amount';
+
+/**
+ * TRON transaction fields for TransferContract and TriggerSmartContract
+ * transaction types.
+ */
+export interface TronTransactionCondition {
+  /**
+   * Supported TRON transaction fields in format "TransactionType.field_name"
+   */
+  field:
+    | 'TransferContract.to_address'
+    | 'TransferContract.amount'
+    | 'TriggerSmartContract.contract_address'
+    | 'TriggerSmartContract.call_value'
+    | 'TriggerSmartContract.token_id'
+    | 'TriggerSmartContract.call_token_value';
+
+  field_source: 'tron_transaction';
+
+  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+  value: string | Array<string>;
+}
+
+/**
+ * SUI transaction command attributes, enables allowlisting specific command types.
+ * Allowed commands: 'TransferObjects', 'SplitCoins', 'MergeCoins'. Only 'eq' and
+ * 'in' operators are supported.
+ */
+export interface SuiTransactionCommandCondition {
+  field: 'commandName';
+
+  field_source: 'sui_transaction_command';
+
+  /**
+   * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
+   * supported for command names.
+   */
+  operator: SuiTransactionCommandOperator;
+
+  /**
+   * Command name(s) to match. Must be one of: 'TransferObjects', 'SplitCoins',
+   * 'MergeCoins'
+   */
+  value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+}
+
+/**
+ * SUI TransferObjects command attributes, including recipient and amount fields.
+ */
+export interface SuiTransferObjectsCommandCondition {
+  /**
+   * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
+   * and 'amount' are supported.
+   */
+  field: SuiTransferObjectsCommandField;
+
+  field_source: 'sui_transfer_objects_command';
+
+  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+  value: string | Array<string>;
 }
 
 /**
@@ -503,6 +588,9 @@ export interface PolicyCreateRuleResponse {
     | PolicyCreateRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyCreateRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyCreateRuleResponse.SystemCondition
+    | TronTransactionCondition
+    | SuiTransactionCommandCondition
+    | SuiTransferObjectsCommandCondition
   >;
 
   /**
@@ -511,11 +599,13 @@ export interface PolicyCreateRuleResponse {
   method:
     | 'eth_sendTransaction'
     | 'eth_signTransaction'
+    | 'eth_signUserOperation'
     | 'eth_signTypedData_v4'
     | 'eth_sign7702Authorization'
     | 'signTransaction'
     | 'signAndSendTransaction'
     | 'exportPrivateKey'
+    | 'signTransactionBytes'
     | '*';
 
   name: string;
@@ -527,11 +617,11 @@ export namespace PolicyCreateRuleResponse {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -548,7 +638,7 @@ export namespace PolicyCreateRuleResponse {
 
     field_source: 'ethereum_calldata';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -561,7 +651,7 @@ export namespace PolicyCreateRuleResponse {
 
     field_source: 'ethereum_typed_data_domain';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -575,7 +665,7 @@ export namespace PolicyCreateRuleResponse {
 
     field_source: 'ethereum_typed_data_message';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     typed_data: EthereumTypedDataMessageCondition.TypedData;
 
@@ -606,7 +696,7 @@ export namespace PolicyCreateRuleResponse {
 
     field_source: 'ethereum_7702_authorization';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -619,7 +709,7 @@ export namespace PolicyCreateRuleResponse {
 
     field_source: 'solana_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -633,7 +723,7 @@ export namespace PolicyCreateRuleResponse {
 
     field_source: 'solana_system_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -653,7 +743,7 @@ export namespace PolicyCreateRuleResponse {
 
     field_source: 'solana_token_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -666,7 +756,7 @@ export namespace PolicyCreateRuleResponse {
 
     field_source: 'system';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -704,6 +794,9 @@ export interface PolicyUpdateRuleResponse {
     | PolicyUpdateRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyUpdateRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyUpdateRuleResponse.SystemCondition
+    | TronTransactionCondition
+    | SuiTransactionCommandCondition
+    | SuiTransferObjectsCommandCondition
   >;
 
   /**
@@ -712,11 +805,13 @@ export interface PolicyUpdateRuleResponse {
   method:
     | 'eth_sendTransaction'
     | 'eth_signTransaction'
+    | 'eth_signUserOperation'
     | 'eth_signTypedData_v4'
     | 'eth_sign7702Authorization'
     | 'signTransaction'
     | 'signAndSendTransaction'
     | 'exportPrivateKey'
+    | 'signTransactionBytes'
     | '*';
 
   name: string;
@@ -728,11 +823,11 @@ export namespace PolicyUpdateRuleResponse {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -749,7 +844,7 @@ export namespace PolicyUpdateRuleResponse {
 
     field_source: 'ethereum_calldata';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -762,7 +857,7 @@ export namespace PolicyUpdateRuleResponse {
 
     field_source: 'ethereum_typed_data_domain';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -776,7 +871,7 @@ export namespace PolicyUpdateRuleResponse {
 
     field_source: 'ethereum_typed_data_message';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     typed_data: EthereumTypedDataMessageCondition.TypedData;
 
@@ -807,7 +902,7 @@ export namespace PolicyUpdateRuleResponse {
 
     field_source: 'ethereum_7702_authorization';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -820,7 +915,7 @@ export namespace PolicyUpdateRuleResponse {
 
     field_source: 'solana_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -834,7 +929,7 @@ export namespace PolicyUpdateRuleResponse {
 
     field_source: 'solana_system_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -854,7 +949,7 @@ export namespace PolicyUpdateRuleResponse {
 
     field_source: 'solana_token_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -867,7 +962,7 @@ export namespace PolicyUpdateRuleResponse {
 
     field_source: 'system';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -895,6 +990,9 @@ export interface PolicyGetRuleResponse {
     | PolicyGetRuleResponse.SolanaSystemProgramInstructionCondition
     | PolicyGetRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyGetRuleResponse.SystemCondition
+    | TronTransactionCondition
+    | SuiTransactionCommandCondition
+    | SuiTransferObjectsCommandCondition
   >;
 
   /**
@@ -903,11 +1001,13 @@ export interface PolicyGetRuleResponse {
   method:
     | 'eth_sendTransaction'
     | 'eth_signTransaction'
+    | 'eth_signUserOperation'
     | 'eth_signTypedData_v4'
     | 'eth_sign7702Authorization'
     | 'signTransaction'
     | 'signAndSendTransaction'
     | 'exportPrivateKey'
+    | 'signTransactionBytes'
     | '*';
 
   name: string;
@@ -919,11 +1019,11 @@ export namespace PolicyGetRuleResponse {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -940,7 +1040,7 @@ export namespace PolicyGetRuleResponse {
 
     field_source: 'ethereum_calldata';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -953,7 +1053,7 @@ export namespace PolicyGetRuleResponse {
 
     field_source: 'ethereum_typed_data_domain';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -967,7 +1067,7 @@ export namespace PolicyGetRuleResponse {
 
     field_source: 'ethereum_typed_data_message';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     typed_data: EthereumTypedDataMessageCondition.TypedData;
 
@@ -998,7 +1098,7 @@ export namespace PolicyGetRuleResponse {
 
     field_source: 'ethereum_7702_authorization';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1011,7 +1111,7 @@ export namespace PolicyGetRuleResponse {
 
     field_source: 'solana_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1025,7 +1125,7 @@ export namespace PolicyGetRuleResponse {
 
     field_source: 'solana_system_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1045,7 +1145,7 @@ export namespace PolicyGetRuleResponse {
 
     field_source: 'solana_token_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1058,7 +1158,7 @@ export namespace PolicyGetRuleResponse {
 
     field_source: 'system';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1068,7 +1168,7 @@ export interface PolicyCreateParams {
   /**
    * Body param: The chain type the policy applies to.
    */
-  chain_type: 'ethereum' | 'solana';
+  chain_type: 'ethereum' | 'solana' | 'tron' | 'sui';
 
   /**
    * Body param: Name to assign to policy.
@@ -1093,8 +1193,7 @@ export interface PolicyCreateParams {
   owner?: PolicyCreateParams.PublicKeyOwner | PolicyCreateParams.UserOwner | null;
 
   /**
-   * Body param: The key quorum ID to set as the owner of the resource. If you
-   * provide this, do not specify an owner.
+   * Body param
    */
   owner_id?: string | null;
 
@@ -1125,6 +1224,9 @@ export namespace PolicyCreateParams {
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
+      | PoliciesAPI.TronTransactionCondition
+      | PoliciesAPI.SuiTransactionCommandCondition
+      | PoliciesAPI.SuiTransferObjectsCommandCondition
     >;
 
     /**
@@ -1133,11 +1235,13 @@ export namespace PolicyCreateParams {
     method:
       | 'eth_sendTransaction'
       | 'eth_signTransaction'
+      | 'eth_signUserOperation'
       | 'eth_signTypedData_v4'
       | 'eth_sign7702Authorization'
       | 'signTransaction'
       | 'signAndSendTransaction'
       | 'exportPrivateKey'
+      | 'signTransactionBytes'
       | '*';
 
     name: string;
@@ -1149,11 +1253,11 @@ export namespace PolicyCreateParams {
      * eth_sendTransaction request.
      */
     export interface EthereumTransactionCondition {
-      field: 'to' | 'value';
+      field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1170,7 +1274,7 @@ export namespace PolicyCreateParams {
 
       field_source: 'ethereum_calldata';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1183,7 +1287,7 @@ export namespace PolicyCreateParams {
 
       field_source: 'ethereum_typed_data_domain';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1197,7 +1301,7 @@ export namespace PolicyCreateParams {
 
       field_source: 'ethereum_typed_data_message';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       typed_data: EthereumTypedDataMessageCondition.TypedData;
 
@@ -1228,7 +1332,7 @@ export namespace PolicyCreateParams {
 
       field_source: 'ethereum_7702_authorization';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1241,7 +1345,7 @@ export namespace PolicyCreateParams {
 
       field_source: 'solana_program_instruction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1255,7 +1359,7 @@ export namespace PolicyCreateParams {
 
       field_source: 'solana_system_program_instruction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1275,7 +1379,7 @@ export namespace PolicyCreateParams {
 
       field_source: 'solana_token_program_instruction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1288,15 +1392,16 @@ export namespace PolicyCreateParams {
 
       field_source: 'system';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
   }
 
   /**
-   * The P-256 public key of the owner of the resource. If you provide this, do not
-   * specify an owner_id as it will be generated automatically.
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
    */
   export interface PublicKeyOwner {
     public_key: string;
@@ -1331,6 +1436,9 @@ export interface PolicyCreateRuleParams {
     | PolicyCreateRuleParams.SolanaSystemProgramInstructionCondition
     | PolicyCreateRuleParams.SolanaTokenProgramInstructionCondition
     | PolicyCreateRuleParams.SystemCondition
+    | TronTransactionCondition
+    | SuiTransactionCommandCondition
+    | SuiTransferObjectsCommandCondition
   >;
 
   /**
@@ -1339,11 +1447,13 @@ export interface PolicyCreateRuleParams {
   method:
     | 'eth_sendTransaction'
     | 'eth_signTransaction'
+    | 'eth_signUserOperation'
     | 'eth_signTypedData_v4'
     | 'eth_sign7702Authorization'
     | 'signTransaction'
     | 'signAndSendTransaction'
     | 'exportPrivateKey'
+    | 'signTransactionBytes'
     | '*';
 
   /**
@@ -1364,11 +1474,11 @@ export namespace PolicyCreateRuleParams {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1385,7 +1495,7 @@ export namespace PolicyCreateRuleParams {
 
     field_source: 'ethereum_calldata';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1398,7 +1508,7 @@ export namespace PolicyCreateRuleParams {
 
     field_source: 'ethereum_typed_data_domain';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1412,7 +1522,7 @@ export namespace PolicyCreateRuleParams {
 
     field_source: 'ethereum_typed_data_message';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     typed_data: EthereumTypedDataMessageCondition.TypedData;
 
@@ -1443,7 +1553,7 @@ export namespace PolicyCreateRuleParams {
 
     field_source: 'ethereum_7702_authorization';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1456,7 +1566,7 @@ export namespace PolicyCreateRuleParams {
 
     field_source: 'solana_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1470,7 +1580,7 @@ export namespace PolicyCreateRuleParams {
 
     field_source: 'solana_system_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1490,7 +1600,7 @@ export namespace PolicyCreateRuleParams {
 
     field_source: 'solana_token_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1503,7 +1613,7 @@ export namespace PolicyCreateRuleParams {
 
     field_source: 'system';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1544,8 +1654,7 @@ export interface PolicyUpdateParams {
   owner?: PolicyUpdateParams.PublicKeyOwner | PolicyUpdateParams.UserOwner | null;
 
   /**
-   * Body param: The key quorum ID to set as the owner of the resource. If you
-   * provide this, do not specify an owner.
+   * Body param
    */
   owner_id?: string | null;
 
@@ -1563,8 +1672,9 @@ export interface PolicyUpdateParams {
 
 export namespace PolicyUpdateParams {
   /**
-   * The P-256 public key of the owner of the resource. If you provide this, do not
-   * specify an owner_id as it will be generated automatically.
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
    */
   export interface PublicKeyOwner {
     public_key: string;
@@ -1598,6 +1708,9 @@ export namespace PolicyUpdateParams {
       | Rule.SolanaSystemProgramInstructionCondition
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
+      | PoliciesAPI.TronTransactionCondition
+      | PoliciesAPI.SuiTransactionCommandCondition
+      | PoliciesAPI.SuiTransferObjectsCommandCondition
     >;
 
     /**
@@ -1606,11 +1719,13 @@ export namespace PolicyUpdateParams {
     method:
       | 'eth_sendTransaction'
       | 'eth_signTransaction'
+      | 'eth_signUserOperation'
       | 'eth_signTypedData_v4'
       | 'eth_sign7702Authorization'
       | 'signTransaction'
       | 'signAndSendTransaction'
       | 'exportPrivateKey'
+      | 'signTransactionBytes'
       | '*';
 
     name: string;
@@ -1622,11 +1737,11 @@ export namespace PolicyUpdateParams {
      * eth_sendTransaction request.
      */
     export interface EthereumTransactionCondition {
-      field: 'to' | 'value';
+      field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1643,7 +1758,7 @@ export namespace PolicyUpdateParams {
 
       field_source: 'ethereum_calldata';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1656,7 +1771,7 @@ export namespace PolicyUpdateParams {
 
       field_source: 'ethereum_typed_data_domain';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1670,7 +1785,7 @@ export namespace PolicyUpdateParams {
 
       field_source: 'ethereum_typed_data_message';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       typed_data: EthereumTypedDataMessageCondition.TypedData;
 
@@ -1701,7 +1816,7 @@ export namespace PolicyUpdateParams {
 
       field_source: 'ethereum_7702_authorization';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1714,7 +1829,7 @@ export namespace PolicyUpdateParams {
 
       field_source: 'solana_program_instruction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1728,7 +1843,7 @@ export namespace PolicyUpdateParams {
 
       field_source: 'solana_system_program_instruction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1748,7 +1863,7 @@ export namespace PolicyUpdateParams {
 
       field_source: 'solana_token_program_instruction';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1761,7 +1876,7 @@ export namespace PolicyUpdateParams {
 
       field_source: 'system';
 
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
     }
@@ -1792,6 +1907,9 @@ export interface PolicyUpdateRuleParams {
     | PolicyUpdateRuleParams.SolanaSystemProgramInstructionCondition
     | PolicyUpdateRuleParams.SolanaTokenProgramInstructionCondition
     | PolicyUpdateRuleParams.SystemCondition
+    | TronTransactionCondition
+    | SuiTransactionCommandCondition
+    | SuiTransferObjectsCommandCondition
   >;
 
   /**
@@ -1800,11 +1918,13 @@ export interface PolicyUpdateRuleParams {
   method:
     | 'eth_sendTransaction'
     | 'eth_signTransaction'
+    | 'eth_signUserOperation'
     | 'eth_signTypedData_v4'
     | 'eth_sign7702Authorization'
     | 'signTransaction'
     | 'signAndSendTransaction'
     | 'exportPrivateKey'
+    | 'signTransactionBytes'
     | '*';
 
   /**
@@ -1825,11 +1945,11 @@ export namespace PolicyUpdateRuleParams {
    * eth_sendTransaction request.
    */
   export interface EthereumTransactionCondition {
-    field: 'to' | 'value';
+    field: 'to' | 'value' | 'chain_id';
 
     field_source: 'ethereum_transaction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1846,7 +1966,7 @@ export namespace PolicyUpdateRuleParams {
 
     field_source: 'ethereum_calldata';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1859,7 +1979,7 @@ export namespace PolicyUpdateRuleParams {
 
     field_source: 'ethereum_typed_data_domain';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1873,7 +1993,7 @@ export namespace PolicyUpdateRuleParams {
 
     field_source: 'ethereum_typed_data_message';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     typed_data: EthereumTypedDataMessageCondition.TypedData;
 
@@ -1904,7 +2024,7 @@ export namespace PolicyUpdateRuleParams {
 
     field_source: 'ethereum_7702_authorization';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1917,7 +2037,7 @@ export namespace PolicyUpdateRuleParams {
 
     field_source: 'solana_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1931,7 +2051,7 @@ export namespace PolicyUpdateRuleParams {
 
     field_source: 'solana_system_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1951,7 +2071,7 @@ export namespace PolicyUpdateRuleParams {
 
     field_source: 'solana_token_program_instruction';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1964,7 +2084,7 @@ export namespace PolicyUpdateRuleParams {
 
     field_source: 'system';
 
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in';
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
     value: string | Array<string>;
   }
@@ -1977,6 +2097,11 @@ export interface PolicyGetRuleParams {
 export declare namespace Policies {
   export {
     type Policy as Policy,
+    type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
+    type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
+    type TronTransactionCondition as TronTransactionCondition,
+    type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
+    type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
     type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
     type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,

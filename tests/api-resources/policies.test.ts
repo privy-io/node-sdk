@@ -13,7 +13,7 @@ describe('resource policies', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.policies.create({
       chain_type: 'ethereum',
-      name: 'name',
+      name: 'x',
       rules: [
         {
           action: 'ALLOW',
@@ -26,7 +26,7 @@ describe('resource policies', () => {
             },
           ],
           method: 'eth_sendTransaction',
-          name: 'name',
+          name: 'x',
         },
       ],
       version: '1.0',
@@ -44,7 +44,7 @@ describe('resource policies', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.policies.create({
       chain_type: 'ethereum',
-      name: 'name',
+      name: 'x',
       rules: [
         {
           action: 'ALLOW',
@@ -57,7 +57,7 @@ describe('resource policies', () => {
             },
           ],
           method: 'eth_sendTransaction',
-          name: 'name',
+          name: 'x',
         },
       ],
       version: '1.0',
@@ -80,7 +80,7 @@ describe('resource policies', () => {
         },
       ],
       method: 'eth_sendTransaction',
-      name: 'name',
+      name: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -104,7 +104,7 @@ describe('resource policies', () => {
         },
       ],
       method: 'eth_sendTransaction',
-      name: 'name',
+      name: 'x',
       'privy-authorization-signature': 'privy-authorization-signature',
     });
   });
@@ -181,7 +181,7 @@ describe('resource policies', () => {
         },
       ],
       method: 'eth_sendTransaction',
-      name: 'name',
+      name: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -206,7 +206,7 @@ describe('resource policies', () => {
         },
       ],
       method: 'eth_sendTransaction',
-      name: 'name',
+      name: 'x',
       'privy-authorization-signature': 'privy-authorization-signature',
     });
   });

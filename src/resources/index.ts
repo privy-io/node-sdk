@@ -212,3 +212,13 @@ export {
   type KrakenEmbedVerificationCompletedWebhookPayload,
   type KrakenEmbedVerificationFailedWebhookPayload,
 } from './webhooks';
+export {
+  Yield,
+  type YieldProvider,
+  type YieldSweepType,
+  type YieldSweepStatus,
+  type YieldDepositInput,
+  type YieldWithdrawInput,
+  type YieldSweepResponse,
+  type VaultResponse,
+} from './yield';

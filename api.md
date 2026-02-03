@@ -277,3 +277,15 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationCompletedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationFailedWebhookPayload</a></code>
+
+# Yield
+
+Types:
+
+- <code><a href="./src/resources/yield.ts">YieldProvider</a></code>
+- <code><a href="./src/resources/yield.ts">YieldSweepType</a></code>
+- <code><a href="./src/resources/yield.ts">YieldSweepStatus</a></code>
+- <code><a href="./src/resources/yield.ts">YieldDepositInput</a></code>
+- <code><a href="./src/resources/yield.ts">YieldWithdrawInput</a></code>
+- <code><a href="./src/resources/yield.ts">YieldSweepResponse</a></code>
+- <code><a href="./src/resources/yield.ts">VaultResponse</a></code>

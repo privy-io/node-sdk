@@ -180,6 +180,16 @@ import {
   Webhooks,
 } from './resources/webhooks';
 import {
+  VaultResponse,
+  Yield,
+  YieldDepositInput,
+  YieldProvider,
+  YieldSweepResponse,
+  YieldSweepStatus,
+  YieldSweepType,
+  YieldWithdrawInput,
+} from './resources/yield';
+import {
   CurveSigningChainType,
   CustodialWallet,
   CustodialWalletChainType,
@@ -1001,6 +1011,7 @@ export class PrivyAPI {
   apps: API.Apps = new API.Apps(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
+  yield: API.Yield = new API.Yield(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -1013,6 +1024,7 @@ PrivyAPI.Analytics = Analytics;
 PrivyAPI.Apps = Apps;
 PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.Webhooks = Webhooks;
+PrivyAPI.Yield = Yield;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -1240,5 +1252,16 @@ export declare namespace PrivyAPI {
     type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
     type KrakenEmbedVerificationCompletedWebhookPayload as KrakenEmbedVerificationCompletedWebhookPayload,
     type KrakenEmbedVerificationFailedWebhookPayload as KrakenEmbedVerificationFailedWebhookPayload,
+  };
+
+  export {
+    Yield as Yield,
+    type YieldProvider as YieldProvider,
+    type YieldSweepType as YieldSweepType,
+    type YieldSweepStatus as YieldSweepStatus,
+    type YieldDepositInput as YieldDepositInput,
+    type YieldWithdrawInput as YieldWithdrawInput,
+    type YieldSweepResponse as YieldSweepResponse,
+    type VaultResponse as VaultResponse,
   };
 }

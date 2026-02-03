@@ -30,7 +30,7 @@ describe('resource users', () => {
       custom_metadata: { foo: 'string' },
       wallets: [
         {
-          chain_type: 'ethereum',
+          chain_type: 'solana',
           additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
           create_smart_wallet: true,
           policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
@@ -317,7 +317,7 @@ describe('resource users', () => {
 
   // Prism tests are disabled
   test.skip('search: only required params', async () => {
-    const responsePromise = client.users.search({ searchTerm: 'searchTerm' });
+    const responsePromise = client.users.search({ search_term: 'search_term' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -329,7 +329,7 @@ describe('resource users', () => {
 
   // Prism tests are disabled
   test.skip('search: required and optional params', async () => {
-    const response = await client.users.search({ searchTerm: 'searchTerm' });
+    const response = await client.users.search({ search_term: 'search_term' });
   });
 
   // Prism tests are disabled

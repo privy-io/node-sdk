@@ -10,8 +10,8 @@ const client = new PrivyAPI({
 
 describe('resource balance', () => {
   // Prism tests are disabled
-  test.skip('get', async () => {
-    const responsePromise = client.wallets.balance.get('wallet_id');
+  test.skip('get: only required params', async () => {
+    const responsePromise = client.wallets.balance.get('wallet_id', { asset: 'usdc', chain: 'ethereum' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,19 +22,11 @@ describe('resource balance', () => {
   });
 
   // Prism tests are disabled
-  test.skip('get: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.wallets.balance.get(
-        'wallet_id',
-        {
-          token: 'string',
-          asset: 'usdc',
-          chain: 'ethereum',
-          include_currency: 'usd',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(PrivyAPI.NotFoundError);
+  test.skip('get: required and optional params', async () => {
+    const response = await client.wallets.balance.get('wallet_id', {
+      asset: 'usdc',
+      chain: 'ethereum',
+      include_currency: 'usd',
+    });
   });
 });

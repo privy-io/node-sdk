@@ -17,7 +17,7 @@ export class Wallets extends APIResource {
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
 
   /**
-   * Creates a new wallet on the requested chain and for the requested owner.
+   * Create a new wallet.
    *
    * @example
    * ```ts
@@ -113,11 +113,7 @@ export class Wallets extends APIResource {
    * ```ts
    * const response = await client.wallets._rawSign(
    *   'wallet_id',
-   *   {
-   *     params: {
-   *       hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e',
-   *     },
-   *   },
+   *   { params: {} },
    * );
    * ```
    */
@@ -152,8 +148,8 @@ export class Wallets extends APIResource {
    * @example
    * ```ts
    * const response = await client.wallets._rpc('wallet_id', {
-   *   method: 'personal_sign',
-   *   params: { encoding: 'utf-8', message: 'message' },
+   *   method: 'eth_signTransaction',
+   *   params: { transaction: {} },
    * });
    * ```
    */
@@ -270,9 +266,6 @@ export class Wallets extends APIResource {
 
 export type WalletsCursor = Cursor<Wallet>;
 
-/**
- * A wallet managed by Privy's wallet infrastructure.
- */
 export interface Wallet {
   /**
    * Unique ID of the wallet. This will be the primary identifier when using the
@@ -291,9 +284,21 @@ export interface Wallet {
   address: string;
 
   /**
-   * The wallet chain types.
+   * Chain type of the wallet
    */
-  chain_type: WalletChainType;
+  chain_type:
+    | 'solana'
+    | 'ethereum'
+    | 'cosmos'
+    | 'stellar'
+    | 'sui'
+    | 'tron'
+    | 'bitcoin-segwit'
+    | 'near'
+    | 'spark'
+    | 'ton'
+    | 'starknet'
+    | 'movement';
 
   /**
    * Unix timestamp of when the wallet was created in milliseconds.
@@ -313,14 +318,14 @@ export interface Wallet {
   imported_at: number | null;
 
   /**
-   * The key quorum ID of the owner of the wallet.
-   */
-  owner_id: string | null;
-
-  /**
    * List of policy IDs for policies that are enforced on the wallet.
    */
   policy_ids: Array<string>;
+
+  /**
+   * The key quorum ID of the owner of the wallet.
+   */
+  owner_id?: string;
 
   /**
    * The compressed, raw public key for the wallet along the chain cryptographic
@@ -331,778 +336,9 @@ export interface Wallet {
 
 export namespace Wallet {
   export interface AdditionalSigner {
+    override_policy_ids: Array<string>;
+
     signer_id: string;
-
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
-  }
-}
-
-/**
- * The wallet chain types that support curve-based signing.
- */
-export type CurveSigningChainType =
-  | 'cosmos'
-  | 'stellar'
-  | 'sui'
-  | 'aptos'
-  | 'movement'
-  | 'tron'
-  | 'bitcoin-segwit'
-  | 'near'
-  | 'ton'
-  | 'starknet';
-
-/**
- * The wallet chain types that are not first class chains.
- */
-export type ExtendedChainType =
-  | 'cosmos'
-  | 'stellar'
-  | 'sui'
-  | 'aptos'
-  | 'movement'
-  | 'tron'
-  | 'bitcoin-segwit'
-  | 'near'
-  | 'ton'
-  | 'starknet'
-  | 'spark';
-
-/**
- * The wallet chain types that offer first class support.
- */
-export type FirstClassChainType = 'ethereum' | 'solana';
-
-/**
- * The wallet chain types.
- */
-export type WalletChainType =
-  | 'ethereum'
-  | 'solana'
-  | 'cosmos'
-  | 'stellar'
-  | 'sui'
-  | 'aptos'
-  | 'movement'
-  | 'tron'
-  | 'bitcoin-segwit'
-  | 'near'
-  | 'ton'
-  | 'starknet'
-  | 'spark';
-
-/**
- * Information about the custodian managing this wallet.
- */
-export interface WalletCustodian {
-  name: string;
-}
-
-/**
- * The provider of the custodial wallet.
- */
-export type CustodialWalletProvider = 'bridge';
-
-/**
- * The chain type of the custodial wallet.
- */
-export type CustodialWalletChainType = 'ethereum';
-
-/**
- * The input for creating a custodial wallet.
- */
-export interface CustodialWalletCreateInput {
-  /**
-   * The chain type of the custodial wallet.
-   */
-  chain_type: CustodialWalletChainType;
-
-  /**
-   * The provider of the custodial wallet.
-   */
-  provider: CustodialWalletProvider;
-
-  /**
-   * The resource ID of the beneficiary of the custodial wallet, given by the
-   * licensing provider.
-   */
-  provider_user_id: string;
-
-  additional_signers?: Array<CustodialWalletCreateInput.AdditionalSigner>;
-
-  owner?: CustodialWalletCreateInput.UserID | CustodialWalletCreateInput.PublicKey | null;
-
-  policy_ids?: Array<string>;
-}
-
-export namespace CustodialWalletCreateInput {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    override_policy_ids?: Array<string>;
-  }
-
-  export interface UserID {
-    user_id: string;
-  }
-
-  export interface PublicKey {
-    public_key: string;
-  }
-}
-
-/**
- * Information about a custodial wallet.
- */
-export interface CustodialWallet {
-  id: string;
-
-  address: string;
-
-  /**
-   * The chain type of the custodial wallet.
-   */
-  chain_type: CustodialWalletChainType;
-
-  owner_id: string | null;
-
-  /**
-   * The provider of the custodial wallet.
-   */
-  provider: CustodialWalletProvider;
-
-  additional_signers?: Array<CustodialWallet.AdditionalSigner>;
-
-  policy_ids?: Array<string>;
-}
-
-export namespace CustodialWallet {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    override_policy_ids?: Array<string>;
-  }
-}
-
-/**
- * Optional HPKE configuration for wallet import decryption. These parameters allow
- * importing wallets encrypted by external providers that use different HPKE
- * configurations.
- */
-export interface HpkeImportConfig {
-  /**
-   * Additional Authenticated Data (AAD) used during encryption. Should be
-   * base64-encoded bytes.
-   */
-  aad?: string;
-
-  /**
-   * The AEAD algorithm used for encryption. Defaults to CHACHA20_POLY1305 if not
-   * specified.
-   */
-  aead_algorithm?: 'CHACHA20_POLY1305' | 'AES_GCM256';
-
-  /**
-   * Application-specific context information (INFO) used during HPKE encryption.
-   * Should be base64-encoded bytes.
-   */
-  info?: string;
-}
-
-/**
- * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
- */
-export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
-
-/**
- * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
- */
-export interface EthereumPersonalSignRpcInput {
-  method: 'personal_sign';
-
-  params: EthereumPersonalSignRpcInput.Params;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-}
-
-export namespace EthereumPersonalSignRpcInput {
-  export interface Params {
-    encoding: 'utf-8' | 'hex';
-
-    message: string;
-  }
-}
-
-/**
- * Executes the EVM `eth_signTransaction` RPC to sign a transaction.
- */
-export interface EthereumSignTransactionRpcInput {
-  method: 'eth_signTransaction';
-
-  params: EthereumSignTransactionRpcInput.Params;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-}
-
-export namespace EthereumSignTransactionRpcInput {
-  export interface Params {
-    transaction: Params.Transaction;
-  }
-
-  export namespace Params {
-    export interface Transaction {
-      authorization_list?: Array<Transaction.AuthorizationList>;
-
-      chain_id?: string | number;
-
-      data?: string;
-
-      from?: string;
-
-      gas_limit?: string | number;
-
-      gas_price?: string | number;
-
-      max_fee_per_gas?: string | number;
-
-      max_priority_fee_per_gas?: string | number;
-
-      nonce?: string | number;
-
-      to?: string;
-
-      type?: 0 | 1 | 2 | 4;
-
-      value?: string | number;
-    }
-
-    export namespace Transaction {
-      export interface AuthorizationList {
-        chain_id: string | number;
-
-        contract: string;
-
-        nonce: string | number;
-
-        r: string;
-
-        s: string;
-
-        y_parity: number;
-      }
-    }
-  }
-}
-
-/**
- * Executes the EVM `eth_sendTransaction` RPC to sign and broadcast a transaction.
- */
-export interface EthereumSendTransactionRpcInput {
-  caip2: string;
-
-  method: 'eth_sendTransaction';
-
-  params: EthereumSendTransactionRpcInput.Params;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-
-  sponsor?: boolean;
-}
-
-export namespace EthereumSendTransactionRpcInput {
-  export interface Params {
-    transaction: Params.Transaction;
-  }
-
-  export namespace Params {
-    export interface Transaction {
-      authorization_list?: Array<Transaction.AuthorizationList>;
-
-      chain_id?: string | number;
-
-      data?: string;
-
-      from?: string;
-
-      gas_limit?: string | number;
-
-      gas_price?: string | number;
-
-      max_fee_per_gas?: string | number;
-
-      max_priority_fee_per_gas?: string | number;
-
-      nonce?: string | number;
-
-      to?: string;
-
-      type?: 0 | 1 | 2 | 4;
-
-      value?: string | number;
-    }
-
-    export namespace Transaction {
-      export interface AuthorizationList {
-        chain_id: string | number;
-
-        contract: string;
-
-        nonce: string | number;
-
-        r: string;
-
-        s: string;
-
-        y_parity: number;
-      }
-    }
-  }
-}
-
-/**
- * Executes the EVM `eth_signTypedData_v4` RPC (EIP-712) to sign a typed data
- * object.
- */
-export interface EthereumSignTypedDataRpcInput {
-  method: 'eth_signTypedData_v4';
-
-  params: EthereumSignTypedDataRpcInput.Params;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-}
-
-export namespace EthereumSignTypedDataRpcInput {
-  export interface Params {
-    typed_data: Params.TypedData;
-  }
-
-  export namespace Params {
-    export interface TypedData {
-      domain: { [key: string]: unknown };
-
-      message: { [key: string]: unknown };
-
-      primary_type: string;
-
-      types: { [key: string]: Array<TypedData.Type> };
-    }
-
-    export namespace TypedData {
-      export interface Type {
-        name: string;
-
-        type: string;
-      }
-    }
-  }
-}
-
-/**
- * Executes an RPC method to hash and sign a UserOperation.
- */
-export interface EthereumSignUserOperationRpcInput {
-  method: 'eth_signUserOperation';
-
-  params: EthereumSignUserOperationRpcInput.Params;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-}
-
-export namespace EthereumSignUserOperationRpcInput {
-  export interface Params {
-    chain_id: string | number;
-
-    contract: string;
-
-    user_operation: Params.UserOperation;
-  }
-
-  export namespace Params {
-    export interface UserOperation {
-      call_data: string;
-
-      call_gas_limit: string;
-
-      max_fee_per_gas: string;
-
-      max_priority_fee_per_gas: string;
-
-      nonce: string;
-
-      paymaster: string;
-
-      paymaster_data: string;
-
-      paymaster_post_op_gas_limit: string;
-
-      paymaster_verification_gas_limit: string;
-
-      pre_verification_gas: string;
-
-      sender: string;
-
-      verification_gas_limit: string;
-    }
-  }
-}
-
-/**
- * Signs an EIP-7702 authorization.
- */
-export interface EthereumSign7702AuthorizationRpcInput {
-  method: 'eth_sign7702Authorization';
-
-  params: EthereumSign7702AuthorizationRpcInput.Params;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-}
-
-export namespace EthereumSign7702AuthorizationRpcInput {
-  export interface Params {
-    chain_id: string | number;
-
-    contract: string;
-
-    nonce?: string | number;
-  }
-}
-
-/**
- * Signs a raw hash on the secp256k1 curve.
- */
-export interface EthereumSecp256k1SignRpcInput {
-  method: 'secp256k1_sign';
-
-  params: EthereumSecp256k1SignRpcInput.Params;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-}
-
-export namespace EthereumSecp256k1SignRpcInput {
-  export interface Params {
-    hash: string;
-  }
-}
-
-/**
- * Executes the SVM `signTransaction` RPC to sign a transaction.
- */
-export interface SolanaSignTransactionRpcInput {
-  method: 'signTransaction';
-
-  params: SolanaSignTransactionRpcInput.Params;
-
-  address?: string;
-
-  chain_type?: 'solana';
-}
-
-export namespace SolanaSignTransactionRpcInput {
-  export interface Params {
-    encoding: 'base64';
-
-    transaction: string;
-  }
-}
-
-/**
- * Executes the SVM `signAndSendTransaction` RPC to sign and broadcast a
- * transaction.
- */
-export interface SolanaSignAndSendTransactionRpcInput {
-  caip2: string;
-
-  method: 'signAndSendTransaction';
-
-  params: SolanaSignAndSendTransactionRpcInput.Params;
-
-  address?: string;
-
-  chain_type?: 'solana';
-
-  sponsor?: boolean;
-}
-
-export namespace SolanaSignAndSendTransactionRpcInput {
-  export interface Params {
-    encoding: 'base64';
-
-    transaction: string;
-  }
-}
-
-/**
- * Executes the SVM `signMessage` RPC to sign a message.
- */
-export interface SolanaSignMessageRpcInput {
-  method: 'signMessage';
-
-  params: SolanaSignMessageRpcInput.Params;
-
-  address?: string;
-
-  chain_type?: 'solana';
-}
-
-export namespace SolanaSignMessageRpcInput {
-  export interface Params {
-    encoding: 'base64';
-
-    message: string;
-  }
-}
-
-/**
- * Response to the EVM `eth_signTransaction` RPC.
- */
-export interface EthereumSignTransactionRpcResponse {
-  data: EthereumSignTransactionRpcResponse.Data;
-
-  method: 'eth_signTransaction';
-}
-
-export namespace EthereumSignTransactionRpcResponse {
-  export interface Data {
-    encoding: 'rlp';
-
-    signed_transaction: string;
-  }
-}
-
-/**
- * Response to the EVM `eth_sendTransaction` RPC.
- */
-export interface EthereumSendTransactionRpcResponse {
-  data: EthereumSendTransactionRpcResponse.Data;
-
-  method: 'eth_sendTransaction';
-}
-
-export namespace EthereumSendTransactionRpcResponse {
-  export interface Data {
-    caip2: string;
-
-    hash: string;
-
-    transaction_id?: string;
-
-    transaction_request?: Data.TransactionRequest;
-
-    user_operation_hash?: string;
-  }
-
-  export namespace Data {
-    export interface TransactionRequest {
-      authorization_list?: Array<TransactionRequest.AuthorizationList>;
-
-      chain_id?: string | number;
-
-      data?: string;
-
-      from?: string;
-
-      gas_limit?: string | number;
-
-      gas_price?: string | number;
-
-      max_fee_per_gas?: string | number;
-
-      max_priority_fee_per_gas?: string | number;
-
-      nonce?: string | number;
-
-      to?: string;
-
-      type?: 0 | 1 | 2 | 4;
-
-      value?: string | number;
-    }
-
-    export namespace TransactionRequest {
-      export interface AuthorizationList {
-        chain_id: string | number;
-
-        contract: string;
-
-        nonce: string | number;
-
-        r: string;
-
-        s: string;
-
-        y_parity: number;
-      }
-    }
-  }
-}
-
-/**
- * Response to the EVM `personal_sign` RPC.
- */
-export interface EthereumPersonalSignRpcResponse {
-  data: EthereumPersonalSignRpcResponse.Data;
-
-  method: 'personal_sign';
-}
-
-export namespace EthereumPersonalSignRpcResponse {
-  export interface Data {
-    encoding: 'hex';
-
-    signature: string;
-  }
-}
-
-/**
- * Response to the EVM `eth_signTypedData_v4` RPC.
- */
-export interface EthereumSignTypedDataRpcResponse {
-  data: EthereumSignTypedDataRpcResponse.Data;
-
-  method: 'eth_signTypedData_v4';
-}
-
-export namespace EthereumSignTypedDataRpcResponse {
-  export interface Data {
-    encoding: 'hex';
-
-    signature: string;
-  }
-}
-
-/**
- * Response to the EVM `eth_signUserOperation` RPC.
- */
-export interface EthereumSignUserOperationRpcResponse {
-  data: EthereumSignUserOperationRpcResponse.Data;
-
-  method: 'eth_signUserOperation';
-}
-
-export namespace EthereumSignUserOperationRpcResponse {
-  export interface Data {
-    encoding: 'hex';
-
-    signature: string;
-  }
-}
-
-/**
- * Response to the EVM `eth_sign7702Authorization` RPC.
- */
-export interface EthereumSign7702AuthorizationRpcResponse {
-  data: EthereumSign7702AuthorizationRpcResponse.Data;
-
-  method: 'eth_sign7702Authorization';
-}
-
-export namespace EthereumSign7702AuthorizationRpcResponse {
-  export interface Data {
-    authorization: Data.Authorization;
-  }
-
-  export namespace Data {
-    export interface Authorization {
-      chain_id: string | number;
-
-      contract: string;
-
-      nonce: string | number;
-
-      r: string;
-
-      s: string;
-
-      y_parity: number;
-    }
-  }
-}
-
-/**
- * Response to the EVM `secp256k1_sign` RPC.
- */
-export interface EthereumSecp256k1SignRpcResponse {
-  data: EthereumSecp256k1SignRpcResponse.Data;
-
-  method: 'secp256k1_sign';
-}
-
-export namespace EthereumSecp256k1SignRpcResponse {
-  export interface Data {
-    encoding: 'hex';
-
-    signature: string;
-  }
-}
-
-/**
- * Response to the SVM `signTransaction` RPC.
- */
-export interface SolanaSignTransactionRpcResponse {
-  data: SolanaSignTransactionRpcResponse.Data;
-
-  method: 'signTransaction';
-}
-
-export namespace SolanaSignTransactionRpcResponse {
-  export interface Data {
-    encoding: 'base64';
-
-    signed_transaction: string;
-  }
-}
-
-/**
- * Response to the SVM `signAndSendTransaction` RPC.
- */
-export interface SolanaSignAndSendTransactionRpcResponse {
-  data: SolanaSignAndSendTransactionRpcResponse.Data;
-
-  method: 'signAndSendTransaction';
-}
-
-export namespace SolanaSignAndSendTransactionRpcResponse {
-  export interface Data {
-    caip2: string;
-
-    hash: string;
-
-    transaction_id?: string;
-  }
-}
-
-/**
- * Response to the SVM `signMessage` RPC.
- */
-export interface SolanaSignMessageRpcResponse {
-  data: SolanaSignMessageRpcResponse.Data;
-
-  method: 'signMessage';
-}
-
-export namespace SolanaSignMessageRpcResponse {
-  export interface Data {
-    encoding: 'base64';
-
-    signature: string;
   }
 }
 
@@ -1138,8 +374,6 @@ export interface WalletInitImportResponse {
 
 export interface WalletRawSignResponse {
   data: WalletRawSignResponse.Data;
-
-  method: 'raw_sign';
 }
 
 export namespace WalletRawSignResponse {
@@ -1150,20 +384,190 @@ export namespace WalletRawSignResponse {
   }
 }
 
-/**
- * Response to the EVM `personal_sign` RPC.
- */
 export type WalletRpcResponse =
-  | EthereumPersonalSignRpcResponse
-  | EthereumSignTypedDataRpcResponse
-  | EthereumSignTransactionRpcResponse
-  | EthereumSendTransactionRpcResponse
-  | EthereumSignUserOperationRpcResponse
-  | EthereumSign7702AuthorizationRpcResponse
-  | EthereumSecp256k1SignRpcResponse
-  | SolanaSignMessageRpcResponse
-  | SolanaSignTransactionRpcResponse
-  | SolanaSignAndSendTransactionRpcResponse;
+  | WalletRpcResponse.SolanaSignTransactionRpcResponse
+  | WalletRpcResponse.SolanaSignAndSendTransactionRpcResponse
+  | WalletRpcResponse.SolanaSignMessageRpcResponse
+  | WalletRpcResponse.EthereumSignTransactionRpcResponse
+  | WalletRpcResponse.EthereumSendTransactionRpcResponse
+  | WalletRpcResponse.EthereumPersonalSignRpcResponse
+  | WalletRpcResponse.EthereumSignTypedDataRpcResponse
+  | WalletRpcResponse.EthereumSign7702AuthorizationRpcResponse
+  | WalletRpcResponse.EthereumSecp256k1SignRpcResponse;
+
+export namespace WalletRpcResponse {
+  export interface SolanaSignTransactionRpcResponse {
+    data: SolanaSignTransactionRpcResponse.Data;
+
+    method: 'signTransaction';
+  }
+
+  export namespace SolanaSignTransactionRpcResponse {
+    export interface Data {
+      encoding: 'base64';
+
+      signed_transaction: string;
+    }
+  }
+
+  export interface SolanaSignAndSendTransactionRpcResponse {
+    data: SolanaSignAndSendTransactionRpcResponse.Data;
+
+    method: 'signAndSendTransaction';
+  }
+
+  export namespace SolanaSignAndSendTransactionRpcResponse {
+    export interface Data {
+      caip2: string;
+
+      hash: string;
+
+      transaction_id?: string;
+    }
+  }
+
+  export interface SolanaSignMessageRpcResponse {
+    data: SolanaSignMessageRpcResponse.Data;
+
+    method: 'signMessage';
+  }
+
+  export namespace SolanaSignMessageRpcResponse {
+    export interface Data {
+      encoding: 'base64';
+
+      signature: string;
+    }
+  }
+
+  export interface EthereumSignTransactionRpcResponse {
+    data: EthereumSignTransactionRpcResponse.Data;
+
+    method: 'eth_signTransaction';
+  }
+
+  export namespace EthereumSignTransactionRpcResponse {
+    export interface Data {
+      encoding: 'rlp';
+
+      signed_transaction: string;
+    }
+  }
+
+  export interface EthereumSendTransactionRpcResponse {
+    data: EthereumSendTransactionRpcResponse.Data;
+
+    method: 'eth_sendTransaction';
+  }
+
+  export namespace EthereumSendTransactionRpcResponse {
+    export interface Data {
+      caip2: string;
+
+      hash: string;
+
+      transaction_id?: string;
+
+      transaction_request?: Data.TransactionRequest;
+    }
+
+    export namespace Data {
+      export interface TransactionRequest {
+        chain_id?: string | number;
+
+        data?: string;
+
+        from?: string;
+
+        gas_limit?: string | number;
+
+        gas_price?: string | number;
+
+        max_fee_per_gas?: string | number;
+
+        max_priority_fee_per_gas?: string | number;
+
+        nonce?: string | number;
+
+        to?: string;
+
+        type?: 0 | 1 | 2;
+
+        value?: string | number;
+      }
+    }
+  }
+
+  export interface EthereumPersonalSignRpcResponse {
+    data: EthereumPersonalSignRpcResponse.Data;
+
+    method: 'personal_sign';
+  }
+
+  export namespace EthereumPersonalSignRpcResponse {
+    export interface Data {
+      encoding: 'hex';
+
+      signature: string;
+    }
+  }
+
+  export interface EthereumSignTypedDataRpcResponse {
+    data: EthereumSignTypedDataRpcResponse.Data;
+
+    method: 'eth_signTypedData_v4';
+  }
+
+  export namespace EthereumSignTypedDataRpcResponse {
+    export interface Data {
+      encoding: 'hex';
+
+      signature: string;
+    }
+  }
+
+  export interface EthereumSign7702AuthorizationRpcResponse {
+    data: EthereumSign7702AuthorizationRpcResponse.Data;
+
+    method: 'eth_sign7702Authorization';
+  }
+
+  export namespace EthereumSign7702AuthorizationRpcResponse {
+    export interface Data {
+      authorization: Data.Authorization;
+    }
+
+    export namespace Data {
+      export interface Authorization {
+        chain_id: string | number;
+
+        contract: string;
+
+        nonce: string | number;
+
+        r: string;
+
+        s: string;
+
+        y_parity: number;
+      }
+    }
+  }
+
+  export interface EthereumSecp256k1SignRpcResponse {
+    data: EthereumSecp256k1SignRpcResponse.Data;
+
+    method: 'secp256k1_sign';
+  }
+
+  export namespace EthereumSecp256k1SignRpcResponse {
+    export interface Data {
+      encoding: 'hex';
+
+      signature: string;
+    }
+  }
+}
 
 export type WalletAuthenticateWithJwtResponse =
   | WalletAuthenticateWithJwtResponse.WithEncryption
@@ -1237,9 +641,21 @@ export interface WalletCreateWalletsWithRecoveryResponse {
 
 export interface WalletCreateParams {
   /**
-   * Body param: The wallet chain types.
+   * Body param: Chain type of the wallet
    */
-  chain_type: WalletChainType;
+  chain_type:
+    | 'solana'
+    | 'ethereum'
+    | 'cosmos'
+    | 'stellar'
+    | 'sui'
+    | 'tron'
+    | 'bitcoin-segwit'
+    | 'near'
+    | 'spark'
+    | 'ton'
+    | 'starknet'
+    | 'movement';
 
   /**
    * Body param: Additional signers for the wallet.
@@ -1274,19 +690,14 @@ export interface WalletCreateParams {
 
 export namespace WalletCreateParams {
   export interface AdditionalSigner {
-    signer_id: string;
+    override_policy_ids: Array<string>;
 
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
+    signer_id: string;
   }
 
   /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
+   * The P-256 public key of the owner of the resource. If you provide this, do not
+   * specify an owner_id as it will be generated automatically.
    */
   export interface PublicKeyOwner {
     public_key: string;
@@ -1303,21 +714,21 @@ export namespace WalletCreateParams {
 }
 
 export interface WalletListParams extends CursorParams {
-  /**
-   * Filter wallets by authorization public key. Returns wallets owned by key quorums
-   * that include the specified P-256 public key (base64-encoded DER format). Cannot
-   * be used together with user_id.
-   */
-  authorization_key?: string;
+  chain_type?:
+    | 'cosmos'
+    | 'stellar'
+    | 'sui'
+    | 'aptos'
+    | 'movement'
+    | 'tron'
+    | 'bitcoin-segwit'
+    | 'near'
+    | 'ton'
+    | 'starknet'
+    | 'spark'
+    | 'solana'
+    | 'ethereum';
 
-  /**
-   * The wallet chain types.
-   */
-  chain_type?: WalletChainType;
-
-  /**
-   * Filter wallets by user ID. Cannot be used together with authorization_key.
-   */
   user_id?: string;
 }
 
@@ -1397,9 +808,9 @@ export declare namespace WalletInitImportParams {
 
 export interface WalletRawSignParams {
   /**
-   * Body param: Sign a pre-computed hash
+   * Body param
    */
-  params: WalletRawSignParams.Hash | WalletRawSignParams.Bytes;
+  params: WalletRawSignParams.Params;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are
@@ -1415,50 +826,168 @@ export interface WalletRawSignParams {
 }
 
 export namespace WalletRawSignParams {
-  /**
-   * Sign a pre-computed hash
-   */
-  export interface Hash {
+  export interface Params {
     /**
      * The hash to sign. Must start with `0x`.
      */
-    hash: string;
-  }
-
-  /**
-   * Hash and sign bytes using the specified encoding and hash function.
-   */
-  export interface Bytes {
-    /**
-     * The bytes to hash and sign.
-     */
-    bytes: string;
-
-    /**
-     * The encoding scheme for the bytes.
-     */
-    encoding: 'utf-8' | 'hex' | 'base64';
-
-    /**
-     * The hash function to hash the bytes.
-     */
-    hash_function: 'keccak256' | 'sha256' | 'blake2b256';
+    hash?: string;
   }
 }
 
 export type WalletRpcParams =
+  | WalletRpcParams.EthereumSignTransactionRpcInput
+  | WalletRpcParams.EthereumSendTransactionRpcInput
   | WalletRpcParams.EthereumPersonalSignRpcInput
   | WalletRpcParams.EthereumSignTypedDataRpcInput
-  | WalletRpcParams.EthereumSignTransactionRpcInput
-  | WalletRpcParams.EthereumSignUserOperationRpcInput
-  | WalletRpcParams.EthereumSendTransactionRpcInput
   | WalletRpcParams.EthereumSign7702AuthorizationRpcInput
   | WalletRpcParams.EthereumSecp256k1SignRpcInput
-  | WalletRpcParams.SolanaSignMessageRpcInput
   | WalletRpcParams.SolanaSignTransactionRpcInput
-  | WalletRpcParams.SolanaSignAndSendTransactionRpcInput;
+  | WalletRpcParams.SolanaSignAndSendTransactionRpcInput
+  | WalletRpcParams.SolanaSignMessageRpcInput;
 
 export declare namespace WalletRpcParams {
+  export interface EthereumSignTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'eth_signTransaction';
+
+    /**
+     * Body param
+     */
+    params: EthereumSignTransactionRpcInput.Params;
+
+    /**
+     * Body param
+     */
+    address?: string;
+
+    /**
+     * Body param
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace EthereumSignTransactionRpcInput {
+    export interface Params {
+      transaction: Params.Transaction;
+    }
+
+    export namespace Params {
+      export interface Transaction {
+        chain_id?: string | number;
+
+        data?: string;
+
+        from?: string;
+
+        gas_limit?: string | number;
+
+        gas_price?: string | number;
+
+        max_fee_per_gas?: string | number;
+
+        max_priority_fee_per_gas?: string | number;
+
+        nonce?: string | number;
+
+        to?: string;
+
+        type?: 0 | 1 | 2;
+
+        value?: string | number;
+      }
+    }
+  }
+
+  export interface EthereumSendTransactionRpcInput {
+    /**
+     * Body param
+     */
+    caip2: string;
+
+    /**
+     * Body param
+     */
+    method: 'eth_sendTransaction';
+
+    /**
+     * Body param
+     */
+    params: EthereumSendTransactionRpcInput.Params;
+
+    /**
+     * Body param
+     */
+    address?: string;
+
+    /**
+     * Body param
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    sponsor?: boolean;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace EthereumSendTransactionRpcInput {
+    export interface Params {
+      transaction: Params.Transaction;
+    }
+
+    export namespace Params {
+      export interface Transaction {
+        chain_id?: string | number;
+
+        data?: string;
+
+        from?: string;
+
+        gas_limit?: string | number;
+
+        gas_price?: string | number;
+
+        max_fee_per_gas?: string | number;
+
+        max_priority_fee_per_gas?: string | number;
+
+        nonce?: string | number;
+
+        to?: string;
+
+        type?: 0 | 1 | 2;
+
+        value?: string | number;
+      }
+    }
+  }
+
   export interface EthereumPersonalSignRpcInput {
     /**
      * Body param
@@ -1561,256 +1090,6 @@ export declare namespace WalletRpcParams {
     }
   }
 
-  export interface EthereumSignTransactionRpcInput {
-    /**
-     * Body param
-     */
-    method: 'eth_signTransaction';
-
-    /**
-     * Body param
-     */
-    params: EthereumSignTransactionRpcInput.Params;
-
-    /**
-     * Body param
-     */
-    address?: string;
-
-    /**
-     * Body param
-     */
-    chain_type?: 'ethereum';
-
-    /**
-     * Header param: Request authorization signature. If multiple signatures are
-     * required, they should be comma separated.
-     */
-    'privy-authorization-signature'?: string;
-
-    /**
-     * Header param: Idempotency keys ensure API requests are executed only once within
-     * a 24-hour window.
-     */
-    'privy-idempotency-key'?: string;
-  }
-
-  export namespace EthereumSignTransactionRpcInput {
-    export interface Params {
-      transaction: Params.Transaction;
-    }
-
-    export namespace Params {
-      export interface Transaction {
-        authorization_list?: Array<Transaction.AuthorizationList>;
-
-        chain_id?: string | number;
-
-        data?: string;
-
-        from?: string;
-
-        gas_limit?: string | number;
-
-        gas_price?: string | number;
-
-        max_fee_per_gas?: string | number;
-
-        max_priority_fee_per_gas?: string | number;
-
-        nonce?: string | number;
-
-        to?: string;
-
-        type?: 0 | 1 | 2 | 4;
-
-        value?: string | number;
-      }
-
-      export namespace Transaction {
-        export interface AuthorizationList {
-          chain_id: string | number;
-
-          contract: string;
-
-          nonce: string | number;
-
-          r: string;
-
-          s: string;
-
-          y_parity: number;
-        }
-      }
-    }
-  }
-
-  export interface EthereumSignUserOperationRpcInput {
-    /**
-     * Body param
-     */
-    method: 'eth_signUserOperation';
-
-    /**
-     * Body param
-     */
-    params: EthereumSignUserOperationRpcInput.Params;
-
-    /**
-     * Body param
-     */
-    address?: string;
-
-    /**
-     * Body param
-     */
-    chain_type?: 'ethereum';
-
-    /**
-     * Header param: Request authorization signature. If multiple signatures are
-     * required, they should be comma separated.
-     */
-    'privy-authorization-signature'?: string;
-
-    /**
-     * Header param: Idempotency keys ensure API requests are executed only once within
-     * a 24-hour window.
-     */
-    'privy-idempotency-key'?: string;
-  }
-
-  export namespace EthereumSignUserOperationRpcInput {
-    export interface Params {
-      chain_id: string | number;
-
-      contract: string;
-
-      user_operation: Params.UserOperation;
-    }
-
-    export namespace Params {
-      export interface UserOperation {
-        call_data: string;
-
-        call_gas_limit: string;
-
-        max_fee_per_gas: string;
-
-        max_priority_fee_per_gas: string;
-
-        nonce: string;
-
-        paymaster: string;
-
-        paymaster_data: string;
-
-        paymaster_post_op_gas_limit: string;
-
-        paymaster_verification_gas_limit: string;
-
-        pre_verification_gas: string;
-
-        sender: string;
-
-        verification_gas_limit: string;
-      }
-    }
-  }
-
-  export interface EthereumSendTransactionRpcInput {
-    /**
-     * Body param
-     */
-    caip2: string;
-
-    /**
-     * Body param
-     */
-    method: 'eth_sendTransaction';
-
-    /**
-     * Body param
-     */
-    params: EthereumSendTransactionRpcInput.Params;
-
-    /**
-     * Body param
-     */
-    address?: string;
-
-    /**
-     * Body param
-     */
-    chain_type?: 'ethereum';
-
-    /**
-     * Body param
-     */
-    sponsor?: boolean;
-
-    /**
-     * Header param: Request authorization signature. If multiple signatures are
-     * required, they should be comma separated.
-     */
-    'privy-authorization-signature'?: string;
-
-    /**
-     * Header param: Idempotency keys ensure API requests are executed only once within
-     * a 24-hour window.
-     */
-    'privy-idempotency-key'?: string;
-  }
-
-  export namespace EthereumSendTransactionRpcInput {
-    export interface Params {
-      transaction: Params.Transaction;
-    }
-
-    export namespace Params {
-      export interface Transaction {
-        authorization_list?: Array<Transaction.AuthorizationList>;
-
-        chain_id?: string | number;
-
-        data?: string;
-
-        from?: string;
-
-        gas_limit?: string | number;
-
-        gas_price?: string | number;
-
-        max_fee_per_gas?: string | number;
-
-        max_priority_fee_per_gas?: string | number;
-
-        nonce?: string | number;
-
-        to?: string;
-
-        type?: 0 | 1 | 2 | 4;
-
-        value?: string | number;
-      }
-
-      export namespace Transaction {
-        export interface AuthorizationList {
-          chain_id: string | number;
-
-          contract: string;
-
-          nonce: string | number;
-
-          r: string;
-
-          s: string;
-
-          y_parity: number;
-        }
-      }
-    }
-  }
-
   export interface EthereumSign7702AuthorizationRpcInput {
     /**
      * Body param
@@ -1892,48 +1171,6 @@ export declare namespace WalletRpcParams {
   export namespace EthereumSecp256k1SignRpcInput {
     export interface Params {
       hash: string;
-    }
-  }
-
-  export interface SolanaSignMessageRpcInput {
-    /**
-     * Body param
-     */
-    method: 'signMessage';
-
-    /**
-     * Body param
-     */
-    params: SolanaSignMessageRpcInput.Params;
-
-    /**
-     * Body param
-     */
-    address?: string;
-
-    /**
-     * Body param
-     */
-    chain_type?: 'solana';
-
-    /**
-     * Header param: Request authorization signature. If multiple signatures are
-     * required, they should be comma separated.
-     */
-    'privy-authorization-signature'?: string;
-
-    /**
-     * Header param: Idempotency keys ensure API requests are executed only once within
-     * a 24-hour window.
-     */
-    'privy-idempotency-key'?: string;
-  }
-
-  export namespace SolanaSignMessageRpcInput {
-    export interface Params {
-      encoding: 'base64';
-
-      message: string;
     }
   }
 
@@ -2030,6 +1267,48 @@ export declare namespace WalletRpcParams {
       transaction: string;
     }
   }
+
+  export interface SolanaSignMessageRpcInput {
+    /**
+     * Body param
+     */
+    method: 'signMessage';
+
+    /**
+     * Body param
+     */
+    params: SolanaSignMessageRpcInput.Params;
+
+    /**
+     * Body param
+     */
+    address?: string;
+
+    /**
+     * Body param
+     */
+    chain_type?: 'solana';
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+  }
+
+  export namespace SolanaSignMessageRpcInput {
+    export interface Params {
+      encoding: 'base64';
+
+      message: string;
+    }
+  }
 }
 
 export interface WalletSubmitImportParams {
@@ -2082,13 +1361,6 @@ export namespace WalletSubmitImportParams {
      * The index of the wallet to import.
      */
     index: number;
-
-    /**
-     * Optional HPKE configuration for wallet import decryption. These parameters allow
-     * importing wallets encrypted by external providers that use different HPKE
-     * configurations.
-     */
-    hpke_config?: WalletsAPI.HpkeImportConfig;
   }
 
   export interface PrivateKeySubmitInput {
@@ -2120,13 +1392,6 @@ export namespace WalletSubmitImportParams {
     encryption_type: 'HPKE';
 
     entropy_type: 'private-key';
-
-    /**
-     * Optional HPKE configuration for wallet import decryption. These parameters allow
-     * importing wallets encrypted by external providers that use different HPKE
-     * configurations.
-     */
-    hpke_config?: WalletsAPI.HpkeImportConfig;
   }
 
   export interface AdditionalSigner {
@@ -2158,7 +1423,8 @@ export interface WalletUpdateParams {
   owner?: WalletUpdateParams.PublicKeyOwner | WalletUpdateParams.UserOwner | null;
 
   /**
-   * Body param
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
    */
   owner_id?: string | null;
 
@@ -2177,19 +1443,14 @@ export interface WalletUpdateParams {
 
 export namespace WalletUpdateParams {
   export interface AdditionalSigner {
-    signer_id: string;
+    override_policy_ids: Array<string>;
 
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
+    signer_id: string;
   }
 
   /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
+   * The P-256 public key of the owner of the resource. If you provide this, do not
+   * specify an owner_id as it will be generated automatically.
    */
   export interface PublicKeyOwner {
     public_key: string;
@@ -2266,9 +1527,21 @@ export namespace WalletCreateWalletsWithRecoveryParams {
 
   export interface Wallet {
     /**
-     * The wallet chain types.
+     * Chain type of the wallet
      */
-    chain_type: WalletsAPI.WalletChainType;
+    chain_type:
+      | 'solana'
+      | 'ethereum'
+      | 'cosmos'
+      | 'stellar'
+      | 'sui'
+      | 'tron'
+      | 'bitcoin-segwit'
+      | 'near'
+      | 'spark'
+      | 'ton'
+      | 'starknet'
+      | 'movement';
 
     /**
      * List of policy IDs for policies that should be enforced on the wallet.
@@ -2284,37 +1557,6 @@ Wallets.Balance = Balance;
 export declare namespace Wallets {
   export {
     type Wallet as Wallet,
-    type CurveSigningChainType as CurveSigningChainType,
-    type ExtendedChainType as ExtendedChainType,
-    type FirstClassChainType as FirstClassChainType,
-    type WalletChainType as WalletChainType,
-    type WalletCustodian as WalletCustodian,
-    type CustodialWalletProvider as CustodialWalletProvider,
-    type CustodialWalletChainType as CustodialWalletChainType,
-    type CustodialWalletCreateInput as CustodialWalletCreateInput,
-    type CustodialWallet as CustodialWallet,
-    type HpkeImportConfig as HpkeImportConfig,
-    type SuiCommandName as SuiCommandName,
-    type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
-    type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
-    type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,
-    type EthereumSignTypedDataRpcInput as EthereumSignTypedDataRpcInput,
-    type EthereumSignUserOperationRpcInput as EthereumSignUserOperationRpcInput,
-    type EthereumSign7702AuthorizationRpcInput as EthereumSign7702AuthorizationRpcInput,
-    type EthereumSecp256k1SignRpcInput as EthereumSecp256k1SignRpcInput,
-    type SolanaSignTransactionRpcInput as SolanaSignTransactionRpcInput,
-    type SolanaSignAndSendTransactionRpcInput as SolanaSignAndSendTransactionRpcInput,
-    type SolanaSignMessageRpcInput as SolanaSignMessageRpcInput,
-    type EthereumSignTransactionRpcResponse as EthereumSignTransactionRpcResponse,
-    type EthereumSendTransactionRpcResponse as EthereumSendTransactionRpcResponse,
-    type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
-    type EthereumSignTypedDataRpcResponse as EthereumSignTypedDataRpcResponse,
-    type EthereumSignUserOperationRpcResponse as EthereumSignUserOperationRpcResponse,
-    type EthereumSign7702AuthorizationRpcResponse as EthereumSign7702AuthorizationRpcResponse,
-    type EthereumSecp256k1SignRpcResponse as EthereumSecp256k1SignRpcResponse,
-    type SolanaSignTransactionRpcResponse as SolanaSignTransactionRpcResponse,
-    type SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
-    type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,

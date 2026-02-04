@@ -8,11 +8,7 @@ export class Aggregations extends APIResource {}
 /**
  * The RPC method this aggregation applies to.
  */
-export type AggregationMethod =
-  | 'eth_signTransaction'
-  | 'eth_signUserOperation'
-  | 'signTransaction'
-  | 'signTransactionBytes';
+export type AggregationMethod = 'eth_signTransaction' | 'eth_signUserOperation';
 
 /**
  * The metric configuration for an aggregation, defining what field/field_source to
@@ -486,6 +482,365 @@ export namespace Aggregation {
   }
 }
 
+/**
+ * Input for creating an aggregation.
+ */
+export interface AggregationInput {
+  /**
+   * The RPC method this aggregation applies to.
+   */
+  method: AggregationMethod;
+
+  /**
+   * The metric configuration for an aggregation, defining what field/field_source to
+   * measure and the aggregation function to apply.
+   */
+  metric: AggregationMetric;
+
+  /**
+   * The name of the aggregation.
+   */
+  name: string;
+
+  /**
+   * The time window configuration for an aggregation.
+   */
+  window: AggregationWindow;
+
+  /**
+   * Optional conditions to filter events before aggregation.
+   */
+  conditions?: Array<
+    | AggregationInput.UnionMember0
+    | AggregationInput.UnionMember1
+    | AggregationInput.UnionMember2
+    | AggregationInput.UnionMember3
+    | AggregationInput.UnionMember4
+    | AggregationInput.UnionMember5
+    | AggregationInput.UnionMember6
+    | AggregationInput.UnionMember7
+    | AggregationInput.UnionMember8
+    | AggregationInput.UnionMember9
+    | AggregationInput.UnionMember10
+    | AggregationInput.UnionMember11
+    | AggregationInput.UnionMember12
+    | AggregationInput.UnionMember13
+  >;
+
+  /**
+   * Optional grouping configuration for bucketing metrics.
+   */
+  group_by?: Array<AggregationGroupBy>;
+
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  owner?: AggregationInput.PublicKeyOwner | AggregationInput.UserOwner | null;
+
+  owner_id?: string | null;
+}
+
+export namespace AggregationInput {
+  export interface UnionMember0 {
+    field: 'to' | 'value' | 'chain_id';
+
+    field_source: 'ethereum_transaction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export interface UnionMember1 {
+    abi: Array<UnionMember1.Abi>;
+
+    field: string;
+
+    field_source: 'ethereum_calldata';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export namespace UnionMember1 {
+    export interface Abi {
+      type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+      anonymous?: boolean;
+
+      inputs?: Array<Abi.Input>;
+
+      name?: string;
+
+      outputs?: Array<Abi.Output>;
+
+      stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+    }
+
+    export namespace Abi {
+      export interface Input {
+        type: string;
+
+        components?: Array<unknown>;
+
+        indexed?: boolean;
+
+        internalType?: string;
+
+        name?: string;
+      }
+
+      export interface Output {
+        type: string;
+
+        components?: Array<unknown>;
+
+        indexed?: boolean;
+
+        internalType?: string;
+
+        name?: string;
+      }
+    }
+  }
+
+  export interface UnionMember2 {
+    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+
+    field_source: 'ethereum_typed_data_domain';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export interface UnionMember3 {
+    field: string;
+
+    field_source: 'ethereum_typed_data_message';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    typed_data: UnionMember3.TypedData;
+
+    value: string | Array<string>;
+  }
+
+  export namespace UnionMember3 {
+    export interface TypedData {
+      primary_type: string;
+
+      types: { [key: string]: Array<TypedData.Type> };
+    }
+
+    export namespace TypedData {
+      export interface Type {
+        name: string;
+
+        type: string;
+      }
+    }
+  }
+
+  export interface UnionMember4 {
+    field: 'contract';
+
+    field_source: 'ethereum_7702_authorization';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export interface UnionMember5 {
+    field: 'programId';
+
+    field_source: 'solana_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export interface UnionMember6 {
+    field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+
+    field_source: 'solana_system_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export interface UnionMember7 {
+    field:
+      | 'instructionName'
+      | 'Transfer.source'
+      | 'Transfer.destination'
+      | 'Transfer.authority'
+      | 'Transfer.amount'
+      | 'TransferChecked.source'
+      | 'TransferChecked.destination'
+      | 'TransferChecked.authority'
+      | 'TransferChecked.amount'
+      | 'TransferChecked.mint'
+      | 'Burn.account'
+      | 'Burn.mint'
+      | 'Burn.authority'
+      | 'Burn.amount'
+      | 'MintTo.mint'
+      | 'MintTo.account'
+      | 'MintTo.authority'
+      | 'MintTo.amount'
+      | 'CloseAccount.account'
+      | 'CloseAccount.destination'
+      | 'CloseAccount.authority'
+      | 'InitializeAccount3.account'
+      | 'InitializeAccount3.mint'
+      | 'InitializeAccount3.owner';
+
+    field_source: 'solana_token_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export interface UnionMember8 {
+    field:
+      | 'TransferContract.to_address'
+      | 'TransferContract.amount'
+      | 'TriggerSmartContract.contract_address'
+      | 'TriggerSmartContract.call_value'
+      | 'TriggerSmartContract.token_id'
+      | 'TriggerSmartContract.call_token_value';
+
+    field_source: 'tron_transaction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export interface UnionMember9 {
+    field: 'current_unix_timestamp';
+
+    field_source: 'system';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export interface UnionMember10 {
+    field: string;
+
+    field_source: 'reference';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export interface UnionMember11 {
+    abi: Array<UnionMember11.Abi>;
+
+    field: string;
+
+    field_source: 'tron_trigger_smart_contract_data';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  export namespace UnionMember11 {
+    export interface Abi {
+      type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+      anonymous?: boolean;
+
+      inputs?: Array<Abi.Input>;
+
+      name?: string;
+
+      outputs?: Array<Abi.Output>;
+
+      stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+    }
+
+    export namespace Abi {
+      export interface Input {
+        type: string;
+
+        components?: Array<unknown>;
+
+        indexed?: boolean;
+
+        internalType?: string;
+
+        name?: string;
+      }
+
+      export interface Output {
+        type: string;
+
+        components?: Array<unknown>;
+
+        indexed?: boolean;
+
+        internalType?: string;
+
+        name?: string;
+      }
+    }
+  }
+
+  export interface UnionMember12 {
+    field: 'commandName';
+
+    field_source: 'sui_transaction_command';
+
+    operator: 'eq' | 'in';
+
+    /**
+     * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+     */
+    value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+  }
+
+  export interface UnionMember13 {
+    field: 'recipient' | 'amount';
+
+    field_source: 'sui_transfer_objects_command';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
+   */
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
+}
+
 export declare namespace Aggregations {
   export {
     type AggregationMethod as AggregationMethod,
@@ -493,5 +848,6 @@ export declare namespace Aggregations {
     type AggregationWindow as AggregationWindow,
     type AggregationGroupBy as AggregationGroupBy,
     type Aggregation as Aggregation,
+    type AggregationInput as AggregationInput,
   };
 }

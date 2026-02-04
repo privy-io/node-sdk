@@ -136,6 +136,7 @@ Types:
 - <code><a href="./src/resources/users.ts">LinkedAccountFarcasterInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountTelegramInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountCustomJwtInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountPasskeyInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountInput</a></code>
 - <code><a href="./src/resources/users.ts">UserBatchCreateInput</a></code>
 - <code><a href="./src/resources/users.ts">SMSMfaMethod</a></code>
@@ -249,6 +250,7 @@ Types:
 - <code><a href="./src/resources/aggregations.ts">AggregationWindow</a></code>
 - <code><a href="./src/resources/aggregations.ts">AggregationGroupBy</a></code>
 - <code><a href="./src/resources/aggregations.ts">Aggregation</a></code>
+- <code><a href="./src/resources/aggregations.ts">AggregationInput</a></code>
 
 # Webhooks
 
@@ -277,6 +279,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationCompletedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
 
 # Yield
 

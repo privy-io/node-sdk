@@ -1455,6 +1455,21 @@ export interface LinkedAccountCustomJwtInput {
 }
 
 /**
+ * The payload for importing a passkey account.
+ */
+export interface LinkedAccountPasskeyInput {
+  credential_device_type: 'singleDevice' | 'multiDevice';
+
+  credential_id: string;
+
+  credential_public_key: string;
+
+  credential_username: string;
+
+  type: 'passkey';
+}
+
+/**
  * The input for adding a linked account to a user.
  */
 export type LinkedAccountInput =
@@ -1474,7 +1489,8 @@ export type LinkedAccountInput =
   | LinkedAccountLinkedInInput
   | LinkedAccountFarcasterInput
   | LinkedAccountTelegramInput
-  | LinkedAccountCustomJwtInput;
+  | LinkedAccountCustomJwtInput
+  | LinkedAccountPasskeyInput;
 
 /**
  * The payload for batch creating users.
@@ -1818,6 +1834,7 @@ export declare namespace Users {
     type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
     type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
     type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
+    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
     type LinkedAccountInput as LinkedAccountInput,
     type UserBatchCreateInput as UserBatchCreateInput,
     type SMSMfaMethod as SMSMfaMethod,

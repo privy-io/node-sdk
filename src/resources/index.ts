@@ -7,6 +7,7 @@ export {
   type AggregationWindow,
   type AggregationGroupBy,
   type Aggregation,
+  type AggregationInput,
 } from './aggregations';
 export { Analytics, type AnalyticsEventInput } from './analytics';
 export { Apps, type AppResponse } from './apps';
@@ -106,6 +107,7 @@ export {
   type LinkedAccountFarcasterInput,
   type LinkedAccountTelegramInput,
   type LinkedAccountCustomJwtInput,
+  type LinkedAccountPasskeyInput,
   type LinkedAccountInput,
   type UserBatchCreateInput,
   type SMSMfaMethod,
@@ -211,6 +213,7 @@ export {
   type MfaDisabledWebhookPayload,
   type KrakenEmbedVerificationCompletedWebhookPayload,
   type KrakenEmbedVerificationFailedWebhookPayload,
+  type KrakenEmbedQuoteExecutedWebhookPayload,
 } from './webhooks';
 export {
   Yield,

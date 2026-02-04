@@ -22,6 +22,7 @@ import { APIPromise } from './core/api-promise';
 import {
   Aggregation,
   AggregationGroupBy,
+  AggregationInput,
   AggregationMethod,
   AggregationMetric,
   AggregationWindow,
@@ -106,6 +107,7 @@ import {
   LinkedAccountLinkedInInput,
   LinkedAccountLinkedInOAuth,
   LinkedAccountPasskey,
+  LinkedAccountPasskeyInput,
   LinkedAccountPhone,
   LinkedAccountPhoneInput,
   LinkedAccountSmartWallet,
@@ -156,6 +158,7 @@ import {
 import {
   FundsDepositedWebhookPayload,
   FundsWithdrawnWebhookPayload,
+  KrakenEmbedQuoteExecutedWebhookPayload,
   KrakenEmbedVerificationCompletedWebhookPayload,
   KrakenEmbedVerificationFailedWebhookPayload,
   MfaDisabledWebhookPayload,
@@ -1144,6 +1147,7 @@ export declare namespace PrivyAPI {
     type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
     type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
     type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
+    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
     type LinkedAccountInput as LinkedAccountInput,
     type UserBatchCreateInput as UserBatchCreateInput,
     type SMSMfaMethod as SMSMfaMethod,
@@ -1225,6 +1229,7 @@ export declare namespace PrivyAPI {
     type AggregationWindow as AggregationWindow,
     type AggregationGroupBy as AggregationGroupBy,
     type Aggregation as Aggregation,
+    type AggregationInput as AggregationInput,
   };
 
   export {
@@ -1252,6 +1257,7 @@ export declare namespace PrivyAPI {
     type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
     type KrakenEmbedVerificationCompletedWebhookPayload as KrakenEmbedVerificationCompletedWebhookPayload,
     type KrakenEmbedVerificationFailedWebhookPayload as KrakenEmbedVerificationFailedWebhookPayload,
+    type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
   };
 
   export {

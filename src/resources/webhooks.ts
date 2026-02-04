@@ -1068,6 +1068,31 @@ export namespace KrakenEmbedVerificationFailedWebhookPayload {
   }
 }
 
+/**
+ * Payload for the kraken_embed.quote_executed webhook event.
+ */
+export interface KrakenEmbedQuoteExecutedWebhookPayload {
+  /**
+   * ISO 8601 timestamp of when the quote was executed.
+   */
+  executed_at: string;
+
+  /**
+   * The ID of the executed quote.
+   */
+  quote_id: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'kraken_embed.quote.executed';
+
+  /**
+   * The ID of the user.
+   */
+  user_id: string;
+}
+
 export declare namespace Webhooks {
   export {
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
@@ -1093,5 +1118,6 @@ export declare namespace Webhooks {
     type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
     type KrakenEmbedVerificationCompletedWebhookPayload as KrakenEmbedVerificationCompletedWebhookPayload,
     type KrakenEmbedVerificationFailedWebhookPayload as KrakenEmbedVerificationFailedWebhookPayload,
+    type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
   };
 }

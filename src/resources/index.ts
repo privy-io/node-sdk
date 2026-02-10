@@ -17,6 +17,12 @@ export {
   type PrivyOAuthProviderID,
   type CustomOAuthProviderID,
   type OAuthProviderID,
+  type OnrampProvider,
+  type GetFiatCustomerRequestInput,
+  type CreateOrUpdateFiatCustomerRequestInput,
+  type BridgeFiatCustomerResponse,
+  type BridgeSandboxFiatCustomerResponse,
+  type FiatCustomerResponse,
 } from './client-auth';
 export {
   KeyQuorums,

@@ -473,7 +473,10 @@ export interface FundsDepositedWebhookPayload {
   bridge_metadata?:
     | FundsDepositedWebhookPayload.UnionMember0
     | FundsDepositedWebhookPayload.UnionMember1
-    | FundsDepositedWebhookPayload.UnionMember2;
+    | FundsDepositedWebhookPayload.UnionMember2
+    | FundsDepositedWebhookPayload.UnionMember3
+    | FundsDepositedWebhookPayload.UnionMember4
+    | FundsDepositedWebhookPayload.UnionMember5;
 
   /**
    * The transaction fee paid, as a stringified bigint in the chain's native token.
@@ -561,6 +564,40 @@ export namespace FundsDepositedWebhookPayload {
     type: 'fiat_deposit';
 
     virtual_account_id: string;
+  }
+
+  export interface UnionMember3 {
+    method: 'transfer';
+
+    /**
+     * The wallet address that sent the transfer.
+     */
+    source_wallet_address: string;
+
+    transfer_id: string;
+
+    type: 'crypto_deposit';
+  }
+
+  export interface UnionMember4 {
+    method: 'transfer';
+
+    transfer_id: string;
+
+    type: 'fiat_deposit';
+  }
+
+  export interface UnionMember5 {
+    method: 'transfer';
+
+    transfer_id: string;
+
+    type: 'refund';
+
+    /**
+     * The original transfer transaction hash (if available).
+     */
+    original_transaction_hash?: string;
   }
 }
 

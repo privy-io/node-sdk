@@ -228,6 +228,12 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">PrivyOAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">CustomOAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthProviderID</a></code>
+- <code><a href="./src/resources/client-auth.ts">OnrampProvider</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatCustomerRequestInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">CreateOrUpdateFiatCustomerRequestInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatCustomerResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatCustomerResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatCustomerResponse</a></code>
 
 # Analytics
 

@@ -31,10 +31,16 @@ import {
 import { Analytics, AnalyticsEventInput } from './resources/analytics';
 import { AppResponse, Apps } from './resources/apps';
 import {
+  BridgeFiatCustomerResponse,
+  BridgeSandboxFiatCustomerResponse,
   ClientAuth,
+  CreateOrUpdateFiatCustomerRequestInput,
   CustomOAuthProviderID,
   ExternalOAuthProviderID,
+  FiatCustomerResponse,
+  GetFiatCustomerRequestInput,
   OAuthProviderID,
+  OnrampProvider,
   PrivyOAuthProviderID,
 } from './resources/client-auth';
 import {
@@ -1227,6 +1233,12 @@ export declare namespace PrivyAPI {
     type PrivyOAuthProviderID as PrivyOAuthProviderID,
     type CustomOAuthProviderID as CustomOAuthProviderID,
     type OAuthProviderID as OAuthProviderID,
+    type OnrampProvider as OnrampProvider,
+    type GetFiatCustomerRequestInput as GetFiatCustomerRequestInput,
+    type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,
+    type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
+    type BridgeSandboxFiatCustomerResponse as BridgeSandboxFiatCustomerResponse,
+    type FiatCustomerResponse as FiatCustomerResponse,
   };
 
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };

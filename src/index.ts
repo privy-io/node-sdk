@@ -52,3 +52,12 @@ export {
   PermissionDeniedError,
   UnprocessableEntityError,
 } from './core/error';
+
+// x402 payment support
+export {
+  wrapFetchWithPayment,
+  type WrapFetchWithPayment,
+  type WrapFetchWithPaymentOptions,
+  type EvmWalletConfig,
+  type SolanaWalletConfig,
+} from './x402';

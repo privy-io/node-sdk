@@ -58,6 +58,5 @@ export {
   wrapFetchWithPayment,
   type WrapFetchWithPayment,
   type WrapFetchWithPaymentOptions,
-  type EvmWalletConfig,
-  type SolanaWalletConfig,
+  type WalletConfig,
 } from './x402';

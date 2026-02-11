@@ -1,85 +1,41 @@
 import { wrapFetchWithPayment } from '@privy-io/node';
 import type { PrivyClient } from '@privy-io/node';
 
-// Mock the x402 packages
+// Mock external dependencies
 jest.mock('@x402/fetch', () => ({
   wrapFetchWithPayment: jest.fn((fetch) => fetch),
-  x402Client: jest.fn().mockImplementation(() => ({
-    register: jest.fn().mockReturnThis(),
-  })),
+  x402Client: jest.fn().mockImplementation(() => ({})),
 }));
-
-jest.mock('@x402/evm/exact/client', () => ({
-  registerExactEvmScheme: jest.fn(),
-}));
-
-jest.mock('@x402/svm/exact/client', () => ({
-  registerExactSvmScheme: jest.fn(),
-}));
-
-jest.mock('@privy-io/node/viem', () => ({
-  createViemAccount: jest.fn().mockImplementation(() => ({})),
-}));
-
-jest.mock('@privy-io/node/solana-kit', () => ({
-  createSolanaKitSigner: jest.fn().mockImplementation(() => ({})),
-}));
+jest.mock('@x402/evm/exact/client', () => ({ registerExactEvmScheme: jest.fn() }));
+jest.mock('@x402/svm/exact/client', () => ({ registerExactSvmScheme: jest.fn() }));
+jest.mock('@privy-io/node/viem', () => ({ createViemAccount: jest.fn() }));
+jest.mock('@privy-io/node/solana-kit', () => ({ createSolanaKitSigner: jest.fn() }));
 
 describe('wrapFetchWithPayment', () => {
   const mockWalletsGet = jest.fn();
-  const mockPrivyClient = {
-    wallets: () => ({ get: mockWalletsGet }),
-  } as unknown as PrivyClient;
+  const mockClient = { wallets: () => ({ get: mockWalletsGet }) } as unknown as PrivyClient;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => jest.clearAllMocks());
 
-  it('throws error when no wallet configuration is provided', async () => {
-    await expect(wrapFetchWithPayment({ client: mockPrivyClient })).rejects.toThrow(
-      'At least one wallet configuration (evm or solana) must be provided',
-    );
-  });
-
-  it('works with EVM wallet', async () => {
-    const result = await wrapFetchWithPayment({
-      client: mockPrivyClient,
-      evm: { walletId: 'test-wallet-id', address: '0x1234567890123456789012345678901234567890' },
-    });
-    expect(typeof result).toBe('function');
-  });
-
-  it('works with Solana wallet', async () => {
-    const result = await wrapFetchWithPayment({
-      client: mockPrivyClient,
-      solana: {
-        walletId: 'test-wallet-id',
-        address: 'SoLANaAddRess1234567890123456789012345678901234' as any,
-      },
-    });
-    expect(typeof result).toBe('function');
-  });
-
-  it('fetches address from API when not provided', async () => {
+  it('returns a fetch function for valid wallet', async () => {
     mockWalletsGet.mockResolvedValueOnce({
-      id: 'test-wallet-id',
-      address: '0xFetchedAddress1234567890123456789012345678',
+      address: '0x123',
+      chain_type: 'ethereum',
     });
 
-    await wrapFetchWithPayment({
-      client: mockPrivyClient,
-      evm: { walletId: 'test-wallet-id' },
+    const result = await wrapFetchWithPayment({
+      client: mockClient,
+      wallet: { walletId: 'test-wallet' },
     });
 
-    expect(mockWalletsGet).toHaveBeenCalledWith('test-wallet-id');
+    expect(typeof result).toBe('function');
   });
 
-  it('skips API call when address is provided', async () => {
-    await wrapFetchWithPayment({
-      client: mockPrivyClient,
-      evm: { walletId: 'test-wallet-id', address: '0x1234567890123456789012345678901234567890' },
-    });
+  it('throws for unsupported chain type', async () => {
+    mockWalletsGet.mockResolvedValueOnce({ address: 'x', chain_type: 'cosmos' });
 
-    expect(mockWalletsGet).not.toHaveBeenCalled();
+    await expect(wrapFetchWithPayment({ client: mockClient, wallet: { walletId: 'test' } })).rejects.toThrow(
+      'Unsupported chain type',
+    );
   });
 });

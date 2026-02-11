@@ -7,22 +7,22 @@ export class Yield extends APIResource {}
 /**
  * Supported yield/lending protocol providers.
  */
-export type YieldProvider = 'morpho' | 'aave';
+export type EthereumYieldProvider = 'morpho' | 'aave';
 
 /**
  * Type of yield sweep.
  */
-export type YieldSweepType = 'deposit' | 'withdraw';
+export type EthereumYieldSweepType = 'deposit' | 'withdraw';
 
 /**
  * Status of a yield sweep.
  */
-export type YieldSweepStatus = 'pending' | 'confirmed' | 'failed';
+export type EthereumYieldSweepStatus = 'pending' | 'confirmed' | 'failed';
 
 /**
  * Input for depositing assets into an ERC-4626 vault.
  */
-export interface YieldDepositInput {
+export interface EthereumYieldDepositInput {
   /**
    * The amount of the underlying asset to deposit, in the smallest unit (e.g., wei
    * for ETH, 6 decimals for USDC). Must be a non-negative integer string.
@@ -38,7 +38,7 @@ export interface YieldDepositInput {
 /**
  * Input for withdrawing assets from an ERC-4626 vault.
  */
-export interface YieldWithdrawInput {
+export interface EthereumYieldWithdrawInput {
   /**
    * The amount of the underlying asset to withdraw, in the smallest unit (e.g., wei
    * for ETH, 6 decimals for USDC). Must be a non-negative integer string.
@@ -54,7 +54,7 @@ export interface YieldWithdrawInput {
 /**
  * A yield sweep record representing a deposit or withdrawal.
  */
-export interface YieldSweepResponse {
+export interface EthereumYieldSweepResponse {
   /**
    * Unique identifier for the yield sweep.
    */
@@ -84,7 +84,7 @@ export interface YieldSweepResponse {
   /**
    * Status of a yield sweep.
    */
-  status: YieldSweepStatus;
+  status: EthereumYieldSweepStatus;
 
   /**
    * The ID of the underlying blockchain transaction (deposit/withdraw).
@@ -94,7 +94,7 @@ export interface YieldSweepResponse {
   /**
    * Type of yield sweep.
    */
-  type: YieldSweepType;
+  type: EthereumYieldSweepType;
 
   /**
    * Unix timestamp of when the sweep was last updated, in milliseconds.
@@ -113,9 +113,19 @@ export interface YieldSweepResponse {
 }
 
 /**
+ * Input for fetching vault details.
+ */
+export interface EthereumVaultDetailsInput {
+  /**
+   * The Privy vault ID.
+   */
+  vault_id: string;
+}
+
+/**
  * A vault configuration for yield features.
  */
-export interface VaultResponse {
+export interface EthereumVaultResponse {
   /**
    * Unique identifier for the vault.
    */
@@ -139,7 +149,7 @@ export interface VaultResponse {
   /**
    * Supported yield/lending protocol providers.
    */
-  provider: YieldProvider;
+  provider: EthereumYieldProvider;
 
   /**
    * The address of the underlying vault that the fee vault wraps. If this is not a
@@ -153,14 +163,157 @@ export interface VaultResponse {
   vault_address: string;
 }
 
+/**
+ * Detailed vault information including current APY and liquidity.
+ */
+export interface EthereumVaultDetailsResponse {
+  /**
+   * Vault identifier.
+   */
+  id: string;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * Assets available for instant withdrawal in USD.
+   */
+  available_liquidity_usd: number | null;
+
+  /**
+   * Chain identifier (e.g., eip155:8453).
+   */
+  caip2: string;
+
+  /**
+   * Supported yield/lending protocol providers.
+   */
+  provider: EthereumYieldProvider;
+
+  /**
+   * Total value locked in USD.
+   */
+  tvl_usd: number | null;
+
+  /**
+   * Current annual percentage yield in basis points (e.g., 500 for 5%). 1 basis
+   * point = 0.01%.
+   */
+  user_apy: number | null;
+
+  /**
+   * On-chain vault contract address.
+   */
+  vault_address: string;
+}
+
+/**
+ * Input for fetching yield positions.
+ */
+export interface EthereumYieldPositionsInput {
+  /**
+   * The vault ID to get position for.
+   */
+  vault_id: string;
+}
+
+/**
+ * A user's position in a DeFi vault.
+ */
+export interface EthereumVaultPosition {
+  asset: EthereumVaultPosition.Asset;
+
+  /**
+   * Current asset value in the vault (realtime from ERC4626), in smallest unit.
+   */
+  assets_in_vault: string;
+
+  /**
+   * Current vault shares held (realtime from ERC4626).
+   */
+  shares_in_vault: string;
+
+  /**
+   * Total amount deposited into the vault, in smallest unit.
+   */
+  total_deposited: string;
+
+  /**
+   * Total amount withdrawn from the vault, in smallest unit.
+   */
+  total_withdrawn: string;
+}
+
+export namespace EthereumVaultPosition {
+  export interface Asset {
+    /**
+     * Token contract address.
+     */
+    address: string;
+
+    /**
+     * Token symbol (e.g., "USDC").
+     */
+    symbol: string;
+  }
+}
+
+/**
+ * A user's position in a yield vault.
+ */
+export interface EthereumYieldPositionResponse {
+  asset: EthereumYieldPositionResponse.Asset;
+
+  /**
+   * Current asset value in the vault (realtime from ERC4626), in smallest unit.
+   */
+  assets_in_vault: string;
+
+  /**
+   * Current vault shares held (realtime from ERC4626).
+   */
+  shares_in_vault: string;
+
+  /**
+   * Total amount deposited into the vault, in smallest unit.
+   */
+  total_deposited: string;
+
+  /**
+   * Total amount withdrawn from the vault, in smallest unit.
+   */
+  total_withdrawn: string;
+}
+
+export namespace EthereumYieldPositionResponse {
+  export interface Asset {
+    /**
+     * Token contract address.
+     */
+    address: string;
+
+    /**
+     * Token symbol (e.g., "USDC").
+     */
+    symbol: string;
+  }
+}
+
 export declare namespace Yield {
   export {
-    type YieldProvider as YieldProvider,
-    type YieldSweepType as YieldSweepType,
-    type YieldSweepStatus as YieldSweepStatus,
-    type YieldDepositInput as YieldDepositInput,
-    type YieldWithdrawInput as YieldWithdrawInput,
-    type YieldSweepResponse as YieldSweepResponse,
-    type VaultResponse as VaultResponse,
+    type EthereumYieldProvider as EthereumYieldProvider,
+    type EthereumYieldSweepType as EthereumYieldSweepType,
+    type EthereumYieldSweepStatus as EthereumYieldSweepStatus,
+    type EthereumYieldDepositInput as EthereumYieldDepositInput,
+    type EthereumYieldWithdrawInput as EthereumYieldWithdrawInput,
+    type EthereumYieldSweepResponse as EthereumYieldSweepResponse,
+    type EthereumVaultDetailsInput as EthereumVaultDetailsInput,
+    type EthereumVaultResponse as EthereumVaultResponse,
+    type EthereumVaultDetailsResponse as EthereumVaultDetailsResponse,
+    type EthereumYieldPositionsInput as EthereumYieldPositionsInput,
+    type EthereumVaultPosition as EthereumVaultPosition,
+    type EthereumYieldPositionResponse as EthereumYieldPositionResponse,
   };
 }

@@ -114,6 +114,193 @@ export interface BridgeSandboxFiatCustomerResponse {
  */
 export type FiatCustomerResponse = BridgeFiatCustomerResponse | BridgeSandboxFiatCustomerResponse;
 
+export type BridgeDestinationAsset = 'usdb' | 'usdc' | 'usdt' | 'dai' | 'pyusd' | 'eurc';
+
+export type BridgeSourceAsset = 'usd' | 'eur' | 'mxn' | 'brl' | 'gbp';
+
+export interface BridgeFiatVirtualAccountSource {
+  asset: BridgeSourceAsset;
+}
+
+export interface BridgeFiatVirtualAccountDestination {
+  address: string;
+
+  asset: BridgeDestinationAsset;
+
+  chain: string;
+}
+
+/**
+ * The request input for creating virtual account.
+ */
+export interface BridgeFiatVirtualAccountRequest {
+  destination: BridgeFiatVirtualAccountDestination;
+
+  provider: 'bridge';
+
+  source: BridgeFiatVirtualAccountSource;
+}
+
+/**
+ * The request input for creating virtual account.
+ */
+export interface BridgeSandboxFiatVirtualAccountRequest {
+  destination: BridgeFiatVirtualAccountDestination;
+
+  provider: 'bridge-sandbox';
+
+  source: BridgeFiatVirtualAccountSource;
+}
+
+/**
+ * The request input for creating virtual account.
+ */
+export type FiatVirtualAccountRequest =
+  | BridgeFiatVirtualAccountRequest
+  | BridgeSandboxFiatVirtualAccountRequest;
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export interface BridgeUsdFiatVirtualAccountDepositInstructions {
+  asset: 'usd';
+
+  bank_account_number: string;
+
+  bank_address: string;
+
+  bank_beneficiary_address: string;
+
+  bank_beneficiary_name: string;
+
+  bank_name: string;
+
+  bank_routing_number: string;
+
+  payment_rails: Array<'ach_push' | 'wire'>;
+}
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export interface BridgeEurFiatVirtualAccountDepositInstructions {
+  account_holder_name: string;
+
+  asset: 'eur';
+
+  bank_address: string;
+
+  bank_name: string;
+
+  bic: string;
+
+  iban: string;
+
+  payment_rails: Array<'sepa'>;
+}
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export interface BridgeMxnFiatVirtualAccountDepositInstructions {
+  account_holder_name: string;
+
+  asset: 'mxn';
+
+  bank_address: string;
+
+  bank_name: string;
+
+  clabe: string;
+
+  payment_rails: Array<'spei'>;
+}
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export interface BridgeBrlFiatVirtualAccountDepositInstructions {
+  account_holder_name: string;
+
+  asset: 'brl';
+
+  bank_address: string;
+
+  bank_name: string;
+
+  br_code: string;
+
+  payment_rails: Array<'pix'>;
+}
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export interface BridgeGbpFiatVirtualAccountDepositInstructions {
+  account_holder_name: string;
+
+  account_number: string;
+
+  asset: 'gbp';
+
+  bank_address: string;
+
+  bank_name: string;
+
+  payment_rails: Array<'faster_payments'>;
+
+  sort_code: string;
+}
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export type BridgeFiatVirtualAccountDepositInstructions =
+  | BridgeUsdFiatVirtualAccountDepositInstructions
+  | BridgeEurFiatVirtualAccountDepositInstructions
+  | BridgeMxnFiatVirtualAccountDepositInstructions
+  | BridgeBrlFiatVirtualAccountDepositInstructions
+  | BridgeGbpFiatVirtualAccountDepositInstructions;
+
+/**
+ * The response for creating virtual account.
+ */
+export interface BridgeFiatVirtualAccountResponse {
+  /**
+   * The deposit instructions for a virtual account.
+   */
+  deposit_instructions: BridgeFiatVirtualAccountDepositInstructions;
+
+  destination: BridgeFiatVirtualAccountDestination;
+
+  provider: 'bridge';
+
+  status: string;
+}
+
+/**
+ * The response for creating virtual account.
+ */
+export interface BridgeSandboxFiatVirtualAccountResponse {
+  /**
+   * The deposit instructions for a virtual account.
+   */
+  deposit_instructions: BridgeFiatVirtualAccountDepositInstructions;
+
+  destination: BridgeFiatVirtualAccountDestination;
+
+  provider: 'bridge-sandbox';
+
+  status: string;
+}
+
+/**
+ * The response for creating virtual account.
+ */
+export type FiatVirtualAccountResponse =
+  | BridgeFiatVirtualAccountResponse
+  | BridgeSandboxFiatVirtualAccountResponse;
+
 export declare namespace ClientAuth {
   export {
     type ExternalOAuthProviderID as ExternalOAuthProviderID,
@@ -126,5 +313,21 @@ export declare namespace ClientAuth {
     type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
     type BridgeSandboxFiatCustomerResponse as BridgeSandboxFiatCustomerResponse,
     type FiatCustomerResponse as FiatCustomerResponse,
+    type BridgeDestinationAsset as BridgeDestinationAsset,
+    type BridgeSourceAsset as BridgeSourceAsset,
+    type BridgeFiatVirtualAccountSource as BridgeFiatVirtualAccountSource,
+    type BridgeFiatVirtualAccountDestination as BridgeFiatVirtualAccountDestination,
+    type BridgeFiatVirtualAccountRequest as BridgeFiatVirtualAccountRequest,
+    type BridgeSandboxFiatVirtualAccountRequest as BridgeSandboxFiatVirtualAccountRequest,
+    type FiatVirtualAccountRequest as FiatVirtualAccountRequest,
+    type BridgeUsdFiatVirtualAccountDepositInstructions as BridgeUsdFiatVirtualAccountDepositInstructions,
+    type BridgeEurFiatVirtualAccountDepositInstructions as BridgeEurFiatVirtualAccountDepositInstructions,
+    type BridgeMxnFiatVirtualAccountDepositInstructions as BridgeMxnFiatVirtualAccountDepositInstructions,
+    type BridgeBrlFiatVirtualAccountDepositInstructions as BridgeBrlFiatVirtualAccountDepositInstructions,
+    type BridgeGbpFiatVirtualAccountDepositInstructions as BridgeGbpFiatVirtualAccountDepositInstructions,
+    type BridgeFiatVirtualAccountDepositInstructions as BridgeFiatVirtualAccountDepositInstructions,
+    type BridgeFiatVirtualAccountResponse as BridgeFiatVirtualAccountResponse,
+    type BridgeSandboxFiatVirtualAccountResponse as BridgeSandboxFiatVirtualAccountResponse,
+    type FiatVirtualAccountResponse as FiatVirtualAccountResponse,
   };
 }

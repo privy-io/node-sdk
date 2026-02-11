@@ -234,6 +234,22 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatCustomerResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatCustomerResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatCustomerResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeDestinationAsset</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeSourceAsset</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountSource</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountDestination</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountRequest</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatVirtualAccountRequest</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatVirtualAccountRequest</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeUsdFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeEurFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeMxnFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeBrlFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeGbpFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatVirtualAccountResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatVirtualAccountResponse</a></code>
 
 # Analytics
 
@@ -291,10 +307,15 @@ Types:
 
 Types:
 
-- <code><a href="./src/resources/yield.ts">YieldProvider</a></code>
-- <code><a href="./src/resources/yield.ts">YieldSweepType</a></code>
-- <code><a href="./src/resources/yield.ts">YieldSweepStatus</a></code>
-- <code><a href="./src/resources/yield.ts">YieldDepositInput</a></code>
-- <code><a href="./src/resources/yield.ts">YieldWithdrawInput</a></code>
-- <code><a href="./src/resources/yield.ts">YieldSweepResponse</a></code>
-- <code><a href="./src/resources/yield.ts">VaultResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldProvider</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldSweepType</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldSweepStatus</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldDepositInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldWithdrawInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldSweepResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumVaultDetailsInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumVaultResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumVaultDetailsResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldPositionsInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumVaultPosition</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldPositionResponse</a></code>

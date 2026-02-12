@@ -1,5 +1,5 @@
-import type { Hex } from 'viem';
-import type { Address } from '@solana/kit';
+import { isAddress as isEvmAddress, type Hex } from 'viem';
+import { isAddress as isSolanaAddress, type Address } from '@solana/kit';
 import { x402Client } from '@x402/fetch';
 import { registerExactEvmScheme } from '@x402/evm/exact/client';
 import { registerExactSvmScheme } from '@x402/svm/exact/client';
@@ -14,8 +14,6 @@ export interface CreateX402ClientInput {
   walletId: string;
   /** Address for the wallet. */
   address: string;
-  /** Chain type for the wallet: 'ethereum' or 'solana'. */
-  chainType: 'ethereum' | 'solana';
   /** Authorization context for the wallet. */
   authorizationContext?: AuthorizationContext;
 }
@@ -30,8 +28,7 @@ export interface CreateX402ClientInput {
  * @param input - Configuration for the x402 client
  * @param input.walletId - ID of the Privy wallet to use for payments
  * @param input.address - Address of the wallet
- * @param input.chainType - Chain type: 'ethereum' or 'solana'
- * @param input.authorizationContext - Optional authorization context for the wallet
+ * @param input.authorizationContext - Authorization context for the wallet
  * @returns A configured x402Client instance
  *
  * @example
@@ -49,7 +46,6 @@ export interface CreateX402ClientInput {
  * const x402client = createX402Client(privyClient, {
  *   walletId: wallet.id,
  *   address: wallet.address,
- *   chainType: wallet.chain_type,
  * });
  *
  * // Use with fetch
@@ -63,18 +59,18 @@ export interface CreateX402ClientInput {
  */
 export function createX402Client(
   client: PrivyClient,
-  { walletId, address, chainType, authorizationContext }: CreateX402ClientInput,
+  { walletId, address, authorizationContext }: CreateX402ClientInput,
 ): x402Client {
   const x402client = new x402Client();
 
-  if (chainType === 'ethereum') {
+  if (isEvmAddress(address)) {
     const evmSigner = createViemAccount(client, {
       walletId,
       address: address as Hex,
       ...(authorizationContext ? { authorizationContext } : {}),
     });
     registerExactEvmScheme(x402client, { signer: evmSigner });
-  } else if (chainType === 'solana') {
+  } else if (isSolanaAddress(address)) {
     const solanaSigner = createSolanaKitSigner(client, {
       walletId,
       address: address as Address,
@@ -82,9 +78,7 @@ export function createX402Client(
     });
     registerExactSvmScheme(x402client, { signer: solanaSigner });
   } else {
-    throw new Error(
-      `Unsupported chain type: ${chainType}. Only 'ethereum' and 'solana' are supported for x402.`,
-    );
+    throw new Error(`Invalid wallet address: ${address}. Address must be a valid EVM or Solana address.`);
   }
 
   return x402client;

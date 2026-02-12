@@ -16,36 +16,32 @@ describe('createX402Client', () => {
 
   beforeEach(() => jest.clearAllMocks());
 
-  it('registers EVM scheme for ethereum chainType', () => {
+  it('registers EVM scheme for EVM address', () => {
     createX402Client(mockClient, {
       walletId: 'test-wallet',
-      address: '0x123',
-      chainType: 'ethereum',
+      address: '0x1234567890123456789012345678901234567890',
     });
 
     expect(registerExactEvmScheme).toHaveBeenCalledTimes(1);
     expect(registerExactSvmScheme).not.toHaveBeenCalled();
   });
 
-  it('registers SVM scheme for solana chainType', () => {
+  it('registers SVM scheme for Solana address', () => {
     createX402Client(mockClient, {
       walletId: 'test-wallet',
       address: '3NNMsXXYT2JNGAmYmYhJHoWJbU6uQBgGnajEJhkaj9Ts',
-      chainType: 'solana',
     });
 
     expect(registerExactSvmScheme).toHaveBeenCalledTimes(1);
     expect(registerExactEvmScheme).not.toHaveBeenCalled();
   });
 
-  it('throws for unsupported chain type', () => {
+  it('throws for invalid address', () => {
     expect(() =>
       createX402Client(mockClient, {
-        walletId: 'test',
-        address: 'x',
-        // @ts-expect-error testing invalid chain type
-        chainType: 'cosmos',
+        walletId: 'test-wallet',
+        address: 'invalid-address',
       }),
-    ).toThrow('Unsupported chain type');
+    ).toThrow('Invalid wallet address');
   });
 });

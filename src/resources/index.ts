@@ -246,6 +246,7 @@ export {
   type EthereumYieldWithdrawInput,
   type EthereumYieldSweepResponse,
   type EthereumVaultDetailsInput,
+  type EthereumYieldSweepIDInput,
   type EthereumVaultResponse,
   type EthereumVaultDetailsResponse,
   type EthereumYieldPositionsInput,

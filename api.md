@@ -314,6 +314,7 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldWithdrawInput</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldSweepResponse</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumVaultDetailsInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldSweepIDInput</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumVaultResponse</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumVaultDetailsResponse</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldPositionsInput</a></code>

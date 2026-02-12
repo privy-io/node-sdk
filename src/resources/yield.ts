@@ -123,6 +123,16 @@ export interface EthereumVaultDetailsInput {
 }
 
 /**
+ * Input for fetching a yield sweep by ID.
+ */
+export interface EthereumYieldSweepIDInput {
+  /**
+   * The yield sweep ID.
+   */
+  id: string;
+}
+
+/**
  * A vault configuration for yield features.
  */
 export interface EthereumVaultResponse {
@@ -310,6 +320,7 @@ export declare namespace Yield {
     type EthereumYieldWithdrawInput as EthereumYieldWithdrawInput,
     type EthereumYieldSweepResponse as EthereumYieldSweepResponse,
     type EthereumVaultDetailsInput as EthereumVaultDetailsInput,
+    type EthereumYieldSweepIDInput as EthereumYieldSweepIDInput,
     type EthereumVaultResponse as EthereumVaultResponse,
     type EthereumVaultDetailsResponse as EthereumVaultDetailsResponse,
     type EthereumYieldPositionsInput as EthereumYieldPositionsInput,

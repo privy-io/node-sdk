@@ -24,6 +24,8 @@ export interface CreateX402ClientInput {
  * The returned client can be used with x402's `wrapFetchWithPayment` or `wrapAxiosWithPayment`
  * to automatically handle HTTP 402 Payment Required responses.
  *
+ * @experimental This API is experimental and may change in future versions.
+ *
  * @param client - The Privy client instance
  * @param input - Configuration for the x402 client
  * @param input.walletId - ID of the Privy wallet to use for payments

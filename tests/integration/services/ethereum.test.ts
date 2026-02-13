@@ -580,6 +580,52 @@ describe('PrivyEthereumService', () => {
         );
       });
     });
+    describe('user operation signing', () => {
+      const userOperation: PrivyEthereumService.SignUserOperationInput['params']['user_operation'] = {
+        sender: '0xdf1Bff521006396b2dd11725681ebA6998DB37e3',
+        nonce: '0x1000000000000000a',
+        call_data:
+          '0x34fcd5be000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000020000000000000000000000000036cbd53842c5426634e7929541ec2318f3dcf7e000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000044a9059cbb000000000000000000000000cc9c3d98163f4f6af884e259132e15d6d27a5c57000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000',
+        call_gas_limit: '0x877f',
+        verification_gas_limit: '0x8550',
+        pre_verification_gas: '0xbcc4',
+        max_fee_per_gas: '0x18700',
+        max_priority_fee_per_gas: '0x186a0',
+        paymaster: '0x2cc0c7981D846b9F2a16276556f6e8cb52BfB633',
+        paymaster_data:
+          '0x000000000000000069174750fbd97f1583efc0158107838d694bb88594fc428f431892960194089ef4e15c8b330b402626cd01ce11057354528807581e7400e4edf33e15e3b55bcc6ef63fcf1c',
+        paymaster_verification_gas_limit: '0x7680',
+        paymaster_post_op_gas_limit: '0x00',
+      };
+      const userOperationParams: PrivyEthereumService.SignUserOperationInput['params'] = {
+        chain_id: '0x66eee', // Arbitrum Sepolia
+        contract: '0x69007702764179f14F51cdce752f4f775d74E139',
+        user_operation: userOperation,
+      };
+      it('should be able to sign a user operation', async () => {
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signUserOperation(OWNERLESS_ETHEREUM_WALLET.id, { params: userOperationParams });
+
+        expect(response.signature).toBeDefined();
+        expect(response.encoding).toBe('hex');
+        expect(response.signature).toMatch(/^0x[0-9a-fA-F]+$/);
+      });
+      it('should be able to sign a user operation with an authorization context', async () => {
+        const response = await privyClient
+          .wallets()
+          .ethereum()
+          .signUserOperation(P256_OWNED_ETHEREUM_WALLET.id, {
+            params: userOperationParams,
+            authorization_context: p256AuthorizationContext,
+          });
+
+        expect(response.signature).toBeDefined();
+        expect(response.encoding).toBe('hex');
+        expect(response.signature).toMatch(/^0x[0-9a-fA-F]+$/);
+      });
+    });
     // Skipped to not waste funds. Logic is shared with signing transactions so safe to not frequently test.
     describe.skip('transaction sending', () => {
       const transaction: PrivyEthereumService.SendTransactionInput['params']['transaction'] = {

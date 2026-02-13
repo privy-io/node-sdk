@@ -20,6 +20,7 @@ export {
   type OnrampProvider,
   type GetFiatCustomerRequestInput,
   type CreateOrUpdateFiatCustomerRequestInput,
+  type BridgeFiatRejectionReason,
   type BridgeFiatCustomerResponse,
   type BridgeSandboxFiatCustomerResponse,
   type FiatCustomerResponse,

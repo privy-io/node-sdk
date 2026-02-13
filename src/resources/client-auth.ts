@@ -68,6 +68,13 @@ export interface CreateOrUpdateFiatCustomerRequestInput {
 }
 
 /**
+ * A rejection reason for a customer KYC verification.
+ */
+export interface BridgeFiatRejectionReason {
+  reason: string;
+}
+
+/**
  * The response for getting a native onramp provider customer.
  */
 export interface BridgeFiatCustomerResponse {
@@ -88,6 +95,8 @@ export interface BridgeFiatCustomerResponse {
     | 'under_review';
 
   kyc_url?: string;
+
+  rejection_reasons?: Array<BridgeFiatRejectionReason>;
 }
 
 /**
@@ -111,6 +120,8 @@ export interface BridgeSandboxFiatCustomerResponse {
     | 'under_review';
 
   kyc_url?: string;
+
+  rejection_reasons?: Array<BridgeFiatRejectionReason>;
 }
 
 /**
@@ -314,6 +325,7 @@ export declare namespace ClientAuth {
     type OnrampProvider as OnrampProvider,
     type GetFiatCustomerRequestInput as GetFiatCustomerRequestInput,
     type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,
+    type BridgeFiatRejectionReason as BridgeFiatRejectionReason,
     type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
     type BridgeSandboxFiatCustomerResponse as BridgeSandboxFiatCustomerResponse,
     type FiatCustomerResponse as FiatCustomerResponse,

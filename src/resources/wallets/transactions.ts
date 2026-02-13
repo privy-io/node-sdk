@@ -13,7 +13,7 @@ export class Transactions extends APIResource {
    * ```ts
    * const transaction = await client.wallets.transactions.get(
    *   'wallet_id',
-   *   { asset: 'usdc', chain: 'ethereum' },
+   *   { asset: 'usdc', chain: 'base' },
    * );
    * ```
    */
@@ -61,7 +61,7 @@ export namespace TransactionGetResponse {
 
   export namespace Transaction {
     export interface UnionMember0 {
-      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
 
       chain:
         | 'ethereum'
@@ -77,9 +77,7 @@ export namespace TransactionGetResponse {
         | 'base_sepolia'
         | 'linea_testnet'
         | 'optimism_sepolia'
-        | 'polygon_amoy'
-        | 'solana_devnet'
-        | 'solana_testnet';
+        | 'polygon_amoy';
 
       display_values: { [key: string]: string };
 
@@ -99,7 +97,7 @@ export namespace TransactionGetResponse {
     }
 
     export interface UnionMember1 {
-      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
 
       chain:
         | 'ethereum'
@@ -115,9 +113,7 @@ export namespace TransactionGetResponse {
         | 'base_sepolia'
         | 'linea_testnet'
         | 'optimism_sepolia'
-        | 'polygon_amoy'
-        | 'solana_devnet'
-        | 'solana_testnet';
+        | 'polygon_amoy';
 
       display_values: { [key: string]: string };
 
@@ -139,23 +135,13 @@ export namespace TransactionGetResponse {
 }
 
 export interface TransactionGetParams {
-  asset:
-    | 'usdc'
-    | 'eth'
-    | 'pol'
-    | 'usdt'
-    | 'eurc'
-    | 'usdb'
-    | 'sol'
-    | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
+  asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol' | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'sol'>;
 
-  chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'sepolia';
+  chain: 'base';
 
   cursor?: string;
 
   limit?: number | null;
-
-  tx_hash?: string;
 }
 
 export declare namespace Transactions {

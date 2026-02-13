@@ -13,14 +13,11 @@ export class Balance extends APIResource {
    * ```ts
    * const balance = await client.wallets.balance.get(
    *   'wallet_id',
+   *   { asset: 'usdc', chain: 'ethereum' },
    * );
    * ```
    */
-  get(
-    walletID: string,
-    query: BalanceGetParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<BalanceGetResponse> {
+  get(walletID: string, query: BalanceGetParams, options?: RequestOptions): APIPromise<BalanceGetResponse> {
     return this._client.get(path`/v1/wallets/${walletID}/balance`, { query, ...options });
   }
 }
@@ -31,7 +28,7 @@ export interface BalanceGetResponse {
 
 export namespace BalanceGetResponse {
   export interface Balance {
-    asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+    asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol';
 
     chain:
       | 'ethereum'
@@ -47,9 +44,7 @@ export namespace BalanceGetResponse {
       | 'base_sepolia'
       | 'linea_testnet'
       | 'optimism_sepolia'
-      | 'polygon_amoy'
-      | 'solana_devnet'
-      | 'solana_testnet';
+      | 'polygon_amoy';
 
     display_values: { [key: string]: string };
 
@@ -60,19 +55,9 @@ export namespace BalanceGetResponse {
 }
 
 export interface BalanceGetParams {
-  token?: string | Array<string>;
+  asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'sol' | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'sol'>;
 
-  asset?:
-    | 'usdc'
-    | 'eth'
-    | 'pol'
-    | 'usdt'
-    | 'eurc'
-    | 'usdb'
-    | 'sol'
-    | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
-
-  chain?:
+  chain:
     | 'ethereum'
     | 'arbitrum'
     | 'base'
@@ -87,8 +72,6 @@ export interface BalanceGetParams {
     | 'linea_testnet'
     | 'optimism_sepolia'
     | 'polygon_amoy'
-    | 'solana_devnet'
-    | 'solana_testnet'
     | Array<
         | 'ethereum'
         | 'arbitrum'
@@ -104,11 +87,9 @@ export interface BalanceGetParams {
         | 'linea_testnet'
         | 'optimism_sepolia'
         | 'polygon_amoy'
-        | 'solana_devnet'
-        | 'solana_testnet'
       >;
 
-  include_currency?: 'usd' | 'eur';
+  include_currency?: 'usd';
 }
 
 export declare namespace Balance {

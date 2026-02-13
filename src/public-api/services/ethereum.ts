@@ -5,6 +5,7 @@ import {
   EthereumSign7702AuthorizationRpcResponse,
   EthereumSignTransactionRpcResponse,
   EthereumSignTypedDataRpcResponse,
+  EthereumSignUserOperationRpcResponse,
   WalletRpcParams,
 } from '../../resources';
 import { ReplaceParams, PrivyWalletsService } from './wallets';
@@ -94,6 +95,19 @@ export class PrivyEthereumService {
     return response.data;
   }
 
+  public async signUserOperation(
+    walletId: string,
+    input: PrivyEthereumService.SignUserOperationInput,
+  ): Promise<EthereumSignUserOperationRpcResponse.Data> {
+    const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
+      method: 'eth_signUserOperation',
+      chain_type: 'ethereum',
+    });
+
+    return response.data;
+  }
+
   public async sendTransaction(
     walletId: string,
     input: PrivyEthereumService.SendTransactionInput,
@@ -129,6 +143,8 @@ export namespace PrivyEthereumService {
   export type SignTransactionInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSignTransactionRpcInput>;
   /** The input type for the {@link PrivyEthereumService.signTypedData} method. */
   export type SignTypedDataInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSignTypedDataRpcInput>;
+  /** The input type for the {@link PrivyEthereumService.signUserOperation} method. */
+  export type SignUserOperationInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSignUserOperationRpcInput>;
   /** The input type for the {@link PrivyEthereumService.sendTransaction} method. */
   export type SendTransactionInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSendTransactionRpcInput>;
 }

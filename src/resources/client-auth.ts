@@ -49,6 +49,8 @@ export interface GetFiatCustomerRequestInput {
    * Valid set of onramp providers
    */
   provider: OnrampProvider;
+
+  kyc_redirect_url?: string;
 }
 
 /**
@@ -61,6 +63,8 @@ export interface CreateOrUpdateFiatCustomerRequestInput {
    * Valid set of onramp providers
    */
   provider: OnrampProvider;
+
+  kyc_redirect_url?: string;
 }
 
 /**

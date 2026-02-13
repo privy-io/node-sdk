@@ -519,6 +519,139 @@ export interface HpkeImportConfig {
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
 
 /**
+ * Input for a single wallet in a batch creation request.
+ */
+export interface WalletBatchItemInput {
+  /**
+   * The wallet chain types.
+   */
+  chain_type: WalletChainType;
+
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: Array<WalletBatchItemInput.AdditionalSigner>;
+
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  owner?: WalletBatchItemInput.PublicKeyOwner | WalletBatchItemInput.UserOwner | null;
+
+  /**
+   * The key quorum ID to set as the owner of the resource. If you provide this, do
+   * not specify an owner.
+   */
+  owner_id?: string;
+
+  /**
+   * List of policy IDs for policies that should be enforced on the wallet.
+   * Currently, only one policy is supported per wallet.
+   */
+  policy_ids?: Array<string>;
+}
+
+export namespace WalletBatchItemInput {
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
+  }
+
+  /**
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
+   */
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
+}
+
+/**
+ * Request body for batch wallet creation.
+ */
+export interface WalletBatchCreateInput {
+  /**
+   * Array of wallet creation requests. Minimum 1, maximum 100.
+   */
+  wallets: Array<WalletBatchItemInput>;
+}
+
+/**
+ * A single result from a batch wallet creation operation.
+ */
+export type WalletBatchCreateResult =
+  | WalletBatchCreateResult.WalletBatchCreateSuccess
+  | WalletBatchCreateResult.WalletBatchCreateFailure;
+
+export namespace WalletBatchCreateResult {
+  /**
+   * A successful wallet creation result within a batch operation.
+   */
+  export interface WalletBatchCreateSuccess {
+    /**
+     * The index of the wallet in the original request array.
+     */
+    index: number;
+
+    success: true;
+
+    /**
+     * A wallet managed by Privy's wallet infrastructure.
+     */
+    wallet: WalletsAPI.Wallet;
+  }
+
+  /**
+   * A failed wallet creation result within a batch operation.
+   */
+  export interface WalletBatchCreateFailure {
+    /**
+     * A PrivyErrorCode string identifying the error type (e.g., "invalid_data",
+     * "resource_conflict").
+     */
+    code: string;
+
+    /**
+     * A human-readable error message with details about what went wrong.
+     */
+    error: string;
+
+    /**
+     * The index of the wallet in the original request array.
+     */
+    index: number;
+
+    success: false;
+  }
+}
+
+/**
+ * Response for a batch wallet creation request.
+ */
+export interface WalletBatchCreateResponse {
+  /**
+   * Array of results for each wallet creation request, in the same order as input.
+   */
+  results: Array<WalletBatchCreateResult>;
+}
+
+/**
  * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
  */
 export interface EthereumPersonalSignRpcInput {
@@ -2295,6 +2428,10 @@ export declare namespace Wallets {
     type CustodialWallet as CustodialWallet,
     type HpkeImportConfig as HpkeImportConfig,
     type SuiCommandName as SuiCommandName,
+    type WalletBatchItemInput as WalletBatchItemInput,
+    type WalletBatchCreateInput as WalletBatchCreateInput,
+    type WalletBatchCreateResult as WalletBatchCreateResult,
+    type WalletBatchCreateResponse as WalletBatchCreateResponse,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
     type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,

@@ -14,6 +14,10 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletBatchItemInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResult</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcInput</a></code>
@@ -302,6 +306,11 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationCompletedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteCancelledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
 
 # Yield
 

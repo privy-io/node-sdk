@@ -13,11 +13,14 @@ export class Balance extends APIResource {
    * ```ts
    * const balance = await client.wallets.balance.get(
    *   'wallet_id',
-   *   { asset: 'usdc', chain: 'ethereum' },
    * );
    * ```
    */
-  get(walletID: string, query: BalanceGetParams, options?: RequestOptions): APIPromise<BalanceGetResponse> {
+  get(
+    walletID: string,
+    query: BalanceGetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<BalanceGetResponse> {
     return this._client.get(path`/v1/wallets/${walletID}/balance`, { query, ...options });
   }
 }
@@ -28,7 +31,7 @@ export interface BalanceGetResponse {
 
 export namespace BalanceGetResponse {
   export interface Balance {
-    asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+    asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
     chain:
       | 'ethereum'
@@ -57,7 +60,14 @@ export namespace BalanceGetResponse {
 }
 
 export interface BalanceGetParams {
-  asset:
+  /**
+   * The token contract address(es) to query in format "chain:address" (e.g.,
+   * "base:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" or
+   * "solana:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v").
+   */
+  token?: string | Array<string>;
+
+  asset?:
     | 'usdc'
     | 'eth'
     | 'pol'
@@ -67,7 +77,7 @@ export interface BalanceGetParams {
     | 'sol'
     | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
 
-  chain:
+  chain?:
     | 'ethereum'
     | 'arbitrum'
     | 'base'

@@ -1,5 +1,48 @@
 # Changelog
 
+## 0.9.0 (2026-02-13)
+
+Full Changelog: [v0.8.0...v0.9.0](https://github.com/privy-io/node-sdk/compare/v0.8.0...v0.9.0)
+
+### Features
+
+* **api:** api update ([b6e1c84](https://github.com/privy-io/node-sdk/commit/b6e1c84038d94ae5182c765b0407186dc5f54ecd))
+* **api:** api update ([bac71ca](https://github.com/privy-io/node-sdk/commit/bac71ca2bc3fa5c1f34cf752f64401e17cfad979))
+* **api:** api update ([6b67757](https://github.com/privy-io/node-sdk/commit/6b67757ba7e952b1a89d17df3236362156bf3699))
+* **api:** api update ([0e3ddf0](https://github.com/privy-io/node-sdk/commit/0e3ddf096c5876f6e428aa0b1aabb2eb7d69e450))
+* **api:** api update ([5653da0](https://github.com/privy-io/node-sdk/commit/5653da0049a506c4bb7bca7eb577faad58727503))
+* **api:** api update ([627ee1b](https://github.com/privy-io/node-sdk/commit/627ee1b3d8d1d5e045815c384a6c4cdc0bba5076))
+* **api:** api update ([7032cd7](https://github.com/privy-io/node-sdk/commit/7032cd78d6ce80ae33145b2dd6227744d8dc3514))
+* **api:** api update ([226d667](https://github.com/privy-io/node-sdk/commit/226d667d41d392e06cef293aaf896e6070639415))
+* **api:** api update ([d66b38f](https://github.com/privy-io/node-sdk/commit/d66b38fc893c8419718a518b88df340f7a5e51ec))
+* **api:** api update ([bb9b136](https://github.com/privy-io/node-sdk/commit/bb9b136b3b97ff8296ba6da22d80cdfb2b22a419))
+* **api:** api update ([623e0d6](https://github.com/privy-io/node-sdk/commit/623e0d643f72ed059b89b312699dfa09d40692a2))
+* **api:** api update ([a5d7543](https://github.com/privy-io/node-sdk/commit/a5d75432911d69123044131d3cd47ab6374e6d8e))
+* **api:** api update ([0c2ba6d](https://github.com/privy-io/node-sdk/commit/0c2ba6d234f020d14b8697d68403409c3f3016dc))
+* **api:** api update ([92f4f4f](https://github.com/privy-io/node-sdk/commit/92f4f4faafb46821423062673a53a200a6be128c))
+* **api:** api update ([85040d2](https://github.com/privy-io/node-sdk/commit/85040d209d9536125f97cc1d86fb6e1a12d5bccd))
+* **api:** manual updates ([744cf64](https://github.com/privy-io/node-sdk/commit/744cf64d3ccb39e375826196bca602494449e687))
+* **api:** manual updates ([4d13f7d](https://github.com/privy-io/node-sdk/commit/4d13f7db2b7f2f35448015dfb7b0666f58f125ae))
+* **api:** manual updates ([88ac05f](https://github.com/privy-io/node-sdk/commit/88ac05ff422c5f45a9eaef6031c0eaf3482ca34a))
+* **x402:** add x402 methods ([#84](https://github.com/privy-io/node-sdk/issues/84)) ([8fc581e](https://github.com/privy-io/node-sdk/commit/8fc581ed1af72580b174653c57b202ee94e809b3))
+
+
+### Bug Fixes
+
+* **client:** avoid memory leak with abort signals ([964edcf](https://github.com/privy-io/node-sdk/commit/964edcfd0486c7fbd2bd867c72c0907ea006af63))
+* **client:** avoid removing abort listener too early ([3a0187a](https://github.com/privy-io/node-sdk/commit/3a0187ae339cf74d786336d878f8bdc331245a20))
+* fixes incorrect name generation ([#86](https://github.com/privy-io/node-sdk/issues/86)) ([7cb3e9e](https://github.com/privy-io/node-sdk/commit/7cb3e9e489b1d2f31faa34ed266fd0ea383293d4))
+* oauth provider id template strings ([#85](https://github.com/privy-io/node-sdk/issues/85)) ([b17d1ba](https://github.com/privy-io/node-sdk/commit/b17d1ba8fefe81878c71ad4892787a7bbade560a))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([9b2f7d1](https://github.com/privy-io/node-sdk/commit/9b2f7d19e1654691f121a99482e7e807ba5c8b50))
+* **client:** do not parse responses with empty content-length ([66b9eef](https://github.com/privy-io/node-sdk/commit/66b9eef69db180bf953516105610d7545846483e))
+* **client:** restructure abort controller binding ([0002005](https://github.com/privy-io/node-sdk/commit/00020051e4246594bd26bc4766f7fc74026d1837))
+* **internal:** avoid type checking errors with ts-reset ([5962e41](https://github.com/privy-io/node-sdk/commit/5962e414da6816248af0ced983c0cdaac85ac0bd))
+* **internal:** fix pagination internals not accepting option promises ([c4ba7d9](https://github.com/privy-io/node-sdk/commit/c4ba7d9118dfba3e654d9df8e94f1af692a791f6))
+
 ## 0.8.0 (2026-01-17)
 
 Full Changelog: [v0.7.0...v0.8.0](https://github.com/privy-io/node-sdk/compare/v0.7.0...v0.8.0)

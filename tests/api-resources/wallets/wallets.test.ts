@@ -51,6 +51,7 @@ describe('resource wallets', () => {
     await expect(
       client.wallets.list(
         {
+          authorization_key: 's=-/fw-L-+N\n',
           chain_type: 'ethereum',
           cursor: 'x',
           limit: 100,

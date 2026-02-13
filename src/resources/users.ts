@@ -349,39 +349,6 @@ export interface AuthenticatedUser {
 }
 
 /**
- * A linked account for the user.
- */
-export type LinkedAccount =
-  | LinkedAccountEmail
-  | LinkedAccountPhone
-  | LinkedAccountEthereum
-  | LinkedAccountSolana
-  | LinkedAccountSmartWallet
-  | LinkedAccountEthereumEmbeddedWallet
-  | LinkedAccountSolanaEmbeddedWallet
-  | LinkedAccountBitcoinSegwitEmbeddedWallet
-  | LinkedAccountBitcoinTaprootEmbeddedWallet
-  | LinkedAccountCurveSigningEmbeddedWallet
-  | LinkedAccountGoogleOAuth
-  | LinkedAccountTwitterOAuth
-  | LinkedAccountDiscordOAuth
-  | LinkedAccountGitHubOAuth
-  | LinkedAccountSpotifyOAuth
-  | LinkedAccountInstagramOAuth
-  | LinkedAccountTiktokOAuth
-  | LinkedAccountLineOAuth
-  | LinkedAccountTwitchOAuth
-  | LinkedAccountLinkedInOAuth
-  | LinkedAccountAppleOAuth
-  | LinkedAccountCustomOAuth
-  | LinkedAccountCustomJwt
-  | LinkedAccountFarcaster
-  | LinkedAccountPasskey
-  | LinkedAccountTelegram
-  | LinkedAccountCrossApp
-  | LinkedAccountAuthorizationKey;
-
-/**
  * A Privy user object.
  */
 export interface User {
@@ -1202,6 +1169,39 @@ export interface LinkedAccountAuthorizationKey {
 }
 
 /**
+ * A linked account for the user.
+ */
+export type LinkedAccount =
+  | LinkedAccountEmail
+  | LinkedAccountPhone
+  | LinkedAccountEthereum
+  | LinkedAccountSolana
+  | LinkedAccountSmartWallet
+  | LinkedAccountEthereumEmbeddedWallet
+  | LinkedAccountSolanaEmbeddedWallet
+  | LinkedAccountBitcoinSegwitEmbeddedWallet
+  | LinkedAccountBitcoinTaprootEmbeddedWallet
+  | LinkedAccountCurveSigningEmbeddedWallet
+  | LinkedAccountGoogleOAuth
+  | LinkedAccountTwitterOAuth
+  | LinkedAccountDiscordOAuth
+  | LinkedAccountGitHubOAuth
+  | LinkedAccountSpotifyOAuth
+  | LinkedAccountInstagramOAuth
+  | LinkedAccountTiktokOAuth
+  | LinkedAccountLineOAuth
+  | LinkedAccountTwitchOAuth
+  | LinkedAccountLinkedInOAuth
+  | LinkedAccountAppleOAuth
+  | LinkedAccountCustomOAuth
+  | LinkedAccountCustomJwt
+  | LinkedAccountFarcaster
+  | LinkedAccountPasskey
+  | LinkedAccountTelegram
+  | LinkedAccountCrossApp
+  | LinkedAccountAuthorizationKey;
+
+/**
  * The possible types of linked accounts.
  */
 export type LinkedAccountType =
@@ -1455,6 +1455,21 @@ export interface LinkedAccountCustomJwtInput {
 }
 
 /**
+ * The payload for importing a passkey account.
+ */
+export interface LinkedAccountPasskeyInput {
+  credential_device_type: 'singleDevice' | 'multiDevice';
+
+  credential_id: string;
+
+  credential_public_key: string;
+
+  credential_username: string;
+
+  type: 'passkey';
+}
+
+/**
  * The input for adding a linked account to a user.
  */
 export type LinkedAccountInput =
@@ -1474,7 +1489,8 @@ export type LinkedAccountInput =
   | LinkedAccountLinkedInInput
   | LinkedAccountFarcasterInput
   | LinkedAccountTelegramInput
-  | LinkedAccountCustomJwtInput;
+  | LinkedAccountCustomJwtInput
+  | LinkedAccountPasskeyInput;
 
 /**
  * The payload for batch creating users.
@@ -1762,7 +1778,6 @@ export interface UserUnlinkLinkedAccountParams {
 export declare namespace Users {
   export {
     type AuthenticatedUser as AuthenticatedUser,
-    type LinkedAccount as LinkedAccount,
     type User as User,
     type LinkedAccountEmail as LinkedAccountEmail,
     type LinkedAccountPhone as LinkedAccountPhone,
@@ -1799,6 +1814,7 @@ export declare namespace Users {
     type CrossAppSmartWallet as CrossAppSmartWallet,
     type LinkedAccountCrossApp as LinkedAccountCrossApp,
     type LinkedAccountAuthorizationKey as LinkedAccountAuthorizationKey,
+    type LinkedAccount as LinkedAccount,
     type LinkedAccountType as LinkedAccountType,
     type CustomMetadata as CustomMetadata,
     type LinkedAccountWalletInput as LinkedAccountWalletInput,
@@ -1818,6 +1834,7 @@ export declare namespace Users {
     type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
     type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
     type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
+    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
     type LinkedAccountInput as LinkedAccountInput,
     type UserBatchCreateInput as UserBatchCreateInput,
     type SMSMfaMethod as SMSMfaMethod,

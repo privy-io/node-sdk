@@ -2,11 +2,11 @@
 
 Types:
 
-- <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCustodian</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletChainType</a></code>
@@ -14,6 +14,10 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletBatchItemInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResult</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcInput</a></code>
@@ -80,7 +84,6 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccount</a></code>
 - <code><a href="./src/resources/users.ts">User</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEmail</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountPhone</a></code>
@@ -117,6 +120,7 @@ Types:
 - <code><a href="./src/resources/users.ts">CrossAppSmartWallet</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountCrossApp</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountAuthorizationKey</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccount</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountType</a></code>
 - <code><a href="./src/resources/users.ts">CustomMetadata</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountWalletInput</a></code>
@@ -136,6 +140,7 @@ Types:
 - <code><a href="./src/resources/users.ts">LinkedAccountFarcasterInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountTelegramInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountCustomJwtInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountPasskeyInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountInput</a></code>
 - <code><a href="./src/resources/users.ts">UserBatchCreateInput</a></code>
 - <code><a href="./src/resources/users.ts">SMSMfaMethod</a></code>
@@ -227,6 +232,28 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">PrivyOAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">CustomOAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthProviderID</a></code>
+- <code><a href="./src/resources/client-auth.ts">OnrampProvider</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatCustomerRequestInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">CreateOrUpdateFiatCustomerRequestInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatCustomerResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatCustomerResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatCustomerResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeDestinationAsset</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeSourceAsset</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountSource</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountDestination</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountRequest</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatVirtualAccountRequest</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatVirtualAccountRequest</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeUsdFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeEurFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeMxnFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeBrlFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeGbpFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountDepositInstructions</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatVirtualAccountResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatVirtualAccountResponse</a></code>
 
 # Analytics
 
@@ -249,3 +276,56 @@ Types:
 - <code><a href="./src/resources/aggregations.ts">AggregationWindow</a></code>
 - <code><a href="./src/resources/aggregations.ts">AggregationGroupBy</a></code>
 - <code><a href="./src/resources/aggregations.ts">Aggregation</a></code>
+- <code><a href="./src/resources/aggregations.ts">AggregationInput</a></code>
+
+# Webhooks
+
+Types:
+
+- <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserUnlinkedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserUpdatedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserTransferredAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserWalletCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionBroadcastedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionExecutionRevertedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionStillPendingWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionReplacedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionProviderErrorWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">MfaEnabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationCompletedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteCancelledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
+
+# Yield
+
+Types:
+
+- <code><a href="./src/resources/yield.ts">EthereumYieldProvider</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldSweepType</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldSweepStatus</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldDepositInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldWithdrawInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldSweepResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumVaultDetailsInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldSweepIDInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumVaultResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumVaultDetailsResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldPositionsInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumVaultPosition</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldPositionResponse</a></code>

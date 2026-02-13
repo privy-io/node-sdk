@@ -60,6 +60,14 @@ async function postprocess() {
       types: './solana-kit.d.mts',
       default: './solana-kit.mjs',
     },
+    './x402': {
+      require: {
+        types: './x402.d.ts',
+        default: './x402.js',
+      },
+      types: './x402.d.mts',
+      default: './x402.mjs',
+    },
   };
 
   await fs.promises.writeFile(

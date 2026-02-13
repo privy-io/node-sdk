@@ -471,12 +471,12 @@ export interface FundsDepositedWebhookPayload {
    * Optional Bridge metadata for custodial wallet deposits.
    */
   bridge_metadata?:
-    | FundsDepositedWebhookPayload.UnionMember0
-    | FundsDepositedWebhookPayload.UnionMember1
-    | FundsDepositedWebhookPayload.UnionMember2
-    | FundsDepositedWebhookPayload.UnionMember3
-    | FundsDepositedWebhookPayload.UnionMember4
-    | FundsDepositedWebhookPayload.UnionMember5;
+    | FundsDepositedWebhookPayload.BridgeMetadataUnionMember0
+    | FundsDepositedWebhookPayload.BridgeMetadataUnionMember1
+    | FundsDepositedWebhookPayload.BridgeMetadataUnionMember2
+    | FundsDepositedWebhookPayload.BridgeMetadataUnionMember3
+    | FundsDepositedWebhookPayload.BridgeMetadataUnionMember4
+    | FundsDepositedWebhookPayload.BridgeMetadataUnionMember5;
 
   /**
    * The transaction fee paid, as a stringified bigint in the chain's native token.
@@ -521,7 +521,7 @@ export namespace FundsDepositedWebhookPayload {
     timestamp: number;
   }
 
-  export interface UnionMember0 {
+  export interface BridgeMetadataUnionMember0 {
     drain_id: string;
 
     /**
@@ -541,7 +541,7 @@ export namespace FundsDepositedWebhookPayload {
     type: 'crypto_deposit';
   }
 
-  export interface UnionMember1 {
+  export interface BridgeMetadataUnionMember1 {
     drain_id: string;
 
     liquidation_address_id: string;
@@ -556,7 +556,7 @@ export namespace FundsDepositedWebhookPayload {
     type: 'refund';
   }
 
-  export interface UnionMember2 {
+  export interface BridgeMetadataUnionMember2 {
     activity_id: string;
 
     method: 'virtual_account';
@@ -566,7 +566,7 @@ export namespace FundsDepositedWebhookPayload {
     virtual_account_id: string;
   }
 
-  export interface UnionMember3 {
+  export interface BridgeMetadataUnionMember3 {
     method: 'transfer';
 
     /**
@@ -579,7 +579,7 @@ export namespace FundsDepositedWebhookPayload {
     type: 'crypto_deposit';
   }
 
-  export interface UnionMember4 {
+  export interface BridgeMetadataUnionMember4 {
     method: 'transfer';
 
     transfer_id: string;
@@ -587,7 +587,7 @@ export namespace FundsDepositedWebhookPayload {
     type: 'fiat_deposit';
   }
 
-  export interface UnionMember5 {
+  export interface BridgeMetadataUnionMember5 {
     method: 'transfer';
 
     transfer_id: string;
@@ -915,17 +915,17 @@ export namespace KrakenEmbedVerificationFailedWebhookPayload {
 
       details_type:
         | UnionMember1.UnionMember0
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type;
+        | UnionMember1.FullNameType
+        | UnionMember1.DateOfBirthType
+        | UnionMember1.CityOfBirthType
+        | UnionMember1.CountryOfBirthType
+        | UnionMember1.NationalitiesType
+        | UnionMember1.ResidenceType
+        | UnionMember1.PhoneType
+        | UnionMember1.OccupationType
+        | UnionMember1.EmployerType
+        | UnionMember1.TaxIdsType
+        | UnionMember1.ClientIdentifierType;
 
       reason: string | null;
     }
@@ -937,47 +937,47 @@ export namespace KrakenEmbedVerificationFailedWebhookPayload {
         version?: number;
       }
 
-      export interface Type {
+      export interface FullNameType {
         type: 'full_name';
       }
 
-      export interface Type {
+      export interface DateOfBirthType {
         type: 'date_of_birth';
       }
 
-      export interface Type {
+      export interface CityOfBirthType {
         type: 'city_of_birth';
       }
 
-      export interface Type {
+      export interface CountryOfBirthType {
         type: 'country_of_birth';
       }
 
-      export interface Type {
+      export interface NationalitiesType {
         type: 'nationalities';
       }
 
-      export interface Type {
+      export interface ResidenceType {
         type: 'residence';
       }
 
-      export interface Type {
+      export interface PhoneType {
         type: 'phone';
       }
 
-      export interface Type {
+      export interface OccupationType {
         type: 'occupation';
       }
 
-      export interface Type {
+      export interface EmployerType {
         type: 'employer';
       }
 
-      export interface Type {
+      export interface TaxIdsType {
         type: 'tax_ids';
       }
 
-      export interface Type {
+      export interface ClientIdentifierType {
         type: 'client_identifier';
       }
     }
@@ -1024,17 +1024,17 @@ export namespace KrakenEmbedVerificationFailedWebhookPayload {
 
       details_type:
         | UnionMember1.UnionMember0
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type
-        | UnionMember1.Type;
+        | UnionMember1.FullNameType
+        | UnionMember1.DateOfBirthType
+        | UnionMember1.CityOfBirthType
+        | UnionMember1.CountryOfBirthType
+        | UnionMember1.NationalitiesType
+        | UnionMember1.ResidenceType
+        | UnionMember1.PhoneType
+        | UnionMember1.OccupationType
+        | UnionMember1.EmployerType
+        | UnionMember1.TaxIdsType
+        | UnionMember1.ClientIdentifierType;
 
       reason: string | null;
     }
@@ -1046,47 +1046,47 @@ export namespace KrakenEmbedVerificationFailedWebhookPayload {
         version?: number;
       }
 
-      export interface Type {
+      export interface FullNameType {
         type: 'full_name';
       }
 
-      export interface Type {
+      export interface DateOfBirthType {
         type: 'date_of_birth';
       }
 
-      export interface Type {
+      export interface CityOfBirthType {
         type: 'city_of_birth';
       }
 
-      export interface Type {
+      export interface CountryOfBirthType {
         type: 'country_of_birth';
       }
 
-      export interface Type {
+      export interface NationalitiesType {
         type: 'nationalities';
       }
 
-      export interface Type {
+      export interface ResidenceType {
         type: 'residence';
       }
 
-      export interface Type {
+      export interface PhoneType {
         type: 'phone';
       }
 
-      export interface Type {
+      export interface OccupationType {
         type: 'occupation';
       }
 
-      export interface Type {
+      export interface EmployerType {
         type: 'employer';
       }
 
-      export interface Type {
+      export interface TaxIdsType {
         type: 'tax_ids';
       }
 
-      export interface Type {
+      export interface ClientIdentifierType {
         type: 'client_identifier';
       }
     }

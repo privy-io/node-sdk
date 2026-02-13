@@ -1,5 +1,67 @@
 import { Webhook } from 'svix';
 import { PrivyAPIError } from '../../core/error';
+import type {
+  UserCreatedWebhookPayload,
+  UserAuthenticatedWebhookPayload,
+  UserLinkedAccountWebhookPayload,
+  UserUnlinkedAccountWebhookPayload,
+  UserUpdatedAccountWebhookPayload,
+  UserTransferredAccountWebhookPayload,
+  UserWalletCreatedWebhookPayload,
+  TransactionBroadcastedWebhookPayload,
+  TransactionConfirmedWebhookPayload,
+  TransactionExecutionRevertedWebhookPayload,
+  TransactionStillPendingWebhookPayload,
+  TransactionFailedWebhookPayload,
+  TransactionReplacedWebhookPayload,
+  TransactionProviderErrorWebhookPayload,
+  FundsDepositedWebhookPayload,
+  FundsWithdrawnWebhookPayload,
+  PrivateKeyExportWebhookPayload,
+  WalletRecoverySetupWebhookPayload,
+  WalletRecoveredWebhookPayload,
+  MfaEnabledWebhookPayload,
+  MfaDisabledWebhookPayload,
+  KrakenEmbedVerificationCompletedWebhookPayload,
+  KrakenEmbedVerificationFailedWebhookPayload,
+  KrakenEmbedQuoteExecutedWebhookPayload,
+  KrakenEmbedQuoteExecutionFailedWebhookPayload,
+  KrakenEmbedQuoteCancelledWebhookPayload,
+  KrakenEmbedUserVerifiedWebhookPayload,
+  KrakenEmbedUserDisabledWebhookPayload,
+  KrakenEmbedUserClosedWebhookPayload,
+} from '../../resources/webhooks';
+
+export type WebhookEvent =
+  | UserCreatedWebhookPayload
+  | UserAuthenticatedWebhookPayload
+  | UserLinkedAccountWebhookPayload
+  | UserUnlinkedAccountWebhookPayload
+  | UserUpdatedAccountWebhookPayload
+  | UserTransferredAccountWebhookPayload
+  | UserWalletCreatedWebhookPayload
+  | TransactionBroadcastedWebhookPayload
+  | TransactionConfirmedWebhookPayload
+  | TransactionExecutionRevertedWebhookPayload
+  | TransactionStillPendingWebhookPayload
+  | TransactionFailedWebhookPayload
+  | TransactionReplacedWebhookPayload
+  | TransactionProviderErrorWebhookPayload
+  | FundsDepositedWebhookPayload
+  | FundsWithdrawnWebhookPayload
+  | PrivateKeyExportWebhookPayload
+  | WalletRecoverySetupWebhookPayload
+  | WalletRecoveredWebhookPayload
+  | MfaEnabledWebhookPayload
+  | MfaDisabledWebhookPayload
+  | KrakenEmbedVerificationCompletedWebhookPayload
+  | KrakenEmbedVerificationFailedWebhookPayload
+  | KrakenEmbedQuoteExecutedWebhookPayload
+  | KrakenEmbedQuoteExecutionFailedWebhookPayload
+  | KrakenEmbedQuoteCancelledWebhookPayload
+  | KrakenEmbedUserVerifiedWebhookPayload
+  | KrakenEmbedUserDisabledWebhookPayload
+  | KrakenEmbedUserClosedWebhookPayload;
 
 export class PrivyWebhooksService {
   private webhookSigningSecret: string | undefined;
@@ -17,7 +79,7 @@ export class PrivyWebhooksService {
    * @param input.signing_secret The webhook secret to use for verifying the webhook request.
    * @returns verified payload if the webhook signature is valid otherwise throws.
    */
-  async verify({ payload, svix, signing_secret }: PrivyWebhooksService.VerifyInput): Promise<unknown> {
+  async verify({ payload, svix, signing_secret }: PrivyWebhooksService.VerifyInput): Promise<WebhookEvent> {
     const signingSecret = signing_secret ?? this.webhookSigningSecret;
     if (!signingSecret) {
       throw new InvalidWebhookError('Webhook signing secret is required');
@@ -31,7 +93,8 @@ export class PrivyWebhooksService {
         'svix-timestamp': svix.timestamp,
         'svix-signature': svix.signature,
       };
-      return webhook.verify(stringPayload, svixHeaders);
+      // Casting is safe here because `verify` succeeds meaning the API sent this event.
+      return webhook.verify(stringPayload, svixHeaders) as WebhookEvent;
     } catch (error) {
       if (error instanceof Error) {
         throw new InvalidWebhookError(`Webhook verification failed: ${error.message}`);

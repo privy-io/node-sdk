@@ -172,6 +172,10 @@ export {
   type CustodialWallet,
   type HpkeImportConfig,
   type SuiCommandName,
+  type WalletBatchItemInput,
+  type WalletBatchCreateInput,
+  type WalletBatchCreateResult,
+  type WalletBatchCreateResponse,
   type EthereumPersonalSignRpcInput,
   type EthereumSignTransactionRpcInput,
   type EthereumSendTransactionRpcInput,
@@ -236,6 +240,11 @@ export {
   type KrakenEmbedVerificationCompletedWebhookPayload,
   type KrakenEmbedVerificationFailedWebhookPayload,
   type KrakenEmbedQuoteExecutedWebhookPayload,
+  type KrakenEmbedQuoteExecutionFailedWebhookPayload,
+  type KrakenEmbedQuoteCancelledWebhookPayload,
+  type KrakenEmbedUserVerifiedWebhookPayload,
+  type KrakenEmbedUserDisabledWebhookPayload,
+  type KrakenEmbedUserClosedWebhookPayload,
 } from './webhooks';
 export {
   Yield,

@@ -1130,6 +1130,128 @@ export interface KrakenEmbedQuoteExecutedWebhookPayload {
   user_id: string;
 }
 
+/**
+ * Payload for the kraken_embed.quote.execution_failed webhook event.
+ */
+export interface KrakenEmbedQuoteExecutionFailedWebhookPayload {
+  /**
+   * ISO 8601 timestamp of when the quote execution failed.
+   */
+  failed_at: string;
+
+  /**
+   * The ID of the quote that failed to execute.
+   */
+  quote_id: string;
+
+  /**
+   * A human-readable description of why the quote execution failed. Intended for
+   * display and logging purposes only.
+   */
+  reason: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'kraken_embed.quote.execution_failed';
+
+  /**
+   * The ID of the user.
+   */
+  user_id: string;
+}
+
+/**
+ * Payload for the kraken_embed.quote.cancelled webhook event.
+ */
+export interface KrakenEmbedQuoteCancelledWebhookPayload {
+  /**
+   * ISO 8601 timestamp of when the quote was cancelled.
+   */
+  cancelled_at: string;
+
+  /**
+   * The ID of the cancelled quote.
+   */
+  quote_id: string;
+
+  /**
+   * A human-readable description of why the quote was cancelled. Intended for
+   * display and logging purposes only.
+   */
+  reason: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'kraken_embed.quote.cancelled';
+
+  /**
+   * The ID of the user.
+   */
+  user_id: string;
+}
+
+/**
+ * Payload for the kraken_embed.user.verified webhook event.
+ */
+export interface KrakenEmbedUserVerifiedWebhookPayload {
+  /**
+   * The type of webhook event.
+   */
+  type: 'kraken_embed.user.verified';
+
+  /**
+   * The ID of the user.
+   */
+  user_id: string;
+
+  /**
+   * ISO 8601 timestamp of when the user was verified.
+   */
+  verified_at: string;
+}
+
+/**
+ * Payload for the kraken_embed.user.disabled webhook event.
+ */
+export interface KrakenEmbedUserDisabledWebhookPayload {
+  /**
+   * ISO 8601 timestamp of when the user was disabled.
+   */
+  disabled_at: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'kraken_embed.user.disabled';
+
+  /**
+   * The ID of the user.
+   */
+  user_id: string;
+}
+
+/**
+ * Payload for the kraken_embed.user.closed webhook event.
+ */
+export interface KrakenEmbedUserClosedWebhookPayload {
+  /**
+   * ISO 8601 timestamp of when the user was closed.
+   */
+  closed_at: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'kraken_embed.user.closed';
+
+  /**
+   * The ID of the user.
+   */
+  user_id: string;
+}
+
 export declare namespace Webhooks {
   export {
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
@@ -1156,5 +1278,10 @@ export declare namespace Webhooks {
     type KrakenEmbedVerificationCompletedWebhookPayload as KrakenEmbedVerificationCompletedWebhookPayload,
     type KrakenEmbedVerificationFailedWebhookPayload as KrakenEmbedVerificationFailedWebhookPayload,
     type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
+    type KrakenEmbedQuoteExecutionFailedWebhookPayload as KrakenEmbedQuoteExecutionFailedWebhookPayload,
+    type KrakenEmbedQuoteCancelledWebhookPayload as KrakenEmbedQuoteCancelledWebhookPayload,
+    type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
+    type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
+    type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
   };
 }

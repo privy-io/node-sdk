@@ -23,13 +23,13 @@ export type ExternalOAuthProviderID =
 /**
  * The ID of a Privy app as an OAuth provider. Must start with "privy:".
  */
-export type PrivyOAuthProviderID = string;
+export type PrivyOAuthProviderID = `privy:${string}`;
 
 /**
  * The ID of a custom OAuth provider, set up for this app. Must start with
  * "custom:".
  */
-export type CustomOAuthProviderID = string;
+export type CustomOAuthProviderID = `custom:${string}`;
 
 /**
  * The ID of an OAuth provider.

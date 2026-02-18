@@ -17,6 +17,7 @@ export {
   type PrivyOAuthProviderID,
   type CustomOAuthProviderID,
   type OAuthProviderID,
+  type BridgeOnrampProvider,
   type OnrampProvider,
   type GetFiatCustomerRequestInput,
   type CreateOrUpdateFiatCustomerRequestInput,

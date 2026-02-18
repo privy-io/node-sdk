@@ -37,6 +37,11 @@ export type CustomOAuthProviderID = `custom:${string}`;
 export type OAuthProviderID = ExternalOAuthProviderID | PrivyOAuthProviderID;
 
 /**
+ * Bridge provider variant — production or sandbox.
+ */
+export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
+
+/**
  * Valid set of onramp providers
  */
 export type OnrampProvider = 'bridge' | 'bridge-sandbox';
@@ -322,6 +327,7 @@ export declare namespace ClientAuth {
     type PrivyOAuthProviderID as PrivyOAuthProviderID,
     type CustomOAuthProviderID as CustomOAuthProviderID,
     type OAuthProviderID as OAuthProviderID,
+    type BridgeOnrampProvider as BridgeOnrampProvider,
     type OnrampProvider as OnrampProvider,
     type GetFiatCustomerRequestInput as GetFiatCustomerRequestInput,
     type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,

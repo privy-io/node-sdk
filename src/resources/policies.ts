@@ -417,7 +417,7 @@ export namespace Policy {
     }
 
     /**
-     * Allowed contract addresses for eth_signAuthorization requests.
+     * Allowed contract addresses for eth_sign7702Authorization requests.
      */
     export interface Ethereum7702AuthorizationCondition {
       field: 'contract';
@@ -689,7 +689,7 @@ export namespace PolicyCreateRuleResponse {
   }
 
   /**
-   * Allowed contract addresses for eth_signAuthorization requests.
+   * Allowed contract addresses for eth_sign7702Authorization requests.
    */
   export interface Ethereum7702AuthorizationCondition {
     field: 'contract';
@@ -895,7 +895,7 @@ export namespace PolicyUpdateRuleResponse {
   }
 
   /**
-   * Allowed contract addresses for eth_signAuthorization requests.
+   * Allowed contract addresses for eth_sign7702Authorization requests.
    */
   export interface Ethereum7702AuthorizationCondition {
     field: 'contract';
@@ -1091,7 +1091,7 @@ export namespace PolicyGetRuleResponse {
   }
 
   /**
-   * Allowed contract addresses for eth_signAuthorization requests.
+   * Allowed contract addresses for eth_sign7702Authorization requests.
    */
   export interface Ethereum7702AuthorizationCondition {
     field: 'contract';
@@ -1325,7 +1325,7 @@ export namespace PolicyCreateParams {
     }
 
     /**
-     * Allowed contract addresses for eth_signAuthorization requests.
+     * Allowed contract addresses for eth_sign7702Authorization requests.
      */
     export interface Ethereum7702AuthorizationCondition {
       field: 'contract';
@@ -1546,7 +1546,7 @@ export namespace PolicyCreateRuleParams {
   }
 
   /**
-   * Allowed contract addresses for eth_signAuthorization requests.
+   * Allowed contract addresses for eth_sign7702Authorization requests.
    */
   export interface Ethereum7702AuthorizationCondition {
     field: 'contract';
@@ -1809,7 +1809,7 @@ export namespace PolicyUpdateParams {
     }
 
     /**
-     * Allowed contract addresses for eth_signAuthorization requests.
+     * Allowed contract addresses for eth_sign7702Authorization requests.
      */
     export interface Ethereum7702AuthorizationCondition {
       field: 'contract';
@@ -2017,7 +2017,7 @@ export namespace PolicyUpdateRuleParams {
   }
 
   /**
-   * Allowed contract addresses for eth_signAuthorization requests.
+   * Allowed contract addresses for eth_sign7702Authorization requests.
    */
   export interface Ethereum7702AuthorizationCondition {
     field: 'contract';

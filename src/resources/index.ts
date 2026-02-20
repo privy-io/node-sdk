@@ -247,6 +247,8 @@ export {
   type KrakenEmbedUserVerifiedWebhookPayload,
   type KrakenEmbedUserDisabledWebhookPayload,
   type KrakenEmbedUserClosedWebhookPayload,
+  type YieldDepositConfirmedWebhookPayload,
+  type YieldWithdrawConfirmedWebhookPayload,
 } from './webhooks';
 export {
   Yield,

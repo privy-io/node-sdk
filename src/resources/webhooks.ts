@@ -1252,6 +1252,64 @@ export interface KrakenEmbedUserClosedWebhookPayload {
   user_id: string;
 }
 
+/**
+ * Payload for the yield.deposit.confirmed webhook event.
+ */
+export interface YieldDepositConfirmedWebhookPayload {
+  assets: string;
+
+  block_number: number;
+
+  caip2: string;
+
+  log_index: number;
+
+  owner: string;
+
+  sender: string;
+
+  shares: string;
+
+  transaction_hash: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'yield.deposit.confirmed';
+
+  vault_address: string;
+}
+
+/**
+ * Payload for the yield.withdraw.confirmed webhook event.
+ */
+export interface YieldWithdrawConfirmedWebhookPayload {
+  assets: string;
+
+  block_number: number;
+
+  caip2: string;
+
+  log_index: number;
+
+  owner: string;
+
+  receiver: string;
+
+  sender: string;
+
+  shares: string;
+
+  transaction_hash: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'yield.withdraw.confirmed';
+
+  vault_address: string;
+}
+
 export declare namespace Webhooks {
   export {
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
@@ -1283,5 +1341,7 @@ export declare namespace Webhooks {
     type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
     type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
     type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
+    type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
+    type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
   };
 }

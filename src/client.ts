@@ -210,6 +210,8 @@ import {
   WalletRecoveredWebhookPayload,
   WalletRecoverySetupWebhookPayload,
   Webhooks,
+  YieldDepositConfirmedWebhookPayload,
+  YieldWithdrawConfirmedWebhookPayload,
 } from './resources/webhooks';
 import {
   EthereumVaultDetailsInput,
@@ -1349,6 +1351,8 @@ export declare namespace PrivyAPI {
     type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
     type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
     type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
+    type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
+    type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
   };
 
   export {

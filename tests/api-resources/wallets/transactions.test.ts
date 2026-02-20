@@ -9,7 +9,7 @@ const client = new PrivyAPI({
 });
 
 describe('resource transactions', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get: only required params', async () => {
     const responsePromise = client.wallets.transactions.get('wallet_id', {
       asset: 'usdc',
@@ -24,7 +24,7 @@ describe('resource transactions', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get: required and optional params', async () => {
     const response = await client.wallets.transactions.get('wallet_id', {
       asset: 'usdc',

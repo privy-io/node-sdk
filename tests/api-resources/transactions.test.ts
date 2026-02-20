@@ -9,7 +9,7 @@ const client = new PrivyAPI({
 });
 
 describe('resource transactions', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.transactions.get('transaction_id');
     const rawResponse = await responsePromise.asResponse();

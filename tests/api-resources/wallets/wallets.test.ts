@@ -9,7 +9,7 @@ const client = new PrivyAPI({
 });
 
 describe('resource wallets', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.wallets.create({ chain_type: 'ethereum' });
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource wallets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.wallets.create({
       chain_type: 'ethereum',
@@ -33,7 +33,7 @@ describe('resource wallets', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.wallets.list();
     const rawResponse = await responsePromise.asResponse();
@@ -45,7 +45,7 @@ describe('resource wallets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -62,7 +62,7 @@ describe('resource wallets', () => {
     ).rejects.toThrow(PrivyAPI.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_export: only required params', async () => {
     const responsePromise = client.wallets._export('wallet_id', {
       encryption_type: 'HPKE',
@@ -78,7 +78,7 @@ describe('resource wallets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_export: required and optional params', async () => {
     const response = await client.wallets._export('wallet_id', {
       encryption_type: 'HPKE',
@@ -88,7 +88,7 @@ describe('resource wallets', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_initImport: only required params', async () => {
     const responsePromise = client.wallets._initImport({
       address: 'address',
@@ -106,7 +106,7 @@ describe('resource wallets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_initImport: required and optional params', async () => {
     const response = await client.wallets._initImport({
       address: 'address',
@@ -117,7 +117,7 @@ describe('resource wallets', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_rawSign: only required params', async () => {
     const responsePromise = client.wallets._rawSign('wallet_id', {
       params: { hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e' },
@@ -131,7 +131,7 @@ describe('resource wallets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_rawSign: required and optional params', async () => {
     const response = await client.wallets._rawSign('wallet_id', {
       params: { hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e' },
@@ -140,7 +140,7 @@ describe('resource wallets', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_rpc: only required params', async () => {
     const responsePromise = client.wallets._rpc('wallet_id', {
       method: 'personal_sign',
@@ -155,7 +155,7 @@ describe('resource wallets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_rpc: required and optional params', async () => {
     const response = await client.wallets._rpc('wallet_id', {
       method: 'personal_sign',
@@ -167,7 +167,7 @@ describe('resource wallets', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_submitImport: only required params', async () => {
     const responsePromise = client.wallets._submitImport({
       wallet: {
@@ -189,7 +189,7 @@ describe('resource wallets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_submitImport: required and optional params', async () => {
     const response = await client.wallets._submitImport({
       wallet: {
@@ -213,7 +213,7 @@ describe('resource wallets', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_update', async () => {
     const responsePromise = client.wallets._update('wallet_id', {});
     const rawResponse = await responsePromise.asResponse();
@@ -225,7 +225,7 @@ describe('resource wallets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('authenticateWithJwt: only required params', async () => {
     const responsePromise = client.wallets.authenticateWithJwt({
       user_jwt:
@@ -240,7 +240,7 @@ describe('resource wallets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('authenticateWithJwt: required and optional params', async () => {
     const response = await client.wallets.authenticateWithJwt({
       user_jwt:
@@ -250,7 +250,7 @@ describe('resource wallets', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('createWalletsWithRecovery: only required params', async () => {
     const responsePromise = client.wallets.createWalletsWithRecovery({
       primary_signer: { subject_id: 'cm7oxq1el000e11o8iwp7d0d0' },
@@ -266,7 +266,7 @@ describe('resource wallets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('createWalletsWithRecovery: required and optional params', async () => {
     const response = await client.wallets.createWalletsWithRecovery({
       primary_signer: { subject_id: 'cm7oxq1el000e11o8iwp7d0d0' },
@@ -278,7 +278,7 @@ describe('resource wallets', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.wallets.get('wallet_id');
     const rawResponse = await responsePromise.asResponse();

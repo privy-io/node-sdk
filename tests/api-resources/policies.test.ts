@@ -9,7 +9,7 @@ const client = new PrivyAPI({
 });
 
 describe('resource policies', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.policies.create({
       chain_type: 'ethereum',
@@ -40,7 +40,7 @@ describe('resource policies', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.policies.create({
       chain_type: 'ethereum',
@@ -67,7 +67,7 @@ describe('resource policies', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_createRule: only required params', async () => {
     const responsePromise = client.policies._createRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       action: 'ALLOW',
@@ -91,7 +91,7 @@ describe('resource policies', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_createRule: required and optional params', async () => {
     const response = await client.policies._createRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       action: 'ALLOW',
@@ -109,7 +109,7 @@ describe('resource policies', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_delete', async () => {
     const responsePromise = client.policies._delete('xxxxxxxxxxxxxxxxxxxxxxxx');
     const rawResponse = await responsePromise.asResponse();
@@ -121,7 +121,7 @@ describe('resource policies', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_delete: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -133,7 +133,7 @@ describe('resource policies', () => {
     ).rejects.toThrow(PrivyAPI.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_deleteRule: only required params', async () => {
     const responsePromise = client.policies._deleteRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
@@ -147,7 +147,7 @@ describe('resource policies', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_deleteRule: required and optional params', async () => {
     const response = await client.policies._deleteRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
@@ -155,7 +155,7 @@ describe('resource policies', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_update', async () => {
     const responsePromise = client.policies._update('xxxxxxxxxxxxxxxxxxxxxxxx', {});
     const rawResponse = await responsePromise.asResponse();
@@ -167,7 +167,7 @@ describe('resource policies', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_updateRule: only required params', async () => {
     const responsePromise = client.policies._updateRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
@@ -192,7 +192,7 @@ describe('resource policies', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_updateRule: required and optional params', async () => {
     const response = await client.policies._updateRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
@@ -211,7 +211,7 @@ describe('resource policies', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.policies.get('xxxxxxxxxxxxxxxxxxxxxxxx');
     const rawResponse = await responsePromise.asResponse();
@@ -223,7 +223,7 @@ describe('resource policies', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getRule: only required params', async () => {
     const responsePromise = client.policies.getRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
@@ -237,7 +237,7 @@ describe('resource policies', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getRule: required and optional params', async () => {
     const response = await client.policies.getRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',

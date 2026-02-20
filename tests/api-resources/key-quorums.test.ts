@@ -9,7 +9,7 @@ const client = new PrivyAPI({
 });
 
 describe('resource keyQuorums', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create', async () => {
     const responsePromise = client.keyQuorums.create({});
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource keyQuorums', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_delete', async () => {
     const responsePromise = client.keyQuorums._delete('key_quorum_id');
     const rawResponse = await responsePromise.asResponse();
@@ -33,7 +33,7 @@ describe('resource keyQuorums', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_delete: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -45,7 +45,7 @@ describe('resource keyQuorums', () => {
     ).rejects.toThrow(PrivyAPI.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('_update', async () => {
     const responsePromise = client.keyQuorums._update('key_quorum_id', {});
     const rawResponse = await responsePromise.asResponse();
@@ -57,7 +57,7 @@ describe('resource keyQuorums', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.keyQuorums.get('key_quorum_id');
     const rawResponse = await responsePromise.asResponse();

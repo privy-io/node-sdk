@@ -60,7 +60,7 @@ $ yarn link @privy-io/node
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @privy-io/node
+$ pnpm link --global @privy-io/node
 ```
 
 ## Running tests

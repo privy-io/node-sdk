@@ -20,6 +20,13 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
+  AccountResponse,
+  AccountWallet,
+  AccountWalletConfigurationItem,
+  Accounts,
+  CreateAccountInput,
+} from './resources/accounts';
+import {
   Aggregation,
   AggregationGroupBy,
   AggregationInput,
@@ -61,6 +68,7 @@ import {
   OnrampProvider,
   PrivyOAuthProviderID,
 } from './resources/client-auth';
+import { IntentAuthorizationKeyQuorumMember, IntentAuthorizationMember, Intents } from './resources/intents';
 import {
   KeyQuorum,
   KeyQuorumCreateParams,
@@ -1074,7 +1082,9 @@ export class PrivyAPI {
   apps: API.Apps = new API.Apps(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
+  accounts: API.Accounts = new API.Accounts(this);
   yield: API.Yield = new API.Yield(this);
+  intents: API.Intents = new API.Intents(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -1087,7 +1097,9 @@ PrivyAPI.Analytics = Analytics;
 PrivyAPI.Apps = Apps;
 PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.Webhooks = Webhooks;
+PrivyAPI.Accounts = Accounts;
 PrivyAPI.Yield = Yield;
+PrivyAPI.Intents = Intents;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -1356,6 +1368,14 @@ export declare namespace PrivyAPI {
   };
 
   export {
+    Accounts as Accounts,
+    type AccountWallet as AccountWallet,
+    type AccountResponse as AccountResponse,
+    type AccountWalletConfigurationItem as AccountWalletConfigurationItem,
+    type CreateAccountInput as CreateAccountInput,
+  };
+
+  export {
     Yield as Yield,
     type EthereumYieldProvider as EthereumYieldProvider,
     type EthereumYieldSweepType as EthereumYieldSweepType,
@@ -1370,5 +1390,11 @@ export declare namespace PrivyAPI {
     type EthereumYieldPositionsInput as EthereumYieldPositionsInput,
     type EthereumVaultPosition as EthereumVaultPosition,
     type EthereumYieldPositionResponse as EthereumYieldPositionResponse,
+  };
+
+  export {
+    Intents as Intents,
+    type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
+    type IntentAuthorizationMember as IntentAuthorizationMember,
   };
 }

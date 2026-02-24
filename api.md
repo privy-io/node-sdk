@@ -316,6 +316,15 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
 
+# Accounts
+
+Types:
+
+- <code><a href="./src/resources/accounts.ts">AccountWallet</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountResponse</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountWalletConfigurationItem</a></code>
+- <code><a href="./src/resources/accounts.ts">CreateAccountInput</a></code>
+
 # Yield
 
 Types:
@@ -333,3 +342,10 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldPositionsInput</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumVaultPosition</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldPositionResponse</a></code>
+
+# Intents
+
+Types:
+
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>

@@ -106,7 +106,7 @@ export interface KeyQuorum {
   display_name?: string;
 
   /**
-   * List of child key quorum IDs that are members of this key quorum.
+   * List of nested key quorum IDs that are members of this key quorum.
    */
   key_quorum_ids?: Array<string>;
 

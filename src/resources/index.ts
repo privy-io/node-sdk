@@ -1,6 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
+  Accounts,
+  type AccountWallet,
+  type AccountResponse,
+  type AccountWalletConfigurationItem,
+  type CreateAccountInput,
+} from './accounts';
+export {
   Aggregations,
   type AggregationMethod,
   type AggregationMetric,
@@ -42,6 +49,7 @@ export {
   type BridgeSandboxFiatVirtualAccountResponse,
   type FiatVirtualAccountResponse,
 } from './client-auth';
+export { Intents, type IntentAuthorizationKeyQuorumMember, type IntentAuthorizationMember } from './intents';
 export {
   KeyQuorums,
   type KeyQuorum,

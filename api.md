@@ -329,6 +329,7 @@ Types:
 
 Types:
 
+- <code><a href="./src/resources/yield.ts">EvmCaip2ChainID</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldProvider</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldSweepType</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldSweepStatus</a></code>
@@ -342,6 +343,9 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldPositionsInput</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumVaultPosition</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldPositionResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldClaimInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldClaimReward</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldClaimResponse</a></code>
 
 # Intents
 

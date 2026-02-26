@@ -25,9 +25,9 @@ export interface AccountWallet {
   chain_type: WalletsAPI.FirstClassChainType;
 
   /**
-   * The custodian responsible for the wallet. Undefined for self-custodial wallets.
+   * Information about the custodian managing this wallet.
    */
-  custodian?: string;
+  custody?: WalletsAPI.WalletCustodian;
 }
 
 /**
@@ -53,35 +53,16 @@ export interface AccountResponse {
 /**
  * Configuration for a wallet to create within an account.
  */
-export type AccountWalletConfigurationItem =
-  | AccountWalletConfigurationItem.ChainType
-  | AccountWalletConfigurationItem.UnionMember1;
+export interface AccountWalletConfigurationItem {
+  /**
+   * The wallet chain types that offer first class support.
+   */
+  chain_type: WalletsAPI.FirstClassChainType;
 
-export namespace AccountWalletConfigurationItem {
-  export interface ChainType {
-    /**
-     * The wallet chain types that offer first class support.
-     */
-    chain_type: WalletsAPI.FirstClassChainType;
-  }
-
-  export interface UnionMember1 {
-    /**
-     * The wallet chain types that offer first class support.
-     */
-    chain_type: WalletsAPI.FirstClassChainType;
-
-    /**
-     * The custodian for the wallet. Must match a configured licensing provider.
-     */
-    custodian: string;
-
-    /**
-     * The resource ID of the beneficiary of the custodial wallet, given by the
-     * licensing provider.
-     */
-    provider_user_id: string;
-  }
+  /**
+   * Information about the custodian managing this wallet.
+   */
+  custody?: WalletsAPI.WalletCustodian;
 }
 
 /**

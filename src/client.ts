@@ -226,6 +226,9 @@ import {
   EthereumVaultDetailsResponse,
   EthereumVaultPosition,
   EthereumVaultResponse,
+  EthereumYieldClaimInput,
+  EthereumYieldClaimResponse,
+  EthereumYieldClaimReward,
   EthereumYieldDepositInput,
   EthereumYieldPositionResponse,
   EthereumYieldPositionsInput,
@@ -235,6 +238,7 @@ import {
   EthereumYieldSweepStatus,
   EthereumYieldSweepType,
   EthereumYieldWithdrawInput,
+  EvmCaip2ChainID,
   Yield,
 } from './resources/yield';
 import {
@@ -1377,6 +1381,7 @@ export declare namespace PrivyAPI {
 
   export {
     Yield as Yield,
+    type EvmCaip2ChainID as EvmCaip2ChainID,
     type EthereumYieldProvider as EthereumYieldProvider,
     type EthereumYieldSweepType as EthereumYieldSweepType,
     type EthereumYieldSweepStatus as EthereumYieldSweepStatus,
@@ -1390,6 +1395,9 @@ export declare namespace PrivyAPI {
     type EthereumYieldPositionsInput as EthereumYieldPositionsInput,
     type EthereumVaultPosition as EthereumVaultPosition,
     type EthereumYieldPositionResponse as EthereumYieldPositionResponse,
+    type EthereumYieldClaimInput as EthereumYieldClaimInput,
+    type EthereumYieldClaimReward as EthereumYieldClaimReward,
+    type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
   };
 
   export {

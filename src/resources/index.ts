@@ -260,6 +260,7 @@ export {
 } from './webhooks';
 export {
   Yield,
+  type EvmCaip2ChainID,
   type EthereumYieldProvider,
   type EthereumYieldSweepType,
   type EthereumYieldSweepStatus,
@@ -273,4 +274,7 @@ export {
   type EthereumYieldPositionsInput,
   type EthereumVaultPosition,
   type EthereumYieldPositionResponse,
+  type EthereumYieldClaimInput,
+  type EthereumYieldClaimReward,
+  type EthereumYieldClaimResponse,
 } from './yield';

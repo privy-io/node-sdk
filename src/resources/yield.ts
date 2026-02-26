@@ -5,6 +5,11 @@ import { APIResource } from '../core/resource';
 export class Yield extends APIResource {}
 
 /**
+ * An EVM CAIP-2 chain identifier (e.g., "eip155:8453" for Base).
+ */
+export type EvmCaip2ChainID = string;
+
+/**
  * Supported yield/lending protocol providers.
  */
 export type EthereumYieldProvider = 'morpho' | 'aave';
@@ -311,8 +316,59 @@ export namespace EthereumYieldPositionResponse {
   }
 }
 
+/**
+ * Input for claiming incentive rewards from vault participation.
+ */
+export interface EthereumYieldClaimInput {
+  /**
+   * An EVM CAIP-2 chain identifier (e.g., "eip155:8453" for Base).
+   */
+  caip2: EvmCaip2ChainID;
+}
+
+/**
+ * A single reward token claimed from vault participation.
+ */
+export interface EthereumYieldClaimReward {
+  /**
+   * Amount claimed in the smallest unit.
+   */
+  amount: string;
+
+  /**
+   * Reward token contract address.
+   */
+  token_address: string;
+
+  /**
+   * Reward token symbol (e.g., "MORPHO").
+   */
+  token_symbol: string;
+}
+
+/**
+ * Response from a yield reward claim operation.
+ */
+export interface EthereumYieldClaimResponse {
+  /**
+   * Privy transaction record ID for the claim operation.
+   */
+  id: string;
+
+  /**
+   * An EVM CAIP-2 chain identifier (e.g., "eip155:8453" for Base).
+   */
+  caip2: EvmCaip2ChainID;
+
+  /**
+   * List of reward tokens claimed.
+   */
+  rewards: Array<EthereumYieldClaimReward>;
+}
+
 export declare namespace Yield {
   export {
+    type EvmCaip2ChainID as EvmCaip2ChainID,
     type EthereumYieldProvider as EthereumYieldProvider,
     type EthereumYieldSweepType as EthereumYieldSweepType,
     type EthereumYieldSweepStatus as EthereumYieldSweepStatus,
@@ -326,5 +382,8 @@ export declare namespace Yield {
     type EthereumYieldPositionsInput as EthereumYieldPositionsInput,
     type EthereumVaultPosition as EthereumVaultPosition,
     type EthereumYieldPositionResponse as EthereumYieldPositionResponse,
+    type EthereumYieldClaimInput as EthereumYieldClaimInput,
+    type EthereumYieldClaimReward as EthereumYieldClaimReward,
+    type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
   };
 }

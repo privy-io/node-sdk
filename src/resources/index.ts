@@ -6,6 +6,7 @@ export {
   type AccountResponse,
   type AccountWalletConfigurationItem,
   type CreateAccountInput,
+  type AccountsListResponse,
 } from './accounts';
 export {
   Aggregations,

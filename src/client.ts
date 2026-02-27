@@ -24,6 +24,7 @@ import {
   AccountWallet,
   AccountWalletConfigurationItem,
   Accounts,
+  AccountsListResponse,
   CreateAccountInput,
 } from './resources/accounts';
 import {
@@ -1377,6 +1378,7 @@ export declare namespace PrivyAPI {
     type AccountResponse as AccountResponse,
     type AccountWalletConfigurationItem as AccountWalletConfigurationItem,
     type CreateAccountInput as CreateAccountInput,
+    type AccountsListResponse as AccountsListResponse,
   };
 
   export {

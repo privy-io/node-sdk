@@ -324,6 +324,7 @@ Types:
 - <code><a href="./src/resources/accounts.ts">AccountResponse</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountWalletConfigurationItem</a></code>
 - <code><a href="./src/resources/accounts.ts">CreateAccountInput</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountsListResponse</a></code>
 
 # Yield
 

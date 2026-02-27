@@ -20,6 +20,13 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
+  AccountResponse,
+  AccountWallet,
+  AccountWalletConfigurationItem,
+  Accounts,
+  CreateAccountInput,
+} from './resources/accounts';
+import {
   Aggregation,
   AggregationGroupBy,
   AggregationInput,
@@ -35,6 +42,7 @@ import {
   BridgeDestinationAsset,
   BridgeEurFiatVirtualAccountDepositInstructions,
   BridgeFiatCustomerResponse,
+  BridgeFiatRejectionReason,
   BridgeFiatVirtualAccountDepositInstructions,
   BridgeFiatVirtualAccountDestination,
   BridgeFiatVirtualAccountRequest,
@@ -42,6 +50,7 @@ import {
   BridgeFiatVirtualAccountSource,
   BridgeGbpFiatVirtualAccountDepositInstructions,
   BridgeMxnFiatVirtualAccountDepositInstructions,
+  BridgeOnrampProvider,
   BridgeSandboxFiatCustomerResponse,
   BridgeSandboxFiatVirtualAccountRequest,
   BridgeSandboxFiatVirtualAccountResponse,
@@ -59,6 +68,7 @@ import {
   OnrampProvider,
   PrivyOAuthProviderID,
 } from './resources/client-auth';
+import { IntentAuthorizationKeyQuorumMember, IntentAuthorizationMember, Intents } from './resources/intents';
 import {
   KeyQuorum,
   KeyQuorumCreateParams,
@@ -208,12 +218,17 @@ import {
   WalletRecoveredWebhookPayload,
   WalletRecoverySetupWebhookPayload,
   Webhooks,
+  YieldDepositConfirmedWebhookPayload,
+  YieldWithdrawConfirmedWebhookPayload,
 } from './resources/webhooks';
 import {
   EthereumVaultDetailsInput,
   EthereumVaultDetailsResponse,
   EthereumVaultPosition,
   EthereumVaultResponse,
+  EthereumYieldClaimInput,
+  EthereumYieldClaimResponse,
+  EthereumYieldClaimReward,
   EthereumYieldDepositInput,
   EthereumYieldPositionResponse,
   EthereumYieldPositionsInput,
@@ -223,6 +238,7 @@ import {
   EthereumYieldSweepStatus,
   EthereumYieldSweepType,
   EthereumYieldWithdrawInput,
+  EvmCaip2ChainID,
   Yield,
 } from './resources/yield';
 import {
@@ -1028,6 +1044,14 @@ export class PrivyAPI {
         (Symbol.iterator in body && 'next' in body && typeof body.next === 'function'))
     ) {
       return { bodyHeaders: undefined, body: Shims.ReadableStreamFrom(body as AsyncIterable<Uint8Array>) };
+    } else if (
+      typeof body === 'object' &&
+      headers.values.get('content-type') === 'application/x-www-form-urlencoded'
+    ) {
+      return {
+        bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: this.stringifyQuery(body as Record<string, unknown>),
+      };
     } else {
       return this.#encoder({ body, headers });
     }
@@ -1062,7 +1086,9 @@ export class PrivyAPI {
   apps: API.Apps = new API.Apps(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
+  accounts: API.Accounts = new API.Accounts(this);
   yield: API.Yield = new API.Yield(this);
+  intents: API.Intents = new API.Intents(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -1075,7 +1101,9 @@ PrivyAPI.Analytics = Analytics;
 PrivyAPI.Apps = Apps;
 PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.Webhooks = Webhooks;
+PrivyAPI.Accounts = Accounts;
 PrivyAPI.Yield = Yield;
+PrivyAPI.Intents = Intents;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -1268,9 +1296,11 @@ export declare namespace PrivyAPI {
     type PrivyOAuthProviderID as PrivyOAuthProviderID,
     type CustomOAuthProviderID as CustomOAuthProviderID,
     type OAuthProviderID as OAuthProviderID,
+    type BridgeOnrampProvider as BridgeOnrampProvider,
     type OnrampProvider as OnrampProvider,
     type GetFiatCustomerRequestInput as GetFiatCustomerRequestInput,
     type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,
+    type BridgeFiatRejectionReason as BridgeFiatRejectionReason,
     type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
     type BridgeSandboxFiatCustomerResponse as BridgeSandboxFiatCustomerResponse,
     type FiatCustomerResponse as FiatCustomerResponse,
@@ -1337,10 +1367,21 @@ export declare namespace PrivyAPI {
     type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
     type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
     type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
+    type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
+    type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
+  };
+
+  export {
+    Accounts as Accounts,
+    type AccountWallet as AccountWallet,
+    type AccountResponse as AccountResponse,
+    type AccountWalletConfigurationItem as AccountWalletConfigurationItem,
+    type CreateAccountInput as CreateAccountInput,
   };
 
   export {
     Yield as Yield,
+    type EvmCaip2ChainID as EvmCaip2ChainID,
     type EthereumYieldProvider as EthereumYieldProvider,
     type EthereumYieldSweepType as EthereumYieldSweepType,
     type EthereumYieldSweepStatus as EthereumYieldSweepStatus,
@@ -1354,5 +1395,14 @@ export declare namespace PrivyAPI {
     type EthereumYieldPositionsInput as EthereumYieldPositionsInput,
     type EthereumVaultPosition as EthereumVaultPosition,
     type EthereumYieldPositionResponse as EthereumYieldPositionResponse,
+    type EthereumYieldClaimInput as EthereumYieldClaimInput,
+    type EthereumYieldClaimReward as EthereumYieldClaimReward,
+    type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
+  };
+
+  export {
+    Intents as Intents,
+    type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
+    type IntentAuthorizationMember as IntentAuthorizationMember,
   };
 }

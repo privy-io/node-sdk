@@ -1,6 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
+  Accounts,
+  type AccountWallet,
+  type AccountResponse,
+  type AccountWalletConfigurationItem,
+  type CreateAccountInput,
+} from './accounts';
+export {
   Aggregations,
   type AggregationMethod,
   type AggregationMetric,
@@ -17,9 +24,11 @@ export {
   type PrivyOAuthProviderID,
   type CustomOAuthProviderID,
   type OAuthProviderID,
+  type BridgeOnrampProvider,
   type OnrampProvider,
   type GetFiatCustomerRequestInput,
   type CreateOrUpdateFiatCustomerRequestInput,
+  type BridgeFiatRejectionReason,
   type BridgeFiatCustomerResponse,
   type BridgeSandboxFiatCustomerResponse,
   type FiatCustomerResponse,
@@ -40,6 +49,7 @@ export {
   type BridgeSandboxFiatVirtualAccountResponse,
   type FiatVirtualAccountResponse,
 } from './client-auth';
+export { Intents, type IntentAuthorizationKeyQuorumMember, type IntentAuthorizationMember } from './intents';
 export {
   KeyQuorums,
   type KeyQuorum,
@@ -245,9 +255,12 @@ export {
   type KrakenEmbedUserVerifiedWebhookPayload,
   type KrakenEmbedUserDisabledWebhookPayload,
   type KrakenEmbedUserClosedWebhookPayload,
+  type YieldDepositConfirmedWebhookPayload,
+  type YieldWithdrawConfirmedWebhookPayload,
 } from './webhooks';
 export {
   Yield,
+  type EvmCaip2ChainID,
   type EthereumYieldProvider,
   type EthereumYieldSweepType,
   type EthereumYieldSweepStatus,
@@ -261,4 +274,7 @@ export {
   type EthereumYieldPositionsInput,
   type EthereumVaultPosition,
   type EthereumYieldPositionResponse,
+  type EthereumYieldClaimInput,
+  type EthereumYieldClaimReward,
+  type EthereumYieldClaimResponse,
 } from './yield';

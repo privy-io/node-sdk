@@ -399,7 +399,15 @@ export type WalletChainType =
  * Information about the custodian managing this wallet.
  */
 export interface WalletCustodian {
-  name: string;
+  /**
+   * The custodian responsible for the wallet.
+   */
+  provider: string;
+
+  /**
+   * The resource ID of the beneficiary of the custodial wallet.
+   */
+  provider_user_id: string;
 }
 
 /**

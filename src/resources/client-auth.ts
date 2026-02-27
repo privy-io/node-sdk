@@ -37,6 +37,11 @@ export type CustomOAuthProviderID = `custom:${string}`;
 export type OAuthProviderID = ExternalOAuthProviderID | PrivyOAuthProviderID;
 
 /**
+ * Bridge provider variant — production or sandbox.
+ */
+export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
+
+/**
  * Valid set of onramp providers
  */
 export type OnrampProvider = 'bridge' | 'bridge-sandbox';
@@ -49,6 +54,8 @@ export interface GetFiatCustomerRequestInput {
    * Valid set of onramp providers
    */
   provider: OnrampProvider;
+
+  kyc_redirect_url?: string;
 }
 
 /**
@@ -61,6 +68,15 @@ export interface CreateOrUpdateFiatCustomerRequestInput {
    * Valid set of onramp providers
    */
   provider: OnrampProvider;
+
+  kyc_redirect_url?: string;
+}
+
+/**
+ * A rejection reason for a customer KYC verification.
+ */
+export interface BridgeFiatRejectionReason {
+  reason: string;
 }
 
 /**
@@ -84,6 +100,8 @@ export interface BridgeFiatCustomerResponse {
     | 'under_review';
 
   kyc_url?: string;
+
+  rejection_reasons?: Array<BridgeFiatRejectionReason>;
 }
 
 /**
@@ -107,6 +125,8 @@ export interface BridgeSandboxFiatCustomerResponse {
     | 'under_review';
 
   kyc_url?: string;
+
+  rejection_reasons?: Array<BridgeFiatRejectionReason>;
 }
 
 /**
@@ -307,9 +327,11 @@ export declare namespace ClientAuth {
     type PrivyOAuthProviderID as PrivyOAuthProviderID,
     type CustomOAuthProviderID as CustomOAuthProviderID,
     type OAuthProviderID as OAuthProviderID,
+    type BridgeOnrampProvider as BridgeOnrampProvider,
     type OnrampProvider as OnrampProvider,
     type GetFiatCustomerRequestInput as GetFiatCustomerRequestInput,
     type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,
+    type BridgeFiatRejectionReason as BridgeFiatRejectionReason,
     type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
     type BridgeSandboxFiatCustomerResponse as BridgeSandboxFiatCustomerResponse,
     type FiatCustomerResponse as FiatCustomerResponse,

@@ -232,9 +232,11 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">PrivyOAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">CustomOAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthProviderID</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeOnrampProvider</a></code>
 - <code><a href="./src/resources/client-auth.ts">OnrampProvider</a></code>
 - <code><a href="./src/resources/client-auth.ts">GetFiatCustomerRequestInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">CreateOrUpdateFiatCustomerRequestInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">BridgeFiatRejectionReason</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatCustomerResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatCustomerResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatCustomerResponse</a></code>
@@ -311,11 +313,23 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
+
+# Accounts
+
+Types:
+
+- <code><a href="./src/resources/accounts.ts">AccountWallet</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountResponse</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountWalletConfigurationItem</a></code>
+- <code><a href="./src/resources/accounts.ts">CreateAccountInput</a></code>
 
 # Yield
 
 Types:
 
+- <code><a href="./src/resources/yield.ts">EvmCaip2ChainID</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldProvider</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldSweepType</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldSweepStatus</a></code>
@@ -329,3 +343,13 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldPositionsInput</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumVaultPosition</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldPositionResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldClaimInput</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldClaimReward</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldClaimResponse</a></code>
+
+# Intents
+
+Types:
+
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>

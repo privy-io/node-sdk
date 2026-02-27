@@ -105,6 +105,11 @@ export interface KeyQuorum {
 
   display_name?: string;
 
+  /**
+   * List of nested key quorum IDs that are members of this key quorum.
+   */
+  key_quorum_ids?: Array<string>;
+
   user_ids?: Array<string>;
 }
 
@@ -131,6 +136,12 @@ export interface KeyQuorumCreateParams {
   authorization_threshold?: number;
 
   display_name?: string;
+
+  /**
+   * List of key quorum IDs that should be members of this key quorum. Key quorums
+   * can only be nested 1 level deep.
+   */
+  key_quorum_ids?: Array<string>;
 
   /**
    * List of P-256 public keys of the keys that should be authorized to sign on the
@@ -164,6 +175,12 @@ export interface KeyQuorumUpdateParams {
    * Body param
    */
   display_name?: string;
+
+  /**
+   * Body param: List of key quorum IDs that should be members of this key quorum.
+   * Key quorums can only be nested 1 level deep.
+   */
+  key_quorum_ids?: Array<string>;
 
   /**
    * Body param: List of P-256 public keys of the keys that should be authorized to

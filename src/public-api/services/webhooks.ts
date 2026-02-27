@@ -22,14 +22,6 @@ import type {
   WalletRecoveredWebhookPayload,
   MfaEnabledWebhookPayload,
   MfaDisabledWebhookPayload,
-  KrakenEmbedVerificationCompletedWebhookPayload,
-  KrakenEmbedVerificationFailedWebhookPayload,
-  KrakenEmbedQuoteExecutedWebhookPayload,
-  KrakenEmbedQuoteExecutionFailedWebhookPayload,
-  KrakenEmbedQuoteCancelledWebhookPayload,
-  KrakenEmbedUserVerifiedWebhookPayload,
-  KrakenEmbedUserDisabledWebhookPayload,
-  KrakenEmbedUserClosedWebhookPayload,
 } from '../../resources/webhooks';
 
 export type WebhookEvent =
@@ -53,15 +45,7 @@ export type WebhookEvent =
   | WalletRecoverySetupWebhookPayload
   | WalletRecoveredWebhookPayload
   | MfaEnabledWebhookPayload
-  | MfaDisabledWebhookPayload
-  | KrakenEmbedVerificationCompletedWebhookPayload
-  | KrakenEmbedVerificationFailedWebhookPayload
-  | KrakenEmbedQuoteExecutedWebhookPayload
-  | KrakenEmbedQuoteExecutionFailedWebhookPayload
-  | KrakenEmbedQuoteCancelledWebhookPayload
-  | KrakenEmbedUserVerifiedWebhookPayload
-  | KrakenEmbedUserDisabledWebhookPayload
-  | KrakenEmbedUserClosedWebhookPayload;
+  | MfaDisabledWebhookPayload;
 
 export class PrivyWebhooksService {
   private webhookSigningSecret: string | undefined;

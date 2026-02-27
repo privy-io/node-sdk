@@ -19,7 +19,7 @@ export {
   type VerifyIdentityTokenInput,
 } from './lib/auth';
 
-export { type User, type LinkedAccountEmbeddedWallet } from './resources/users';
+export { type User, type LinkedAccountEmbeddedWallet, type LinkedAccount } from './resources/users';
 export { type Wallet } from './resources/wallets';
 export { type Policy } from './resources/policies';
 export { type KeyQuorum } from './resources/key-quorums';

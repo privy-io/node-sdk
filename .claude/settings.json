@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(yarn lint)",
+      "Bash(yarn test:integration:*)",
+      "Bash(git show:*)",
+      "Bash(gh pr view:*)"
+    ]
+  }
+}

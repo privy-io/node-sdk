@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.10.0 (2026-02-27)
+
+Full Changelog: [v0.9.0...v0.10.0](https://github.com/privy-io/node-sdk/compare/v0.9.0...v0.10.0)
+
+### Features
+
+* **api:** api update ([14a8c62](https://github.com/privy-io/node-sdk/commit/14a8c629acf2892c5653a98dfab2239623c67c39))
+* **api:** api update ([15ed42f](https://github.com/privy-io/node-sdk/commit/15ed42fe45e581496013f4d6d87f388aefac93c1))
+* **api:** api update ([8fb4475](https://github.com/privy-io/node-sdk/commit/8fb4475b14fcdc5e9ee14af2f159299851f5c28d))
+* **api:** api update ([378bea7](https://github.com/privy-io/node-sdk/commit/378bea7f7ffb654f12043083a36d6be819161cb6))
+* **api:** api update ([afd7b4c](https://github.com/privy-io/node-sdk/commit/afd7b4c69ec0a629b83d4785fab098b80c44d006))
+* **api:** api update ([61b5def](https://github.com/privy-io/node-sdk/commit/61b5defaeebc6f9805571e2d2d938855d259dcb1))
+* **api:** api update ([3a5a2f6](https://github.com/privy-io/node-sdk/commit/3a5a2f6bc4d6fd111447b080bef63a450eeda44d))
+* **api:** api update ([fb516d6](https://github.com/privy-io/node-sdk/commit/fb516d695a40f40486a004291f4a4fe24fa89eec))
+* ethereum signUserOperation util ([#89](https://github.com/privy-io/node-sdk/issues/89)) ([8d32aa7](https://github.com/privy-io/node-sdk/commit/8d32aa7c1ad6df4e7b8dcf2012924cf705eacbd3))
+* expose LinkedAccount type ([#90](https://github.com/privy-io/node-sdk/issues/90)) ([db6e8d9](https://github.com/privy-io/node-sdk/commit/db6e8d918f4e9d013442cc7a2e26863cf4312522))
+* returns a typed payload after webhook verification ([#87](https://github.com/privy-io/node-sdk/issues/87)) ([82ce0a7](https://github.com/privy-io/node-sdk/commit/82ce0a71e17bd0e5c20a8777e6bcfd1d7b61701f))
+
+
+### Bug Fixes
+
+* **docs/contributing:** correct pnpm link command ([1ea6518](https://github.com/privy-io/node-sdk/commit/1ea65188e454c60f9ced06cb98b3c1178d85790d))
+
+
+### Chores
+
+* **internal/client:** fix form-urlencoded requests ([b0b505a](https://github.com/privy-io/node-sdk/commit/b0b505af4f630b1fbf05d4bf8c398d8714a46ebe))
+* **internal:** remove mock server code ([ea82bbe](https://github.com/privy-io/node-sdk/commit/ea82bbea3a78276efefdc0cb000ce22d83351fad))
+* update mock server docs ([05644d1](https://github.com/privy-io/node-sdk/commit/05644d18cec42a270ef9b586616951f556db20ac))
+
 ## 0.9.0 (2026-02-13)
 
 Full Changelog: [v0.8.0...v0.9.0](https://github.com/privy-io/node-sdk/compare/v0.8.0...v0.9.0)

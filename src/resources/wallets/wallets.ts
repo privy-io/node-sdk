@@ -476,12 +476,12 @@ export interface CustodialWallet {
    */
   chain_type: CustodialWalletChainType;
 
-  owner_id: string | null;
-
   /**
-   * The provider of the custodial wallet.
+   * Information about the custodian managing this wallet.
    */
-  provider: CustodialWalletProvider;
+  custody: WalletCustodian;
+
+  owner_id: string | null;
 
   additional_signers?: Array<CustodialWallet.AdditionalSigner>;
 

@@ -80,11 +80,27 @@ export interface CreateAccountInput {
   display_name?: string;
 }
 
+/**
+ * Paginated list of digital asset accounts.
+ */
+export interface AccountsListResponse {
+  /**
+   * The list of accounts.
+   */
+  data: Array<AccountResponse>;
+
+  /**
+   * Cursor for fetching the next page of results, or null if no more results.
+   */
+  next_cursor: string | null;
+}
+
 export declare namespace Accounts {
   export {
     type AccountWallet as AccountWallet,
     type AccountResponse as AccountResponse,
     type AccountWalletConfigurationItem as AccountWalletConfigurationItem,
     type CreateAccountInput as CreateAccountInput,
+    type AccountsListResponse as AccountsListResponse,
   };
 }

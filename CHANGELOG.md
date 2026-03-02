@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.10.1 (2026-02-27)
+
+Full Changelog: [v0.10.0...v0.10.1](https://github.com/privy-io/node-sdk/compare/v0.10.0...v0.10.1)
+
+### Features
+
+* **api:** api update ([cfb2771](https://github.com/privy-io/node-sdk/commit/cfb2771a406cab7c66ebc610e1971a3e9df77e3d))
+* **typescript:** set up npm oidc publishing ([cf13bf7](https://github.com/privy-io/node-sdk/commit/cf13bf7627811c4b24bf3164f21c3e3ef27cd835))
+
+
+### Chores
+
+* **internal:** move stringifyQuery implementation to internal function ([14381a9](https://github.com/privy-io/node-sdk/commit/14381a99a7e2d66722b84bf7746c78bef592c539))
+
 ## 0.10.0 (2026-02-27)
 
 Full Changelog: [v0.9.0...v0.10.0](https://github.com/privy-io/node-sdk/compare/v0.9.0...v0.10.0)

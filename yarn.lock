@@ -1546,7 +1546,7 @@
     "@typescript-eslint/types" "8.31.1"
     eslint-visitor-keys "^4.2.0"
 
-"@x402/core@^2.3.0", "@x402/core@~2.3.0":
+"@x402/core@~2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@x402/core/-/core-2.3.0.tgz#512da9a8154af7dfa05f6f754f0309ce7f06d07a"
   integrity sha512-XOSfqZXJMHwBoTFa07MiVr35CaMPoD2hVwncMAQQKr/qfEHmdD4mP3vrcAQvkfIJXVdu/wkpWXTJ5irXy1jn7g==

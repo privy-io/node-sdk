@@ -57,6 +57,40 @@ describe('PrivyWalletsService', () => {
       );
     });
   });
+  describe('create idempotency', () => {
+    it('will succeed if the idempotency key is reused with the same body', async () => {
+      const idempotencyKey = crypto.randomUUID();
+      const response1 = await privyClient.wallets().create({
+        chain_type: 'ethereum',
+        idempotency_key: idempotencyKey,
+      });
+      expect(response1.id).toBeDefined();
+      expect(response1.chain_type).toBe('ethereum');
+      expect(response1.address).toBeDefined();
+
+      const response2 = await privyClient.wallets().create({
+        chain_type: 'ethereum',
+        idempotency_key: idempotencyKey,
+      });
+      expect(response2.id).toBe(response1.id);
+    });
+    it('will fail if the idempotency key is reused with a different body', async () => {
+      const idempotencyKey = crypto.randomUUID();
+      await privyClient.wallets().create({
+        chain_type: 'ethereum',
+        idempotency_key: idempotencyKey,
+      });
+
+      await expect(
+        privyClient.wallets().create({
+          chain_type: 'solana',
+          idempotency_key: idempotencyKey,
+        }),
+      ).rejects.toThrow(
+        `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
+      );
+    });
+  });
   describe('update', () => {
     it('should be able to change the owner on a wallet', async () => {
       // Check the wallet is ownerless initially

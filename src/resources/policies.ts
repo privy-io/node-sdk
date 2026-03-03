@@ -8,6 +8,9 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Operations related to policies
+ */
 export class Policies extends APIResource {
   /**
    * Create a new policy.

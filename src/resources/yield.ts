@@ -364,6 +364,19 @@ export interface EthereumYieldClaimResponse {
    * List of reward tokens claimed.
    */
   rewards: Array<EthereumYieldClaimReward>;
+
+  /**
+   * The current status of the claim transaction.
+   */
+  status:
+    | 'broadcasted'
+    | 'confirmed'
+    | 'execution_reverted'
+    | 'failed'
+    | 'replaced'
+    | 'finalized'
+    | 'provider_error'
+    | 'pending';
 }
 
 export declare namespace Yield {

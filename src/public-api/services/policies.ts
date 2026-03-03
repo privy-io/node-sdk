@@ -1,9 +1,11 @@
 import { Prettify } from 'viem';
 import { PrivyAPI } from '../../client';
+import { APIPromise } from '../../core/api-promise';
 import { generateAuthorizationSignatures } from '../../lib/authorization';
 import {
   Policies,
   Policy,
+  PolicyCreateParams,
   PolicyCreateRuleParams,
   PolicyCreateRuleResponse,
   PolicyDeleteParams,
@@ -15,7 +17,7 @@ import {
   PolicyUpdateRuleResponse,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
-import { WithAuthorization } from './types';
+import { WithAuthorization, WithIdempotency } from './types';
 
 export class PrivyPoliciesService extends Policies {
   private privyClient: PrivyClient;
@@ -23,6 +25,16 @@ export class PrivyPoliciesService extends Policies {
   constructor(privyApiClient: PrivyAPI, privyClient: PrivyClient) {
     super(privyApiClient);
     this.privyClient = privyClient;
+  }
+
+  public override create({
+    idempotency_key: idempotencyKey,
+    ...params
+  }: PrivyPoliciesService.CreateInput): APIPromise<Policy> {
+    return super.create({
+      ...params,
+      ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
+    });
   }
 
   public async update(
@@ -162,6 +174,8 @@ export class PrivyPoliciesService extends Policies {
 }
 
 export namespace PrivyPoliciesService {
+  /** The input type for the {@link PrivyPoliciesService.create} method. */
+  export type CreateInput = Prettify<WithIdempotency<PolicyCreateParams>>;
   /** The input type for the {@link PrivyPoliciesService.update} method. */
   export type UpdateInput = Prettify<WithAuthorization<PolicyUpdateParams>>;
   /** The input type for the {@link PrivyPoliciesService.delete} method. */

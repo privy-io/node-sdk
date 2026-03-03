@@ -6,6 +6,9 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Operations related to key quorums
+ */
 export class KeyQuorums extends APIResource {
   /**
    * Create a new key quorum.

@@ -5,6 +5,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Operations related to transactions
+ */
 export class Transactions extends APIResource {
   /**
    * Get a transaction by transaction ID.

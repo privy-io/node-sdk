@@ -5,6 +5,9 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Operations related to wallets
+ */
 export class Balance extends APIResource {
   /**
    * Get the balance of a wallet by wallet ID.

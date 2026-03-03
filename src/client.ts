@@ -1078,9 +1078,21 @@ export class PrivyAPI {
   static toFile = Uploads.toFile;
 
   wallets: API.Wallets = new API.Wallets(this);
+  /**
+   * Operations related to users
+   */
   users: API.Users = new API.Users(this);
+  /**
+   * Operations related to policies
+   */
   policies: API.Policies = new API.Policies(this);
+  /**
+   * Operations related to transactions
+   */
   transactions: API.Transactions = new API.Transactions(this);
+  /**
+   * Operations related to key quorums
+   */
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
   analytics: API.Analytics = new API.Analytics(this);

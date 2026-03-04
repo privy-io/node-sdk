@@ -93,20 +93,22 @@ describe('PrivyWalletsService', () => {
   });
   describe('update', () => {
     it('should be able to change the owner on a wallet', async () => {
+      const wallet = await privyClient.wallets().create({ chain_type: 'tron' });
+
       // Check the wallet is ownerless initially
-      const wallet1 = await privyClient.wallets().get(OWNERLESS_TRON_WALLET.id);
+      const wallet1 = await privyClient.wallets().get(wallet.id);
       expect(wallet1.owner_id).toBeNull();
 
       // Update the owner field to a p256 key
-      const wallet2 = await privyClient.wallets().update(OWNERLESS_TRON_WALLET.id, {
-        owner: { public_key: P256_KEYPAIR.publicKey },
+      const wallet2 = await privyClient.wallets().update(wallet.id, {
+        owner: { public_key: resources.p256KeyPair.publicKey },
       });
       expect(wallet2.owner_id).toBeDefined();
 
       // Update the wallet back to ownerless
-      const wallet3 = await privyClient.wallets().update(OWNERLESS_TRON_WALLET.id, {
+      const wallet3 = await privyClient.wallets().update(wallet.id, {
         owner: null,
-        authorization_context: p256AuthorizationContext,
+        authorization_context: { authorization_private_keys: [resources.p256KeyPair.privateKey] },
       });
       expect(wallet3.owner_id).toBeNull();
     });

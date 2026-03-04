@@ -14,20 +14,29 @@ import {
 } from 'viem/accounts';
 import { generateP256KeyPair } from '@privy-io/node';
 import { OWNERLESS_TRON_WALLET, P256_KEYPAIR, P256_OWNED_TRON_WALLET, TEST_APP } from '../test-config';
+import {
+  setupTestWalletResources,
+  cleanupTestWalletResources,
+  TestWalletResources,
+} from '../test-setup';
 
 describe('PrivyWalletsService', () => {
   const p256AuthorizationContext: AuthorizationContext = {
     authorization_private_keys: [P256_KEYPAIR.privateKey],
   };
 
+  let resources: TestWalletResources;
   let privyClient: PrivyClient;
-  beforeEach(() => {
-    privyClient = new PrivyClient({
-      appId: TEST_APP.id,
-      appSecret: TEST_APP.secret,
-      apiUrl: TEST_APP.apiUrl,
-    });
+
+  beforeAll(async () => {
+    resources = await setupTestWalletResources();
+    privyClient = resources.client;
   });
+
+  afterAll(async () => {
+    if (resources) await cleanupTestWalletResources(resources);
+  });
+
   describe.skip('create', () => {
     test.each([
       { chainType: 'ethereum', owner: null },

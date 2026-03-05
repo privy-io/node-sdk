@@ -925,6 +925,16 @@ export interface RpcIntentResponse {
    * Human-readable reason for dismissal, present when status is 'dismissed'
    */
   dismissal_reason?: string;
+
+  /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
 }
 
 export namespace RpcIntentResponse {
@@ -1615,6 +1625,16 @@ export interface WalletIntentResponse {
    * Human-readable reason for dismissal, present when status is 'dismissed'
    */
   dismissal_reason?: string;
+
+  /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
 }
 
 export namespace WalletIntentResponse {
@@ -1781,6 +1801,16 @@ export interface PolicyIntentResponse {
    * Human-readable reason for dismissal, present when status is 'dismissed'
    */
   dismissal_reason?: string;
+
+  /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
 }
 
 export namespace PolicyIntentResponse {
@@ -2547,6 +2577,16 @@ export interface KeyQuorumIntentResponse {
    * Human-readable reason for dismissal, present when status is 'dismissed'
    */
   dismissal_reason?: string;
+
+  /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
 }
 
 export namespace KeyQuorumIntentResponse {
@@ -2674,10 +2714,20 @@ export interface RuleIntentResponse {
   dismissal_reason?: string;
 
   /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
    * Parent policy containing this rule, including sibling rules for contextual
    * display
    */
   policy?: RuleIntentResponse.Policy;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
 }
 
 export namespace RuleIntentResponse {

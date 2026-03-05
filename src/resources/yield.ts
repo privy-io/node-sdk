@@ -203,6 +203,11 @@ export interface EthereumVaultDetailsResponse {
   caip2: string;
 
   /**
+   * Human-readable vault name from the yield provider.
+   */
+  name: string;
+
+  /**
    * Supported yield/lending protocol providers.
    */
   provider: EthereumYieldProvider;

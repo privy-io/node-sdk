@@ -18,40 +18,43 @@ import {
   verifyMessage,
   verifyTypedData,
 } from 'viem/utils';
-import { generateTestJWT } from '../helpers/jwt-auth';
 import {
-  TEST_APP,
-  P256_KEYPAIR,
-  OWNERLESS_ETHEREUM_WALLET,
-  P256_OWNED_ETHEREUM_WALLET,
-  USER_OWNED_ETHEREUM_WALLET,
-} from './test-config';
+  setupTestWalletResources,
+  createTestWallets,
+  cleanupTestWalletResources,
+  TestWalletResources,
+  TestWallet,
+  WALLET_CASES,
+} from './test-setup';
 
 describe('viem utils', () => {
+  let resources: TestWalletResources;
+  let wallets: TestWallet[];
   let privyClient: PrivyClient;
-  beforeEach(() => {
-    privyClient = new PrivyClient({
-      appId: TEST_APP.id,
-      appSecret: TEST_APP.secret,
-      apiUrl: TEST_APP.apiUrl,
-    });
+
+  beforeAll(async () => {
+    resources = await setupTestWalletResources();
+    wallets = await createTestWallets(resources, 'ethereum');
+    privyClient = resources.client;
+  });
+
+  afterAll(async () => {
+    if (resources) await cleanupTestWalletResources(resources);
   });
 
   describe('createViemAccount', () => {
-    describe.each([
-      { owner: null, walletId: OWNERLESS_ETHEREUM_WALLET.id, address: OWNERLESS_ETHEREUM_WALLET.address },
-      { owner: 'p256', walletId: P256_OWNED_ETHEREUM_WALLET.id, address: P256_OWNED_ETHEREUM_WALLET.address },
-      { owner: 'user', walletId: USER_OWNED_ETHEREUM_WALLET.id, address: USER_OWNED_ETHEREUM_WALLET.address },
-    ] as const)('for a wallet with owner:$owner', ({ owner, walletId, address }) => {
+    describe.each(WALLET_CASES)('$ownership', ({ index }) => {
+      let wallet: TestWallet;
+      let address: Hex;
       let account: LocalAccount;
-      beforeEach(async () => {
+
+      beforeEach(() => {
+        wallet = wallets[index]!;
+        address = address;
         account = createViemAccount(privyClient, {
-          walletId,
+          walletId: wallet.id,
           address,
-          authorizationContext: {
-            ...(owner === 'p256' ? { authorization_private_keys: [P256_KEYPAIR.privateKey] } : {}),
-            ...(owner === 'user' ? { user_jwts: [await generateTestJWT()] } : {}),
-          },
+          authorizationContext: wallet.authorizationContext ?? {},
         });
       });
       it('should be able to sign a hash', async () => {

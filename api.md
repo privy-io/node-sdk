@@ -14,6 +14,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">PatchWalletRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResult</a></code>
@@ -38,10 +39,11 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletRpcRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponseBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRawSignResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateWithJwtResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCreateWalletsWithRecoveryResponse</a></code>
 
@@ -52,7 +54,7 @@ Methods:
 - <code title="post /v1/wallets/{wallet_id}/export">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_export</a>(walletID, { ...params }) -> WalletExportResponse</code>
 - <code title="post /v1/wallets/import/init">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_initImport</a>({ ...params }) -> WalletInitImportResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/raw_sign">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rawSign</a>(walletID, { ...params }) -> WalletRawSignResponse</code>
-- <code title="post /v1/wallets/{wallet_id}/rpc">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rpc</a>(walletID, { ...params }) -> WalletRpcResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/rpc">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rpc</a>(walletID, { ...params }) -> WalletRpcResponseBody</code>
 - <code title="post /v1/wallets/import/submit">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_submitImport</a>({ ...params }) -> Wallet</code>
 - <code title="patch /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_update</a>(walletID, { ...params }) -> Wallet</code>
 - <code title="post /v1/wallets/authenticate">client.wallets.<a href="./src/resources/wallets/wallets.ts">authenticateWithJwt</a>({ ...params }) -> WalletAuthenticateWithJwtResponse</code>
@@ -215,6 +217,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateParams</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumDeleteResponse</a></code>
 
 Methods:
@@ -240,6 +243,21 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatCustomerResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatCustomerResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatCustomerResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatCurrencyCode</a></code>
+- <code><a href="./src/resources/client-auth.ts">CryptoCurrencyCode</a></code>
+- <code><a href="./src/resources/client-auth.ts">Caip2ChainID</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatAmount</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampSource</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampDestination</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampEnvironment</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampQuotesInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampQuote</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampQuotesResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampURLInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampURLResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampTransactionStatus</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampTransactionStatusInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampTransactionStatusResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeDestinationAsset</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeSourceAsset</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountSource</a></code>
@@ -319,6 +337,24 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">IntentCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentAuthorizedWebhookPayload</a></code>
 
+# Intents
+
+Types:
+
+- <code><a href="./src/resources/intents.ts">IntentType</a></code>
+- <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
+- <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
+- <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
+
 # Accounts
 
 Types:
@@ -354,10 +390,3 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimInput</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimReward</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimResponse</a></code>
-
-# Intents
-
-Types:
-
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>

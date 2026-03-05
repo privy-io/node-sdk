@@ -61,19 +61,49 @@ import {
   BridgeSandboxFiatVirtualAccountResponse,
   BridgeSourceAsset,
   BridgeUsdFiatVirtualAccountDepositInstructions,
+  Caip2ChainID,
   ClientAuth,
   CreateOrUpdateFiatCustomerRequestInput,
+  CryptoCurrencyCode,
   CustomOAuthProviderID,
   ExternalOAuthProviderID,
+  FiatAmount,
+  FiatCurrencyCode,
   FiatCustomerResponse,
+  FiatOnrampDestination,
+  FiatOnrampEnvironment,
+  FiatOnrampQuote,
+  FiatOnrampSource,
+  FiatOnrampTransactionStatus,
   FiatVirtualAccountRequest,
   FiatVirtualAccountResponse,
   GetFiatCustomerRequestInput,
+  GetFiatOnrampQuotesInput,
+  GetFiatOnrampQuotesResponse,
+  GetFiatOnrampTransactionStatusInput,
+  GetFiatOnrampTransactionStatusResponse,
+  GetFiatOnrampURLInput,
+  GetFiatOnrampURLResponse,
   OAuthProviderID,
   OnrampProvider,
   PrivyOAuthProviderID,
 } from './resources/client-auth';
-import { IntentAuthorizationKeyQuorumMember, IntentAuthorizationMember, Intents } from './resources/intents';
+import {
+  BaseActionResult,
+  IntentAuthorization,
+  IntentAuthorizationKeyQuorumMember,
+  IntentAuthorizationMember,
+  IntentResponse,
+  IntentStatus,
+  IntentType,
+  Intents,
+  KeyQuorumIntentResponse,
+  PolicyIntentResponse,
+  RpcIntentResponse,
+  RuleIntentRequestDetails,
+  RuleIntentResponse,
+  WalletIntentResponse,
+} from './resources/intents';
 import {
   KeyQuorum,
   KeyQuorumCreateParams,
@@ -272,6 +302,7 @@ import {
   ExtendedChainType,
   FirstClassChainType,
   HpkeImportConfig,
+  PatchWalletRequestBody,
   SolanaSignAndSendTransactionRpcInput,
   SolanaSignAndSendTransactionRpcResponse,
   SolanaSignMessageRpcInput,
@@ -299,7 +330,8 @@ import {
   WalletRawSignParams,
   WalletRawSignResponse,
   WalletRpcParams,
-  WalletRpcResponse,
+  WalletRpcRequestBody,
+  WalletRpcResponseBody,
   WalletSubmitImportParams,
   WalletUpdateParams,
   Wallets,
@@ -1106,9 +1138,9 @@ export class PrivyAPI {
   apps: API.Apps = new API.Apps(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
+  intents: API.Intents = new API.Intents(this);
   accounts: API.Accounts = new API.Accounts(this);
   yield: API.Yield = new API.Yield(this);
-  intents: API.Intents = new API.Intents(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -1121,9 +1153,9 @@ PrivyAPI.Analytics = Analytics;
 PrivyAPI.Apps = Apps;
 PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.Webhooks = Webhooks;
+PrivyAPI.Intents = Intents;
 PrivyAPI.Accounts = Accounts;
 PrivyAPI.Yield = Yield;
-PrivyAPI.Intents = Intents;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -1145,6 +1177,7 @@ export declare namespace PrivyAPI {
     type CustodialWallet as CustodialWallet,
     type HpkeImportConfig as HpkeImportConfig,
     type SuiCommandName as SuiCommandName,
+    type PatchWalletRequestBody as PatchWalletRequestBody,
     type WalletBatchItemInput as WalletBatchItemInput,
     type WalletBatchCreateInput as WalletBatchCreateInput,
     type WalletBatchCreateResult as WalletBatchCreateResult,
@@ -1169,10 +1202,11 @@ export declare namespace PrivyAPI {
     type SolanaSignTransactionRpcResponse as SolanaSignTransactionRpcResponse,
     type SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
+    type WalletRpcRequestBody as WalletRpcRequestBody,
+    type WalletRpcResponseBody as WalletRpcResponseBody,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
-    type WalletRpcResponse as WalletRpcResponse,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletsCursor as WalletsCursor,
@@ -1304,8 +1338,8 @@ export declare namespace PrivyAPI {
   export {
     KeyQuorums as KeyQuorums,
     type KeyQuorum as KeyQuorum,
-    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
+    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
   };
@@ -1324,6 +1358,21 @@ export declare namespace PrivyAPI {
     type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
     type BridgeSandboxFiatCustomerResponse as BridgeSandboxFiatCustomerResponse,
     type FiatCustomerResponse as FiatCustomerResponse,
+    type FiatCurrencyCode as FiatCurrencyCode,
+    type CryptoCurrencyCode as CryptoCurrencyCode,
+    type Caip2ChainID as Caip2ChainID,
+    type FiatAmount as FiatAmount,
+    type FiatOnrampSource as FiatOnrampSource,
+    type FiatOnrampDestination as FiatOnrampDestination,
+    type FiatOnrampEnvironment as FiatOnrampEnvironment,
+    type GetFiatOnrampQuotesInput as GetFiatOnrampQuotesInput,
+    type FiatOnrampQuote as FiatOnrampQuote,
+    type GetFiatOnrampQuotesResponse as GetFiatOnrampQuotesResponse,
+    type GetFiatOnrampURLInput as GetFiatOnrampURLInput,
+    type GetFiatOnrampURLResponse as GetFiatOnrampURLResponse,
+    type FiatOnrampTransactionStatus as FiatOnrampTransactionStatus,
+    type GetFiatOnrampTransactionStatusInput as GetFiatOnrampTransactionStatusInput,
+    type GetFiatOnrampTransactionStatusResponse as GetFiatOnrampTransactionStatusResponse,
     type BridgeDestinationAsset as BridgeDestinationAsset,
     type BridgeSourceAsset as BridgeSourceAsset,
     type BridgeFiatVirtualAccountSource as BridgeFiatVirtualAccountSource,
@@ -1395,6 +1444,23 @@ export declare namespace PrivyAPI {
   };
 
   export {
+    Intents as Intents,
+    type IntentType as IntentType,
+    type IntentStatus as IntentStatus,
+    type RuleIntentRequestDetails as RuleIntentRequestDetails,
+    type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
+    type IntentAuthorizationMember as IntentAuthorizationMember,
+    type IntentAuthorization as IntentAuthorization,
+    type BaseActionResult as BaseActionResult,
+    type RpcIntentResponse as RpcIntentResponse,
+    type WalletIntentResponse as WalletIntentResponse,
+    type PolicyIntentResponse as PolicyIntentResponse,
+    type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
+    type RuleIntentResponse as RuleIntentResponse,
+    type IntentResponse as IntentResponse,
+  };
+
+  export {
     Accounts as Accounts,
     type AccountWallet as AccountWallet,
     type AccountResponse as AccountResponse,
@@ -1426,11 +1492,5 @@ export declare namespace PrivyAPI {
     type EthereumYieldClaimInput as EthereumYieldClaimInput,
     type EthereumYieldClaimReward as EthereumYieldClaimReward,
     type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
-  };
-
-  export {
-    Intents as Intents,
-    type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
-    type IntentAuthorizationMember as IntentAuthorizationMember,
   };
 }

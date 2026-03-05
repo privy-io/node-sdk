@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as IntentsAPI from './intents';
 import * as UsersAPI from './users';
 
 export class Webhooks extends APIResource {}
@@ -1121,9 +1122,9 @@ export interface IntentCreatedWebhookPayload {
   intent_id: string;
 
   /**
-   * The type of resource the intent modifies.
+   * Type of intent.
    */
-  intent_type: 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'WALLET';
+  intent_type: IntentsAPI.IntentType;
 
   /**
    * The current status of the intent.
@@ -1177,9 +1178,9 @@ export interface IntentAuthorizedWebhookPayload {
   intent_id: string;
 
   /**
-   * The type of resource the intent modifies.
+   * Type of intent.
    */
-  intent_type: 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'WALLET';
+  intent_type: IntentsAPI.IntentType;
 
   /**
    * The current status of the intent.

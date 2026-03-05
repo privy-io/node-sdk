@@ -70,6 +70,7 @@ export namespace TransactionGetResponse {
         | 'ethereum'
         | 'arbitrum'
         | 'base'
+        | 'tempo'
         | 'linea'
         | 'optimism'
         | 'polygon'
@@ -108,6 +109,7 @@ export namespace TransactionGetResponse {
         | 'ethereum'
         | 'arbitrum'
         | 'base'
+        | 'tempo'
         | 'linea'
         | 'optimism'
         | 'polygon'
@@ -152,7 +154,7 @@ export interface TransactionGetParams {
     | 'sol'
     | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
 
-  chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'sepolia';
+  chain: 'ethereum' | 'arbitrum' | 'base' | 'tempo' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'sepolia';
 
   cursor?: string;
 

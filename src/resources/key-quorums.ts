@@ -124,6 +124,37 @@ export namespace KeyQuorum {
   }
 }
 
+/**
+ * Request input for creating or updating a key quorum.
+ */
+export interface KeyQuorumCreateParams {
+  /**
+   * The number of keys that must sign for an action to be valid. Must be less than
+   * or equal to total number of key quorum members.
+   */
+  authorization_threshold?: number;
+
+  display_name?: string;
+
+  /**
+   * List of key quorum IDs that should be members of this key quorum. Key quorums
+   * can only be nested 1 level deep.
+   */
+  key_quorum_ids?: Array<string>;
+
+  /**
+   * List of P-256 public keys of the keys that should be authorized to sign on the
+   * key quorum, in base64-encoded DER format.
+   */
+  public_keys?: Array<string>;
+
+  /**
+   * List of user IDs of the users that should be authorized to sign on the key
+   * quorum.
+   */
+  user_ids?: Array<string>;
+}
+
 export interface KeyQuorumDeleteResponse {
   /**
    * Whether the key quorum was deleted successfully.
@@ -207,8 +238,8 @@ export interface KeyQuorumUpdateParams {
 export declare namespace KeyQuorums {
   export {
     type KeyQuorum as KeyQuorum,
-    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
+    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
   };

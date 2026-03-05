@@ -151,13 +151,20 @@ export class Wallets extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.wallets._rpc('wallet_id', {
-   *   method: 'personal_sign',
-   *   params: { encoding: 'utf-8', message: 'message' },
-   * });
+   * const walletRpcResponseBody = await client.wallets._rpc(
+   *   'wallet_id',
+   *   {
+   *     method: 'personal_sign',
+   *     params: { encoding: 'utf-8', message: 'message' },
+   *   },
+   * );
    * ```
    */
-  _rpc(walletID: string, params: WalletRpcParams, options?: RequestOptions): APIPromise<WalletRpcResponse> {
+  _rpc(
+    walletID: string,
+    params: WalletRpcParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletRpcResponseBody> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-idempotency-key': privyIdempotencyKey,
@@ -525,6 +532,61 @@ export interface HpkeImportConfig {
  * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
  */
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
+
+/**
+ * Request body for updating a wallet.
+ */
+export interface PatchWalletRequestBody {
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: Array<PatchWalletRequestBody.AdditionalSigner>;
+
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  owner?: PatchWalletRequestBody.PublicKeyOwner | PatchWalletRequestBody.UserOwner | null;
+
+  owner_id?: string | null;
+
+  /**
+   * New policy IDs to enforce on the wallet. Currently, only one policy is supported
+   * per wallet.
+   */
+  policy_ids?: Array<string>;
+}
+
+export namespace PatchWalletRequestBody {
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
+  }
+
+  /**
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
+   */
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
+}
 
 /**
  * Input for a single wallet in a batch creation request.
@@ -1247,6 +1309,36 @@ export namespace SolanaSignMessageRpcResponse {
   }
 }
 
+/**
+ * Request body for wallet RPC operations, discriminated by method.
+ */
+export type WalletRpcRequestBody =
+  | EthereumPersonalSignRpcInput
+  | EthereumSignTypedDataRpcInput
+  | EthereumSignTransactionRpcInput
+  | EthereumSignUserOperationRpcInput
+  | EthereumSendTransactionRpcInput
+  | EthereumSign7702AuthorizationRpcInput
+  | EthereumSecp256k1SignRpcInput
+  | SolanaSignMessageRpcInput
+  | SolanaSignTransactionRpcInput
+  | SolanaSignAndSendTransactionRpcInput;
+
+/**
+ * Response body for wallet RPC operations, discriminated by method.
+ */
+export type WalletRpcResponseBody =
+  | EthereumPersonalSignRpcResponse
+  | EthereumSignTypedDataRpcResponse
+  | EthereumSignTransactionRpcResponse
+  | EthereumSendTransactionRpcResponse
+  | EthereumSignUserOperationRpcResponse
+  | EthereumSign7702AuthorizationRpcResponse
+  | EthereumSecp256k1SignRpcResponse
+  | SolanaSignMessageRpcResponse
+  | SolanaSignTransactionRpcResponse
+  | SolanaSignAndSendTransactionRpcResponse;
+
 export interface WalletExportResponse {
   /**
    * The encrypted private key.
@@ -1290,21 +1382,6 @@ export namespace WalletRawSignResponse {
     signature: string;
   }
 }
-
-/**
- * Response to the EVM `personal_sign` RPC.
- */
-export type WalletRpcResponse =
-  | EthereumPersonalSignRpcResponse
-  | EthereumSignTypedDataRpcResponse
-  | EthereumSignTransactionRpcResponse
-  | EthereumSendTransactionRpcResponse
-  | EthereumSignUserOperationRpcResponse
-  | EthereumSign7702AuthorizationRpcResponse
-  | EthereumSecp256k1SignRpcResponse
-  | SolanaSignMessageRpcResponse
-  | SolanaSignTransactionRpcResponse
-  | SolanaSignAndSendTransactionRpcResponse;
 
 export type WalletAuthenticateWithJwtResponse =
   | WalletAuthenticateWithJwtResponse.WithEncryption
@@ -2436,6 +2513,7 @@ export declare namespace Wallets {
     type CustodialWallet as CustodialWallet,
     type HpkeImportConfig as HpkeImportConfig,
     type SuiCommandName as SuiCommandName,
+    type PatchWalletRequestBody as PatchWalletRequestBody,
     type WalletBatchItemInput as WalletBatchItemInput,
     type WalletBatchCreateInput as WalletBatchCreateInput,
     type WalletBatchCreateResult as WalletBatchCreateResult,
@@ -2460,10 +2538,11 @@ export declare namespace Wallets {
     type SolanaSignTransactionRpcResponse as SolanaSignTransactionRpcResponse,
     type SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
+    type WalletRpcRequestBody as WalletRpcRequestBody,
+    type WalletRpcResponseBody as WalletRpcResponseBody,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
-    type WalletRpcResponse as WalletRpcResponse,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletsCursor as WalletsCursor,

@@ -1,5 +1,4 @@
 import { secp256k1 } from '@noble/curves/secp256k1';
-import { AuthorizationContext } from '@privy-io/node';
 import { PrivyClient } from '@privy-io/node';
 import { base58, base64, hex } from '@scure/base';
 import crypto from 'node:crypto';
@@ -13,14 +12,16 @@ import {
   privateKeyToAccount,
 } from 'viem/accounts';
 import { generateP256KeyPair } from '@privy-io/node';
-import { OWNERLESS_TRON_WALLET, P256_KEYPAIR, P256_OWNED_TRON_WALLET, TEST_APP } from '../test-config';
-import { setupTestWalletResources, cleanupTestWalletResources, TestWalletResources } from '../test-setup';
+import {
+  setupTestWalletResources,
+  createTestWallets,
+  cleanupTestWalletResources,
+  TestWalletResources,
+  TestWallet,
+  WALLET_CASES,
+} from '../test-setup';
 
 describe('PrivyWalletsService', () => {
-  const p256AuthorizationContext: AuthorizationContext = {
-    authorization_private_keys: [P256_KEYPAIR.privateKey],
-  };
-
   let resources: TestWalletResources;
   let privyClient: PrivyClient;
 
@@ -276,77 +277,98 @@ describe('PrivyWalletsService', () => {
     });
   });
   describe('other chains', () => {
+    let tronWallets: TestWallet[];
+
+    beforeAll(async () => {
+      tronWallets = await createTestWallets(resources, 'tron');
+    });
+
     describe('raw sign', () => {
-      it('should be able to sign a message', async () => {
-        const response = await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET.id, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+      describe.each(WALLET_CASES)('$ownership', ({ index }) => {
+        it('should be able to sign a message', async () => {
+          const wallet = tronWallets[index]!;
+          const response = await privyClient.wallets().rawSign(wallet.id, {
+            params: {
+              hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+            },
+            ...(wallet.authorizationContext && {
+              authorization_context: wallet.authorizationContext,
+            }),
+          });
+
+          expect(response.encoding).toBe('hex');
+          expect(response.signature).toBeDefined();
+          expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
+
+          const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
+          const signatureBytes = hexToBytes(response.signature as `0x${string}`);
+          const publicKeyBytes = hexToBytes(`0x${wallet.publicKey}`);
+
+          const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
+          expect(verified).toBe(true);
         });
 
-        expect(response.encoding).toBe('hex');
-        expect(response.signature).toBeDefined();
-        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
-
-        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
-        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
-        const publicKeyBytes = hexToBytes(`0x${OWNERLESS_TRON_WALLET.pk}`);
-
-        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
-        expect(verified).toBe(true);
-      });
-      it('will succeed if the idempotency key is reused with the same body', async () => {
-        const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET.id, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotency_key: idempotencyKey,
-        });
-
-        const response = await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET.id, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotency_key: idempotencyKey,
-        });
-        expect(response.encoding).toBe('hex');
-        expect(response.signature).toBeDefined();
-        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
-
-        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
-        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
-        const publicKeyBytes = hexToBytes(`0x${OWNERLESS_TRON_WALLET.pk}`);
-
-        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
-        expect(verified).toBe(true);
-      });
-      it('will fail if the idempotency key is reused with a different body', async () => {
-        const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET.id, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotency_key: idempotencyKey,
-        });
-
-        await expect(
-          privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET.id, {
-            params: { hash: '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321' },
+        it('will succeed if the idempotency key is reused with the same body', async () => {
+          const wallet = tronWallets[index]!;
+          const idempotencyKey = crypto.randomUUID();
+          await privyClient.wallets().rawSign(wallet.id, {
+            params: {
+              hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+            },
             idempotency_key: idempotencyKey,
-          }),
-        ).rejects.toThrow(
-          `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
-        );
-      });
-      it('should be able to sign a message with an authorization context', async () => {
-        const response = await privyClient.wallets().rawSign(P256_OWNED_TRON_WALLET.id, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          authorization_context: p256AuthorizationContext,
+            ...(wallet.authorizationContext && {
+              authorization_context: wallet.authorizationContext,
+            }),
+          });
+
+          const response = await privyClient.wallets().rawSign(wallet.id, {
+            params: {
+              hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+            },
+            idempotency_key: idempotencyKey,
+            ...(wallet.authorizationContext && {
+              authorization_context: wallet.authorizationContext,
+            }),
+          });
+          expect(response.encoding).toBe('hex');
+          expect(response.signature).toBeDefined();
+          expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
+
+          const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
+          const signatureBytes = hexToBytes(response.signature as `0x${string}`);
+          const publicKeyBytes = hexToBytes(`0x${wallet.publicKey}`);
+
+          const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
+          expect(verified).toBe(true);
         });
 
-        expect(response.encoding).toBe('hex');
-        expect(response.signature).toBeDefined();
-        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
+        it('will fail if the idempotency key is reused with a different body', async () => {
+          const wallet = tronWallets[index]!;
+          const idempotencyKey = crypto.randomUUID();
+          await privyClient.wallets().rawSign(wallet.id, {
+            params: {
+              hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+            },
+            idempotency_key: idempotencyKey,
+            ...(wallet.authorizationContext && {
+              authorization_context: wallet.authorizationContext,
+            }),
+          });
 
-        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
-        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
-        const publicKeyBytes = hexToBytes(`0x${P256_OWNED_TRON_WALLET.pk}`);
-
-        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
-        expect(verified).toBe(true);
+          await expect(
+            privyClient.wallets().rawSign(wallet.id, {
+              params: {
+                hash: '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321',
+              },
+              idempotency_key: idempotencyKey,
+              ...(wallet.authorizationContext && {
+                authorization_context: wallet.authorizationContext,
+              }),
+            }),
+          ).rejects.toThrow(
+            `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
+          );
+        });
       });
     });
   });

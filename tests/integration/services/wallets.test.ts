@@ -14,11 +14,7 @@ import {
 } from 'viem/accounts';
 import { generateP256KeyPair } from '@privy-io/node';
 import { OWNERLESS_TRON_WALLET, P256_KEYPAIR, P256_OWNED_TRON_WALLET, TEST_APP } from '../test-config';
-import {
-  setupTestWalletResources,
-  cleanupTestWalletResources,
-  TestWalletResources,
-} from '../test-setup';
+import { setupTestWalletResources, cleanupTestWalletResources, TestWalletResources } from '../test-setup';
 
 describe('PrivyWalletsService', () => {
   const p256AuthorizationContext: AuthorizationContext = {
@@ -37,35 +33,6 @@ describe('PrivyWalletsService', () => {
     if (resources) await cleanupTestWalletResources(resources);
   });
 
-  describe.skip('create', () => {
-    test.each([
-      { chainType: 'ethereum', owner: null },
-      { chainType: 'ethereum', owner: 'p256' },
-      { chainType: 'solana', owner: null },
-      { chainType: 'solana', owner: 'p256' },
-      { chainType: 'tron', owner: null, hasPublicKey: true },
-      { chainType: 'tron', owner: 'p256', hasPublicKey: true },
-    ] as const)('.create($chainType, owner:$owner)', async ({ chainType, owner, hasPublicKey }) => {
-      const walletResponse = await privyClient.wallets().create({
-        chain_type: chainType,
-        owner: owner === 'p256' ? { public_key: P256_KEYPAIR.publicKey } : null,
-      });
-
-      expect(walletResponse.id).toBeDefined();
-      expect(walletResponse.chain_type).toBe(chainType);
-      expect(walletResponse.address).toBeDefined();
-      hasPublicKey && expect(walletResponse.public_key).toBeDefined();
-
-      // Log the details of the created wallets so it can be added to the envfile
-      const OWNER_PREFIX: string = owner === 'p256' ? 'P256_OWNED' : 'OWNERLESS';
-      const CHAIN_TYPE: string = chainType.toUpperCase();
-      console.log(
-        `${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_ID=${walletResponse.id}` +
-          `\n${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_ADDRESS=${walletResponse.address}` +
-          (hasPublicKey ? `\n${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_PK=${walletResponse.public_key}` : ''),
-      );
-    });
-  });
   describe('create idempotency', () => {
     it('will succeed if the idempotency key is reused with the same body', async () => {
       const idempotencyKey = crypto.randomUUID();

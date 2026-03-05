@@ -22,12 +22,14 @@ export interface TestWallet {
 /**
  * Static list of wallet ownership cases for use with describe.each / it.each.
  * Matches the order and ownership values returned by createTestWallets.
+ *
+ * This needs to have an `index` property so jest .each can know it.
  */
 export const WALLET_CASES = [
-  { ownership: 'ownerless' },
-  { ownership: 'key-owned' },
-  { ownership: 'user-owned' },
-  { ownership: 'quorum-owned' },
+  { index: 0, ownership: 'ownerless' },
+  { index: 1, ownership: 'key-owned' },
+  { index: 2, ownership: 'user-owned' },
+  { index: 3, ownership: 'quorum-owned' },
 ] as const;
 
 export async function setupTestWalletResources(): Promise<TestWalletResources> {

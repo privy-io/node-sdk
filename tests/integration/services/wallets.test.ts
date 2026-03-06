@@ -20,6 +20,7 @@ import {
   TestWallet,
   WALLET_CASES,
 } from '../test-setup';
+import { sleep } from '@privy-io/node/internal/utils';
 
 describe('PrivyWalletsService', () => {
   let resources: TestWalletResources;
@@ -144,6 +145,8 @@ describe('PrivyWalletsService', () => {
       expect(wallet.chain_type).toBe('ethereum');
       expect(wallet.address).toBe(viemWallet.address);
 
+      await sleep(300);
+
       const { signature } = await privyClient
         .wallets()
         .ethereum()
@@ -183,6 +186,8 @@ describe('PrivyWalletsService', () => {
       expect(wallet.id).toBeDefined();
       expect(wallet.chain_type).toBe('ethereum');
       expect(wallet.address).toBe(viemWallet.address);
+
+      await sleep(300);
 
       const { signature } = await privyClient
         .wallets()

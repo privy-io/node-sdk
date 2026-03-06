@@ -113,7 +113,11 @@ export async function createTestWallets(
           break;
       }
 
-      const wallet = await client.wallets().create({ chain_type: chainType, owner, owner_id: ownerId });
+      const wallet = await client.wallets().create({
+        chain_type: chainType,
+        ...(owner !== undefined && { owner }),
+        ...(ownerId !== undefined && { owner_id: ownerId }),
+      });
 
       return {
         ownership,

@@ -11,7 +11,7 @@ describe('PrivyKeyQuorumsService', () => {
       apiUrl: TEST_APP.apiUrl,
     });
   });
-  describe.skip('create', () => {
+  describe('create', () => {
     it('should create a key quorum with a two public keys', async () => {
       const keyPair = await generateP256KeyPair();
       const keyPair2 = await generateP256KeyPair();
@@ -28,6 +28,12 @@ describe('PrivyKeyQuorumsService', () => {
         expect.objectContaining({ public_key: keyPair.publicKey }),
         expect.objectContaining({ public_key: keyPair2.publicKey }),
       ]);
+
+      await privyClient.keyQuorums().delete(keyQuorum.id, {
+        authorization_context: {
+          authorization_private_keys: [keyPair.privateKey, keyPair2.privateKey],
+        },
+      });
     });
   });
   describe('update', () => {

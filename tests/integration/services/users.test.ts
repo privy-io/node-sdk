@@ -10,7 +10,7 @@ describe('PrivyUsersService', () => {
       apiUrl: TEST_APP.apiUrl,
     });
   });
-  describe.skip('create', () => {
+  describe('create', () => {
     it('should create a user with a linked email account and a wallet', async () => {
       const user = await privyClient.users().create({
         linked_accounts: [{ type: 'email', address: 'batman@privy.io' }],
@@ -26,6 +26,8 @@ describe('PrivyUsersService', () => {
         expect.objectContaining({ type: 'wallet', chain_type: 'ethereum' }),
       ]);
       expect(user.custom_metadata).toEqual({ key: 'value' });
+
+      await privyClient.users().delete(user.id);
     });
   });
 });

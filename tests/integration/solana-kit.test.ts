@@ -1,5 +1,5 @@
 import { PrivyClient } from '@privy-io/node';
-import { createSolanaKitSigner, SolanaKitSigner } from '@privy-io/node/solana-kit';
+import { createSolanaKitSigner, type SolanaKitSigner } from '@privy-io/node/solana-kit';
 import {
   address,
   assertIsTransactionWithinSizeLimit,
@@ -18,53 +18,45 @@ import {
 } from '@solana/kit';
 import { base58 } from '@scure/base';
 import nacl from 'tweetnacl';
-import { generateTestJWT } from '../helpers/jwt-auth';
 import { createTransferTransaction, SOL_DEVNET_CAIP2 } from '../helpers/solana';
 import {
-  TEST_APP,
-  P256_KEYPAIR,
-  OWNERLESS_SOLANA_WALLET,
-  P256_OWNED_SOLANA_WALLET,
-  USER_OWNED_SOLANA_WALLET,
-} from './test-config';
+  setupTestWalletResources,
+  createTestWallets,
+  cleanupTestWalletResources,
+  TestWalletResources,
+  TestWallet,
+  WALLET_CASES,
+} from './test-setup';
 
 describe('@solana/kit interop', () => {
+  let resources: TestWalletResources;
+  let wallets: TestWallet[];
   let privyClient: PrivyClient;
-  beforeEach(() => {
-    privyClient = new PrivyClient({
-      appId: TEST_APP.id,
-      appSecret: TEST_APP.secret,
-      apiUrl: TEST_APP.apiUrl,
-    });
+
+  beforeAll(async () => {
+    resources = await setupTestWalletResources();
+    wallets = await createTestWallets(resources, 'solana');
+    privyClient = resources.client;
+  });
+
+  afterAll(async () => {
+    if (resources) await cleanupTestWalletResources(resources);
   });
 
   describe('using a Privy wallet as a signer', () => {
-    describe.each([
-      // Case 1. Ownerless wallet
-      { owner: null, walletId: OWNERLESS_SOLANA_WALLET.id, walletAddress: OWNERLESS_SOLANA_WALLET.address },
-      // Case 2. P256-owned wallet
-      {
-        owner: 'p256',
-        walletId: P256_OWNED_SOLANA_WALLET.id,
-        walletAddress: P256_OWNED_SOLANA_WALLET.address,
-      },
-      // Case 3. User-owned wallet
-      {
-        owner: 'user',
-        walletId: USER_OWNED_SOLANA_WALLET.id,
-        walletAddress: USER_OWNED_SOLANA_WALLET.address,
-      },
-    ] as const)('for a wallet with owner:$owner', ({ owner, walletId, walletAddress }) => {
+    describe.each(WALLET_CASES)('$ownership', ({ index }) => {
+      let wallet: TestWallet;
+      let walletAddress: Address;
       let privySigner: SolanaKitSigner;
-      beforeEach(async () => {
+
+      beforeEach(() => {
+        wallet = wallets[index]!;
+        walletAddress = address(wallet.address);
         privySigner = createSolanaKitSigner(privyClient, {
-          walletId,
-          address: address(walletAddress),
+          walletId: wallet.id,
+          address: walletAddress,
           caip2: SOL_DEVNET_CAIP2,
-          authorizationContext: {
-            ...(owner === 'p256' ? { authorization_private_keys: [P256_KEYPAIR.privateKey] } : {}),
-            ...(owner === 'user' ? { user_jwts: [await generateTestJWT()] } : {}),
-          },
+          authorizationContext: wallet.authorizationContext ?? {},
         });
       });
 

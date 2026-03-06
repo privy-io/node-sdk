@@ -73,7 +73,6 @@ jobs:
     env:
       TEST_APP_SECRET: ${{ secrets.TEST_APP_SECRET }}
       JWT_AUTH_SK: ${{ secrets.JWT_AUTH_SK }}
-      P256_PRIVATE_KEY: ${{ secrets.P256_PRIVATE_KEY }}
       TEST_APP_TEST_ACCOUNT_OTP: ${{ secrets.TEST_APP_TEST_ACCOUNT_OTP }}
     name: test
     runs-on: ${{ github.repository == 'stainless-sdks/privy-api-client-typescript' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}

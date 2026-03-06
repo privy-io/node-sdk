@@ -12,7 +12,7 @@ describe('PrivyPoliciesService', () => {
       apiUrl: TEST_APP.apiUrl,
     });
   });
-  describe.skip('create', () => {
+  describe('create', () => {
     it('should create a policy', async () => {
       const policy = await privyClient.policies().create({
         version: '1.0',
@@ -44,6 +44,8 @@ describe('PrivyPoliciesService', () => {
           method: 'eth_sendTransaction',
         }),
       ]);
+
+      await privyClient.policies().delete(policy.id, {});
     });
   });
   describe('create idempotency', () => {

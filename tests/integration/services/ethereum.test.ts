@@ -1,11 +1,8 @@
-import { PrivyAPI } from '@privy-io/node/client';
 import { PrivyEthereumService } from '@privy-io/node';
 import { PrivyClient } from '@privy-io/node';
-import { generateP256KeyPair } from '@privy-io/node';
 import { Hex, verifyHash, verifyMessage, verifyTypedData } from 'viem';
 import { verifyAuthorization } from 'viem/utils';
 
-import { TEST_APP } from '../test-config';
 import {
   setupTestWalletResources,
   createTestWallets,

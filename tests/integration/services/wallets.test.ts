@@ -273,7 +273,6 @@ describe('PrivyWalletsService', () => {
           const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
           expect(verified).toBe(true);
         });
-
       });
     });
   });

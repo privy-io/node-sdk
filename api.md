@@ -227,6 +227,34 @@ Methods:
 - <code title="patch /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_update</a>(keyQuorumID, { ...params }) -> KeyQuorum</code>
 - <code title="get /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">get</a>(keyQuorumID) -> KeyQuorum</code>
 
+# Apps
+
+Types:
+
+- <code><a href="./src/resources/apps/apps.ts">AppResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmailInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">WalletInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">PhoneInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">UserInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AllowlistEntry</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/apps/{app_id}">client.apps.<a href="./src/resources/apps/apps.ts">get</a>(appID) -> AppResponse</code>
+
+## Allowlist
+
+Types:
+
+- <code><a href="./src/resources/apps/allowlist.ts">AllowlistListResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">create</a>(appID, { ...params }) -> AllowlistEntry</code>
+- <code title="get /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">list</a>(appID) -> AllowlistListResponse</code>
+- <code title="delete /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">delete</a>(appID, { ...params }) -> AllowlistDeletionResponse</code>
+
 # ClientAuth
 
 Types:
@@ -281,18 +309,6 @@ Types:
 Types:
 
 - <code><a href="./src/resources/analytics.ts">AnalyticsEventInput</a></code>
-
-# Apps
-
-Types:
-
-- <code><a href="./src/resources/apps.ts">AppResponse</a></code>
-- <code><a href="./src/resources/apps.ts">EmailInviteInput</a></code>
-- <code><a href="./src/resources/apps.ts">WalletInviteInput</a></code>
-- <code><a href="./src/resources/apps.ts">PhoneInviteInput</a></code>
-- <code><a href="./src/resources/apps.ts">UserInviteInput</a></code>
-- <code><a href="./src/resources/apps.ts">AllowlistEntry</a></code>
-- <code><a href="./src/resources/apps.ts">AllowlistDeletionResponse</a></code>
 
 # Aggregations
 

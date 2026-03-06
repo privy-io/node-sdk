@@ -284,13 +284,8 @@ Types:
 
 Types:
 
-- <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserUnlinkedAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserUpdatedAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserTransferredAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserWalletCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">MfaEnabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionBroadcastedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionExecutionRevertedWebhookPayload</a></code>
@@ -298,23 +293,31 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">TransactionFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionReplacedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionProviderErrorWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserUnlinkedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserUpdatedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserTransferredAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserWalletCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">MfaEnabledWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationCompletedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteCancelledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentAuthorizerMember</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentAuthorizer</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentAuthorizedWebhookPayload</a></code>
 
 # Accounts
 
@@ -323,8 +326,12 @@ Types:
 - <code><a href="./src/resources/accounts.ts">AccountWallet</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountResponse</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountWalletConfigurationItem</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountDisplayName</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountWalletsConfiguration</a></code>
 - <code><a href="./src/resources/accounts.ts">CreateAccountInput</a></code>
+- <code><a href="./src/resources/accounts.ts">UpdateAccountInput</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountsListResponse</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountBalanceResponse</a></code>
 
 # Yield
 

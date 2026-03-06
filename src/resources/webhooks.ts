@@ -6,148 +6,43 @@ import * as UsersAPI from './users';
 export class Webhooks extends APIResource {}
 
 /**
- * Payload for the user.created webhook event.
+ * Payload for the mfa.enabled webhook event.
  */
-export interface UserCreatedWebhookPayload {
+export interface MfaEnabledWebhookPayload {
+  /**
+   * The MFA method that was enabled.
+   */
+  method: 'sms' | 'totp' | 'passkey';
+
   /**
    * The type of webhook event.
    */
-  type: 'user.created';
+  type: 'mfa.enabled';
 
   /**
-   * A Privy user object.
+   * The ID of the user who enabled MFA.
    */
-  user: UsersAPI.User;
+  user_id: string;
 }
 
 /**
- * Payload for the user.authenticated webhook event.
+ * Payload for the mfa.disabled webhook event.
  */
-export interface UserAuthenticatedWebhookPayload {
+export interface MfaDisabledWebhookPayload {
   /**
-   * A linked account for the user.
+   * The MFA method that was disabled.
    */
-  account: UsersAPI.LinkedAccount;
+  method: 'sms' | 'totp' | 'passkey';
 
   /**
    * The type of webhook event.
    */
-  type: 'user.authenticated';
+  type: 'mfa.disabled';
 
   /**
-   * A Privy user object.
+   * The ID of the user who disabled MFA.
    */
-  user: UsersAPI.User;
-}
-
-/**
- * Payload for the user.linked_account webhook event.
- */
-export interface UserLinkedAccountWebhookPayload {
-  /**
-   * A linked account for the user.
-   */
-  account: UsersAPI.LinkedAccount;
-
-  /**
-   * The type of webhook event.
-   */
-  type: 'user.linked_account';
-
-  /**
-   * A Privy user object.
-   */
-  user: UsersAPI.User;
-}
-
-/**
- * Payload for the user.unlinked_account webhook event.
- */
-export interface UserUnlinkedAccountWebhookPayload {
-  /**
-   * A linked account for the user.
-   */
-  account: UsersAPI.LinkedAccount;
-
-  /**
-   * The type of webhook event.
-   */
-  type: 'user.unlinked_account';
-
-  /**
-   * A Privy user object.
-   */
-  user: UsersAPI.User;
-}
-
-/**
- * Payload for the user.updated_account webhook event.
- */
-export interface UserUpdatedAccountWebhookPayload {
-  /**
-   * A linked account for the user.
-   */
-  account: UsersAPI.LinkedAccount;
-
-  /**
-   * The type of webhook event.
-   */
-  type: 'user.updated_account';
-
-  /**
-   * A Privy user object.
-   */
-  user: UsersAPI.User;
-}
-
-/**
- * Payload for the user.transferred_account webhook event.
- */
-export interface UserTransferredAccountWebhookPayload {
-  /**
-   * A linked account for the user.
-   */
-  account: UsersAPI.LinkedAccount;
-
-  deletedUser: true;
-
-  fromUser: UserTransferredAccountWebhookPayload.FromUser;
-
-  /**
-   * A Privy user object.
-   */
-  toUser: UsersAPI.User;
-
-  /**
-   * The type of webhook event.
-   */
-  type: 'user.transferred_account';
-}
-
-export namespace UserTransferredAccountWebhookPayload {
-  export interface FromUser {
-    id: string;
-  }
-}
-
-/**
- * Payload for the user.wallet_created webhook event.
- */
-export interface UserWalletCreatedWebhookPayload {
-  /**
-   * The type of webhook event.
-   */
-  type: 'user.wallet_created';
-
-  /**
-   * A Privy user object.
-   */
-  user: UsersAPI.User;
-
-  /**
-   * Base schema for wallet accounts linked to the user.
-   */
-  wallet: UsersAPI.LinkedAccountBaseWallet;
+  user_id: string;
 }
 
 /**
@@ -410,6 +305,151 @@ export interface TransactionProviderErrorWebhookPayload {
    * The ID of the wallet that initiated the transaction.
    */
   wallet_id: string;
+}
+
+/**
+ * Payload for the user.created webhook event.
+ */
+export interface UserCreatedWebhookPayload {
+  /**
+   * The type of webhook event.
+   */
+  type: 'user.created';
+
+  /**
+   * A Privy user object.
+   */
+  user: UsersAPI.User;
+}
+
+/**
+ * Payload for the user.authenticated webhook event.
+ */
+export interface UserAuthenticatedWebhookPayload {
+  /**
+   * A linked account for the user.
+   */
+  account: UsersAPI.LinkedAccount;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'user.authenticated';
+
+  /**
+   * A Privy user object.
+   */
+  user: UsersAPI.User;
+}
+
+/**
+ * Payload for the user.linked_account webhook event.
+ */
+export interface UserLinkedAccountWebhookPayload {
+  /**
+   * A linked account for the user.
+   */
+  account: UsersAPI.LinkedAccount;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'user.linked_account';
+
+  /**
+   * A Privy user object.
+   */
+  user: UsersAPI.User;
+}
+
+/**
+ * Payload for the user.unlinked_account webhook event.
+ */
+export interface UserUnlinkedAccountWebhookPayload {
+  /**
+   * A linked account for the user.
+   */
+  account: UsersAPI.LinkedAccount;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'user.unlinked_account';
+
+  /**
+   * A Privy user object.
+   */
+  user: UsersAPI.User;
+}
+
+/**
+ * Payload for the user.updated_account webhook event.
+ */
+export interface UserUpdatedAccountWebhookPayload {
+  /**
+   * A linked account for the user.
+   */
+  account: UsersAPI.LinkedAccount;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'user.updated_account';
+
+  /**
+   * A Privy user object.
+   */
+  user: UsersAPI.User;
+}
+
+/**
+ * Payload for the user.transferred_account webhook event.
+ */
+export interface UserTransferredAccountWebhookPayload {
+  /**
+   * A linked account for the user.
+   */
+  account: UsersAPI.LinkedAccount;
+
+  deletedUser: true;
+
+  fromUser: UserTransferredAccountWebhookPayload.FromUser;
+
+  /**
+   * A Privy user object.
+   */
+  toUser: UsersAPI.User;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'user.transferred_account';
+}
+
+export namespace UserTransferredAccountWebhookPayload {
+  export interface FromUser {
+    id: string;
+  }
+}
+
+/**
+ * Payload for the user.wallet_created webhook event.
+ */
+export interface UserWalletCreatedWebhookPayload {
+  /**
+   * The type of webhook event.
+   */
+  type: 'user.wallet_created';
+
+  /**
+   * A Privy user object.
+   */
+  user: UsersAPI.User;
+
+  /**
+   * Base schema for wallet accounts linked to the user.
+   */
+  wallet: UsersAPI.LinkedAccountBaseWallet;
 }
 
 /**
@@ -789,321 +829,90 @@ export interface WalletRecoveredWebhookPayload {
 }
 
 /**
- * Payload for the mfa.enabled webhook event.
+ * Payload for the yield.deposit.confirmed webhook event.
  */
-export interface MfaEnabledWebhookPayload {
-  /**
-   * The MFA method that was enabled.
-   */
-  method: 'sms' | 'totp' | 'passkey';
+export interface YieldDepositConfirmedWebhookPayload {
+  assets: string;
+
+  block_number: number;
+
+  caip2: string;
+
+  log_index: number;
+
+  owner: string;
+
+  sender: string;
+
+  shares: string;
+
+  transaction_hash: string;
 
   /**
    * The type of webhook event.
    */
-  type: 'mfa.enabled';
+  type: 'yield.deposit.confirmed';
 
-  /**
-   * The ID of the user who enabled MFA.
-   */
-  user_id: string;
+  vault_address: string;
 }
 
 /**
- * Payload for the mfa.disabled webhook event.
+ * Payload for the yield.withdraw.confirmed webhook event.
  */
-export interface MfaDisabledWebhookPayload {
-  /**
-   * The MFA method that was disabled.
-   */
-  method: 'sms' | 'totp' | 'passkey';
+export interface YieldWithdrawConfirmedWebhookPayload {
+  assets: string;
+
+  block_number: number;
+
+  caip2: string;
+
+  log_index: number;
+
+  owner: string;
+
+  receiver: string;
+
+  sender: string;
+
+  shares: string;
+
+  transaction_hash: string;
 
   /**
    * The type of webhook event.
    */
-  type: 'mfa.disabled';
+  type: 'yield.withdraw.confirmed';
 
-  /**
-   * The ID of the user who disabled MFA.
-   */
-  user_id: string;
+  vault_address: string;
 }
 
 /**
- * Payload for the kraken_embed.verification_completed webhook event.
+ * Union of all webhook payload schemas.
  */
-export interface KrakenEmbedVerificationCompletedWebhookPayload {
-  /**
-   * ISO 8601 timestamp of when verification completed.
-   */
-  completed_at: string;
-
-  /**
-   * The type of webhook event.
-   */
-  type: 'kraken_embed.verification_completed';
-
-  /**
-   * The ID of the user.
-   */
-  user_id: string;
-}
-
-/**
- * Payload for the kraken_embed.verification_failed webhook event.
- */
-export interface KrakenEmbedVerificationFailedWebhookPayload {
-  /**
-   * ISO 8601 timestamp of when verification failed.
-   */
-  failed_at: string;
-
-  /**
-   * The reason for the failure.
-   */
-  failure_reason: 'timeout' | 'api_error' | 'disabled_or_closed';
-
-  /**
-   * The type of webhook event.
-   */
-  type: 'kraken_embed.verification_failed';
-
-  /**
-   * The ID of the user.
-   */
-  user_id: string;
-
-  /**
-   * The user's status at the time of failure.
-   */
-  status?:
-    | KrakenEmbedVerificationFailedWebhookPayload.UnionMember0
-    | KrakenEmbedVerificationFailedWebhookPayload.UnionMember1
-    | KrakenEmbedVerificationFailedWebhookPayload.UnionMember2;
-}
-
-export namespace KrakenEmbedVerificationFailedWebhookPayload {
-  export interface UnionMember0 {
-    required_actions: Array<
-      UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
-    >;
-
-    state: 'ok';
-  }
-
-  export namespace UnionMember0 {
-    export interface UnionMember0 {
-      action_type: 'verification';
-
-      deadline: string | null;
-
-      reasons: Array<string>;
-
-      verification_type:
-        | 'identity'
-        | 'residence'
-        | 'selfie'
-        | 'sanctions_check'
-        | 'pep_check'
-        | 'negative_news_check'
-        | 'tax_id';
-    }
-
-    export interface UnionMember1 {
-      action_type: 'provide_details';
-
-      deadline: string | null;
-
-      details_type:
-        | UnionMember1.UnionMember0
-        | UnionMember1.FullNameType
-        | UnionMember1.DateOfBirthType
-        | UnionMember1.CityOfBirthType
-        | UnionMember1.CountryOfBirthType
-        | UnionMember1.NationalitiesType
-        | UnionMember1.ResidenceType
-        | UnionMember1.PhoneType
-        | UnionMember1.OccupationType
-        | UnionMember1.EmployerType
-        | UnionMember1.TaxIdsType
-        | UnionMember1.ClientIdentifierType;
-
-      reason: string | null;
-    }
-
-    export namespace UnionMember1 {
-      export interface UnionMember0 {
-        type: 'terms_of_service';
-
-        version?: number;
-      }
-
-      export interface FullNameType {
-        type: 'full_name';
-      }
-
-      export interface DateOfBirthType {
-        type: 'date_of_birth';
-      }
-
-      export interface CityOfBirthType {
-        type: 'city_of_birth';
-      }
-
-      export interface CountryOfBirthType {
-        type: 'country_of_birth';
-      }
-
-      export interface NationalitiesType {
-        type: 'nationalities';
-      }
-
-      export interface ResidenceType {
-        type: 'residence';
-      }
-
-      export interface PhoneType {
-        type: 'phone';
-      }
-
-      export interface OccupationType {
-        type: 'occupation';
-      }
-
-      export interface EmployerType {
-        type: 'employer';
-      }
-
-      export interface TaxIdsType {
-        type: 'tax_ids';
-      }
-
-      export interface ClientIdentifierType {
-        type: 'client_identifier';
-      }
-    }
-
-    export interface UnionMember2 {
-      action_type: 'wait';
-
-      wait_reason_code: string;
-    }
-  }
-
-  export interface UnionMember1 {
-    reasons: Array<string>;
-
-    required_actions: Array<
-      UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2
-    >;
-
-    state: 'disabled';
-  }
-
-  export namespace UnionMember1 {
-    export interface UnionMember0 {
-      action_type: 'verification';
-
-      deadline: string | null;
-
-      reasons: Array<string>;
-
-      verification_type:
-        | 'identity'
-        | 'residence'
-        | 'selfie'
-        | 'sanctions_check'
-        | 'pep_check'
-        | 'negative_news_check'
-        | 'tax_id';
-    }
-
-    export interface UnionMember1 {
-      action_type: 'provide_details';
-
-      deadline: string | null;
-
-      details_type:
-        | UnionMember1.UnionMember0
-        | UnionMember1.FullNameType
-        | UnionMember1.DateOfBirthType
-        | UnionMember1.CityOfBirthType
-        | UnionMember1.CountryOfBirthType
-        | UnionMember1.NationalitiesType
-        | UnionMember1.ResidenceType
-        | UnionMember1.PhoneType
-        | UnionMember1.OccupationType
-        | UnionMember1.EmployerType
-        | UnionMember1.TaxIdsType
-        | UnionMember1.ClientIdentifierType;
-
-      reason: string | null;
-    }
-
-    export namespace UnionMember1 {
-      export interface UnionMember0 {
-        type: 'terms_of_service';
-
-        version?: number;
-      }
-
-      export interface FullNameType {
-        type: 'full_name';
-      }
-
-      export interface DateOfBirthType {
-        type: 'date_of_birth';
-      }
-
-      export interface CityOfBirthType {
-        type: 'city_of_birth';
-      }
-
-      export interface CountryOfBirthType {
-        type: 'country_of_birth';
-      }
-
-      export interface NationalitiesType {
-        type: 'nationalities';
-      }
-
-      export interface ResidenceType {
-        type: 'residence';
-      }
-
-      export interface PhoneType {
-        type: 'phone';
-      }
-
-      export interface OccupationType {
-        type: 'occupation';
-      }
-
-      export interface EmployerType {
-        type: 'employer';
-      }
-
-      export interface TaxIdsType {
-        type: 'tax_ids';
-      }
-
-      export interface ClientIdentifierType {
-        type: 'client_identifier';
-      }
-    }
-
-    export interface UnionMember2 {
-      action_type: 'wait';
-
-      wait_reason_code: string;
-    }
-  }
-
-  export interface UnionMember2 {
-    reasons: Array<string>;
-
-    state: 'closed';
-  }
-}
+export type WebhookPayload =
+  | UserCreatedWebhookPayload
+  | UserAuthenticatedWebhookPayload
+  | UserLinkedAccountWebhookPayload
+  | UserUnlinkedAccountWebhookPayload
+  | UserUpdatedAccountWebhookPayload
+  | UserTransferredAccountWebhookPayload
+  | UserWalletCreatedWebhookPayload
+  | TransactionBroadcastedWebhookPayload
+  | TransactionConfirmedWebhookPayload
+  | TransactionExecutionRevertedWebhookPayload
+  | TransactionStillPendingWebhookPayload
+  | TransactionFailedWebhookPayload
+  | TransactionReplacedWebhookPayload
+  | TransactionProviderErrorWebhookPayload
+  | FundsDepositedWebhookPayload
+  | FundsWithdrawnWebhookPayload
+  | PrivateKeyExportWebhookPayload
+  | WalletRecoverySetupWebhookPayload
+  | WalletRecoveredWebhookPayload
+  | MfaEnabledWebhookPayload
+  | MfaDisabledWebhookPayload
+  | YieldDepositConfirmedWebhookPayload
+  | YieldWithdrawConfirmedWebhookPayload;
 
 /**
  * Payload for the kraken_embed.quote_executed webhook event.
@@ -1253,72 +1062,160 @@ export interface KrakenEmbedUserClosedWebhookPayload {
 }
 
 /**
- * Payload for the yield.deposit.confirmed webhook event.
+ * A member of an intent authorizer quorum (user or key).
  */
-export interface YieldDepositConfirmedWebhookPayload {
-  assets: string;
-
-  block_number: number;
-
-  caip2: string;
-
-  log_index: number;
-
-  owner: string;
-
-  sender: string;
-
-  shares: string;
-
-  transaction_hash: string;
+export interface IntentAuthorizerMember {
+  /**
+   * Type of authorizer member.
+   */
+  type: 'user' | 'key';
 
   /**
-   * The type of webhook event.
+   * Public key of the authorizer (for key members).
    */
-  type: 'yield.deposit.confirmed';
+  public_key?: string;
 
-  vault_address: string;
+  /**
+   * User ID of the authorizer (for user members).
+   */
+  user_id?: string;
 }
 
 /**
- * Payload for the yield.withdraw.confirmed webhook event.
+ * A key quorum authorizer for an intent, including threshold and members.
  */
-export interface YieldWithdrawConfirmedWebhookPayload {
-  assets: string;
+export interface IntentAuthorizer {
+  /**
+   * Members who can provide signatures for this quorum.
+   */
+  members: Array<IntentAuthorizerMember>;
 
-  block_number: number;
+  /**
+   * Number of signatures required from this quorum.
+   */
+  threshold: number;
 
-  caip2: string;
+  /**
+   * Display name of the key quorum.
+   */
+  display_name?: string;
+}
 
-  log_index: number;
+/**
+ * Payload for the intent.created webhook event.
+ */
+export interface IntentCreatedWebhookPayload {
+  /**
+   * ISO 8601 timestamp when the intent was created.
+   */
+  created_at: string;
 
-  owner: string;
+  /**
+   * ISO 8601 timestamp when the intent expires.
+   */
+  expires_at: string;
 
-  receiver: string;
+  /**
+   * The unique ID of the intent.
+   */
+  intent_id: string;
 
-  sender: string;
+  /**
+   * The type of resource the intent modifies.
+   */
+  intent_type: 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'WALLET';
 
-  shares: string;
-
-  transaction_hash: string;
+  /**
+   * The current status of the intent.
+   */
+  status: string;
 
   /**
    * The type of webhook event.
    */
-  type: 'yield.withdraw.confirmed';
+  type: 'intent.created';
 
-  vault_address: string;
+  /**
+   * Key quorums that can authorize this intent, including their thresholds and
+   * members.
+   */
+  authorizers?: Array<IntentAuthorizer>;
+
+  /**
+   * Display name of the user who created the intent.
+   */
+  created_by_display_name?: string;
+
+  /**
+   * The ID of the user who created the intent.
+   */
+  created_by_id?: string;
+}
+
+/**
+ * Payload for the intent.authorized webhook event.
+ */
+export interface IntentAuthorizedWebhookPayload {
+  /**
+   * ISO 8601 timestamp when the authorization was recorded.
+   */
+  authorized_at: string;
+
+  /**
+   * ISO 8601 timestamp when the intent was created.
+   */
+  created_at: string;
+
+  /**
+   * ISO 8601 timestamp when the intent expires.
+   */
+  expires_at: string;
+
+  /**
+   * The unique ID of the intent.
+   */
+  intent_id: string;
+
+  /**
+   * The type of resource the intent modifies.
+   */
+  intent_type: 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'WALLET';
+
+  /**
+   * The current status of the intent.
+   */
+  status: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'intent.authorized';
+
+  /**
+   * Display name of the user who authorized the intent.
+   */
+  authorized_by_display_name?: string;
+
+  /**
+   * ID of the user who authorized the intent.
+   */
+  authorized_by_id?: string;
+
+  /**
+   * Display name of the user who created the intent.
+   */
+  created_by_display_name?: string;
+
+  /**
+   * The ID of the user who created the intent.
+   */
+  created_by_id?: string;
 }
 
 export declare namespace Webhooks {
   export {
-    type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
-    type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
-    type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
-    type UserUnlinkedAccountWebhookPayload as UserUnlinkedAccountWebhookPayload,
-    type UserUpdatedAccountWebhookPayload as UserUpdatedAccountWebhookPayload,
-    type UserTransferredAccountWebhookPayload as UserTransferredAccountWebhookPayload,
-    type UserWalletCreatedWebhookPayload as UserWalletCreatedWebhookPayload,
+    type MfaEnabledWebhookPayload as MfaEnabledWebhookPayload,
+    type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
     type TransactionBroadcastedWebhookPayload as TransactionBroadcastedWebhookPayload,
     type TransactionConfirmedWebhookPayload as TransactionConfirmedWebhookPayload,
     type TransactionExecutionRevertedWebhookPayload as TransactionExecutionRevertedWebhookPayload,
@@ -1326,22 +1223,30 @@ export declare namespace Webhooks {
     type TransactionFailedWebhookPayload as TransactionFailedWebhookPayload,
     type TransactionReplacedWebhookPayload as TransactionReplacedWebhookPayload,
     type TransactionProviderErrorWebhookPayload as TransactionProviderErrorWebhookPayload,
+    type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
+    type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
+    type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
+    type UserUnlinkedAccountWebhookPayload as UserUnlinkedAccountWebhookPayload,
+    type UserUpdatedAccountWebhookPayload as UserUpdatedAccountWebhookPayload,
+    type UserTransferredAccountWebhookPayload as UserTransferredAccountWebhookPayload,
+    type UserWalletCreatedWebhookPayload as UserWalletCreatedWebhookPayload,
     type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
     type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,
     type PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload,
     type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
     type WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload,
-    type MfaEnabledWebhookPayload as MfaEnabledWebhookPayload,
-    type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
-    type KrakenEmbedVerificationCompletedWebhookPayload as KrakenEmbedVerificationCompletedWebhookPayload,
-    type KrakenEmbedVerificationFailedWebhookPayload as KrakenEmbedVerificationFailedWebhookPayload,
+    type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
+    type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
+    type WebhookPayload as WebhookPayload,
     type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
     type KrakenEmbedQuoteExecutionFailedWebhookPayload as KrakenEmbedQuoteExecutionFailedWebhookPayload,
     type KrakenEmbedQuoteCancelledWebhookPayload as KrakenEmbedQuoteCancelledWebhookPayload,
     type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
     type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
     type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
-    type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
-    type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
+    type IntentAuthorizerMember as IntentAuthorizerMember,
+    type IntentAuthorizer as IntentAuthorizer,
+    type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
+    type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
   };
 }

@@ -1063,58 +1063,18 @@ export interface KrakenEmbedUserClosedWebhookPayload {
 }
 
 /**
- * A member of an intent authorizer quorum (user or key).
- */
-export interface IntentAuthorizerMember {
-  /**
-   * Type of authorizer member.
-   */
-  type: 'user' | 'key';
-
-  /**
-   * Public key of the authorizer (for key members).
-   */
-  public_key?: string;
-
-  /**
-   * User ID of the authorizer (for user members).
-   */
-  user_id?: string;
-}
-
-/**
- * A key quorum authorizer for an intent, including threshold and members.
- */
-export interface IntentAuthorizer {
-  /**
-   * Members who can provide signatures for this quorum.
-   */
-  members: Array<IntentAuthorizerMember>;
-
-  /**
-   * Number of signatures required from this quorum.
-   */
-  threshold: number;
-
-  /**
-   * Display name of the key quorum.
-   */
-  display_name?: string;
-}
-
-/**
  * Payload for the intent.created webhook event.
  */
 export interface IntentCreatedWebhookPayload {
   /**
-   * ISO 8601 timestamp when the intent was created.
+   * Unix timestamp when the intent was created.
    */
-  created_at: string;
+  created_at: number;
 
   /**
-   * ISO 8601 timestamp when the intent expires.
+   * Unix timestamp when the intent expires.
    */
-  expires_at: string;
+  expires_at: number;
 
   /**
    * The unique ID of the intent.
@@ -1137,10 +1097,9 @@ export interface IntentCreatedWebhookPayload {
   type: 'intent.created';
 
   /**
-   * Key quorums that can authorize this intent, including their thresholds and
-   * members.
+   * Key quorums that can authorize this intent.
    */
-  authorizers?: Array<IntentAuthorizer>;
+  authorization_details?: Array<IntentsAPI.IntentAuthorization>;
 
   /**
    * Display name of the user who created the intent.
@@ -1158,19 +1117,19 @@ export interface IntentCreatedWebhookPayload {
  */
 export interface IntentAuthorizedWebhookPayload {
   /**
-   * ISO 8601 timestamp when the authorization was recorded.
+   * Unix timestamp when the authorization was recorded.
    */
-  authorized_at: string;
+  authorized_at: number;
 
   /**
-   * ISO 8601 timestamp when the intent was created.
+   * Unix timestamp when the intent was created.
    */
-  created_at: string;
+  created_at: number;
 
   /**
-   * ISO 8601 timestamp when the intent expires.
+   * Unix timestamp when the intent expires.
    */
-  expires_at: string;
+  expires_at: number;
 
   /**
    * The unique ID of the intent.
@@ -1183,6 +1142,11 @@ export interface IntentAuthorizedWebhookPayload {
   intent_type: IntentsAPI.IntentType;
 
   /**
+   * A leaf member (user or key) of a nested key quorum in an intent authorization.
+   */
+  member: IntentsAPI.IntentAuthorizationKeyQuorumMember;
+
+  /**
    * The current status of the intent.
    */
   status: string;
@@ -1191,16 +1155,6 @@ export interface IntentAuthorizedWebhookPayload {
    * The type of webhook event.
    */
   type: 'intent.authorized';
-
-  /**
-   * Display name of the user who authorized the intent.
-   */
-  authorized_by_display_name?: string;
-
-  /**
-   * ID of the user who authorized the intent.
-   */
-  authorized_by_id?: string;
 
   /**
    * Display name of the user who created the intent.
@@ -1245,8 +1199,6 @@ export declare namespace Webhooks {
     type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
     type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
     type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
-    type IntentAuthorizerMember as IntentAuthorizerMember,
-    type IntentAuthorizer as IntentAuthorizer,
     type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
     type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
   };

@@ -250,6 +250,7 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">FiatOnrampSource</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatOnrampDestination</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatOnrampEnvironment</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampProvider</a></code>
 - <code><a href="./src/resources/client-auth.ts">GetFiatOnrampQuotesInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatOnrampQuote</a></code>
 - <code><a href="./src/resources/client-auth.ts">GetFiatOnrampQuotesResponse</a></code>
@@ -286,6 +287,12 @@ Types:
 Types:
 
 - <code><a href="./src/resources/apps.ts">AppResponse</a></code>
+- <code><a href="./src/resources/apps.ts">EmailInviteInput</a></code>
+- <code><a href="./src/resources/apps.ts">WalletInviteInput</a></code>
+- <code><a href="./src/resources/apps.ts">PhoneInviteInput</a></code>
+- <code><a href="./src/resources/apps.ts">UserInviteInput</a></code>
+- <code><a href="./src/resources/apps.ts">AllowlistEntry</a></code>
+- <code><a href="./src/resources/apps.ts">AllowlistDeletionResponse</a></code>
 
 # Aggregations
 
@@ -332,8 +339,6 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">IntentAuthorizerMember</a></code>
-- <code><a href="./src/resources/webhooks.ts">IntentAuthorizer</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentAuthorizedWebhookPayload</a></code>
 

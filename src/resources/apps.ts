@@ -254,6 +254,68 @@ export namespace AppResponse {
   }
 }
 
+/**
+ * Allowlist invite input for an email address.
+ */
+export interface EmailInviteInput {
+  type: 'email';
+
+  value: string;
+}
+
+/**
+ * Allowlist invite input for a wallet address.
+ */
+export interface WalletInviteInput {
+  type: 'wallet';
+
+  value: string;
+}
+
+/**
+ * Allowlist invite input for a phone number.
+ */
+export interface PhoneInviteInput {
+  type: 'phone';
+
+  value: string;
+}
+
+/**
+ * Input for adding or removing an allowlist entry. Discriminated by type.
+ */
+export type UserInviteInput = EmailInviteInput | WalletInviteInput | PhoneInviteInput;
+
+/**
+ * An allowlist entry for an app.
+ */
+export interface AllowlistEntry {
+  id: string;
+
+  acceptedAt: number | null;
+
+  appId: string;
+
+  type: string;
+
+  value: string;
+}
+
+/**
+ * Confirmation response for deleting an allowlist entry.
+ */
+export interface AllowlistDeletionResponse {
+  message: string;
+}
+
 export declare namespace Apps {
-  export { type AppResponse as AppResponse };
+  export {
+    type AppResponse as AppResponse,
+    type EmailInviteInput as EmailInviteInput,
+    type WalletInviteInput as WalletInviteInput,
+    type PhoneInviteInput as PhoneInviteInput,
+    type UserInviteInput as UserInviteInput,
+    type AllowlistEntry as AllowlistEntry,
+    type AllowlistDeletionResponse as AllowlistDeletionResponse,
+  };
 }

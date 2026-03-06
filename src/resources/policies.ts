@@ -779,6 +779,10 @@ export interface PolicyDeleteRuleResponse {
   success: boolean;
 }
 
+/**
+ * A rule that defines the conditions and action to take if the conditions are
+ * true.
+ */
 export interface PolicyUpdateRuleResponse {
   id: string;
 

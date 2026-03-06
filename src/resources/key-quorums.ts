@@ -15,7 +15,14 @@ export class KeyQuorums extends APIResource {
    *
    * @example
    * ```ts
-   * const keyQuorum = await client.keyQuorums.create();
+   * const keyQuorum = await client.keyQuorums.create({
+   *   authorization_threshold: 1,
+   *   display_name: 'Prod key quorum',
+   *   public_keys: [
+   *     'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx4aoeD72yykviK+f/ckqE2CItVIG\n1rCnvC3/XZ1HgpOcMEMialRmTrqIK4oZlYd1RfxU3za/C9yjhboIuoPD3g==',
+   *     'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAErzZtQr/bMIh3Y8f9ZqseB9i/AfjQ\nhu+agbNqXcJy/TfoNqvc/Y3Mh7gIZ8ZLXQEykycx4mYSpqrxp1lBKqsZDQ==',
+   *   ],
+   * });
    * ```
    */
   create(body: KeyQuorumCreateParams, options?: RequestOptions): APIPromise<KeyQuorum> {
@@ -58,6 +65,13 @@ export class KeyQuorums extends APIResource {
    * ```ts
    * const keyQuorum = await client.keyQuorums._update(
    *   'key_quorum_id',
+   *   {
+   *     authorization_threshold: 1,
+   *     display_name: 'Prod key quorum',
+   *     public_keys: [
+   *       'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx4aoeD72yykviK+f/ckqE2CItVIG\n1rCnvC3/XZ1HgpOcMEMialRmTrqIK4oZlYd1RfxU3za/C9yjhboIuoPD3g==',
+   *     ],
+   *   },
    * );
    * ```
    */

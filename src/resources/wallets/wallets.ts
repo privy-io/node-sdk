@@ -154,8 +154,9 @@ export class Wallets extends APIResource {
    * const walletRpcResponseBody = await client.wallets._rpc(
    *   'wallet_id',
    *   {
-   *     method: 'personal_sign',
-   *     params: { encoding: 'utf-8', message: 'message' },
+   *     method: 'eth_sendTransaction',
+   *     params: {},
+   *     chain_type: 'ethereum',
    *   },
    * );
    * ```
@@ -213,7 +214,9 @@ export class Wallets extends APIResource {
    *
    * @example
    * ```ts
-   * const wallet = await client.wallets._update('wallet_id');
+   * const wallet = await client.wallets._update('wallet_id', {
+   *   policy_ids: ['tb54eps4z44ed0jepousxi4n'],
+   * });
    * ```
    */
   _update(walletID: string, params: WalletUpdateParams, options?: RequestOptions): APIPromise<Wallet> {

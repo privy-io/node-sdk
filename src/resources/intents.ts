@@ -697,9 +697,9 @@ export type IntentAuthorizationKeyQuorumMember =
 export namespace IntentAuthorizationKeyQuorumMember {
   export interface UserMember {
     /**
-     * Whether this member has signed the intent
+     * Unix timestamp when this member signed, or null if not yet signed.
      */
-    has_signed: boolean;
+    signed_at: number | null;
 
     type: 'user';
 
@@ -707,30 +707,20 @@ export namespace IntentAuthorizationKeyQuorumMember {
      * User ID of the key quorum member
      */
     user_id: string;
-
-    /**
-     * Display name for the user (email, etc)
-     */
-    display_name?: string;
   }
 
   export interface KeyMember {
-    /**
-     * Whether this key has signed the intent
-     */
-    has_signed: boolean;
-
     /**
      * Public key of the key quorum member
      */
     public_key: string;
 
-    type: 'key';
-
     /**
-     * Display name for the key (if any)
+     * Unix timestamp when this member signed, or null if not yet signed.
      */
-    display_name?: string;
+    signed_at: number | null;
+
+    type: 'key';
   }
 }
 
@@ -746,9 +736,9 @@ export type IntentAuthorizationMember =
 export namespace IntentAuthorizationMember {
   export interface UserMember {
     /**
-     * Whether this member has signed the intent
+     * Unix timestamp when this member signed, or null if not yet signed.
      */
-    has_signed: boolean;
+    signed_at: number | null;
 
     type: 'user';
 
@@ -756,38 +746,23 @@ export namespace IntentAuthorizationMember {
      * User ID of the key quorum member
      */
     user_id: string;
-
-    /**
-     * Display name for the user (email, etc)
-     */
-    display_name?: string;
   }
 
   export interface KeyMember {
-    /**
-     * Whether this key has signed the intent
-     */
-    has_signed: boolean;
-
     /**
      * Public key of the key quorum member
      */
     public_key: string;
 
-    type: 'key';
-
     /**
-     * Display name for the key (if any)
+     * Unix timestamp when this member signed, or null if not yet signed.
      */
-    display_name?: string;
+    signed_at: number | null;
+
+    type: 'key';
   }
 
   export interface KeyQuorumMember {
-    /**
-     * Whether this child key quorum has fulfilled its threshold
-     */
-    has_signed: boolean;
-
     /**
      * ID of the child key quorum member
      */
@@ -802,6 +777,11 @@ export namespace IntentAuthorizationMember {
      * Number of signatures required from this child quorum
      */
     threshold: number;
+
+    /**
+     * Whether this child key quorum has met its signature threshold
+     */
+    threshold_met: boolean;
 
     type: 'key_quorum';
 

@@ -65,6 +65,13 @@ export async function setupTestWalletResources(): Promise<TestWalletResources> {
 
 export async function cleanupTestWalletResources(resources: TestWalletResources) {
   try {
+    await resources.client.keyQuorums().delete(resources.quorumId, {
+      authorization_context: { authorization_private_keys: [resources.quorumKeyPair.privateKey] },
+    });
+  } catch {
+    // Best-effort cleanup
+  }
+  try {
     await resources.client.users().delete(resources.userId);
   } catch {
     // Best-effort cleanup

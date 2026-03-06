@@ -194,6 +194,11 @@ export interface FiatOnrampDestination {
 export type FiatOnrampEnvironment = 'sandbox' | 'production';
 
 /**
+ * The fiat onramp provider to use.
+ */
+export type FiatOnrampProvider = 'meld' | 'meld-sandbox';
+
+/**
  * The request input for getting fiat onramp quotes.
  */
 export interface GetFiatOnrampQuotesInput {
@@ -219,15 +224,18 @@ export interface GetFiatOnrampQuotesInput {
 export interface FiatOnrampQuote {
   payment_method: string;
 
-  provider: string;
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
 
-  destination_currency_code?: string;
+  destination_currency_code?: string | null;
 
-  source_amount?: number;
+  source_amount?: number | null;
 
-  source_currency_code?: string;
+  source_currency_code?: string | null;
 
-  sub_provider?: string;
+  sub_provider?: string | null;
 }
 
 /**
@@ -246,14 +254,12 @@ export interface GetFiatOnrampURLInput {
    */
   destination: FiatOnrampDestination;
 
-  /**
-   * Whether to use the sandbox or production environment for fiat onramp.
-   */
-  environment: FiatOnrampEnvironment;
-
   payment_method: string;
 
-  provider: string;
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
 
   /**
    * Source currency details for a fiat onramp quote request.
@@ -290,7 +296,10 @@ export type FiatOnrampTransactionStatus =
  * The request input for checking a fiat onramp session status.
  */
 export interface GetFiatOnrampTransactionStatusInput {
-  provider: string;
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
 
   session_id: string;
 }
@@ -519,6 +528,7 @@ export declare namespace ClientAuth {
     type FiatOnrampSource as FiatOnrampSource,
     type FiatOnrampDestination as FiatOnrampDestination,
     type FiatOnrampEnvironment as FiatOnrampEnvironment,
+    type FiatOnrampProvider as FiatOnrampProvider,
     type GetFiatOnrampQuotesInput as GetFiatOnrampQuotesInput,
     type FiatOnrampQuote as FiatOnrampQuote,
     type GetFiatOnrampQuotesResponse as GetFiatOnrampQuotesResponse,

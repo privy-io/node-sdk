@@ -22,7 +22,16 @@ export {
   type AggregationInput,
 } from './aggregations';
 export { Analytics, type AnalyticsEventInput } from './analytics';
-export { Apps, type AppResponse } from './apps';
+export {
+  Apps,
+  type AppResponse,
+  type EmailInviteInput,
+  type WalletInviteInput,
+  type PhoneInviteInput,
+  type UserInviteInput,
+  type AllowlistEntry,
+  type AllowlistDeletionResponse,
+} from './apps';
 export {
   ClientAuth,
   type ExternalOAuthProviderID,
@@ -44,6 +53,7 @@ export {
   type FiatOnrampSource,
   type FiatOnrampDestination,
   type FiatOnrampEnvironment,
+  type FiatOnrampProvider,
   type GetFiatOnrampQuotesInput,
   type FiatOnrampQuote,
   type GetFiatOnrampQuotesResponse,
@@ -293,8 +303,6 @@ export {
   type KrakenEmbedUserVerifiedWebhookPayload,
   type KrakenEmbedUserDisabledWebhookPayload,
   type KrakenEmbedUserClosedWebhookPayload,
-  type IntentAuthorizerMember,
-  type IntentAuthorizer,
   type IntentCreatedWebhookPayload,
   type IntentAuthorizedWebhookPayload,
 } from './webhooks';

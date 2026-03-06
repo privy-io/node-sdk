@@ -41,7 +41,16 @@ import {
   Aggregations,
 } from './resources/aggregations';
 import { Analytics, AnalyticsEventInput } from './resources/analytics';
-import { AppResponse, Apps } from './resources/apps';
+import {
+  AllowlistDeletionResponse,
+  AllowlistEntry,
+  AppResponse,
+  Apps,
+  EmailInviteInput,
+  PhoneInviteInput,
+  UserInviteInput,
+  WalletInviteInput,
+} from './resources/apps';
 import {
   BridgeBrlFiatVirtualAccountDepositInstructions,
   BridgeDestinationAsset,
@@ -72,6 +81,7 @@ import {
   FiatCustomerResponse,
   FiatOnrampDestination,
   FiatOnrampEnvironment,
+  FiatOnrampProvider,
   FiatOnrampQuote,
   FiatOnrampSource,
   FiatOnrampTransactionStatus,
@@ -226,8 +236,6 @@ import {
   FundsDepositedWebhookPayload,
   FundsWithdrawnWebhookPayload,
   IntentAuthorizedWebhookPayload,
-  IntentAuthorizer,
-  IntentAuthorizerMember,
   IntentCreatedWebhookPayload,
   KrakenEmbedQuoteCancelledWebhookPayload,
   KrakenEmbedQuoteExecutedWebhookPayload,
@@ -1365,6 +1373,7 @@ export declare namespace PrivyAPI {
     type FiatOnrampSource as FiatOnrampSource,
     type FiatOnrampDestination as FiatOnrampDestination,
     type FiatOnrampEnvironment as FiatOnrampEnvironment,
+    type FiatOnrampProvider as FiatOnrampProvider,
     type GetFiatOnrampQuotesInput as GetFiatOnrampQuotesInput,
     type FiatOnrampQuote as FiatOnrampQuote,
     type GetFiatOnrampQuotesResponse as GetFiatOnrampQuotesResponse,
@@ -1393,7 +1402,16 @@ export declare namespace PrivyAPI {
 
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
 
-  export { Apps as Apps, type AppResponse as AppResponse };
+  export {
+    Apps as Apps,
+    type AppResponse as AppResponse,
+    type EmailInviteInput as EmailInviteInput,
+    type WalletInviteInput as WalletInviteInput,
+    type PhoneInviteInput as PhoneInviteInput,
+    type UserInviteInput as UserInviteInput,
+    type AllowlistEntry as AllowlistEntry,
+    type AllowlistDeletionResponse as AllowlistDeletionResponse,
+  };
 
   export {
     Aggregations as Aggregations,
@@ -1437,8 +1455,6 @@ export declare namespace PrivyAPI {
     type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
     type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
     type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
-    type IntentAuthorizerMember as IntentAuthorizerMember,
-    type IntentAuthorizer as IntentAuthorizer,
     type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
     type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
   };

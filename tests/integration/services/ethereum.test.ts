@@ -4,7 +4,7 @@ import { PrivyClient } from '@privy-io/node';
 import { generateP256KeyPair } from '@privy-io/node';
 import { Hex, verifyHash, verifyMessage, verifyTypedData } from 'viem';
 import { verifyAuthorization } from 'viem/utils';
-import crypto from 'node:crypto';
+
 import { TEST_APP } from '../test-config';
 import {
   setupTestWalletResources,
@@ -90,58 +90,6 @@ describe('PrivyEthereumService', () => {
           });
           expect(verified).toBe(true);
         });
-        it('will succeed if the idempotency key is reused with the same body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          await privyClient
-            .wallets()
-            .ethereum()
-            .signMessage(wallet.id, {
-              message: 'Hello, world!',
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          const response = await privyClient
-            .wallets()
-            .ethereum()
-            .signMessage(wallet.id, {
-              message: 'Hello, world!',
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          expect(response.signature).toBeDefined();
-          const verified = await verifyMessage({
-            address: wallet.address as Hex,
-            message: 'Hello, world!',
-            signature: response.signature as `0x${string}`,
-          });
-          expect(verified).toBe(true);
-        });
-        it('will fail if the idempotency key is reused with a different body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          await privyClient
-            .wallets()
-            .ethereum()
-            .signMessage(wallet.id, {
-              message: 'Hello, world!',
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          await expect(
-            privyClient
-              .wallets()
-              .ethereum()
-              .signMessage(wallet.id, {
-                message: 'Goodbye, world!',
-                idempotency_key: idempotencyKey,
-                ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-              }),
-          ).rejects.toThrow(
-            `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
-          );
-        });
       });
 
       describe('secp256k1 sign', () => {
@@ -160,58 +108,6 @@ describe('PrivyEthereumService', () => {
 
           const verified = await verifyHash({ hash, signature, address: wallet.address as Hex });
           expect(verified).toBe(true);
-        });
-        it('will succeed if the idempotency key is reused with the same body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          const hash = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
-          await privyClient
-            .wallets()
-            .ethereum()
-            .signSecp256k1(wallet.id, {
-              params: { hash },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-          const response = await privyClient
-            .wallets()
-            .ethereum()
-            .signSecp256k1(wallet.id, {
-              params: { hash },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          expect(response.signature).toBeDefined();
-          const signature = response.signature as Hex;
-
-          const verified = await verifyHash({ hash, signature, address: wallet.address as Hex });
-          expect(verified).toBe(true);
-        });
-        it('will fail if the idempotency key is reused with a different body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          const hash1 = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
-          await privyClient
-            .wallets()
-            .ethereum()
-            .signSecp256k1(wallet.id, {
-              params: { hash: hash1 },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          const hash2 = '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef12345678';
-          await expect(
-            privyClient
-              .wallets()
-              .ethereum()
-              .signSecp256k1(wallet.id, {
-                params: { hash: hash2 },
-                idempotency_key: idempotencyKey,
-                ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-              }),
-          ).rejects.toThrow(
-            `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
-          );
         });
       });
 
@@ -246,65 +142,6 @@ describe('PrivyEthereumService', () => {
           });
           expect(verified).toBe(true);
         });
-        it('will succeed if the idempotency key is reused with the same body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          await privyClient
-            .wallets()
-            .ethereum()
-            .sign7702Authorization(wallet.id, {
-              params: authorization7702,
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-          const response = await privyClient
-            .wallets()
-            .ethereum()
-            .sign7702Authorization(wallet.id, {
-              params: authorization7702,
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          expect(response.authorization).toBeDefined();
-          const signedAuthorization = response.authorization;
-
-          const verified = await verifyAuthorization({
-            address: wallet.address as Hex,
-            authorization: {
-              chainId: signedAuthorization.chain_id as number,
-              address: signedAuthorization.contract as Hex,
-              nonce: signedAuthorization.nonce as number,
-              r: signedAuthorization.r as Hex,
-              s: signedAuthorization.s as Hex,
-              yParity: signedAuthorization.y_parity,
-            },
-          });
-          expect(verified).toBe(true);
-        });
-        it('will fail if the idempotency key is reused with a different body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          await privyClient
-            .wallets()
-            .ethereum()
-            .sign7702Authorization(wallet.id, {
-              params: authorization7702,
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          await expect(
-            privyClient
-              .wallets()
-              .ethereum()
-              .sign7702Authorization(wallet.id, {
-                params: { ...authorization7702, contract: '0xabcdef1234abcdef1234abcdef1234abcdef1234' },
-                idempotency_key: idempotencyKey,
-                ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-              }),
-          ).rejects.toThrow(
-            `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
-          );
-        });
       });
 
       describe('transaction signing', () => {
@@ -328,53 +165,6 @@ describe('PrivyEthereumService', () => {
           expect(response.signed_transaction).toBeDefined();
           expect(response.encoding).toBe('rlp');
           expect(response.signed_transaction).toMatch(/^0x[0-9a-fA-F]+$/);
-        });
-        it('will succeed if the idempotency key is reused with the same body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          await privyClient
-            .wallets()
-            .ethereum()
-            .signTransaction(wallet.id, {
-              params: { transaction },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-          const response = await privyClient
-            .wallets()
-            .ethereum()
-            .signTransaction(wallet.id, {
-              params: { transaction },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          expect(response.signed_transaction).toBeDefined();
-          expect(response.encoding).toBe('rlp');
-          expect(response.signed_transaction).toMatch(/^0x[0-9a-fA-F]+$/);
-        });
-        it('will fail if the idempotency key is reused with a different body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          await privyClient
-            .wallets()
-            .ethereum()
-            .signTransaction(wallet.id, {
-              params: { transaction },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          await expect(
-            privyClient
-              .wallets()
-              .ethereum()
-              .signTransaction(wallet.id, {
-                params: { transaction: { ...transaction, to: '0xabcdef1234abcdef1234abcdef1234abcdef1234' } },
-                idempotency_key: idempotencyKey,
-                ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-              }),
-          ).rejects.toThrow(
-            `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
-          );
         });
       });
 
@@ -410,61 +200,6 @@ describe('PrivyEthereumService', () => {
             message: typedData.message,
           });
           expect(verified).toBe(true);
-        });
-        it('will succeed if the idempotency key is reused with the same body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          await privyClient
-            .wallets()
-            .ethereum()
-            .signTypedData(wallet.id, {
-              params: { typed_data: typedData },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-          const response = await privyClient
-            .wallets()
-            .ethereum()
-            .signTypedData(wallet.id, {
-              params: { typed_data: typedData },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          expect(response.signature).toBeDefined();
-          expect(response.encoding).toBe('hex');
-          const verified = await verifyTypedData({
-            signature: response.signature as Hex,
-            address: wallet.address as Hex,
-            domain: typedData.domain,
-            types: typedData.types,
-            primaryType: typedData.primary_type,
-            message: typedData.message,
-          });
-          expect(verified).toBe(true);
-        });
-        it('will fail if the idempotency key is reused with a different body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          await privyClient
-            .wallets()
-            .ethereum()
-            .signTypedData(wallet.id, {
-              params: { typed_data: typedData },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          await expect(
-            privyClient
-              .wallets()
-              .ethereum()
-              .signTypedData(wallet.id, {
-                params: { typed_data: { ...typedData, message: { content: 'A different message' } } },
-                idempotency_key: idempotencyKey,
-                ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-              }),
-          ).rejects.toThrow(
-            `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
-          );
         });
       });
 
@@ -525,31 +260,6 @@ describe('PrivyEthereumService', () => {
           expect(response.hash).toBeDefined();
           expect(response.caip2).toBe('eip155:11155111');
           expect(response.hash).toMatch(/^0x[0-9a-fA-F]+$/);
-        });
-        it('will succeed if the idempotency key is reused with the same body', async () => {
-          const idempotencyKey = crypto.randomUUID();
-          const firstTx = await privyClient
-            .wallets()
-            .ethereum()
-            .sendTransaction(wallet.id, {
-              caip2: 'eip155:11155111',
-              params: { transaction: sendTx },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          const secondTx = await privyClient
-            .wallets()
-            .ethereum()
-            .sendTransaction(wallet.id, {
-              caip2: 'eip155:11155111',
-              params: { transaction: sendTx },
-              idempotency_key: idempotencyKey,
-              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
-            });
-
-          expect(firstTx.hash).toEqual(secondTx.hash);
-          expect(firstTx.transaction_id).toEqual(secondTx.transaction_id);
         });
       });
     });

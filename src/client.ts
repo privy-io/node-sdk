@@ -42,16 +42,6 @@ import {
 } from './resources/aggregations';
 import { Analytics, AnalyticsEventInput } from './resources/analytics';
 import {
-  AllowlistDeletionResponse,
-  AllowlistEntry,
-  AppResponse,
-  Apps,
-  EmailInviteInput,
-  PhoneInviteInput,
-  UserInviteInput,
-  WalletInviteInput,
-} from './resources/apps';
-import {
   BridgeBrlFiatVirtualAccountDepositInstructions,
   BridgeDestinationAsset,
   BridgeEurFiatVirtualAccountDepositInstructions,
@@ -287,6 +277,16 @@ import {
   EvmCaip2ChainID,
   Yield,
 } from './resources/yield';
+import {
+  AllowlistDeletionResponse,
+  AllowlistEntry,
+  AppResponse,
+  Apps,
+  EmailInviteInput,
+  PhoneInviteInput,
+  UserInviteInput,
+  WalletInviteInput,
+} from './resources/apps/apps';
 import {
   CurveSigningChainType,
   CustodialWallet,
@@ -1141,9 +1141,12 @@ export class PrivyAPI {
    * Operations related to key quorums
    */
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
+  /**
+   * Operations related to app settings and allowlist management
+   */
+  apps: API.Apps = new API.Apps(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
   analytics: API.Analytics = new API.Analytics(this);
-  apps: API.Apps = new API.Apps(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
   intents: API.Intents = new API.Intents(this);
@@ -1156,9 +1159,9 @@ PrivyAPI.Users = Users;
 PrivyAPI.Policies = Policies;
 PrivyAPI.Transactions = Transactions;
 PrivyAPI.KeyQuorums = KeyQuorums;
+PrivyAPI.Apps = Apps;
 PrivyAPI.ClientAuth = ClientAuth;
 PrivyAPI.Analytics = Analytics;
-PrivyAPI.Apps = Apps;
 PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.Intents = Intents;
@@ -1353,6 +1356,17 @@ export declare namespace PrivyAPI {
   };
 
   export {
+    Apps as Apps,
+    type AppResponse as AppResponse,
+    type EmailInviteInput as EmailInviteInput,
+    type WalletInviteInput as WalletInviteInput,
+    type PhoneInviteInput as PhoneInviteInput,
+    type UserInviteInput as UserInviteInput,
+    type AllowlistEntry as AllowlistEntry,
+    type AllowlistDeletionResponse as AllowlistDeletionResponse,
+  };
+
+  export {
     ClientAuth as ClientAuth,
     type ExternalOAuthProviderID as ExternalOAuthProviderID,
     type PrivyOAuthProviderID as PrivyOAuthProviderID,
@@ -1401,17 +1415,6 @@ export declare namespace PrivyAPI {
   };
 
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
-
-  export {
-    Apps as Apps,
-    type AppResponse as AppResponse,
-    type EmailInviteInput as EmailInviteInput,
-    type WalletInviteInput as WalletInviteInput,
-    type PhoneInviteInput as PhoneInviteInput,
-    type UserInviteInput as UserInviteInput,
-    type AllowlistEntry as AllowlistEntry,
-    type AllowlistDeletionResponse as AllowlistDeletionResponse,
-  };
 
   export {
     Aggregations as Aggregations,

@@ -31,7 +31,7 @@ export {
   type UserInviteInput,
   type AllowlistEntry,
   type AllowlistDeletionResponse,
-} from './apps';
+} from './apps/apps';
 export {
   ClientAuth,
   type ExternalOAuthProviderID,

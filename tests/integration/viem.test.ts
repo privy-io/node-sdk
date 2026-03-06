@@ -50,7 +50,7 @@ describe('viem utils', () => {
 
       beforeEach(() => {
         wallet = wallets[index]!;
-        address = address;
+        address = wallet.address as Hex;
         account = createViemAccount(privyClient, {
           walletId: wallet.id,
           address,

@@ -41,7 +41,7 @@ export async function setupTestWalletResources(): Promise<TestWalletResources> {
 
   const [p256KeyPair, quorumKeyPair] = await Promise.all([generateP256KeyPair(), generateP256KeyPair()]);
 
-  const customUserId = `test-user-${Date.now()}`;
+  const customUserId = `test-user-${crypto.randomUUID()}`;
   const user = await client.users().create({
     linked_accounts: [{ type: 'custom_auth', custom_user_id: customUserId }],
   });

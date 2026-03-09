@@ -6,7 +6,6 @@ import { verifyAuthorization } from 'viem/utils';
 import {
   setupTestWalletResources,
   createTestWallets,
-  cleanupTestWalletResources,
   TestWalletResources,
   TestWallet,
   WALLET_CASES,
@@ -23,9 +22,6 @@ describe('PrivyEthereumService', () => {
     privyClient = resources.client;
   });
 
-  afterAll(async () => {
-    if (resources) await cleanupTestWalletResources(resources);
-  });
   describe('ethereum', () => {
     describe.each(WALLET_CASES)('$ownership', ({ index }) => {
       let wallet: TestWallet;

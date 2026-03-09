@@ -6,7 +6,6 @@ import { createTransferTransaction, SOL_DEVNET_CAIP2 } from '../../helpers/solan
 import {
   setupTestWalletResources,
   createTestWallets,
-  cleanupTestWalletResources,
   TestWalletResources,
   TestWallet,
   WALLET_CASES,
@@ -21,10 +20,6 @@ describe('PrivySolanaService', () => {
     resources = await setupTestWalletResources();
     wallets = await createTestWallets(resources, 'solana');
     privyClient = resources.client;
-  });
-
-  afterAll(async () => {
-    if (resources) await cleanupTestWalletResources(resources);
   });
 
   describe.each(WALLET_CASES)('$ownership', ({ index }) => {

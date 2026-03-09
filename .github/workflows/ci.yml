@@ -104,31 +104,17 @@ jobs:
     if: ${{ failure() && (github.ref_name == 'next' || github.ref_name == 'main') && (github.event_name == 'push' || github.event_name == 'schedule') }}
     steps:
       - name: Notify server-sdk-errors on Slack
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_SERVER_SDK_ERRORS }}
-          LINT_RESULT: ${{ needs.lint.result == 'success' && 'passed' || 'failed' }}
-          BUILD_RESULT: ${{ needs.build.result == 'success' && 'passed' || 'failed' }}
-          TEST_RESULT: ${{ needs.test.result == 'success' && 'passed' || 'failed' }}
-          BRANCH: ${{ github.ref_name }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          curl -X POST "$SLACK_WEBHOOK_URL" \
-            -H 'Content-Type: application/json' \
-            -d '{
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "Node SDK CI failure"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Workflow failed on `'"$BRANCH"'`.\n- `lint` job '"$LINT_RESULT"'\n- `build` job '"$BUILD_RESULT"'\n- `test` job '"$TEST_RESULT"'\n\n<'"$RUN_URL"'|View workflow run>"
-                  }
-                }
-              ]
-            }'
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_SERVER_SDK_ERRORS }}
+          webhook-type: incoming-webhook
+          payload: |
+            blocks:
+              - type: "header"
+                text:
+                  type: "plain_text"
+                  text: "Node SDK CI failure"
+              - type: "section"
+                text:
+                  type: "mrkdwn"
+                  text: "Workflow failed on `${{ github.ref_name }}`.\n- `lint` job ${{ needs.lint.result == 'success' && 'passed' || 'failed' }}\n- `build` job ${{ needs.build.result == 'success' && 'passed' || 'failed' }}\n- `test` job ${{ needs.test.result == 'success' && 'passed' || 'failed' }}\n\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run>"

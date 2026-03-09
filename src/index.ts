@@ -6,6 +6,7 @@ export { type PrivyPoliciesService } from './public-api/services/policies';
 export { type PrivyTransactionsService } from './public-api/services/transactions';
 export { type PrivyKeyQuorumsService } from './public-api/services/key-quorums';
 export { type PrivyUsersService } from './public-api/services/users';
+export { type PrivyAppsService } from './public-api/services/apps';
 export { type PrivyUtils } from './public-api/services/utils';
 export {
   InvalidAuthTokenError,
@@ -20,6 +21,15 @@ export {
 } from './lib/auth';
 
 export { type User, type LinkedAccountEmbeddedWallet, type LinkedAccount } from './resources/users';
+export {
+  type AppResponse,
+  type AllowlistEntry,
+  type AllowlistDeletionResponse,
+  type UserInviteInput,
+  type EmailInviteInput,
+  type WalletInviteInput,
+  type PhoneInviteInput,
+} from './resources/apps/apps';
 export { type Wallet } from './resources/wallets';
 export { type Policy } from './resources/policies';
 export { type KeyQuorum } from './resources/key-quorums';

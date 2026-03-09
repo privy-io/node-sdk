@@ -321,10 +321,32 @@ Types:
 - <code><a href="./src/resources/aggregations.ts">Aggregation</a></code>
 - <code><a href="./src/resources/aggregations.ts">AggregationInput</a></code>
 
+# Intents
+
+Types:
+
+- <code><a href="./src/resources/intents.ts">IntentType</a></code>
+- <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
+- <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
+- <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
+
 # Webhooks
 
 Types:
 
+- <code><a href="./src/resources/webhooks.ts">IntentCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentAuthorizedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentExecutedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">MfaEnabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionBroadcastedWebhookPayload</a></code>
@@ -334,6 +356,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">TransactionFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionReplacedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionProviderErrorWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserOperationCompletedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
@@ -355,26 +378,6 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">IntentCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">IntentAuthorizedWebhookPayload</a></code>
-
-# Intents
-
-Types:
-
-- <code><a href="./src/resources/intents.ts">IntentType</a></code>
-- <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
-- <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
-- <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
-- <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
 
 # Accounts
 
@@ -411,3 +414,4 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimInput</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimReward</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldClaimIDInput</a></code>

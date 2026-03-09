@@ -384,6 +384,16 @@ export interface EthereumYieldClaimResponse {
     | 'pending';
 }
 
+/**
+ * Input for fetching a yield reward claim by ID.
+ */
+export interface EthereumYieldClaimIDInput {
+  /**
+   * The yield claim transaction ID.
+   */
+  id: string;
+}
+
 export declare namespace Yield {
   export {
     type EvmCaip2ChainID as EvmCaip2ChainID,
@@ -403,5 +413,6 @@ export declare namespace Yield {
     type EthereumYieldClaimInput as EthereumYieldClaimInput,
     type EthereumYieldClaimReward as EthereumYieldClaimReward,
     type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
+    type EthereumYieldClaimIDInput as EthereumYieldClaimIDInput,
   };
 }

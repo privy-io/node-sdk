@@ -7,6 +7,211 @@ import * as UsersAPI from './users';
 export class Webhooks extends APIResource {}
 
 /**
+ * Payload for the intent.created webhook event.
+ */
+export interface IntentCreatedWebhookPayload {
+  /**
+   * Unix timestamp when the intent was created.
+   */
+  created_at: number;
+
+  /**
+   * Unix timestamp when the intent expires.
+   */
+  expires_at: number;
+
+  /**
+   * The unique ID of the intent.
+   */
+  intent_id: string;
+
+  /**
+   * Type of intent.
+   */
+  intent_type: IntentsAPI.IntentType;
+
+  /**
+   * The current status of the intent.
+   */
+  status: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'intent.created';
+
+  /**
+   * Key quorums that can authorize this intent.
+   */
+  authorization_details?: Array<IntentsAPI.IntentAuthorization>;
+
+  /**
+   * Display name of the user who created the intent.
+   */
+  created_by_display_name?: string;
+
+  /**
+   * The ID of the user who created the intent.
+   */
+  created_by_id?: string;
+}
+
+/**
+ * Payload for the intent.authorized webhook event.
+ */
+export interface IntentAuthorizedWebhookPayload {
+  /**
+   * Unix timestamp when the authorization was recorded.
+   */
+  authorized_at: number;
+
+  /**
+   * Unix timestamp when the intent was created.
+   */
+  created_at: number;
+
+  /**
+   * Unix timestamp when the intent expires.
+   */
+  expires_at: number;
+
+  /**
+   * The unique ID of the intent.
+   */
+  intent_id: string;
+
+  /**
+   * Type of intent.
+   */
+  intent_type: IntentsAPI.IntentType;
+
+  /**
+   * A leaf member (user or key) of a nested key quorum in an intent authorization.
+   */
+  member: IntentsAPI.IntentAuthorizationKeyQuorumMember;
+
+  /**
+   * The current status of the intent.
+   */
+  status: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'intent.authorized';
+
+  /**
+   * Display name of the user who created the intent.
+   */
+  created_by_display_name?: string;
+
+  /**
+   * The ID of the user who created the intent.
+   */
+  created_by_id?: string;
+}
+
+/**
+ * Payload for the intent.executed webhook event.
+ */
+export interface IntentExecutedWebhookPayload {
+  /**
+   * Result of the successful intent execution.
+   */
+  action_result: IntentsAPI.BaseActionResult;
+
+  /**
+   * Unix timestamp when the intent was created.
+   */
+  created_at: number;
+
+  /**
+   * Unix timestamp when the intent expires.
+   */
+  expires_at: number;
+
+  /**
+   * The unique ID of the intent.
+   */
+  intent_id: string;
+
+  /**
+   * Type of intent.
+   */
+  intent_type: IntentsAPI.IntentType;
+
+  /**
+   * The current status of the intent.
+   */
+  status: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'intent.executed';
+
+  /**
+   * Display name of the user who created the intent.
+   */
+  created_by_display_name?: string;
+
+  /**
+   * The ID of the user who created the intent.
+   */
+  created_by_id?: string;
+}
+
+/**
+ * Payload for the intent.failed webhook event.
+ */
+export interface IntentFailedWebhookPayload {
+  /**
+   * Result of the failed intent execution.
+   */
+  action_result: IntentsAPI.BaseActionResult;
+
+  /**
+   * Unix timestamp when the intent was created.
+   */
+  created_at: number;
+
+  /**
+   * Unix timestamp when the intent expires.
+   */
+  expires_at: number;
+
+  /**
+   * The unique ID of the intent.
+   */
+  intent_id: string;
+
+  /**
+   * Type of intent.
+   */
+  intent_type: IntentsAPI.IntentType;
+
+  /**
+   * The current status of the intent.
+   */
+  status: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'intent.failed';
+
+  /**
+   * Display name of the user who created the intent.
+   */
+  created_by_display_name?: string;
+
+  /**
+   * The ID of the user who created the intent.
+   */
+  created_by_id?: string;
+}
+
+/**
  * Payload for the mfa.enabled webhook event.
  */
 export interface MfaEnabledWebhookPayload {
@@ -306,6 +511,38 @@ export interface TransactionProviderErrorWebhookPayload {
    * The ID of the wallet that initiated the transaction.
    */
   wallet_id: string;
+}
+
+/**
+ * Payload for the user_operation.completed webhook event.
+ */
+export interface UserOperationCompletedWebhookPayload {
+  actual_gas_cost: string;
+
+  actual_gas_used: string;
+
+  block_number: number;
+
+  caip2: string;
+
+  log_index: number;
+
+  nonce: string;
+
+  paymaster: string | null;
+
+  sender: string;
+
+  success: boolean;
+
+  transaction_hash: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'user_operation.completed';
+
+  user_op_hash: string;
 }
 
 /**
@@ -913,7 +1150,12 @@ export type WebhookPayload =
   | MfaEnabledWebhookPayload
   | MfaDisabledWebhookPayload
   | YieldDepositConfirmedWebhookPayload
-  | YieldWithdrawConfirmedWebhookPayload;
+  | YieldWithdrawConfirmedWebhookPayload
+  | UserOperationCompletedWebhookPayload
+  | IntentCreatedWebhookPayload
+  | IntentAuthorizedWebhookPayload
+  | IntentExecutedWebhookPayload
+  | IntentFailedWebhookPayload;
 
 /**
  * Payload for the kraken_embed.quote_executed webhook event.
@@ -1062,113 +1304,12 @@ export interface KrakenEmbedUserClosedWebhookPayload {
   user_id: string;
 }
 
-/**
- * Payload for the intent.created webhook event.
- */
-export interface IntentCreatedWebhookPayload {
-  /**
-   * Unix timestamp when the intent was created.
-   */
-  created_at: number;
-
-  /**
-   * Unix timestamp when the intent expires.
-   */
-  expires_at: number;
-
-  /**
-   * The unique ID of the intent.
-   */
-  intent_id: string;
-
-  /**
-   * Type of intent.
-   */
-  intent_type: IntentsAPI.IntentType;
-
-  /**
-   * The current status of the intent.
-   */
-  status: string;
-
-  /**
-   * The type of webhook event.
-   */
-  type: 'intent.created';
-
-  /**
-   * Key quorums that can authorize this intent.
-   */
-  authorization_details?: Array<IntentsAPI.IntentAuthorization>;
-
-  /**
-   * Display name of the user who created the intent.
-   */
-  created_by_display_name?: string;
-
-  /**
-   * The ID of the user who created the intent.
-   */
-  created_by_id?: string;
-}
-
-/**
- * Payload for the intent.authorized webhook event.
- */
-export interface IntentAuthorizedWebhookPayload {
-  /**
-   * Unix timestamp when the authorization was recorded.
-   */
-  authorized_at: number;
-
-  /**
-   * Unix timestamp when the intent was created.
-   */
-  created_at: number;
-
-  /**
-   * Unix timestamp when the intent expires.
-   */
-  expires_at: number;
-
-  /**
-   * The unique ID of the intent.
-   */
-  intent_id: string;
-
-  /**
-   * Type of intent.
-   */
-  intent_type: IntentsAPI.IntentType;
-
-  /**
-   * A leaf member (user or key) of a nested key quorum in an intent authorization.
-   */
-  member: IntentsAPI.IntentAuthorizationKeyQuorumMember;
-
-  /**
-   * The current status of the intent.
-   */
-  status: string;
-
-  /**
-   * The type of webhook event.
-   */
-  type: 'intent.authorized';
-
-  /**
-   * Display name of the user who created the intent.
-   */
-  created_by_display_name?: string;
-
-  /**
-   * The ID of the user who created the intent.
-   */
-  created_by_id?: string;
-}
-
 export declare namespace Webhooks {
   export {
+    type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
+    type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
+    type IntentExecutedWebhookPayload as IntentExecutedWebhookPayload,
+    type IntentFailedWebhookPayload as IntentFailedWebhookPayload,
     type MfaEnabledWebhookPayload as MfaEnabledWebhookPayload,
     type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
     type TransactionBroadcastedWebhookPayload as TransactionBroadcastedWebhookPayload,
@@ -1178,6 +1319,7 @@ export declare namespace Webhooks {
     type TransactionFailedWebhookPayload as TransactionFailedWebhookPayload,
     type TransactionReplacedWebhookPayload as TransactionReplacedWebhookPayload,
     type TransactionProviderErrorWebhookPayload as TransactionProviderErrorWebhookPayload,
+    type UserOperationCompletedWebhookPayload as UserOperationCompletedWebhookPayload,
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
     type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
     type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
@@ -1199,7 +1341,5 @@ export declare namespace Webhooks {
     type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
     type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
     type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
-    type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
-    type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
   };
 }

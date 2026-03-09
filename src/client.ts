@@ -227,6 +227,8 @@ import {
   FundsWithdrawnWebhookPayload,
   IntentAuthorizedWebhookPayload,
   IntentCreatedWebhookPayload,
+  IntentExecutedWebhookPayload,
+  IntentFailedWebhookPayload,
   KrakenEmbedQuoteCancelledWebhookPayload,
   KrakenEmbedQuoteExecutedWebhookPayload,
   KrakenEmbedQuoteExecutionFailedWebhookPayload,
@@ -246,6 +248,7 @@ import {
   UserAuthenticatedWebhookPayload,
   UserCreatedWebhookPayload,
   UserLinkedAccountWebhookPayload,
+  UserOperationCompletedWebhookPayload,
   UserTransferredAccountWebhookPayload,
   UserUnlinkedAccountWebhookPayload,
   UserUpdatedAccountWebhookPayload,
@@ -262,6 +265,7 @@ import {
   EthereumVaultDetailsResponse,
   EthereumVaultPosition,
   EthereumVaultResponse,
+  EthereumYieldClaimIDInput,
   EthereumYieldClaimInput,
   EthereumYieldClaimResponse,
   EthereumYieldClaimReward,
@@ -1149,8 +1153,8 @@ export class PrivyAPI {
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
   analytics: API.Analytics = new API.Analytics(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
-  webhooks: API.Webhooks = new API.Webhooks(this);
   intents: API.Intents = new API.Intents(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
   accounts: API.Accounts = new API.Accounts(this);
   yield: API.Yield = new API.Yield(this);
 }
@@ -1164,8 +1168,8 @@ PrivyAPI.Apps = Apps;
 PrivyAPI.ClientAuth = ClientAuth;
 PrivyAPI.Analytics = Analytics;
 PrivyAPI.Aggregations = Aggregations;
-PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.Intents = Intents;
+PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.Accounts = Accounts;
 PrivyAPI.Yield = Yield;
 
@@ -1428,7 +1432,28 @@ export declare namespace PrivyAPI {
   };
 
   export {
+    Intents as Intents,
+    type IntentType as IntentType,
+    type IntentStatus as IntentStatus,
+    type RuleIntentRequestDetails as RuleIntentRequestDetails,
+    type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
+    type IntentAuthorizationMember as IntentAuthorizationMember,
+    type IntentAuthorization as IntentAuthorization,
+    type BaseActionResult as BaseActionResult,
+    type RpcIntentResponse as RpcIntentResponse,
+    type WalletIntentResponse as WalletIntentResponse,
+    type PolicyIntentResponse as PolicyIntentResponse,
+    type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
+    type RuleIntentResponse as RuleIntentResponse,
+    type IntentResponse as IntentResponse,
+  };
+
+  export {
     Webhooks as Webhooks,
+    type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
+    type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
+    type IntentExecutedWebhookPayload as IntentExecutedWebhookPayload,
+    type IntentFailedWebhookPayload as IntentFailedWebhookPayload,
     type MfaEnabledWebhookPayload as MfaEnabledWebhookPayload,
     type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
     type TransactionBroadcastedWebhookPayload as TransactionBroadcastedWebhookPayload,
@@ -1438,6 +1463,7 @@ export declare namespace PrivyAPI {
     type TransactionFailedWebhookPayload as TransactionFailedWebhookPayload,
     type TransactionReplacedWebhookPayload as TransactionReplacedWebhookPayload,
     type TransactionProviderErrorWebhookPayload as TransactionProviderErrorWebhookPayload,
+    type UserOperationCompletedWebhookPayload as UserOperationCompletedWebhookPayload,
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
     type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
     type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
@@ -1459,25 +1485,6 @@ export declare namespace PrivyAPI {
     type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
     type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
     type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
-    type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
-    type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
-  };
-
-  export {
-    Intents as Intents,
-    type IntentType as IntentType,
-    type IntentStatus as IntentStatus,
-    type RuleIntentRequestDetails as RuleIntentRequestDetails,
-    type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
-    type IntentAuthorizationMember as IntentAuthorizationMember,
-    type IntentAuthorization as IntentAuthorization,
-    type BaseActionResult as BaseActionResult,
-    type RpcIntentResponse as RpcIntentResponse,
-    type WalletIntentResponse as WalletIntentResponse,
-    type PolicyIntentResponse as PolicyIntentResponse,
-    type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
-    type RuleIntentResponse as RuleIntentResponse,
-    type IntentResponse as IntentResponse,
   };
 
   export {
@@ -1512,5 +1519,6 @@ export declare namespace PrivyAPI {
     type EthereumYieldClaimInput as EthereumYieldClaimInput,
     type EthereumYieldClaimReward as EthereumYieldClaimReward,
     type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
+    type EthereumYieldClaimIDInput as EthereumYieldClaimIDInput,
   };
 }

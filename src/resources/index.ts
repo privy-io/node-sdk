@@ -273,6 +273,10 @@ export {
 } from './wallets/wallets';
 export {
   Webhooks,
+  type IntentCreatedWebhookPayload,
+  type IntentAuthorizedWebhookPayload,
+  type IntentExecutedWebhookPayload,
+  type IntentFailedWebhookPayload,
   type MfaEnabledWebhookPayload,
   type MfaDisabledWebhookPayload,
   type TransactionBroadcastedWebhookPayload,
@@ -282,6 +286,7 @@ export {
   type TransactionFailedWebhookPayload,
   type TransactionReplacedWebhookPayload,
   type TransactionProviderErrorWebhookPayload,
+  type UserOperationCompletedWebhookPayload,
   type UserCreatedWebhookPayload,
   type UserAuthenticatedWebhookPayload,
   type UserLinkedAccountWebhookPayload,
@@ -303,8 +308,6 @@ export {
   type KrakenEmbedUserVerifiedWebhookPayload,
   type KrakenEmbedUserDisabledWebhookPayload,
   type KrakenEmbedUserClosedWebhookPayload,
-  type IntentCreatedWebhookPayload,
-  type IntentAuthorizedWebhookPayload,
 } from './webhooks';
 export {
   Yield,
@@ -325,4 +328,5 @@ export {
   type EthereumYieldClaimInput,
   type EthereumYieldClaimReward,
   type EthereumYieldClaimResponse,
+  type EthereumYieldClaimIDInput,
 } from './yield';

@@ -66,11 +66,6 @@ export interface EthereumYieldSweepResponse {
   id: string;
 
   /**
-   * The ID of the ERC-20 approval transaction (for deposits).
-   */
-  approval_transaction_id: string | null;
-
-  /**
    * The amount of underlying assets involved. Set after the sweep is confirmed
    * on-chain.
    */
@@ -90,11 +85,6 @@ export interface EthereumYieldSweepResponse {
    * Status of a yield sweep.
    */
   status: EthereumYieldSweepStatus;
-
-  /**
-   * The ID of the underlying blockchain transaction (deposit/withdraw).
-   */
-  transaction_id: string | null;
 
   /**
    * Type of yield sweep.

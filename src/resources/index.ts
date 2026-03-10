@@ -10,6 +10,8 @@ export {
   type CreateAccountInput,
   type UpdateAccountInput,
   type AccountsListResponse,
+  type AssetAccountWithBalance,
+  type AccountsDashboardListResponse,
   type AccountBalanceResponse,
 } from './accounts';
 export {

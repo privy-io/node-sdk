@@ -1072,19 +1072,13 @@ export interface WalletRecoveredWebhookPayload {
 export interface YieldDepositConfirmedWebhookPayload {
   assets: string;
 
-  block_number: number;
-
   caip2: string;
-
-  log_index: number;
 
   owner: string;
 
   sender: string;
 
   shares: string;
-
-  transaction_hash: string;
 
   /**
    * The type of webhook event.
@@ -1100,11 +1094,7 @@ export interface YieldDepositConfirmedWebhookPayload {
 export interface YieldWithdrawConfirmedWebhookPayload {
   assets: string;
 
-  block_number: number;
-
   caip2: string;
-
-  log_index: number;
 
   owner: string;
 
@@ -1113,8 +1103,6 @@ export interface YieldWithdrawConfirmedWebhookPayload {
   sender: string;
 
   shares: string;
-
-  transaction_hash: string;
 
   /**
    * The type of webhook event.

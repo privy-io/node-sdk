@@ -392,6 +392,8 @@ Types:
 - <code><a href="./src/resources/accounts.ts">CreateAccountInput</a></code>
 - <code><a href="./src/resources/accounts.ts">UpdateAccountInput</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountsListResponse</a></code>
+- <code><a href="./src/resources/accounts.ts">AssetAccountWithBalance</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountsDashboardListResponse</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountBalanceResponse</a></code>
 
 # Yield

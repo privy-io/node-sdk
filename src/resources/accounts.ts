@@ -121,6 +121,110 @@ export interface AccountsListResponse {
 }
 
 /**
+ * A digital asset account with its aggregated balance across all wallets and
+ * chains.
+ */
+export interface AssetAccountWithBalance {
+  /**
+   * The account ID.
+   */
+  id: string;
+
+  balance: AssetAccountWithBalance.Balance;
+
+  /**
+   * An optional display name for the account.
+   */
+  display_name: string | null;
+
+  /**
+   * The wallets belonging to this account.
+   */
+  wallets: Array<AccountWallet>;
+}
+
+export namespace AssetAccountWithBalance {
+  export interface Balance {
+    /**
+     * The individual asset balances, each computed across all supported chains.
+     */
+    assets: Array<Balance.Asset>;
+
+    /**
+     * The total balance across all assets.
+     */
+    total: Balance.Total;
+  }
+
+  export namespace Balance {
+    export interface Asset {
+      /**
+       * The amount of the asset held, denominated in the unit of the asset itself, with
+       * 1 decimal of precision.
+       */
+      amount: string;
+
+      /**
+       * The price of the asset in the provided currency.
+       */
+      price: Asset.Price;
+
+      /**
+       * The symbol of the asset (e.g. USDC, ETH).
+       */
+      symbol: string;
+    }
+
+    export namespace Asset {
+      /**
+       * The price of the asset in the provided currency.
+       */
+      export interface Price {
+        /**
+         * The currency code.
+         */
+        currency: 'usd';
+
+        /**
+         * The monetary value as a string.
+         */
+        value: string;
+      }
+    }
+
+    /**
+     * The total balance across all assets.
+     */
+    export interface Total {
+      /**
+       * The currency code.
+       */
+      currency: 'usd';
+
+      /**
+       * The monetary value as a string.
+       */
+      value: string;
+    }
+  }
+}
+
+/**
+ * Paginated list of digital asset accounts for the dashboard.
+ */
+export interface AccountsDashboardListResponse {
+  /**
+   * The list of accounts, with balances included for dashboard display.
+   */
+  data: Array<AssetAccountWithBalance>;
+
+  /**
+   * Cursor for fetching the next page of results, or null if no more results.
+   */
+  next_cursor: string | null;
+}
+
+/**
  * The balance of a digital asset account, aggregated across all wallets and
  * supported chains.
  */
@@ -198,6 +302,8 @@ export declare namespace Accounts {
     type CreateAccountInput as CreateAccountInput,
     type UpdateAccountInput as UpdateAccountInput,
     type AccountsListResponse as AccountsListResponse,
+    type AssetAccountWithBalance as AssetAccountWithBalance,
+    type AccountsDashboardListResponse as AccountsDashboardListResponse,
     type AccountBalanceResponse as AccountBalanceResponse,
   };
 }

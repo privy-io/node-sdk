@@ -27,7 +27,9 @@ import {
   AccountWalletConfigurationItem,
   AccountWalletsConfiguration,
   Accounts,
+  AccountsDashboardListResponse,
   AccountsListResponse,
+  AssetAccountWithBalance,
   CreateAccountInput,
   UpdateAccountInput,
 } from './resources/accounts';
@@ -1499,6 +1501,8 @@ export declare namespace PrivyAPI {
     type CreateAccountInput as CreateAccountInput,
     type UpdateAccountInput as UpdateAccountInput,
     type AccountsListResponse as AccountsListResponse,
+    type AssetAccountWithBalance as AssetAccountWithBalance,
+    type AccountsDashboardListResponse as AccountsDashboardListResponse,
     type AccountBalanceResponse as AccountBalanceResponse,
   };
 

@@ -257,6 +257,7 @@ import {
   WalletRecoverySetupWebhookPayload,
   WebhookPayload,
   Webhooks,
+  YieldClaimConfirmedWebhookPayload,
   YieldDepositConfirmedWebhookPayload,
   YieldWithdrawConfirmedWebhookPayload,
 } from './resources/webhooks';
@@ -1478,6 +1479,7 @@ export declare namespace PrivyAPI {
     type WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload,
     type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
     type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
+    type YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
     type WebhookPayload as WebhookPayload,
     type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
     type KrakenEmbedQuoteExecutionFailedWebhookPayload as KrakenEmbedQuoteExecutionFailedWebhookPayload,

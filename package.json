@@ -93,6 +93,17 @@
     "typescript-eslint": "8.31.1",
     "viem": "^2.34.0"
   },
+  "overrides": {
+    "minimatch": "^9.0.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "minimatch": "^9.0.5"
+    }
+  },
+  "resolutions": {
+    "minimatch": "^9.0.5"
+  },
   "exports": {
     ".": {
       "import": {

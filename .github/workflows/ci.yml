@@ -77,6 +77,8 @@ jobs:
   test:
     timeout-minutes: 10
     env:
+      TEST_API_URL: ${{ secrets.TEST_API_URL }}
+      TEST_APP_ID: ${{ secrets.TEST_APP_ID }}
       TEST_APP_SECRET: ${{ secrets.TEST_APP_SECRET }}
       JWT_AUTH_SK: ${{ secrets.JWT_AUTH_SK }}
       TEST_APP_TEST_ACCOUNT_OTP: ${{ secrets.TEST_APP_TEST_ACCOUNT_OTP }}

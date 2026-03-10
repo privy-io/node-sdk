@@ -371,6 +371,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldClaimConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>

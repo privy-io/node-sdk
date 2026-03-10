@@ -366,6 +366,11 @@ export interface EthereumYieldClaimResponse {
   caip2: EvmCaip2ChainID;
 
   /**
+   * Unix timestamp of when the claim was created, in milliseconds.
+   */
+  created_at: number;
+
+  /**
    * List of reward tokens claimed.
    */
   rewards: Array<EthereumYieldClaimReward>;
@@ -382,6 +387,11 @@ export interface EthereumYieldClaimResponse {
     | 'finalized'
     | 'provider_error'
     | 'pending';
+
+  /**
+   * Unix timestamp of when the claim was last updated, in milliseconds.
+   */
+  updated_at: number;
 }
 
 /**

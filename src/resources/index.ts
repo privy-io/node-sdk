@@ -301,6 +301,7 @@ export {
   type WalletRecoveredWebhookPayload,
   type YieldDepositConfirmedWebhookPayload,
   type YieldWithdrawConfirmedWebhookPayload,
+  type YieldClaimConfirmedWebhookPayload,
   type WebhookPayload,
   type KrakenEmbedQuoteExecutedWebhookPayload,
   type KrakenEmbedQuoteExecutionFailedWebhookPayload,

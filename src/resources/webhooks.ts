@@ -1125,6 +1125,34 @@ export interface YieldWithdrawConfirmedWebhookPayload {
 }
 
 /**
+ * Payload for the yield.claim.confirmed webhook event.
+ */
+export interface YieldClaimConfirmedWebhookPayload {
+  caip2: string;
+
+  rewards: Array<YieldClaimConfirmedWebhookPayload.Reward>;
+
+  transaction_id: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'yield.claim.confirmed';
+
+  wallet_id: string;
+}
+
+export namespace YieldClaimConfirmedWebhookPayload {
+  export interface Reward {
+    amount: string;
+
+    token_address: string;
+
+    token_symbol: string;
+  }
+}
+
+/**
  * Union of all webhook payload schemas.
  */
 export type WebhookPayload =
@@ -1151,6 +1179,7 @@ export type WebhookPayload =
   | MfaDisabledWebhookPayload
   | YieldDepositConfirmedWebhookPayload
   | YieldWithdrawConfirmedWebhookPayload
+  | YieldClaimConfirmedWebhookPayload
   | UserOperationCompletedWebhookPayload
   | IntentCreatedWebhookPayload
   | IntentAuthorizedWebhookPayload
@@ -1334,6 +1363,7 @@ export declare namespace Webhooks {
     type WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload,
     type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
     type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
+    type YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
     type WebhookPayload as WebhookPayload,
     type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
     type KrakenEmbedQuoteExecutionFailedWebhookPayload as KrakenEmbedQuoteExecutionFailedWebhookPayload,

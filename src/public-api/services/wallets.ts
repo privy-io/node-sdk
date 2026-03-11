@@ -11,7 +11,7 @@ import {
   WalletRawSignParams,
   WalletRawSignResponse,
   WalletRpcParams,
-  WalletRpcResponseBody,
+  WalletRpcResponse,
   Wallets,
   WalletSubmitImportParams,
   WalletUpdateParams,
@@ -54,7 +54,7 @@ export class PrivyWalletsService extends Wallets {
   public async rpc<Params extends PrivyWalletsService.RpcInput>(
     walletId: string,
     params: Params,
-  ): Promise<Extract<WalletRpcResponseBody, { method: Params['method'] }>>;
+  ): Promise<Extract<WalletRpcResponse, { method: Params['method'] }>>;
   public async rpc(
     walletId: string,
     {
@@ -62,7 +62,7 @@ export class PrivyWalletsService extends Wallets {
       idempotency_key: idempotencyKey,
       ...params
     }: PrivyWalletsService.RpcInput,
-  ): Promise<WalletRpcResponseBody> {
+  ): Promise<WalletRpcResponse> {
     const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
       authorizationContext,
       input: {

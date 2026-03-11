@@ -291,6 +291,8 @@ import {
   Apps,
   EmailInviteInput,
   PhoneInviteInput,
+  TestAccount,
+  TestAccountsResponse,
   UserInviteInput,
   WalletInviteInput,
 } from './resources/apps/apps';
@@ -317,7 +319,6 @@ import {
   ExtendedChainType,
   FirstClassChainType,
   HpkeImportConfig,
-  PatchWalletRequestBody,
   SolanaSignAndSendTransactionRpcInput,
   SolanaSignAndSendTransactionRpcResponse,
   SolanaSignMessageRpcInput,
@@ -346,9 +347,10 @@ import {
   WalletRawSignResponse,
   WalletRpcParams,
   WalletRpcRequestBody,
-  WalletRpcResponseBody,
+  WalletRpcResponse,
   WalletSubmitImportParams,
   WalletUpdateParams,
+  WalletUpdateRequestBody,
   Wallets,
   WalletsCursor,
 } from './resources/wallets/wallets';
@@ -1196,7 +1198,7 @@ export declare namespace PrivyAPI {
     type CustodialWallet as CustodialWallet,
     type HpkeImportConfig as HpkeImportConfig,
     type SuiCommandName as SuiCommandName,
-    type PatchWalletRequestBody as PatchWalletRequestBody,
+    type WalletUpdateRequestBody as WalletUpdateRequestBody,
     type WalletBatchItemInput as WalletBatchItemInput,
     type WalletBatchCreateInput as WalletBatchCreateInput,
     type WalletBatchCreateResult as WalletBatchCreateResult,
@@ -1222,7 +1224,7 @@ export declare namespace PrivyAPI {
     type SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
     type WalletRpcRequestBody as WalletRpcRequestBody,
-    type WalletRpcResponseBody as WalletRpcResponseBody,
+    type WalletRpcResponse as WalletRpcResponse,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
@@ -1372,6 +1374,8 @@ export declare namespace PrivyAPI {
     type UserInviteInput as UserInviteInput,
     type AllowlistEntry as AllowlistEntry,
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
+    type TestAccount as TestAccount,
+    type TestAccountsResponse as TestAccountsResponse,
   };
 
   export {

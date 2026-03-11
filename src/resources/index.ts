@@ -33,6 +33,8 @@ export {
   type UserInviteInput,
   type AllowlistEntry,
   type AllowlistDeletionResponse,
+  type TestAccount,
+  type TestAccountsResponse,
 } from './apps/apps';
 export {
   ClientAuth,
@@ -229,7 +231,7 @@ export {
   type CustodialWallet,
   type HpkeImportConfig,
   type SuiCommandName,
-  type PatchWalletRequestBody,
+  type WalletUpdateRequestBody,
   type WalletBatchItemInput,
   type WalletBatchCreateInput,
   type WalletBatchCreateResult,
@@ -255,7 +257,7 @@ export {
   type SolanaSignAndSendTransactionRpcResponse,
   type SolanaSignMessageRpcResponse,
   type WalletRpcRequestBody,
-  type WalletRpcResponseBody,
+  type WalletRpcResponse,
   type WalletExportResponse,
   type WalletInitImportResponse,
   type WalletRawSignResponse,

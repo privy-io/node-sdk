@@ -15,4 +15,6 @@ export {
   type UserInviteInput,
   type AllowlistEntry,
   type AllowlistDeletionResponse,
+  type TestAccount,
+  type TestAccountsResponse,
 } from './apps';

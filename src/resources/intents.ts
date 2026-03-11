@@ -2,9 +2,206 @@
 
 import { APIResource } from '../core/resource';
 import * as IntentsAPI from './intents';
+import * as PoliciesAPI from './policies';
 import * as WalletsAPI from './wallets/wallets';
+import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
+import { RequestOptions } from '../internal/request-options';
+import { path } from '../internal/utils/path';
 
-export class Intents extends APIResource {}
+export class Intents extends APIResource {
+  /**
+   * List intents for an app. Returns a paginated list of intents with their current
+   * status and details.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const intentResponse of client.intents.list()) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(
+    query: IntentListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<IntentResponsesCursor, IntentResponse> {
+    return this._client.getAPIList('/v1/intents', Cursor<IntentResponse>, { query, ...options });
+  }
+
+  /**
+   * Create an intent to add a rule to a policy. The intent must be authorized by the
+   * policy owner before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const ruleIntentResponse =
+   *   await client.intents.createPolicyRule('policy_id', {
+   *     action: 'ALLOW',
+   *     conditions: [
+   *       {
+   *         field: 'to',
+   *         field_source: 'ethereum_transaction',
+   *         operator: 'eq',
+   *         value: 'string',
+   *       },
+   *     ],
+   *     method: 'eth_sendTransaction',
+   *     name: 'x',
+   *   });
+   * ```
+   */
+  createPolicyRule(
+    policyID: string,
+    body: IntentCreatePolicyRuleParams,
+    options?: RequestOptions,
+  ): APIPromise<RuleIntentResponse> {
+    return this._client.post(path`/v1/intents/policies/${policyID}/rules`, { body, ...options });
+  }
+
+  /**
+   * Create an intent to delete a rule from a policy. The intent must be authorized
+   * by the policy owner before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const ruleIntentResponse =
+   *   await client.intents.deletePolicyRule('rule_id', {
+   *     policy_id: 'policy_id',
+   *   });
+   * ```
+   */
+  deletePolicyRule(
+    ruleID: string,
+    params: IntentDeletePolicyRuleParams,
+    options?: RequestOptions,
+  ): APIPromise<RuleIntentResponse> {
+    const { policy_id } = params;
+    return this._client.delete(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, options);
+  }
+
+  /**
+   * Retrieve an intent by ID. Returns the intent details including its current
+   * status, authorization details, and execution result if applicable.
+   *
+   * @example
+   * ```ts
+   * const intentResponse = await client.intents.get(
+   *   'intent_id',
+   * );
+   * ```
+   */
+  get(intentID: string, options?: RequestOptions): APIPromise<IntentResponse> {
+    return this._client.get(path`/v1/intents/${intentID}`, options);
+  }
+
+  /**
+   * Create an intent to execute an RPC method on a wallet. The intent must be
+   * authorized by either the wallet owner or signers before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const rpcIntentResponse = await client.intents.rpc(
+   *   'wallet_id',
+   *   {
+   *     method: 'personal_sign',
+   *     params: { encoding: 'utf-8', message: 'message' },
+   *   },
+   * );
+   * ```
+   */
+  rpc(walletID: string, body: IntentRpcParams, options?: RequestOptions): APIPromise<RpcIntentResponse> {
+    return this._client.post(path`/v1/intents/wallets/${walletID}/rpc`, { body, ...options });
+  }
+
+  /**
+   * Create an intent to update a key quorum. The intent must be authorized by the
+   * key quorum members before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const keyQuorumIntentResponse =
+   *   await client.intents.updateKeyQuorum('key_quorum_id');
+   * ```
+   */
+  updateKeyQuorum(
+    keyQuorumID: string,
+    body: IntentUpdateKeyQuorumParams,
+    options?: RequestOptions,
+  ): APIPromise<KeyQuorumIntentResponse> {
+    return this._client.patch(path`/v1/intents/key_quorums/${keyQuorumID}`, { body, ...options });
+  }
+
+  /**
+   * Create an intent to update a policy. The intent must be authorized by the policy
+   * owner before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const policyIntentResponse =
+   *   await client.intents.updatePolicy('policy_id');
+   * ```
+   */
+  updatePolicy(
+    policyID: string,
+    body: IntentUpdatePolicyParams,
+    options?: RequestOptions,
+  ): APIPromise<PolicyIntentResponse> {
+    return this._client.patch(path`/v1/intents/policies/${policyID}`, { body, ...options });
+  }
+
+  /**
+   * Create an intent to update a rule on a policy. The intent must be authorized by
+   * the policy owner before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const ruleIntentResponse =
+   *   await client.intents.updatePolicyRule('rule_id', {
+   *     policy_id: 'policy_id',
+   *     action: 'ALLOW',
+   *     conditions: [
+   *       {
+   *         field: 'to',
+   *         field_source: 'ethereum_transaction',
+   *         operator: 'eq',
+   *         value: 'string',
+   *       },
+   *     ],
+   *     method: 'eth_sendTransaction',
+   *     name: 'x',
+   *   });
+   * ```
+   */
+  updatePolicyRule(
+    ruleID: string,
+    params: IntentUpdatePolicyRuleParams,
+    options?: RequestOptions,
+  ): APIPromise<RuleIntentResponse> {
+    const { policy_id, ...body } = params;
+    return this._client.patch(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, { body, ...options });
+  }
+
+  /**
+   * Create an intent to update a wallet. The intent must be authorized by the wallet
+   * owner before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const walletIntentResponse =
+   *   await client.intents.updateWallet('wallet_id');
+   * ```
+   */
+  updateWallet(
+    walletID: string,
+    body: IntentUpdateWalletParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletIntentResponse> {
+    return this._client.patch(path`/v1/intents/wallets/${walletID}`, { body, ...options });
+  }
+}
+
+export type IntentResponsesCursor = Cursor<IntentResponse>;
 
 /**
  * Type of intent.
@@ -3387,6 +3584,1071 @@ export type IntentResponse =
   | RuleIntentResponse
   | KeyQuorumIntentResponse;
 
+export interface IntentListParams extends CursorParams {
+  created_by_id?: string;
+
+  current_user_has_signed?: 'true' | 'false';
+
+  /**
+   * Type of intent.
+   */
+  intent_type?: IntentType;
+
+  pending_member_id?: string;
+
+  resource_id?: string;
+
+  sort_by?: 'created_at_desc' | 'expires_at_asc' | 'updated_at_desc';
+
+  /**
+   * Current status of an intent.
+   */
+  status?: IntentStatus;
+}
+
+export interface IntentCreatePolicyRuleParams {
+  /**
+   * Action to take if the conditions are true.
+   */
+  action: 'ALLOW' | 'DENY';
+
+  conditions: Array<
+    | IntentCreatePolicyRuleParams.EthereumTransactionCondition
+    | IntentCreatePolicyRuleParams.EthereumCalldataCondition
+    | IntentCreatePolicyRuleParams.EthereumTypedDataDomainCondition
+    | IntentCreatePolicyRuleParams.EthereumTypedDataMessageCondition
+    | IntentCreatePolicyRuleParams.Ethereum7702AuthorizationCondition
+    | IntentCreatePolicyRuleParams.SolanaProgramInstructionCondition
+    | IntentCreatePolicyRuleParams.SolanaSystemProgramInstructionCondition
+    | IntentCreatePolicyRuleParams.SolanaTokenProgramInstructionCondition
+    | IntentCreatePolicyRuleParams.SystemCondition
+    | PoliciesAPI.TronTransactionCondition
+    | PoliciesAPI.SuiTransactionCommandCondition
+    | PoliciesAPI.SuiTransferObjectsCommandCondition
+  >;
+
+  /**
+   * Method the rule applies to.
+   */
+  method:
+    | 'eth_sendTransaction'
+    | 'eth_signTransaction'
+    | 'eth_signUserOperation'
+    | 'eth_signTypedData_v4'
+    | 'eth_sign7702Authorization'
+    | 'signTransaction'
+    | 'signAndSendTransaction'
+    | 'exportPrivateKey'
+    | 'signTransactionBytes'
+    | '*';
+
+  name: string;
+}
+
+export namespace IntentCreatePolicyRuleParams {
+  /**
+   * The verbatim Ethereum transaction object in an eth_signTransaction or
+   * eth_sendTransaction request.
+   */
+  export interface EthereumTransactionCondition {
+    field: 'to' | 'value' | 'chain_id';
+
+    field_source: 'ethereum_transaction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * The decoded calldata in a smart contract interaction as the smart contract
+   * method's parameters. Note that that 'ethereum_calldata' conditions must contain
+   * an abi parameter with the JSON ABI of the smart contract.
+   */
+  export interface EthereumCalldataCondition {
+    abi: unknown;
+
+    field: string;
+
+    field_source: 'ethereum_calldata';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Attributes from the signing domain that will verify the signature.
+   */
+  export interface EthereumTypedDataDomainCondition {
+    field: 'chainId' | 'verifyingContract';
+
+    field_source: 'ethereum_typed_data_domain';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
+   * EIP-712.
+   */
+  export interface EthereumTypedDataMessageCondition {
+    field: string;
+
+    field_source: 'ethereum_typed_data_message';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    typed_data: EthereumTypedDataMessageCondition.TypedData;
+
+    value: string | Array<string>;
+  }
+
+  export namespace EthereumTypedDataMessageCondition {
+    export interface TypedData {
+      primary_type: string;
+
+      types: { [key: string]: Array<TypedData.Type> };
+    }
+
+    export namespace TypedData {
+      export interface Type {
+        name: string;
+
+        type: string;
+      }
+    }
+  }
+
+  /**
+   * Allowed contract addresses for eth_sign7702Authorization requests.
+   */
+  export interface Ethereum7702AuthorizationCondition {
+    field: 'contract';
+
+    field_source: 'ethereum_7702_authorization';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Solana Program attributes, enables allowlisting Solana Programs.
+   */
+  export interface SolanaProgramInstructionCondition {
+    field: 'programId';
+
+    field_source: 'solana_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Solana System Program attributes, including more granular Transfer instruction
+   * fields.
+   */
+  export interface SolanaSystemProgramInstructionCondition {
+    field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+
+    field_source: 'solana_system_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Solana Token Program attributes, including more granular TransferChecked
+   * instruction fields.
+   */
+  export interface SolanaTokenProgramInstructionCondition {
+    field:
+      | 'instructionName'
+      | 'TransferChecked.source'
+      | 'TransferChecked.destination'
+      | 'TransferChecked.authority'
+      | 'TransferChecked.amount'
+      | 'TransferChecked.mint';
+
+    field_source: 'solana_token_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * System attributes, including current unix timestamp (in seconds).
+   */
+  export interface SystemCondition {
+    field: 'current_unix_timestamp';
+
+    field_source: 'system';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+}
+
+export interface IntentDeletePolicyRuleParams {
+  /**
+   * ID of the policy.
+   */
+  policy_id: string;
+}
+
+export type IntentRpcParams =
+  | IntentRpcParams.EthereumPersonalSignRpcInput
+  | IntentRpcParams.EthereumSignTypedDataRpcInput
+  | IntentRpcParams.EthereumSignTransactionRpcInput
+  | IntentRpcParams.EthereumSignUserOperationRpcInput
+  | IntentRpcParams.EthereumSendTransactionRpcInput
+  | IntentRpcParams.EthereumSign7702AuthorizationRpcInput
+  | IntentRpcParams.EthereumSecp256k1SignRpcInput
+  | IntentRpcParams.SolanaSignMessageRpcInput
+  | IntentRpcParams.SolanaSignTransactionRpcInput
+  | IntentRpcParams.SolanaSignAndSendTransactionRpcInput;
+
+export declare namespace IntentRpcParams {
+  export interface EthereumPersonalSignRpcInput {
+    method: 'personal_sign';
+
+    params: EthereumPersonalSignRpcInput.Params;
+
+    address?: string;
+
+    chain_type?: 'ethereum';
+  }
+
+  export namespace EthereumPersonalSignRpcInput {
+    export interface Params {
+      encoding: 'utf-8' | 'hex';
+
+      message: string;
+    }
+  }
+
+  export interface EthereumSignTypedDataRpcInput {
+    method: 'eth_signTypedData_v4';
+
+    params: EthereumSignTypedDataRpcInput.Params;
+
+    address?: string;
+
+    chain_type?: 'ethereum';
+  }
+
+  export namespace EthereumSignTypedDataRpcInput {
+    export interface Params {
+      typed_data: Params.TypedData;
+    }
+
+    export namespace Params {
+      export interface TypedData {
+        domain: { [key: string]: unknown };
+
+        message: { [key: string]: unknown };
+
+        primary_type: string;
+
+        types: { [key: string]: Array<TypedData.Type> };
+      }
+
+      export namespace TypedData {
+        export interface Type {
+          name: string;
+
+          type: string;
+        }
+      }
+    }
+  }
+
+  export interface EthereumSignTransactionRpcInput {
+    method: 'eth_signTransaction';
+
+    params: EthereumSignTransactionRpcInput.Params;
+
+    address?: string;
+
+    chain_type?: 'ethereum';
+  }
+
+  export namespace EthereumSignTransactionRpcInput {
+    export interface Params {
+      transaction: Params.Transaction;
+    }
+
+    export namespace Params {
+      export interface Transaction {
+        authorization_list?: Array<Transaction.AuthorizationList>;
+
+        chain_id?: string | number;
+
+        data?: string;
+
+        from?: string;
+
+        gas_limit?: string | number;
+
+        gas_price?: string | number;
+
+        max_fee_per_gas?: string | number;
+
+        max_priority_fee_per_gas?: string | number;
+
+        nonce?: string | number;
+
+        to?: string;
+
+        type?: 0 | 1 | 2 | 4;
+
+        value?: string | number;
+      }
+
+      export namespace Transaction {
+        export interface AuthorizationList {
+          chain_id: string | number;
+
+          contract: string;
+
+          nonce: string | number;
+
+          r: string;
+
+          s: string;
+
+          y_parity: number;
+        }
+      }
+    }
+  }
+
+  export interface EthereumSignUserOperationRpcInput {
+    method: 'eth_signUserOperation';
+
+    params: EthereumSignUserOperationRpcInput.Params;
+
+    address?: string;
+
+    chain_type?: 'ethereum';
+  }
+
+  export namespace EthereumSignUserOperationRpcInput {
+    export interface Params {
+      chain_id: string | number;
+
+      contract: string;
+
+      user_operation: Params.UserOperation;
+    }
+
+    export namespace Params {
+      export interface UserOperation {
+        call_data: string;
+
+        call_gas_limit: string;
+
+        max_fee_per_gas: string;
+
+        max_priority_fee_per_gas: string;
+
+        nonce: string;
+
+        paymaster: string;
+
+        paymaster_data: string;
+
+        paymaster_post_op_gas_limit: string;
+
+        paymaster_verification_gas_limit: string;
+
+        pre_verification_gas: string;
+
+        sender: string;
+
+        verification_gas_limit: string;
+      }
+    }
+  }
+
+  export interface EthereumSendTransactionRpcInput {
+    caip2: string;
+
+    method: 'eth_sendTransaction';
+
+    params: EthereumSendTransactionRpcInput.Params;
+
+    address?: string;
+
+    chain_type?: 'ethereum';
+
+    sponsor?: boolean;
+  }
+
+  export namespace EthereumSendTransactionRpcInput {
+    export interface Params {
+      transaction: Params.Transaction;
+    }
+
+    export namespace Params {
+      export interface Transaction {
+        authorization_list?: Array<Transaction.AuthorizationList>;
+
+        chain_id?: string | number;
+
+        data?: string;
+
+        from?: string;
+
+        gas_limit?: string | number;
+
+        gas_price?: string | number;
+
+        max_fee_per_gas?: string | number;
+
+        max_priority_fee_per_gas?: string | number;
+
+        nonce?: string | number;
+
+        to?: string;
+
+        type?: 0 | 1 | 2 | 4;
+
+        value?: string | number;
+      }
+
+      export namespace Transaction {
+        export interface AuthorizationList {
+          chain_id: string | number;
+
+          contract: string;
+
+          nonce: string | number;
+
+          r: string;
+
+          s: string;
+
+          y_parity: number;
+        }
+      }
+    }
+  }
+
+  export interface EthereumSign7702AuthorizationRpcInput {
+    method: 'eth_sign7702Authorization';
+
+    params: EthereumSign7702AuthorizationRpcInput.Params;
+
+    address?: string;
+
+    chain_type?: 'ethereum';
+  }
+
+  export namespace EthereumSign7702AuthorizationRpcInput {
+    export interface Params {
+      chain_id: string | number;
+
+      contract: string;
+
+      nonce?: string | number;
+    }
+  }
+
+  export interface EthereumSecp256k1SignRpcInput {
+    method: 'secp256k1_sign';
+
+    params: EthereumSecp256k1SignRpcInput.Params;
+
+    address?: string;
+
+    chain_type?: 'ethereum';
+  }
+
+  export namespace EthereumSecp256k1SignRpcInput {
+    export interface Params {
+      hash: string;
+    }
+  }
+
+  export interface SolanaSignMessageRpcInput {
+    method: 'signMessage';
+
+    params: SolanaSignMessageRpcInput.Params;
+
+    address?: string;
+
+    chain_type?: 'solana';
+  }
+
+  export namespace SolanaSignMessageRpcInput {
+    export interface Params {
+      encoding: 'base64';
+
+      message: string;
+    }
+  }
+
+  export interface SolanaSignTransactionRpcInput {
+    method: 'signTransaction';
+
+    params: SolanaSignTransactionRpcInput.Params;
+
+    address?: string;
+
+    chain_type?: 'solana';
+  }
+
+  export namespace SolanaSignTransactionRpcInput {
+    export interface Params {
+      encoding: 'base64';
+
+      transaction: string;
+    }
+  }
+
+  export interface SolanaSignAndSendTransactionRpcInput {
+    caip2: string;
+
+    method: 'signAndSendTransaction';
+
+    params: SolanaSignAndSendTransactionRpcInput.Params;
+
+    address?: string;
+
+    chain_type?: 'solana';
+
+    sponsor?: boolean;
+  }
+
+  export namespace SolanaSignAndSendTransactionRpcInput {
+    export interface Params {
+      encoding: 'base64';
+
+      transaction: string;
+    }
+  }
+}
+
+export interface IntentUpdateKeyQuorumParams {
+  /**
+   * The number of keys that must sign for an action to be valid. Must be less than
+   * or equal to total number of key quorum members.
+   */
+  authorization_threshold?: number;
+
+  display_name?: string;
+
+  /**
+   * List of key quorum IDs that should be members of this key quorum. Key quorums
+   * can only be nested 1 level deep.
+   */
+  key_quorum_ids?: Array<string>;
+
+  /**
+   * List of P-256 public keys of the keys that should be authorized to sign on the
+   * key quorum, in base64-encoded DER format.
+   */
+  public_keys?: Array<string>;
+
+  /**
+   * List of user IDs of the users that should be authorized to sign on the key
+   * quorum.
+   */
+  user_ids?: Array<string>;
+}
+
+export interface IntentUpdatePolicyParams {
+  /**
+   * Name to assign to policy.
+   */
+  name?: string;
+
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  owner?: IntentUpdatePolicyParams.PublicKeyOwner | IntentUpdatePolicyParams.UserOwner | null;
+
+  owner_id?: string | null;
+
+  rules?: Array<IntentUpdatePolicyParams.Rule>;
+}
+
+export namespace IntentUpdatePolicyParams {
+  /**
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
+   */
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
+
+  /**
+   * The rules that apply to each method the policy covers.
+   */
+  export interface Rule {
+    /**
+     * Action to take if the conditions are true.
+     */
+    action: 'ALLOW' | 'DENY';
+
+    conditions: Array<
+      | Rule.EthereumTransactionCondition
+      | Rule.EthereumCalldataCondition
+      | Rule.EthereumTypedDataDomainCondition
+      | Rule.EthereumTypedDataMessageCondition
+      | Rule.Ethereum7702AuthorizationCondition
+      | Rule.SolanaProgramInstructionCondition
+      | Rule.SolanaSystemProgramInstructionCondition
+      | Rule.SolanaTokenProgramInstructionCondition
+      | Rule.SystemCondition
+      | PoliciesAPI.TronTransactionCondition
+      | PoliciesAPI.SuiTransactionCommandCondition
+      | PoliciesAPI.SuiTransferObjectsCommandCondition
+    >;
+
+    /**
+     * Method the rule applies to.
+     */
+    method:
+      | 'eth_sendTransaction'
+      | 'eth_signTransaction'
+      | 'eth_signUserOperation'
+      | 'eth_signTypedData_v4'
+      | 'eth_sign7702Authorization'
+      | 'signTransaction'
+      | 'signAndSendTransaction'
+      | 'exportPrivateKey'
+      | 'signTransactionBytes'
+      | '*';
+
+    name: string;
+  }
+
+  export namespace Rule {
+    /**
+     * The verbatim Ethereum transaction object in an eth_signTransaction or
+     * eth_sendTransaction request.
+     */
+    export interface EthereumTransactionCondition {
+      field: 'to' | 'value' | 'chain_id';
+
+      field_source: 'ethereum_transaction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    /**
+     * The decoded calldata in a smart contract interaction as the smart contract
+     * method's parameters. Note that that 'ethereum_calldata' conditions must contain
+     * an abi parameter with the JSON ABI of the smart contract.
+     */
+    export interface EthereumCalldataCondition {
+      abi: unknown;
+
+      field: string;
+
+      field_source: 'ethereum_calldata';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    /**
+     * Attributes from the signing domain that will verify the signature.
+     */
+    export interface EthereumTypedDataDomainCondition {
+      field: 'chainId' | 'verifyingContract';
+
+      field_source: 'ethereum_typed_data_domain';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    /**
+     * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
+     * EIP-712.
+     */
+    export interface EthereumTypedDataMessageCondition {
+      field: string;
+
+      field_source: 'ethereum_typed_data_message';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      typed_data: EthereumTypedDataMessageCondition.TypedData;
+
+      value: string | Array<string>;
+    }
+
+    export namespace EthereumTypedDataMessageCondition {
+      export interface TypedData {
+        primary_type: string;
+
+        types: { [key: string]: Array<TypedData.Type> };
+      }
+
+      export namespace TypedData {
+        export interface Type {
+          name: string;
+
+          type: string;
+        }
+      }
+    }
+
+    /**
+     * Allowed contract addresses for eth_sign7702Authorization requests.
+     */
+    export interface Ethereum7702AuthorizationCondition {
+      field: 'contract';
+
+      field_source: 'ethereum_7702_authorization';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    /**
+     * Solana Program attributes, enables allowlisting Solana Programs.
+     */
+    export interface SolanaProgramInstructionCondition {
+      field: 'programId';
+
+      field_source: 'solana_program_instruction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    /**
+     * Solana System Program attributes, including more granular Transfer instruction
+     * fields.
+     */
+    export interface SolanaSystemProgramInstructionCondition {
+      field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+
+      field_source: 'solana_system_program_instruction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    /**
+     * Solana Token Program attributes, including more granular TransferChecked
+     * instruction fields.
+     */
+    export interface SolanaTokenProgramInstructionCondition {
+      field:
+        | 'instructionName'
+        | 'TransferChecked.source'
+        | 'TransferChecked.destination'
+        | 'TransferChecked.authority'
+        | 'TransferChecked.amount'
+        | 'TransferChecked.mint';
+
+      field_source: 'solana_token_program_instruction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    /**
+     * System attributes, including current unix timestamp (in seconds).
+     */
+    export interface SystemCondition {
+      field: 'current_unix_timestamp';
+
+      field_source: 'system';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+  }
+}
+
+export interface IntentUpdatePolicyRuleParams {
+  /**
+   * Path param: ID of the policy.
+   */
+  policy_id: string;
+
+  /**
+   * Body param: Action to take if the conditions are true.
+   */
+  action: 'ALLOW' | 'DENY';
+
+  /**
+   * Body param
+   */
+  conditions: Array<
+    | IntentUpdatePolicyRuleParams.EthereumTransactionCondition
+    | IntentUpdatePolicyRuleParams.EthereumCalldataCondition
+    | IntentUpdatePolicyRuleParams.EthereumTypedDataDomainCondition
+    | IntentUpdatePolicyRuleParams.EthereumTypedDataMessageCondition
+    | IntentUpdatePolicyRuleParams.Ethereum7702AuthorizationCondition
+    | IntentUpdatePolicyRuleParams.SolanaProgramInstructionCondition
+    | IntentUpdatePolicyRuleParams.SolanaSystemProgramInstructionCondition
+    | IntentUpdatePolicyRuleParams.SolanaTokenProgramInstructionCondition
+    | IntentUpdatePolicyRuleParams.SystemCondition
+    | PoliciesAPI.TronTransactionCondition
+    | PoliciesAPI.SuiTransactionCommandCondition
+    | PoliciesAPI.SuiTransferObjectsCommandCondition
+  >;
+
+  /**
+   * Body param: Method the rule applies to.
+   */
+  method:
+    | 'eth_sendTransaction'
+    | 'eth_signTransaction'
+    | 'eth_signUserOperation'
+    | 'eth_signTypedData_v4'
+    | 'eth_sign7702Authorization'
+    | 'signTransaction'
+    | 'signAndSendTransaction'
+    | 'exportPrivateKey'
+    | 'signTransactionBytes'
+    | '*';
+
+  /**
+   * Body param
+   */
+  name: string;
+}
+
+export namespace IntentUpdatePolicyRuleParams {
+  /**
+   * The verbatim Ethereum transaction object in an eth_signTransaction or
+   * eth_sendTransaction request.
+   */
+  export interface EthereumTransactionCondition {
+    field: 'to' | 'value' | 'chain_id';
+
+    field_source: 'ethereum_transaction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * The decoded calldata in a smart contract interaction as the smart contract
+   * method's parameters. Note that that 'ethereum_calldata' conditions must contain
+   * an abi parameter with the JSON ABI of the smart contract.
+   */
+  export interface EthereumCalldataCondition {
+    abi: unknown;
+
+    field: string;
+
+    field_source: 'ethereum_calldata';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Attributes from the signing domain that will verify the signature.
+   */
+  export interface EthereumTypedDataDomainCondition {
+    field: 'chainId' | 'verifyingContract';
+
+    field_source: 'ethereum_typed_data_domain';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
+   * EIP-712.
+   */
+  export interface EthereumTypedDataMessageCondition {
+    field: string;
+
+    field_source: 'ethereum_typed_data_message';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    typed_data: EthereumTypedDataMessageCondition.TypedData;
+
+    value: string | Array<string>;
+  }
+
+  export namespace EthereumTypedDataMessageCondition {
+    export interface TypedData {
+      primary_type: string;
+
+      types: { [key: string]: Array<TypedData.Type> };
+    }
+
+    export namespace TypedData {
+      export interface Type {
+        name: string;
+
+        type: string;
+      }
+    }
+  }
+
+  /**
+   * Allowed contract addresses for eth_sign7702Authorization requests.
+   */
+  export interface Ethereum7702AuthorizationCondition {
+    field: 'contract';
+
+    field_source: 'ethereum_7702_authorization';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Solana Program attributes, enables allowlisting Solana Programs.
+   */
+  export interface SolanaProgramInstructionCondition {
+    field: 'programId';
+
+    field_source: 'solana_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Solana System Program attributes, including more granular Transfer instruction
+   * fields.
+   */
+  export interface SolanaSystemProgramInstructionCondition {
+    field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+
+    field_source: 'solana_system_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Solana Token Program attributes, including more granular TransferChecked
+   * instruction fields.
+   */
+  export interface SolanaTokenProgramInstructionCondition {
+    field:
+      | 'instructionName'
+      | 'TransferChecked.source'
+      | 'TransferChecked.destination'
+      | 'TransferChecked.authority'
+      | 'TransferChecked.amount'
+      | 'TransferChecked.mint';
+
+    field_source: 'solana_token_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * System attributes, including current unix timestamp (in seconds).
+   */
+  export interface SystemCondition {
+    field: 'current_unix_timestamp';
+
+    field_source: 'system';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+}
+
+export interface IntentUpdateWalletParams {
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: Array<IntentUpdateWalletParams.AdditionalSigner>;
+
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  owner?: IntentUpdateWalletParams.PublicKeyOwner | IntentUpdateWalletParams.UserOwner | null;
+
+  owner_id?: string | null;
+
+  /**
+   * New policy IDs to enforce on the wallet. Currently, only one policy is supported
+   * per wallet.
+   */
+  policy_ids?: Array<string>;
+}
+
+export namespace IntentUpdateWalletParams {
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
+  }
+
+  /**
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
+   */
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
+}
+
 export declare namespace Intents {
   export {
     type IntentType as IntentType,
@@ -3402,5 +4664,14 @@ export declare namespace Intents {
     type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
     type RuleIntentResponse as RuleIntentResponse,
     type IntentResponse as IntentResponse,
+    type IntentResponsesCursor as IntentResponsesCursor,
+    type IntentListParams as IntentListParams,
+    type IntentCreatePolicyRuleParams as IntentCreatePolicyRuleParams,
+    type IntentDeletePolicyRuleParams as IntentDeletePolicyRuleParams,
+    type IntentRpcParams as IntentRpcParams,
+    type IntentUpdateKeyQuorumParams as IntentUpdateKeyQuorumParams,
+    type IntentUpdatePolicyParams as IntentUpdatePolicyParams,
+    type IntentUpdatePolicyRuleParams as IntentUpdatePolicyRuleParams,
+    type IntentUpdateWalletParams as IntentUpdateWalletParams,
   };
 }

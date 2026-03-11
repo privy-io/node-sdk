@@ -322,67 +322,6 @@ export class Users extends APIResource {
 export type UsersCursor = Cursor<User>;
 
 /**
- * The authenticated user.
- */
-export interface AuthenticatedUser {
-  token: string | null;
-
-  privy_access_token: string | null;
-
-  refresh_token: string | null;
-
-  /**
-   * Instructs the client on how to handle tokens received
-   */
-  session_update_action: 'set' | 'ignore' | 'clear';
-
-  /**
-   * A Privy user object.
-   */
-  user: User;
-
-  identity_token?: string;
-
-  is_new_user?: boolean;
-
-  /**
-   * OAuth tokens associated with the user.
-   */
-  oauth_tokens?: OAuthTokens;
-}
-
-/**
- * A Privy user object.
- */
-export interface User {
-  id: string;
-
-  /**
-   * Unix timestamp of when the user was created in milliseconds.
-   */
-  created_at: number;
-
-  /**
-   * Indicates if the user has accepted the terms of service.
-   */
-  has_accepted_terms: boolean;
-
-  /**
-   * Indicates if the user is a guest account user.
-   */
-  is_guest: boolean;
-
-  linked_accounts: Array<LinkedAccount>;
-
-  mfa_methods: Array<LinkedMfaMethod>;
-
-  /**
-   * Custom metadata associated with the user.
-   */
-  custom_metadata?: CustomMetadata;
-}
-
-/**
  * An email account linked to the user.
  */
 export interface LinkedAccountEmail {
@@ -1583,6 +1522,37 @@ export interface PasskeyMfaMethod {
 export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod;
 
 /**
+ * A Privy user object.
+ */
+export interface User {
+  id: string;
+
+  /**
+   * Unix timestamp of when the user was created in milliseconds.
+   */
+  created_at: number;
+
+  /**
+   * Indicates if the user has accepted the terms of service.
+   */
+  has_accepted_terms: boolean;
+
+  /**
+   * Indicates if the user is a guest account user.
+   */
+  is_guest: boolean;
+
+  linked_accounts: Array<LinkedAccount>;
+
+  mfa_methods: Array<LinkedMfaMethod>;
+
+  /**
+   * Custom metadata associated with the user.
+   */
+  custom_metadata?: CustomMetadata;
+}
+
+/**
  * OAuth tokens associated with the user.
  */
 export interface OAuthTokens {
@@ -1609,6 +1579,36 @@ export interface UserWithIdentityToken {
    * A Privy user object.
    */
   user: User;
+}
+
+/**
+ * The authenticated user.
+ */
+export interface AuthenticatedUser {
+  token: string | null;
+
+  privy_access_token: string | null;
+
+  refresh_token: string | null;
+
+  /**
+   * Instructs the client on how to handle tokens received
+   */
+  session_update_action: 'set' | 'ignore' | 'clear';
+
+  /**
+   * A Privy user object.
+   */
+  user: User;
+
+  identity_token?: string;
+
+  is_new_user?: boolean;
+
+  /**
+   * OAuth tokens associated with the user.
+   */
+  oauth_tokens?: OAuthTokens;
 }
 
 export interface UserCreateParams {
@@ -1780,8 +1780,6 @@ export interface UserUnlinkLinkedAccountParams {
 
 export declare namespace Users {
   export {
-    type AuthenticatedUser as AuthenticatedUser,
-    type User as User,
     type LinkedAccountEmail as LinkedAccountEmail,
     type LinkedAccountPhone as LinkedAccountPhone,
     type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
@@ -1844,8 +1842,10 @@ export declare namespace Users {
     type TotpMfaMethod as TotpMfaMethod,
     type PasskeyMfaMethod as PasskeyMfaMethod,
     type LinkedMfaMethod as LinkedMfaMethod,
+    type User as User,
     type OAuthTokens as OAuthTokens,
     type UserWithIdentityToken as UserWithIdentityToken,
+    type AuthenticatedUser as AuthenticatedUser,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,

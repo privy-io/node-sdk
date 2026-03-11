@@ -4,7 +4,6 @@ export { Balance, type BalanceGetResponse, type BalanceGetParams } from './balan
 export { Transactions, type TransactionGetResponse, type TransactionGetParams } from './transactions';
 export {
   Wallets,
-  type Wallet,
   type CurveSigningChainType,
   type ExtendedChainType,
   type FirstClassChainType,
@@ -16,6 +15,7 @@ export {
   type CustodialWallet,
   type HpkeImportConfig,
   type SuiCommandName,
+  type Wallet,
   type WalletUpdateRequestBody,
   type WalletBatchItemInput,
   type WalletBatchCreateInput,

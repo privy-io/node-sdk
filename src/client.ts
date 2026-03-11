@@ -95,9 +95,18 @@ import {
   IntentAuthorization,
   IntentAuthorizationKeyQuorumMember,
   IntentAuthorizationMember,
+  IntentCreatePolicyRuleParams,
+  IntentDeletePolicyRuleParams,
+  IntentListParams,
   IntentResponse,
+  IntentResponsesCursor,
+  IntentRpcParams,
   IntentStatus,
   IntentType,
+  IntentUpdateKeyQuorumParams,
+  IntentUpdatePolicyParams,
+  IntentUpdatePolicyRuleParams,
+  IntentUpdateWalletParams,
   Intents,
   KeyQuorumIntentResponse,
   PolicyIntentResponse,
@@ -1151,6 +1160,7 @@ export class PrivyAPI {
    * Operations related to key quorums
    */
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
+  intents: API.Intents = new API.Intents(this);
   /**
    * Operations related to app settings and allowlist management
    */
@@ -1158,7 +1168,6 @@ export class PrivyAPI {
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
   analytics: API.Analytics = new API.Analytics(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
-  intents: API.Intents = new API.Intents(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
   accounts: API.Accounts = new API.Accounts(this);
   yield: API.Yield = new API.Yield(this);
@@ -1169,11 +1178,11 @@ PrivyAPI.Users = Users;
 PrivyAPI.Policies = Policies;
 PrivyAPI.Transactions = Transactions;
 PrivyAPI.KeyQuorums = KeyQuorums;
+PrivyAPI.Intents = Intents;
 PrivyAPI.Apps = Apps;
 PrivyAPI.ClientAuth = ClientAuth;
 PrivyAPI.Analytics = Analytics;
 PrivyAPI.Aggregations = Aggregations;
-PrivyAPI.Intents = Intents;
 PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.Accounts = Accounts;
 PrivyAPI.Yield = Yield;
@@ -1186,7 +1195,6 @@ export declare namespace PrivyAPI {
 
   export {
     Wallets as Wallets,
-    type Wallet as Wallet,
     type CurveSigningChainType as CurveSigningChainType,
     type ExtendedChainType as ExtendedChainType,
     type FirstClassChainType as FirstClassChainType,
@@ -1198,6 +1206,7 @@ export declare namespace PrivyAPI {
     type CustodialWallet as CustodialWallet,
     type HpkeImportConfig as HpkeImportConfig,
     type SuiCommandName as SuiCommandName,
+    type Wallet as Wallet,
     type WalletUpdateRequestBody as WalletUpdateRequestBody,
     type WalletBatchItemInput as WalletBatchItemInput,
     type WalletBatchCreateInput as WalletBatchCreateInput,
@@ -1245,8 +1254,6 @@ export declare namespace PrivyAPI {
 
   export {
     Users as Users,
-    type AuthenticatedUser as AuthenticatedUser,
-    type User as User,
     type LinkedAccountEmail as LinkedAccountEmail,
     type LinkedAccountPhone as LinkedAccountPhone,
     type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
@@ -1309,8 +1316,10 @@ export declare namespace PrivyAPI {
     type TotpMfaMethod as TotpMfaMethod,
     type PasskeyMfaMethod as PasskeyMfaMethod,
     type LinkedMfaMethod as LinkedMfaMethod,
+    type User as User,
     type OAuthTokens as OAuthTokens,
     type UserWithIdentityToken as UserWithIdentityToken,
+    type AuthenticatedUser as AuthenticatedUser,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,
@@ -1334,12 +1343,12 @@ export declare namespace PrivyAPI {
 
   export {
     Policies as Policies,
-    type Policy as Policy,
     type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
     type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
     type TronTransactionCondition as TronTransactionCondition,
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
+    type Policy as Policy,
     type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
     type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,
@@ -1358,11 +1367,37 @@ export declare namespace PrivyAPI {
 
   export {
     KeyQuorums as KeyQuorums,
-    type KeyQuorum as KeyQuorum,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
+    type KeyQuorum as KeyQuorum,
     type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
+  };
+
+  export {
+    Intents as Intents,
+    type IntentType as IntentType,
+    type IntentStatus as IntentStatus,
+    type RuleIntentRequestDetails as RuleIntentRequestDetails,
+    type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
+    type IntentAuthorizationMember as IntentAuthorizationMember,
+    type IntentAuthorization as IntentAuthorization,
+    type BaseActionResult as BaseActionResult,
+    type RpcIntentResponse as RpcIntentResponse,
+    type WalletIntentResponse as WalletIntentResponse,
+    type PolicyIntentResponse as PolicyIntentResponse,
+    type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
+    type RuleIntentResponse as RuleIntentResponse,
+    type IntentResponse as IntentResponse,
+    type IntentResponsesCursor as IntentResponsesCursor,
+    type IntentListParams as IntentListParams,
+    type IntentCreatePolicyRuleParams as IntentCreatePolicyRuleParams,
+    type IntentDeletePolicyRuleParams as IntentDeletePolicyRuleParams,
+    type IntentRpcParams as IntentRpcParams,
+    type IntentUpdateKeyQuorumParams as IntentUpdateKeyQuorumParams,
+    type IntentUpdatePolicyParams as IntentUpdatePolicyParams,
+    type IntentUpdatePolicyRuleParams as IntentUpdatePolicyRuleParams,
+    type IntentUpdateWalletParams as IntentUpdateWalletParams,
   };
 
   export {
@@ -1436,23 +1471,6 @@ export declare namespace PrivyAPI {
     type AggregationGroupBy as AggregationGroupBy,
     type Aggregation as Aggregation,
     type AggregationInput as AggregationInput,
-  };
-
-  export {
-    Intents as Intents,
-    type IntentType as IntentType,
-    type IntentStatus as IntentStatus,
-    type RuleIntentRequestDetails as RuleIntentRequestDetails,
-    type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
-    type IntentAuthorizationMember as IntentAuthorizationMember,
-    type IntentAuthorization as IntentAuthorization,
-    type BaseActionResult as BaseActionResult,
-    type RpcIntentResponse as RpcIntentResponse,
-    type WalletIntentResponse as WalletIntentResponse,
-    type PolicyIntentResponse as PolicyIntentResponse,
-    type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
-    type RuleIntentResponse as RuleIntentResponse,
-    type IntentResponse as IntentResponse,
   };
 
   export {

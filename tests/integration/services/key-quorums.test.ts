@@ -24,10 +24,13 @@ describe('PrivyKeyQuorumsService', () => {
       expect(keyQuorum.id).toBeDefined();
       expect(keyQuorum.display_name).toBe('2 of 2 Test Key Quorum');
       expect(keyQuorum.authorization_threshold).toBe(2);
-      expect(keyQuorum.authorization_keys).toEqual([
+      expect(keyQuorum.authorization_keys).toHaveLength(2);
+      expect(keyQuorum.authorization_keys).toContainEqual(
         expect.objectContaining({ public_key: keyPair.publicKey }),
+      );
+      expect(keyQuorum.authorization_keys).toContainEqual(
         expect.objectContaining({ public_key: keyPair2.publicKey }),
-      ]);
+      );
 
       await privyClient.keyQuorums().delete(keyQuorum.id, {
         authorization_context: {

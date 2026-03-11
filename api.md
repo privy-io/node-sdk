@@ -2,7 +2,6 @@
 
 Types:
 
-- <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
@@ -14,6 +13,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletUpdateRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateInput</a></code>
@@ -85,8 +85,6 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
-- <code><a href="./src/resources/users.ts">User</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEmail</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountPhone</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountBaseWallet</a></code>
@@ -149,8 +147,10 @@ Types:
 - <code><a href="./src/resources/users.ts">TotpMfaMethod</a></code>
 - <code><a href="./src/resources/users.ts">PasskeyMfaMethod</a></code>
 - <code><a href="./src/resources/users.ts">LinkedMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">User</a></code>
 - <code><a href="./src/resources/users.ts">OAuthTokens</a></code>
 - <code><a href="./src/resources/users.ts">UserWithIdentityToken</a></code>
+- <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
 
 Methods:
 
@@ -179,12 +179,12 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/policies.ts">Policy</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandOperator</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
 - <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
+- <code><a href="./src/resources/policies.ts">Policy</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyCreateRuleResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteRuleResponse</a></code>
@@ -216,8 +216,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateParams</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumDeleteResponse</a></code>
 
 Methods:
@@ -226,6 +226,36 @@ Methods:
 - <code title="delete /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_delete</a>(keyQuorumID, { ...params }) -> KeyQuorumDeleteResponse</code>
 - <code title="patch /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_update</a>(keyQuorumID, { ...params }) -> KeyQuorum</code>
 - <code title="get /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">get</a>(keyQuorumID) -> KeyQuorum</code>
+
+# Intents
+
+Types:
+
+- <code><a href="./src/resources/intents.ts">IntentType</a></code>
+- <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
+- <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
+- <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/intents">client.intents.<a href="./src/resources/intents.ts">list</a>({ ...params }) -> IntentResponsesCursor</code>
+- <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleIntentResponse</code>
+- <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicyRule</a>(ruleID, { ...params }) -> RuleIntentResponse</code>
+- <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/resources/intents.ts">get</a>(intentID) -> IntentResponse</code>
+- <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/resources/intents.ts">rpc</a>(walletID, { ...params }) -> RpcIntentResponse</code>
+- <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/resources/intents.ts">updateKeyQuorum</a>(keyQuorumID, { ...params }) -> KeyQuorumIntentResponse</code>
+- <code title="patch /v1/intents/policies/{policy_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicy</a>(policyID, { ...params }) -> PolicyIntentResponse</code>
+- <code title="patch /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicyRule</a>(ruleID, { ...params }) -> RuleIntentResponse</code>
+- <code title="patch /v1/intents/wallets/{wallet_id}">client.intents.<a href="./src/resources/intents.ts">updateWallet</a>(walletID, { ...params }) -> WalletIntentResponse</code>
 
 # Apps
 
@@ -244,6 +274,7 @@ Types:
 Methods:
 
 - <code title="get /v1/apps/{app_id}">client.apps.<a href="./src/resources/apps/apps.ts">get</a>(appID) -> AppResponse</code>
+- <code title="get /v1/apps/{app_id}/test_credentials">client.apps.<a href="./src/resources/apps/apps.ts">getTestCredentials</a>(appID) -> TestAccountsResponse</code>
 
 ## Allowlist
 
@@ -322,24 +353,6 @@ Types:
 - <code><a href="./src/resources/aggregations.ts">AggregationGroupBy</a></code>
 - <code><a href="./src/resources/aggregations.ts">Aggregation</a></code>
 - <code><a href="./src/resources/aggregations.ts">AggregationInput</a></code>
-
-# Intents
-
-Types:
-
-- <code><a href="./src/resources/intents.ts">IntentType</a></code>
-- <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
-- <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
-- <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
-- <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
 
 # Webhooks
 

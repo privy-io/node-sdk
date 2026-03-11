@@ -25,6 +25,19 @@ export class Apps extends APIResource {
   get(appID: string, options?: RequestOptions): APIPromise<AppResponse> {
     return this._client.get(path`/v1/apps/${appID}`, options);
   }
+
+  /**
+   * Get the test accounts and credentials for an app.
+   *
+   * @example
+   * ```ts
+   * const testAccountsResponse =
+   *   await client.apps.getTestCredentials('app_id');
+   * ```
+   */
+  getTestCredentials(appID: string, options?: RequestOptions): APIPromise<TestAccountsResponse> {
+    return this._client.get(path`/v1/apps/${appID}/test_credentials`, options);
+  }
 }
 
 /**

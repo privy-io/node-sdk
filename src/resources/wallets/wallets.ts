@@ -277,77 +277,6 @@ export class Wallets extends APIResource {
 export type WalletsCursor = Cursor<Wallet>;
 
 /**
- * A wallet managed by Privy's wallet infrastructure.
- */
-export interface Wallet {
-  /**
-   * Unique ID of the wallet. This will be the primary identifier when using the
-   * wallet in the future.
-   */
-  id: string;
-
-  /**
-   * Additional signers for the wallet.
-   */
-  additional_signers: Array<Wallet.AdditionalSigner>;
-
-  /**
-   * Address of the wallet.
-   */
-  address: string;
-
-  /**
-   * The wallet chain types.
-   */
-  chain_type: WalletChainType;
-
-  /**
-   * Unix timestamp of when the wallet was created in milliseconds.
-   */
-  created_at: number;
-
-  /**
-   * Unix timestamp of when the wallet was exported in milliseconds, if the wallet
-   * was exported.
-   */
-  exported_at: number | null;
-
-  /**
-   * Unix timestamp of when the wallet was imported in milliseconds, if the wallet
-   * was imported.
-   */
-  imported_at: number | null;
-
-  /**
-   * The key quorum ID of the owner of the wallet.
-   */
-  owner_id: string | null;
-
-  /**
-   * List of policy IDs for policies that are enforced on the wallet.
-   */
-  policy_ids: Array<string>;
-
-  /**
-   * The compressed, raw public key for the wallet along the chain cryptographic
-   * curve.
-   */
-  public_key?: string;
-}
-
-export namespace Wallet {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
-  }
-}
-
-/**
  * The wallet chain types that support curve-based signing.
  */
 export type CurveSigningChainType =
@@ -531,6 +460,77 @@ export interface HpkeImportConfig {
  * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
  */
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
+
+/**
+ * A wallet managed by Privy's wallet infrastructure.
+ */
+export interface Wallet {
+  /**
+   * Unique ID of the wallet. This will be the primary identifier when using the
+   * wallet in the future.
+   */
+  id: string;
+
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers: Array<Wallet.AdditionalSigner>;
+
+  /**
+   * Address of the wallet.
+   */
+  address: string;
+
+  /**
+   * The wallet chain types.
+   */
+  chain_type: WalletChainType;
+
+  /**
+   * Unix timestamp of when the wallet was created in milliseconds.
+   */
+  created_at: number;
+
+  /**
+   * Unix timestamp of when the wallet was exported in milliseconds, if the wallet
+   * was exported.
+   */
+  exported_at: number | null;
+
+  /**
+   * Unix timestamp of when the wallet was imported in milliseconds, if the wallet
+   * was imported.
+   */
+  imported_at: number | null;
+
+  /**
+   * The key quorum ID of the owner of the wallet.
+   */
+  owner_id: string | null;
+
+  /**
+   * List of policy IDs for policies that are enforced on the wallet.
+   */
+  policy_ids: Array<string>;
+
+  /**
+   * The compressed, raw public key for the wallet along the chain cryptographic
+   * curve.
+   */
+  public_key?: string;
+}
+
+export namespace Wallet {
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
+  }
+}
 
 /**
  * Request body for updating a wallet.
@@ -2500,7 +2500,6 @@ Wallets.Balance = Balance;
 
 export declare namespace Wallets {
   export {
-    type Wallet as Wallet,
     type CurveSigningChainType as CurveSigningChainType,
     type ExtendedChainType as ExtendedChainType,
     type FirstClassChainType as FirstClassChainType,
@@ -2512,6 +2511,7 @@ export declare namespace Wallets {
     type CustodialWallet as CustodialWallet,
     type HpkeImportConfig as HpkeImportConfig,
     type SuiCommandName as SuiCommandName,
+    type Wallet as Wallet,
     type WalletUpdateRequestBody as WalletUpdateRequestBody,
     type WalletBatchItemInput as WalletBatchItemInput,
     type WalletBatchCreateInput as WalletBatchCreateInput,

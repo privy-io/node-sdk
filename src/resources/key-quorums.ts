@@ -111,34 +111,6 @@ export class KeyQuorums extends APIResource {
 }
 
 /**
- * A key quorum for authorizing wallet operations.
- */
-export interface KeyQuorum {
-  id: string;
-
-  authorization_keys: Array<KeyQuorum.AuthorizationKey>;
-
-  authorization_threshold?: number;
-
-  display_name?: string;
-
-  /**
-   * List of nested key quorum IDs that are members of this key quorum.
-   */
-  key_quorum_ids?: Array<string>;
-
-  user_ids?: Array<string>;
-}
-
-export namespace KeyQuorum {
-  export interface AuthorizationKey {
-    display_name: string | null;
-
-    public_key: string;
-  }
-}
-
-/**
  * Request input for creating or updating a key quorum.
  */
 export interface KeyQuorumCreateParams {
@@ -167,6 +139,34 @@ export interface KeyQuorumCreateParams {
    * quorum.
    */
   user_ids?: Array<string>;
+}
+
+/**
+ * A key quorum for authorizing wallet operations.
+ */
+export interface KeyQuorum {
+  id: string;
+
+  authorization_keys: Array<KeyQuorum.AuthorizationKey>;
+
+  authorization_threshold?: number;
+
+  display_name?: string;
+
+  /**
+   * List of nested key quorum IDs that are members of this key quorum.
+   */
+  key_quorum_ids?: Array<string>;
+
+  user_ids?: Array<string>;
+}
+
+export namespace KeyQuorum {
+  export interface AuthorizationKey {
+    display_name: string | null;
+
+    public_key: string;
+  }
 }
 
 export interface KeyQuorumDeleteResponse {
@@ -251,8 +251,8 @@ export interface KeyQuorumUpdateParams {
 
 export declare namespace KeyQuorums {
   export {
-    type KeyQuorum as KeyQuorum,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
+    type KeyQuorum as KeyQuorum,
     type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,

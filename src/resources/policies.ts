@@ -259,6 +259,81 @@ export class Policies extends APIResource {
 }
 
 /**
+ * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
+ * supported for command names.
+ */
+export type SuiTransactionCommandOperator = 'eq' | 'in';
+
+/**
+ * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
+ * and 'amount' are supported.
+ */
+export type SuiTransferObjectsCommandField = 'recipient' | 'amount';
+
+/**
+ * TRON transaction fields for TransferContract and TriggerSmartContract
+ * transaction types.
+ */
+export interface TronTransactionCondition {
+  /**
+   * Supported TRON transaction fields in format "TransactionType.field_name"
+   */
+  field:
+    | 'TransferContract.to_address'
+    | 'TransferContract.amount'
+    | 'TriggerSmartContract.contract_address'
+    | 'TriggerSmartContract.call_value'
+    | 'TriggerSmartContract.token_id'
+    | 'TriggerSmartContract.call_token_value';
+
+  field_source: 'tron_transaction';
+
+  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+  value: string | Array<string>;
+}
+
+/**
+ * SUI transaction command attributes, enables allowlisting specific command types.
+ * Allowed commands: 'TransferObjects', 'SplitCoins', 'MergeCoins'. Only 'eq' and
+ * 'in' operators are supported.
+ */
+export interface SuiTransactionCommandCondition {
+  field: 'commandName';
+
+  field_source: 'sui_transaction_command';
+
+  /**
+   * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
+   * supported for command names.
+   */
+  operator: SuiTransactionCommandOperator;
+
+  /**
+   * Command name(s) to match. Must be one of: 'TransferObjects', 'SplitCoins',
+   * 'MergeCoins'
+   */
+  value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+}
+
+/**
+ * SUI TransferObjects command attributes, including recipient and amount fields.
+ */
+export interface SuiTransferObjectsCommandCondition {
+  /**
+   * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
+   * and 'amount' are supported.
+   */
+  field: SuiTransferObjectsCommandField;
+
+  field_source: 'sui_transfer_objects_command';
+
+  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+  value: string | Array<string>;
+}
+
+/**
  * A policy for controlling wallet operations.
  */
 export interface Policy {
@@ -492,81 +567,6 @@ export namespace Policy {
       value: string | Array<string>;
     }
   }
-}
-
-/**
- * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
- * supported for command names.
- */
-export type SuiTransactionCommandOperator = 'eq' | 'in';
-
-/**
- * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
- * and 'amount' are supported.
- */
-export type SuiTransferObjectsCommandField = 'recipient' | 'amount';
-
-/**
- * TRON transaction fields for TransferContract and TriggerSmartContract
- * transaction types.
- */
-export interface TronTransactionCondition {
-  /**
-   * Supported TRON transaction fields in format "TransactionType.field_name"
-   */
-  field:
-    | 'TransferContract.to_address'
-    | 'TransferContract.amount'
-    | 'TriggerSmartContract.contract_address'
-    | 'TriggerSmartContract.call_value'
-    | 'TriggerSmartContract.token_id'
-    | 'TriggerSmartContract.call_token_value';
-
-  field_source: 'tron_transaction';
-
-  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-  value: string | Array<string>;
-}
-
-/**
- * SUI transaction command attributes, enables allowlisting specific command types.
- * Allowed commands: 'TransferObjects', 'SplitCoins', 'MergeCoins'. Only 'eq' and
- * 'in' operators are supported.
- */
-export interface SuiTransactionCommandCondition {
-  field: 'commandName';
-
-  field_source: 'sui_transaction_command';
-
-  /**
-   * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
-   * supported for command names.
-   */
-  operator: SuiTransactionCommandOperator;
-
-  /**
-   * Command name(s) to match. Must be one of: 'TransferObjects', 'SplitCoins',
-   * 'MergeCoins'
-   */
-  value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
-}
-
-/**
- * SUI TransferObjects command attributes, including recipient and amount fields.
- */
-export interface SuiTransferObjectsCommandCondition {
-  /**
-   * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
-   * and 'amount' are supported.
-   */
-  field: SuiTransferObjectsCommandField;
-
-  field_source: 'sui_transfer_objects_command';
-
-  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-  value: string | Array<string>;
 }
 
 /**
@@ -2103,12 +2103,12 @@ export interface PolicyGetRuleParams {
 
 export declare namespace Policies {
   export {
-    type Policy as Policy,
     type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
     type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
     type TronTransactionCondition as TronTransactionCondition,
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
+    type Policy as Policy,
     type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
     type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,

@@ -21,10 +21,13 @@ describe('PrivyUsersService', () => {
       });
 
       expect(user.id).toBeDefined();
-      expect(user.linked_accounts).toEqual([
+      expect(user.linked_accounts).toHaveLength(2);
+      expect(user.linked_accounts).toContainEqual(
         expect.objectContaining({ type: 'email', address: 'batman@privy.io' }),
+      );
+      expect(user.linked_accounts).toContainEqual(
         expect.objectContaining({ type: 'wallet', chain_type: 'ethereum' }),
-      ]);
+      );
       expect(user.custom_metadata).toEqual({ key: 'value' });
 
       await privyClient.users().delete(user.id);

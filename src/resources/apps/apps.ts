@@ -330,6 +330,30 @@ export interface AllowlistDeletionResponse {
   message: string;
 }
 
+/**
+ * A test account for an app.
+ */
+export interface TestAccount {
+  id: string;
+
+  created_at: string;
+
+  email: string;
+
+  otp_code: string;
+
+  phone_number: string;
+
+  updated_at: string;
+}
+
+/**
+ * Response for listing test accounts for an app.
+ */
+export interface TestAccountsResponse {
+  data: Array<TestAccount>;
+}
+
 Apps.Allowlist = Allowlist;
 
 export declare namespace Apps {
@@ -341,6 +365,8 @@ export declare namespace Apps {
     type UserInviteInput as UserInviteInput,
     type AllowlistEntry as AllowlistEntry,
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
+    type TestAccount as TestAccount,
+    type TestAccountsResponse as TestAccountsResponse,
   };
 
   export {

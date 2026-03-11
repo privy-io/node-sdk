@@ -14,7 +14,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">PatchWalletRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletUpdateRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResult</a></code>
@@ -40,7 +40,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRpcRequestBody</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponseBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRawSignResponse</a></code>
@@ -54,7 +54,7 @@ Methods:
 - <code title="post /v1/wallets/{wallet_id}/export">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_export</a>(walletID, { ...params }) -> WalletExportResponse</code>
 - <code title="post /v1/wallets/import/init">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_initImport</a>({ ...params }) -> WalletInitImportResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/raw_sign">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rawSign</a>(walletID, { ...params }) -> WalletRawSignResponse</code>
-- <code title="post /v1/wallets/{wallet_id}/rpc">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rpc</a>(walletID, { ...params }) -> WalletRpcResponseBody</code>
+- <code title="post /v1/wallets/{wallet_id}/rpc">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rpc</a>(walletID, { ...params }) -> WalletRpcResponse</code>
 - <code title="post /v1/wallets/import/submit">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_submitImport</a>({ ...params }) -> Wallet</code>
 - <code title="patch /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_update</a>(walletID, { ...params }) -> Wallet</code>
 - <code title="post /v1/wallets/authenticate">client.wallets.<a href="./src/resources/wallets/wallets.ts">authenticateWithJwt</a>({ ...params }) -> WalletAuthenticateWithJwtResponse</code>
@@ -238,6 +238,8 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">UserInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AllowlistEntry</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>
+- <code><a href="./src/resources/apps/apps.ts">TestAccountsResponse</a></code>
 
 Methods:
 

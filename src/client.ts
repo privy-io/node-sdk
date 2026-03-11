@@ -124,6 +124,12 @@ import {
   KeyQuorums,
 } from './resources/key-quorums';
 import {
+  KrakenEmbed,
+  KrakenEmbedCurrentDayPnl,
+  KrakenEmbedGetPortfolioSummaryQueryParams,
+  KrakenEmbedGetPortfolioSummaryResponse,
+} from './resources/kraken-embed';
+import {
   Policies,
   Policy,
   PolicyCreateParams,
@@ -1171,6 +1177,7 @@ export class PrivyAPI {
   webhooks: API.Webhooks = new API.Webhooks(this);
   accounts: API.Accounts = new API.Accounts(this);
   yield: API.Yield = new API.Yield(this);
+  krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -1186,6 +1193,7 @@ PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.Accounts = Accounts;
 PrivyAPI.Yield = Yield;
+PrivyAPI.KrakenEmbed = KrakenEmbed;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -1548,5 +1556,12 @@ export declare namespace PrivyAPI {
     type EthereumYieldClaimReward as EthereumYieldClaimReward,
     type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
     type EthereumYieldClaimIDInput as EthereumYieldClaimIDInput,
+  };
+
+  export {
+    KrakenEmbed as KrakenEmbed,
+    type KrakenEmbedGetPortfolioSummaryQueryParams as KrakenEmbedGetPortfolioSummaryQueryParams,
+    type KrakenEmbedCurrentDayPnl as KrakenEmbedCurrentDayPnl,
+    type KrakenEmbedGetPortfolioSummaryResponse as KrakenEmbedGetPortfolioSummaryResponse,
   };
 }

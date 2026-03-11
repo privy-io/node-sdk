@@ -433,3 +433,11 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimReward</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimResponse</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimIDInput</a></code>
+
+# KrakenEmbed
+
+Types:
+
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCurrentDayPnl</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryResponse</a></code>

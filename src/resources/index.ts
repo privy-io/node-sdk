@@ -117,6 +117,12 @@ export {
   type KeyQuorumUpdateParams,
 } from './key-quorums';
 export {
+  KrakenEmbed,
+  type KrakenEmbedGetPortfolioSummaryQueryParams,
+  type KrakenEmbedCurrentDayPnl,
+  type KrakenEmbedGetPortfolioSummaryResponse,
+} from './kraken-embed';
+export {
   Policies,
   type SuiTransactionCommandOperator,
   type SuiTransferObjectsCommandField,

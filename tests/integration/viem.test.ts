@@ -21,7 +21,6 @@ import {
 import {
   setupTestWalletResources,
   createTestWallets,
-  cleanupTestWalletResources,
   TestWalletResources,
   TestWallet,
   WALLET_CASES,
@@ -36,10 +35,6 @@ describe('viem utils', () => {
     resources = await setupTestWalletResources();
     wallets = await createTestWallets(resources, 'ethereum');
     privyClient = resources.client;
-  });
-
-  afterAll(async () => {
-    if (resources) await cleanupTestWalletResources(resources);
   });
 
   describe('createViemAccount', () => {

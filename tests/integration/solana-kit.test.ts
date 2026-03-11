@@ -22,7 +22,6 @@ import { createTransferTransaction, SOL_DEVNET_CAIP2 } from '../helpers/solana';
 import {
   setupTestWalletResources,
   createTestWallets,
-  cleanupTestWalletResources,
   TestWalletResources,
   TestWallet,
   WALLET_CASES,
@@ -37,10 +36,6 @@ describe('@solana/kit interop', () => {
     resources = await setupTestWalletResources();
     wallets = await createTestWallets(resources, 'solana');
     privyClient = resources.client;
-  });
-
-  afterAll(async () => {
-    if (resources) await cleanupTestWalletResources(resources);
   });
 
   describe('using a Privy wallet as a signer', () => {

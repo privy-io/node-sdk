@@ -20,6 +20,7 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
+  AccountBalanceParams,
   AccountBalanceResponse,
   AccountDisplayName,
   AccountResponse,
@@ -1534,6 +1535,7 @@ export declare namespace PrivyAPI {
     type AssetAccountWithBalance as AssetAccountWithBalance,
     type AccountsDashboardListResponse as AccountsDashboardListResponse,
     type AccountBalanceResponse as AccountBalanceResponse,
+    type AccountBalanceParams as AccountBalanceParams,
   };
 
   export {

@@ -13,6 +13,7 @@ export {
   type AssetAccountWithBalance,
   type AccountsDashboardListResponse,
   type AccountBalanceResponse,
+  type AccountBalanceParams,
 } from './accounts';
 export {
   Aggregations,

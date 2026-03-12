@@ -410,6 +410,7 @@ Types:
 - <code><a href="./src/resources/accounts.ts">AssetAccountWithBalance</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountsDashboardListResponse</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountBalanceResponse</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountBalanceParams</a></code>
 
 # Yield
 

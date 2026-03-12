@@ -292,6 +292,16 @@ export namespace AccountBalanceResponse {
   }
 }
 
+/**
+ * Query parameters for the account balance endpoint.
+ */
+export interface AccountBalanceParams {
+  /**
+   * When set to true, returns balances from testnet chains instead of mainnets.
+   */
+  testnet_mode?: 'true' | 'false';
+}
+
 export declare namespace Accounts {
   export {
     type AccountWallet as AccountWallet,
@@ -305,5 +315,6 @@ export declare namespace Accounts {
     type AssetAccountWithBalance as AssetAccountWithBalance,
     type AccountsDashboardListResponse as AccountsDashboardListResponse,
     type AccountBalanceResponse as AccountBalanceResponse,
+    type AccountBalanceParams as AccountBalanceParams,
   };
 }

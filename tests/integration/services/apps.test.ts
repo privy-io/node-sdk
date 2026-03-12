@@ -44,4 +44,19 @@ describe('PrivyAppsService', () => {
       expect(deleted.message).toBeDefined();
     });
   });
+
+  describe('getTestAccessToken', () => {
+    it('should return a valid access token for the default test account', async () => {
+      const { access_token } = await privyClient.apps().getTestAccessToken();
+      expect(typeof access_token).toBe('string');
+      expect(access_token.length).toBeGreaterThan(0);
+
+      const verified = await privyClient.utils().auth().verifyAccessToken(access_token);
+
+      expect(verified.app_id).toBe(TEST_APP.id);
+      expect(verified.user_id).toEqual(expect.any(String));
+      expect(verified.session_id).toEqual(expect.any(String));
+      expect(verified.issuer).toBe('privy.io');
+    });
+  });
 });

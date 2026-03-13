@@ -233,6 +233,11 @@ Types:
 
 - <code><a href="./src/resources/intents.ts">IntentType</a></code>
 - <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
+- <code><a href="./src/resources/intents.ts">RpcIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentCreateRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentUpdateRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentDeleteRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
@@ -314,6 +319,7 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">FiatOnrampProvider</a></code>
 - <code><a href="./src/resources/client-auth.ts">GetFiatOnrampQuotesInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatOnrampQuote</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampProviderError</a></code>
 - <code><a href="./src/resources/client-auth.ts">GetFiatOnrampQuotesResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">GetFiatOnrampURLInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">GetFiatOnrampURLResponse</a></code>
@@ -434,6 +440,18 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimReward</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimResponse</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimIDInput</a></code>
+
+# WalletActions
+
+Types:
+
+- <code><a href="./src/resources/wallet-actions.ts">WalletActionType</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">WalletActionStatus</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">WalletActionStepType</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EvmWalletActionStepStatus</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EvmTransactionWalletActionStep</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EvmUserOperationWalletActionStep</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">WalletActionStep</a></code>
 
 # KrakenEmbed
 

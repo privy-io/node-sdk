@@ -61,6 +61,7 @@ export {
   type FiatOnrampProvider,
   type GetFiatOnrampQuotesInput,
   type FiatOnrampQuote,
+  type FiatOnrampProviderError,
   type GetFiatOnrampQuotesResponse,
   type GetFiatOnrampURLInput,
   type GetFiatOnrampURLResponse,
@@ -88,6 +89,11 @@ export {
   Intents,
   type IntentType,
   type IntentStatus,
+  type RpcIntentRequestDetails,
+  type PolicyIntentRequestDetails,
+  type RuleIntentCreateRequestDetails,
+  type RuleIntentUpdateRequestDetails,
+  type RuleIntentDeleteRequestDetails,
   type RuleIntentRequestDetails,
   type IntentAuthorizationKeyQuorumMember,
   type IntentAuthorizationMember,
@@ -233,6 +239,16 @@ export {
   type UserUnlinkLinkedAccountParams,
   type UsersCursor,
 } from './users';
+export {
+  WalletActions,
+  type WalletActionType,
+  type WalletActionStatus,
+  type WalletActionStepType,
+  type EvmWalletActionStepStatus,
+  type EvmTransactionWalletActionStep,
+  type EvmUserOperationWalletActionStep,
+  type WalletActionStep,
+} from './wallet-actions';
 export {
   Wallets,
   type CurveSigningChainType,

@@ -989,6 +989,16 @@ export class PrivyAPI {
       }
     }
 
+    // If the standard retry headers aren't set, fall back to X-RateLimit-Reset
+    // which is a Unix timestamp (in seconds) indicating when the rate limit resets.
+    const rateLimitResetHeader = responseHeaders?.get('x-ratelimit-reset');
+    if (rateLimitResetHeader && !timeoutMillis) {
+      const resetEpochSeconds = parseFloat(rateLimitResetHeader);
+      if (!Number.isNaN(resetEpochSeconds)) {
+        timeoutMillis = resetEpochSeconds * 1000 - Date.now();
+      }
+    }
+
     // If the API asks us to wait a certain amount of time, just do what it
     // says, but otherwise calculate a default
     if (timeoutMillis === undefined) {

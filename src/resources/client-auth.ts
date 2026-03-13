@@ -196,7 +196,7 @@ export type FiatOnrampEnvironment = 'sandbox' | 'production';
 /**
  * The fiat onramp provider to use.
  */
-export type FiatOnrampProvider = 'meld' | 'meld-sandbox';
+export type FiatOnrampProvider = 'meld' | 'meld-sandbox' | 'moonpay' | 'moonpay-sandbox';
 
 /**
  * The request input for getting fiat onramp quotes.
@@ -239,10 +239,24 @@ export interface FiatOnrampQuote {
 }
 
 /**
+ * An error from a specific fiat onramp provider when fetching quotes.
+ */
+export interface FiatOnrampProviderError {
+  error: string;
+
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
+}
+
+/**
  * The response containing fiat onramp quotes.
  */
 export interface GetFiatOnrampQuotesResponse {
   quotes: Array<FiatOnrampQuote>;
+
+  provider_errors?: Array<FiatOnrampProviderError>;
 }
 
 /**
@@ -531,6 +545,7 @@ export declare namespace ClientAuth {
     type FiatOnrampProvider as FiatOnrampProvider,
     type GetFiatOnrampQuotesInput as GetFiatOnrampQuotesInput,
     type FiatOnrampQuote as FiatOnrampQuote,
+    type FiatOnrampProviderError as FiatOnrampProviderError,
     type GetFiatOnrampQuotesResponse as GetFiatOnrampQuotesResponse,
     type GetFiatOnrampURLInput as GetFiatOnrampURLInput,
     type GetFiatOnrampURLResponse as GetFiatOnrampURLResponse,

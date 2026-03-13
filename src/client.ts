@@ -75,6 +75,7 @@ import {
   FiatOnrampDestination,
   FiatOnrampEnvironment,
   FiatOnrampProvider,
+  FiatOnrampProviderError,
   FiatOnrampQuote,
   FiatOnrampSource,
   FiatOnrampTransactionStatus,
@@ -110,10 +111,15 @@ import {
   IntentUpdateWalletParams,
   Intents,
   KeyQuorumIntentResponse,
+  PolicyIntentRequestDetails,
   PolicyIntentResponse,
+  RpcIntentRequestDetails,
   RpcIntentResponse,
+  RuleIntentCreateRequestDetails,
+  RuleIntentDeleteRequestDetails,
   RuleIntentRequestDetails,
   RuleIntentResponse,
+  RuleIntentUpdateRequestDetails,
   WalletIntentResponse,
 } from './resources/intents';
 import {
@@ -240,6 +246,16 @@ import {
   Users,
   UsersCursor,
 } from './resources/users';
+import {
+  EvmTransactionWalletActionStep,
+  EvmUserOperationWalletActionStep,
+  EvmWalletActionStepStatus,
+  WalletActionStatus,
+  WalletActionStep,
+  WalletActionStepType,
+  WalletActionType,
+  WalletActions,
+} from './resources/wallet-actions';
 import {
   FundsDepositedWebhookPayload,
   FundsWithdrawnWebhookPayload,
@@ -1188,6 +1204,7 @@ export class PrivyAPI {
   webhooks: API.Webhooks = new API.Webhooks(this);
   accounts: API.Accounts = new API.Accounts(this);
   yield: API.Yield = new API.Yield(this);
+  walletActions: API.WalletActions = new API.WalletActions(this);
   krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
 }
 
@@ -1204,6 +1221,7 @@ PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.Accounts = Accounts;
 PrivyAPI.Yield = Yield;
+PrivyAPI.WalletActions = WalletActions;
 PrivyAPI.KrakenEmbed = KrakenEmbed;
 
 export declare namespace PrivyAPI {
@@ -1397,6 +1415,11 @@ export declare namespace PrivyAPI {
     Intents as Intents,
     type IntentType as IntentType,
     type IntentStatus as IntentStatus,
+    type RpcIntentRequestDetails as RpcIntentRequestDetails,
+    type PolicyIntentRequestDetails as PolicyIntentRequestDetails,
+    type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
+    type RuleIntentUpdateRequestDetails as RuleIntentUpdateRequestDetails,
+    type RuleIntentDeleteRequestDetails as RuleIntentDeleteRequestDetails,
     type RuleIntentRequestDetails as RuleIntentRequestDetails,
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
@@ -1456,6 +1479,7 @@ export declare namespace PrivyAPI {
     type FiatOnrampProvider as FiatOnrampProvider,
     type GetFiatOnrampQuotesInput as GetFiatOnrampQuotesInput,
     type FiatOnrampQuote as FiatOnrampQuote,
+    type FiatOnrampProviderError as FiatOnrampProviderError,
     type GetFiatOnrampQuotesResponse as GetFiatOnrampQuotesResponse,
     type GetFiatOnrampURLInput as GetFiatOnrampURLInput,
     type GetFiatOnrampURLResponse as GetFiatOnrampURLResponse,
@@ -1568,6 +1592,17 @@ export declare namespace PrivyAPI {
     type EthereumYieldClaimReward as EthereumYieldClaimReward,
     type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
     type EthereumYieldClaimIDInput as EthereumYieldClaimIDInput,
+  };
+
+  export {
+    WalletActions as WalletActions,
+    type WalletActionType as WalletActionType,
+    type WalletActionStatus as WalletActionStatus,
+    type WalletActionStepType as WalletActionStepType,
+    type EvmWalletActionStepStatus as EvmWalletActionStepStatus,
+    type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
+    type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
+    type WalletActionStep as WalletActionStep,
   };
 
   export {

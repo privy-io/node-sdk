@@ -151,10 +151,14 @@ export class Wallets extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.wallets._rpc('wallet_id', {
-   *   method: 'personal_sign',
-   *   params: { encoding: 'utf-8', message: 'message' },
-   * });
+   * const walletRpcResponse = await client.wallets._rpc(
+   *   'wallet_id',
+   *   {
+   *     method: 'eth_sendTransaction',
+   *     params: {},
+   *     chain_type: 'ethereum',
+   *   },
+   * );
    * ```
    */
   _rpc(walletID: string, params: WalletRpcParams, options?: RequestOptions): APIPromise<WalletRpcResponse> {
@@ -206,7 +210,9 @@ export class Wallets extends APIResource {
    *
    * @example
    * ```ts
-   * const wallet = await client.wallets._update('wallet_id');
+   * const wallet = await client.wallets._update('wallet_id', {
+   *   policy_ids: ['tb54eps4z44ed0jepousxi4n'],
+   * });
    * ```
    */
   _update(walletID: string, params: WalletUpdateParams, options?: RequestOptions): APIPromise<Wallet> {
@@ -269,77 +275,6 @@ export class Wallets extends APIResource {
 }
 
 export type WalletsCursor = Cursor<Wallet>;
-
-/**
- * A wallet managed by Privy's wallet infrastructure.
- */
-export interface Wallet {
-  /**
-   * Unique ID of the wallet. This will be the primary identifier when using the
-   * wallet in the future.
-   */
-  id: string;
-
-  /**
-   * Additional signers for the wallet.
-   */
-  additional_signers: Array<Wallet.AdditionalSigner>;
-
-  /**
-   * Address of the wallet.
-   */
-  address: string;
-
-  /**
-   * The wallet chain types.
-   */
-  chain_type: WalletChainType;
-
-  /**
-   * Unix timestamp of when the wallet was created in milliseconds.
-   */
-  created_at: number;
-
-  /**
-   * Unix timestamp of when the wallet was exported in milliseconds, if the wallet
-   * was exported.
-   */
-  exported_at: number | null;
-
-  /**
-   * Unix timestamp of when the wallet was imported in milliseconds, if the wallet
-   * was imported.
-   */
-  imported_at: number | null;
-
-  /**
-   * The key quorum ID of the owner of the wallet.
-   */
-  owner_id: string | null;
-
-  /**
-   * List of policy IDs for policies that are enforced on the wallet.
-   */
-  policy_ids: Array<string>;
-
-  /**
-   * The compressed, raw public key for the wallet along the chain cryptographic
-   * curve.
-   */
-  public_key?: string;
-}
-
-export namespace Wallet {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
-  }
-}
 
 /**
  * The wallet chain types that support curve-based signing.
@@ -525,6 +460,132 @@ export interface HpkeImportConfig {
  * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
  */
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
+
+/**
+ * A wallet managed by Privy's wallet infrastructure.
+ */
+export interface Wallet {
+  /**
+   * Unique ID of the wallet. This will be the primary identifier when using the
+   * wallet in the future.
+   */
+  id: string;
+
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers: Array<Wallet.AdditionalSigner>;
+
+  /**
+   * Address of the wallet.
+   */
+  address: string;
+
+  /**
+   * The wallet chain types.
+   */
+  chain_type: WalletChainType;
+
+  /**
+   * Unix timestamp of when the wallet was created in milliseconds.
+   */
+  created_at: number;
+
+  /**
+   * Unix timestamp of when the wallet was exported in milliseconds, if the wallet
+   * was exported.
+   */
+  exported_at: number | null;
+
+  /**
+   * Unix timestamp of when the wallet was imported in milliseconds, if the wallet
+   * was imported.
+   */
+  imported_at: number | null;
+
+  /**
+   * The key quorum ID of the owner of the wallet.
+   */
+  owner_id: string | null;
+
+  /**
+   * List of policy IDs for policies that are enforced on the wallet.
+   */
+  policy_ids: Array<string>;
+
+  /**
+   * The compressed, raw public key for the wallet along the chain cryptographic
+   * curve.
+   */
+  public_key?: string;
+}
+
+export namespace Wallet {
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
+  }
+}
+
+/**
+ * Request body for updating a wallet.
+ */
+export interface WalletUpdateRequestBody {
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: Array<WalletUpdateRequestBody.AdditionalSigner>;
+
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  owner?: WalletUpdateRequestBody.PublicKeyOwner | WalletUpdateRequestBody.UserOwner | null;
+
+  owner_id?: string | null;
+
+  /**
+   * New policy IDs to enforce on the wallet. Currently, only one policy is supported
+   * per wallet.
+   */
+  policy_ids?: Array<string>;
+}
+
+export namespace WalletUpdateRequestBody {
+  export interface AdditionalSigner {
+    signer_id: string;
+
+    /**
+     * The array of policy IDs that will be applied to wallet requests. If specified,
+     * this will override the base policy IDs set on the wallet.
+     */
+    override_policy_ids?: Array<string>;
+  }
+
+  /**
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
+   */
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
+}
 
 /**
  * Input for a single wallet in a batch creation request.
@@ -1247,6 +1308,36 @@ export namespace SolanaSignMessageRpcResponse {
   }
 }
 
+/**
+ * Request body for wallet RPC operations, discriminated by method.
+ */
+export type WalletRpcRequestBody =
+  | EthereumPersonalSignRpcInput
+  | EthereumSignTypedDataRpcInput
+  | EthereumSignTransactionRpcInput
+  | EthereumSignUserOperationRpcInput
+  | EthereumSendTransactionRpcInput
+  | EthereumSign7702AuthorizationRpcInput
+  | EthereumSecp256k1SignRpcInput
+  | SolanaSignMessageRpcInput
+  | SolanaSignTransactionRpcInput
+  | SolanaSignAndSendTransactionRpcInput;
+
+/**
+ * Response body for wallet RPC operations, discriminated by method.
+ */
+export type WalletRpcResponse =
+  | EthereumPersonalSignRpcResponse
+  | EthereumSignTypedDataRpcResponse
+  | EthereumSignTransactionRpcResponse
+  | EthereumSendTransactionRpcResponse
+  | EthereumSignUserOperationRpcResponse
+  | EthereumSign7702AuthorizationRpcResponse
+  | EthereumSecp256k1SignRpcResponse
+  | SolanaSignMessageRpcResponse
+  | SolanaSignTransactionRpcResponse
+  | SolanaSignAndSendTransactionRpcResponse;
+
 export interface WalletExportResponse {
   /**
    * The encrypted private key.
@@ -1290,21 +1381,6 @@ export namespace WalletRawSignResponse {
     signature: string;
   }
 }
-
-/**
- * Response to the EVM `personal_sign` RPC.
- */
-export type WalletRpcResponse =
-  | EthereumPersonalSignRpcResponse
-  | EthereumSignTypedDataRpcResponse
-  | EthereumSignTransactionRpcResponse
-  | EthereumSendTransactionRpcResponse
-  | EthereumSignUserOperationRpcResponse
-  | EthereumSign7702AuthorizationRpcResponse
-  | EthereumSecp256k1SignRpcResponse
-  | SolanaSignMessageRpcResponse
-  | SolanaSignTransactionRpcResponse
-  | SolanaSignAndSendTransactionRpcResponse;
 
 export type WalletAuthenticateWithJwtResponse =
   | WalletAuthenticateWithJwtResponse.WithEncryption
@@ -2424,7 +2500,6 @@ Wallets.Balance = Balance;
 
 export declare namespace Wallets {
   export {
-    type Wallet as Wallet,
     type CurveSigningChainType as CurveSigningChainType,
     type ExtendedChainType as ExtendedChainType,
     type FirstClassChainType as FirstClassChainType,
@@ -2436,6 +2511,8 @@ export declare namespace Wallets {
     type CustodialWallet as CustodialWallet,
     type HpkeImportConfig as HpkeImportConfig,
     type SuiCommandName as SuiCommandName,
+    type Wallet as Wallet,
+    type WalletUpdateRequestBody as WalletUpdateRequestBody,
     type WalletBatchItemInput as WalletBatchItemInput,
     type WalletBatchCreateInput as WalletBatchCreateInput,
     type WalletBatchCreateResult as WalletBatchCreateResult,
@@ -2460,10 +2537,11 @@ export declare namespace Wallets {
     type SolanaSignTransactionRpcResponse as SolanaSignTransactionRpcResponse,
     type SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
+    type WalletRpcRequestBody as WalletRpcRequestBody,
+    type WalletRpcResponse as WalletRpcResponse,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
-    type WalletRpcResponse as WalletRpcResponse,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletsCursor as WalletsCursor,

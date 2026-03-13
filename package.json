@@ -1,6 +1,6 @@
 {
   "name": "@privy-io/node",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "The official TypeScript library for the Privy API",
   "author": "Privy API <support@privy.io>",
   "types": "dist/index.d.ts",
@@ -92,6 +92,17 @@
     "typescript": "5.8.3",
     "typescript-eslint": "8.31.1",
     "viem": "^2.34.0"
+  },
+  "overrides": {
+    "minimatch": "^9.0.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "minimatch": "^9.0.5"
+    }
+  },
+  "resolutions": {
+    "minimatch": "^9.0.5"
   },
   "exports": {
     ".": {

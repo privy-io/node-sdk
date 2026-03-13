@@ -1,5 +1,6 @@
 import { P256KeyPair, PrivyClient, generateP256KeyPair } from '@privy-io/node';
 import { NotFoundError } from '@privy-io/node';
+import crypto from 'node:crypto';
 import { TEST_APP } from '../test-config';
 
 describe('PrivyPoliciesService', () => {
@@ -11,7 +12,7 @@ describe('PrivyPoliciesService', () => {
       apiUrl: TEST_APP.apiUrl,
     });
   });
-  describe.skip('create', () => {
+  describe('create', () => {
     it('should create a policy', async () => {
       const policy = await privyClient.policies().create({
         version: '1.0',
@@ -43,6 +44,58 @@ describe('PrivyPoliciesService', () => {
           method: 'eth_sendTransaction',
         }),
       ]);
+
+      await privyClient.policies().delete(policy.id, {});
+    });
+  });
+  describe('create idempotency', () => {
+    it('will succeed if the idempotency key is reused with the same body', async () => {
+      const idempotencyKey = crypto.randomUUID();
+      const response1 = await privyClient.policies().create({
+        version: '1.0',
+        name: 'NodeSDK Idempotency Test',
+        chain_type: 'ethereum',
+        rules: [],
+        idempotency_key: idempotencyKey,
+      });
+      expect(response1.id).toBeDefined();
+      expect(response1.name).toBe('NodeSDK Idempotency Test');
+      expect(response1.chain_type).toBe('ethereum');
+
+      const response2 = await privyClient.policies().create({
+        version: '1.0',
+        name: 'NodeSDK Idempotency Test',
+        chain_type: 'ethereum',
+        rules: [],
+        idempotency_key: idempotencyKey,
+      });
+      expect(response2.id).toBe(response1.id);
+
+      await privyClient.policies().delete(response1.id, {});
+    });
+    it('will fail if the idempotency key is reused with a different body', async () => {
+      const idempotencyKey = crypto.randomUUID();
+      const response = await privyClient.policies().create({
+        version: '1.0',
+        name: 'NodeSDK Idempotency Test',
+        chain_type: 'ethereum',
+        rules: [],
+        idempotency_key: idempotencyKey,
+      });
+
+      await expect(
+        privyClient.policies().create({
+          version: '1.0',
+          name: 'NodeSDK Idempotency Test Different',
+          chain_type: 'ethereum',
+          rules: [],
+          idempotency_key: idempotencyKey,
+        }),
+      ).rejects.toThrow(
+        `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
+      );
+
+      await privyClient.policies().delete(response.id, {});
     });
   });
   describe('update', () => {

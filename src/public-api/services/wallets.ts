@@ -1,10 +1,12 @@
 import { PrivyAPI } from '../../client';
+import { APIPromise } from '../../core/api-promise';
 import { PrivyAPIError } from '../../core/error';
 import { generateAuthorizationSignatures } from '../../lib/authorization';
 import { setupHPKERecipient, setupHPKESender } from '../../lib/cryptography';
 import { entropyToBytes } from '../../lib/wallet-entropy';
 import {
   Wallet,
+  WalletCreateParams,
   WalletExportParams,
   WalletRawSignParams,
   WalletRawSignResponse,
@@ -37,6 +39,16 @@ export class PrivyWalletsService extends Wallets {
 
   public solana(): PrivySolanaService {
     return this.solanaService;
+  }
+
+  public override create({
+    idempotency_key: idempotencyKey,
+    ...params
+  }: PrivyWalletsService.CreateInput): APIPromise<Wallet> {
+    return super.create({
+      ...params,
+      ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
+    });
   }
 
   public async rpc<Params extends PrivyWalletsService.RpcInput>(
@@ -218,6 +230,8 @@ export class PrivyWalletsService extends Wallets {
  * @see {@link PrivyWalletsService} class.
  */
 export namespace PrivyWalletsService {
+  /** The input type for the {@link PrivyWalletsService.create} method. */
+  export type CreateInput = Prettify<WithIdempotency<WalletCreateParams>>;
   /** The input type for the {@link PrivyWalletsService.rpc} method. */
   export type RpcInput = Prettify<WithIdempotency<WithAuthorization<WalletRpcParams>>>;
   /** The input type for the {@link PrivyWalletsService.rawSign} method. */

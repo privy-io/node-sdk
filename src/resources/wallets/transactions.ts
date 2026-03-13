@@ -5,6 +5,9 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Operations related to wallets
+ */
 export class Transactions extends APIResource {
   /**
    * Get incoming and outgoing transactions of a wallet by wallet ID.
@@ -61,12 +64,13 @@ export namespace TransactionGetResponse {
 
   export namespace Transaction {
     export interface UnionMember0 {
-      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+      asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
       chain:
         | 'ethereum'
         | 'arbitrum'
         | 'base'
+        | 'tempo'
         | 'linea'
         | 'optimism'
         | 'polygon'
@@ -99,12 +103,13 @@ export namespace TransactionGetResponse {
     }
 
     export interface UnionMember1 {
-      asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+      asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
       chain:
         | 'ethereum'
         | 'arbitrum'
         | 'base'
+        | 'tempo'
         | 'linea'
         | 'optimism'
         | 'polygon'
@@ -141,15 +146,16 @@ export namespace TransactionGetResponse {
 export interface TransactionGetParams {
   asset:
     | 'usdc'
+    | 'usdc.e'
     | 'eth'
     | 'pol'
     | 'usdt'
     | 'eurc'
     | 'usdb'
     | 'sol'
-    | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
+    | Array<'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
 
-  chain: 'ethereum' | 'arbitrum' | 'base' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'sepolia';
+  chain: 'ethereum' | 'arbitrum' | 'base' | 'tempo' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'sepolia';
 
   cursor?: string;
 

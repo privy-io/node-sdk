@@ -1,5 +1,55 @@
 # Changelog
 
+## 0.11.0 (2026-03-13)
+
+Full Changelog: [v0.10.1...v0.11.0](https://github.com/privy-io/node-sdk/compare/v0.10.1...v0.11.0)
+
+### ⚠ BREAKING CHANGES
+
+* `PrivywalletsService.create()` no longer accepts `'privy-idempotency-key'` as a parameter. Use `idempotency_key` instead.
+* `PrivyPoliciesService.create()` no longer accepts `'privy-idempotency-key'` as a parameter. Use `idempotency_key` instead.
+
+### Features
+
+* adds a helper to create policies with an idempotency key ([#94](https://github.com/privy-io/node-sdk/issues/94)) ([373bb44](https://github.com/privy-io/node-sdk/commit/373bb44678bc6628966a549ea7bbaf8753309a31))
+* adds a helper to create wallets with an idempotency key ([#93](https://github.com/privy-io/node-sdk/issues/93)) ([5550257](https://github.com/privy-io/node-sdk/commit/5550257c7a24b52ad551b8452da92f22a25bbb32))
+* **api:** api update ([a7f2ab9](https://github.com/privy-io/node-sdk/commit/a7f2ab933785329fa0cfa96ee6e6030790d7ac9b))
+* **api:** api update ([d3145ad](https://github.com/privy-io/node-sdk/commit/d3145adf6ce775fc492c0907be2b841b2e5db454))
+* **api:** api update ([378ac4c](https://github.com/privy-io/node-sdk/commit/378ac4c8069500044f1dd640b4012aa17e696928))
+* **api:** api update ([2c43544](https://github.com/privy-io/node-sdk/commit/2c435446b8d65e221481ca8cd9a37cf084ebf07d))
+* **api:** api update ([6365b99](https://github.com/privy-io/node-sdk/commit/6365b99662ab5dc829e6eefdb8eb4ca353b0cd27))
+* **api:** api update ([1d52329](https://github.com/privy-io/node-sdk/commit/1d5232939cd270ec774b0c4cb0d09b587661c232))
+* **api:** api update ([94ff459](https://github.com/privy-io/node-sdk/commit/94ff4596a62585565777f368d95ac17e0a805340))
+* **api:** api update ([304e9e0](https://github.com/privy-io/node-sdk/commit/304e9e0aea9e1239f7c4f7992c64f6cbc5953a1d))
+* **api:** api update ([56a5aba](https://github.com/privy-io/node-sdk/commit/56a5aba3d0aeb07250609ca29b4fa04cbad0a97b))
+* **api:** api update ([f6f95b7](https://github.com/privy-io/node-sdk/commit/f6f95b76ca747be2015df59098fbff539812b151))
+* **api:** enables apps resource endpoints ([de1a564](https://github.com/privy-io/node-sdk/commit/de1a564476dea465485ae381a7319bf9656504a1))
+* **api:** manual updates ([5cf6ac0](https://github.com/privy-io/node-sdk/commit/5cf6ac0dce823ce8f5c34144e15b025cb908879c))
+* **api:** manual updates ([454c431](https://github.com/privy-io/node-sdk/commit/454c431283fa89e84644170a1cbc7fae0e1b2526))
+* implements apps.getTestAccessToken ([#101](https://github.com/privy-io/node-sdk/issues/101)) ([a3c4cb7](https://github.com/privy-io/node-sdk/commit/a3c4cb7af5de1ebded37b92019b4a47f61b774ce))
+* implements the apps service ([#100](https://github.com/privy-io/node-sdk/issues/100)) ([96504b8](https://github.com/privy-io/node-sdk/commit/96504b82b569a3a786d184d7128a04e63d7d3420))
+
+
+### Bug Fixes
+
+* adapts to the latest breaking changes on type rename ([#98](https://github.com/privy-io/node-sdk/issues/98)) ([a2badea](https://github.com/privy-io/node-sdk/commit/a2badeab73b556c87267a566d9063f82f91b15b3))
+* **client:** preserve URL params already embedded in path ([13d416d](https://github.com/privy-io/node-sdk/commit/13d416df7f455d04cb31ce3a97ff1c6d9f0177b7))
+* WalletRpcResponse renamed again ([#104](https://github.com/privy-io/node-sdk/issues/104)) ([f468592](https://github.com/privy-io/node-sdk/commit/f468592dfaa9165849c212e14d539e59a5dfaaf4))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([0f699de](https://github.com/privy-io/node-sdk/commit/0f699de52e3509ea81d9d3151b4c5f9bebc458f8))
+* configure new SDK language ([90f586b](https://github.com/privy-io/node-sdk/commit/90f586b6a8315e5ef899c27bcb0de13b3aec7bdd))
+* **internal:** codegen related update ([5ccb5d8](https://github.com/privy-io/node-sdk/commit/5ccb5d826141ae640a83d66c1cab51f95aa371a3))
+* **internal:** codegen related update ([0415a9d](https://github.com/privy-io/node-sdk/commit/0415a9df5abf48465c81715dfcb7591dafdc9628))
+* **internal:** update dependencies to address dependabot vulnerabilities ([a7616f8](https://github.com/privy-io/node-sdk/commit/a7616f81d406eef3ce41163d59eef974fe2bfcd7))
+
+
+### Documentation
+
+* updates the contributing docs ([#96](https://github.com/privy-io/node-sdk/issues/96)) ([9472029](https://github.com/privy-io/node-sdk/commit/9472029ae7db587375114a67d98bfd9e6725ba47))
+
 ## 0.10.1 (2026-02-27)
 
 Full Changelog: [v0.10.0...v0.10.1](https://github.com/privy-io/node-sdk/compare/v0.10.0...v0.10.1)

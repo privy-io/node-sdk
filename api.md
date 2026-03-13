@@ -2,7 +2,6 @@
 
 Types:
 
-- <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
@@ -14,6 +13,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletUpdateRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResult</a></code>
@@ -38,10 +39,11 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletRpcRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRawSignResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateWithJwtResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCreateWalletsWithRecoveryResponse</a></code>
 
@@ -83,8 +85,6 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
-- <code><a href="./src/resources/users.ts">User</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEmail</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountPhone</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountBaseWallet</a></code>
@@ -147,8 +147,10 @@ Types:
 - <code><a href="./src/resources/users.ts">TotpMfaMethod</a></code>
 - <code><a href="./src/resources/users.ts">PasskeyMfaMethod</a></code>
 - <code><a href="./src/resources/users.ts">LinkedMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">User</a></code>
 - <code><a href="./src/resources/users.ts">OAuthTokens</a></code>
 - <code><a href="./src/resources/users.ts">UserWithIdentityToken</a></code>
+- <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
 
 Methods:
 
@@ -177,12 +179,12 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/policies.ts">Policy</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandOperator</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
 - <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
+- <code><a href="./src/resources/policies.ts">Policy</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyCreateRuleResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteRuleResponse</a></code>
@@ -214,6 +216,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateParams</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumDeleteResponse</a></code>
 
@@ -223,6 +226,67 @@ Methods:
 - <code title="delete /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_delete</a>(keyQuorumID, { ...params }) -> KeyQuorumDeleteResponse</code>
 - <code title="patch /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_update</a>(keyQuorumID, { ...params }) -> KeyQuorum</code>
 - <code title="get /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">get</a>(keyQuorumID) -> KeyQuorum</code>
+
+# Intents
+
+Types:
+
+- <code><a href="./src/resources/intents.ts">IntentType</a></code>
+- <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
+- <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
+- <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/intents">client.intents.<a href="./src/resources/intents.ts">list</a>({ ...params }) -> IntentResponsesCursor</code>
+- <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleIntentResponse</code>
+- <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicyRule</a>(ruleID, { ...params }) -> RuleIntentResponse</code>
+- <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/resources/intents.ts">get</a>(intentID) -> IntentResponse</code>
+- <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/resources/intents.ts">rpc</a>(walletID, { ...params }) -> RpcIntentResponse</code>
+- <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/resources/intents.ts">updateKeyQuorum</a>(keyQuorumID, { ...params }) -> KeyQuorumIntentResponse</code>
+- <code title="patch /v1/intents/policies/{policy_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicy</a>(policyID, { ...params }) -> PolicyIntentResponse</code>
+- <code title="patch /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicyRule</a>(ruleID, { ...params }) -> RuleIntentResponse</code>
+- <code title="patch /v1/intents/wallets/{wallet_id}">client.intents.<a href="./src/resources/intents.ts">updateWallet</a>(walletID, { ...params }) -> WalletIntentResponse</code>
+
+# Apps
+
+Types:
+
+- <code><a href="./src/resources/apps/apps.ts">AppResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmailInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">WalletInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">PhoneInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">UserInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AllowlistEntry</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>
+- <code><a href="./src/resources/apps/apps.ts">TestAccountsResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/apps/{app_id}">client.apps.<a href="./src/resources/apps/apps.ts">get</a>(appID) -> AppResponse</code>
+- <code title="get /v1/apps/{app_id}/test_credentials">client.apps.<a href="./src/resources/apps/apps.ts">getTestCredentials</a>(appID) -> TestAccountsResponse</code>
+
+## Allowlist
+
+Types:
+
+- <code><a href="./src/resources/apps/allowlist.ts">AllowlistListResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">create</a>(appID, { ...params }) -> AllowlistEntry</code>
+- <code title="get /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">list</a>(appID) -> AllowlistListResponse</code>
+- <code title="delete /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">delete</a>(appID, { ...params }) -> AllowlistDeletionResponse</code>
 
 # ClientAuth
 
@@ -240,6 +304,22 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatCustomerResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatCustomerResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatCustomerResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatCurrencyCode</a></code>
+- <code><a href="./src/resources/client-auth.ts">CryptoCurrencyCode</a></code>
+- <code><a href="./src/resources/client-auth.ts">Caip2ChainID</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatAmount</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampSource</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampDestination</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampEnvironment</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampProvider</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampQuotesInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampQuote</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampQuotesResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampURLInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampURLResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FiatOnrampTransactionStatus</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampTransactionStatusInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampTransactionStatusResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeDestinationAsset</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeSourceAsset</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountSource</a></code>
@@ -263,12 +343,6 @@ Types:
 
 - <code><a href="./src/resources/analytics.ts">AnalyticsEventInput</a></code>
 
-# Apps
-
-Types:
-
-- <code><a href="./src/resources/apps.ts">AppResponse</a></code>
-
 # Aggregations
 
 Types:
@@ -284,13 +358,12 @@ Types:
 
 Types:
 
-- <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserUnlinkedAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserUpdatedAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserTransferredAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserWalletCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentAuthorizedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentExecutedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">MfaEnabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionBroadcastedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionExecutionRevertedWebhookPayload</a></code>
@@ -298,23 +371,29 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">TransactionFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionReplacedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionProviderErrorWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserOperationCompletedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserUnlinkedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserUpdatedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserTransferredAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserWalletCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">MfaEnabledWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationCompletedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">KrakenEmbedVerificationFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldClaimConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteCancelledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
 
 # Accounts
 
@@ -323,8 +402,15 @@ Types:
 - <code><a href="./src/resources/accounts.ts">AccountWallet</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountResponse</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountWalletConfigurationItem</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountDisplayName</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountWalletsConfiguration</a></code>
 - <code><a href="./src/resources/accounts.ts">CreateAccountInput</a></code>
+- <code><a href="./src/resources/accounts.ts">UpdateAccountInput</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountsListResponse</a></code>
+- <code><a href="./src/resources/accounts.ts">AssetAccountWithBalance</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountsDashboardListResponse</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountBalanceResponse</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountBalanceParams</a></code>
 
 # Yield
 
@@ -347,10 +433,12 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimInput</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimReward</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimResponse</a></code>
+- <code><a href="./src/resources/yield.ts">EthereumYieldClaimIDInput</a></code>
 
-# Intents
+# KrakenEmbed
 
 Types:
 
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCurrentDayPnl</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryResponse</a></code>

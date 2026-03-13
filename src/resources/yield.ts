@@ -66,11 +66,6 @@ export interface EthereumYieldSweepResponse {
   id: string;
 
   /**
-   * The ID of the ERC-20 approval transaction (for deposits).
-   */
-  approval_transaction_id: string | null;
-
-  /**
    * The amount of underlying assets involved. Set after the sweep is confirmed
    * on-chain.
    */
@@ -90,11 +85,6 @@ export interface EthereumYieldSweepResponse {
    * Status of a yield sweep.
    */
   status: EthereumYieldSweepStatus;
-
-  /**
-   * The ID of the underlying blockchain transaction (deposit/withdraw).
-   */
-  transaction_id: string | null;
 
   /**
    * Type of yield sweep.
@@ -201,6 +191,11 @@ export interface EthereumVaultDetailsResponse {
    * Chain identifier (e.g., eip155:8453).
    */
   caip2: string;
+
+  /**
+   * Human-readable vault name from the yield provider.
+   */
+  name: string;
 
   /**
    * Supported yield/lending protocol providers.
@@ -361,9 +356,42 @@ export interface EthereumYieldClaimResponse {
   caip2: EvmCaip2ChainID;
 
   /**
+   * Unix timestamp of when the claim was created, in milliseconds.
+   */
+  created_at: number;
+
+  /**
    * List of reward tokens claimed.
    */
   rewards: Array<EthereumYieldClaimReward>;
+
+  /**
+   * The current status of the claim transaction.
+   */
+  status:
+    | 'broadcasted'
+    | 'confirmed'
+    | 'execution_reverted'
+    | 'failed'
+    | 'replaced'
+    | 'finalized'
+    | 'provider_error'
+    | 'pending';
+
+  /**
+   * Unix timestamp of when the claim was last updated, in milliseconds.
+   */
+  updated_at: number;
+}
+
+/**
+ * Input for fetching a yield reward claim by ID.
+ */
+export interface EthereumYieldClaimIDInput {
+  /**
+   * The yield claim transaction ID.
+   */
+  id: string;
 }
 
 export declare namespace Yield {
@@ -385,5 +413,6 @@ export declare namespace Yield {
     type EthereumYieldClaimInput as EthereumYieldClaimInput,
     type EthereumYieldClaimReward as EthereumYieldClaimReward,
     type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
+    type EthereumYieldClaimIDInput as EthereumYieldClaimIDInput,
   };
 }

@@ -5,6 +5,9 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Operations related to wallets
+ */
 export class Balance extends APIResource {
   /**
    * Get the balance of a wallet by wallet ID.
@@ -31,12 +34,13 @@ export interface BalanceGetResponse {
 
 export namespace BalanceGetResponse {
   export interface Balance {
-    asset: 'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+    asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
     chain:
       | 'ethereum'
       | 'arbitrum'
       | 'base'
+      | 'tempo'
       | 'linea'
       | 'optimism'
       | 'polygon'
@@ -69,18 +73,20 @@ export interface BalanceGetParams {
 
   asset?:
     | 'usdc'
+    | 'usdc.e'
     | 'eth'
     | 'pol'
     | 'usdt'
     | 'eurc'
     | 'usdb'
     | 'sol'
-    | Array<'usdc' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
+    | Array<'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
 
   chain?:
     | 'ethereum'
     | 'arbitrum'
     | 'base'
+    | 'tempo'
     | 'linea'
     | 'optimism'
     | 'polygon'
@@ -98,6 +104,7 @@ export interface BalanceGetParams {
         | 'ethereum'
         | 'arbitrum'
         | 'base'
+        | 'tempo'
         | 'linea'
         | 'optimism'
         | 'polygon'

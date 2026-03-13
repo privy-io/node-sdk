@@ -134,6 +134,192 @@ export interface BridgeSandboxFiatCustomerResponse {
  */
 export type FiatCustomerResponse = BridgeFiatCustomerResponse | BridgeSandboxFiatCustomerResponse;
 
+/**
+ * ISO 4217 fiat currency code. Three uppercase ASCII letters.
+ */
+export type FiatCurrencyCode = string;
+
+/**
+ * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
+ */
+export type CryptoCurrencyCode = string;
+
+/**
+ * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
+ * Ethereum mainnet, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
+ */
+export type Caip2ChainID = string;
+
+/**
+ * A positive decimal amount as a string (e.g. "100", "50.25", "0.001").
+ */
+export type FiatAmount = string;
+
+/**
+ * Source currency details for a fiat onramp quote request.
+ */
+export interface FiatOnrampSource {
+  /**
+   * A positive decimal amount as a string (e.g. "100", "50.25", "0.001").
+   */
+  amount: FiatAmount;
+
+  /**
+   * ISO 4217 fiat currency code. Three uppercase ASCII letters.
+   */
+  asset: FiatCurrencyCode;
+}
+
+/**
+ * Destination cryptocurrency details for a fiat onramp quote request.
+ */
+export interface FiatOnrampDestination {
+  address: string;
+
+  /**
+   * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
+   */
+  asset: CryptoCurrencyCode;
+
+  /**
+   * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
+   * Ethereum mainnet, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
+   */
+  chain: Caip2ChainID;
+}
+
+/**
+ * Whether to use the sandbox or production environment for fiat onramp.
+ */
+export type FiatOnrampEnvironment = 'sandbox' | 'production';
+
+/**
+ * The fiat onramp provider to use.
+ */
+export type FiatOnrampProvider = 'meld' | 'meld-sandbox';
+
+/**
+ * The request input for getting fiat onramp quotes.
+ */
+export interface GetFiatOnrampQuotesInput {
+  /**
+   * Destination cryptocurrency details for a fiat onramp quote request.
+   */
+  destination: FiatOnrampDestination;
+
+  /**
+   * Whether to use the sandbox or production environment for fiat onramp.
+   */
+  environment: FiatOnrampEnvironment;
+
+  /**
+   * Source currency details for a fiat onramp quote request.
+   */
+  source: FiatOnrampSource;
+}
+
+/**
+ * A single fiat onramp quote from a provider.
+ */
+export interface FiatOnrampQuote {
+  payment_method: string;
+
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
+
+  destination_currency_code?: string | null;
+
+  source_amount?: number | null;
+
+  source_currency_code?: string | null;
+
+  sub_provider?: string | null;
+}
+
+/**
+ * The response containing fiat onramp quotes.
+ */
+export interface GetFiatOnrampQuotesResponse {
+  quotes: Array<FiatOnrampQuote>;
+}
+
+/**
+ * The request input for getting a fiat onramp provider session URL.
+ */
+export interface GetFiatOnrampURLInput {
+  /**
+   * Destination cryptocurrency details for a fiat onramp quote request.
+   */
+  destination: FiatOnrampDestination;
+
+  payment_method: string;
+
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
+
+  /**
+   * Source currency details for a fiat onramp quote request.
+   */
+  source: FiatOnrampSource;
+
+  redirect_url?: string;
+
+  sub_provider?: string;
+}
+
+/**
+ * The response containing a fiat onramp provider session URL.
+ */
+export interface GetFiatOnrampURLResponse {
+  session_id: string;
+
+  url: string;
+}
+
+/**
+ * Normalized fiat onramp transaction status.
+ */
+export type FiatOnrampTransactionStatus =
+  | 'pending'
+  | 'processing'
+  | 'completed'
+  | 'failed'
+  | 'cancelled'
+  | 'refunded'
+  | 'unknown';
+
+/**
+ * The request input for checking a fiat onramp session status.
+ */
+export interface GetFiatOnrampTransactionStatusInput {
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
+
+  session_id: string;
+}
+
+/**
+ * The response containing the fiat onramp session status.
+ */
+export interface GetFiatOnrampTransactionStatusResponse {
+  raw_status: string;
+
+  session_id: string;
+
+  /**
+   * Normalized fiat onramp transaction status.
+   */
+  status: FiatOnrampTransactionStatus;
+
+  transaction_id?: string;
+}
+
 export type BridgeDestinationAsset = 'usdb' | 'usdc' | 'usdt' | 'dai' | 'pyusd' | 'eurc';
 
 export type BridgeSourceAsset = 'usd' | 'eur' | 'mxn' | 'brl' | 'gbp';
@@ -335,6 +521,22 @@ export declare namespace ClientAuth {
     type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
     type BridgeSandboxFiatCustomerResponse as BridgeSandboxFiatCustomerResponse,
     type FiatCustomerResponse as FiatCustomerResponse,
+    type FiatCurrencyCode as FiatCurrencyCode,
+    type CryptoCurrencyCode as CryptoCurrencyCode,
+    type Caip2ChainID as Caip2ChainID,
+    type FiatAmount as FiatAmount,
+    type FiatOnrampSource as FiatOnrampSource,
+    type FiatOnrampDestination as FiatOnrampDestination,
+    type FiatOnrampEnvironment as FiatOnrampEnvironment,
+    type FiatOnrampProvider as FiatOnrampProvider,
+    type GetFiatOnrampQuotesInput as GetFiatOnrampQuotesInput,
+    type FiatOnrampQuote as FiatOnrampQuote,
+    type GetFiatOnrampQuotesResponse as GetFiatOnrampQuotesResponse,
+    type GetFiatOnrampURLInput as GetFiatOnrampURLInput,
+    type GetFiatOnrampURLResponse as GetFiatOnrampURLResponse,
+    type FiatOnrampTransactionStatus as FiatOnrampTransactionStatus,
+    type GetFiatOnrampTransactionStatusInput as GetFiatOnrampTransactionStatusInput,
+    type GetFiatOnrampTransactionStatusResponse as GetFiatOnrampTransactionStatusResponse,
     type BridgeDestinationAsset as BridgeDestinationAsset,
     type BridgeSourceAsset as BridgeSourceAsset,
     type BridgeFiatVirtualAccountSource as BridgeFiatVirtualAccountSource,

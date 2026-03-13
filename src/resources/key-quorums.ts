@@ -6,13 +6,23 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Operations related to key quorums
+ */
 export class KeyQuorums extends APIResource {
   /**
    * Create a new key quorum.
    *
    * @example
    * ```ts
-   * const keyQuorum = await client.keyQuorums.create();
+   * const keyQuorum = await client.keyQuorums.create({
+   *   authorization_threshold: 1,
+   *   display_name: 'Prod key quorum',
+   *   public_keys: [
+   *     'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx4aoeD72yykviK+f/ckqE2CItVIG\n1rCnvC3/XZ1HgpOcMEMialRmTrqIK4oZlYd1RfxU3za/C9yjhboIuoPD3g==',
+   *     'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAErzZtQr/bMIh3Y8f9ZqseB9i/AfjQ\nhu+agbNqXcJy/TfoNqvc/Y3Mh7gIZ8ZLXQEykycx4mYSpqrxp1lBKqsZDQ==',
+   *   ],
+   * });
    * ```
    */
   create(body: KeyQuorumCreateParams, options?: RequestOptions): APIPromise<KeyQuorum> {
@@ -55,6 +65,13 @@ export class KeyQuorums extends APIResource {
    * ```ts
    * const keyQuorum = await client.keyQuorums._update(
    *   'key_quorum_id',
+   *   {
+   *     authorization_threshold: 1,
+   *     display_name: 'Prod key quorum',
+   *     public_keys: [
+   *       'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx4aoeD72yykviK+f/ckqE2CItVIG\n1rCnvC3/XZ1HgpOcMEMialRmTrqIK4oZlYd1RfxU3za/C9yjhboIuoPD3g==',
+   *     ],
+   *   },
    * );
    * ```
    */
@@ -91,6 +108,37 @@ export class KeyQuorums extends APIResource {
   get(keyQuorumID: string, options?: RequestOptions): APIPromise<KeyQuorum> {
     return this._client.get(path`/v1/key_quorums/${keyQuorumID}`, options);
   }
+}
+
+/**
+ * Request input for creating or updating a key quorum.
+ */
+export interface KeyQuorumCreateParams {
+  /**
+   * The number of keys that must sign for an action to be valid. Must be less than
+   * or equal to total number of key quorum members.
+   */
+  authorization_threshold?: number;
+
+  display_name?: string;
+
+  /**
+   * List of key quorum IDs that should be members of this key quorum. Key quorums
+   * can only be nested 1 level deep.
+   */
+  key_quorum_ids?: Array<string>;
+
+  /**
+   * List of P-256 public keys of the keys that should be authorized to sign on the
+   * key quorum, in base64-encoded DER format.
+   */
+  public_keys?: Array<string>;
+
+  /**
+   * List of user IDs of the users that should be authorized to sign on the key
+   * quorum.
+   */
+  user_ids?: Array<string>;
 }
 
 /**
@@ -203,9 +251,9 @@ export interface KeyQuorumUpdateParams {
 
 export declare namespace KeyQuorums {
   export {
+    type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorum as KeyQuorum,
     type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
-    type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
   };

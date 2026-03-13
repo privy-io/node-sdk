@@ -1,8 +1,7 @@
 import { secp256k1 } from '@noble/curves/secp256k1';
-import { AuthorizationContext } from '@privy-io/node';
 import { PrivyClient } from '@privy-io/node';
 import { base58, base64, hex } from '@scure/base';
-import crypto from 'node:crypto';
+
 import nacl from 'tweetnacl';
 import { hexToBytes, verifyMessage } from 'viem';
 import {
@@ -13,66 +12,41 @@ import {
   privateKeyToAccount,
 } from 'viem/accounts';
 import { generateP256KeyPair } from '@privy-io/node';
-import { OWNERLESS_TRON_WALLET, P256_KEYPAIR, P256_OWNED_TRON_WALLET, TEST_APP } from '../test-config';
+import {
+  setupTestWalletResources,
+  createTestWallets,
+  TestWalletResources,
+  TestWallet,
+  WALLET_CASES,
+} from '../test-setup';
 
 describe('PrivyWalletsService', () => {
-  const p256AuthorizationContext: AuthorizationContext = {
-    authorization_private_keys: [P256_KEYPAIR.privateKey],
-  };
-
+  let resources: TestWalletResources;
   let privyClient: PrivyClient;
-  beforeEach(() => {
-    privyClient = new PrivyClient({
-      appId: TEST_APP.id,
-      appSecret: TEST_APP.secret,
-      apiUrl: TEST_APP.apiUrl,
-    });
-  });
-  describe.skip('create', () => {
-    test.each([
-      { chainType: 'ethereum', owner: null },
-      { chainType: 'ethereum', owner: 'p256' },
-      { chainType: 'solana', owner: null },
-      { chainType: 'solana', owner: 'p256' },
-      { chainType: 'tron', owner: null, hasPublicKey: true },
-      { chainType: 'tron', owner: 'p256', hasPublicKey: true },
-    ] as const)('.create($chainType, owner:$owner)', async ({ chainType, owner, hasPublicKey }) => {
-      const walletResponse = await privyClient.wallets().create({
-        chain_type: chainType,
-        owner: owner === 'p256' ? { public_key: P256_KEYPAIR.publicKey } : null,
-      });
 
-      expect(walletResponse.id).toBeDefined();
-      expect(walletResponse.chain_type).toBe(chainType);
-      expect(walletResponse.address).toBeDefined();
-      hasPublicKey && expect(walletResponse.public_key).toBeDefined();
-
-      // Log the details of the created wallets so it can be added to the envfile
-      const OWNER_PREFIX: string = owner === 'p256' ? 'P256_OWNED' : 'OWNERLESS';
-      const CHAIN_TYPE: string = chainType.toUpperCase();
-      console.log(
-        `${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_ID=${walletResponse.id}` +
-          `\n${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_ADDRESS=${walletResponse.address}` +
-          (hasPublicKey ? `\n${OWNER_PREFIX}_${CHAIN_TYPE}_WALLET_PK=${walletResponse.public_key}` : ''),
-      );
-    });
+  beforeAll(async () => {
+    resources = await setupTestWalletResources();
+    privyClient = resources.client;
   });
+
   describe('update', () => {
     it('should be able to change the owner on a wallet', async () => {
+      const wallet = await privyClient.wallets().create({ chain_type: 'tron' });
+
       // Check the wallet is ownerless initially
-      const wallet1 = await privyClient.wallets().get(OWNERLESS_TRON_WALLET.id);
+      const wallet1 = await privyClient.wallets().get(wallet.id);
       expect(wallet1.owner_id).toBeNull();
 
       // Update the owner field to a p256 key
-      const wallet2 = await privyClient.wallets().update(OWNERLESS_TRON_WALLET.id, {
-        owner: { public_key: P256_KEYPAIR.publicKey },
+      const wallet2 = await privyClient.wallets().update(wallet.id, {
+        owner: { public_key: resources.p256KeyPair.publicKey },
       });
       expect(wallet2.owner_id).toBeDefined();
 
       // Update the wallet back to ownerless
-      const wallet3 = await privyClient.wallets().update(OWNERLESS_TRON_WALLET.id, {
+      const wallet3 = await privyClient.wallets().update(wallet.id, {
         owner: null,
-        authorization_context: p256AuthorizationContext,
+        authorization_context: { authorization_private_keys: [resources.p256KeyPair.privateKey] },
       });
       expect(wallet3.owner_id).toBeNull();
     });
@@ -264,77 +238,36 @@ describe('PrivyWalletsService', () => {
     });
   });
   describe('other chains', () => {
+    let tronWallets: TestWallet[];
+
+    beforeAll(async () => {
+      tronWallets = await createTestWallets(resources, 'tron');
+    });
+
     describe('raw sign', () => {
-      it('should be able to sign a message', async () => {
-        const response = await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET.id, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
+      describe.each(WALLET_CASES)('$ownership', ({ index }) => {
+        it('should be able to sign a message', async () => {
+          const wallet = tronWallets[index]!;
+          const response = await privyClient.wallets().rawSign(wallet.id, {
+            params: {
+              hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+            },
+            ...(wallet.authorizationContext && {
+              authorization_context: wallet.authorizationContext,
+            }),
+          });
+
+          expect(response.encoding).toBe('hex');
+          expect(response.signature).toBeDefined();
+          expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
+
+          const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
+          const signatureBytes = hexToBytes(response.signature as `0x${string}`);
+          const publicKeyBytes = hexToBytes(`0x${wallet.publicKey}`);
+
+          const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
+          expect(verified).toBe(true);
         });
-
-        expect(response.encoding).toBe('hex');
-        expect(response.signature).toBeDefined();
-        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
-
-        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
-        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
-        const publicKeyBytes = hexToBytes(`0x${OWNERLESS_TRON_WALLET.pk}`);
-
-        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
-        expect(verified).toBe(true);
-      });
-      it('will succeed if the idempotency key is reused with the same body', async () => {
-        const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET.id, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotency_key: idempotencyKey,
-        });
-
-        const response = await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET.id, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotency_key: idempotencyKey,
-        });
-        expect(response.encoding).toBe('hex');
-        expect(response.signature).toBeDefined();
-        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
-
-        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
-        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
-        const publicKeyBytes = hexToBytes(`0x${OWNERLESS_TRON_WALLET.pk}`);
-
-        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
-        expect(verified).toBe(true);
-      });
-      it('will fail if the idempotency key is reused with a different body', async () => {
-        const idempotencyKey = crypto.randomUUID();
-        await privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET.id, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          idempotency_key: idempotencyKey,
-        });
-
-        await expect(
-          privyClient.wallets().rawSign(OWNERLESS_TRON_WALLET.id, {
-            params: { hash: '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321' },
-            idempotency_key: idempotencyKey,
-          }),
-        ).rejects.toThrow(
-          `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
-        );
-      });
-      it('should be able to sign a message with an authorization context', async () => {
-        const response = await privyClient.wallets().rawSign(P256_OWNED_TRON_WALLET.id, {
-          params: { hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef' },
-          authorization_context: p256AuthorizationContext,
-        });
-
-        expect(response.encoding).toBe('hex');
-        expect(response.signature).toBeDefined();
-        expect(response.signature).toMatch(/^0x[0-9a-f]+$/);
-
-        const hashBytes = hexToBytes('0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
-        const signatureBytes = hexToBytes(response.signature as `0x${string}`);
-        const publicKeyBytes = hexToBytes(`0x${P256_OWNED_TRON_WALLET.pk}`);
-
-        const verified = secp256k1.verify(signatureBytes, hashBytes, publicKeyBytes);
-        expect(verified).toBe(true);
       });
     });
   });

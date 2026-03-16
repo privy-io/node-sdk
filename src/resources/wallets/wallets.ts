@@ -270,6 +270,9 @@ export class Wallets extends APIResource {
    * ```
    */
   get(walletID: string, options?: RequestOptions): APIPromise<Wallet> {
+    if (walletID === '') {
+      throw new Error('walletID must not be an empty string');
+    }
     return this._client.get(path`/v1/wallets/${walletID}`, options);
   }
 }

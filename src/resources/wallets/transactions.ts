@@ -25,6 +25,9 @@ export class Transactions extends APIResource {
     query: TransactionGetParams,
     options?: RequestOptions,
   ): APIPromise<TransactionGetResponse> {
+    if (walletID === '') {
+      throw new Error('walletID must not be an empty string');
+    }
     return this._client.get(path`/v1/wallets/${walletID}/transactions`, { query, ...options });
   }
 }

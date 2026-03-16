@@ -23,6 +23,9 @@ export class Apps extends APIResource {
    * ```
    */
   get(appID: string, options?: RequestOptions): APIPromise<AppResponse> {
+    if (appID === '') {
+      throw new Error('appID must not be an empty string');
+    }
     return this._client.get(path`/v1/apps/${appID}`, options);
   }
 

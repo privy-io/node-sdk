@@ -234,6 +234,9 @@ export class Policies extends APIResource {
    * ```
    */
   get(policyID: string, options?: RequestOptions): APIPromise<Policy> {
+    if (policyID === '') {
+      throw new Error('policyID must not be an empty string');
+    }
     return this._client.get(path`/v1/policies/${policyID}`, options);
   }
 
@@ -253,7 +256,13 @@ export class Policies extends APIResource {
     params: PolicyGetRuleParams,
     options?: RequestOptions,
   ): APIPromise<PolicyGetRuleResponse> {
+    if (ruleID === '') {
+      throw new Error('ruleID must not be an empty string');
+    }
     const { policy_id } = params;
+    if (policy_id === '') {
+      throw new Error('policy_id must not be an empty string');
+    }
     return this._client.get(path`/v1/policies/${policy_id}/rules/${ruleID}`, options);
   }
 }

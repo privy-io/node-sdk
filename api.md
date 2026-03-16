@@ -43,6 +43,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRpcRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRawSignResponse</a></code>
@@ -187,6 +188,8 @@ Types:
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">Policy</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyAuthorizationHeaders</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyCreateRuleResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyDeleteRuleResponse</a></code>
@@ -220,6 +223,7 @@ Types:
 
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateParams</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumDeleteResponse</a></code>
 
 Methods:
@@ -442,6 +446,7 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimReward</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimResponse</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimIDInput</a></code>
+- <code><a href="./src/resources/yield.ts">YieldAuthorizationHeaders</a></code>
 
 # WalletActions
 

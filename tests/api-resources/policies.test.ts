@@ -106,6 +106,7 @@ describe('resource policies', () => {
       method: 'eth_sendTransaction',
       name: 'x',
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 
@@ -127,7 +128,10 @@ describe('resource policies', () => {
     await expect(
       client.policies._delete(
         'xxxxxxxxxxxxxxxxxxxxxxxx',
-        { 'privy-authorization-signature': 'privy-authorization-signature' },
+        {
+          'privy-authorization-signature': 'privy-authorization-signature',
+          'privy-request-expiry': 'privy-request-expiry',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(PrivyAPI.NotFoundError);
@@ -152,6 +156,7 @@ describe('resource policies', () => {
     const response = await client.policies._deleteRule('xxxxxxxxxxxxxxxxxxxxxxxx', {
       policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 
@@ -208,6 +213,7 @@ describe('resource policies', () => {
       method: 'eth_sendTransaction',
       name: 'x',
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 

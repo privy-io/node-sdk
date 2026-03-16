@@ -44,7 +44,10 @@ export class KeyQuorums extends APIResource {
     params: KeyQuorumDeleteParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<KeyQuorumDeleteResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature } = params ?? {};
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+    } = params ?? {};
     return this._client.delete(path`/v1/key_quorums/${keyQuorumID}`, {
       ...options,
       headers: buildHeaders([
@@ -52,6 +55,7 @@ export class KeyQuorums extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -80,7 +84,11 @@ export class KeyQuorums extends APIResource {
     params: KeyQuorumUpdateParams,
     options?: RequestOptions,
   ): APIPromise<KeyQuorum> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
     return this._client.patch(path`/v1/key_quorums/${keyQuorumID}`, {
       body,
       ...options,
@@ -89,6 +97,7 @@ export class KeyQuorums extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -169,6 +178,29 @@ export namespace KeyQuorum {
   }
 }
 
+/**
+ * Headers required to authorize modifications to key quorums. Must include the app
+ * ID, an authorization signature, and a request expiry timestamp.
+ */
+export interface KeyQuorumAuthorizationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
 export interface KeyQuorumDeleteResponse {
   /**
    * Whether the key quorum was deleted successfully.
@@ -210,6 +242,12 @@ export interface KeyQuorumDeleteParams {
    * should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export interface KeyQuorumUpdateParams {
@@ -247,12 +285,19 @@ export interface KeyQuorumUpdateParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export declare namespace KeyQuorums {
   export {
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorum as KeyQuorum,
+    type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
     type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,

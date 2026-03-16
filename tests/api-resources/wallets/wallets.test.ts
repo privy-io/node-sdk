@@ -85,6 +85,7 @@ describe('resource wallets', () => {
       recipient_public_key:
         'BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=',
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 
@@ -137,6 +138,7 @@ describe('resource wallets', () => {
       params: { hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e' },
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 
@@ -164,6 +166,7 @@ describe('resource wallets', () => {
       chain_type: 'ethereum',
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 

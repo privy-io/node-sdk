@@ -124,6 +124,7 @@ import {
 } from './resources/intents';
 import {
   KeyQuorum,
+  KeyQuorumAuthorizationHeaders,
   KeyQuorumCreateParams,
   KeyQuorumDeleteParams,
   KeyQuorumDeleteResponse,
@@ -137,8 +138,10 @@ import {
   KrakenEmbedGetPortfolioSummaryResponse,
 } from './resources/kraken-embed';
 import {
+  ConditionSetAuthorizationHeaders,
   Policies,
   Policy,
+  PolicyAuthorizationHeaders,
   PolicyCreateParams,
   PolicyCreateRuleParams,
   PolicyCreateRuleResponse,
@@ -315,6 +318,7 @@ import {
   EthereumYieldWithdrawInput,
   EvmCaip2ChainID,
   Yield,
+  YieldAuthorizationHeaders,
 } from './resources/yield';
 import {
   AllowlistDeletionResponse,
@@ -363,6 +367,7 @@ import {
   Wallet,
   WalletAuthenticateWithJwtParams,
   WalletAuthenticateWithJwtResponse,
+  WalletAuthorizationHeaders,
   WalletBatchCreateInput,
   WalletBatchCreateResponse,
   WalletBatchCreateResult,
@@ -1265,6 +1270,7 @@ export declare namespace PrivyAPI {
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
     type WalletRpcRequestBody as WalletRpcRequestBody,
     type WalletRpcResponse as WalletRpcResponse,
+    type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,
@@ -1380,6 +1386,8 @@ export declare namespace PrivyAPI {
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
     type Policy as Policy,
+    type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
+    type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
     type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
     type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,
@@ -1400,6 +1408,7 @@ export declare namespace PrivyAPI {
     KeyQuorums as KeyQuorums,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorum as KeyQuorum,
+    type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
     type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
@@ -1586,6 +1595,7 @@ export declare namespace PrivyAPI {
     type EthereumYieldClaimReward as EthereumYieldClaimReward,
     type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
     type EthereumYieldClaimIDInput as EthereumYieldClaimIDInput,
+    type YieldAuthorizationHeaders as YieldAuthorizationHeaders,
   };
 
   export {

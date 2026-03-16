@@ -73,7 +73,11 @@ export class Wallets extends APIResource {
     params: WalletExportParams,
     options?: RequestOptions,
   ): APIPromise<WalletExportResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
     return this._client.post(path`/v1/wallets/${walletID}/export`, {
       body,
       ...options,
@@ -82,6 +86,7 @@ export class Wallets extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -129,6 +134,7 @@ export class Wallets extends APIResource {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-idempotency-key': privyIdempotencyKey,
+      'privy-request-expiry': privyRequestExpiry,
       ...body
     } = params;
     return this._client.post(path`/v1/wallets/${walletID}/raw_sign`, {
@@ -140,6 +146,7 @@ export class Wallets extends APIResource {
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
           ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -165,6 +172,7 @@ export class Wallets extends APIResource {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-idempotency-key': privyIdempotencyKey,
+      'privy-request-expiry': privyRequestExpiry,
       ...body
     } = params;
     return this._client.post(path`/v1/wallets/${walletID}/rpc`, {
@@ -176,6 +184,7 @@ export class Wallets extends APIResource {
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
           ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -216,7 +225,11 @@ export class Wallets extends APIResource {
    * ```
    */
   _update(walletID: string, params: WalletUpdateParams, options?: RequestOptions): APIPromise<Wallet> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
     return this._client.patch(path`/v1/wallets/${walletID}`, {
       body,
       ...options,
@@ -225,6 +238,7 @@ export class Wallets extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -353,7 +367,7 @@ export type CustodialWalletProvider = 'bridge';
 /**
  * The chain type of the custodial wallet.
  */
-export type CustodialWalletChainType = 'ethereum';
+export type CustodialWalletChainType = 'ethereum' | 'solana';
 
 /**
  * The input for creating a custodial wallet.
@@ -1459,6 +1473,29 @@ export type WalletRpcResponse =
   | SolanaSignTransactionRpcResponse
   | SolanaSignAndSendTransactionRpcResponse;
 
+/**
+ * Headers required to authorize wallet operations. Must include the app ID, an
+ * authorization signature, and a request expiry timestamp.
+ */
+export interface WalletAuthorizationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
 export interface WalletExportResponse {
   /**
    * The encrypted private key.
@@ -1677,6 +1714,12 @@ export interface WalletExportParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export type WalletInitImportParams =
@@ -1750,6 +1793,12 @@ export interface WalletRawSignParams {
    * a 24-hour window.
    */
   'privy-idempotency-key'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace WalletRawSignParams {
@@ -1829,6 +1878,12 @@ export declare namespace WalletRpcParams {
      * a 24-hour window.
      */
     'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumPersonalSignRpcInput {
@@ -1871,6 +1926,12 @@ export declare namespace WalletRpcParams {
      * a 24-hour window.
      */
     'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSignTypedDataRpcInput {
@@ -1931,6 +1992,12 @@ export declare namespace WalletRpcParams {
      * a 24-hour window.
      */
     'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSignTransactionRpcInput {
@@ -2015,6 +2082,12 @@ export declare namespace WalletRpcParams {
      * a 24-hour window.
      */
     'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSignUserOperationRpcInput {
@@ -2097,6 +2170,12 @@ export declare namespace WalletRpcParams {
      * a 24-hour window.
      */
     'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSendTransactionRpcInput {
@@ -2181,6 +2260,12 @@ export declare namespace WalletRpcParams {
      * a 24-hour window.
      */
     'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSign7702AuthorizationRpcInput {
@@ -2225,6 +2310,12 @@ export declare namespace WalletRpcParams {
      * a 24-hour window.
      */
     'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSecp256k1SignRpcInput {
@@ -2265,6 +2356,12 @@ export declare namespace WalletRpcParams {
      * a 24-hour window.
      */
     'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace SolanaSignMessageRpcInput {
@@ -2307,6 +2404,12 @@ export declare namespace WalletRpcParams {
      * a 24-hour window.
      */
     'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace SolanaSignTransactionRpcInput {
@@ -2359,6 +2462,12 @@ export declare namespace WalletRpcParams {
      * a 24-hour window.
      */
     'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace SolanaSignAndSendTransactionRpcInput {
@@ -2511,6 +2620,12 @@ export interface WalletUpdateParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace WalletUpdateParams {
@@ -2662,6 +2777,7 @@ export declare namespace Wallets {
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
     type WalletRpcRequestBody as WalletRpcRequestBody,
     type WalletRpcResponse as WalletRpcResponse,
+    type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletRawSignResponse as WalletRawSignResponse,

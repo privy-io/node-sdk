@@ -20,6 +20,9 @@ export class Transactions extends APIResource {
    * ```
    */
   get(transactionID: string, options?: RequestOptions): APIPromise<TransactionGetResponse> {
+    if (transactionID === '') {
+      throw new Error('transactionID must not be an empty string');
+    }
     return this._client.get(path`/v1/transactions/${transactionID}`, options);
   }
 }

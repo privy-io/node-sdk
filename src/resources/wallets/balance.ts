@@ -24,6 +24,9 @@ export class Balance extends APIResource {
     query: BalanceGetParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<BalanceGetResponse> {
+    if (walletID === '') {
+      throw new Error('walletID must not be an empty string');
+    }
     return this._client.get(path`/v1/wallets/${walletID}/balance`, { query, ...options });
   }
 }

@@ -92,6 +92,9 @@ export class Intents extends APIResource {
    * ```
    */
   get(intentID: string, options?: RequestOptions): APIPromise<IntentResponse> {
+    if (intentID === '') {
+      throw new Error('intentID must not be an empty string');
+    }
     return this._client.get(path`/v1/intents/${intentID}`, options);
   }
 

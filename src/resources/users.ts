@@ -73,6 +73,9 @@ export class Users extends APIResource {
    * ```
    */
   _get(userID: string, options?: RequestOptions): APIPromise<User> {
+    if (userID === '') {
+      throw new Error('userID must not be an empty string');
+    }
     return this._client.get(path`/v1/users/${userID}`, options);
   }
 

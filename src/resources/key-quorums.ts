@@ -115,6 +115,9 @@ export class KeyQuorums extends APIResource {
    * ```
    */
   get(keyQuorumID: string, options?: RequestOptions): APIPromise<KeyQuorum> {
+    if (keyQuorumID === '') {
+      throw new Error('keyQuorumID must not be an empty string');
+    }
     return this._client.get(path`/v1/key_quorums/${keyQuorumID}`, options);
   }
 }

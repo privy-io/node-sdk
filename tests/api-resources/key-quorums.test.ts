@@ -39,7 +39,10 @@ describe('resource keyQuorums', () => {
     await expect(
       client.keyQuorums._delete(
         'key_quorum_id',
-        { 'privy-authorization-signature': 'privy-authorization-signature' },
+        {
+          'privy-authorization-signature': 'privy-authorization-signature',
+          'privy-request-expiry': 'privy-request-expiry',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(PrivyAPI.NotFoundError);

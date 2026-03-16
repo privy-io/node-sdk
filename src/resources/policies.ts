@@ -79,7 +79,11 @@ export class Policies extends APIResource {
     params: PolicyCreateRuleParams,
     options?: RequestOptions,
   ): APIPromise<PolicyCreateRuleResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
     return this._client.post(path`/v1/policies/${policyID}/rules`, {
       body,
       ...options,
@@ -88,6 +92,7 @@ export class Policies extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -109,7 +114,10 @@ export class Policies extends APIResource {
     params: PolicyDeleteParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<PolicyDeleteResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature } = params ?? {};
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+    } = params ?? {};
     return this._client.delete(path`/v1/policies/${policyID}`, {
       ...options,
       headers: buildHeaders([
@@ -117,6 +125,7 @@ export class Policies extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -139,7 +148,11 @@ export class Policies extends APIResource {
     params: PolicyDeleteRuleParams,
     options?: RequestOptions,
   ): APIPromise<PolicyDeleteRuleResponse> {
-    const { policy_id, 'privy-authorization-signature': privyAuthorizationSignature } = params;
+    const {
+      policy_id,
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+    } = params;
     return this._client.delete(path`/v1/policies/${policy_id}/rules/${ruleID}`, {
       ...options,
       headers: buildHeaders([
@@ -147,6 +160,7 @@ export class Policies extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -164,7 +178,11 @@ export class Policies extends APIResource {
    * ```
    */
   _update(policyID: string, params: PolicyUpdateParams, options?: RequestOptions): APIPromise<Policy> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
     return this._client.patch(path`/v1/policies/${policyID}`, {
       body,
       ...options,
@@ -173,6 +191,7 @@ export class Policies extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -208,7 +227,12 @@ export class Policies extends APIResource {
     params: PolicyUpdateRuleParams,
     options?: RequestOptions,
   ): APIPromise<PolicyUpdateRuleResponse> {
-    const { policy_id, 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      policy_id,
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
     return this._client.patch(path`/v1/policies/${policy_id}/rules/${ruleID}`, {
       body,
       ...options,
@@ -217,6 +241,7 @@ export class Policies extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -567,6 +592,52 @@ export namespace Policy {
       value: string | Array<string>;
     }
   }
+}
+
+/**
+ * Headers required to authorize modifications to policies. Must include the app
+ * ID, an authorization signature, and a request expiry timestamp.
+ */
+export interface PolicyAuthorizationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
+/**
+ * Headers required to authorize modifications to condition sets. Must include the
+ * app ID, an authorization signature, and a request expiry timestamp.
+ */
+export interface ConditionSetAuthorizationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 /**
@@ -1473,6 +1544,12 @@ export interface PolicyCreateRuleParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace PolicyCreateRuleParams {
@@ -1632,6 +1709,12 @@ export interface PolicyDeleteParams {
    * should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export interface PolicyDeleteRuleParams {
@@ -1645,6 +1728,12 @@ export interface PolicyDeleteRuleParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export interface PolicyUpdateParams {
@@ -1675,6 +1764,12 @@ export interface PolicyUpdateParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace PolicyUpdateParams {
@@ -1944,6 +2039,12 @@ export interface PolicyUpdateRuleParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace PolicyUpdateRuleParams {
@@ -2109,6 +2210,8 @@ export declare namespace Policies {
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
     type Policy as Policy,
+    type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
+    type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
     type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
     type PolicyDeleteResponse as PolicyDeleteResponse,
     type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,

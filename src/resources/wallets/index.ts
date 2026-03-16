@@ -45,6 +45,7 @@ export {
   type SolanaSignMessageRpcResponse,
   type WalletRpcRequestBody,
   type WalletRpcResponse,
+  type WalletAuthorizationHeaders,
   type WalletExportResponse,
   type WalletInitImportResponse,
   type WalletRawSignResponse,

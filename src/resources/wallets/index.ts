@@ -14,6 +14,8 @@ export {
   type CustodialWalletCreateInput,
   type CustodialWallet,
   type HpkeImportConfig,
+  type CreateTokenTransferRequest,
+  type CreateTokenTransferResponse,
   type SuiCommandName,
   type Wallet,
   type WalletUpdateRequestBody,

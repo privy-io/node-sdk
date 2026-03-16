@@ -457,6 +457,127 @@ export interface HpkeImportConfig {
 }
 
 /**
+ * Request body for initiating a sponsored token transfer from an embedded wallet.
+ */
+export interface CreateTokenTransferRequest {
+  destination: CreateTokenTransferRequest.Destination;
+
+  source: CreateTokenTransferRequest.Source;
+}
+
+export namespace CreateTokenTransferRequest {
+  export interface Destination {
+    /**
+     * Recipient address (hex for EVM, base58 for Solana)
+     */
+    address: string;
+  }
+
+  export interface Source {
+    /**
+     * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
+     * USDC, "0.01" for 0.01 ETH). Not in the smallest on-chain unit (wei, lamports,
+     * etc.).
+     */
+    amount: string;
+
+    /**
+     * The asset to transfer. Supported: 'usdc', 'usdb', 'usdt' (stablecoins), 'eth'
+     * (native Ethereum), 'sol' (native Solana).
+     */
+    asset: string;
+
+    /**
+     * The blockchain network on which to perform the transfer. Supported chains
+     * include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and their
+     * respective testnets.
+     */
+    chain: string;
+  }
+}
+
+/**
+ * Response for a created transfer action. The transfer is processed
+ * asynchronously; this returns a pending action.
+ */
+export interface CreateTokenTransferResponse {
+  /**
+   * Unique identifier for this wallet action.
+   */
+  id: string;
+
+  /**
+   * Balance changes from the transfer. Empty at creation, populated later.
+   */
+  balance_changes: Array<unknown>;
+
+  destination: CreateTokenTransferResponse.Destination;
+
+  source: CreateTokenTransferResponse.Source;
+
+  /**
+   * The status of the wallet action. Always "pending" at creation; updated
+   * asynchronously.
+   */
+  status: 'pending';
+
+  /**
+   * The transaction steps for this transfer. Typically contains one step.
+   */
+  steps: Array<CreateTokenTransferResponse.Step>;
+
+  /**
+   * The type of wallet action. Always "transfer" for this endpoint.
+   */
+  type: 'transfer';
+
+  /**
+   * The ID of the wallet initiating the transfer.
+   */
+  wallet_id: string;
+}
+
+export namespace CreateTokenTransferResponse {
+  export interface Destination {
+    /**
+     * The recipient address as provided in the request.
+     */
+    address: string;
+  }
+
+  export interface Source {
+    /**
+     * The transfer amount as provided in the request.
+     */
+    amount: string;
+
+    asset: string;
+
+    chain: string;
+  }
+
+  export interface Step {
+    chain: string;
+
+    /**
+     * The status of this step. Always "pending" at creation time.
+     */
+    status: 'pending';
+
+    /**
+     * The on-chain transaction hash. Null until the transaction is broadcast,
+     * populated asynchronously.
+     */
+    transaction_hash: string | null;
+
+    /**
+     * The type of blockchain transaction for this step.
+     */
+    type: 'evm_transaction' | 'svm_transaction';
+  }
+}
+
+/**
  * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
  */
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
@@ -2510,6 +2631,8 @@ export declare namespace Wallets {
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWallet as CustodialWallet,
     type HpkeImportConfig as HpkeImportConfig,
+    type CreateTokenTransferRequest as CreateTokenTransferRequest,
+    type CreateTokenTransferResponse as CreateTokenTransferResponse,
     type SuiCommandName as SuiCommandName,
     type Wallet as Wallet,
     type WalletUpdateRequestBody as WalletUpdateRequestBody,

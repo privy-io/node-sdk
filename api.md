@@ -12,6 +12,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CreateTokenTransferRequest</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CreateTokenTransferResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletUpdateRequestBody</a></code>

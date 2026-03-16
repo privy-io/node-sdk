@@ -329,6 +329,8 @@ import {
   WalletInviteInput,
 } from './resources/apps/apps';
 import {
+  CreateTokenTransferRequest,
+  CreateTokenTransferResponse,
   CurveSigningChainType,
   CustodialWallet,
   CustodialWalletChainType,
@@ -1232,6 +1234,8 @@ export declare namespace PrivyAPI {
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWallet as CustodialWallet,
     type HpkeImportConfig as HpkeImportConfig,
+    type CreateTokenTransferRequest as CreateTokenTransferRequest,
+    type CreateTokenTransferResponse as CreateTokenTransferResponse,
     type SuiCommandName as SuiCommandName,
     type Wallet as Wallet,
     type WalletUpdateRequestBody as WalletUpdateRequestBody,

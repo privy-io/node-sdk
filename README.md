@@ -39,8 +39,6 @@ Note that React Native is not supported at this time.
 
 If you are interested in other runtime environments, please open or upvote an issue on GitHub.
 
-
-
 ## Changelog
 
 Our [changelog](https://docs.privy.io/changelogs/node) contains the latest information about new releases, including features, fixes, and upcoming changes.

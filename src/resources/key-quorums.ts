@@ -182,8 +182,7 @@ export namespace KeyQuorum {
 }
 
 /**
- * Headers required to authorize modifications to key quorums. Must include the app
- * ID, an authorization signature, and a request expiry timestamp.
+ * Headers required to authorize modifications to key quorums.
  */
 export interface KeyQuorumAuthorizationHeaders {
   /**

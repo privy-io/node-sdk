@@ -153,6 +153,14 @@ export {
   type PolicyUpdateRuleParams,
   type PolicyGetRuleParams,
 } from './policies';
+export {
+  Swaps,
+  type SwapAmountType,
+  type SwapQuoteRequest,
+  type SwapQuoteResponse,
+  type SwapRequest,
+  type SwapResponse,
+} from './swaps';
 export { Transactions, type TransactionGetResponse } from './transactions';
 export {
   Users,

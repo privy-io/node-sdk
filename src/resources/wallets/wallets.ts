@@ -1477,8 +1477,7 @@ export type WalletRpcResponse =
   | SolanaSignAndSendTransactionRpcResponse;
 
 /**
- * Headers required to authorize wallet operations. Must include the app ID, an
- * authorization signature, and a request expiry timestamp.
+ * Headers required to authorize wallet operations.
  */
 export interface WalletAuthorizationHeaders {
   /**

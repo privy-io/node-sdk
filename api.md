@@ -460,6 +460,16 @@ Types:
 - <code><a href="./src/resources/wallet-actions.ts">EvmUserOperationWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">WalletActionStep</a></code>
 
+# Swaps
+
+Types:
+
+- <code><a href="./src/resources/swaps.ts">SwapAmountType</a></code>
+- <code><a href="./src/resources/swaps.ts">SwapQuoteRequest</a></code>
+- <code><a href="./src/resources/swaps.ts">SwapQuoteResponse</a></code>
+- <code><a href="./src/resources/swaps.ts">SwapRequest</a></code>
+- <code><a href="./src/resources/swaps.ts">SwapResponse</a></code>
+
 # KrakenEmbed
 
 Types:

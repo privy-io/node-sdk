@@ -595,8 +595,7 @@ export namespace Policy {
 }
 
 /**
- * Headers required to authorize modifications to policies. Must include the app
- * ID, an authorization signature, and a request expiry timestamp.
+ * Headers required to authorize modifications to policies.
  */
 export interface PolicyAuthorizationHeaders {
   /**
@@ -618,8 +617,7 @@ export interface PolicyAuthorizationHeaders {
 }
 
 /**
- * Headers required to authorize modifications to condition sets. Must include the
- * app ID, an authorization signature, and a request expiry timestamp.
+ * Headers required to authorize modifications to condition sets.
  */
 export interface ConditionSetAuthorizationHeaders {
   /**

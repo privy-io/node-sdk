@@ -395,8 +395,7 @@ export interface EthereumYieldClaimIDInput {
 }
 
 /**
- * Headers required to authorize yield operations. Must include the app ID, an
- * authorization signature, and a request expiry timestamp.
+ * Headers required to authorize yield operations.
  */
 export interface YieldAuthorizationHeaders {
   /**

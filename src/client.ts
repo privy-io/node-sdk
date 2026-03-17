@@ -160,6 +160,14 @@ import {
   SuiTransferObjectsCommandField,
   TronTransactionCondition,
 } from './resources/policies';
+import {
+  SwapAmountType,
+  SwapQuoteRequest,
+  SwapQuoteResponse,
+  SwapRequest,
+  SwapResponse,
+  Swaps,
+} from './resources/swaps';
 import { TransactionGetResponse, Transactions } from './resources/transactions';
 import {
   AuthenticatedUser,
@@ -1202,6 +1210,7 @@ export class PrivyAPI {
   accounts: API.Accounts = new API.Accounts(this);
   yield: API.Yield = new API.Yield(this);
   walletActions: API.WalletActions = new API.WalletActions(this);
+  swaps: API.Swaps = new API.Swaps(this);
   krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
 }
 
@@ -1219,6 +1228,7 @@ PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.Accounts = Accounts;
 PrivyAPI.Yield = Yield;
 PrivyAPI.WalletActions = WalletActions;
+PrivyAPI.Swaps = Swaps;
 PrivyAPI.KrakenEmbed = KrakenEmbed;
 
 export declare namespace PrivyAPI {
@@ -1607,6 +1617,15 @@ export declare namespace PrivyAPI {
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
     type WalletActionStep as WalletActionStep,
+  };
+
+  export {
+    Swaps as Swaps,
+    type SwapAmountType as SwapAmountType,
+    type SwapQuoteRequest as SwapQuoteRequest,
+    type SwapQuoteResponse as SwapQuoteResponse,
+    type SwapRequest as SwapRequest,
+    type SwapResponse as SwapResponse,
   };
 
   export {

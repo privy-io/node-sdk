@@ -132,6 +132,70 @@ export async function generateAuthorizationSignatures(
 }
 
 /**
+ * The result of authorizing a request. Contains the headers that should be
+ * spread into the underlying API call.
+ */
+export interface AuthorizedRequest {
+  headers: Record<string, string>;
+}
+
+/**
+ * Generates authorization signatures and computes the request expiry for an authorized API request.
+ * Returns an {@link AuthorizedRequest} containing all headers that should be forwarded to the
+ * underlying generated API method.
+ *
+ * @param client The Privy client instance, used for JWT exchange and default expiry computation.
+ * @param appId The Privy app ID for the request.
+ * @param options The request details including authorization context, HTTP method, URL, body,
+ *   and optional idempotency key and request expiry.
+ * @returns An {@link AuthorizedRequest} with the computed headers.
+ */
+export async function authorizeRequest(
+  client: PrivyClient,
+  appId: string,
+  {
+    authorizationContext = {},
+    idempotencyKey,
+    requestExpiry,
+    method,
+    url,
+    body,
+  }: {
+    authorizationContext?: AuthorizationContext | undefined;
+    idempotencyKey?: string | undefined;
+    requestExpiry?: string | undefined;
+    method: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+    url: string;
+    body: any;
+  },
+): Promise<AuthorizedRequest> {
+  const effectiveExpiry = requestExpiry ?? client.getRequestExpiry();
+
+  const signatures = await generateAuthorizationSignatures(client, {
+    authorizationContext,
+    input: {
+      version: 1,
+      method,
+      url,
+      body,
+      headers: {
+        'privy-app-id': appId,
+        ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
+        'privy-request-expiry': effectiveExpiry,
+      },
+    },
+  });
+
+  return {
+    headers: {
+      'privy-authorization-signature': signatures.join(','),
+      ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
+      'privy-request-expiry': effectiveExpiry,
+    },
+  };
+}
+
+/**
  * Signs the given request with the provided private key.
  *
  * @param authorizationPrivateKey The base64-encoded PKCS8-formatted private key, with no PEM headers.

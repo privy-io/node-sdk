@@ -152,13 +152,3 @@ export function generateAuthorizationSignature({
   // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
   return Buffer.from(signature).toString('base64');
 }
-
-/**
- * Returns a default request expiry timestamp set to 15 minutes from now.
- * The value is a Unix timestamp in milliseconds, returned as a string.
- */
-const DEFAULT_EXPIRY_TIME_MS = 15 * 60 * 1000;
-
-export function getRequestExpiryIn15Minutes(): string {
-  return String(Date.now() + DEFAULT_EXPIRY_TIME_MS);
-}

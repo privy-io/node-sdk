@@ -1,7 +1,7 @@
 import { PrivyAPI } from '../../client';
 import { APIPromise } from '../../core/api-promise';
 import { PrivyAPIError } from '../../core/error';
-import { getRequestExpiryIn15Minutes, generateAuthorizationSignatures } from '../../lib/authorization';
+import { generateAuthorizationSignatures } from '../../lib/authorization';
 import { setupHPKERecipient, setupHPKESender } from '../../lib/cryptography';
 import { entropyToBytes } from '../../lib/wallet-entropy';
 import {
@@ -64,7 +64,7 @@ export class PrivyWalletsService extends Wallets {
       ...params
     }: PrivyWalletsService.RpcInput,
   ): Promise<WalletRpcResponse> {
-    const effectiveExpiry = requestExpiry ?? getRequestExpiryIn15Minutes();
+    const effectiveExpiry = requestExpiry ?? this.privyClient.getRequestExpiry();
 
     const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
       authorizationContext,

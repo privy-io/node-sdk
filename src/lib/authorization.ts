@@ -57,6 +57,7 @@ export type WalletApiRequestSignatureInput = {
   headers: {
     'privy-app-id': string;
     'privy-idempotency-key'?: string;
+    'privy-request-expiry'?: string;
   };
 };
 

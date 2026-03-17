@@ -10,7 +10,6 @@ import { PrivyUtils } from './services/utils';
 import { JwtExchangeService } from '../lib/jwt-exchange';
 import { VERSION } from '../version';
 import { createPrivyAppJWKS } from '../lib/auth';
-
 type InternalClientOptions = Omit<ClientOptions, 'appID' | 'appSecret' | 'baseUrl'>;
 
 export interface PrivyClientOptions extends InternalClientOptions {
@@ -18,11 +17,15 @@ export interface PrivyClientOptions extends InternalClientOptions {
   appSecret: string;
   apiUrl?: string;
   authorizationKeyCacheMaxCapacity?: number;
+  /** Default request expiry duration in milliseconds. Defaults to 15 minutes. */
+  defaultRequestExpiryMs?: number;
   jwtVerificationKey?: string;
   webhookSigningSecret?: string;
 }
 
 const DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY = 1000;
+// 15 minutes
+const DEFAULT_REQUEST_EXPIRY_MS = 15 * 60 * 1000;
 
 export class PrivyClient {
   private privyApiClient: PrivyAPI;
@@ -35,6 +38,7 @@ export class PrivyClient {
   private appsService: PrivyAppsService;
   private utilsService: PrivyUtils;
   private jwtExchangeService: JwtExchangeService;
+  private _defaultRequestExpiryMs: number;
 
   /** @internal */
   _jwtExchange(): JwtExchangeService {
@@ -46,6 +50,7 @@ export class PrivyClient {
     appSecret,
     apiUrl,
     authorizationKeyCacheMaxCapacity = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
+    defaultRequestExpiryMs = DEFAULT_REQUEST_EXPIRY_MS,
     defaultHeaders,
     jwtVerificationKey,
     webhookSigningSecret,
@@ -69,6 +74,7 @@ export class PrivyClient {
       verificationKeyOverride: jwtVerificationKey,
     });
 
+    this._defaultRequestExpiryMs = defaultRequestExpiryMs;
     this.jwtExchangeService = new JwtExchangeService(
       this.privyApiClient.wallets,
       authorizationKeyCacheMaxCapacity,
@@ -113,5 +119,15 @@ export class PrivyClient {
 
   public utils(): PrivyUtils {
     return this.utilsService;
+  }
+
+  /**
+   * Returns a request expiry timestamp as a Unix timestamp in milliseconds, returned as a string.
+   *
+   * If `expiryMs` is provided, uses that duration. Otherwise falls back to the
+   * `defaultRequestExpiryMs` configured on the client (defaults to 15 minutes).
+   */
+  public getRequestExpiry(expiryMs?: number): string {
+    return String(Date.now() + (expiryMs ?? this._defaultRequestExpiryMs));
   }
 }

@@ -1,7 +1,7 @@
 import { PrivyAPI } from '../../client';
 import { APIPromise } from '../../core/api-promise';
 import { PrivyAPIError } from '../../core/error';
-import { generateAuthorizationSignatures } from '../../lib/authorization';
+import { getRequestExpiryIn15Minutes, generateAuthorizationSignatures } from '../../lib/authorization';
 import { setupHPKERecipient, setupHPKESender } from '../../lib/cryptography';
 import { entropyToBytes } from '../../lib/wallet-entropy';
 import {
@@ -19,7 +19,7 @@ import {
 import { PrivyClient } from '../PrivyClient';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
-import { Prettify, WithAuthorization, WithIdempotency } from './types';
+import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
 
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
@@ -60,9 +60,12 @@ export class PrivyWalletsService extends Wallets {
     {
       authorization_context: authorizationContext = {},
       idempotency_key: idempotencyKey,
+      request_expiry: requestExpiry,
       ...params
     }: PrivyWalletsService.RpcInput,
   ): Promise<WalletRpcResponse> {
+    const effectiveExpiry = requestExpiry ?? getRequestExpiryIn15Minutes();
+
     const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
       authorizationContext,
       input: {
@@ -73,6 +76,7 @@ export class PrivyWalletsService extends Wallets {
         headers: {
           'privy-app-id': this._client.appID,
           ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
+          'privy-request-expiry': effectiveExpiry,
         },
       },
     });
@@ -81,6 +85,7 @@ export class PrivyWalletsService extends Wallets {
       ...params,
       'privy-authorization-signature': authorizationSignaturesHeader.join(','),
       ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
+      'privy-request-expiry': effectiveExpiry,
     });
   }
 
@@ -233,7 +238,7 @@ export namespace PrivyWalletsService {
   /** The input type for the {@link PrivyWalletsService.create} method. */
   export type CreateInput = Prettify<WithIdempotency<WalletCreateParams>>;
   /** The input type for the {@link PrivyWalletsService.rpc} method. */
-  export type RpcInput = Prettify<WithIdempotency<WithAuthorization<WalletRpcParams>>>;
+  export type RpcInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<WalletRpcParams>>>>;
   /** The input type for the {@link PrivyWalletsService.rawSign} method. */
   export type RawSignInput = Prettify<WithIdempotency<WithAuthorization<WalletRawSignParams>>>;
   /** The input type for the {@link PrivyWalletsService.update} method. */
@@ -266,7 +271,7 @@ export namespace PrivyWalletsService {
  * e.g. `ethereum().signMessage()` will set `chain_type=ethereum` and `method=personal_sign`.
  */
 export type PrivyWalletsRpcInput<Params extends WalletRpcParams> =
-  Prettify<WithIdempotency<WithAuthorization<Omit<Params, 'chain_type'|'method'>>>>;
+  Prettify<WithExpiry<WithIdempotency<WithAuthorization<Omit<Params, 'chain_type'|'method'>>>>>;
 
 // prettier-ignore
 /**

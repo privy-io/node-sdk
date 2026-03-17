@@ -67,7 +67,7 @@ export class PrivyWalletsService extends Wallets {
     const { headers } = await authorizeRequest(this.privyClient, this._client.appID, {
       authorizationContext,
       idempotencyKey,
-      requestExpiry,
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
       url: `${this._client.baseURL}/v1/wallets/${walletId}/rpc`,
       body: params,

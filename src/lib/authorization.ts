@@ -140,11 +140,15 @@ export interface AuthorizedRequest {
 }
 
 /**
- * Generates authorization signatures and computes the request expiry for an authorized API request.
+ * Generates authorization signatures for an authorized API request.
  * Returns an {@link AuthorizedRequest} containing all headers that should be forwarded to the
  * underlying generated API method.
  *
- * @param client The Privy client instance, used for JWT exchange and default expiry computation.
+ * If `requestExpiry` is provided, it is included in both the authorization signature and the
+ * returned headers. If omitted, no expiry header is included — callers that require expiry
+ * should compute a default before calling this function.
+ *
+ * @param client The Privy client instance, used for JWT exchange.
  * @param appId The Privy app ID for the request.
  * @param options The request details including authorization context, HTTP method, URL, body,
  *   and optional idempotency key and request expiry.
@@ -169,8 +173,6 @@ export async function authorizeRequest(
     body: any;
   },
 ): Promise<AuthorizedRequest> {
-  const effectiveExpiry = requestExpiry ?? client.getRequestExpiry();
-
   const signatures = await generateAuthorizationSignatures(client, {
     authorizationContext,
     input: {
@@ -181,7 +183,7 @@ export async function authorizeRequest(
       headers: {
         'privy-app-id': appId,
         ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
-        'privy-request-expiry': effectiveExpiry,
+        ...(requestExpiry && { 'privy-request-expiry': requestExpiry }),
       },
     },
   });
@@ -190,7 +192,7 @@ export async function authorizeRequest(
     headers: {
       'privy-authorization-signature': signatures.join(','),
       ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
-      'privy-request-expiry': effectiveExpiry,
+      ...(requestExpiry && { 'privy-request-expiry': requestExpiry }),
     },
   };
 }

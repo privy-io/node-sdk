@@ -251,6 +251,9 @@ export class Wallets extends APIResource {
    * @example
    * ```ts
    * const response = await client.wallets.authenticateWithJwt({
+   *   encryption_type: 'HPKE',
+   *   recipient_public_key:
+   *     'DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1',
    *   user_jwt:
    *     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
    * });
@@ -647,6 +650,16 @@ export interface Wallet {
    * List of policy IDs for policies that are enforced on the wallet.
    */
   policy_ids: Array<string>;
+
+  /**
+   * The number of keys that must sign for an action to be valid.
+   */
+  authorization_threshold?: number;
+
+  /**
+   * Information about the custodian managing this wallet.
+   */
+  custody?: WalletCustodian;
 
   /**
    * The compressed, raw public key for the wallet along the chain cryptographic
@@ -1472,6 +1485,28 @@ export type WalletRpcResponse =
   | SolanaSignMessageRpcResponse
   | SolanaSignTransactionRpcResponse
   | SolanaSignAndSendTransactionRpcResponse;
+
+/**
+ * Request body for wallet authentication with HPKE-encrypted response.
+ */
+export interface WalletAuthenticateRequestBody {
+  /**
+   * The encryption type for the authentication response. Currently only supports
+   * HPKE.
+   */
+  encryption_type: 'HPKE';
+
+  /**
+   * The public key of your ECDH keypair, in base64-encoded, SPKI-format, whose
+   * private key will be able to decrypt the session key.
+   */
+  recipient_public_key: string;
+
+  /**
+   * The user's JWT, to be used to authenticate the user.
+   */
+  user_jwt: string;
+}
 
 /**
  * Headers required to authorize wallet operations.
@@ -2659,21 +2694,21 @@ export namespace WalletUpdateParams {
 
 export interface WalletAuthenticateWithJwtParams {
   /**
-   * The user's JWT, to be used to authenticate the user.
-   */
-  user_jwt: string;
-
-  /**
    * The encryption type for the authentication response. Currently only supports
    * HPKE.
    */
-  encryption_type?: 'HPKE';
+  encryption_type: 'HPKE';
 
   /**
    * The public key of your ECDH keypair, in base64-encoded, SPKI-format, whose
    * private key will be able to decrypt the session key.
    */
-  recipient_public_key?: string;
+  recipient_public_key: string;
+
+  /**
+   * The user's JWT, to be used to authenticate the user.
+   */
+  user_jwt: string;
 }
 
 export interface WalletCreateWalletsWithRecoveryParams {
@@ -2776,6 +2811,7 @@ export declare namespace Wallets {
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
     type WalletRpcRequestBody as WalletRpcRequestBody,
     type WalletRpcResponse as WalletRpcResponse,
+    type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
     type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,

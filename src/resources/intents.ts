@@ -2016,10 +2016,9 @@ export interface RpcIntentResponse {
   created_by_id?: string;
 
   /**
-   * Current state of the wallet before any changes. If undefined, the resource was
-   * deleted and no longer exists
+   * A wallet managed by Privy's wallet infrastructure.
    */
-  current_resource_data?: RpcIntentResponse.CurrentResourceData;
+  current_resource_data?: WalletsAPI.Wallet;
 
   /**
    * Human-readable reason for dismissal, present when status is 'dismissed'
@@ -2604,56 +2603,6 @@ export namespace RpcIntentResponse {
       }
     }
   }
-
-  /**
-   * Current state of the wallet before any changes. If undefined, the resource was
-   * deleted and no longer exists
-   */
-  export interface CurrentResourceData {
-    id: string;
-
-    additional_signers: Array<CurrentResourceData.AdditionalSigner>;
-
-    address: string;
-
-    /**
-     * The wallet chain types.
-     */
-    chain_type: WalletsAPI.WalletChainType;
-
-    created_at: number;
-
-    exported_at: number | null;
-
-    imported_at: number | null;
-
-    owner_id: string | null;
-
-    policy_ids: Array<string>;
-
-    authorization_threshold?: number;
-
-    custodian?: CurrentResourceData.Custodian;
-
-    /**
-     * Information about the custodian managing this wallet.
-     */
-    custody?: WalletsAPI.WalletCustodian;
-
-    public_key?: string;
-  }
-
-  export namespace CurrentResourceData {
-    export interface AdditionalSigner {
-      signer_id: string;
-
-      override_policy_ids?: Array<string>;
-    }
-
-    export interface Custodian {
-      name: string;
-    }
-  }
 }
 
 /**
@@ -2716,10 +2665,9 @@ export interface WalletIntentResponse {
   created_by_id?: string;
 
   /**
-   * Current state of the wallet before any changes. If undefined, the resource was
-   * deleted and no longer exists
+   * A wallet managed by Privy's wallet infrastructure.
    */
-  current_resource_data?: WalletIntentResponse.CurrentResourceData;
+  current_resource_data?: WalletsAPI.Wallet;
 
   /**
    * Human-readable reason for dismissal, present when status is 'dismissed'
@@ -2778,56 +2726,6 @@ export namespace WalletIntentResponse {
       export interface PublicKey {
         public_key: string;
       }
-    }
-  }
-
-  /**
-   * Current state of the wallet before any changes. If undefined, the resource was
-   * deleted and no longer exists
-   */
-  export interface CurrentResourceData {
-    id: string;
-
-    additional_signers: Array<CurrentResourceData.AdditionalSigner>;
-
-    address: string;
-
-    /**
-     * The wallet chain types.
-     */
-    chain_type: WalletsAPI.WalletChainType;
-
-    created_at: number;
-
-    exported_at: number | null;
-
-    imported_at: number | null;
-
-    owner_id: string | null;
-
-    policy_ids: Array<string>;
-
-    authorization_threshold?: number;
-
-    custodian?: CurrentResourceData.Custodian;
-
-    /**
-     * Information about the custodian managing this wallet.
-     */
-    custody?: WalletsAPI.WalletCustodian;
-
-    public_key?: string;
-  }
-
-  export namespace CurrentResourceData {
-    export interface AdditionalSigner {
-      signer_id: string;
-
-      override_policy_ids?: Array<string>;
-    }
-
-    export interface Custodian {
-      name: string;
     }
   }
 }

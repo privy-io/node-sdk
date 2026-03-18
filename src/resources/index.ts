@@ -105,6 +105,7 @@ export {
   type KeyQuorumIntentResponse,
   type RuleIntentResponse,
   type IntentResponse,
+  type IntentCreationHeaders,
   type IntentListParams,
   type IntentCreatePolicyRuleParams,
   type IntentDeletePolicyRuleParams,

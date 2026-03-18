@@ -6,6 +6,7 @@ import * as PoliciesAPI from './policies';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -53,10 +54,18 @@ export class Intents extends APIResource {
    */
   createPolicyRule(
     policyID: string,
-    body: IntentCreatePolicyRuleParams,
+    params: IntentCreatePolicyRuleParams,
     options?: RequestOptions,
   ): APIPromise<RuleIntentResponse> {
-    return this._client.post(path`/v1/intents/policies/${policyID}/rules`, { body, ...options });
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.post(path`/v1/intents/policies/${policyID}/rules`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -76,8 +85,14 @@ export class Intents extends APIResource {
     params: IntentDeletePolicyRuleParams,
     options?: RequestOptions,
   ): APIPromise<RuleIntentResponse> {
-    const { policy_id } = params;
-    return this._client.delete(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, options);
+    const { policy_id, 'privy-request-expiry': privyRequestExpiry } = params;
+    return this._client.delete(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, {
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -110,8 +125,16 @@ export class Intents extends APIResource {
    * );
    * ```
    */
-  rpc(walletID: string, body: IntentRpcParams, options?: RequestOptions): APIPromise<RpcIntentResponse> {
-    return this._client.post(path`/v1/intents/wallets/${walletID}/rpc`, { body, ...options });
+  rpc(walletID: string, params: IntentRpcParams, options?: RequestOptions): APIPromise<RpcIntentResponse> {
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.post(path`/v1/intents/wallets/${walletID}/rpc`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -126,10 +149,18 @@ export class Intents extends APIResource {
    */
   updateKeyQuorum(
     keyQuorumID: string,
-    body: IntentUpdateKeyQuorumParams,
+    params: IntentUpdateKeyQuorumParams,
     options?: RequestOptions,
   ): APIPromise<KeyQuorumIntentResponse> {
-    return this._client.patch(path`/v1/intents/key_quorums/${keyQuorumID}`, { body, ...options });
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.patch(path`/v1/intents/key_quorums/${keyQuorumID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -144,10 +175,18 @@ export class Intents extends APIResource {
    */
   updatePolicy(
     policyID: string,
-    body: IntentUpdatePolicyParams,
+    params: IntentUpdatePolicyParams,
     options?: RequestOptions,
   ): APIPromise<PolicyIntentResponse> {
-    return this._client.patch(path`/v1/intents/policies/${policyID}`, { body, ...options });
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.patch(path`/v1/intents/policies/${policyID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -178,8 +217,15 @@ export class Intents extends APIResource {
     params: IntentUpdatePolicyRuleParams,
     options?: RequestOptions,
   ): APIPromise<RuleIntentResponse> {
-    const { policy_id, ...body } = params;
-    return this._client.patch(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, { body, ...options });
+    const { policy_id, 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.patch(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -194,10 +240,18 @@ export class Intents extends APIResource {
    */
   updateWallet(
     walletID: string,
-    body: IntentUpdateWalletParams,
+    params: IntentUpdateWalletParams,
     options?: RequestOptions,
   ): APIPromise<WalletIntentResponse> {
-    return this._client.patch(path`/v1/intents/wallets/${walletID}`, { body, ...options });
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.patch(path`/v1/intents/wallets/${walletID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -1978,6 +2032,12 @@ export interface RpcIntentResponse {
   created_by_display_name: string;
 
   /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
    * Unix timestamp when the intent expires
    */
   expires_at: number;
@@ -2626,6 +2686,12 @@ export interface WalletIntentResponse {
   created_by_display_name: string;
 
   /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
    * Unix timestamp when the intent expires
    */
   expires_at: number;
@@ -2749,6 +2815,12 @@ export interface PolicyIntentResponse {
    * Display name of the user who created the intent
    */
   created_by_display_name: string;
+
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
 
   /**
    * Unix timestamp when the intent expires
@@ -3526,6 +3598,12 @@ export interface KeyQuorumIntentResponse {
   created_by_display_name: string;
 
   /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
    * Unix timestamp when the intent expires
    */
   expires_at: number;
@@ -3660,6 +3738,12 @@ export interface RuleIntentResponse {
    * Display name of the user who created the intent
    */
   created_by_display_name: string;
+
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
 
   /**
    * Unix timestamp when the intent expires
@@ -4405,6 +4489,22 @@ export type IntentResponse =
   | RuleIntentResponse
   | KeyQuorumIntentResponse;
 
+/**
+ * Headers required to create an intent.
+ */
+export interface IntentCreationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
 export interface IntentListParams extends CursorParams {
   created_by_id?: string;
 
@@ -4429,10 +4529,13 @@ export interface IntentListParams extends CursorParams {
 
 export interface IntentCreatePolicyRuleParams {
   /**
-   * Action to take if the conditions are true.
+   * Body param: Action to take if the conditions are true.
    */
   action: 'ALLOW' | 'DENY';
 
+  /**
+   * Body param
+   */
   conditions: Array<
     | IntentCreatePolicyRuleParams.EthereumTransactionCondition
     | IntentCreatePolicyRuleParams.EthereumCalldataCondition
@@ -4449,7 +4552,7 @@ export interface IntentCreatePolicyRuleParams {
   >;
 
   /**
-   * Method the rule applies to.
+   * Body param: Method the rule applies to.
    */
   method:
     | 'eth_sendTransaction'
@@ -4463,7 +4566,16 @@ export interface IntentCreatePolicyRuleParams {
     | 'signTransactionBytes'
     | '*';
 
+  /**
+   * Body param
+   */
   name: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace IntentCreatePolicyRuleParams {
@@ -4619,9 +4731,15 @@ export namespace IntentCreatePolicyRuleParams {
 
 export interface IntentDeletePolicyRuleParams {
   /**
-   * ID of the policy.
+   * Path param: ID of the policy.
    */
   policy_id: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export type IntentRpcParams =
@@ -4638,13 +4756,31 @@ export type IntentRpcParams =
 
 export declare namespace IntentRpcParams {
   export interface EthereumPersonalSignRpcInput {
+    /**
+     * Body param
+     */
     method: 'personal_sign';
 
+    /**
+     * Body param
+     */
     params: EthereumPersonalSignRpcInput.Params;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumPersonalSignRpcInput {
@@ -4656,13 +4792,31 @@ export declare namespace IntentRpcParams {
   }
 
   export interface EthereumSignTypedDataRpcInput {
+    /**
+     * Body param
+     */
     method: 'eth_signTypedData_v4';
 
+    /**
+     * Body param
+     */
     params: EthereumSignTypedDataRpcInput.Params;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSignTypedDataRpcInput {
@@ -4692,13 +4846,31 @@ export declare namespace IntentRpcParams {
   }
 
   export interface EthereumSignTransactionRpcInput {
+    /**
+     * Body param
+     */
     method: 'eth_signTransaction';
 
+    /**
+     * Body param
+     */
     params: EthereumSignTransactionRpcInput.Params;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSignTransactionRpcInput {
@@ -4752,13 +4924,31 @@ export declare namespace IntentRpcParams {
   }
 
   export interface EthereumSignUserOperationRpcInput {
+    /**
+     * Body param
+     */
     method: 'eth_signUserOperation';
 
+    /**
+     * Body param
+     */
     params: EthereumSignUserOperationRpcInput.Params;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSignUserOperationRpcInput {
@@ -4800,17 +4990,41 @@ export declare namespace IntentRpcParams {
   }
 
   export interface EthereumSendTransactionRpcInput {
+    /**
+     * Body param
+     */
     caip2: string;
 
+    /**
+     * Body param
+     */
     method: 'eth_sendTransaction';
 
+    /**
+     * Body param
+     */
     params: EthereumSendTransactionRpcInput.Params;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
 
+    /**
+     * Body param
+     */
     sponsor?: boolean;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSendTransactionRpcInput {
@@ -4864,13 +5078,31 @@ export declare namespace IntentRpcParams {
   }
 
   export interface EthereumSign7702AuthorizationRpcInput {
+    /**
+     * Body param
+     */
     method: 'eth_sign7702Authorization';
 
+    /**
+     * Body param
+     */
     params: EthereumSign7702AuthorizationRpcInput.Params;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSign7702AuthorizationRpcInput {
@@ -4884,13 +5116,31 @@ export declare namespace IntentRpcParams {
   }
 
   export interface EthereumSecp256k1SignRpcInput {
+    /**
+     * Body param
+     */
     method: 'secp256k1_sign';
 
+    /**
+     * Body param
+     */
     params: EthereumSecp256k1SignRpcInput.Params;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace EthereumSecp256k1SignRpcInput {
@@ -4900,13 +5150,31 @@ export declare namespace IntentRpcParams {
   }
 
   export interface SolanaSignMessageRpcInput {
+    /**
+     * Body param
+     */
     method: 'signMessage';
 
+    /**
+     * Body param
+     */
     params: SolanaSignMessageRpcInput.Params;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'solana';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace SolanaSignMessageRpcInput {
@@ -4918,13 +5186,31 @@ export declare namespace IntentRpcParams {
   }
 
   export interface SolanaSignTransactionRpcInput {
+    /**
+     * Body param
+     */
     method: 'signTransaction';
 
+    /**
+     * Body param
+     */
     params: SolanaSignTransactionRpcInput.Params;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'solana';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace SolanaSignTransactionRpcInput {
@@ -4936,17 +5222,41 @@ export declare namespace IntentRpcParams {
   }
 
   export interface SolanaSignAndSendTransactionRpcInput {
+    /**
+     * Body param
+     */
     caip2: string;
 
+    /**
+     * Body param
+     */
     method: 'signAndSendTransaction';
 
+    /**
+     * Body param
+     */
     params: SolanaSignAndSendTransactionRpcInput.Params;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'solana';
 
+    /**
+     * Body param
+     */
     sponsor?: boolean;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export namespace SolanaSignAndSendTransactionRpcInput {
@@ -4960,48 +5270,69 @@ export declare namespace IntentRpcParams {
 
 export interface IntentUpdateKeyQuorumParams {
   /**
-   * The number of keys that must sign for an action to be valid. Must be less than
-   * or equal to total number of key quorum members.
+   * Body param: The number of keys that must sign for an action to be valid. Must be
+   * less than or equal to total number of key quorum members.
    */
   authorization_threshold?: number;
 
+  /**
+   * Body param
+   */
   display_name?: string;
 
   /**
-   * List of key quorum IDs that should be members of this key quorum. Key quorums
-   * can only be nested 1 level deep.
+   * Body param: List of key quorum IDs that should be members of this key quorum.
+   * Key quorums can only be nested 1 level deep.
    */
   key_quorum_ids?: Array<string>;
 
   /**
-   * List of P-256 public keys of the keys that should be authorized to sign on the
-   * key quorum, in base64-encoded DER format.
+   * Body param: List of P-256 public keys of the keys that should be authorized to
+   * sign on the key quorum, in base64-encoded DER format.
    */
   public_keys?: Array<string>;
 
   /**
-   * List of user IDs of the users that should be authorized to sign on the key
-   * quorum.
+   * Body param: List of user IDs of the users that should be authorized to sign on
+   * the key quorum.
    */
   user_ids?: Array<string>;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export interface IntentUpdatePolicyParams {
   /**
-   * Name to assign to policy.
+   * Body param: Name to assign to policy.
    */
   name?: string;
 
   /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
+   * Body param: The owner of the resource. If you provide this, do not specify an
+   * owner_id as it will be generated automatically. When updating a wallet, you can
+   * set the owner to null to remove the owner.
    */
   owner?: IntentUpdatePolicyParams.PublicKeyOwner | IntentUpdatePolicyParams.UserOwner | null;
 
+  /**
+   * Body param
+   */
   owner_id?: string | null;
 
+  /**
+   * Body param
+   */
   rules?: Array<IntentUpdatePolicyParams.Rule>;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace IntentUpdatePolicyParams {
@@ -5265,6 +5596,12 @@ export interface IntentUpdatePolicyRuleParams {
    * Body param
    */
   name: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace IntentUpdatePolicyRuleParams {
@@ -5420,24 +5757,33 @@ export namespace IntentUpdatePolicyRuleParams {
 
 export interface IntentUpdateWalletParams {
   /**
-   * Additional signers for the wallet.
+   * Body param: Additional signers for the wallet.
    */
   additional_signers?: Array<IntentUpdateWalletParams.AdditionalSigner>;
 
   /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
+   * Body param: The owner of the resource. If you provide this, do not specify an
+   * owner_id as it will be generated automatically. When updating a wallet, you can
+   * set the owner to null to remove the owner.
    */
   owner?: IntentUpdateWalletParams.PublicKeyOwner | IntentUpdateWalletParams.UserOwner | null;
 
+  /**
+   * Body param
+   */
   owner_id?: string | null;
 
   /**
-   * New policy IDs to enforce on the wallet. Currently, only one policy is supported
-   * per wallet.
+   * Body param: New policy IDs to enforce on the wallet. Currently, only one policy
+   * is supported per wallet.
    */
   policy_ids?: Array<string>;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace IntentUpdateWalletParams {
@@ -5490,6 +5836,7 @@ export declare namespace Intents {
     type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
     type RuleIntentResponse as RuleIntentResponse,
     type IntentResponse as IntentResponse,
+    type IntentCreationHeaders as IntentCreationHeaders,
     type IntentResponsesCursor as IntentResponsesCursor,
     type IntentListParams as IntentListParams,
     type IntentCreatePolicyRuleParams as IntentCreatePolicyRuleParams,

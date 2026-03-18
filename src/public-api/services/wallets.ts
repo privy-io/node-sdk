@@ -1,7 +1,7 @@
 import { PrivyAPI } from '../../client';
 import { APIPromise } from '../../core/api-promise';
 import { PrivyAPIError } from '../../core/error';
-import { prepareRequest, generateAuthorizationSignatures } from '../../lib/authorization';
+import { prepareRequest } from '../../lib/authorization';
 import { setupHPKERecipient, setupHPKESender } from '../../lib/cryptography';
 import { entropyToBytes } from '../../lib/wallet-entropy';
 import {
@@ -81,60 +81,50 @@ export class PrivyWalletsService extends Wallets {
     {
       authorization_context: authorizationContext = {},
       idempotency_key: idempotencyKey,
+      request_expiry: requestExpiry,
       ...params
     }: PrivyWalletsService.RawSignInput,
   ): Promise<WalletRawSignResponse.Data> {
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'POST',
-        url: `${this._client.baseURL}/v1/wallets/${walletId}/raw_sign`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-          ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
-        },
-      },
+      idempotencyKey,
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'POST',
+      url: `${this._client.baseURL}/v1/wallets/${walletId}/raw_sign`,
+      body: params,
     });
 
-    const response = await this._rawSign(walletId, {
-      ...params,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-      ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
-    });
+    const response = await this._rawSign(walletId, { ...params, ...headers });
 
     return response.data;
   }
 
   public async update(
     walletId: string,
-    { authorization_context: authorizationContext = {}, ...params }: PrivyWalletsService.UpdateInput,
+    {
+      authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
+      ...params
+    }: PrivyWalletsService.UpdateInput,
   ): Promise<Wallet> {
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'PATCH',
-        url: `${this._client.baseURL}/v1/wallets/${walletId}`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-        },
-      },
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'PATCH',
+      url: `${this._client.baseURL}/v1/wallets/${walletId}`,
+      body: params,
     });
 
-    const response = await this._update(walletId, {
-      ...params,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-    });
-
-    return response;
+    return await this._update(walletId, { ...params, ...headers });
   }
 
   public async export(
     walletId: string,
-    { authorization_context: authorizationContext = {}, ...outerParams }: PrivyWalletsService.ExportInput,
+    {
+      authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
+      ...outerParams
+    }: PrivyWalletsService.ExportInput,
   ): Promise<PrivyWalletsService.ExportResponse> {
     const { publicKeySpki, decryptPayload } = await setupHPKERecipient();
 
@@ -145,23 +135,15 @@ export class PrivyWalletsService extends Wallets {
       recipient_public_key: Buffer.from(publicKeySpki).toString('base64'),
     };
 
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'POST',
-        url: `${this._client.baseURL}/v1/wallets/${walletId}/export`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-        },
-      },
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'POST',
+      url: `${this._client.baseURL}/v1/wallets/${walletId}/export`,
+      body: params,
     });
 
-    const response = await this._export(walletId, {
-      ...params,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-    });
+    const response = await this._export(walletId, { ...params, ...headers });
     const decryptedPrivateKey = await decryptPayload(
       // We fall back to `Buffer` here as Uint8Array.fromBase64 is not widely supported yet
       Buffer.from(response.encapsulated_key, 'base64'),
@@ -227,11 +209,11 @@ export namespace PrivyWalletsService {
   /** The input type for the {@link PrivyWalletsService.rpc} method. */
   export type RpcInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<WalletRpcParams>>>>;
   /** The input type for the {@link PrivyWalletsService.rawSign} method. */
-  export type RawSignInput = Prettify<WithIdempotency<WithAuthorization<WalletRawSignParams>>>;
+  export type RawSignInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<WalletRawSignParams>>>>;
   /** The input type for the {@link PrivyWalletsService.update} method. */
-  export type UpdateInput = Prettify<WithAuthorization<WalletUpdateParams>>;
+  export type UpdateInput = Prettify<WithExpiry<WithAuthorization<WalletUpdateParams>>>;
   /** The input type for the {@link PrivyWalletsService.export} method. */
-  export type ExportInput = Prettify<WithAuthorization<Omit<WalletExportParams, 'encryption_type' | 'recipient_public_key'>>>;
+  export type ExportInput = Prettify<WithExpiry<WithAuthorization<Omit<WalletExportParams, 'encryption_type' | 'recipient_public_key'>>>>;
   /** The response type for the {@link PrivyWalletsService.export} method. */
   export type ExportResponse = { private_key: string };
   export type ImportInputWallet = Prettify<

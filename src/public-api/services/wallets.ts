@@ -1,7 +1,7 @@
 import { PrivyAPI } from '../../client';
 import { APIPromise } from '../../core/api-promise';
 import { PrivyAPIError } from '../../core/error';
-import { generateAuthorizationSignatures } from '../../lib/authorization';
+import { prepareRequest, generateAuthorizationSignatures } from '../../lib/authorization';
 import { setupHPKERecipient, setupHPKESender } from '../../lib/cryptography';
 import { entropyToBytes } from '../../lib/wallet-entropy';
 import {
@@ -64,29 +64,16 @@ export class PrivyWalletsService extends Wallets {
       ...params
     }: PrivyWalletsService.RpcInput,
   ): Promise<WalletRpcResponse> {
-    const effectiveExpiry = requestExpiry ?? this.privyClient.getRequestExpiry();
-
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'POST',
-        url: `${this._client.baseURL}/v1/wallets/${walletId}/rpc`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-          ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
-          'privy-request-expiry': effectiveExpiry,
-        },
-      },
+      idempotencyKey,
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'POST',
+      url: `${this._client.baseURL}/v1/wallets/${walletId}/rpc`,
+      body: params,
     });
 
-    return await this._rpc(walletId, {
-      ...params,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-      ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
-      'privy-request-expiry': effectiveExpiry,
-    });
+    return await this._rpc(walletId, { ...params, ...headers });
   }
 
   public async rawSign(

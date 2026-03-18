@@ -132,6 +132,72 @@ export async function generateAuthorizationSignatures(
 }
 
 /**
+ * The result of authorizing a request. Contains the headers that should be
+ * spread into the underlying API call.
+ */
+export interface PreparedRequest {
+  headers: Record<string, string>;
+}
+
+/**
+ * Generates authorization signatures for an authorized API request.
+ * Returns an {@link PreparedRequest} containing all headers that should be forwarded to the
+ * underlying generated API method.
+ *
+ * If `requestExpiry` is provided, it is included in both the authorization signature and the
+ * returned headers. If omitted, no expiry header is included — callers that require expiry
+ * should compute a default before calling this function.
+ *
+ * @param client The Privy client instance, used for JWT exchange.
+ * @param appId The Privy app ID for the request.
+ * @param options The request details including authorization context, HTTP method, URL, body,
+ *   and optional idempotency key and request expiry.
+ * @returns An {@link PreparedRequest} with the computed headers.
+ */
+export async function prepareRequest(
+  client: PrivyClient,
+  appId: string,
+  {
+    authorizationContext = {},
+    idempotencyKey,
+    requestExpiry,
+    method,
+    url,
+    body,
+  }: {
+    authorizationContext?: AuthorizationContext | undefined;
+    idempotencyKey?: string | undefined;
+    requestExpiry?: string | undefined;
+    method: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+    url: string;
+    body: any;
+  },
+): Promise<PreparedRequest> {
+  const signatures = await generateAuthorizationSignatures(client, {
+    authorizationContext,
+    input: {
+      version: 1,
+      method,
+      url,
+      body,
+      headers: {
+        'privy-app-id': appId,
+        ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
+        ...(requestExpiry && { 'privy-request-expiry': requestExpiry }),
+      },
+    },
+  });
+
+  return {
+    headers: {
+      'privy-authorization-signature': signatures.join(','),
+      ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
+      ...(requestExpiry && { 'privy-request-expiry': requestExpiry }),
+    },
+  };
+}
+
+/**
  * Signs the given request with the provided private key.
  *
  * @param authorizationPrivateKey The base64-encoded PKCS8-formatted private key, with no PEM headers.

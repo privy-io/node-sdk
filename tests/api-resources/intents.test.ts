@@ -80,6 +80,7 @@ describe('resource intents', () => {
       ],
       method: 'eth_sendTransaction',
       name: 'x',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 
@@ -97,7 +98,10 @@ describe('resource intents', () => {
 
   // Mock server tests are disabled
   test.skip('deletePolicyRule: required and optional params', async () => {
-    const response = await client.intents.deletePolicyRule('rule_id', { policy_id: 'policy_id' });
+    const response = await client.intents.deletePolicyRule('rule_id', {
+      policy_id: 'policy_id',
+      'privy-request-expiry': 'privy-request-expiry',
+    });
   });
 
   // Mock server tests are disabled
@@ -134,6 +138,7 @@ describe('resource intents', () => {
       params: { encoding: 'utf-8', message: 'message' },
       address: 'address',
       chain_type: 'ethereum',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 
@@ -201,6 +206,7 @@ describe('resource intents', () => {
       ],
       method: 'eth_sendTransaction',
       name: 'x',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 

@@ -256,6 +256,7 @@ Types:
 - <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">IntentCreationHeaders</a></code>
 
 Methods:
 

@@ -135,13 +135,13 @@ export async function generateAuthorizationSignatures(
  * The result of authorizing a request. Contains the headers that should be
  * spread into the underlying API call.
  */
-export interface AuthorizedRequest {
+export interface PreparedRequest {
   headers: Record<string, string>;
 }
 
 /**
  * Generates authorization signatures for an authorized API request.
- * Returns an {@link AuthorizedRequest} containing all headers that should be forwarded to the
+ * Returns an {@link PreparedRequest} containing all headers that should be forwarded to the
  * underlying generated API method.
  *
  * If `requestExpiry` is provided, it is included in both the authorization signature and the
@@ -152,9 +152,9 @@ export interface AuthorizedRequest {
  * @param appId The Privy app ID for the request.
  * @param options The request details including authorization context, HTTP method, URL, body,
  *   and optional idempotency key and request expiry.
- * @returns An {@link AuthorizedRequest} with the computed headers.
+ * @returns An {@link PreparedRequest} with the computed headers.
  */
-export async function authorizeRequest(
+export async function prepareRequest(
   client: PrivyClient,
   appId: string,
   {
@@ -172,7 +172,7 @@ export async function authorizeRequest(
     url: string;
     body: any;
   },
-): Promise<AuthorizedRequest> {
+): Promise<PreparedRequest> {
   const signatures = await generateAuthorizationSignatures(client, {
     authorizationContext,
     input: {

@@ -34,6 +34,21 @@ export type EvmWalletActionStepStatus =
   | 'abandoned';
 
 /**
+ * A description of why a wallet action (or a step within a wallet action) failed.
+ */
+export interface FailureReason {
+  /**
+   * Human-readable failure message.
+   */
+  message: string;
+
+  /**
+   * Additional error details, if available.
+   */
+  details?: unknown;
+}
+
+/**
  * A wallet action step consisting of an EVM transaction.
  */
 export interface EvmTransactionWalletActionStep {
@@ -56,26 +71,9 @@ export interface EvmTransactionWalletActionStep {
   type: 'evm_transaction';
 
   /**
-   * If in a failed terminal state, provides context.
+   * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason?: EvmTransactionWalletActionStep.FailureReason;
-}
-
-export namespace EvmTransactionWalletActionStep {
-  /**
-   * If in a failed terminal state, provides context.
-   */
-  export interface FailureReason {
-    /**
-     * Human-readable message.
-     */
-    message: string;
-
-    /**
-     * Error details, if available.
-     */
-    details?: unknown;
-  }
+  failure_reason?: FailureReason;
 }
 
 /**
@@ -112,26 +110,9 @@ export interface EvmUserOperationWalletActionStep {
   user_operation_hash: string | null;
 
   /**
-   * If in a failed terminal state, provides context.
+   * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason?: EvmUserOperationWalletActionStep.FailureReason;
-}
-
-export namespace EvmUserOperationWalletActionStep {
-  /**
-   * If in a failed terminal state, provides context.
-   */
-  export interface FailureReason {
-    /**
-     * Human-readable message.
-     */
-    message: string;
-
-    /**
-     * Error details, if available.
-     */
-    details?: unknown;
-  }
+  failure_reason?: FailureReason;
 }
 
 /**
@@ -145,6 +126,7 @@ export declare namespace WalletActions {
     type WalletActionStatus as WalletActionStatus,
     type WalletActionStepType as WalletActionStepType,
     type EvmWalletActionStepStatus as EvmWalletActionStepStatus,
+    type FailureReason as FailureReason,
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
     type WalletActionStep as WalletActionStep,

@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as IntentsAPI from './intents';
 import * as UsersAPI from './users';
+import * as WalletActionsAPI from './wallet-actions';
 
 export class Webhooks extends APIResource {}
 
@@ -1321,6 +1322,237 @@ export interface KrakenEmbedUserClosedWebhookPayload {
   user_id: string;
 }
 
+/**
+ * Payload for the wallet_action.swap.created webhook event.
+ */
+export interface WalletActionSwapCreatedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * Amount of input token in base units.
+   */
+  input_amount: string;
+
+  /**
+   * Token address being sold.
+   */
+  input_token: string;
+
+  /**
+   * Token address being bought.
+   */
+  output_token: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.swap.created';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
+ * Payload for the wallet_action.swap.succeeded webhook event.
+ */
+export interface WalletActionSwapSucceededWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * Amount of input token in base units.
+   */
+  input_amount: string;
+
+  /**
+   * Token address being sold.
+   */
+  input_token: string;
+
+  /**
+   * Amount of output token received, in base units.
+   */
+  output_amount: string;
+
+  /**
+   * Token address being bought.
+   */
+  output_token: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action, including transaction hashes.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.swap.succeeded';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
+ * Payload for the wallet_action.swap.rejected webhook event.
+ */
+export interface WalletActionSwapRejectedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: WalletActionsAPI.FailureReason;
+
+  /**
+   * Amount of input token in base units.
+   */
+  input_amount: string;
+
+  /**
+   * Token address being sold.
+   */
+  input_token: string;
+
+  /**
+   * Token address being bought.
+   */
+  output_token: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action at the time of rejection.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.swap.rejected';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
+ * Payload for the wallet_action.swap.failed webhook event.
+ */
+export interface WalletActionSwapFailedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: WalletActionsAPI.FailureReason;
+
+  /**
+   * Amount of input token in base units.
+   */
+  input_amount: string;
+
+  /**
+   * Token address being sold.
+   */
+  input_token: string;
+
+  /**
+   * Token address being bought.
+   */
+  output_token: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action. Completed steps will have transaction hashes;
+   * the failing step will have a failure_reason.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.swap.failed';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
 export declare namespace Webhooks {
   export {
     type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
@@ -1359,5 +1591,9 @@ export declare namespace Webhooks {
     type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
     type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
     type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
+    type WalletActionSwapCreatedWebhookPayload as WalletActionSwapCreatedWebhookPayload,
+    type WalletActionSwapSucceededWebhookPayload as WalletActionSwapSucceededWebhookPayload,
+    type WalletActionSwapRejectedWebhookPayload as WalletActionSwapRejectedWebhookPayload,
+    type WalletActionSwapFailedWebhookPayload as WalletActionSwapFailedWebhookPayload,
   };
 }

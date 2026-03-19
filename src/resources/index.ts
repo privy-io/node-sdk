@@ -45,6 +45,12 @@ export {
   type OAuthProviderID,
   type BridgeOnrampProvider,
   type OnrampProvider,
+  type PasswordlessLinkRequestBody,
+  type PasswordlessInitRequestBody,
+  type PasswordlessUnlinkRequestBody,
+  type PasswordlessUpdateRequestBody,
+  type PasswordlessAuthenticateRequestBody,
+  type PasswordlessTransferRequestBody,
   type GetFiatCustomerRequestInput,
   type CreateOrUpdateFiatCustomerRequestInput,
   type BridgeFiatRejectionReason,
@@ -84,7 +90,11 @@ export {
   type BridgeFiatVirtualAccountResponse,
   type BridgeSandboxFiatVirtualAccountResponse,
   type FiatVirtualAccountResponse,
+  type GuestAuthenticateRequestBody,
+  type OAuthAuthorizationCodeRequestBody,
+  type OptionalRefreshTokenInput,
 } from './client-auth';
+export { CrossApp, type CrossAppConnection, type CrossAppConnectionsResponse } from './cross-app';
 export {
   Intents,
   type IntentType,
@@ -118,12 +128,12 @@ export {
 } from './intents';
 export {
   KeyQuorums,
-  type KeyQuorumCreateParams,
   type KeyQuorum,
+  type KeyQuorumCreateParams,
+  type KeyQuorumUpdateParams,
   type KeyQuorumAuthorizationHeaders,
   type KeyQuorumDeleteResponse,
   type KeyQuorumDeleteParams,
-  type KeyQuorumUpdateParams,
 } from './key-quorums';
 export {
   KrakenEmbed,
@@ -257,6 +267,7 @@ export {
   type WalletActionStatus,
   type WalletActionStepType,
   type EvmWalletActionStepStatus,
+  type FailureReason,
   type EvmTransactionWalletActionStep,
   type EvmUserOperationWalletActionStep,
   type WalletActionStep,
@@ -273,8 +284,6 @@ export {
   type CustodialWalletCreateInput,
   type CustodialWallet,
   type HpkeImportConfig,
-  type CreateTokenTransferRequest,
-  type CreateTokenTransferResponse,
   type SuiCommandName,
   type Wallet,
   type WalletUpdateRequestBody,
@@ -305,6 +314,12 @@ export {
   type WalletRpcRequestBody,
   type WalletRpcResponse,
   type WalletAuthenticateRequestBody,
+  type TokenTransferSource,
+  type TokenTransferDestination,
+  type TransferStepType,
+  type TransferStep,
+  type CreateTokenTransferRequest,
+  type CreateTokenTransferResponse,
   type WalletAuthorizationHeaders,
   type WalletExportResponse,
   type WalletInitImportResponse,
@@ -361,6 +376,10 @@ export {
   type KrakenEmbedUserVerifiedWebhookPayload,
   type KrakenEmbedUserDisabledWebhookPayload,
   type KrakenEmbedUserClosedWebhookPayload,
+  type WalletActionSwapCreatedWebhookPayload,
+  type WalletActionSwapSucceededWebhookPayload,
+  type WalletActionSwapRejectedWebhookPayload,
+  type WalletActionSwapFailedWebhookPayload,
 } from './webhooks';
 export {
   Yield,

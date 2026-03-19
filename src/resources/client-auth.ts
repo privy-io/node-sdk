@@ -47,6 +47,62 @@ export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
 export type OnrampProvider = 'bridge' | 'bridge-sandbox';
 
 /**
+ * The request body for linking a passwordless account.
+ */
+export interface PasswordlessLinkRequestBody {
+  code: string;
+
+  email: string;
+}
+
+/**
+ * The request body for initiating a passwordless ceremony.
+ */
+export interface PasswordlessInitRequestBody {
+  email: string;
+
+  token?: string;
+}
+
+/**
+ * The request body for unlinking a passwordless account.
+ */
+export interface PasswordlessUnlinkRequestBody {
+  address: string;
+}
+
+/**
+ * The request body for updating a passwordless account.
+ */
+export interface PasswordlessUpdateRequestBody {
+  code: string;
+
+  newAddress: string;
+
+  oldAddress: string;
+}
+
+/**
+ * The request body for authenticating a passwordless account.
+ */
+export interface PasswordlessAuthenticateRequestBody {
+  code: string;
+
+  email: string;
+
+  mode?: 'no-signup' | 'login-or-sign-up';
+}
+
+/**
+ * The request body for transferring a passwordless account.
+ */
+export interface PasswordlessTransferRequestBody {
+  email: string;
+
+  nonce: string;
+}
+
+/**
  * The request input for getting a native onramp provider customer.
  */
 export interface GetFiatCustomerRequestInput {
@@ -521,6 +577,31 @@ export type FiatVirtualAccountResponse =
   | BridgeFiatVirtualAccountResponse
   | BridgeSandboxFiatVirtualAccountResponse;
 
+/**
+ * The request body for authenticating a guest.
+ */
+export interface GuestAuthenticateRequestBody {
+  guest_credential: string;
+}
+
+/**
+ * The request body for getting an OAuth authorization code.
+ */
+export interface OAuthAuthorizationCodeRequestBody {
+  code_challenge: string;
+
+  redirect_to: string;
+
+  state: string;
+}
+
+/**
+ * The input for refreshing a session or logging out.
+ */
+export interface OptionalRefreshTokenInput {
+  refresh_token?: string;
+}
+
 export declare namespace ClientAuth {
   export {
     type ExternalOAuthProviderID as ExternalOAuthProviderID,
@@ -529,6 +610,12 @@ export declare namespace ClientAuth {
     type OAuthProviderID as OAuthProviderID,
     type BridgeOnrampProvider as BridgeOnrampProvider,
     type OnrampProvider as OnrampProvider,
+    type PasswordlessLinkRequestBody as PasswordlessLinkRequestBody,
+    type PasswordlessInitRequestBody as PasswordlessInitRequestBody,
+    type PasswordlessUnlinkRequestBody as PasswordlessUnlinkRequestBody,
+    type PasswordlessUpdateRequestBody as PasswordlessUpdateRequestBody,
+    type PasswordlessAuthenticateRequestBody as PasswordlessAuthenticateRequestBody,
+    type PasswordlessTransferRequestBody as PasswordlessTransferRequestBody,
     type GetFiatCustomerRequestInput as GetFiatCustomerRequestInput,
     type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,
     type BridgeFiatRejectionReason as BridgeFiatRejectionReason,
@@ -568,5 +655,8 @@ export declare namespace ClientAuth {
     type BridgeFiatVirtualAccountResponse as BridgeFiatVirtualAccountResponse,
     type BridgeSandboxFiatVirtualAccountResponse as BridgeSandboxFiatVirtualAccountResponse,
     type FiatVirtualAccountResponse as FiatVirtualAccountResponse,
+    type GuestAuthenticateRequestBody as GuestAuthenticateRequestBody,
+    type OAuthAuthorizationCodeRequestBody as OAuthAuthorizationCodeRequestBody,
+    type OptionalRefreshTokenInput as OptionalRefreshTokenInput,
   };
 }

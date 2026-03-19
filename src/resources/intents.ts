@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as IntentsAPI from './intents';
+import * as KeyQuorumsAPI from './key-quorums';
 import * as PoliciesAPI from './policies';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
@@ -3647,10 +3648,9 @@ export interface KeyQuorumIntentResponse {
   created_by_id?: string;
 
   /**
-   * Current state of the key quorum before any changes. If undefined, the resource
-   * was deleted and no longer exists
+   * A key quorum for authorizing wallet operations.
    */
-  current_resource_data?: KeyQuorumIntentResponse.CurrentResourceData;
+  current_resource_data?: KeyQuorumsAPI.KeyQuorum;
 
   /**
    * Human-readable reason for dismissal, present when status is 'dismissed'
@@ -3674,51 +3674,14 @@ export namespace KeyQuorumIntentResponse {
    * endpoint
    */
   export interface RequestDetails {
-    body: RequestDetails.Body;
+    /**
+     * Request input for updating an existing key quorum.
+     */
+    body: KeyQuorumsAPI.KeyQuorumUpdateParams;
 
     method: 'PATCH';
 
     url: string;
-  }
-
-  export namespace RequestDetails {
-    export interface Body {
-      authorization_threshold?: number;
-
-      display_name?: string;
-
-      key_quorum_ids?: Array<string>;
-
-      public_keys?: Array<string>;
-
-      user_ids?: Array<string>;
-    }
-  }
-
-  /**
-   * Current state of the key quorum before any changes. If undefined, the resource
-   * was deleted and no longer exists
-   */
-  export interface CurrentResourceData {
-    id: string;
-
-    authorization_keys: Array<CurrentResourceData.AuthorizationKey>;
-
-    authorization_threshold: number | null;
-
-    display_name: string | null;
-
-    user_ids: Array<string> | null;
-
-    key_quorum_ids?: Array<string>;
-  }
-
-  export namespace CurrentResourceData {
-    export interface AuthorizationKey {
-      display_name: string | null;
-
-      public_key: string;
-    }
   }
 }
 

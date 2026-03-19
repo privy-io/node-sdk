@@ -12,8 +12,6 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">CreateTokenTransferRequest</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">CreateTokenTransferResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletUpdateRequestBody</a></code>
@@ -44,6 +42,12 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRpcRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TokenTransferSource</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TokenTransferDestination</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferStepType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferStep</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CreateTokenTransferRequest</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CreateTokenTransferResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
@@ -222,8 +226,9 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateParams</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateParams</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumUpdateParams</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumDeleteResponse</a></code>
 
@@ -311,6 +316,12 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">OAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeOnrampProvider</a></code>
 - <code><a href="./src/resources/client-auth.ts">OnrampProvider</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessLinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessInitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessUnlinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessUpdateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessTransferRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">GetFiatCustomerRequestInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">CreateOrUpdateFiatCustomerRequestInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatRejectionReason</a></code>
@@ -350,6 +361,9 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatVirtualAccountResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatVirtualAccountResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">GuestAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthAuthorizationCodeRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OptionalRefreshTokenInput</a></code>
 
 # Analytics
 
@@ -367,6 +381,19 @@ Types:
 - <code><a href="./src/resources/aggregations.ts">AggregationGroupBy</a></code>
 - <code><a href="./src/resources/aggregations.ts">Aggregation</a></code>
 - <code><a href="./src/resources/aggregations.ts">AggregationInput</a></code>
+
+# WalletActions
+
+Types:
+
+- <code><a href="./src/resources/wallet-actions.ts">WalletActionType</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">WalletActionStatus</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">WalletActionStepType</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EvmWalletActionStepStatus</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">FailureReason</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EvmTransactionWalletActionStep</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EvmUserOperationWalletActionStep</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">WalletActionStep</a></code>
 
 # Webhooks
 
@@ -408,6 +435,10 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapFailedWebhookPayload</a></code>
 
 # Accounts
 
@@ -450,18 +481,6 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldClaimIDInput</a></code>
 - <code><a href="./src/resources/yield.ts">YieldAuthorizationHeaders</a></code>
 
-# WalletActions
-
-Types:
-
-- <code><a href="./src/resources/wallet-actions.ts">WalletActionType</a></code>
-- <code><a href="./src/resources/wallet-actions.ts">WalletActionStatus</a></code>
-- <code><a href="./src/resources/wallet-actions.ts">WalletActionStepType</a></code>
-- <code><a href="./src/resources/wallet-actions.ts">EvmWalletActionStepStatus</a></code>
-- <code><a href="./src/resources/wallet-actions.ts">EvmTransactionWalletActionStep</a></code>
-- <code><a href="./src/resources/wallet-actions.ts">EvmUserOperationWalletActionStep</a></code>
-- <code><a href="./src/resources/wallet-actions.ts">WalletActionStep</a></code>
-
 # Swaps
 
 Types:
@@ -479,3 +498,10 @@ Types:
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryQueryParams</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCurrentDayPnl</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryResponse</a></code>
+
+# CrossApp
+
+Types:
+
+- <code><a href="./src/resources/cross-app.ts">CrossAppConnection</a></code>
+- <code><a href="./src/resources/cross-app.ts">CrossAppConnectionsResponse</a></code>

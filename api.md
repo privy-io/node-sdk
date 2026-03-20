@@ -420,6 +420,14 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">UserUpdatedAccountWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserTransferredAccountWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserWalletCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTransferCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTransferSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTransferRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTransferFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>
@@ -435,10 +443,6 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionSwapCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionSwapSucceededWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionSwapRejectedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionSwapFailedWebhookPayload</a></code>
 
 # Accounts
 

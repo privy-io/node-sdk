@@ -7,7 +7,7 @@ export class WalletActions extends APIResource {}
 /**
  * Type of wallet action
  */
-export type WalletActionType = 'swap';
+export type WalletActionType = 'swap' | 'transfer';
 
 /**
  * Status of a wallet action.
@@ -120,6 +120,110 @@ export interface EvmUserOperationWalletActionStep {
  */
 export type WalletActionStep = EvmTransactionWalletActionStep | EvmUserOperationWalletActionStep;
 
+/**
+ * Response for a swap action.
+ */
+export interface SwapActionResponse {
+  /**
+   * The ID of the wallet action.
+   */
+  id: string;
+
+  /**
+   * CAIP-2 chain identifier for the swap.
+   */
+  caip2: string;
+
+  /**
+   * Exact base-unit amount of input token. Populated after on-chain confirmation.
+   */
+  input_amount: string | null;
+
+  /**
+   * Token address or "native" for the token being sold.
+   */
+  input_token: string;
+
+  /**
+   * Exact base-unit amount of output token. Populated after on-chain confirmation.
+   */
+  output_amount: string | null;
+
+  /**
+   * Token address or "native" for the token being bought.
+   */
+  output_token: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionStatus;
+
+  type: 'swap';
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * The steps of the wallet action. Only returned if `?include=steps` is provided.
+   */
+  steps?: Array<WalletActionStep>;
+}
+
+/**
+ * Response for a transfer action.
+ */
+export interface TransferActionResponse {
+  /**
+   * The ID of the wallet action.
+   */
+  id: string;
+
+  /**
+   * Recipient address.
+   */
+  destination_address: string;
+
+  /**
+   * Decimal amount as the user provided (e.g. "1.5").
+   */
+  source_amount: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth").
+   */
+  source_asset: string;
+
+  /**
+   * Chain name (e.g. "base", "ethereum").
+   */
+  source_chain: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionStatus;
+
+  type: 'transfer';
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * The steps of the wallet action. Only returned if `?include=steps` is provided.
+   */
+  steps?: Array<WalletActionStep>;
+}
+
+/**
+ * Response for a wallet action, discriminated on type.
+ */
+export type WalletActionResponse = SwapActionResponse | TransferActionResponse;
+
 export declare namespace WalletActions {
   export {
     type WalletActionType as WalletActionType,
@@ -130,5 +234,8 @@ export declare namespace WalletActions {
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
     type WalletActionStep as WalletActionStep,
+    type SwapActionResponse as SwapActionResponse,
+    type TransferActionResponse as TransferActionResponse,
+    type WalletActionResponse as WalletActionResponse,
   };
 }

@@ -522,6 +522,8 @@ export namespace RpcIntentRequestDetails {
 
       contract: string;
 
+      executor?: 'self';
+
       nonce?: string | number;
     }
   }
@@ -2351,6 +2353,8 @@ export namespace RpcIntentResponse {
         chain_id: string | number;
 
         contract: string;
+
+        executor?: 'self';
 
         nonce?: string | number;
       }
@@ -5073,6 +5077,8 @@ export declare namespace IntentRpcParams {
       chain_id: string | number;
 
       contract: string;
+
+      executor?: 'self';
 
       nonce?: string | number;
     }

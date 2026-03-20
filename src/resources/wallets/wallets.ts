@@ -1008,6 +1008,8 @@ export namespace EthereumSign7702AuthorizationRpcInput {
 
     contract: string;
 
+    executor?: 'self';
+
     nonce?: string | number;
   }
 }
@@ -2236,6 +2238,8 @@ export declare namespace WalletRpcParams {
       chain_id: string | number;
 
       contract: string;
+
+      executor?: 'self';
 
       nonce?: string | number;
     }

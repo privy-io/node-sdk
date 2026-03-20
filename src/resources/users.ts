@@ -1528,7 +1528,7 @@ export interface User {
   id: string;
 
   /**
-   * Unix timestamp of when the user was created in milliseconds.
+   * Unix timestamp of when the user was created in seconds.
    */
   created_at: number;
 

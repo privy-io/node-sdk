@@ -171,14 +171,7 @@ import {
   SuiTransferObjectsCommandField,
   TronTransactionCondition,
 } from './resources/policies';
-import {
-  SwapAmountType,
-  SwapQuoteRequest,
-  SwapQuoteResponse,
-  SwapRequest,
-  SwapResponse,
-  Swaps,
-} from './resources/swaps';
+import { SwapAmountType, SwapQuoteRequest, SwapQuoteResponse, SwapRequest, Swaps } from './resources/swaps';
 import { TransactionGetResponse, Transactions } from './resources/transactions';
 import {
   AuthenticatedUser,
@@ -273,6 +266,9 @@ import {
   EvmUserOperationWalletActionStep,
   EvmWalletActionStepStatus,
   FailureReason,
+  SwapActionResponse,
+  TransferActionResponse,
+  WalletActionResponse,
   WalletActionStatus,
   WalletActionStep,
   WalletActionStepType,
@@ -358,7 +354,6 @@ import {
 } from './resources/apps/apps';
 import {
   CreateTokenTransferRequest,
-  CreateTokenTransferResponse,
   CurveSigningChainType,
   CustodialWallet,
   CustodialWalletChainType,
@@ -390,8 +385,6 @@ import {
   SuiCommandName,
   TokenTransferDestination,
   TokenTransferSource,
-  TransferStep,
-  TransferStepType,
   Wallet,
   WalletAuthenticateRequestBody,
   WalletAuthenticateWithJwtParams,
@@ -1225,9 +1218,9 @@ export class PrivyAPI {
    */
   apps: API.Apps = new API.Apps(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
+  walletActions: API.WalletActions = new API.WalletActions(this);
   analytics: API.Analytics = new API.Analytics(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
-  walletActions: API.WalletActions = new API.WalletActions(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
   accounts: API.Accounts = new API.Accounts(this);
   yield: API.Yield = new API.Yield(this);
@@ -1244,9 +1237,9 @@ PrivyAPI.KeyQuorums = KeyQuorums;
 PrivyAPI.Intents = Intents;
 PrivyAPI.Apps = Apps;
 PrivyAPI.ClientAuth = ClientAuth;
+PrivyAPI.WalletActions = WalletActions;
 PrivyAPI.Analytics = Analytics;
 PrivyAPI.Aggregations = Aggregations;
-PrivyAPI.WalletActions = WalletActions;
 PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.Accounts = Accounts;
 PrivyAPI.Yield = Yield;
@@ -1304,10 +1297,7 @@ export declare namespace PrivyAPI {
     type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
     type TokenTransferSource as TokenTransferSource,
     type TokenTransferDestination as TokenTransferDestination,
-    type TransferStepType as TransferStepType,
-    type TransferStep as TransferStep,
     type CreateTokenTransferRequest as CreateTokenTransferRequest,
-    type CreateTokenTransferResponse as CreateTokenTransferResponse,
     type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
@@ -1555,18 +1545,6 @@ export declare namespace PrivyAPI {
     type OptionalRefreshTokenInput as OptionalRefreshTokenInput,
   };
 
-  export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
-
-  export {
-    Aggregations as Aggregations,
-    type AggregationMethod as AggregationMethod,
-    type AggregationMetric as AggregationMetric,
-    type AggregationWindow as AggregationWindow,
-    type AggregationGroupBy as AggregationGroupBy,
-    type Aggregation as Aggregation,
-    type AggregationInput as AggregationInput,
-  };
-
   export {
     WalletActions as WalletActions,
     type WalletActionType as WalletActionType,
@@ -1577,6 +1555,21 @@ export declare namespace PrivyAPI {
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
     type WalletActionStep as WalletActionStep,
+    type SwapActionResponse as SwapActionResponse,
+    type TransferActionResponse as TransferActionResponse,
+    type WalletActionResponse as WalletActionResponse,
+  };
+
+  export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
+
+  export {
+    Aggregations as Aggregations,
+    type AggregationMethod as AggregationMethod,
+    type AggregationMetric as AggregationMetric,
+    type AggregationWindow as AggregationWindow,
+    type AggregationGroupBy as AggregationGroupBy,
+    type Aggregation as Aggregation,
+    type AggregationInput as AggregationInput,
   };
 
   export {
@@ -1668,7 +1661,6 @@ export declare namespace PrivyAPI {
     type SwapQuoteRequest as SwapQuoteRequest,
     type SwapQuoteResponse as SwapQuoteResponse,
     type SwapRequest as SwapRequest,
-    type SwapResponse as SwapResponse,
   };
 
   export {

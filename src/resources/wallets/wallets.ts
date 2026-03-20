@@ -1423,34 +1423,6 @@ export interface TokenTransferDestination {
 }
 
 /**
- * The type of blockchain transaction for a transfer step.
- */
-export type TransferStepType = 'evm_transaction' | 'svm_transaction';
-
-/**
- * An individual blockchain transaction step within a token transfer action.
- */
-export interface TransferStep {
-  chain: string;
-
-  /**
-   * The status of this step. Always "pending" at creation time.
-   */
-  status: 'pending';
-
-  /**
-   * The on-chain transaction hash. Null until the transaction is broadcast,
-   * populated asynchronously.
-   */
-  transaction_hash: string | null;
-
-  /**
-   * The type of blockchain transaction for a transfer step.
-   */
-  type: TransferStepType;
-}
-
-/**
  * Request body for initiating a sponsored token transfer from an embedded wallet.
  */
 export interface CreateTokenTransferRequest {
@@ -1463,53 +1435,6 @@ export interface CreateTokenTransferRequest {
    * The source asset, amount, and chain for a token transfer.
    */
   source: TokenTransferSource;
-}
-
-/**
- * Response for a created transfer action. The transfer is processed
- * asynchronously; this returns a pending action.
- */
-export interface CreateTokenTransferResponse {
-  /**
-   * Unique identifier for this wallet action.
-   */
-  id: string;
-
-  /**
-   * Balance changes from the transfer. Empty at creation, populated later.
-   */
-  balance_changes: Array<unknown>;
-
-  /**
-   * The destination address for a token transfer.
-   */
-  destination: TokenTransferDestination;
-
-  /**
-   * The source asset, amount, and chain for a token transfer.
-   */
-  source: TokenTransferSource;
-
-  /**
-   * The status of the wallet action. Always "pending" at creation; updated
-   * asynchronously.
-   */
-  status: 'pending';
-
-  /**
-   * The transaction steps for this transfer. Typically contains one step.
-   */
-  steps: Array<TransferStep>;
-
-  /**
-   * The type of wallet action. Always "transfer" for this endpoint.
-   */
-  type: 'transfer';
-
-  /**
-   * The ID of the wallet initiating the transfer.
-   */
-  wallet_id: string;
 }
 
 /**
@@ -2816,10 +2741,7 @@ export declare namespace Wallets {
     type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
     type TokenTransferSource as TokenTransferSource,
     type TokenTransferDestination as TokenTransferDestination,
-    type TransferStepType as TransferStepType,
-    type TransferStep as TransferStep,
     type CreateTokenTransferRequest as CreateTokenTransferRequest,
-    type CreateTokenTransferResponse as CreateTokenTransferResponse,
     type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,

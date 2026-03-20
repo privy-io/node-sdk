@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as WalletActionsAPI from './wallet-actions';
 
 export class Swaps extends APIResource {}
 
@@ -127,58 +126,11 @@ export interface SwapRequest {
   slippage_bps?: number;
 }
 
-/**
- * Result of a token swap execution.
- */
-export interface SwapResponse {
-  /**
-   * The ID of the wallet action.
-   */
-  id: string | null;
-
-  /**
-   * Chain identifier.
-   */
-  caip2: string;
-
-  /**
-   * Amount of input token in base units.
-   */
-  input_amount: string;
-
-  /**
-   * Token address being sold.
-   */
-  input_token: string;
-
-  /**
-   * Token address being bought.
-   */
-  output_token: string;
-
-  /**
-   * Status of a wallet action.
-   */
-  status: WalletActionsAPI.WalletActionStatus;
-
-  /**
-   * The ID of the wallet involved in the action.
-   */
-  wallet_id: string;
-
-  /**
-   * The steps of the wallet action. Only returned if `?include=action_steps` is
-   * provided.
-   */
-  steps?: Array<WalletActionsAPI.WalletActionStep>;
-}
-
 export declare namespace Swaps {
   export {
     type SwapAmountType as SwapAmountType,
     type SwapQuoteRequest as SwapQuoteRequest,
     type SwapQuoteResponse as SwapQuoteResponse,
     type SwapRequest as SwapRequest,
-    type SwapResponse as SwapResponse,
   };
 }

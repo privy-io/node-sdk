@@ -170,7 +170,6 @@ export {
   type SwapQuoteRequest,
   type SwapQuoteResponse,
   type SwapRequest,
-  type SwapResponse,
 } from './swaps';
 export { Transactions, type TransactionGetResponse } from './transactions';
 export {
@@ -271,6 +270,9 @@ export {
   type EvmTransactionWalletActionStep,
   type EvmUserOperationWalletActionStep,
   type WalletActionStep,
+  type SwapActionResponse,
+  type TransferActionResponse,
+  type WalletActionResponse,
 } from './wallet-actions';
 export {
   Wallets,
@@ -316,10 +318,7 @@ export {
   type WalletAuthenticateRequestBody,
   type TokenTransferSource,
   type TokenTransferDestination,
-  type TransferStepType,
-  type TransferStep,
   type CreateTokenTransferRequest,
-  type CreateTokenTransferResponse,
   type WalletAuthorizationHeaders,
   type WalletExportResponse,
   type WalletInitImportResponse,

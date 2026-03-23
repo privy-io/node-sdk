@@ -123,8 +123,8 @@ export class Intents extends APIResource {
    * const rpcIntentResponse = await client.intents.rpc(
    *   'wallet_id',
    *   {
-   *     method: 'personal_sign',
-   *     params: { encoding: 'utf-8', message: 'message' },
+   *     method: 'eth_signTransaction',
+   *     params: { transaction: {} },
    *   },
    * );
    * ```
@@ -275,569 +275,14 @@ export type IntentStatus = 'pending' | 'executed' | 'failed' | 'expired' | 'reje
  * Request details for an RPC intent.
  */
 export interface RpcIntentRequestDetails {
-  body:
-    | RpcIntentRequestDetails.UnionMember0
-    | RpcIntentRequestDetails.UnionMember1
-    | RpcIntentRequestDetails.UnionMember2
-    | RpcIntentRequestDetails.UnionMember3
-    | RpcIntentRequestDetails.UnionMember4
-    | RpcIntentRequestDetails.UnionMember5
-    | RpcIntentRequestDetails.UnionMember6
-    | RpcIntentRequestDetails.UnionMember7
-    | RpcIntentRequestDetails.UnionMember8
-    | RpcIntentRequestDetails.UnionMember9
-    | RpcIntentRequestDetails.UnionMember10
-    | RpcIntentRequestDetails.UnionMember11
-    | RpcIntentRequestDetails.UnionMember12
-    | RpcIntentRequestDetails.UnionMember13
-    | RpcIntentRequestDetails.UnionMember14
-    | RpcIntentRequestDetails.UnionMember15
-    | RpcIntentRequestDetails.UnionMember16
-    | RpcIntentRequestDetails.UnionMember17
-    | RpcIntentRequestDetails.UnionMember18
-    | RpcIntentRequestDetails.UnionMember19;
+  /**
+   * Request body for wallet RPC operations, discriminated by method.
+   */
+  body: WalletsAPI.WalletRpcRequestBody;
 
   method: 'POST';
 
   url: string;
-}
-
-export namespace RpcIntentRequestDetails {
-  export interface UnionMember0 {
-    method: 'eth_signTransaction';
-
-    params: UnionMember0.Params;
-
-    address?: string;
-
-    chain_type?: 'ethereum';
-
-    wallet_id?: string;
-  }
-
-  export namespace UnionMember0 {
-    export interface Params {
-      transaction: Params.Transaction;
-    }
-
-    export namespace Params {
-      export interface Transaction {
-        authorization_list?: Array<Transaction.AuthorizationList>;
-
-        chain_id?: string | number;
-
-        data?: string;
-
-        from?: string;
-
-        gas_limit?: string | number;
-
-        gas_price?: string | number;
-
-        max_fee_per_gas?: string | number;
-
-        max_priority_fee_per_gas?: string | number;
-
-        nonce?: string | number;
-
-        to?: string;
-
-        type?: 0 | 1 | 2 | 4;
-
-        value?: string | number;
-      }
-
-      export namespace Transaction {
-        export interface AuthorizationList {
-          chain_id: string | number;
-
-          contract: string;
-
-          nonce: string | number;
-
-          r: string;
-
-          s: string;
-
-          y_parity: number;
-        }
-      }
-    }
-  }
-
-  export interface UnionMember1 {
-    caip2: string;
-
-    method: 'eth_sendTransaction';
-
-    params: UnionMember1.Params;
-
-    address?: string;
-
-    chain_type?: 'ethereum';
-
-    sponsor?: boolean;
-
-    wallet_id?: string;
-  }
-
-  export namespace UnionMember1 {
-    export interface Params {
-      transaction: Params.Transaction;
-    }
-
-    export namespace Params {
-      export interface Transaction {
-        authorization_list?: Array<Transaction.AuthorizationList>;
-
-        chain_id?: string | number;
-
-        data?: string;
-
-        from?: string;
-
-        gas_limit?: string | number;
-
-        gas_price?: string | number;
-
-        max_fee_per_gas?: string | number;
-
-        max_priority_fee_per_gas?: string | number;
-
-        nonce?: string | number;
-
-        to?: string;
-
-        type?: 0 | 1 | 2 | 4;
-
-        value?: string | number;
-      }
-
-      export namespace Transaction {
-        export interface AuthorizationList {
-          chain_id: string | number;
-
-          contract: string;
-
-          nonce: string | number;
-
-          r: string;
-
-          s: string;
-
-          y_parity: number;
-        }
-      }
-    }
-  }
-
-  export interface UnionMember2 {
-    method: 'personal_sign';
-
-    params: UnionMember2.Params;
-
-    address?: string;
-
-    chain_type?: 'ethereum';
-
-    wallet_id?: string;
-  }
-
-  export namespace UnionMember2 {
-    export interface Params {
-      encoding: 'utf-8' | 'hex';
-
-      message: string;
-    }
-  }
-
-  export interface UnionMember3 {
-    method: 'eth_signTypedData_v4';
-
-    params: UnionMember3.Params;
-
-    address?: string;
-
-    chain_type?: 'ethereum';
-
-    wallet_id?: string;
-  }
-
-  export namespace UnionMember3 {
-    export interface Params {
-      typed_data: Params.TypedData;
-    }
-
-    export namespace Params {
-      export interface TypedData {
-        domain: { [key: string]: unknown };
-
-        message: { [key: string]: unknown };
-
-        primary_type: string;
-
-        types: { [key: string]: Array<TypedData.Type> };
-      }
-
-      export namespace TypedData {
-        export interface Type {
-          name: string;
-
-          type: string;
-        }
-      }
-    }
-  }
-
-  export interface UnionMember4 {
-    method: 'secp256k1_sign';
-
-    params: UnionMember4.Params;
-
-    address?: string;
-
-    chain_type?: 'ethereum';
-
-    wallet_id?: string;
-  }
-
-  export namespace UnionMember4 {
-    export interface Params {
-      hash: string;
-    }
-  }
-
-  export interface UnionMember5 {
-    method: 'eth_sign7702Authorization';
-
-    params: UnionMember5.Params;
-
-    address?: string;
-
-    chain_type?: 'ethereum';
-
-    wallet_id?: string;
-  }
-
-  export namespace UnionMember5 {
-    export interface Params {
-      chain_id: string | number;
-
-      contract: string;
-
-      executor?: 'self';
-
-      nonce?: string | number;
-    }
-  }
-
-  export interface UnionMember6 {
-    method: 'eth_signUserOperation';
-
-    params: UnionMember6.Params;
-
-    address?: string;
-
-    chain_type?: 'ethereum';
-
-    wallet_id?: string;
-  }
-
-  export namespace UnionMember6 {
-    export interface Params {
-      chain_id: string | number;
-
-      contract: string;
-
-      user_operation: Params.UserOperation;
-    }
-
-    export namespace Params {
-      export interface UserOperation {
-        call_data: string;
-
-        call_gas_limit: string;
-
-        max_fee_per_gas: string;
-
-        max_priority_fee_per_gas: string;
-
-        nonce: string;
-
-        paymaster: string;
-
-        paymaster_data: string;
-
-        paymaster_post_op_gas_limit: string;
-
-        paymaster_verification_gas_limit: string;
-
-        pre_verification_gas: string;
-
-        sender: string;
-
-        verification_gas_limit: string;
-      }
-    }
-  }
-
-  export interface UnionMember7 {
-    method: 'signTransaction';
-
-    params: UnionMember7.Params;
-
-    address?: string;
-
-    chain_type?: 'solana';
-
-    wallet_id?: string;
-  }
-
-  export namespace UnionMember7 {
-    export interface Params {
-      encoding: 'base64';
-
-      transaction: string;
-    }
-  }
-
-  export interface UnionMember8 {
-    caip2: string;
-
-    method: 'signAndSendTransaction';
-
-    params: UnionMember8.Params;
-
-    address?: string;
-
-    chain_type?: 'solana';
-
-    sponsor?: boolean;
-
-    wallet_id?: string;
-  }
-
-  export namespace UnionMember8 {
-    export interface Params {
-      encoding: 'base64';
-
-      transaction: string;
-    }
-  }
-
-  export interface UnionMember9 {
-    method: 'signMessage';
-
-    params: UnionMember9.Params;
-
-    address?: string;
-
-    chain_type?: 'solana';
-
-    wallet_id?: string;
-  }
-
-  export namespace UnionMember9 {
-    export interface Params {
-      encoding: 'base64';
-
-      message: string;
-    }
-  }
-
-  export interface UnionMember10 {
-    address: string;
-
-    method: 'exportPrivateKey';
-
-    params: UnionMember10.Params;
-  }
-
-  export namespace UnionMember10 {
-    export interface Params {
-      encryption_type: 'HPKE';
-
-      recipient_public_key: string;
-
-      export_type?: 'display' | 'client';
-    }
-  }
-
-  export interface UnionMember11 {
-    method: 'transfer';
-
-    params: UnionMember11.Params;
-
-    network?: 'MAINNET' | 'REGTEST';
-  }
-
-  export namespace UnionMember11 {
-    export interface Params {
-      amount_sats: number;
-
-      receiver_spark_address: string;
-    }
-  }
-
-  export interface UnionMember12 {
-    method: 'getBalance';
-
-    network?: 'MAINNET' | 'REGTEST';
-  }
-
-  export interface UnionMember13 {
-    method: 'transferTokens';
-
-    params: UnionMember13.Params;
-
-    network?: 'MAINNET' | 'REGTEST';
-  }
-
-  export namespace UnionMember13 {
-    export interface Params {
-      receiver_spark_address: string;
-
-      token_amount: number;
-
-      token_identifier: string;
-
-      output_selection_strategy?: 'SMALL_FIRST' | 'LARGE_FIRST';
-
-      selected_outputs?: Array<Params.SelectedOutput>;
-    }
-
-    export namespace Params {
-      export interface SelectedOutput {
-        previous_transaction_hash: string;
-
-        previous_transaction_vout: number;
-
-        output?: SelectedOutput.Output;
-      }
-
-      export namespace SelectedOutput {
-        export interface Output {
-          owner_public_key: string;
-
-          token_amount: string;
-
-          id?: string;
-
-          revocation_commitment?: string;
-
-          token_identifier?: string;
-
-          token_public_key?: string;
-
-          withdraw_bond_sats?: number;
-
-          withdraw_relative_block_locktime?: number;
-        }
-      }
-    }
-  }
-
-  export interface UnionMember14 {
-    method: 'getStaticDepositAddress';
-
-    network?: 'MAINNET' | 'REGTEST';
-  }
-
-  export interface UnionMember15 {
-    method: 'getClaimStaticDepositQuote';
-
-    params: UnionMember15.Params;
-
-    network?: 'MAINNET' | 'REGTEST';
-  }
-
-  export namespace UnionMember15 {
-    export interface Params {
-      transaction_id: string;
-
-      output_index?: number;
-    }
-  }
-
-  export interface UnionMember16 {
-    method: 'claimStaticDeposit';
-
-    params: UnionMember16.Params;
-
-    network?: 'MAINNET' | 'REGTEST';
-  }
-
-  export namespace UnionMember16 {
-    export interface Params {
-      credit_amount_sats: number;
-
-      signature: string;
-
-      transaction_id: string;
-
-      output_index?: number;
-    }
-  }
-
-  export interface UnionMember17 {
-    method: 'createLightningInvoice';
-
-    params: UnionMember17.Params;
-
-    network?: 'MAINNET' | 'REGTEST';
-  }
-
-  export namespace UnionMember17 {
-    export interface Params {
-      amount_sats: number;
-
-      description_hash?: string;
-
-      expiry_seconds?: number;
-
-      include_spark_address?: boolean;
-
-      memo?: string;
-
-      receiver_identity_pubkey?: string;
-    }
-  }
-
-  export interface UnionMember18 {
-    method: 'payLightningInvoice';
-
-    params: UnionMember18.Params;
-
-    network?: 'MAINNET' | 'REGTEST';
-  }
-
-  export namespace UnionMember18 {
-    export interface Params {
-      invoice: string;
-
-      max_fee_sats: number;
-
-      amount_sats_to_send?: number;
-
-      prefer_spark?: boolean;
-    }
-  }
-
-  export interface UnionMember19 {
-    method: 'signMessageWithIdentityKey';
-
-    params: UnionMember19.Params;
-
-    network?: 'MAINNET' | 'REGTEST';
-  }
-
-  export namespace UnionMember19 {
-    export interface Params {
-      message: string;
-
-      compact?: boolean;
-    }
-  }
 }
 
 /**
@@ -2107,569 +1552,14 @@ export namespace RpcIntentResponse {
    * The original RPC request that would be sent to the wallet endpoint
    */
   export interface RequestDetails {
-    body:
-      | RequestDetails.UnionMember0
-      | RequestDetails.UnionMember1
-      | RequestDetails.UnionMember2
-      | RequestDetails.UnionMember3
-      | RequestDetails.UnionMember4
-      | RequestDetails.UnionMember5
-      | RequestDetails.UnionMember6
-      | RequestDetails.UnionMember7
-      | RequestDetails.UnionMember8
-      | RequestDetails.UnionMember9
-      | RequestDetails.UnionMember10
-      | RequestDetails.UnionMember11
-      | RequestDetails.UnionMember12
-      | RequestDetails.UnionMember13
-      | RequestDetails.UnionMember14
-      | RequestDetails.UnionMember15
-      | RequestDetails.UnionMember16
-      | RequestDetails.UnionMember17
-      | RequestDetails.UnionMember18
-      | RequestDetails.UnionMember19;
+    /**
+     * Request body for wallet RPC operations, discriminated by method.
+     */
+    body: WalletsAPI.WalletRpcRequestBody;
 
     method: 'POST';
 
     url: string;
-  }
-
-  export namespace RequestDetails {
-    export interface UnionMember0 {
-      method: 'eth_signTransaction';
-
-      params: UnionMember0.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember0 {
-      export interface Params {
-        transaction: Params.Transaction;
-      }
-
-      export namespace Params {
-        export interface Transaction {
-          authorization_list?: Array<Transaction.AuthorizationList>;
-
-          chain_id?: string | number;
-
-          data?: string;
-
-          from?: string;
-
-          gas_limit?: string | number;
-
-          gas_price?: string | number;
-
-          max_fee_per_gas?: string | number;
-
-          max_priority_fee_per_gas?: string | number;
-
-          nonce?: string | number;
-
-          to?: string;
-
-          type?: 0 | 1 | 2 | 4;
-
-          value?: string | number;
-        }
-
-        export namespace Transaction {
-          export interface AuthorizationList {
-            chain_id: string | number;
-
-            contract: string;
-
-            nonce: string | number;
-
-            r: string;
-
-            s: string;
-
-            y_parity: number;
-          }
-        }
-      }
-    }
-
-    export interface UnionMember1 {
-      caip2: string;
-
-      method: 'eth_sendTransaction';
-
-      params: UnionMember1.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      sponsor?: boolean;
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember1 {
-      export interface Params {
-        transaction: Params.Transaction;
-      }
-
-      export namespace Params {
-        export interface Transaction {
-          authorization_list?: Array<Transaction.AuthorizationList>;
-
-          chain_id?: string | number;
-
-          data?: string;
-
-          from?: string;
-
-          gas_limit?: string | number;
-
-          gas_price?: string | number;
-
-          max_fee_per_gas?: string | number;
-
-          max_priority_fee_per_gas?: string | number;
-
-          nonce?: string | number;
-
-          to?: string;
-
-          type?: 0 | 1 | 2 | 4;
-
-          value?: string | number;
-        }
-
-        export namespace Transaction {
-          export interface AuthorizationList {
-            chain_id: string | number;
-
-            contract: string;
-
-            nonce: string | number;
-
-            r: string;
-
-            s: string;
-
-            y_parity: number;
-          }
-        }
-      }
-    }
-
-    export interface UnionMember2 {
-      method: 'personal_sign';
-
-      params: UnionMember2.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember2 {
-      export interface Params {
-        encoding: 'utf-8' | 'hex';
-
-        message: string;
-      }
-    }
-
-    export interface UnionMember3 {
-      method: 'eth_signTypedData_v4';
-
-      params: UnionMember3.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember3 {
-      export interface Params {
-        typed_data: Params.TypedData;
-      }
-
-      export namespace Params {
-        export interface TypedData {
-          domain: { [key: string]: unknown };
-
-          message: { [key: string]: unknown };
-
-          primary_type: string;
-
-          types: { [key: string]: Array<TypedData.Type> };
-        }
-
-        export namespace TypedData {
-          export interface Type {
-            name: string;
-
-            type: string;
-          }
-        }
-      }
-    }
-
-    export interface UnionMember4 {
-      method: 'secp256k1_sign';
-
-      params: UnionMember4.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember4 {
-      export interface Params {
-        hash: string;
-      }
-    }
-
-    export interface UnionMember5 {
-      method: 'eth_sign7702Authorization';
-
-      params: UnionMember5.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember5 {
-      export interface Params {
-        chain_id: string | number;
-
-        contract: string;
-
-        executor?: 'self';
-
-        nonce?: string | number;
-      }
-    }
-
-    export interface UnionMember6 {
-      method: 'eth_signUserOperation';
-
-      params: UnionMember6.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember6 {
-      export interface Params {
-        chain_id: string | number;
-
-        contract: string;
-
-        user_operation: Params.UserOperation;
-      }
-
-      export namespace Params {
-        export interface UserOperation {
-          call_data: string;
-
-          call_gas_limit: string;
-
-          max_fee_per_gas: string;
-
-          max_priority_fee_per_gas: string;
-
-          nonce: string;
-
-          paymaster: string;
-
-          paymaster_data: string;
-
-          paymaster_post_op_gas_limit: string;
-
-          paymaster_verification_gas_limit: string;
-
-          pre_verification_gas: string;
-
-          sender: string;
-
-          verification_gas_limit: string;
-        }
-      }
-    }
-
-    export interface UnionMember7 {
-      method: 'signTransaction';
-
-      params: UnionMember7.Params;
-
-      address?: string;
-
-      chain_type?: 'solana';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember7 {
-      export interface Params {
-        encoding: 'base64';
-
-        transaction: string;
-      }
-    }
-
-    export interface UnionMember8 {
-      caip2: string;
-
-      method: 'signAndSendTransaction';
-
-      params: UnionMember8.Params;
-
-      address?: string;
-
-      chain_type?: 'solana';
-
-      sponsor?: boolean;
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember8 {
-      export interface Params {
-        encoding: 'base64';
-
-        transaction: string;
-      }
-    }
-
-    export interface UnionMember9 {
-      method: 'signMessage';
-
-      params: UnionMember9.Params;
-
-      address?: string;
-
-      chain_type?: 'solana';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember9 {
-      export interface Params {
-        encoding: 'base64';
-
-        message: string;
-      }
-    }
-
-    export interface UnionMember10 {
-      address: string;
-
-      method: 'exportPrivateKey';
-
-      params: UnionMember10.Params;
-    }
-
-    export namespace UnionMember10 {
-      export interface Params {
-        encryption_type: 'HPKE';
-
-        recipient_public_key: string;
-
-        export_type?: 'display' | 'client';
-      }
-    }
-
-    export interface UnionMember11 {
-      method: 'transfer';
-
-      params: UnionMember11.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember11 {
-      export interface Params {
-        amount_sats: number;
-
-        receiver_spark_address: string;
-      }
-    }
-
-    export interface UnionMember12 {
-      method: 'getBalance';
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export interface UnionMember13 {
-      method: 'transferTokens';
-
-      params: UnionMember13.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember13 {
-      export interface Params {
-        receiver_spark_address: string;
-
-        token_amount: number;
-
-        token_identifier: string;
-
-        output_selection_strategy?: 'SMALL_FIRST' | 'LARGE_FIRST';
-
-        selected_outputs?: Array<Params.SelectedOutput>;
-      }
-
-      export namespace Params {
-        export interface SelectedOutput {
-          previous_transaction_hash: string;
-
-          previous_transaction_vout: number;
-
-          output?: SelectedOutput.Output;
-        }
-
-        export namespace SelectedOutput {
-          export interface Output {
-            owner_public_key: string;
-
-            token_amount: string;
-
-            id?: string;
-
-            revocation_commitment?: string;
-
-            token_identifier?: string;
-
-            token_public_key?: string;
-
-            withdraw_bond_sats?: number;
-
-            withdraw_relative_block_locktime?: number;
-          }
-        }
-      }
-    }
-
-    export interface UnionMember14 {
-      method: 'getStaticDepositAddress';
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export interface UnionMember15 {
-      method: 'getClaimStaticDepositQuote';
-
-      params: UnionMember15.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember15 {
-      export interface Params {
-        transaction_id: string;
-
-        output_index?: number;
-      }
-    }
-
-    export interface UnionMember16 {
-      method: 'claimStaticDeposit';
-
-      params: UnionMember16.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember16 {
-      export interface Params {
-        credit_amount_sats: number;
-
-        signature: string;
-
-        transaction_id: string;
-
-        output_index?: number;
-      }
-    }
-
-    export interface UnionMember17 {
-      method: 'createLightningInvoice';
-
-      params: UnionMember17.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember17 {
-      export interface Params {
-        amount_sats: number;
-
-        description_hash?: string;
-
-        expiry_seconds?: number;
-
-        include_spark_address?: boolean;
-
-        memo?: string;
-
-        receiver_identity_pubkey?: string;
-      }
-    }
-
-    export interface UnionMember18 {
-      method: 'payLightningInvoice';
-
-      params: UnionMember18.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember18 {
-      export interface Params {
-        invoice: string;
-
-        max_fee_sats: number;
-
-        amount_sats_to_send?: number;
-
-        prefer_spark?: boolean;
-      }
-    }
-
-    export interface UnionMember19 {
-      method: 'signMessageWithIdentityKey';
-
-      params: UnionMember19.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember19 {
-      export interface Params {
-        message: string;
-
-        compact?: boolean;
-      }
-    }
   }
 }
 
@@ -4713,108 +3603,28 @@ export interface IntentDeletePolicyRuleParams {
 }
 
 export type IntentRpcParams =
+  | IntentRpcParams.EthereumSignTransactionRpcInput
+  | IntentRpcParams.EthereumSendTransactionRpcInput
   | IntentRpcParams.EthereumPersonalSignRpcInput
   | IntentRpcParams.EthereumSignTypedDataRpcInput
-  | IntentRpcParams.EthereumSignTransactionRpcInput
-  | IntentRpcParams.EthereumSignUserOperationRpcInput
-  | IntentRpcParams.EthereumSendTransactionRpcInput
-  | IntentRpcParams.EthereumSign7702AuthorizationRpcInput
   | IntentRpcParams.EthereumSecp256k1SignRpcInput
-  | IntentRpcParams.SolanaSignMessageRpcInput
+  | IntentRpcParams.EthereumSign7702AuthorizationRpcInput
+  | IntentRpcParams.EthereumSignUserOperationRpcInput
   | IntentRpcParams.SolanaSignTransactionRpcInput
-  | IntentRpcParams.SolanaSignAndSendTransactionRpcInput;
+  | IntentRpcParams.SolanaSignAndSendTransactionRpcInput
+  | IntentRpcParams.SolanaSignMessageRpcInput
+  | IntentRpcParams.SparkTransferRpcInput
+  | IntentRpcParams.SparkGetBalanceRpcInput
+  | IntentRpcParams.SparkTransferTokensRpcInput
+  | IntentRpcParams.SparkGetStaticDepositAddressRpcInput
+  | IntentRpcParams.SparkGetClaimStaticDepositQuoteRpcInput
+  | IntentRpcParams.SparkClaimStaticDepositRpcInput
+  | IntentRpcParams.SparkCreateLightningInvoiceRpcInput
+  | IntentRpcParams.SparkPayLightningInvoiceRpcInput
+  | IntentRpcParams.SparkSignMessageWithIdentityKeyRpcInput
+  | IntentRpcParams.ExportPrivateKeyRpcInput;
 
 export declare namespace IntentRpcParams {
-  export interface EthereumPersonalSignRpcInput {
-    /**
-     * Body param
-     */
-    method: 'personal_sign';
-
-    /**
-     * Body param
-     */
-    params: EthereumPersonalSignRpcInput.Params;
-
-    /**
-     * Body param
-     */
-    address?: string;
-
-    /**
-     * Body param
-     */
-    chain_type?: 'ethereum';
-
-    /**
-     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
-     * representing the deadline by which the request must be processed.
-     */
-    'privy-request-expiry'?: string;
-  }
-
-  export namespace EthereumPersonalSignRpcInput {
-    export interface Params {
-      encoding: 'utf-8' | 'hex';
-
-      message: string;
-    }
-  }
-
-  export interface EthereumSignTypedDataRpcInput {
-    /**
-     * Body param
-     */
-    method: 'eth_signTypedData_v4';
-
-    /**
-     * Body param
-     */
-    params: EthereumSignTypedDataRpcInput.Params;
-
-    /**
-     * Body param
-     */
-    address?: string;
-
-    /**
-     * Body param
-     */
-    chain_type?: 'ethereum';
-
-    /**
-     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
-     * representing the deadline by which the request must be processed.
-     */
-    'privy-request-expiry'?: string;
-  }
-
-  export namespace EthereumSignTypedDataRpcInput {
-    export interface Params {
-      typed_data: Params.TypedData;
-    }
-
-    export namespace Params {
-      export interface TypedData {
-        domain: { [key: string]: unknown };
-
-        message: { [key: string]: unknown };
-
-        primary_type: string;
-
-        types: { [key: string]: Array<TypedData.Type> };
-      }
-
-      export namespace TypedData {
-        export interface Type {
-          name: string;
-
-          type: string;
-        }
-      }
-    }
-  }
-
   export interface EthereumSignTransactionRpcInput {
     /**
      * Body param
@@ -4822,9 +3632,9 @@ export declare namespace IntentRpcParams {
     method: 'eth_signTransaction';
 
     /**
-     * Body param
+     * Body param: Parameters for the EVM `eth_signTransaction` RPC.
      */
-    params: EthereumSignTransactionRpcInput.Params;
+    params: WalletsAPI.EthereumSignTransactionRpcInputParams;
 
     /**
      * Body param
@@ -4837,126 +3647,15 @@ export declare namespace IntentRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
-     * representing the deadline by which the request must be processed.
-     */
-    'privy-request-expiry'?: string;
-  }
-
-  export namespace EthereumSignTransactionRpcInput {
-    export interface Params {
-      transaction: Params.Transaction;
-    }
-
-    export namespace Params {
-      export interface Transaction {
-        authorization_list?: Array<Transaction.AuthorizationList>;
-
-        chain_id?: string | number;
-
-        data?: string;
-
-        from?: string;
-
-        gas_limit?: string | number;
-
-        gas_price?: string | number;
-
-        max_fee_per_gas?: string | number;
-
-        max_priority_fee_per_gas?: string | number;
-
-        nonce?: string | number;
-
-        to?: string;
-
-        type?: 0 | 1 | 2 | 4;
-
-        value?: string | number;
-      }
-
-      export namespace Transaction {
-        export interface AuthorizationList {
-          chain_id: string | number;
-
-          contract: string;
-
-          nonce: string | number;
-
-          r: string;
-
-          s: string;
-
-          y_parity: number;
-        }
-      }
-    }
-  }
-
-  export interface EthereumSignUserOperationRpcInput {
-    /**
      * Body param
      */
-    method: 'eth_signUserOperation';
-
-    /**
-     * Body param
-     */
-    params: EthereumSignUserOperationRpcInput.Params;
-
-    /**
-     * Body param
-     */
-    address?: string;
-
-    /**
-     * Body param
-     */
-    chain_type?: 'ethereum';
+    wallet_id?: string;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
      * representing the deadline by which the request must be processed.
      */
     'privy-request-expiry'?: string;
-  }
-
-  export namespace EthereumSignUserOperationRpcInput {
-    export interface Params {
-      chain_id: string | number;
-
-      contract: string;
-
-      user_operation: Params.UserOperation;
-    }
-
-    export namespace Params {
-      export interface UserOperation {
-        call_data: string;
-
-        call_gas_limit: string;
-
-        max_fee_per_gas: string;
-
-        max_priority_fee_per_gas: string;
-
-        nonce: string;
-
-        paymaster: string;
-
-        paymaster_data: string;
-
-        paymaster_post_op_gas_limit: string;
-
-        paymaster_verification_gas_limit: string;
-
-        pre_verification_gas: string;
-
-        sender: string;
-
-        verification_gas_limit: string;
-      }
-    }
   }
 
   export interface EthereumSendTransactionRpcInput {
@@ -4971,9 +3670,9 @@ export declare namespace IntentRpcParams {
     method: 'eth_sendTransaction';
 
     /**
-     * Body param
+     * Body param: Parameters for the EVM `eth_sendTransaction` RPC.
      */
-    params: EthereumSendTransactionRpcInput.Params;
+    params: WalletsAPI.EthereumSendTransactionRpcInputParams;
 
     /**
      * Body param
@@ -4991,72 +3690,27 @@ export declare namespace IntentRpcParams {
     sponsor?: boolean;
 
     /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
      * representing the deadline by which the request must be processed.
      */
     'privy-request-expiry'?: string;
   }
 
-  export namespace EthereumSendTransactionRpcInput {
-    export interface Params {
-      transaction: Params.Transaction;
-    }
-
-    export namespace Params {
-      export interface Transaction {
-        authorization_list?: Array<Transaction.AuthorizationList>;
-
-        chain_id?: string | number;
-
-        data?: string;
-
-        from?: string;
-
-        gas_limit?: string | number;
-
-        gas_price?: string | number;
-
-        max_fee_per_gas?: string | number;
-
-        max_priority_fee_per_gas?: string | number;
-
-        nonce?: string | number;
-
-        to?: string;
-
-        type?: 0 | 1 | 2 | 4;
-
-        value?: string | number;
-      }
-
-      export namespace Transaction {
-        export interface AuthorizationList {
-          chain_id: string | number;
-
-          contract: string;
-
-          nonce: string | number;
-
-          r: string;
-
-          s: string;
-
-          y_parity: number;
-        }
-      }
-    }
-  }
-
-  export interface EthereumSign7702AuthorizationRpcInput {
+  export interface EthereumPersonalSignRpcInput {
     /**
      * Body param
      */
-    method: 'eth_sign7702Authorization';
+    method: 'personal_sign';
 
     /**
-     * Body param
+     * Body param: Parameters for the EVM `personal_sign` RPC.
      */
-    params: EthereumSign7702AuthorizationRpcInput.Params;
+    params: WalletsAPI.EthereumPersonalSignRpcInputParams;
 
     /**
      * Body param
@@ -5069,22 +3723,48 @@ export declare namespace IntentRpcParams {
     chain_type?: 'ethereum';
 
     /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
      * representing the deadline by which the request must be processed.
      */
     'privy-request-expiry'?: string;
   }
 
-  export namespace EthereumSign7702AuthorizationRpcInput {
-    export interface Params {
-      chain_id: string | number;
+  export interface EthereumSignTypedDataRpcInput {
+    /**
+     * Body param
+     */
+    method: 'eth_signTypedData_v4';
 
-      contract: string;
+    /**
+     * Body param: Parameters for the EVM `eth_signTypedData_v4` RPC.
+     */
+    params: WalletsAPI.EthereumSignTypedDataRpcInputParams;
 
-      executor?: 'self';
+    /**
+     * Body param
+     */
+    address?: string;
 
-      nonce?: string | number;
-    }
+    /**
+     * Body param
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export interface EthereumSecp256k1SignRpcInput {
@@ -5094,9 +3774,9 @@ export declare namespace IntentRpcParams {
     method: 'secp256k1_sign';
 
     /**
-     * Body param
+     * Body param: Parameters for the EVM `secp256k1_sign` RPC.
      */
-    params: EthereumSecp256k1SignRpcInput.Params;
+    params: WalletsAPI.EthereumSecp256k1SignRpcInputParams;
 
     /**
      * Body param
@@ -5109,28 +3789,27 @@ export declare namespace IntentRpcParams {
     chain_type?: 'ethereum';
 
     /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
      * representing the deadline by which the request must be processed.
      */
     'privy-request-expiry'?: string;
   }
 
-  export namespace EthereumSecp256k1SignRpcInput {
-    export interface Params {
-      hash: string;
-    }
-  }
-
-  export interface SolanaSignMessageRpcInput {
+  export interface EthereumSign7702AuthorizationRpcInput {
     /**
      * Body param
      */
-    method: 'signMessage';
+    method: 'eth_sign7702Authorization';
 
     /**
-     * Body param
+     * Body param: Parameters for the EVM `eth_sign7702Authorization` RPC.
      */
-    params: SolanaSignMessageRpcInput.Params;
+    params: WalletsAPI.EthereumSign7702AuthorizationRpcInputParams;
 
     /**
      * Body param
@@ -5140,7 +3819,12 @@ export declare namespace IntentRpcParams {
     /**
      * Body param
      */
-    chain_type?: 'solana';
+    chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -5149,12 +3833,37 @@ export declare namespace IntentRpcParams {
     'privy-request-expiry'?: string;
   }
 
-  export namespace SolanaSignMessageRpcInput {
-    export interface Params {
-      encoding: 'base64';
+  export interface EthereumSignUserOperationRpcInput {
+    /**
+     * Body param
+     */
+    method: 'eth_signUserOperation';
 
-      message: string;
-    }
+    /**
+     * Body param: Parameters for the EVM `eth_signUserOperation` RPC.
+     */
+    params: WalletsAPI.EthereumSignUserOperationRpcInputParams;
+
+    /**
+     * Body param
+     */
+    address?: string;
+
+    /**
+     * Body param
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export interface SolanaSignTransactionRpcInput {
@@ -5164,9 +3873,9 @@ export declare namespace IntentRpcParams {
     method: 'signTransaction';
 
     /**
-     * Body param
+     * Body param: Parameters for the SVM `signTransaction` RPC.
      */
-    params: SolanaSignTransactionRpcInput.Params;
+    params: WalletsAPI.SolanaSignTransactionRpcInputParams;
 
     /**
      * Body param
@@ -5179,18 +3888,15 @@ export declare namespace IntentRpcParams {
     chain_type?: 'solana';
 
     /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
      * representing the deadline by which the request must be processed.
      */
     'privy-request-expiry'?: string;
-  }
-
-  export namespace SolanaSignTransactionRpcInput {
-    export interface Params {
-      encoding: 'base64';
-
-      transaction: string;
-    }
   }
 
   export interface SolanaSignAndSendTransactionRpcInput {
@@ -5205,9 +3911,9 @@ export declare namespace IntentRpcParams {
     method: 'signAndSendTransaction';
 
     /**
-     * Body param
+     * Body param: Parameters for the SVM `signAndSendTransaction` RPC.
      */
-    params: SolanaSignAndSendTransactionRpcInput.Params;
+    params: WalletsAPI.SolanaSignAndSendTransactionRpcInputParams;
 
     /**
      * Body param
@@ -5225,17 +3931,277 @@ export declare namespace IntentRpcParams {
     sponsor?: boolean;
 
     /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
      * representing the deadline by which the request must be processed.
      */
     'privy-request-expiry'?: string;
   }
 
-  export namespace SolanaSignAndSendTransactionRpcInput {
-    export interface Params {
-      encoding: 'base64';
+  export interface SolanaSignMessageRpcInput {
+    /**
+     * Body param
+     */
+    method: 'signMessage';
 
-      transaction: string;
+    /**
+     * Body param: Parameters for the SVM `signMessage` RPC.
+     */
+    params: WalletsAPI.SolanaSignMessageRpcInputParams;
+
+    /**
+     * Body param
+     */
+    address?: string;
+
+    /**
+     * Body param
+     */
+    chain_type?: 'solana';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkTransferRpcInput {
+    /**
+     * Body param
+     */
+    method: 'transfer';
+
+    /**
+     * Body param: Parameters for the Spark `transfer` RPC.
+     */
+    params: WalletsAPI.SparkTransferRpcInputParams;
+
+    /**
+     * Body param
+     */
+    network?: 'MAINNET' | 'REGTEST';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkGetBalanceRpcInput {
+    /**
+     * Body param
+     */
+    method: 'getBalance';
+
+    /**
+     * Body param
+     */
+    network?: 'MAINNET' | 'REGTEST';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkTransferTokensRpcInput {
+    /**
+     * Body param
+     */
+    method: 'transferTokens';
+
+    /**
+     * Body param: Parameters for the Spark `transferTokens` RPC.
+     */
+    params: WalletsAPI.SparkTransferTokensRpcInputParams;
+
+    /**
+     * Body param
+     */
+    network?: 'MAINNET' | 'REGTEST';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkGetStaticDepositAddressRpcInput {
+    /**
+     * Body param
+     */
+    method: 'getStaticDepositAddress';
+
+    /**
+     * Body param
+     */
+    network?: 'MAINNET' | 'REGTEST';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkGetClaimStaticDepositQuoteRpcInput {
+    /**
+     * Body param
+     */
+    method: 'getClaimStaticDepositQuote';
+
+    /**
+     * Body param: Parameters for the Spark `getClaimStaticDepositQuote` RPC.
+     */
+    params: WalletsAPI.SparkGetClaimStaticDepositQuoteRpcInputParams;
+
+    /**
+     * Body param
+     */
+    network?: 'MAINNET' | 'REGTEST';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkClaimStaticDepositRpcInput {
+    /**
+     * Body param
+     */
+    method: 'claimStaticDeposit';
+
+    /**
+     * Body param: Parameters for the Spark `claimStaticDeposit` RPC.
+     */
+    params: WalletsAPI.SparkClaimStaticDepositRpcInputParams;
+
+    /**
+     * Body param
+     */
+    network?: 'MAINNET' | 'REGTEST';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkCreateLightningInvoiceRpcInput {
+    /**
+     * Body param
+     */
+    method: 'createLightningInvoice';
+
+    /**
+     * Body param: Parameters for the Spark `createLightningInvoice` RPC.
+     */
+    params: WalletsAPI.SparkCreateLightningInvoiceRpcInputParams;
+
+    /**
+     * Body param
+     */
+    network?: 'MAINNET' | 'REGTEST';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkPayLightningInvoiceRpcInput {
+    /**
+     * Body param
+     */
+    method: 'payLightningInvoice';
+
+    /**
+     * Body param: Parameters for the Spark `payLightningInvoice` RPC.
+     */
+    params: WalletsAPI.SparkPayLightningInvoiceRpcInputParams;
+
+    /**
+     * Body param
+     */
+    network?: 'MAINNET' | 'REGTEST';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkSignMessageWithIdentityKeyRpcInput {
+    /**
+     * Body param
+     */
+    method: 'signMessageWithIdentityKey';
+
+    /**
+     * Body param: Parameters for the Spark `signMessageWithIdentityKey` RPC.
+     */
+    params: WalletsAPI.SparkSignMessageWithIdentityKeyRpcInputParams;
+
+    /**
+     * Body param
+     */
+    network?: 'MAINNET' | 'REGTEST';
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface ExportPrivateKeyRpcInput {
+    /**
+     * Body param
+     */
+    address: string;
+
+    /**
+     * Body param
+     */
+    method: 'exportPrivateKey';
+
+    /**
+     * Body param
+     */
+    params: ExportPrivateKeyRpcInput.Params;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export namespace ExportPrivateKeyRpcInput {
+    export interface Params {
+      encryption_type: 'HPKE';
+
+      recipient_public_key: string;
+
+      export_type?: 'display' | 'client';
     }
   }
 }

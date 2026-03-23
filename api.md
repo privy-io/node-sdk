@@ -13,32 +13,100 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">ExportPrivateKeyRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">ExportPrivateKeyRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawSignHashParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesEncoding</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesHashFunction</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawSignInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawSignInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawSignResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawSignResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumTypedDataInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTypedDataRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTypedDataRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSecp256k1SignRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSecp256k1SignRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTypedDataRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTypedDataRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSecp256k1SignRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSecp256k1SignRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SolanaRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkTransferRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkTransferRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetBalanceRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkOutputSelectionStrategy</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkTransferTokensRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkTransferTokensRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetStaticDepositAddressRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetClaimStaticDepositQuoteRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetClaimStaticDepositQuoteRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkClaimStaticDepositRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkClaimStaticDepositRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkCreateLightningInvoiceRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkCreateLightningInvoiceRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkPayLightningInvoiceRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkPayLightningInvoiceRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkSignMessageWithIdentityKeyRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkSignMessageWithIdentityKeyRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkTransferRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetBalanceRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkTransferTokensRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkTransferTokensRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetStaticDepositAddressRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetStaticDepositAddressRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetClaimStaticDepositQuoteRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetClaimStaticDepositQuoteRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkClaimStaticDepositRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkClaimStaticDepositRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkCreateLightningInvoiceRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkPayLightningInvoiceRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkSignMessageWithIdentityKeyRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkSignMessageWithIdentityKeyRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletUpdateRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResult</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTypedDataRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSecp256k1SignRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendTransactionRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTypedDataRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSecp256k1SignRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignAndSendTransactionRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">SolanaSignMessageRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRpcRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateRequestBody</a></code>
@@ -48,7 +116,6 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">WalletRawSignResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateWithJwtResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCreateWalletsWithRecoveryResponse</a></code>
 
@@ -58,7 +125,7 @@ Methods:
 - <code title="get /v1/wallets">client.wallets.<a href="./src/resources/wallets/wallets.ts">list</a>({ ...params }) -> WalletsCursor</code>
 - <code title="post /v1/wallets/{wallet_id}/export">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_export</a>(walletID, { ...params }) -> WalletExportResponse</code>
 - <code title="post /v1/wallets/import/init">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_initImport</a>({ ...params }) -> WalletInitImportResponse</code>
-- <code title="post /v1/wallets/{wallet_id}/raw_sign">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rawSign</a>(walletID, { ...params }) -> WalletRawSignResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/raw_sign">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rawSign</a>(walletID, { ...params }) -> RawSignResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/rpc">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rpc</a>(walletID, { ...params }) -> WalletRpcResponse</code>
 - <code title="post /v1/wallets/import/submit">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_submitImport</a>({ ...params }) -> Wallet</code>
 - <code title="patch /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_update</a>(walletID, { ...params }) -> Wallet</code>
@@ -127,7 +194,12 @@ Types:
 - <code><a href="./src/resources/users.ts">LinkedAccountAuthorizationKey</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccount</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountType</a></code>
+- <code><a href="./src/resources/users.ts">SMSMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">TotpMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">PasskeyMfaMethod</a></code>
+- <code><a href="./src/resources/users.ts">LinkedMfaMethod</a></code>
 - <code><a href="./src/resources/users.ts">CustomMetadata</a></code>
+- <code><a href="./src/resources/users.ts">User</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountWalletInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEmailInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountPhoneInput</a></code>
@@ -148,11 +220,6 @@ Types:
 - <code><a href="./src/resources/users.ts">LinkedAccountPasskeyInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountInput</a></code>
 - <code><a href="./src/resources/users.ts">UserBatchCreateInput</a></code>
-- <code><a href="./src/resources/users.ts">SMSMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">TotpMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">PasskeyMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">LinkedMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">User</a></code>
 - <code><a href="./src/resources/users.ts">OAuthTokens</a></code>
 - <code><a href="./src/resources/users.ts">UserWithIdentityToken</a></code>
 - <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
@@ -213,6 +280,22 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/transactions.ts">TransactionScanningMetadata</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningRpcRequest</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningRequestBody</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningValidationErrorResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningValidationSuccessResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningValidationResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningAssetInfo</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningAssetValue</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningAssetDiff</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningExposure</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningCalldata</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningParams</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationErrorResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationSuccessResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningResponseBody</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionGetResponse</a></code>
 
 Methods:
@@ -276,6 +359,16 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletCreateOnLogin</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletChainConfig</a></code>
+- <code><a href="./src/resources/apps/apps.ts">UserOwnedRecoveryOption</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletInputSchema</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletMode</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletConfigSchema</a></code>
+- <code><a href="./src/resources/apps/apps.ts">TelegramAuthConfigSchema</a></code>
+- <code><a href="./src/resources/apps/apps.ts">FundingMethodEnum</a></code>
+- <code><a href="./src/resources/apps/apps.ts">FundingOption</a></code>
+- <code><a href="./src/resources/apps/apps.ts">FundingConfigResponseSchema</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AppResponse</a></code>
 - <code><a href="./src/resources/apps/apps.ts">EmailInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">WalletInviteInput</a></code>
@@ -319,6 +412,16 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">PasswordlessUpdateRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">PasswordlessAuthenticateRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">PasswordlessTransferRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessSMSLinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessSMSInitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessSMSUnlinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessSMSUpdateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessSMSAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasswordlessSMSTransferRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">AuthenticateJwtInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">LinkJwtInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">CustomJwtAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">CustomJwtLinkRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">GetFiatCustomerRequestInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">CreateOrUpdateFiatCustomerRequestInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatRejectionReason</a></code>
@@ -359,8 +462,92 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatVirtualAccountResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatVirtualAccountResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">GuestAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthCodeType</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthInitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthInitResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthLinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthUnlinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthLinkResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTransferUserInfoMeta</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTransferUserInfo</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTransferRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthAuthorizationCodeRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthVerifyRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthVerifyResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiweInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">SmartWalletSiweInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">AuthenticateSiweInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiweAddressInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiweInitInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiweNonce</a></code>
+- <code><a href="./src/resources/client-auth.ts">TransferSiweInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiweInitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiweInitResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiweAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiweLinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiweLinkSmartWalletRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiweUnlinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiwsInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">AuthenticateSiwsInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiwsAddressInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiwsInitInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiwsNonce</a></code>
+- <code><a href="./src/resources/client-auth.ts">TransferSiwsInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiwsInitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiwsInitResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiwsAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiwsLinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiwsUnlinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">TelegramAuthResult</a></code>
+- <code><a href="./src/resources/client-auth.ts">TelegramWebAppData</a></code>
+- <code><a href="./src/resources/client-auth.ts">TelegramAuthenticateInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">TelegramUnlinkInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">TransferTelegramInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">TelegramAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">TelegramLinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">TelegramUnlinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterConnectInitResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterConnectStatusCompletedResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterConnectStatusPendingResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterAuthenticateInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterLinkInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterInitInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterUnlinkInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">TransferFarcasterInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterV2InitInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterV2InitResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterV2AuthenticateInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterConnectStatusCompletedResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterConnectStatusPendingResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterUnlinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterInitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterConnectInitResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterLinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterV2InitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterV2InitResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterV2AuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterSignerInitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterSignerInitPendingApproval</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterSignerApproved</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterSignerRevoked</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterSignerStatusPendingApproval</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterSignerInitResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">FarcasterSignerStatusResponseBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OptionalRefreshTokenInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaVerifyResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaSMSInitVerifyInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaSMSInitEnrollInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaSMSInitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaSMSEnrollRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaSMSVerifyRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaTotpInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaTotpInitResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaPasskeyInitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaPasskeyInitResponseBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaPasskeyVerifyRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaPasskeyEnrollmentRequestBody</a></code>
 
 # WalletActions
 
@@ -383,6 +570,49 @@ Types:
 Types:
 
 - <code><a href="./src/resources/analytics.ts">AnalyticsEventInput</a></code>
+
+# EmbeddedWallets
+
+Types:
+
+- <code><a href="./src/resources/embedded-wallets.ts">RecoveryType</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">ICloudClientType</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">RecoveryKeyMaterialInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">RecoveryKeyMaterialResponse</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">OAuthInitRecoveryInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">OAuthAuthenticateRecoveryResponse</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">OAuthInitICloudRecoveryInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">OAuthCallbackICloudExpoInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">RecoveryConfigurationICloudInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">RecoveryConfigurationICloudResponse</a></code>
+
+# Funding
+
+Types:
+
+- <code><a href="./src/resources/funding.ts">CoinbaseBlockchain</a></code>
+- <code><a href="./src/resources/funding.ts">CoinbaseEthereumAsset</a></code>
+- <code><a href="./src/resources/funding.ts">CoinbaseSolanaAsset</a></code>
+- <code><a href="./src/resources/funding.ts">CoinbaseOnRampEthereumAddress</a></code>
+- <code><a href="./src/resources/funding.ts">CoinbaseOnRampSolanaAddress</a></code>
+- <code><a href="./src/resources/funding.ts">CoinbaseOnRampInitEthereumInput</a></code>
+- <code><a href="./src/resources/funding.ts">CoinbaseOnRampInitSolanaInput</a></code>
+- <code><a href="./src/resources/funding.ts">CoinbaseOnRampInitInput</a></code>
+- <code><a href="./src/resources/funding.ts">CoinbaseOnRampInitResponse</a></code>
+- <code><a href="./src/resources/funding.ts">CoinbaseOnRampStatus</a></code>
+- <code><a href="./src/resources/funding.ts">CoinbaseOnRampStatusResponse</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayPaymentMethod</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayCurrencyCode</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayUiTheme</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayUiConfig</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpaySolanaCurrencyCode</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayFiatOnRampEthereumConfig</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayFiatOnRampSolanaConfig</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayFiatOnRampEthereumInput</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayFiatOnRampSolanaInput</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayOnRampSandboxConfig</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayOnRampSignInput</a></code>
+- <code><a href="./src/resources/funding.ts">MoonpayOnRampSignResponse</a></code>
 
 # Aggregations
 

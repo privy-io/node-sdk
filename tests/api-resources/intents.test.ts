@@ -119,8 +119,8 @@ describe('resource intents', () => {
   // Mock server tests are disabled
   test.skip('rpc: only required params', async () => {
     const responsePromise = client.intents.rpc('wallet_id', {
-      method: 'personal_sign',
-      params: { encoding: 'utf-8', message: 'message' },
+      method: 'eth_signTransaction',
+      params: { transaction: {} },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -134,10 +134,35 @@ describe('resource intents', () => {
   // Mock server tests are disabled
   test.skip('rpc: required and optional params', async () => {
     const response = await client.intents.rpc('wallet_id', {
-      method: 'personal_sign',
-      params: { encoding: 'utf-8', message: 'message' },
+      method: 'eth_signTransaction',
+      params: {
+        transaction: {
+          authorization_list: [
+            {
+              chain_id: 'string',
+              contract: 'contract',
+              nonce: 'string',
+              r: 'r',
+              s: 's',
+              y_parity: 0,
+            },
+          ],
+          chain_id: 'string',
+          data: 'data',
+          from: 'from',
+          gas_limit: 'string',
+          gas_price: 'string',
+          max_fee_per_gas: 'string',
+          max_priority_fee_per_gas: 'string',
+          nonce: 'string',
+          to: 'to',
+          type: 0,
+          value: 'string',
+        },
+      },
       address: 'address',
       chain_type: 'ethereum',
+      wallet_id: 'wallet_id',
       'privy-request-expiry': 'privy-request-expiry',
     });
   });

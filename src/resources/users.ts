@@ -1174,9 +1174,72 @@ export type LinkedAccountType =
   | ClientAuthAPI.CustomOAuthProviderID;
 
 /**
+ * A SMS MFA method.
+ */
+export interface SMSMfaMethod {
+  type: 'sms';
+
+  verified_at: number;
+}
+
+/**
+ * A TOTP MFA method.
+ */
+export interface TotpMfaMethod {
+  type: 'totp';
+
+  verified_at: number;
+}
+
+/**
+ * A Passkey MFA method.
+ */
+export interface PasskeyMfaMethod {
+  type: 'passkey';
+
+  verified_at: number;
+}
+
+/**
+ * A multi-factor authentication method linked to the user.
+ */
+export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod;
+
+/**
  * Custom metadata associated with the user.
  */
 export type CustomMetadata = { [key: string]: string | number | boolean };
+
+/**
+ * A Privy user object.
+ */
+export interface User {
+  id: string;
+
+  /**
+   * Unix timestamp of when the user was created in seconds.
+   */
+  created_at: number;
+
+  /**
+   * Indicates if the user has accepted the terms of service.
+   */
+  has_accepted_terms: boolean;
+
+  /**
+   * Indicates if the user is a guest account user.
+   */
+  is_guest: boolean;
+
+  linked_accounts: Array<LinkedAccount>;
+
+  mfa_methods: Array<LinkedMfaMethod>;
+
+  /**
+   * Custom metadata associated with the user.
+   */
+  custom_metadata?: CustomMetadata;
+}
 
 /**
  * The payload for importing a wallet account.
@@ -1493,69 +1556,6 @@ export namespace UserBatchCreateInput {
 }
 
 /**
- * A SMS MFA method.
- */
-export interface SMSMfaMethod {
-  type: 'sms';
-
-  verified_at: number;
-}
-
-/**
- * A TOTP MFA method.
- */
-export interface TotpMfaMethod {
-  type: 'totp';
-
-  verified_at: number;
-}
-
-/**
- * A Passkey MFA method.
- */
-export interface PasskeyMfaMethod {
-  type: 'passkey';
-
-  verified_at: number;
-}
-
-/**
- * A multi-factor authentication method linked to the user.
- */
-export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod;
-
-/**
- * A Privy user object.
- */
-export interface User {
-  id: string;
-
-  /**
-   * Unix timestamp of when the user was created in seconds.
-   */
-  created_at: number;
-
-  /**
-   * Indicates if the user has accepted the terms of service.
-   */
-  has_accepted_terms: boolean;
-
-  /**
-   * Indicates if the user is a guest account user.
-   */
-  is_guest: boolean;
-
-  linked_accounts: Array<LinkedAccount>;
-
-  mfa_methods: Array<LinkedMfaMethod>;
-
-  /**
-   * Custom metadata associated with the user.
-   */
-  custom_metadata?: CustomMetadata;
-}
-
-/**
  * OAuth tokens associated with the user.
  */
 export interface OAuthTokens {
@@ -1820,7 +1820,12 @@ export declare namespace Users {
     type LinkedAccountAuthorizationKey as LinkedAccountAuthorizationKey,
     type LinkedAccount as LinkedAccount,
     type LinkedAccountType as LinkedAccountType,
+    type SMSMfaMethod as SMSMfaMethod,
+    type TotpMfaMethod as TotpMfaMethod,
+    type PasskeyMfaMethod as PasskeyMfaMethod,
+    type LinkedMfaMethod as LinkedMfaMethod,
     type CustomMetadata as CustomMetadata,
+    type User as User,
     type LinkedAccountWalletInput as LinkedAccountWalletInput,
     type LinkedAccountEmailInput as LinkedAccountEmailInput,
     type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
@@ -1841,11 +1846,6 @@ export declare namespace Users {
     type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
     type LinkedAccountInput as LinkedAccountInput,
     type UserBatchCreateInput as UserBatchCreateInput,
-    type SMSMfaMethod as SMSMfaMethod,
-    type TotpMfaMethod as TotpMfaMethod,
-    type PasskeyMfaMethod as PasskeyMfaMethod,
-    type LinkedMfaMethod as LinkedMfaMethod,
-    type User as User,
     type OAuthTokens as OAuthTokens,
     type UserWithIdentityToken as UserWithIdentityToken,
     type AuthenticatedUser as AuthenticatedUser,

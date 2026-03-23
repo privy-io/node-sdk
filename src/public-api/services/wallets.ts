@@ -9,7 +9,7 @@ import {
   WalletCreateParams,
   WalletExportParams,
   WalletRawSignParams,
-  WalletRawSignResponse,
+  RawSignResponseData,
   WalletRpcParams,
   WalletRpcResponse,
   Wallets,
@@ -84,7 +84,7 @@ export class PrivyWalletsService extends Wallets {
       request_expiry: requestExpiry,
       ...params
     }: PrivyWalletsService.RawSignInput,
-  ): Promise<WalletRawSignResponse.Data> {
+  ): Promise<RawSignResponseData> {
     const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
       idempotencyKey,

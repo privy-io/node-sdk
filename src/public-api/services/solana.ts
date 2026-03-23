@@ -1,7 +1,10 @@
 import {
-  SolanaSignAndSendTransactionRpcResponse,
-  SolanaSignMessageRpcResponse,
-  SolanaSignTransactionRpcResponse,
+  SolanaSignAndSendTransactionRpcInputParams,
+  SolanaSignAndSendTransactionRpcResponseData,
+  SolanaSignMessageRpcInputParams,
+  SolanaSignMessageRpcResponseData,
+  SolanaSignTransactionRpcInputParams,
+  SolanaSignTransactionRpcResponseData,
   WalletRpcParams,
 } from '../../resources';
 import { PrivyWalletsService, ReplaceParams } from './wallets';
@@ -17,8 +20,8 @@ export class PrivySolanaService {
   public async signMessage(
     walletId: string,
     { message, ...input }: PrivySolanaService.SignMessageInput,
-  ): Promise<SolanaSignMessageRpcResponse.Data> {
-    let params: WalletRpcParams.SolanaSignMessageRpcInput.Params;
+  ): Promise<SolanaSignMessageRpcResponseData> {
+    let params: SolanaSignMessageRpcInputParams;
     if (message instanceof Uint8Array) {
       // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
       params = { message: Buffer.from(message).toString('base64'), encoding: 'base64' };
@@ -40,8 +43,8 @@ export class PrivySolanaService {
   public async signTransaction(
     walletId: string,
     { transaction, ...input }: PrivySolanaService.SignTransactionInput,
-  ): Promise<SolanaSignTransactionRpcResponse.Data> {
-    let params: WalletRpcParams.SolanaSignTransactionRpcInput.Params;
+  ): Promise<SolanaSignTransactionRpcResponseData> {
+    let params: SolanaSignTransactionRpcInputParams;
     if (transaction instanceof Uint8Array) {
       // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
       params = { transaction: Buffer.from(transaction).toString('base64'), encoding: 'base64' };
@@ -63,8 +66,8 @@ export class PrivySolanaService {
   public async signAndSendTransaction(
     walletId: string,
     { transaction, ...input }: PrivySolanaService.SignAndSendTransactionInput,
-  ): Promise<SolanaSignAndSendTransactionRpcResponse.Data> {
-    let params: WalletRpcParams.SolanaSignAndSendTransactionRpcInput.Params;
+  ): Promise<SolanaSignAndSendTransactionRpcResponseData> {
+    let params: SolanaSignAndSendTransactionRpcInputParams;
     if (transaction instanceof Uint8Array) {
       // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
       params = { transaction: Buffer.from(transaction).toString('base64'), encoding: 'base64' };

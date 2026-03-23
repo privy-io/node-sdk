@@ -1,11 +1,12 @@
 import {
-  EthereumPersonalSignRpcResponse,
-  EthereumSecp256k1SignRpcResponse,
-  EthereumSendTransactionRpcResponse,
-  EthereumSign7702AuthorizationRpcResponse,
-  EthereumSignTransactionRpcResponse,
-  EthereumSignTypedDataRpcResponse,
-  EthereumSignUserOperationRpcResponse,
+  EthereumPersonalSignRpcInputParams,
+  EthereumPersonalSignRpcResponseData,
+  EthereumSecp256k1SignRpcResponseData,
+  EthereumSendTransactionRpcResponseData,
+  EthereumSign7702AuthorizationRpcResponseData,
+  EthereumSignTransactionRpcResponseData,
+  EthereumSignTypedDataRpcResponseData,
+  EthereumSignUserOperationRpcResponseData,
   WalletRpcParams,
 } from '../../resources';
 import { ReplaceParams, PrivyWalletsService } from './wallets';
@@ -21,8 +22,8 @@ export class PrivyEthereumService {
   public async signMessage(
     walletId: string,
     { message, ...input }: PrivyEthereumService.SignMessageInput,
-  ): Promise<EthereumPersonalSignRpcResponse.Data> {
-    let params: WalletRpcParams.EthereumPersonalSignRpcInput.Params;
+  ): Promise<EthereumPersonalSignRpcResponseData> {
+    let params: EthereumPersonalSignRpcInputParams;
     if (message instanceof Uint8Array) {
       // We fall back to `Buffer` here as Uint8Array.toHex is not widely supported yet
       params = { message: Buffer.from(message).toString('hex'), encoding: 'hex' };
@@ -46,7 +47,7 @@ export class PrivyEthereumService {
   public async signSecp256k1(
     walletId: string,
     input: PrivyEthereumService.SignSecp256k1Input,
-  ): Promise<EthereumSecp256k1SignRpcResponse.Data> {
+  ): Promise<EthereumSecp256k1SignRpcResponseData> {
     const response = await this.privyWalletsService.rpc(walletId, {
       ...input,
       method: 'secp256k1_sign',
@@ -59,7 +60,7 @@ export class PrivyEthereumService {
   public async sign7702Authorization(
     walletId: string,
     input: PrivyEthereumService.Sign7702AuthorizationInput,
-  ): Promise<EthereumSign7702AuthorizationRpcResponse.Data> {
+  ): Promise<EthereumSign7702AuthorizationRpcResponseData> {
     const response = await this.privyWalletsService.rpc(walletId, {
       ...input,
       method: 'eth_sign7702Authorization',
@@ -72,7 +73,7 @@ export class PrivyEthereumService {
   public async signTransaction(
     walletId: string,
     input: PrivyEthereumService.SignTransactionInput,
-  ): Promise<EthereumSignTransactionRpcResponse.Data> {
+  ): Promise<EthereumSignTransactionRpcResponseData> {
     const response = await this.privyWalletsService.rpc(walletId, {
       ...input,
       method: 'eth_signTransaction',
@@ -85,7 +86,7 @@ export class PrivyEthereumService {
   public async signTypedData(
     walletId: string,
     input: PrivyEthereumService.SignTypedDataInput,
-  ): Promise<EthereumSignTypedDataRpcResponse.Data> {
+  ): Promise<EthereumSignTypedDataRpcResponseData> {
     const response = await this.privyWalletsService.rpc(walletId, {
       ...input,
       method: 'eth_signTypedData_v4',
@@ -98,7 +99,7 @@ export class PrivyEthereumService {
   public async signUserOperation(
     walletId: string,
     input: PrivyEthereumService.SignUserOperationInput,
-  ): Promise<EthereumSignUserOperationRpcResponse.Data> {
+  ): Promise<EthereumSignUserOperationRpcResponseData> {
     const response = await this.privyWalletsService.rpc(walletId, {
       ...input,
       method: 'eth_signUserOperation',
@@ -111,7 +112,7 @@ export class PrivyEthereumService {
   public async sendTransaction(
     walletId: string,
     input: PrivyEthereumService.SendTransactionInput,
-  ): Promise<EthereumSendTransactionRpcResponse.Data> {
+  ): Promise<EthereumSendTransactionRpcResponseData> {
     const response = await this.privyWalletsService.rpc(walletId, {
       ...input,
       method: 'eth_sendTransaction',

@@ -8,6 +8,16 @@ export {
 } from './allowlist';
 export {
   Apps,
+  type EmbeddedWalletCreateOnLogin,
+  type EmbeddedWalletChainConfig,
+  type UserOwnedRecoveryOption,
+  type EmbeddedWalletInputSchema,
+  type EmbeddedWalletMode,
+  type EmbeddedWalletConfigSchema,
+  type TelegramAuthConfigSchema,
+  type FundingMethodEnum,
+  type FundingOption,
+  type FundingConfigResponseSchema,
   type AppResponse,
   type EmailInviteInput,
   type WalletInviteInput,

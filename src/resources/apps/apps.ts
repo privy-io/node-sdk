@@ -41,6 +41,119 @@ export class Apps extends APIResource {
 }
 
 /**
+ * Whether to create embedded wallets on login.
+ */
+export type EmbeddedWalletCreateOnLogin = 'users-without-wallets' | 'all-users' | 'off';
+
+/**
+ * Chain-specific configuration for embedded wallets.
+ */
+export interface EmbeddedWalletChainConfig {
+  /**
+   * Whether to create embedded wallets on login.
+   */
+  create_on_login: EmbeddedWalletCreateOnLogin;
+}
+
+/**
+ * A user-owned recovery option for embedded wallets.
+ */
+export type UserOwnedRecoveryOption = 'user-passcode' | 'google-drive' | 'icloud';
+
+/**
+ * Input configuration for embedded wallets.
+ */
+export interface EmbeddedWalletInputSchema {
+  /**
+   * Whether to create embedded wallets on login.
+   */
+  create_on_login: EmbeddedWalletCreateOnLogin;
+
+  /**
+   * Chain-specific configuration for embedded wallets.
+   */
+  ethereum: EmbeddedWalletChainConfig;
+
+  /**
+   * Chain-specific configuration for embedded wallets.
+   */
+  solana: EmbeddedWalletChainConfig;
+
+  user_owned_recovery_options: Array<UserOwnedRecoveryOption>;
+
+  require_user_owned_recovery_on_create?: boolean;
+
+  require_user_password_on_create?: boolean;
+}
+
+/**
+ * The mode for embedded wallets.
+ */
+export type EmbeddedWalletMode = 'legacy-embedded-wallets-only' | 'user-controlled-server-wallets-only';
+
+/**
+ * Configuration for embedded wallets including the mode.
+ */
+export interface EmbeddedWalletConfigSchema extends EmbeddedWalletInputSchema {
+  /**
+   * The mode for embedded wallets.
+   */
+  mode: EmbeddedWalletMode;
+}
+
+/**
+ * Configuration for Telegram authentication.
+ */
+export interface TelegramAuthConfigSchema {
+  bot_id: string;
+
+  bot_name: string;
+
+  link_enabled: boolean;
+
+  seamless_auth_enabled: boolean;
+}
+
+/**
+ * A funding method for on-ramp.
+ */
+export type FundingMethodEnum = 'moonpay' | 'coinbase-onramp' | 'external';
+
+/**
+ * A funding option with method and provider.
+ */
+export interface FundingOption {
+  method: string;
+
+  provider: string;
+}
+
+/**
+ * Configuration for funding and on-ramp options.
+ */
+export interface FundingConfigResponseSchema {
+  cross_chain_bridging_enabled: boolean;
+
+  default_recommended_amount: string;
+
+  default_recommended_currency: FundingConfigResponseSchema.DefaultRecommendedCurrency;
+
+  methods: Array<FundingMethodEnum>;
+
+  options: Array<FundingOption>;
+
+  prompt_funding_on_wallet_creation: boolean;
+}
+
+export namespace FundingConfigResponseSchema {
+  export interface DefaultRecommendedCurrency {
+    chain: string;
+
+    asset?: 'native-currency' | 'USDC';
+  }
+}
+
+/**
  * The response for getting an app.
  */
 export interface AppResponse {
@@ -74,7 +187,10 @@ export interface AppResponse {
 
   email_auth: boolean;
 
-  embedded_wallet_config: AppResponse.EmbeddedWalletConfig;
+  /**
+   * Configuration for embedded wallets including the mode.
+   */
+  embedded_wallet_config: EmbeddedWalletConfigSchema;
 
   enabled_captcha_provider: 'turnstile' | 'hcaptcha' | null;
 
@@ -152,9 +268,15 @@ export interface AppResponse {
 
   captcha_site_key?: string;
 
-  funding_config?: AppResponse.FundingConfig;
+  /**
+   * Configuration for funding and on-ramp options.
+   */
+  funding_config?: FundingConfigResponseSchema;
 
-  telegram_auth_config?: AppResponse.TelegramAuthConfig;
+  /**
+   * Configuration for Telegram authentication.
+   */
+  telegram_auth_config?: TelegramAuthConfigSchema;
 }
 
 export namespace AppResponse {
@@ -180,32 +302,6 @@ export namespace AppResponse {
     provider_display_name: string;
 
     provider_icon_url: string;
-  }
-
-  export interface EmbeddedWalletConfig {
-    create_on_login: 'users-without-wallets' | 'all-users' | 'off';
-
-    ethereum: EmbeddedWalletConfig.Ethereum;
-
-    mode: 'legacy-embedded-wallets-only' | 'user-controlled-server-wallets-only';
-
-    solana: EmbeddedWalletConfig.Solana;
-
-    user_owned_recovery_options: Array<'user-passcode' | 'google-drive' | 'icloud'>;
-
-    require_user_owned_recovery_on_create?: boolean;
-
-    require_user_password_on_create?: boolean;
-  }
-
-  export namespace EmbeddedWalletConfig {
-    export interface Ethereum {
-      create_on_login: 'users-without-wallets' | 'all-users' | 'off';
-    }
-
-    export interface Solana {
-      create_on_login: 'users-without-wallets' | 'all-users' | 'off';
-    }
   }
 
   export interface Enabled {
@@ -248,44 +344,6 @@ export namespace AppResponse {
         policy_id: string;
       }
     }
-  }
-
-  export interface FundingConfig {
-    cross_chain_bridging_enabled: boolean;
-
-    default_recommended_amount: string;
-
-    default_recommended_currency: FundingConfig.DefaultRecommendedCurrency;
-
-    methods: Array<'moonpay' | 'coinbase-onramp' | 'external'>;
-
-    options: Array<FundingConfig.Option>;
-
-    prompt_funding_on_wallet_creation: boolean;
-  }
-
-  export namespace FundingConfig {
-    export interface DefaultRecommendedCurrency {
-      chain: string;
-
-      asset?: 'native-currency' | 'USDC';
-    }
-
-    export interface Option {
-      method: string;
-
-      provider: string;
-    }
-  }
-
-  export interface TelegramAuthConfig {
-    bot_id: string;
-
-    bot_name: string;
-
-    link_enabled: boolean;
-
-    seamless_auth_enabled: boolean;
   }
 }
 
@@ -371,6 +429,16 @@ Apps.Allowlist = Allowlist;
 
 export declare namespace Apps {
   export {
+    type EmbeddedWalletCreateOnLogin as EmbeddedWalletCreateOnLogin,
+    type EmbeddedWalletChainConfig as EmbeddedWalletChainConfig,
+    type UserOwnedRecoveryOption as UserOwnedRecoveryOption,
+    type EmbeddedWalletInputSchema as EmbeddedWalletInputSchema,
+    type EmbeddedWalletMode as EmbeddedWalletMode,
+    type EmbeddedWalletConfigSchema as EmbeddedWalletConfigSchema,
+    type TelegramAuthConfigSchema as TelegramAuthConfigSchema,
+    type FundingMethodEnum as FundingMethodEnum,
+    type FundingOption as FundingOption,
+    type FundingConfigResponseSchema as FundingConfigResponseSchema,
     type AppResponse as AppResponse,
     type EmailInviteInput as EmailInviteInput,
     type WalletInviteInput as WalletInviteInput,

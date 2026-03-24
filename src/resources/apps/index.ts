@@ -27,4 +27,7 @@ export {
   type AllowlistDeletionResponse,
   type TestAccount,
   type TestAccountsResponse,
+  type Caip2,
+  type GasSponsorshipConfigurationInput,
+  type GasSponsorshipConfiguration,
 } from './apps';

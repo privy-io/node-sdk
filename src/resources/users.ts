@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as UsersAPI from './users';
 import * as ClientAuthAPI from './client-auth';
+import * as EmbeddedWalletsAPI from './embedded-wallets';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
@@ -1528,30 +1529,10 @@ export namespace UserBatchCreateInput {
      */
     custom_metadata?: UsersAPI.CustomMetadata;
 
-    wallets?: Array<User.Wallet>;
-  }
-
-  export namespace User {
-    export interface Wallet {
-      /**
-       * The wallet chain types.
-       */
-      chain_type: WalletsAPI.WalletChainType;
-
-      additional_signers?: Array<Wallet.AdditionalSigner>;
-
-      create_smart_wallet?: boolean;
-
-      policy_ids?: Array<string>;
-    }
-
-    export namespace Wallet {
-      export interface AdditionalSigner {
-        signer_id: string;
-
-        override_policy_ids?: Array<string>;
-      }
-    }
+    /**
+     * Wallets to create.
+     */
+    wallets?: Array<EmbeddedWalletsAPI.WalletCreationInput>;
   }
 }
 
@@ -1721,30 +1702,7 @@ export interface UserGetByWalletAddressParams {
 }
 
 export interface UserPregenerateWalletsParams {
-  wallets: Array<UserPregenerateWalletsParams.Wallet>;
-}
-
-export namespace UserPregenerateWalletsParams {
-  export interface Wallet {
-    /**
-     * The wallet chain types.
-     */
-    chain_type: WalletsAPI.WalletChainType;
-
-    additional_signers?: Array<Wallet.AdditionalSigner>;
-
-    create_smart_wallet?: boolean;
-
-    policy_ids?: Array<string>;
-  }
-
-  export namespace Wallet {
-    export interface AdditionalSigner {
-      signer_id: string;
-
-      override_policy_ids?: Array<string>;
-    }
-  }
+  wallets: Array<EmbeddedWalletsAPI.WalletCreationInput>;
 }
 
 export type UserSearchParams = UserSearchParams.Variant0 | UserSearchParams.Variant1;

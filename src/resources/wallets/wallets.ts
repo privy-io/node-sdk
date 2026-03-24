@@ -457,6 +457,38 @@ export namespace CustodialWallet {
 }
 
 /**
+ * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+ */
+export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
+
+/**
+ * The chain type of the wallet to import. Currently supports `ethereum` and
+ * `solana`.
+ */
+export type WalletImportSupportedChains = 'ethereum' | 'solana';
+
+/**
+ * The entropy type of the wallet to import. Supports `private-key` for raw private
+ * keys and `hd` for HD wallet seed phrases.
+ */
+export type WalletImportSupportedEntropyTypes = 'private-key' | 'hd';
+
+/**
+ * Response from initializing a wallet import, containing the encryption public
+ * key.
+ */
+export interface WalletImportInitResponse {
+  encryption_public_key: string;
+
+  encryption_type: 'HPKE';
+}
+
+/**
+ * The AEAD algorithm used for HPKE encryption.
+ */
+export type HpkeAeadAlgorithm = 'CHACHA20_POLY1305' | 'AES_GCM256';
+
+/**
  * Optional HPKE configuration for wallet import decryption. These parameters allow
  * importing wallets encrypted by external providers that use different HPKE
  * configurations.
@@ -469,10 +501,9 @@ export interface HpkeImportConfig {
   aad?: string;
 
   /**
-   * The AEAD algorithm used for encryption. Defaults to CHACHA20_POLY1305 if not
-   * specified.
+   * The AEAD algorithm used for HPKE encryption.
    */
-  aead_algorithm?: 'CHACHA20_POLY1305' | 'AES_GCM256';
+  aead_algorithm?: HpkeAeadAlgorithm;
 
   /**
    * Application-specific context information (INFO) used during HPKE encryption.
@@ -480,11 +511,6 @@ export interface HpkeImportConfig {
    */
   info?: string;
 }
-
-/**
- * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
- */
-export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
 
 /**
  * Exports the private key of the wallet.
@@ -2631,7 +2657,7 @@ export declare namespace WalletInitImportParams {
      * The chain type of the wallet to import. Currently supports `ethereum` and
      * `solana`.
      */
-    chain_type: 'ethereum' | 'solana';
+    chain_type: WalletImportSupportedChains;
 
     /**
      * The encryption type of the wallet to import. Currently only supports `HPKE`.
@@ -2659,7 +2685,7 @@ export declare namespace WalletInitImportParams {
      * The chain type of the wallet to import. Currently supports `ethereum` and
      * `solana`.
      */
-    chain_type: 'ethereum' | 'solana';
+    chain_type: WalletImportSupportedChains;
 
     /**
      * The encryption type of the wallet to import. Currently only supports `HPKE`.
@@ -3562,7 +3588,7 @@ export namespace WalletSubmitImportParams {
      * The chain type of the wallet to import. Currently supports `ethereum` and
      * `solana`.
      */
-    chain_type: 'ethereum' | 'solana';
+    chain_type: WalletsAPI.WalletImportSupportedChains;
 
     /**
      * The encrypted entropy of the wallet to import.
@@ -3608,7 +3634,7 @@ export namespace WalletSubmitImportParams {
      * The chain type of the wallet to import. Currently supports `ethereum` and
      * `solana`.
      */
-    chain_type: 'ethereum' | 'solana';
+    chain_type: WalletsAPI.WalletImportSupportedChains;
 
     /**
      * The encrypted entropy of the wallet to import.
@@ -3805,8 +3831,12 @@ export declare namespace Wallets {
     type CustodialWalletChainType as CustodialWalletChainType,
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWallet as CustodialWallet,
-    type HpkeImportConfig as HpkeImportConfig,
     type SuiCommandName as SuiCommandName,
+    type WalletImportSupportedChains as WalletImportSupportedChains,
+    type WalletImportSupportedEntropyTypes as WalletImportSupportedEntropyTypes,
+    type WalletImportInitResponse as WalletImportInitResponse,
+    type HpkeAeadAlgorithm as HpkeAeadAlgorithm,
+    type HpkeImportConfig as HpkeImportConfig,
     type ExportPrivateKeyRpcInput as ExportPrivateKeyRpcInput,
     type ExportPrivateKeyRpcResponse as ExportPrivateKeyRpcResponse,
     type RawSignHashParams as RawSignHashParams,

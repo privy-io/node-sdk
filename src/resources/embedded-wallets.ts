@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as WalletsAPI from './wallets/wallets';
 
 export class EmbeddedWallets extends APIResource {}
 
@@ -104,6 +105,62 @@ export interface RecoveryConfigurationICloudResponse {
   environment: string;
 }
 
+/**
+ * An additional signer configuration for a wallet.
+ */
+export interface WalletCreationAdditionalSignerItem {
+  /**
+   * The key quorum ID for the signer.
+   */
+  signer_id: string;
+
+  /**
+   * The array of policy IDs that will be applied to wallet requests. If specified,
+   * this will override the base policy IDs set on the wallet. Currently, only one
+   * policy is supported per signer.
+   */
+  override_policy_ids?: Array<string>;
+}
+
+/**
+ * The fields on wallet creation that can be specified when creating a
+ * user-controlled embedded server wallet.
+ */
+export interface WalletCreationInput {
+  /**
+   * The wallet chain types.
+   */
+  chain_type: WalletsAPI.WalletChainType;
+
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: Array<WalletCreationAdditionalSignerItem>;
+
+  /**
+   * Create a smart wallet with this wallet as the signer. Only supported for wallets
+   * with `chain_type: "ethereum"`.
+   */
+  create_smart_wallet?: boolean;
+
+  /**
+   * Policy IDs to enforce on the wallet. Currently, only one policy is supported per
+   * wallet.
+   */
+  policy_ids?: Array<string>;
+}
+
+/**
+ * The fields describing embedded wallet creation, used for user import and
+ * embedded wallet generation.
+ */
+export interface EmbeddedWalletCreationInput {
+  /**
+   * Wallets to create.
+   */
+  wallets?: Array<WalletCreationInput>;
+}
+
 export declare namespace EmbeddedWallets {
   export {
     type RecoveryType as RecoveryType,
@@ -116,5 +173,8 @@ export declare namespace EmbeddedWallets {
     type OAuthCallbackICloudExpoInput as OAuthCallbackICloudExpoInput,
     type RecoveryConfigurationICloudInput as RecoveryConfigurationICloudInput,
     type RecoveryConfigurationICloudResponse as RecoveryConfigurationICloudResponse,
+    type WalletCreationAdditionalSignerItem as WalletCreationAdditionalSignerItem,
+    type WalletCreationInput as WalletCreationInput,
+    type EmbeddedWalletCreationInput as EmbeddedWalletCreationInput,
   };
 }

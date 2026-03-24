@@ -293,6 +293,184 @@ export class Policies extends APIResource {
 }
 
 /**
+ * Unique ID of the condition set to take actions on.
+ */
+export interface ConditionSetRequestParams {
+  condition_set_id: string;
+}
+
+/**
+ * Unique IDs of the condition set and the condition set item within the condition
+ * set to take actions on.
+ */
+export interface ConditionSetItemRequestParams {
+  condition_set_id: string;
+
+  condition_set_item_id: string;
+}
+
+/**
+ * Request body for creating a condition set.
+ */
+export interface ConditionSetRequestBody {
+  /**
+   * Name to assign to condition set.
+   */
+  name: string;
+
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  owner?: ConditionSetRequestBody.PublicKeyOwner | ConditionSetRequestBody.UserOwner | null;
+
+  owner_id?: string | null;
+}
+
+export namespace ConditionSetRequestBody {
+  /**
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
+   */
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
+}
+
+/**
+ * A condition set for grouping related condition values.
+ */
+export interface ConditionSet {
+  /**
+   * Unique ID of the created condition set. This will be the primary identifier when
+   * using the condition set in the future.
+   */
+  id: string;
+
+  /**
+   * Unix timestamp of when the condition set was created in milliseconds.
+   */
+  created_at: number;
+
+  /**
+   * Name of the condition set.
+   */
+  name: string;
+
+  /**
+   * The key quorum ID of the owner of the condition set.
+   */
+  owner_id: string;
+}
+
+/**
+ * Request body for updating a condition set.
+ */
+export interface UpdateConditionSetRequestBody {
+  /**
+   * Name to assign to condition set.
+   */
+  name?: string;
+
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  owner?: UpdateConditionSetRequestBody.PublicKeyOwner | UpdateConditionSetRequestBody.UserOwner | null;
+
+  owner_id?: string | null;
+}
+
+export namespace UpdateConditionSetRequestBody {
+  /**
+   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
+   * If you provide this, do not specify an owner_id as it will be generated
+   * automatically.
+   */
+  export interface PublicKeyOwner {
+    public_key: string;
+  }
+
+  /**
+   * The user ID of the owner of the resource. The user must already exist, and this
+   * value must start with "did:privy:". If you provide this, do not specify an
+   * owner_id as it will be generated automatically.
+   */
+  export interface UserOwner {
+    user_id: string;
+  }
+}
+
+/**
+ * A single value to add to a condition set.
+ */
+export interface ConditionSetItemValueInput {
+  value: string;
+}
+
+/**
+ * Array of values to add to the condition set. Maximum 100 items per request.
+ */
+export type ConditionSetItemsRequestBody = Array<ConditionSetItemValueInput>;
+
+/**
+ * A single item in a condition set.
+ */
+export interface ConditionSetItem {
+  /**
+   * Unique ID of the created condition set item.
+   */
+  id: string;
+
+  /**
+   * Unique ID of the condition set this item belongs to.
+   */
+  condition_set_id: string;
+
+  /**
+   * Unix timestamp of when the condition set item was created in milliseconds.
+   */
+  created_at: number;
+
+  /**
+   * The value stored in this condition set item.
+   */
+  value: string;
+}
+
+/**
+ * Array of condition set items.
+ */
+export type ConditionSetItems = Array<ConditionSetItem>;
+
+/**
+ * Paginated list of condition set items.
+ */
+export interface ConditionSetItemsResponse {
+  /**
+   * List of condition set items.
+   */
+  items: Array<ConditionSetItem>;
+
+  /**
+   * Cursor for pagination. Null if there are no more items.
+   */
+  next_cursor: string | null;
+}
+
+/**
  * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
  * supported for command names.
  */
@@ -2211,6 +2389,16 @@ export interface PolicyGetRuleParams {
 
 export declare namespace Policies {
   export {
+    type ConditionSetRequestParams as ConditionSetRequestParams,
+    type ConditionSetItemRequestParams as ConditionSetItemRequestParams,
+    type ConditionSetRequestBody as ConditionSetRequestBody,
+    type ConditionSet as ConditionSet,
+    type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
+    type ConditionSetItemValueInput as ConditionSetItemValueInput,
+    type ConditionSetItemsRequestBody as ConditionSetItemsRequestBody,
+    type ConditionSetItem as ConditionSetItem,
+    type ConditionSetItems as ConditionSetItems,
+    type ConditionSetItemsResponse as ConditionSetItemsResponse,
     type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
     type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
     type TronTransactionCondition as TronTransactionCondition,

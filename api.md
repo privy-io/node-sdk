@@ -11,8 +11,12 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletImportSupportedChains</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletImportSupportedEntropyTypes</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletImportInitResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">HpkeAeadAlgorithm</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExportPrivateKeyRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExportPrivateKeyRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignHashParams</a></code>
@@ -251,6 +255,16 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/policies.ts">ConditionSetRequestParams</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItemRequestParams</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetRequestBody</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSet</a></code>
+- <code><a href="./src/resources/policies.ts">UpdateConditionSetRequestBody</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItemValueInput</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItemsRequestBody</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItem</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItems</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItemsResponse</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandOperator</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
 - <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
@@ -378,6 +392,9 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccountsResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">Caip2</a></code>
+- <code><a href="./src/resources/apps/apps.ts">GasSponsorshipConfigurationInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">GasSponsorshipConfiguration</a></code>
 
 Methods:
 
@@ -585,6 +602,9 @@ Types:
 - <code><a href="./src/resources/embedded-wallets.ts">OAuthCallbackICloudExpoInput</a></code>
 - <code><a href="./src/resources/embedded-wallets.ts">RecoveryConfigurationICloudInput</a></code>
 - <code><a href="./src/resources/embedded-wallets.ts">RecoveryConfigurationICloudResponse</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">WalletCreationAdditionalSignerItem</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">WalletCreationInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">EmbeddedWalletCreationInput</a></code>
 
 # Funding
 

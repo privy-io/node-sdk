@@ -197,6 +197,7 @@ import {
 } from './resources/client-auth';
 import { CrossApp, CrossAppConnection, CrossAppConnectionsResponse } from './resources/cross-app';
 import {
+  EmbeddedWalletCreationInput,
   EmbeddedWallets,
   ICloudClientType,
   OAuthAuthenticateRecoveryResponse,
@@ -208,6 +209,8 @@ import {
   RecoveryKeyMaterialInput,
   RecoveryKeyMaterialResponse,
   RecoveryType,
+  WalletCreationAdditionalSignerItem,
+  WalletCreationInput,
 } from './resources/embedded-wallets';
 import {
   CoinbaseBlockchain,
@@ -282,7 +285,16 @@ import {
   KrakenEmbedGetPortfolioSummaryResponse,
 } from './resources/kraken-embed';
 import {
+  ConditionSet,
   ConditionSetAuthorizationHeaders,
+  ConditionSetItem,
+  ConditionSetItemRequestParams,
+  ConditionSetItemValueInput,
+  ConditionSetItems,
+  ConditionSetItemsRequestBody,
+  ConditionSetItemsResponse,
+  ConditionSetRequestBody,
+  ConditionSetRequestParams,
   Policies,
   Policy,
   PolicyAuthorizationHeaders,
@@ -303,6 +315,7 @@ import {
   SuiTransferObjectsCommandCondition,
   SuiTransferObjectsCommandField,
   TronTransactionCondition,
+  UpdateConditionSetRequestBody,
 } from './resources/policies';
 import { SwapAmountType, SwapQuoteRequest, SwapQuoteResponse, SwapRequest, Swaps } from './resources/swaps';
 import {
@@ -501,6 +514,7 @@ import {
   AllowlistEntry,
   AppResponse,
   Apps,
+  Caip2,
   EmailInviteInput,
   EmbeddedWalletChainConfig,
   EmbeddedWalletConfigSchema,
@@ -510,6 +524,8 @@ import {
   FundingConfigResponseSchema,
   FundingMethodEnum,
   FundingOption,
+  GasSponsorshipConfiguration,
+  GasSponsorshipConfigurationInput,
   PhoneInviteInput,
   TelegramAuthConfigSchema,
   TestAccount,
@@ -560,6 +576,7 @@ import {
   ExportPrivateKeyRpcResponse,
   ExtendedChainType,
   FirstClassChainType,
+  HpkeAeadAlgorithm,
   HpkeImportConfig,
   RawSignBytesEncoding,
   RawSignBytesHashFunction,
@@ -635,6 +652,9 @@ import {
   WalletCustodian,
   WalletExportParams,
   WalletExportResponse,
+  WalletImportInitResponse,
+  WalletImportSupportedChains,
+  WalletImportSupportedEntropyTypes,
   WalletInitImportParams,
   WalletInitImportResponse,
   WalletListParams,
@@ -1501,8 +1521,12 @@ export declare namespace PrivyAPI {
     type CustodialWalletChainType as CustodialWalletChainType,
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWallet as CustodialWallet,
-    type HpkeImportConfig as HpkeImportConfig,
     type SuiCommandName as SuiCommandName,
+    type WalletImportSupportedChains as WalletImportSupportedChains,
+    type WalletImportSupportedEntropyTypes as WalletImportSupportedEntropyTypes,
+    type WalletImportInitResponse as WalletImportInitResponse,
+    type HpkeAeadAlgorithm as HpkeAeadAlgorithm,
+    type HpkeImportConfig as HpkeImportConfig,
     type ExportPrivateKeyRpcInput as ExportPrivateKeyRpcInput,
     type ExportPrivateKeyRpcResponse as ExportPrivateKeyRpcResponse,
     type RawSignHashParams as RawSignHashParams,
@@ -1712,6 +1736,16 @@ export declare namespace PrivyAPI {
 
   export {
     Policies as Policies,
+    type ConditionSetRequestParams as ConditionSetRequestParams,
+    type ConditionSetItemRequestParams as ConditionSetItemRequestParams,
+    type ConditionSetRequestBody as ConditionSetRequestBody,
+    type ConditionSet as ConditionSet,
+    type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
+    type ConditionSetItemValueInput as ConditionSetItemValueInput,
+    type ConditionSetItemsRequestBody as ConditionSetItemsRequestBody,
+    type ConditionSetItem as ConditionSetItem,
+    type ConditionSetItems as ConditionSetItems,
+    type ConditionSetItemsResponse as ConditionSetItemsResponse,
     type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
     type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
     type TronTransactionCondition as TronTransactionCondition,
@@ -1818,6 +1852,9 @@ export declare namespace PrivyAPI {
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
     type TestAccount as TestAccount,
     type TestAccountsResponse as TestAccountsResponse,
+    type Caip2 as Caip2,
+    type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
+    type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
   };
 
   export {
@@ -2001,6 +2038,9 @@ export declare namespace PrivyAPI {
     type OAuthCallbackICloudExpoInput as OAuthCallbackICloudExpoInput,
     type RecoveryConfigurationICloudInput as RecoveryConfigurationICloudInput,
     type RecoveryConfigurationICloudResponse as RecoveryConfigurationICloudResponse,
+    type WalletCreationAdditionalSignerItem as WalletCreationAdditionalSignerItem,
+    type WalletCreationInput as WalletCreationInput,
+    type EmbeddedWalletCreationInput as EmbeddedWalletCreationInput,
   };
 
   export {

@@ -425,6 +425,33 @@ export interface TestAccountsResponse {
   data: Array<TestAccount>;
 }
 
+/**
+ * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+ */
+export type Caip2 = string;
+
+/**
+ * Input for configuring gas sponsorship settings for an app.
+ */
+export interface GasSponsorshipConfigurationInput {
+  configured_networks?: Array<Caip2>;
+
+  require_app_secret?: boolean;
+
+  sponsorship_enabled?: boolean;
+}
+
+/**
+ * Gas sponsorship configuration for an app.
+ */
+export interface GasSponsorshipConfiguration {
+  configured_networks: Array<Caip2>;
+
+  require_app_secret: boolean;
+
+  sponsorship_enabled: boolean;
+}
+
 Apps.Allowlist = Allowlist;
 
 export declare namespace Apps {
@@ -448,6 +475,9 @@ export declare namespace Apps {
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
     type TestAccount as TestAccount,
     type TestAccountsResponse as TestAccountsResponse,
+    type Caip2 as Caip2,
+    type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
+    type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
   };
 
   export {

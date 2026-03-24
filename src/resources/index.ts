@@ -46,6 +46,9 @@ export {
   type AllowlistDeletionResponse,
   type TestAccount,
   type TestAccountsResponse,
+  type Caip2,
+  type GasSponsorshipConfigurationInput,
+  type GasSponsorshipConfiguration,
 } from './apps/apps';
 export {
   ClientAuth,
@@ -211,6 +214,9 @@ export {
   type OAuthCallbackICloudExpoInput,
   type RecoveryConfigurationICloudInput,
   type RecoveryConfigurationICloudResponse,
+  type WalletCreationAdditionalSignerItem,
+  type WalletCreationInput,
+  type EmbeddedWalletCreationInput,
 } from './embedded-wallets';
 export {
   Funding,
@@ -286,6 +292,16 @@ export {
 } from './kraken-embed';
 export {
   Policies,
+  type ConditionSetRequestParams,
+  type ConditionSetItemRequestParams,
+  type ConditionSetRequestBody,
+  type ConditionSet,
+  type UpdateConditionSetRequestBody,
+  type ConditionSetItemValueInput,
+  type ConditionSetItemsRequestBody,
+  type ConditionSetItem,
+  type ConditionSetItems,
+  type ConditionSetItemsResponse,
   type SuiTransactionCommandOperator,
   type SuiTransferObjectsCommandField,
   type TronTransactionCondition,
@@ -447,8 +463,12 @@ export {
   type CustodialWalletChainType,
   type CustodialWalletCreateInput,
   type CustodialWallet,
-  type HpkeImportConfig,
   type SuiCommandName,
+  type WalletImportSupportedChains,
+  type WalletImportSupportedEntropyTypes,
+  type WalletImportInitResponse,
+  type HpkeAeadAlgorithm,
+  type HpkeImportConfig,
   type ExportPrivateKeyRpcInput,
   type ExportPrivateKeyRpcResponse,
   type RawSignHashParams,

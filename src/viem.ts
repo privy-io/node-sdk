@@ -9,7 +9,7 @@ import { toHex } from 'viem/utils';
 import { PrivyAPIError } from './core/error';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
-import type { WalletRpcParams } from './resources';
+import type { EthereumSignTransactionRpcInputParams } from './resources';
 
 export interface CreateViemAccountInput {
   /** ID for the wallet. */
@@ -172,7 +172,7 @@ const formatViemPersonalSignMessage = (message: SignMessageParameters['message']
  */
 const formatViemTransaction = (
   tx: SignTransactionParameters['transaction'],
-): WalletRpcParams.EthereumSignTransactionRpcInput.Params.Transaction => {
+): EthereumSignTransactionRpcInputParams.Transaction => {
   return {
     type: formatViemTransactionType(tx.type),
     ...(tx.to ? { to: tx.to } : {}),

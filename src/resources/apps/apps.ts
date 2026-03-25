@@ -44,6 +44,31 @@ export class Apps extends APIResource {
 }
 
 /**
+ * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+ */
+export type Caip2 = string;
+
+/**
+ * A currency asset type.
+ */
+export type CurrencyAsset = 'native-currency' | 'USDC';
+
+/**
+ * A crypto currency identified by a CAIP-2 chain ID and optional asset.
+ */
+export interface Currency {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  chain: Caip2;
+
+  /**
+   * A currency asset type.
+   */
+  asset?: CurrencyAsset;
+}
+
+/**
  * Whether to create embedded wallets on login.
  */
 export type EmbeddedWalletCreateOnLogin = 'users-without-wallets' | 'all-users' | 'off';
@@ -139,21 +164,16 @@ export interface FundingConfigResponseSchema {
 
   default_recommended_amount: string;
 
-  default_recommended_currency: FundingConfigResponseSchema.DefaultRecommendedCurrency;
+  /**
+   * A crypto currency identified by a CAIP-2 chain ID and optional asset.
+   */
+  default_recommended_currency: Currency;
 
   methods: Array<FundingMethodEnum>;
 
   options: Array<FundingOption>;
 
   prompt_funding_on_wallet_creation: boolean;
-}
-
-export namespace FundingConfigResponseSchema {
-  export interface DefaultRecommendedCurrency {
-    chain: string;
-
-    asset?: 'native-currency' | 'USDC';
-  }
 }
 
 /**
@@ -429,11 +449,6 @@ export interface TestAccountsResponse {
 }
 
 /**
- * A valid CAIP-2 chain ID (e.g. 'eip155:1').
- */
-export type Caip2 = string;
-
-/**
  * Input for configuring gas sponsorship settings for an app.
  */
 export interface GasSponsorshipConfigurationInput {
@@ -459,6 +474,9 @@ Apps.Allowlist = Allowlist;
 
 export declare namespace Apps {
   export {
+    type Caip2 as Caip2,
+    type CurrencyAsset as CurrencyAsset,
+    type Currency as Currency,
     type EmbeddedWalletCreateOnLogin as EmbeddedWalletCreateOnLogin,
     type EmbeddedWalletChainConfig as EmbeddedWalletChainConfig,
     type UserOwnedRecoveryOption as UserOwnedRecoveryOption,
@@ -478,7 +496,6 @@ export declare namespace Apps {
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
     type TestAccount as TestAccount,
     type TestAccountsResponse as TestAccountsResponse,
-    type Caip2 as Caip2,
     type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
     type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
   };

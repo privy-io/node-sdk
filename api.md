@@ -106,6 +106,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SparkSignMessageWithIdentityKeyRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">GetByWalletAddressRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletUpdateRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateInput</a></code>
@@ -274,8 +275,6 @@ Types:
 - <code><a href="./src/resources/policies.ts">PolicyAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/policies.ts">ConditionSetAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyCreateRuleResponse</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyDeleteResponse</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyDeleteRuleResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyUpdateRuleResponse</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyGetRuleResponse</a></code>
 
@@ -283,8 +282,8 @@ Methods:
 
 - <code title="post /v1/policies">client.policies.<a href="./src/resources/policies.ts">create</a>({ ...params }) -> Policy</code>
 - <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/resources/policies.ts">\_createRule</a>(policyID, { ...params }) -> PolicyCreateRuleResponse</code>
-- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_delete</a>(policyID, { ...params }) -> PolicyDeleteResponse</code>
-- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_deleteRule</a>(ruleID, { ...params }) -> PolicyDeleteRuleResponse</code>
+- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_delete</a>(policyID, { ...params }) -> SuccessResponse</code>
+- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_deleteRule</a>(ruleID, { ...params }) -> SuccessResponse</code>
 - <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
 - <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_updateRule</a>(ruleID, { ...params }) -> PolicyUpdateRuleResponse</code>
 - <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">get</a>(policyID) -> Policy</code>
@@ -324,12 +323,11 @@ Types:
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateParams</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumUpdateParams</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumAuthorizationHeaders</a></code>
-- <code><a href="./src/resources/key-quorums.ts">KeyQuorumDeleteResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/key_quorums">client.keyQuorums.<a href="./src/resources/key-quorums.ts">create</a>({ ...params }) -> KeyQuorum</code>
-- <code title="delete /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_delete</a>(keyQuorumID, { ...params }) -> KeyQuorumDeleteResponse</code>
+- <code title="delete /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_delete</a>(keyQuorumID, { ...params }) -> SuccessResponse</code>
 - <code title="patch /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_update</a>(keyQuorumID, { ...params }) -> KeyQuorum</code>
 - <code title="get /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">get</a>(keyQuorumID) -> KeyQuorum</code>
 
@@ -373,6 +371,9 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/apps/apps.ts">Caip2</a></code>
+- <code><a href="./src/resources/apps/apps.ts">CurrencyAsset</a></code>
+- <code><a href="./src/resources/apps/apps.ts">Currency</a></code>
 - <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletCreateOnLogin</a></code>
 - <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletChainConfig</a></code>
 - <code><a href="./src/resources/apps/apps.ts">UserOwnedRecoveryOption</a></code>
@@ -392,7 +393,6 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccountsResponse</a></code>
-- <code><a href="./src/resources/apps/apps.ts">Caip2</a></code>
 - <code><a href="./src/resources/apps/apps.ts">GasSponsorshipConfigurationInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">GasSponsorshipConfiguration</a></code>
 
@@ -423,6 +423,29 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">OAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeOnrampProvider</a></code>
 - <code><a href="./src/resources/client-auth.ts">OnrampProvider</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyCredPropsResult</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyClientExtensionResults</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyCredentialDescriptor</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyRelyingParty</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyUser</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyPubKeyCredParam</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyAuthenticatorSelection</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyEnrollmentExtensions</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyAttestationResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyAuthenticatorEnrollmentOptions</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyAuthenticatorEnrollmentResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">ResponsePasskeyInitLink</a></code>
+- <code><a href="./src/resources/client-auth.ts">ResponsePasskeyInitRegister</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyLinkInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyRegisterInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyInitInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">UnlinkPasskeyInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyVerifyExtensions</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyAssertionResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyAuthenticatorVerifyOptions</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyAuthenticatorVerifyResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">ResponsePasskeyInitAuthenticate</a></code>
+- <code><a href="./src/resources/client-auth.ts">PasskeyAuthenticateInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">PasswordlessLinkRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">PasswordlessInitRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">PasswordlessUnlinkRequestBody</a></code>
@@ -565,6 +588,12 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">MfaPasskeyInitResponseBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaPasskeyVerifyRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaPasskeyEnrollmentRequestBody</a></code>
+
+# Shared
+
+Types:
+
+- <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
 
 # WalletActions
 

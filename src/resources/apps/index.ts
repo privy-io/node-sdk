@@ -8,6 +8,9 @@ export {
 } from './allowlist';
 export {
   Apps,
+  type Caip2,
+  type CurrencyAsset,
+  type Currency,
   type EmbeddedWalletCreateOnLogin,
   type EmbeddedWalletChainConfig,
   type UserOwnedRecoveryOption,
@@ -27,7 +30,6 @@ export {
   type AllowlistDeletionResponse,
   type TestAccount,
   type TestAccountsResponse,
-  type Caip2,
   type GasSponsorshipConfigurationInput,
   type GasSponsorshipConfiguration,
 } from './apps';

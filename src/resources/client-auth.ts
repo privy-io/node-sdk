@@ -48,6 +48,338 @@ export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
 export type OnrampProvider = 'bridge' | 'bridge-sandbox';
 
 /**
+ * The result of the WebAuthn credProps extension.
+ */
+export interface PasskeyCredPropsResult {
+  rk?: boolean;
+}
+
+/**
+ * Client extension results returned by the WebAuthn authenticator.
+ */
+export interface PasskeyClientExtensionResults {
+  app_id?: boolean;
+
+  /**
+   * The result of the WebAuthn credProps extension.
+   */
+  cred_props?: PasskeyCredPropsResult;
+
+  hmac_create_secret?: boolean;
+}
+
+/**
+ * A WebAuthn credential descriptor identifying a specific public key credential.
+ */
+export interface PasskeyCredentialDescriptor {
+  id: string;
+
+  type: string;
+
+  transports?: Array<string>;
+}
+
+/**
+ * Relying party information for a WebAuthn ceremony.
+ */
+export interface PasskeyRelyingParty {
+  name: string;
+
+  id?: string;
+}
+
+/**
+ * User entity for a WebAuthn registration ceremony.
+ */
+export interface PasskeyUser {
+  id: string;
+
+  display_name: string;
+
+  name: string;
+}
+
+/**
+ * A public key credential parameter specifying the algorithm and credential type.
+ */
+export interface PasskeyPubKeyCredParam {
+  alg: number;
+
+  type: 'public-key';
+}
+
+/**
+ * Authenticator selection criteria for a WebAuthn registration ceremony.
+ */
+export interface PasskeyAuthenticatorSelection {
+  authenticator_attachment?: string;
+
+  require_resident_key?: boolean;
+
+  resident_key?: string;
+
+  user_verification?: string;
+}
+
+/**
+ * Extensions for a WebAuthn registration ceremony.
+ */
+export interface PasskeyEnrollmentExtensions {
+  app_id?: string;
+
+  /**
+   * The result of the WebAuthn credProps extension.
+   */
+  cred_props?: PasskeyCredPropsResult;
+
+  hmac_create_secret?: boolean;
+}
+
+/**
+ * The authenticator attestation response from a WebAuthn registration ceremony.
+ */
+export interface PasskeyAttestationResponse {
+  attestation_object: string;
+
+  client_data_json: string;
+
+  authenticator_data?: string;
+
+  public_key?: string;
+
+  public_key_algorithm?: number;
+
+  transports?: Array<unknown>;
+}
+
+/**
+ * WebAuthn registration options as defined by the Web Authentication
+ * specification.
+ */
+export interface PasskeyAuthenticatorEnrollmentOptions {
+  challenge: string;
+
+  pub_key_cred_params: Array<PasskeyPubKeyCredParam>;
+
+  /**
+   * Relying party information for a WebAuthn ceremony.
+   */
+  rp: PasskeyRelyingParty;
+
+  /**
+   * User entity for a WebAuthn registration ceremony.
+   */
+  user: PasskeyUser;
+
+  attestation?: string;
+
+  /**
+   * Authenticator selection criteria for a WebAuthn registration ceremony.
+   */
+  authenticator_selection?: PasskeyAuthenticatorSelection;
+
+  exclude_credentials?: Array<PasskeyCredentialDescriptor>;
+
+  /**
+   * Extensions for a WebAuthn registration ceremony.
+   */
+  extensions?: PasskeyEnrollmentExtensions;
+
+  timeout?: number;
+}
+
+/**
+ * WebAuthn registration response as defined by the Web Authentication
+ * specification.
+ */
+export interface PasskeyAuthenticatorEnrollmentResponse {
+  id: string;
+
+  /**
+   * Client extension results returned by the WebAuthn authenticator.
+   */
+  client_extension_results: PasskeyClientExtensionResults;
+
+  raw_id: string;
+
+  /**
+   * The authenticator attestation response from a WebAuthn registration ceremony.
+   */
+  response: PasskeyAttestationResponse;
+
+  type: 'public-key';
+
+  authenticator_attachment?: string;
+}
+
+/**
+ * Response for initiating a passkey link ceremony.
+ */
+export interface ResponsePasskeyInitLink {
+  /**
+   * WebAuthn registration options as defined by the Web Authentication
+   * specification.
+   */
+  options: PasskeyAuthenticatorEnrollmentOptions;
+
+  relying_party?: string;
+}
+
+/**
+ * Response for initiating a passkey registration ceremony.
+ */
+export interface ResponsePasskeyInitRegister {
+  /**
+   * WebAuthn registration options as defined by the Web Authentication
+   * specification.
+   */
+  options: PasskeyAuthenticatorEnrollmentOptions;
+
+  relying_party?: string;
+}
+
+/**
+ * Input for linking a passkey credential.
+ */
+export interface PasskeyLinkInput {
+  /**
+   * WebAuthn registration response as defined by the Web Authentication
+   * specification.
+   */
+  authenticator_response: PasskeyAuthenticatorEnrollmentResponse;
+
+  relying_party?: string;
+}
+
+/**
+ * Input for registering a passkey credential.
+ */
+export interface PasskeyRegisterInput {
+  /**
+   * WebAuthn registration response as defined by the Web Authentication
+   * specification.
+   */
+  authenticator_response: PasskeyAuthenticatorEnrollmentResponse;
+
+  relying_party?: string;
+}
+
+/**
+ * Input for initiating a passkey ceremony.
+ */
+export interface PasskeyInitInput {
+  token?: string;
+
+  relying_party?: string;
+}
+
+/**
+ * Input for unlinking a passkey credential.
+ */
+export interface UnlinkPasskeyInput {
+  credential_id: string;
+
+  remove_as_mfa?: boolean;
+}
+
+/**
+ * Extensions for a WebAuthn authentication ceremony.
+ */
+export interface PasskeyVerifyExtensions {
+  app_id?: string;
+
+  cred_props?: boolean;
+
+  hmac_create_secret?: boolean;
+}
+
+/**
+ * The authenticator assertion response from a WebAuthn authentication ceremony.
+ */
+export interface PasskeyAssertionResponse {
+  authenticator_data: string;
+
+  client_data_json: string;
+
+  signature: string;
+
+  user_handle?: string;
+}
+
+/**
+ * WebAuthn authentication options as defined by the Web Authentication
+ * specification.
+ */
+export interface PasskeyAuthenticatorVerifyOptions {
+  challenge: string;
+
+  allow_credentials?: Array<PasskeyCredentialDescriptor>;
+
+  /**
+   * Extensions for a WebAuthn authentication ceremony.
+   */
+  extensions?: PasskeyVerifyExtensions;
+
+  rp_id?: string;
+
+  timeout?: number;
+
+  user_verification?: string;
+}
+
+/**
+ * WebAuthn authentication response as defined by the Web Authentication
+ * specification.
+ */
+export interface PasskeyAuthenticatorVerifyResponse {
+  id: string;
+
+  /**
+   * Client extension results returned by the WebAuthn authenticator.
+   */
+  client_extension_results: PasskeyClientExtensionResults;
+
+  raw_id: string;
+
+  /**
+   * The authenticator assertion response from a WebAuthn authentication ceremony.
+   */
+  response: PasskeyAssertionResponse;
+
+  type: 'public-key';
+
+  authenticator_attachment?: string;
+}
+
+/**
+ * Response for initiating a passkey authentication ceremony.
+ */
+export interface ResponsePasskeyInitAuthenticate {
+  /**
+   * WebAuthn authentication options as defined by the Web Authentication
+   * specification.
+   */
+  options: PasskeyAuthenticatorVerifyOptions;
+
+  relying_party?: string;
+}
+
+/**
+ * Input for authenticating with a passkey.
+ */
+export interface PasskeyAuthenticateInput {
+  /**
+   * WebAuthn authentication response as defined by the Web Authentication
+   * specification.
+   */
+  authenticator_response: PasskeyAuthenticatorVerifyResponse;
+
+  challenge: string;
+
+  relying_party?: string;
+}
+
+/**
  * The request body for linking a passwordless account.
  */
 export interface PasswordlessLinkRequestBody {
@@ -1643,94 +1975,26 @@ export interface MfaPasskeyInitRequestBody {
  * The response body for initializing a passkey MFA flow.
  */
 export interface MfaPasskeyInitResponseBody {
-  options: MfaPasskeyInitResponseBody.Options;
+  /**
+   * WebAuthn authentication options as defined by the Web Authentication
+   * specification.
+   */
+  options: PasskeyAuthenticatorVerifyOptions;
 
   relying_party?: string;
-}
-
-export namespace MfaPasskeyInitResponseBody {
-  export interface Options {
-    challenge: string;
-
-    allow_credentials?: Array<Options.AllowCredential>;
-
-    extensions?: Options.Extensions;
-
-    rp_id?: string;
-
-    timeout?: number;
-
-    user_verification?: string;
-  }
-
-  export namespace Options {
-    export interface AllowCredential {
-      id: string;
-
-      type: string;
-
-      transports?: Array<string>;
-    }
-
-    export interface Extensions {
-      app_id?: string;
-
-      cred_props?: boolean;
-
-      hmac_create_secret?: boolean;
-    }
-  }
 }
 
 /**
  * The request body for verifying a passkey MFA flow.
  */
 export interface MfaPasskeyVerifyRequestBody {
-  authenticator_response: MfaPasskeyVerifyRequestBody.AuthenticatorResponse;
+  /**
+   * WebAuthn authentication response as defined by the Web Authentication
+   * specification.
+   */
+  authenticator_response: PasskeyAuthenticatorVerifyResponse;
 
   relying_party?: string;
-}
-
-export namespace MfaPasskeyVerifyRequestBody {
-  export interface AuthenticatorResponse {
-    id: string;
-
-    client_extension_results: AuthenticatorResponse.ClientExtensionResults;
-
-    raw_id: string;
-
-    response: AuthenticatorResponse.Response;
-
-    type: 'public-key';
-
-    authenticator_attachment?: string;
-  }
-
-  export namespace AuthenticatorResponse {
-    export interface ClientExtensionResults {
-      app_id?: boolean;
-
-      cred_props?: ClientExtensionResults.CredProps;
-
-      hmac_create_secret?: boolean;
-    }
-
-    export namespace ClientExtensionResults {
-      export interface CredProps {
-        rk?: boolean;
-      }
-    }
-
-    export interface Response {
-      authenticator_data: string;
-
-      client_data_json: string;
-
-      signature: string;
-
-      user_handle?: string;
-    }
-  }
 }
 
 /**
@@ -1750,6 +2014,29 @@ export declare namespace ClientAuth {
     type OAuthProviderID as OAuthProviderID,
     type BridgeOnrampProvider as BridgeOnrampProvider,
     type OnrampProvider as OnrampProvider,
+    type PasskeyCredPropsResult as PasskeyCredPropsResult,
+    type PasskeyClientExtensionResults as PasskeyClientExtensionResults,
+    type PasskeyCredentialDescriptor as PasskeyCredentialDescriptor,
+    type PasskeyRelyingParty as PasskeyRelyingParty,
+    type PasskeyUser as PasskeyUser,
+    type PasskeyPubKeyCredParam as PasskeyPubKeyCredParam,
+    type PasskeyAuthenticatorSelection as PasskeyAuthenticatorSelection,
+    type PasskeyEnrollmentExtensions as PasskeyEnrollmentExtensions,
+    type PasskeyAttestationResponse as PasskeyAttestationResponse,
+    type PasskeyAuthenticatorEnrollmentOptions as PasskeyAuthenticatorEnrollmentOptions,
+    type PasskeyAuthenticatorEnrollmentResponse as PasskeyAuthenticatorEnrollmentResponse,
+    type ResponsePasskeyInitLink as ResponsePasskeyInitLink,
+    type ResponsePasskeyInitRegister as ResponsePasskeyInitRegister,
+    type PasskeyLinkInput as PasskeyLinkInput,
+    type PasskeyRegisterInput as PasskeyRegisterInput,
+    type PasskeyInitInput as PasskeyInitInput,
+    type UnlinkPasskeyInput as UnlinkPasskeyInput,
+    type PasskeyVerifyExtensions as PasskeyVerifyExtensions,
+    type PasskeyAssertionResponse as PasskeyAssertionResponse,
+    type PasskeyAuthenticatorVerifyOptions as PasskeyAuthenticatorVerifyOptions,
+    type PasskeyAuthenticatorVerifyResponse as PasskeyAuthenticatorVerifyResponse,
+    type ResponsePasskeyInitAuthenticate as ResponsePasskeyInitAuthenticate,
+    type PasskeyAuthenticateInput as PasskeyAuthenticateInput,
     type PasswordlessLinkRequestBody as PasswordlessLinkRequestBody,
     type PasswordlessInitRequestBody as PasswordlessInitRequestBody,
     type PasswordlessUnlinkRequestBody as PasswordlessUnlinkRequestBody,

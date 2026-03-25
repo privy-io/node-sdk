@@ -38,7 +38,7 @@ export type WithIdempotency<Params extends IdempotencyParams> =
  * Configuration object that can be set by the caller and is used to generate the right value for
  * the `privy-request-expiry` HTTP header.
  */
-export type ExpiryConfig = { request_expiry?: string };
+export type ExpiryConfig = { request_expiry?: number };
 type ExpiryParams = { 'privy-request-expiry'?: any };
 // prettier-ignore
 /**

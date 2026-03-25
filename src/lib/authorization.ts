@@ -173,7 +173,7 @@ export async function prepareRequest(
     body: any;
   },
 ): Promise<PreparedRequest> {
-  const privyRequestExpirtyHeader = String(requestExpiry)
+  const privyRequestExpirtyHeader = String(requestExpiry);
 
   const signatures = await generateAuthorizationSignatures(client, {
     authorizationContext,

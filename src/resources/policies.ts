@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as PoliciesAPI from './policies';
+import * as SharedAPI from './shared';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
@@ -104,7 +105,7 @@ export class Policies extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.policies._delete(
+   * const successResponse = await client.policies._delete(
    *   'xxxxxxxxxxxxxxxxxxxxxxxx',
    * );
    * ```
@@ -113,7 +114,7 @@ export class Policies extends APIResource {
     policyID: string,
     params: PolicyDeleteParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<PolicyDeleteResponse> {
+  ): APIPromise<SharedAPI.SuccessResponse> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-request-expiry': privyRequestExpiry,
@@ -137,7 +138,7 @@ export class Policies extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.policies._deleteRule(
+   * const successResponse = await client.policies._deleteRule(
    *   'xxxxxxxxxxxxxxxxxxxxxxxx',
    *   { policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx' },
    * );
@@ -147,7 +148,7 @@ export class Policies extends APIResource {
     ruleID: string,
     params: PolicyDeleteRuleParams,
     options?: RequestOptions,
-  ): APIPromise<PolicyDeleteRuleResponse> {
+  ): APIPromise<SharedAPI.SuccessResponse> {
     const {
       policy_id,
       'privy-authorization-signature': privyAuthorizationSignature,
@@ -1010,20 +1011,6 @@ export namespace PolicyCreateRuleResponse {
 
     value: string | Array<string>;
   }
-}
-
-export interface PolicyDeleteResponse {
-  /**
-   * Whether the policy was deleted successfully.
-   */
-  success: boolean;
-}
-
-export interface PolicyDeleteRuleResponse {
-  /**
-   * Whether the rule was deleted successfully.
-   */
-  success: boolean;
 }
 
 /**
@@ -2399,8 +2386,6 @@ export declare namespace Policies {
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
     type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
     type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
-    type PolicyDeleteResponse as PolicyDeleteResponse,
-    type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,
     type PolicyUpdateRuleResponse as PolicyUpdateRuleResponse,
     type PolicyGetRuleResponse as PolicyGetRuleResponse,
     type PolicyCreateParams as PolicyCreateParams,

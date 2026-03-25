@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as SharedAPI from './shared';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -34,7 +35,7 @@ export class KeyQuorums extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.keyQuorums._delete(
+   * const successResponse = await client.keyQuorums._delete(
    *   'key_quorum_id',
    * );
    * ```
@@ -43,7 +44,7 @@ export class KeyQuorums extends APIResource {
     keyQuorumID: string,
     params: KeyQuorumDeleteParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<KeyQuorumDeleteResponse> {
+  ): APIPromise<SharedAPI.SuccessResponse> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-request-expiry': privyRequestExpiry,
@@ -231,13 +232,6 @@ export interface KeyQuorumAuthorizationHeaders {
   'privy-request-expiry'?: string;
 }
 
-export interface KeyQuorumDeleteResponse {
-  /**
-   * Whether the key quorum was deleted successfully.
-   */
-  success: boolean;
-}
-
 export interface KeyQuorumCreateParams {
   /**
    * The number of keys that must sign for an action to be valid. Must be less than
@@ -329,7 +323,6 @@ export declare namespace KeyQuorums {
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
     type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
-    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
   };
 }

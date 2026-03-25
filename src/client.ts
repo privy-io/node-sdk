@@ -150,6 +150,25 @@ import {
   OAuthVerifyResponseBody,
   OnrampProvider,
   OptionalRefreshTokenInput,
+  PasskeyAssertionResponse,
+  PasskeyAttestationResponse,
+  PasskeyAuthenticateInput,
+  PasskeyAuthenticatorEnrollmentOptions,
+  PasskeyAuthenticatorEnrollmentResponse,
+  PasskeyAuthenticatorSelection,
+  PasskeyAuthenticatorVerifyOptions,
+  PasskeyAuthenticatorVerifyResponse,
+  PasskeyClientExtensionResults,
+  PasskeyCredPropsResult,
+  PasskeyCredentialDescriptor,
+  PasskeyEnrollmentExtensions,
+  PasskeyInitInput,
+  PasskeyLinkInput,
+  PasskeyPubKeyCredParam,
+  PasskeyRegisterInput,
+  PasskeyRelyingParty,
+  PasskeyUser,
+  PasskeyVerifyExtensions,
   PasswordlessAuthenticateRequestBody,
   PasswordlessInitRequestBody,
   PasswordlessLinkRequestBody,
@@ -163,6 +182,9 @@ import {
   PasswordlessUnlinkRequestBody,
   PasswordlessUpdateRequestBody,
   PrivyOAuthProviderID,
+  ResponsePasskeyInitAuthenticate,
+  ResponsePasskeyInitLink,
+  ResponsePasskeyInitRegister,
   SiweAddressInput,
   SiweAuthenticateRequestBody,
   SiweInitInput,
@@ -194,6 +216,7 @@ import {
   TransferSiweInput,
   TransferSiwsInput,
   TransferTelegramInput,
+  UnlinkPasskeyInput,
 } from './resources/client-auth';
 import { CrossApp, CrossAppConnection, CrossAppConnectionsResponse } from './resources/cross-app';
 import {
@@ -274,7 +297,6 @@ import {
   KeyQuorumAuthorizationHeaders,
   KeyQuorumCreateParams,
   KeyQuorumDeleteParams,
-  KeyQuorumDeleteResponse,
   KeyQuorumUpdateParams,
   KeyQuorums,
 } from './resources/key-quorums';
@@ -302,9 +324,7 @@ import {
   PolicyCreateRuleParams,
   PolicyCreateRuleResponse,
   PolicyDeleteParams,
-  PolicyDeleteResponse,
   PolicyDeleteRuleParams,
-  PolicyDeleteRuleResponse,
   PolicyGetRuleParams,
   PolicyGetRuleResponse,
   PolicyUpdateParams,
@@ -317,6 +337,7 @@ import {
   TronTransactionCondition,
   UpdateConditionSetRequestBody,
 } from './resources/policies';
+import { Shared, SuccessResponse } from './resources/shared';
 import { SwapAmountType, SwapQuoteRequest, SwapQuoteResponse, SwapRequest, Swaps } from './resources/swaps';
 import {
   TransactionGetResponse,
@@ -515,6 +536,8 @@ import {
   AppResponse,
   Apps,
   Caip2,
+  Currency,
+  CurrencyAsset,
   EmailInviteInput,
   EmbeddedWalletChainConfig,
   EmbeddedWalletConfigSchema,
@@ -576,6 +599,7 @@ import {
   ExportPrivateKeyRpcResponse,
   ExtendedChainType,
   FirstClassChainType,
+  GetByWalletAddressRequestBody,
   HpkeAeadAlgorithm,
   HpkeImportConfig,
   RawSignBytesEncoding,
@@ -1471,6 +1495,7 @@ export class PrivyAPI {
    */
   apps: API.Apps = new API.Apps(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
+  shared: API.Shared = new API.Shared(this);
   walletActions: API.WalletActions = new API.WalletActions(this);
   analytics: API.Analytics = new API.Analytics(this);
   embeddedWallets: API.EmbeddedWallets = new API.EmbeddedWallets(this);
@@ -1492,6 +1517,7 @@ PrivyAPI.KeyQuorums = KeyQuorums;
 PrivyAPI.Intents = Intents;
 PrivyAPI.Apps = Apps;
 PrivyAPI.ClientAuth = ClientAuth;
+PrivyAPI.Shared = Shared;
 PrivyAPI.WalletActions = WalletActions;
 PrivyAPI.Analytics = Analytics;
 PrivyAPI.EmbeddedWallets = EmbeddedWallets;
@@ -1616,6 +1642,7 @@ export declare namespace PrivyAPI {
     type SparkSignMessageWithIdentityKeyRpcResponse as SparkSignMessageWithIdentityKeyRpcResponse,
     type SparkRpcResponse as SparkRpcResponse,
     type Wallet as Wallet,
+    type GetByWalletAddressRequestBody as GetByWalletAddressRequestBody,
     type WalletUpdateRequestBody as WalletUpdateRequestBody,
     type WalletBatchItemInput as WalletBatchItemInput,
     type WalletBatchCreateInput as WalletBatchCreateInput,
@@ -1755,8 +1782,6 @@ export declare namespace PrivyAPI {
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
     type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
     type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
-    type PolicyDeleteResponse as PolicyDeleteResponse,
-    type PolicyDeleteRuleResponse as PolicyDeleteRuleResponse,
     type PolicyUpdateRuleResponse as PolicyUpdateRuleResponse,
     type PolicyGetRuleResponse as PolicyGetRuleResponse,
     type PolicyCreateParams as PolicyCreateParams,
@@ -1795,7 +1820,6 @@ export declare namespace PrivyAPI {
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
     type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
-    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
   };
 
@@ -1833,6 +1857,9 @@ export declare namespace PrivyAPI {
 
   export {
     Apps as Apps,
+    type Caip2 as Caip2,
+    type CurrencyAsset as CurrencyAsset,
+    type Currency as Currency,
     type EmbeddedWalletCreateOnLogin as EmbeddedWalletCreateOnLogin,
     type EmbeddedWalletChainConfig as EmbeddedWalletChainConfig,
     type UserOwnedRecoveryOption as UserOwnedRecoveryOption,
@@ -1852,7 +1879,6 @@ export declare namespace PrivyAPI {
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
     type TestAccount as TestAccount,
     type TestAccountsResponse as TestAccountsResponse,
-    type Caip2 as Caip2,
     type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
     type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
   };
@@ -1865,6 +1891,29 @@ export declare namespace PrivyAPI {
     type OAuthProviderID as OAuthProviderID,
     type BridgeOnrampProvider as BridgeOnrampProvider,
     type OnrampProvider as OnrampProvider,
+    type PasskeyCredPropsResult as PasskeyCredPropsResult,
+    type PasskeyClientExtensionResults as PasskeyClientExtensionResults,
+    type PasskeyCredentialDescriptor as PasskeyCredentialDescriptor,
+    type PasskeyRelyingParty as PasskeyRelyingParty,
+    type PasskeyUser as PasskeyUser,
+    type PasskeyPubKeyCredParam as PasskeyPubKeyCredParam,
+    type PasskeyAuthenticatorSelection as PasskeyAuthenticatorSelection,
+    type PasskeyEnrollmentExtensions as PasskeyEnrollmentExtensions,
+    type PasskeyAttestationResponse as PasskeyAttestationResponse,
+    type PasskeyAuthenticatorEnrollmentOptions as PasskeyAuthenticatorEnrollmentOptions,
+    type PasskeyAuthenticatorEnrollmentResponse as PasskeyAuthenticatorEnrollmentResponse,
+    type ResponsePasskeyInitLink as ResponsePasskeyInitLink,
+    type ResponsePasskeyInitRegister as ResponsePasskeyInitRegister,
+    type PasskeyLinkInput as PasskeyLinkInput,
+    type PasskeyRegisterInput as PasskeyRegisterInput,
+    type PasskeyInitInput as PasskeyInitInput,
+    type UnlinkPasskeyInput as UnlinkPasskeyInput,
+    type PasskeyVerifyExtensions as PasskeyVerifyExtensions,
+    type PasskeyAssertionResponse as PasskeyAssertionResponse,
+    type PasskeyAuthenticatorVerifyOptions as PasskeyAuthenticatorVerifyOptions,
+    type PasskeyAuthenticatorVerifyResponse as PasskeyAuthenticatorVerifyResponse,
+    type ResponsePasskeyInitAuthenticate as ResponsePasskeyInitAuthenticate,
+    type PasskeyAuthenticateInput as PasskeyAuthenticateInput,
     type PasswordlessLinkRequestBody as PasswordlessLinkRequestBody,
     type PasswordlessInitRequestBody as PasswordlessInitRequestBody,
     type PasswordlessUnlinkRequestBody as PasswordlessUnlinkRequestBody,
@@ -2008,6 +2057,8 @@ export declare namespace PrivyAPI {
     type MfaPasskeyVerifyRequestBody as MfaPasskeyVerifyRequestBody,
     type MfaPasskeyEnrollmentRequestBody as MfaPasskeyEnrollmentRequestBody,
   };
+
+  export { Shared as Shared, type SuccessResponse as SuccessResponse };
 
   export {
     WalletActions as WalletActions,

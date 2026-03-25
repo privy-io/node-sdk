@@ -108,6 +108,7 @@ export {
   type SparkSignMessageWithIdentityKeyRpcResponse,
   type SparkRpcResponse,
   type Wallet,
+  type GetByWalletAddressRequestBody,
   type WalletUpdateRequestBody,
   type WalletBatchItemInput,
   type WalletBatchCreateInput,

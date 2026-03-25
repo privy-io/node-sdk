@@ -2096,6 +2096,16 @@ export namespace Wallet {
 }
 
 /**
+ * Request body for looking up a wallet by its blockchain address.
+ */
+export interface GetByWalletAddressRequestBody {
+  /**
+   * The blockchain address of the wallet to look up.
+   */
+  address: string;
+}
+
+/**
  * Request body for updating a wallet.
  */
 export interface WalletUpdateRequestBody {
@@ -3923,6 +3933,7 @@ export declare namespace Wallets {
     type SparkSignMessageWithIdentityKeyRpcResponse as SparkSignMessageWithIdentityKeyRpcResponse,
     type SparkRpcResponse as SparkRpcResponse,
     type Wallet as Wallet,
+    type GetByWalletAddressRequestBody as GetByWalletAddressRequestBody,
     type WalletUpdateRequestBody as WalletUpdateRequestBody,
     type WalletBatchItemInput as WalletBatchItemInput,
     type WalletBatchCreateInput as WalletBatchCreateInput,

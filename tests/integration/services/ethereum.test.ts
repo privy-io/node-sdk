@@ -50,7 +50,7 @@ describe('PrivyEthereumService', () => {
         });
         it('should be able to sign a message with a custom request_expiry', async () => {
           // Explicitly set expiry to 20 min from now
-          const requestExpiry = String(Date.now() + 20 * 60 * 1000);
+          const requestExpiry = Date.now() + 20 * 60 * 1000;
           const response = await privyClient
             .wallets()
             .ethereum()
@@ -70,7 +70,7 @@ describe('PrivyEthereumService', () => {
         });
         it('should reject a request with an expired request_expiry', async () => {
           // expired 1 minute ago
-          const expiredExpiry = String(Date.now() - 1 * 60 * 1000);
+          const expiredExpiry = Date.now() - 1 * 60 * 1000;
           await expect(
             privyClient
               .wallets()

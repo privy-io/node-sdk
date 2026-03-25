@@ -17,7 +17,7 @@ export interface PrivyClientOptions extends InternalClientOptions {
   appSecret: string;
   apiUrl?: string;
   authorizationKeyCacheMaxCapacity?: number;
-  /** Default request expiry duration in milliseconds. Defaults to 15 minutes. */
+  /** Default request expiry duration in milliseconds from now. Defaults to 15 minutes. */
   defaultRequestExpiryMs?: number;
   jwtVerificationKey?: string;
   webhookSigningSecret?: string;
@@ -122,12 +122,12 @@ export class PrivyClient {
   }
 
   /**
-   * Returns a request expiry timestamp as a Unix timestamp in milliseconds, returned as a string.
+   * Returns a request expiry timestamp as a Unix timestamp in milliseconds.
    *
-   * If `expiryMs` is provided, uses that duration. Otherwise falls back to the
+   * If `expiryMsFromNow` is provided, uses that duration. Otherwise falls back to the
    * `defaultRequestExpiryMs` configured on the client (defaults to 15 minutes).
    */
-  public getRequestExpiry(expiryMs?: number): string {
-    return String(Date.now() + (expiryMs ?? this._defaultRequestExpiryMs));
+  public getRequestExpiry(expiryMsFromNow?: number): number {
+    return Date.now() + (expiryMsFromNow ?? this._defaultRequestExpiryMs);
   }
 }

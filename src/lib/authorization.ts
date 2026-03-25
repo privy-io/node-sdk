@@ -167,7 +167,7 @@ export async function prepareRequest(
   }: {
     authorizationContext?: AuthorizationContext | undefined;
     idempotencyKey?: string | undefined;
-    requestExpiry?: string | undefined;
+    requestExpiry?: number | undefined;
     method: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
     url: string;
     body: any;
@@ -183,7 +183,7 @@ export async function prepareRequest(
       headers: {
         'privy-app-id': appId,
         ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
-        ...(requestExpiry && { 'privy-request-expiry': requestExpiry }),
+        ...(requestExpiry && { 'privy-request-expiry': String(requestExpiry) }),
       },
     },
   });
@@ -192,7 +192,7 @@ export async function prepareRequest(
     headers: {
       'privy-authorization-signature': signatures.join(','),
       ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
-      ...(requestExpiry && { 'privy-request-expiry': requestExpiry }),
+      ...(requestExpiry && { 'privy-request-expiry': String(requestExpiry) }),
     },
   };
 }

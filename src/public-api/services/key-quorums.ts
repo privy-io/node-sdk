@@ -4,9 +4,9 @@ import { prepareRequest } from '../../lib/authorization';
 import {
   KeyQuorum,
   KeyQuorumDeleteParams,
-  KeyQuorumDeleteResponse,
   KeyQuorums,
   KeyQuorumUpdateParams,
+  SuccessResponse,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
 import { WithAuthorization, WithExpiry } from './types';
@@ -45,7 +45,7 @@ export class PrivyKeyQuorumsService extends KeyQuorums {
       request_expiry: requestExpiry,
       ...params
     }: PrivyKeyQuorumsService.DeleteInput,
-  ): Promise<KeyQuorumDeleteResponse> {
+  ): Promise<SuccessResponse> {
     const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),

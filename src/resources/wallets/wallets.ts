@@ -459,6 +459,59 @@ export namespace CustodialWallet {
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
 
 /**
+ * The encryption type of the wallet to import. Currently only supports `HPKE`.
+ */
+export type HpkeEncryption = 'HPKE';
+
+/**
+ * The recipient public key for HPKE encryption, in PEM or DER (base64-encoded)
+ * format.
+ */
+export type RecipientPublicKey = string;
+
+/**
+ * The export type. 'display' is for showing the key to the user in the UI,
+ * 'client' is for exporting to the client application.
+ */
+export type ExportType = 'display' | 'client';
+
+/**
+ * Input for exporting a wallet private key with HPKE encryption.
+ */
+export interface PrivateKeyExportInput {
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  /**
+   * The recipient public key for HPKE encryption, in PEM or DER (base64-encoded)
+   * format.
+   */
+  recipient_public_key: RecipientPublicKey;
+
+  /**
+   * The export type. 'display' is for showing the key to the user in the UI,
+   * 'client' is for exporting to the client application.
+   */
+  export_type?: ExportType;
+}
+
+/**
+ * Response containing the HPKE-encrypted private key.
+ */
+export interface PrivateKeyExportResponse {
+  ciphertext: string;
+
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+}
+
+/**
  * The chain type of the wallet to import. Currently supports `ethereum` and
  * `solana`.
  */
@@ -477,7 +530,10 @@ export type WalletImportSupportedEntropyTypes = 'private-key' | 'hd';
 export interface WalletImportInitResponse {
   encryption_public_key: string;
 
-  encryption_type: 'HPKE';
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
 }
 
 /**
@@ -517,36 +573,22 @@ export interface ExportPrivateKeyRpcInput {
 
   method: 'exportPrivateKey';
 
-  params: ExportPrivateKeyRpcInput.Params;
-}
-
-export namespace ExportPrivateKeyRpcInput {
-  export interface Params {
-    encryption_type: 'HPKE';
-
-    recipient_public_key: string;
-
-    export_type?: 'display' | 'client';
-  }
+  /**
+   * Input for exporting a wallet private key with HPKE encryption.
+   */
+  params: PrivateKeyExportInput;
 }
 
 /**
  * Response to the `exportPrivateKey` RPC.
  */
 export interface ExportPrivateKeyRpcResponse {
-  data: ExportPrivateKeyRpcResponse.Data;
+  /**
+   * Input for exporting a wallet private key with HPKE encryption.
+   */
+  data: PrivateKeyExportInput;
 
   method: 'exportPrivateKey';
-}
-
-export namespace ExportPrivateKeyRpcResponse {
-  export interface Data {
-    encryption_type: 'HPKE';
-
-    recipient_public_key: string;
-
-    export_type?: 'display' | 'client';
-  }
 }
 
 /**
@@ -1361,6 +1403,241 @@ export type SolanaRpcResponse =
   | SolanaSignAndSendTransactionRpcResponse;
 
 /**
+ * The Spark network.
+ */
+export type SparkNetwork = 'MAINNET' | 'REGTEST';
+
+/**
+ * A Spark signing keyshare.
+ */
+export interface SparkSigningKeyshare {
+  owner_identifiers: Array<string>;
+
+  public_key: string;
+
+  public_shares: { [key: string]: string };
+
+  threshold: number;
+
+  updated_time: string;
+}
+
+/**
+ * A Spark wallet leaf node.
+ */
+export interface SparkWalletLeaf {
+  id: string;
+
+  /**
+   * The Spark network.
+   */
+  network: SparkNetwork;
+
+  node_tx: string;
+
+  owner_identity_public_key: string;
+
+  refund_tx: string;
+
+  status: string;
+
+  tree_id: string;
+
+  value: number;
+
+  verifying_public_key: string;
+
+  vout: number;
+
+  parent_node_id?: string;
+
+  /**
+   * A Spark signing keyshare.
+   */
+  signing_keyshare?: SparkSigningKeyshare;
+}
+
+/**
+ * A Spark transfer leaf.
+ */
+export interface SparkTransferLeaf {
+  intermediate_refund_tx: string;
+
+  secret_cipher: string;
+
+  signature: string;
+
+  /**
+   * A Spark wallet leaf node.
+   */
+  leaf?: SparkWalletLeaf;
+}
+
+/**
+ * A Spark transfer.
+ */
+export interface SparkTransfer {
+  id: string;
+
+  leaves: Array<SparkTransferLeaf>;
+
+  receiver_identity_public_key: string;
+
+  sender_identity_public_key: string;
+
+  status: string;
+
+  total_value: number;
+
+  transfer_direction: string;
+
+  type: string;
+
+  created_time?: string;
+
+  expiry_time?: string;
+
+  updated_time?: string;
+}
+
+/**
+ * Metadata for a Spark user token.
+ */
+export interface SparkUserTokenMetadata {
+  decimals: number;
+
+  max_supply: string;
+
+  raw_token_identifier: string;
+
+  token_name: string;
+
+  token_public_key: string;
+
+  token_ticker: string;
+}
+
+/**
+ * Balance of a Spark token.
+ */
+export interface SparkTokenBalance {
+  balance: string;
+
+  /**
+   * Metadata for a Spark user token.
+   */
+  token_metadata: SparkUserTokenMetadata;
+}
+
+/**
+ * The balance of a Spark wallet.
+ */
+export interface SparkBalance {
+  balance: string;
+
+  token_balances: { [key: string]: SparkTokenBalance };
+}
+
+/**
+ * A Spark token output.
+ */
+export interface TokenOutput {
+  owner_public_key: string;
+
+  token_amount: string;
+
+  id?: string;
+
+  revocation_commitment?: string;
+
+  token_identifier?: string;
+
+  token_public_key?: string;
+
+  withdraw_bond_sats?: number;
+
+  withdraw_relative_block_locktime?: number;
+}
+
+/**
+ * A Spark token output with its previous transaction data.
+ */
+export interface OutputWithPreviousTransactionData {
+  previous_transaction_hash: string;
+
+  previous_transaction_vout: number;
+
+  /**
+   * A Spark token output.
+   */
+  output?: TokenOutput;
+}
+
+/**
+ * The fee for a Spark Lightning payment.
+ */
+export interface SparkLightningFee {
+  original_unit: string;
+
+  original_value: number;
+}
+
+/**
+ * A Spark Lightning receive request.
+ */
+export interface SparkLightningReceiveRequest {
+  id: string;
+
+  created_at: string;
+
+  network: string;
+
+  status: string;
+
+  typename: string;
+
+  updated_at: string;
+
+  invoice?: unknown;
+
+  payment_preimage?: string;
+
+  receiver_identity_public_key?: string;
+
+  transfer?: unknown;
+}
+
+/**
+ * A Spark Lightning send request.
+ */
+export interface SparkLightningSendRequest {
+  id: string;
+
+  created_at: string;
+
+  encoded_invoice: string;
+
+  /**
+   * The fee for a Spark Lightning payment.
+   */
+  fee: SparkLightningFee;
+
+  idempotency_key: string;
+
+  network: string;
+
+  status: string;
+
+  typename: string;
+
+  updated_at: string;
+
+  payment_preimage?: string;
+
+  transfer?: unknown;
+}
+
+/**
  * Parameters for the Spark `transfer` RPC.
  */
 export interface SparkTransferRpcInputParams {
@@ -1380,7 +1657,10 @@ export interface SparkTransferRpcInput {
    */
   params: SparkTransferRpcInputParams;
 
-  network?: 'MAINNET' | 'REGTEST';
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
 }
 
 /**
@@ -1389,7 +1669,10 @@ export interface SparkTransferRpcInput {
 export interface SparkGetBalanceRpcInput {
   method: 'getBalance';
 
-  network?: 'MAINNET' | 'REGTEST';
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
 }
 
 /**
@@ -1412,37 +1695,7 @@ export interface SparkTransferTokensRpcInputParams {
    */
   output_selection_strategy?: SparkOutputSelectionStrategy;
 
-  selected_outputs?: Array<SparkTransferTokensRpcInputParams.SelectedOutput>;
-}
-
-export namespace SparkTransferTokensRpcInputParams {
-  export interface SelectedOutput {
-    previous_transaction_hash: string;
-
-    previous_transaction_vout: number;
-
-    output?: SelectedOutput.Output;
-  }
-
-  export namespace SelectedOutput {
-    export interface Output {
-      owner_public_key: string;
-
-      token_amount: string;
-
-      id?: string;
-
-      revocation_commitment?: string;
-
-      token_identifier?: string;
-
-      token_public_key?: string;
-
-      withdraw_bond_sats?: number;
-
-      withdraw_relative_block_locktime?: number;
-    }
-  }
+  selected_outputs?: Array<OutputWithPreviousTransactionData>;
 }
 
 /**
@@ -1456,7 +1709,10 @@ export interface SparkTransferTokensRpcInput {
    */
   params: SparkTransferTokensRpcInputParams;
 
-  network?: 'MAINNET' | 'REGTEST';
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
 }
 
 /**
@@ -1465,7 +1721,10 @@ export interface SparkTransferTokensRpcInput {
 export interface SparkGetStaticDepositAddressRpcInput {
   method: 'getStaticDepositAddress';
 
-  network?: 'MAINNET' | 'REGTEST';
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
 }
 
 /**
@@ -1488,7 +1747,10 @@ export interface SparkGetClaimStaticDepositQuoteRpcInput {
    */
   params: SparkGetClaimStaticDepositQuoteRpcInputParams;
 
-  network?: 'MAINNET' | 'REGTEST';
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
 }
 
 /**
@@ -1515,7 +1777,10 @@ export interface SparkClaimStaticDepositRpcInput {
    */
   params: SparkClaimStaticDepositRpcInputParams;
 
-  network?: 'MAINNET' | 'REGTEST';
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
 }
 
 /**
@@ -1546,7 +1811,10 @@ export interface SparkCreateLightningInvoiceRpcInput {
    */
   params: SparkCreateLightningInvoiceRpcInputParams;
 
-  network?: 'MAINNET' | 'REGTEST';
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
 }
 
 /**
@@ -1573,7 +1841,10 @@ export interface SparkPayLightningInvoiceRpcInput {
    */
   params: SparkPayLightningInvoiceRpcInputParams;
 
-  network?: 'MAINNET' | 'REGTEST';
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
 }
 
 /**
@@ -1596,7 +1867,10 @@ export interface SparkSignMessageWithIdentityKeyRpcInput {
    */
   params: SparkSignMessageWithIdentityKeyRpcInputParams;
 
-  network?: 'MAINNET' | 'REGTEST';
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
 }
 
 /**
@@ -1619,87 +1893,10 @@ export type SparkRpcInput =
 export interface SparkTransferRpcResponse {
   method: 'transfer';
 
-  data?: SparkTransferRpcResponse.Data;
-}
-
-export namespace SparkTransferRpcResponse {
-  export interface Data {
-    id: string;
-
-    leaves: Array<Data.Leaf>;
-
-    receiver_identity_public_key: string;
-
-    sender_identity_public_key: string;
-
-    status: string;
-
-    total_value: number;
-
-    transfer_direction: string;
-
-    type: string;
-
-    created_time?: string;
-
-    expiry_time?: string;
-
-    updated_time?: string;
-  }
-
-  export namespace Data {
-    export interface Leaf {
-      intermediate_refund_tx: string;
-
-      secret_cipher: string;
-
-      signature: string;
-
-      leaf?: Leaf.Leaf;
-    }
-
-    export namespace Leaf {
-      export interface Leaf {
-        id: string;
-
-        network: 'MAINNET' | 'REGTEST';
-
-        node_tx: string;
-
-        owner_identity_public_key: string;
-
-        refund_tx: string;
-
-        status: string;
-
-        tree_id: string;
-
-        value: number;
-
-        verifying_public_key: string;
-
-        vout: number;
-
-        parent_node_id?: string;
-
-        signing_keyshare?: Leaf.SigningKeyshare;
-      }
-
-      export namespace Leaf {
-        export interface SigningKeyshare {
-          owner_identifiers: Array<string>;
-
-          public_key: string;
-
-          public_shares: { [key: string]: string };
-
-          threshold: number;
-
-          updated_time: string;
-        }
-      }
-    }
-  }
+  /**
+   * A Spark transfer.
+   */
+  data?: SparkTransfer;
 }
 
 /**
@@ -1708,39 +1905,10 @@ export namespace SparkTransferRpcResponse {
 export interface SparkGetBalanceRpcResponse {
   method: 'getBalance';
 
-  data?: SparkGetBalanceRpcResponse.Data;
-}
-
-export namespace SparkGetBalanceRpcResponse {
-  export interface Data {
-    balance: string;
-
-    token_balances: { [key: string]: Data.TokenBalances };
-  }
-
-  export namespace Data {
-    export interface TokenBalances {
-      balance: string;
-
-      token_metadata: TokenBalances.TokenMetadata;
-    }
-
-    export namespace TokenBalances {
-      export interface TokenMetadata {
-        decimals: number;
-
-        max_supply: string;
-
-        raw_token_identifier: string;
-
-        token_name: string;
-
-        token_public_key: string;
-
-        token_ticker: string;
-      }
-    }
-  }
+  /**
+   * The balance of a Spark wallet.
+   */
+  data?: SparkBalance;
 }
 
 /**
@@ -1833,31 +2001,10 @@ export interface SparkClaimStaticDepositRpcResponse {
 export interface SparkCreateLightningInvoiceRpcResponse {
   method: 'createLightningInvoice';
 
-  data?: SparkCreateLightningInvoiceRpcResponse.Data;
-}
-
-export namespace SparkCreateLightningInvoiceRpcResponse {
-  export interface Data {
-    id: string;
-
-    created_at: string;
-
-    network: string;
-
-    status: string;
-
-    typename: string;
-
-    updated_at: string;
-
-    invoice?: unknown;
-
-    payment_preimage?: string;
-
-    receiver_identity_public_key?: string;
-
-    transfer?: unknown;
-  }
+  /**
+   * A Spark Lightning receive request.
+   */
+  data?: SparkLightningReceiveRequest;
 }
 
 /**
@@ -1866,119 +2013,10 @@ export namespace SparkCreateLightningInvoiceRpcResponse {
 export interface SparkPayLightningInvoiceRpcResponse {
   method: 'payLightningInvoice';
 
-  data?: SparkPayLightningInvoiceRpcResponse.UnionMember0 | SparkPayLightningInvoiceRpcResponse.UnionMember1;
-}
-
-export namespace SparkPayLightningInvoiceRpcResponse {
-  export interface UnionMember0 {
-    id: string;
-
-    leaves: Array<UnionMember0.Leaf>;
-
-    receiver_identity_public_key: string;
-
-    sender_identity_public_key: string;
-
-    status: string;
-
-    total_value: number;
-
-    transfer_direction: string;
-
-    type: string;
-
-    created_time?: string;
-
-    expiry_time?: string;
-
-    updated_time?: string;
-  }
-
-  export namespace UnionMember0 {
-    export interface Leaf {
-      intermediate_refund_tx: string;
-
-      secret_cipher: string;
-
-      signature: string;
-
-      leaf?: Leaf.Leaf;
-    }
-
-    export namespace Leaf {
-      export interface Leaf {
-        id: string;
-
-        network: 'MAINNET' | 'REGTEST';
-
-        node_tx: string;
-
-        owner_identity_public_key: string;
-
-        refund_tx: string;
-
-        status: string;
-
-        tree_id: string;
-
-        value: number;
-
-        verifying_public_key: string;
-
-        vout: number;
-
-        parent_node_id?: string;
-
-        signing_keyshare?: Leaf.SigningKeyshare;
-      }
-
-      export namespace Leaf {
-        export interface SigningKeyshare {
-          owner_identifiers: Array<string>;
-
-          public_key: string;
-
-          public_shares: { [key: string]: string };
-
-          threshold: number;
-
-          updated_time: string;
-        }
-      }
-    }
-  }
-
-  export interface UnionMember1 {
-    id: string;
-
-    created_at: string;
-
-    encoded_invoice: string;
-
-    fee: UnionMember1.Fee;
-
-    idempotency_key: string;
-
-    network: string;
-
-    status: string;
-
-    typename: string;
-
-    updated_at: string;
-
-    payment_preimage?: string;
-
-    transfer?: unknown;
-  }
-
-  export namespace UnionMember1 {
-    export interface Fee {
-      original_unit: string;
-
-      original_value: number;
-    }
-  }
+  /**
+   * A Spark transfer.
+   */
+  data?: SparkTransfer | SparkLightningSendRequest;
 }
 
 /**
@@ -2452,7 +2490,7 @@ export interface WalletExportResponse {
   /**
    * The encryption type of the wallet to import. Currently only supports `HPKE`.
    */
-  encryption_type: 'HPKE';
+  encryption_type: HpkeEncryption;
 }
 
 export interface WalletInitImportResponse {
@@ -2464,7 +2502,7 @@ export interface WalletInitImportResponse {
   /**
    * The encryption type of the wallet to import. Currently only supports `HPKE`.
    */
-  encryption_type: 'HPKE';
+  encryption_type: HpkeEncryption;
 }
 
 export type WalletAuthenticateWithJwtResponse =
@@ -2628,7 +2666,7 @@ export interface WalletExportParams {
    * Body param: The encryption type of the wallet to import. Currently only supports
    * `HPKE`.
    */
-  encryption_type: 'HPKE';
+  encryption_type: HpkeEncryption;
 
   /**
    * Body param: The base64-encoded encryption public key to encrypt the wallet
@@ -2669,7 +2707,7 @@ export declare namespace WalletInitImportParams {
     /**
      * The encryption type of the wallet to import. Currently only supports `HPKE`.
      */
-    encryption_type: 'HPKE';
+    encryption_type: HpkeEncryption;
 
     /**
      * The entropy type of the wallet to import.
@@ -2697,7 +2735,7 @@ export declare namespace WalletInitImportParams {
     /**
      * The encryption type of the wallet to import. Currently only supports `HPKE`.
      */
-    encryption_type: 'HPKE';
+    encryption_type: HpkeEncryption;
 
     entropy_type: 'private-key';
   }
@@ -3233,9 +3271,9 @@ export declare namespace WalletRpcParams {
     params: SparkTransferRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: SparkNetwork;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3263,9 +3301,9 @@ export declare namespace WalletRpcParams {
     method: 'getBalance';
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: SparkNetwork;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3298,9 +3336,9 @@ export declare namespace WalletRpcParams {
     params: SparkTransferTokensRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: SparkNetwork;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3328,9 +3366,9 @@ export declare namespace WalletRpcParams {
     method: 'getStaticDepositAddress';
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: SparkNetwork;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3363,9 +3401,9 @@ export declare namespace WalletRpcParams {
     params: SparkGetClaimStaticDepositQuoteRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: SparkNetwork;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3398,9 +3436,9 @@ export declare namespace WalletRpcParams {
     params: SparkClaimStaticDepositRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: SparkNetwork;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3433,9 +3471,9 @@ export declare namespace WalletRpcParams {
     params: SparkCreateLightningInvoiceRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: SparkNetwork;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3468,9 +3506,9 @@ export declare namespace WalletRpcParams {
     params: SparkPayLightningInvoiceRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: SparkNetwork;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3503,9 +3541,9 @@ export declare namespace WalletRpcParams {
     params: SparkSignMessageWithIdentityKeyRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: SparkNetwork;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3538,9 +3576,9 @@ export declare namespace WalletRpcParams {
     method: 'exportPrivateKey';
 
     /**
-     * Body param
+     * Body param: Input for exporting a wallet private key with HPKE encryption.
      */
-    params: ExportPrivateKeyRpcInput.Params;
+    params: PrivateKeyExportInput;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3559,16 +3597,6 @@ export declare namespace WalletRpcParams {
      * representing the deadline by which the request must be processed.
      */
     'privy-request-expiry'?: string;
-  }
-
-  export namespace ExportPrivateKeyRpcInput {
-    export interface Params {
-      encryption_type: 'HPKE';
-
-      recipient_public_key: string;
-
-      export_type?: 'display' | 'client';
-    }
   }
 }
 
@@ -3611,7 +3639,7 @@ export namespace WalletSubmitImportParams {
     /**
      * The encryption type of the wallet to import. Currently only supports `HPKE`.
      */
-    encryption_type: 'HPKE';
+    encryption_type: WalletsAPI.HpkeEncryption;
 
     /**
      * The entropy type of the wallet to import.
@@ -3657,7 +3685,7 @@ export namespace WalletSubmitImportParams {
     /**
      * The encryption type of the wallet to import. Currently only supports `HPKE`.
      */
-    encryption_type: 'HPKE';
+    encryption_type: WalletsAPI.HpkeEncryption;
 
     entropy_type: 'private-key';
 
@@ -3839,6 +3867,11 @@ export declare namespace Wallets {
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWallet as CustodialWallet,
     type SuiCommandName as SuiCommandName,
+    type HpkeEncryption as HpkeEncryption,
+    type RecipientPublicKey as RecipientPublicKey,
+    type ExportType as ExportType,
+    type PrivateKeyExportInput as PrivateKeyExportInput,
+    type PrivateKeyExportResponse as PrivateKeyExportResponse,
     type WalletImportSupportedChains as WalletImportSupportedChains,
     type WalletImportSupportedEntropyTypes as WalletImportSupportedEntropyTypes,
     type WalletImportInitResponse as WalletImportInitResponse,
@@ -3899,6 +3932,19 @@ export declare namespace Wallets {
     type SolanaSignMessageRpcResponseData as SolanaSignMessageRpcResponseData,
     type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
     type SolanaRpcResponse as SolanaRpcResponse,
+    type SparkNetwork as SparkNetwork,
+    type SparkSigningKeyshare as SparkSigningKeyshare,
+    type SparkWalletLeaf as SparkWalletLeaf,
+    type SparkTransferLeaf as SparkTransferLeaf,
+    type SparkTransfer as SparkTransfer,
+    type SparkUserTokenMetadata as SparkUserTokenMetadata,
+    type SparkTokenBalance as SparkTokenBalance,
+    type SparkBalance as SparkBalance,
+    type TokenOutput as TokenOutput,
+    type OutputWithPreviousTransactionData as OutputWithPreviousTransactionData,
+    type SparkLightningFee as SparkLightningFee,
+    type SparkLightningReceiveRequest as SparkLightningReceiveRequest,
+    type SparkLightningSendRequest as SparkLightningSendRequest,
     type SparkTransferRpcInputParams as SparkTransferRpcInputParams,
     type SparkTransferRpcInput as SparkTransferRpcInput,
     type SparkGetBalanceRpcInput as SparkGetBalanceRpcInput,

@@ -3984,9 +3984,9 @@ export declare namespace IntentRpcParams {
     params: WalletsAPI.SparkTransferRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: WalletsAPI.SparkNetwork;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -4002,9 +4002,9 @@ export declare namespace IntentRpcParams {
     method: 'getBalance';
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: WalletsAPI.SparkNetwork;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -4025,9 +4025,9 @@ export declare namespace IntentRpcParams {
     params: WalletsAPI.SparkTransferTokensRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: WalletsAPI.SparkNetwork;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -4043,9 +4043,9 @@ export declare namespace IntentRpcParams {
     method: 'getStaticDepositAddress';
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: WalletsAPI.SparkNetwork;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -4066,9 +4066,9 @@ export declare namespace IntentRpcParams {
     params: WalletsAPI.SparkGetClaimStaticDepositQuoteRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: WalletsAPI.SparkNetwork;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -4089,9 +4089,9 @@ export declare namespace IntentRpcParams {
     params: WalletsAPI.SparkClaimStaticDepositRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: WalletsAPI.SparkNetwork;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -4112,9 +4112,9 @@ export declare namespace IntentRpcParams {
     params: WalletsAPI.SparkCreateLightningInvoiceRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: WalletsAPI.SparkNetwork;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -4135,9 +4135,9 @@ export declare namespace IntentRpcParams {
     params: WalletsAPI.SparkPayLightningInvoiceRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: WalletsAPI.SparkNetwork;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -4158,9 +4158,9 @@ export declare namespace IntentRpcParams {
     params: WalletsAPI.SparkSignMessageWithIdentityKeyRpcInputParams;
 
     /**
-     * Body param
+     * Body param: The Spark network.
      */
-    network?: 'MAINNET' | 'REGTEST';
+    network?: WalletsAPI.SparkNetwork;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -4181,25 +4181,15 @@ export declare namespace IntentRpcParams {
     method: 'exportPrivateKey';
 
     /**
-     * Body param
+     * Body param: Input for exporting a wallet private key with HPKE encryption.
      */
-    params: ExportPrivateKeyRpcInput.Params;
+    params: WalletsAPI.PrivateKeyExportInput;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
      * representing the deadline by which the request must be processed.
      */
     'privy-request-expiry'?: string;
-  }
-
-  export namespace ExportPrivateKeyRpcInput {
-    export interface Params {
-      encryption_type: 'HPKE';
-
-      recipient_public_key: string;
-
-      export_type?: 'display' | 'client';
-    }
   }
 }
 

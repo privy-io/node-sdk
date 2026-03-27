@@ -7,6 +7,13 @@ export { type PrivyTransactionsService } from './public-api/services/transaction
 export { type PrivyKeyQuorumsService } from './public-api/services/key-quorums';
 export { type PrivyUsersService } from './public-api/services/users';
 export { type PrivyUtils } from './public-api/services/utils';
+export { type PrivyAnalyticsService } from './public-api/services/analytics';
+export { type PrivyAppsService } from './public-api/services/apps';
+export { type PrivyAggregationsService } from './public-api/services/aggregations';
+export { type PrivyAccountsService } from './public-api/services/accounts';
+export { type PrivyYieldService } from './public-api/services/yield';
+export { type PrivyClientAuthService } from './public-api/services/client-auth';
+export { type PrivyIntentsService } from './public-api/services/intents';
 export {
   InvalidAuthTokenError,
   verifyAccessToken,

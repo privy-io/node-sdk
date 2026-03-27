@@ -6,6 +6,13 @@ import { PrivyTransactionsService } from './services/transactions';
 import { PrivyKeyQuorumsService } from './services/key-quorums';
 import { PrivyUsersService } from './services/users';
 import { PrivyUtils } from './services/utils';
+import { PrivyAnalyticsService } from './services/analytics';
+import { PrivyAppsService } from './services/apps';
+import { PrivyAggregationsService } from './services/aggregations';
+import { PrivyAccountsService } from './services/accounts';
+import { PrivyYieldService } from './services/yield';
+import { PrivyClientAuthService } from './services/client-auth';
+import { PrivyIntentsService } from './services/intents';
 import { JwtExchangeService } from '../lib/jwt-exchange';
 import { VERSION } from '../version';
 import { createPrivyAppJWKS } from '../lib/auth';
@@ -32,6 +39,13 @@ export class PrivyClient {
   private keyQuorumsService: PrivyKeyQuorumsService;
   private usersService: PrivyUsersService;
   private utilsService: PrivyUtils;
+  private analyticsService: PrivyAnalyticsService;
+  private appsService: PrivyAppsService;
+  private aggregationsService: PrivyAggregationsService;
+  private accountsService: PrivyAccountsService;
+  private yieldService: PrivyYieldService;
+  private clientAuthService: PrivyClientAuthService;
+  private intentsService: PrivyIntentsService;
   private jwtExchangeService: JwtExchangeService;
 
   /** @internal */
@@ -78,6 +92,13 @@ export class PrivyClient {
     this.usersService = new PrivyUsersService(this.privyApiClient, appJwks);
     this.utilsService = new PrivyUtils(this.privyApiClient, this, appJwks);
     this.webhooksService = new PrivyWebhooksService(webhookSigningSecret);
+    this.analyticsService = new PrivyAnalyticsService(this.privyApiClient);
+    this.appsService = new PrivyAppsService(this.privyApiClient);
+    this.aggregationsService = new PrivyAggregationsService(this.privyApiClient);
+    this.accountsService = new PrivyAccountsService(this.privyApiClient);
+    this.yieldService = new PrivyYieldService(this.privyApiClient);
+    this.clientAuthService = new PrivyClientAuthService(this.privyApiClient);
+    this.intentsService = new PrivyIntentsService(this.privyApiClient);
   }
 
   public webhooks(): PrivyWebhooksService {
@@ -106,5 +127,33 @@ export class PrivyClient {
 
   public utils(): PrivyUtils {
     return this.utilsService;
+  }
+
+  public analytics(): PrivyAnalyticsService {
+    return this.analyticsService;
+  }
+
+  public apps(): PrivyAppsService {
+    return this.appsService;
+  }
+
+  public aggregations(): PrivyAggregationsService {
+    return this.aggregationsService;
+  }
+
+  public accounts(): PrivyAccountsService {
+    return this.accountsService;
+  }
+
+  public yield(): PrivyYieldService {
+    return this.yieldService;
+  }
+
+  public clientAuth(): PrivyClientAuthService {
+    return this.clientAuthService;
+  }
+
+  public intents(): PrivyIntentsService {
+    return this.intentsService;
   }
 }

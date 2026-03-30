@@ -6,6 +6,115 @@ import * as WalletsAPI from './wallets/wallets';
 export class EmbeddedWallets extends APIResource {}
 
 /**
+ * The supported smart wallet providers.
+ */
+export type SmartWalletType =
+  | 'safe'
+  | 'kernel'
+  | 'light_account'
+  | 'biconomy'
+  | 'coinbase_smart_wallet'
+  | 'thirdweb';
+
+/**
+ * The Alchemy paymaster context for a smart wallet network configuration.
+ */
+export interface AlchemyPaymasterContext {
+  policy_id: string;
+}
+
+/**
+ * Network configuration for a smart wallet.
+ */
+export interface SmartWalletNetworkConfiguration {
+  bundler_url: string;
+
+  chain_id: string;
+
+  chain_name?: string;
+
+  /**
+   * The Alchemy paymaster context for a smart wallet network configuration.
+   */
+  paymaster_context?: AlchemyPaymasterContext;
+
+  paymaster_url?: string;
+
+  rpc_url?: string;
+}
+
+/**
+ * Input for network configuration for a smart wallet.
+ */
+export interface SmartWalletNetworkConfigurationInput {
+  chain_id: string;
+
+  bundler_url?: string;
+
+  chain_name?: string;
+
+  /**
+   * The Alchemy paymaster context for a smart wallet network configuration.
+   */
+  paymaster_context?: AlchemyPaymasterContext;
+
+  paymaster_url?: string;
+
+  rpc_url?: string;
+}
+
+/**
+ * A disabled smart wallet configuration.
+ */
+export interface SmartWalletConfigurationDisabled {
+  enabled: false;
+}
+
+/**
+ * An enabled smart wallet configuration.
+ */
+export interface SmartWalletConfigurationEnabled {
+  configured_networks: Array<SmartWalletNetworkConfiguration>;
+
+  enabled: true;
+
+  /**
+   * The supported smart wallet providers.
+   */
+  smart_wallet_type: SmartWalletType;
+
+  smart_wallet_version?: string;
+}
+
+/**
+ * An enabled smart wallet configuration input.
+ */
+export interface SmartWalletConfigurationInputEnabled {
+  configured_networks: Array<SmartWalletNetworkConfigurationInput>;
+
+  enabled: true;
+
+  /**
+   * The supported smart wallet providers.
+   */
+  smart_wallet_type: SmartWalletType;
+
+  smart_wallet_version?: string | null;
+}
+
+/**
+ * The configuration object for smart wallets.
+ */
+export type SmartWalletConfiguration = SmartWalletConfigurationDisabled | SmartWalletConfigurationEnabled;
+
+/**
+ * The input configuration object for smart wallets.
+ */
+export type SmartWalletConfigurationInput =
+  | SmartWalletConfigurationDisabled
+  | SmartWalletConfigurationInputEnabled;
+
+/**
  * The type of recovery mechanism used for wallet recovery.
  */
 export type RecoveryType =
@@ -163,6 +272,15 @@ export interface EmbeddedWalletCreationInput {
 
 export declare namespace EmbeddedWallets {
   export {
+    type SmartWalletType as SmartWalletType,
+    type AlchemyPaymasterContext as AlchemyPaymasterContext,
+    type SmartWalletNetworkConfiguration as SmartWalletNetworkConfiguration,
+    type SmartWalletNetworkConfigurationInput as SmartWalletNetworkConfigurationInput,
+    type SmartWalletConfigurationDisabled as SmartWalletConfigurationDisabled,
+    type SmartWalletConfigurationEnabled as SmartWalletConfigurationEnabled,
+    type SmartWalletConfigurationInputEnabled as SmartWalletConfigurationInputEnabled,
+    type SmartWalletConfiguration as SmartWalletConfiguration,
+    type SmartWalletConfigurationInput as SmartWalletConfigurationInput,
     type RecoveryType as RecoveryType,
     type ICloudClientType as ICloudClientType,
     type RecoveryKeyMaterialInput as RecoveryKeyMaterialInput,

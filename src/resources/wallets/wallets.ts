@@ -969,19 +969,19 @@ export namespace EthereumSignUserOperationRpcInputParams {
 
     nonce: string;
 
-    paymaster: string;
-
-    paymaster_data: string;
-
-    paymaster_post_op_gas_limit: string;
-
-    paymaster_verification_gas_limit: string;
-
     pre_verification_gas: string;
 
     sender: string;
 
     verification_gas_limit: string;
+
+    paymaster?: string;
+
+    paymaster_data?: string;
+
+    paymaster_post_op_gas_limit?: string;
+
+    paymaster_verification_gas_limit?: string;
   }
 }
 

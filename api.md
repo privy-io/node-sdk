@@ -184,7 +184,6 @@ Types:
 - <code><a href="./src/resources/users.ts">LinkedAccountPhone</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountBaseWallet</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEthereum</a></code>
-- <code><a href="./src/resources/users.ts">SmartWalletType</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountSmartWallet</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountSolana</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountFarcaster</a></code>
@@ -639,6 +638,15 @@ Types:
 
 Types:
 
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletType</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">AlchemyPaymasterContext</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletNetworkConfiguration</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletNetworkConfigurationInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationDisabled</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationEnabled</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationInputEnabled</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfiguration</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationInput</a></code>
 - <code><a href="./src/resources/embedded-wallets.ts">RecoveryType</a></code>
 - <code><a href="./src/resources/embedded-wallets.ts">ICloudClientType</a></code>
 - <code><a href="./src/resources/embedded-wallets.ts">RecoveryKeyMaterialInput</a></code>

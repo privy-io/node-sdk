@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as EmbeddedWalletsAPI from './embedded-wallets';
 import * as UsersAPI from './users';
 
 export class ClientAuth extends APIResource {}
@@ -679,7 +680,13 @@ export type FiatOnrampEnvironment = 'sandbox' | 'production';
 /**
  * The fiat onramp provider to use.
  */
-export type FiatOnrampProvider = 'meld' | 'meld-sandbox' | 'moonpay' | 'moonpay-sandbox';
+export type FiatOnrampProvider =
+  | 'meld'
+  | 'meld-sandbox'
+  | 'moonpay'
+  | 'moonpay-sandbox'
+  | 'coinbase'
+  | 'coinbase-sandbox';
 
 /**
  * The request input for getting fiat onramp quotes.
@@ -1190,7 +1197,10 @@ export interface SmartWalletSiweInput {
 
   signature: string;
 
-  smart_wallet_type: 'safe' | 'kernel' | 'light_account' | 'biconomy' | 'coinbase_smart_wallet' | 'thirdweb';
+  /**
+   * The supported smart wallet providers.
+   */
+  smart_wallet_type: EmbeddedWalletsAPI.SmartWalletType;
 
   smart_wallet_version?: string;
 }
@@ -1312,7 +1322,10 @@ export interface SiweLinkSmartWalletRequestBody {
 
   signature: string;
 
-  smart_wallet_type: 'safe' | 'kernel' | 'light_account' | 'biconomy' | 'coinbase_smart_wallet' | 'thirdweb';
+  /**
+   * The supported smart wallet providers.
+   */
+  smart_wallet_type: EmbeddedWalletsAPI.SmartWalletType;
 
   smart_wallet_version?: string;
 }

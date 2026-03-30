@@ -220,6 +220,7 @@ import {
 } from './resources/client-auth';
 import { CrossApp, CrossAppConnection, CrossAppConnectionsResponse } from './resources/cross-app';
 import {
+  AlchemyPaymasterContext,
   EmbeddedWalletCreationInput,
   EmbeddedWallets,
   ICloudClientType,
@@ -232,6 +233,14 @@ import {
   RecoveryKeyMaterialInput,
   RecoveryKeyMaterialResponse,
   RecoveryType,
+  SmartWalletConfiguration,
+  SmartWalletConfigurationDisabled,
+  SmartWalletConfigurationEnabled,
+  SmartWalletConfigurationInput,
+  SmartWalletConfigurationInputEnabled,
+  SmartWalletNetworkConfiguration,
+  SmartWalletNetworkConfigurationInput,
+  SmartWalletType,
   WalletCreationAdditionalSignerItem,
   WalletCreationInput,
 } from './resources/embedded-wallets';
@@ -421,7 +430,6 @@ import {
   OAuthTokens,
   PasskeyMfaMethod,
   SMSMfaMethod,
-  SmartWalletType,
   TotpMfaMethod,
   User,
   UserBatchCreateInput,
@@ -1714,7 +1722,6 @@ export declare namespace PrivyAPI {
     type LinkedAccountPhone as LinkedAccountPhone,
     type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
     type LinkedAccountEthereum as LinkedAccountEthereum,
-    type SmartWalletType as SmartWalletType,
     type LinkedAccountSmartWallet as LinkedAccountSmartWallet,
     type LinkedAccountSolana as LinkedAccountSolana,
     type LinkedAccountFarcaster as LinkedAccountFarcaster,
@@ -2115,6 +2122,15 @@ export declare namespace PrivyAPI {
 
   export {
     EmbeddedWallets as EmbeddedWallets,
+    type SmartWalletType as SmartWalletType,
+    type AlchemyPaymasterContext as AlchemyPaymasterContext,
+    type SmartWalletNetworkConfiguration as SmartWalletNetworkConfiguration,
+    type SmartWalletNetworkConfigurationInput as SmartWalletNetworkConfigurationInput,
+    type SmartWalletConfigurationDisabled as SmartWalletConfigurationDisabled,
+    type SmartWalletConfigurationEnabled as SmartWalletConfigurationEnabled,
+    type SmartWalletConfigurationInputEnabled as SmartWalletConfigurationInputEnabled,
+    type SmartWalletConfiguration as SmartWalletConfiguration,
+    type SmartWalletConfigurationInput as SmartWalletConfigurationInput,
     type RecoveryType as RecoveryType,
     type ICloudClientType as ICloudClientType,
     type RecoveryKeyMaterialInput as RecoveryKeyMaterialInput,

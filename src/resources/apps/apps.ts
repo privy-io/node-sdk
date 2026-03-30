@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as ClientAuthAPI from '../client-auth';
+import * as EmbeddedWalletsAPI from '../embedded-wallets';
 import * as AllowlistAPI from './allowlist';
 import { Allowlist, AllowlistCreateParams, AllowlistDeleteParams, AllowlistListResponse } from './allowlist';
 import { APIPromise } from '../../core/api-promise';
@@ -256,7 +257,10 @@ export interface AppResponse {
 
   show_wallet_login_first: boolean;
 
-  smart_wallet_config: AppResponse.Enabled | AppResponse.UnionMember1;
+  /**
+   * The configuration object for smart wallets.
+   */
+  smart_wallet_config: EmbeddedWalletsAPI.SmartWalletConfiguration;
 
   sms_auth: boolean;
 
@@ -322,48 +326,6 @@ export namespace AppResponse {
     provider_display_name: string;
 
     provider_icon_url: string;
-  }
-
-  export interface Enabled {
-    enabled: false;
-  }
-
-  export interface UnionMember1 {
-    configured_networks: Array<UnionMember1.ConfiguredNetwork>;
-
-    enabled: true;
-
-    smart_wallet_type:
-      | 'safe'
-      | 'kernel'
-      | 'light_account'
-      | 'biconomy'
-      | 'coinbase_smart_wallet'
-      | 'thirdweb';
-
-    smart_wallet_version?: string;
-  }
-
-  export namespace UnionMember1 {
-    export interface ConfiguredNetwork {
-      bundler_url: string;
-
-      chain_id: string;
-
-      chain_name?: string;
-
-      paymaster_context?: ConfiguredNetwork.PaymasterContext;
-
-      paymaster_url?: string;
-
-      rpc_url?: string;
-    }
-
-    export namespace ConfiguredNetwork {
-      export interface PaymasterContext {
-        policy_id: string;
-      }
-    }
   }
 }
 

@@ -391,17 +391,6 @@ export interface LinkedAccountEthereum {
 }
 
 /**
- * The provider for a smart wallet.
- */
-export type SmartWalletType =
-  | 'safe'
-  | 'kernel'
-  | 'light_account'
-  | 'biconomy'
-  | 'coinbase_smart_wallet'
-  | 'thirdweb';
-
-/**
  * A smart wallet account linked to the user.
  */
 export interface LinkedAccountSmartWallet {
@@ -412,9 +401,9 @@ export interface LinkedAccountSmartWallet {
   latest_verified_at: number | null;
 
   /**
-   * The provider for a smart wallet.
+   * The supported smart wallet providers.
    */
-  smart_wallet_type: SmartWalletType;
+  smart_wallet_type: EmbeddedWalletsAPI.SmartWalletType;
 
   type: 'smart_wallet';
 
@@ -1742,7 +1731,6 @@ export declare namespace Users {
     type LinkedAccountPhone as LinkedAccountPhone,
     type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
     type LinkedAccountEthereum as LinkedAccountEthereum,
-    type SmartWalletType as SmartWalletType,
     type LinkedAccountSmartWallet as LinkedAccountSmartWallet,
     type LinkedAccountSolana as LinkedAccountSolana,
     type LinkedAccountFarcaster as LinkedAccountFarcaster,

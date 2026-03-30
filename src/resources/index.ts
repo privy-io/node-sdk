@@ -229,6 +229,15 @@ export {
 export { CrossApp, type CrossAppConnection, type CrossAppConnectionsResponse } from './cross-app';
 export {
   EmbeddedWallets,
+  type SmartWalletType,
+  type AlchemyPaymasterContext,
+  type SmartWalletNetworkConfiguration,
+  type SmartWalletNetworkConfigurationInput,
+  type SmartWalletConfigurationDisabled,
+  type SmartWalletConfigurationEnabled,
+  type SmartWalletConfigurationInputEnabled,
+  type SmartWalletConfiguration,
+  type SmartWalletConfigurationInput,
   type RecoveryType,
   type ICloudClientType,
   type RecoveryKeyMaterialInput,
@@ -379,7 +388,6 @@ export {
   type LinkedAccountPhone,
   type LinkedAccountBaseWallet,
   type LinkedAccountEthereum,
-  type SmartWalletType,
   type LinkedAccountSmartWallet,
   type LinkedAccountSolana,
   type LinkedAccountFarcaster,

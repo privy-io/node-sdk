@@ -1,7 +1,7 @@
 import { Prettify } from 'viem';
 import { PrivyAPI } from '../../client';
 import { APIPromise } from '../../core/api-promise';
-import { generateAuthorizationSignatures } from '../../lib/authorization';
+import { prepareRequest } from '../../lib/authorization';
 import {
   Policies,
   Policy,
@@ -9,15 +9,14 @@ import {
   PolicyCreateRuleParams,
   PolicyCreateRuleResponse,
   PolicyDeleteParams,
-  PolicyDeleteResponse,
   PolicyDeleteRuleParams,
-  PolicyDeleteRuleResponse,
   PolicyUpdateParams,
   PolicyUpdateRuleParams,
   PolicyUpdateRuleResponse,
+  SuccessResponse,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
-import { WithAuthorization, WithIdempotency } from './types';
+import { WithAuthorization, WithExpiry, WithIdempotency } from './types';
 
 export class PrivyPoliciesService extends Policies {
   private privyClient: PrivyClient;
@@ -39,137 +38,99 @@ export class PrivyPoliciesService extends Policies {
 
   public async update(
     policyId: string,
-    { authorization_context: authorizationContext = {}, ...params }: PrivyPoliciesService.UpdateInput,
+    {
+      authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
+      ...params
+    }: PrivyPoliciesService.UpdateInput,
   ): Promise<Policy> {
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'PATCH',
-        url: `${this._client.baseURL}/v1/policies/${policyId}`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-        },
-      },
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'PATCH',
+      url: `${this._client.baseURL}/v1/policies/${policyId}`,
+      body: params,
     });
 
-    const response = await this._update(policyId, {
-      ...params,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-    });
-
-    return response;
+    return await this._update(policyId, { ...params, ...headers });
   }
 
   public async delete(
     policyId: string,
-    { authorization_context: authorizationContext = {}, ...params }: PrivyPoliciesService.DeleteInput,
-  ): Promise<PolicyDeleteResponse> {
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+    {
+      authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
+      ...params
+    }: PrivyPoliciesService.DeleteInput,
+  ): Promise<SuccessResponse> {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'DELETE',
-        url: `${this._client.baseURL}/v1/policies/${policyId}`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-        },
-      },
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'DELETE',
+      url: `${this._client.baseURL}/v1/policies/${policyId}`,
+      body: params,
     });
 
-    const response = await this._delete(policyId, {
-      ...params,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-    });
-
-    return response;
+    return await this._delete(policyId, { ...params, ...headers });
   }
 
   public async createRule(
     policyId: string,
-    { authorization_context: authorizationContext = {}, ...params }: PrivyPoliciesService.CreateRuleInput,
+    {
+      authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
+      ...params
+    }: PrivyPoliciesService.CreateRuleInput,
   ): Promise<PolicyCreateRuleResponse> {
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'POST',
-        url: `${this._client.baseURL}/v1/policies/${policyId}/rules`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-        },
-      },
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'POST',
+      url: `${this._client.baseURL}/v1/policies/${policyId}/rules`,
+      body: params,
     });
 
-    const response = await this._createRule(policyId, {
-      ...params,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-    });
-
-    return response;
+    return await this._createRule(policyId, { ...params, ...headers });
   }
 
   public async updateRule(
     ruleId: string,
     {
       authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
       policy_id: policyId,
       ...params
     }: PrivyPoliciesService.UpdateRuleInput,
   ): Promise<PolicyUpdateRuleResponse> {
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'PATCH',
-        url: `${this._client.baseURL}/v1/policies/${policyId}/rules/${ruleId}`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-        },
-      },
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'PATCH',
+      url: `${this._client.baseURL}/v1/policies/${policyId}/rules/${ruleId}`,
+      body: params,
     });
 
-    const response = await this._updateRule(ruleId, {
-      ...params,
-      policy_id: policyId,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-    });
-
-    return response;
+    return await this._updateRule(ruleId, { ...params, policy_id: policyId, ...headers });
   }
 
   public async deleteRule(
     ruleId: string,
     {
       authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
       policy_id: policyId,
       ...params
     }: PrivyPoliciesService.DeleteRuleInput,
-  ): Promise<PolicyDeleteRuleResponse> {
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+  ): Promise<SuccessResponse> {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'DELETE',
-        url: `${this._client.baseURL}/v1/policies/${policyId}/rules/${ruleId}`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-        },
-      },
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'DELETE',
+      url: `${this._client.baseURL}/v1/policies/${policyId}/rules/${ruleId}`,
+      body: params,
     });
 
-    const response = await this._deleteRule(ruleId, {
-      ...params,
-      policy_id: policyId,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-    });
-
-    return response;
+    return await this._deleteRule(ruleId, { ...params, policy_id: policyId, ...headers });
   }
 }
 
@@ -177,13 +138,13 @@ export namespace PrivyPoliciesService {
   /** The input type for the {@link PrivyPoliciesService.create} method. */
   export type CreateInput = Prettify<WithIdempotency<PolicyCreateParams>>;
   /** The input type for the {@link PrivyPoliciesService.update} method. */
-  export type UpdateInput = Prettify<WithAuthorization<PolicyUpdateParams>>;
+  export type UpdateInput = Prettify<WithExpiry<WithAuthorization<PolicyUpdateParams>>>;
   /** The input type for the {@link PrivyPoliciesService.delete} method. */
-  export type DeleteInput = Prettify<WithAuthorization<PolicyDeleteParams>>;
+  export type DeleteInput = Prettify<WithExpiry<WithAuthorization<PolicyDeleteParams>>>;
   /** The input type for the {@link PrivyPoliciesService.createRule} method. */
-  export type CreateRuleInput = Prettify<WithAuthorization<PolicyCreateRuleParams>>;
+  export type CreateRuleInput = Prettify<WithExpiry<WithAuthorization<PolicyCreateRuleParams>>>;
   /** The input type for the {@link PrivyPoliciesService.updateRule} method. */
-  export type UpdateRuleInput = Prettify<WithAuthorization<PolicyUpdateRuleParams>>;
+  export type UpdateRuleInput = Prettify<WithExpiry<WithAuthorization<PolicyUpdateRuleParams>>>;
   /** The input type for the {@link PrivyPoliciesService.deleteRule} method. */
-  export type DeleteRuleInput = Prettify<WithAuthorization<PolicyDeleteRuleParams>>;
+  export type DeleteRuleInput = Prettify<WithExpiry<WithAuthorization<PolicyDeleteRuleParams>>>;
 }

@@ -2,10 +2,12 @@
 
 import { APIResource } from '../core/resource';
 import * as IntentsAPI from './intents';
+import * as KeyQuorumsAPI from './key-quorums';
 import * as PoliciesAPI from './policies';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -53,10 +55,18 @@ export class Intents extends APIResource {
    */
   createPolicyRule(
     policyID: string,
-    body: IntentCreatePolicyRuleParams,
+    params: IntentCreatePolicyRuleParams,
     options?: RequestOptions,
   ): APIPromise<RuleIntentResponse> {
-    return this._client.post(path`/v1/intents/policies/${policyID}/rules`, { body, ...options });
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.post(path`/v1/intents/policies/${policyID}/rules`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -76,8 +86,14 @@ export class Intents extends APIResource {
     params: IntentDeletePolicyRuleParams,
     options?: RequestOptions,
   ): APIPromise<RuleIntentResponse> {
-    const { policy_id } = params;
-    return this._client.delete(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, options);
+    const { policy_id, 'privy-request-expiry': privyRequestExpiry } = params;
+    return this._client.delete(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, {
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -92,6 +108,9 @@ export class Intents extends APIResource {
    * ```
    */
   get(intentID: string, options?: RequestOptions): APIPromise<IntentResponse> {
+    if (intentID === '') {
+      throw new Error('intentID must not be an empty string');
+    }
     return this._client.get(path`/v1/intents/${intentID}`, options);
   }
 
@@ -104,14 +123,22 @@ export class Intents extends APIResource {
    * const rpcIntentResponse = await client.intents.rpc(
    *   'wallet_id',
    *   {
-   *     method: 'personal_sign',
-   *     params: { encoding: 'utf-8', message: 'message' },
+   *     method: 'eth_signTransaction',
+   *     params: { transaction: {} },
    *   },
    * );
    * ```
    */
-  rpc(walletID: string, body: IntentRpcParams, options?: RequestOptions): APIPromise<RpcIntentResponse> {
-    return this._client.post(path`/v1/intents/wallets/${walletID}/rpc`, { body, ...options });
+  rpc(walletID: string, params: IntentRpcParams, options?: RequestOptions): APIPromise<RpcIntentResponse> {
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.post(path`/v1/intents/wallets/${walletID}/rpc`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -126,10 +153,18 @@ export class Intents extends APIResource {
    */
   updateKeyQuorum(
     keyQuorumID: string,
-    body: IntentUpdateKeyQuorumParams,
+    params: IntentUpdateKeyQuorumParams,
     options?: RequestOptions,
   ): APIPromise<KeyQuorumIntentResponse> {
-    return this._client.patch(path`/v1/intents/key_quorums/${keyQuorumID}`, { body, ...options });
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.patch(path`/v1/intents/key_quorums/${keyQuorumID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -144,10 +179,18 @@ export class Intents extends APIResource {
    */
   updatePolicy(
     policyID: string,
-    body: IntentUpdatePolicyParams,
+    params: IntentUpdatePolicyParams,
     options?: RequestOptions,
   ): APIPromise<PolicyIntentResponse> {
-    return this._client.patch(path`/v1/intents/policies/${policyID}`, { body, ...options });
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.patch(path`/v1/intents/policies/${policyID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -178,8 +221,15 @@ export class Intents extends APIResource {
     params: IntentUpdatePolicyRuleParams,
     options?: RequestOptions,
   ): APIPromise<RuleIntentResponse> {
-    const { policy_id, ...body } = params;
-    return this._client.patch(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, { body, ...options });
+    const { policy_id, 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.patch(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -194,10 +244,18 @@ export class Intents extends APIResource {
    */
   updateWallet(
     walletID: string,
-    body: IntentUpdateWalletParams,
+    params: IntentUpdateWalletParams,
     options?: RequestOptions,
   ): APIPromise<WalletIntentResponse> {
-    return this._client.patch(path`/v1/intents/wallets/${walletID}`, { body, ...options });
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.patch(path`/v1/intents/wallets/${walletID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -214,675 +272,1045 @@ export type IntentType = 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'WALLET';
 export type IntentStatus = 'pending' | 'executed' | 'failed' | 'expired' | 'rejected' | 'dismissed';
 
 /**
+ * Request details for an RPC intent.
+ */
+export interface RpcIntentRequestDetails {
+  /**
+   * Request body for wallet RPC operations, discriminated by method.
+   */
+  body: WalletsAPI.WalletRpcRequestBody;
+
+  method: 'POST';
+
+  url: string;
+}
+
+/**
+ * Request details for a policy intent.
+ */
+export interface PolicyIntentRequestDetails {
+  body: PolicyIntentRequestDetails.Body;
+
+  method: 'PATCH';
+
+  url: string;
+}
+
+export namespace PolicyIntentRequestDetails {
+  export interface Body {
+    name?: string;
+
+    owner?: Body.UserID | Body.PublicKey | null;
+
+    owner_id?: string | null;
+
+    rules?: Array<Body.Rule>;
+  }
+
+  export namespace Body {
+    export interface UserID {
+      user_id: string;
+    }
+
+    export interface PublicKey {
+      public_key: string;
+    }
+
+    export interface Rule {
+      action: 'ALLOW' | 'DENY';
+
+      conditions: Array<
+        | Rule.UnionMember0
+        | Rule.UnionMember1
+        | Rule.UnionMember2
+        | Rule.UnionMember3
+        | Rule.UnionMember4
+        | Rule.UnionMember5
+        | Rule.UnionMember6
+        | Rule.UnionMember7
+        | Rule.UnionMember8
+        | Rule.UnionMember9
+        | Rule.UnionMember10
+        | Rule.UnionMember11
+        | Rule.UnionMember12
+        | Rule.UnionMember13
+      >;
+
+      method:
+        | 'eth_sendTransaction'
+        | 'eth_signTransaction'
+        | 'eth_signTypedData_v4'
+        | 'eth_signUserOperation'
+        | 'eth_sign7702Authorization'
+        | 'signTransaction'
+        | 'signAndSendTransaction'
+        | 'signTransactionBytes'
+        | 'exportPrivateKey'
+        | '*';
+
+      name: string;
+    }
+
+    export namespace Rule {
+      export interface UnionMember0 {
+        field: 'to' | 'value' | 'chain_id';
+
+        field_source: 'ethereum_transaction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember1 {
+        abi: Array<UnionMember1.Abi>;
+
+        field: string;
+
+        field_source: 'ethereum_calldata';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export namespace UnionMember1 {
+        export interface Abi {
+          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+          anonymous?: boolean;
+
+          inputs?: Array<Abi.Input>;
+
+          name?: string;
+
+          outputs?: Array<Abi.Output>;
+
+          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+        }
+
+        export namespace Abi {
+          export interface Input {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+
+          export interface Output {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+        }
+      }
+
+      export interface UnionMember2 {
+        field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+
+        field_source: 'ethereum_typed_data_domain';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember3 {
+        field: string;
+
+        field_source: 'ethereum_typed_data_message';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        typed_data: UnionMember3.TypedData;
+
+        value: string | Array<string>;
+      }
+
+      export namespace UnionMember3 {
+        export interface TypedData {
+          primary_type: string;
+
+          types: { [key: string]: Array<TypedData.Type> };
+        }
+
+        export namespace TypedData {
+          export interface Type {
+            name: string;
+
+            type: string;
+          }
+        }
+      }
+
+      export interface UnionMember4 {
+        field: 'contract';
+
+        field_source: 'ethereum_7702_authorization';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember5 {
+        field: 'programId';
+
+        field_source: 'solana_program_instruction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember6 {
+        field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+
+        field_source: 'solana_system_program_instruction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember7 {
+        field:
+          | 'instructionName'
+          | 'Transfer.source'
+          | 'Transfer.destination'
+          | 'Transfer.authority'
+          | 'Transfer.amount'
+          | 'TransferChecked.source'
+          | 'TransferChecked.destination'
+          | 'TransferChecked.authority'
+          | 'TransferChecked.amount'
+          | 'TransferChecked.mint'
+          | 'Burn.account'
+          | 'Burn.mint'
+          | 'Burn.authority'
+          | 'Burn.amount'
+          | 'MintTo.mint'
+          | 'MintTo.account'
+          | 'MintTo.authority'
+          | 'MintTo.amount'
+          | 'CloseAccount.account'
+          | 'CloseAccount.destination'
+          | 'CloseAccount.authority'
+          | 'InitializeAccount3.account'
+          | 'InitializeAccount3.mint'
+          | 'InitializeAccount3.owner';
+
+        field_source: 'solana_token_program_instruction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember8 {
+        field:
+          | 'TransferContract.to_address'
+          | 'TransferContract.amount'
+          | 'TriggerSmartContract.contract_address'
+          | 'TriggerSmartContract.call_value'
+          | 'TriggerSmartContract.token_id'
+          | 'TriggerSmartContract.call_token_value';
+
+        field_source: 'tron_transaction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember9 {
+        field: 'current_unix_timestamp';
+
+        field_source: 'system';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember10 {
+        field: string;
+
+        field_source: 'reference';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember11 {
+        abi: Array<UnionMember11.Abi>;
+
+        field: string;
+
+        field_source: 'tron_trigger_smart_contract_data';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export namespace UnionMember11 {
+        export interface Abi {
+          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+          anonymous?: boolean;
+
+          inputs?: Array<Abi.Input>;
+
+          name?: string;
+
+          outputs?: Array<Abi.Output>;
+
+          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+        }
+
+        export namespace Abi {
+          export interface Input {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+
+          export interface Output {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+        }
+      }
+
+      export interface UnionMember12 {
+        field: 'commandName';
+
+        field_source: 'sui_transaction_command';
+
+        operator: 'eq' | 'in';
+
+        /**
+         * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+         */
+        value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+      }
+
+      export interface UnionMember13 {
+        field: 'recipient' | 'amount';
+
+        field_source: 'sui_transfer_objects_command';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+    }
+  }
+}
+
+/**
+ * Request details for creating a rule via intent.
+ */
+export interface RuleIntentCreateRequestDetails {
+  body: RuleIntentCreateRequestDetails.Body;
+
+  method: 'POST';
+
+  url: string;
+}
+
+export namespace RuleIntentCreateRequestDetails {
+  export interface Body {
+    action: 'ALLOW' | 'DENY';
+
+    conditions: Array<
+      | Body.UnionMember0
+      | Body.UnionMember1
+      | Body.UnionMember2
+      | Body.UnionMember3
+      | Body.UnionMember4
+      | Body.UnionMember5
+      | Body.UnionMember6
+      | Body.UnionMember7
+      | Body.UnionMember8
+      | Body.UnionMember9
+      | Body.UnionMember10
+      | Body.UnionMember11
+      | Body.UnionMember12
+      | Body.UnionMember13
+    >;
+
+    method:
+      | 'eth_sendTransaction'
+      | 'eth_signTransaction'
+      | 'eth_signTypedData_v4'
+      | 'eth_signUserOperation'
+      | 'eth_sign7702Authorization'
+      | 'signTransaction'
+      | 'signAndSendTransaction'
+      | 'signTransactionBytes'
+      | 'exportPrivateKey'
+      | '*';
+
+    name: string;
+  }
+
+  export namespace Body {
+    export interface UnionMember0 {
+      field: 'to' | 'value' | 'chain_id';
+
+      field_source: 'ethereum_transaction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember1 {
+      abi: Array<UnionMember1.Abi>;
+
+      field: string;
+
+      field_source: 'ethereum_calldata';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export namespace UnionMember1 {
+      export interface Abi {
+        type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+        anonymous?: boolean;
+
+        inputs?: Array<Abi.Input>;
+
+        name?: string;
+
+        outputs?: Array<Abi.Output>;
+
+        stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+      }
+
+      export namespace Abi {
+        export interface Input {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+
+        export interface Output {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+      }
+    }
+
+    export interface UnionMember2 {
+      field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+
+      field_source: 'ethereum_typed_data_domain';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember3 {
+      field: string;
+
+      field_source: 'ethereum_typed_data_message';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      typed_data: UnionMember3.TypedData;
+
+      value: string | Array<string>;
+    }
+
+    export namespace UnionMember3 {
+      export interface TypedData {
+        primary_type: string;
+
+        types: { [key: string]: Array<TypedData.Type> };
+      }
+
+      export namespace TypedData {
+        export interface Type {
+          name: string;
+
+          type: string;
+        }
+      }
+    }
+
+    export interface UnionMember4 {
+      field: 'contract';
+
+      field_source: 'ethereum_7702_authorization';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember5 {
+      field: 'programId';
+
+      field_source: 'solana_program_instruction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember6 {
+      field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+
+      field_source: 'solana_system_program_instruction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember7 {
+      field:
+        | 'instructionName'
+        | 'Transfer.source'
+        | 'Transfer.destination'
+        | 'Transfer.authority'
+        | 'Transfer.amount'
+        | 'TransferChecked.source'
+        | 'TransferChecked.destination'
+        | 'TransferChecked.authority'
+        | 'TransferChecked.amount'
+        | 'TransferChecked.mint'
+        | 'Burn.account'
+        | 'Burn.mint'
+        | 'Burn.authority'
+        | 'Burn.amount'
+        | 'MintTo.mint'
+        | 'MintTo.account'
+        | 'MintTo.authority'
+        | 'MintTo.amount'
+        | 'CloseAccount.account'
+        | 'CloseAccount.destination'
+        | 'CloseAccount.authority'
+        | 'InitializeAccount3.account'
+        | 'InitializeAccount3.mint'
+        | 'InitializeAccount3.owner';
+
+      field_source: 'solana_token_program_instruction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember8 {
+      field:
+        | 'TransferContract.to_address'
+        | 'TransferContract.amount'
+        | 'TriggerSmartContract.contract_address'
+        | 'TriggerSmartContract.call_value'
+        | 'TriggerSmartContract.token_id'
+        | 'TriggerSmartContract.call_token_value';
+
+      field_source: 'tron_transaction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember9 {
+      field: 'current_unix_timestamp';
+
+      field_source: 'system';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember10 {
+      field: string;
+
+      field_source: 'reference';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember11 {
+      abi: Array<UnionMember11.Abi>;
+
+      field: string;
+
+      field_source: 'tron_trigger_smart_contract_data';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export namespace UnionMember11 {
+      export interface Abi {
+        type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+        anonymous?: boolean;
+
+        inputs?: Array<Abi.Input>;
+
+        name?: string;
+
+        outputs?: Array<Abi.Output>;
+
+        stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+      }
+
+      export namespace Abi {
+        export interface Input {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+
+        export interface Output {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+      }
+    }
+
+    export interface UnionMember12 {
+      field: 'commandName';
+
+      field_source: 'sui_transaction_command';
+
+      operator: 'eq' | 'in';
+
+      /**
+       * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+       */
+      value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+    }
+
+    export interface UnionMember13 {
+      field: 'recipient' | 'amount';
+
+      field_source: 'sui_transfer_objects_command';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+  }
+}
+
+/**
+ * Request details for updating a rule via intent.
+ */
+export interface RuleIntentUpdateRequestDetails {
+  body: RuleIntentUpdateRequestDetails.Body;
+
+  method: 'PATCH';
+
+  url: string;
+}
+
+export namespace RuleIntentUpdateRequestDetails {
+  export interface Body {
+    action: 'ALLOW' | 'DENY';
+
+    conditions: Array<
+      | Body.UnionMember0
+      | Body.UnionMember1
+      | Body.UnionMember2
+      | Body.UnionMember3
+      | Body.UnionMember4
+      | Body.UnionMember5
+      | Body.UnionMember6
+      | Body.UnionMember7
+      | Body.UnionMember8
+      | Body.UnionMember9
+      | Body.UnionMember10
+      | Body.UnionMember11
+      | Body.UnionMember12
+      | Body.UnionMember13
+    >;
+
+    method:
+      | 'eth_sendTransaction'
+      | 'eth_signTransaction'
+      | 'eth_signTypedData_v4'
+      | 'eth_signUserOperation'
+      | 'eth_sign7702Authorization'
+      | 'signTransaction'
+      | 'signAndSendTransaction'
+      | 'signTransactionBytes'
+      | 'exportPrivateKey'
+      | '*';
+
+    name: string;
+  }
+
+  export namespace Body {
+    export interface UnionMember0 {
+      field: 'to' | 'value' | 'chain_id';
+
+      field_source: 'ethereum_transaction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember1 {
+      abi: Array<UnionMember1.Abi>;
+
+      field: string;
+
+      field_source: 'ethereum_calldata';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export namespace UnionMember1 {
+      export interface Abi {
+        type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+        anonymous?: boolean;
+
+        inputs?: Array<Abi.Input>;
+
+        name?: string;
+
+        outputs?: Array<Abi.Output>;
+
+        stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+      }
+
+      export namespace Abi {
+        export interface Input {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+
+        export interface Output {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+      }
+    }
+
+    export interface UnionMember2 {
+      field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+
+      field_source: 'ethereum_typed_data_domain';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember3 {
+      field: string;
+
+      field_source: 'ethereum_typed_data_message';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      typed_data: UnionMember3.TypedData;
+
+      value: string | Array<string>;
+    }
+
+    export namespace UnionMember3 {
+      export interface TypedData {
+        primary_type: string;
+
+        types: { [key: string]: Array<TypedData.Type> };
+      }
+
+      export namespace TypedData {
+        export interface Type {
+          name: string;
+
+          type: string;
+        }
+      }
+    }
+
+    export interface UnionMember4 {
+      field: 'contract';
+
+      field_source: 'ethereum_7702_authorization';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember5 {
+      field: 'programId';
+
+      field_source: 'solana_program_instruction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember6 {
+      field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+
+      field_source: 'solana_system_program_instruction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember7 {
+      field:
+        | 'instructionName'
+        | 'Transfer.source'
+        | 'Transfer.destination'
+        | 'Transfer.authority'
+        | 'Transfer.amount'
+        | 'TransferChecked.source'
+        | 'TransferChecked.destination'
+        | 'TransferChecked.authority'
+        | 'TransferChecked.amount'
+        | 'TransferChecked.mint'
+        | 'Burn.account'
+        | 'Burn.mint'
+        | 'Burn.authority'
+        | 'Burn.amount'
+        | 'MintTo.mint'
+        | 'MintTo.account'
+        | 'MintTo.authority'
+        | 'MintTo.amount'
+        | 'CloseAccount.account'
+        | 'CloseAccount.destination'
+        | 'CloseAccount.authority'
+        | 'InitializeAccount3.account'
+        | 'InitializeAccount3.mint'
+        | 'InitializeAccount3.owner';
+
+      field_source: 'solana_token_program_instruction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember8 {
+      field:
+        | 'TransferContract.to_address'
+        | 'TransferContract.amount'
+        | 'TriggerSmartContract.contract_address'
+        | 'TriggerSmartContract.call_value'
+        | 'TriggerSmartContract.token_id'
+        | 'TriggerSmartContract.call_token_value';
+
+      field_source: 'tron_transaction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember9 {
+      field: 'current_unix_timestamp';
+
+      field_source: 'system';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember10 {
+      field: string;
+
+      field_source: 'reference';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember11 {
+      abi: Array<UnionMember11.Abi>;
+
+      field: string;
+
+      field_source: 'tron_trigger_smart_contract_data';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export namespace UnionMember11 {
+      export interface Abi {
+        type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+        anonymous?: boolean;
+
+        inputs?: Array<Abi.Input>;
+
+        name?: string;
+
+        outputs?: Array<Abi.Output>;
+
+        stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+      }
+
+      export namespace Abi {
+        export interface Input {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+
+        export interface Output {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+      }
+    }
+
+    export interface UnionMember12 {
+      field: 'commandName';
+
+      field_source: 'sui_transaction_command';
+
+      operator: 'eq' | 'in';
+
+      /**
+       * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+       */
+      value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+    }
+
+    export interface UnionMember13 {
+      field: 'recipient' | 'amount';
+
+      field_source: 'sui_transfer_objects_command';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+  }
+}
+
+/**
+ * Request details for deleting a rule via intent.
+ */
+export interface RuleIntentDeleteRequestDetails {
+  method: 'DELETE';
+
+  url: string;
+
+  body?: unknown;
+}
+
+/**
  * The original rule request. Method is POST (create), PATCH (update), or DELETE
  * (delete)
  */
 export type RuleIntentRequestDetails =
-  | RuleIntentRequestDetails.UnionMember0
-  | RuleIntentRequestDetails.UnionMember1
-  | RuleIntentRequestDetails.UnionMember2;
-
-export namespace RuleIntentRequestDetails {
-  export interface UnionMember0 {
-    body: UnionMember0.Body;
-
-    method: 'POST';
-
-    url: string;
-  }
-
-  export namespace UnionMember0 {
-    export interface Body {
-      action: 'ALLOW' | 'DENY';
-
-      conditions: Array<
-        | Body.UnionMember0
-        | Body.UnionMember1
-        | Body.UnionMember2
-        | Body.UnionMember3
-        | Body.UnionMember4
-        | Body.UnionMember5
-        | Body.UnionMember6
-        | Body.UnionMember7
-        | Body.UnionMember8
-        | Body.UnionMember9
-        | Body.UnionMember10
-        | Body.UnionMember11
-        | Body.UnionMember12
-        | Body.UnionMember13
-      >;
-
-      method:
-        | 'eth_sendTransaction'
-        | 'eth_signTransaction'
-        | 'eth_signTypedData_v4'
-        | 'eth_signUserOperation'
-        | 'eth_sign7702Authorization'
-        | 'signTransaction'
-        | 'signAndSendTransaction'
-        | 'signTransactionBytes'
-        | 'exportPrivateKey'
-        | '*';
-
-      name: string;
-    }
-
-    export namespace Body {
-      export interface UnionMember0 {
-        field: 'to' | 'value' | 'chain_id';
-
-        field_source: 'ethereum_transaction';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember1 {
-        abi: Array<UnionMember1.Abi>;
-
-        field: string;
-
-        field_source: 'ethereum_calldata';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export namespace UnionMember1 {
-        export interface Abi {
-          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
-
-          anonymous?: boolean;
-
-          inputs?: Array<Abi.Input>;
-
-          name?: string;
-
-          outputs?: Array<Abi.Output>;
-
-          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
-        }
-
-        export namespace Abi {
-          export interface Input {
-            type: string;
-
-            components?: Array<unknown>;
-
-            indexed?: boolean;
-
-            internalType?: string;
-
-            name?: string;
-          }
-
-          export interface Output {
-            type: string;
-
-            components?: Array<unknown>;
-
-            indexed?: boolean;
-
-            internalType?: string;
-
-            name?: string;
-          }
-        }
-      }
-
-      export interface UnionMember2 {
-        field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
-
-        field_source: 'ethereum_typed_data_domain';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember3 {
-        field: string;
-
-        field_source: 'ethereum_typed_data_message';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        typed_data: UnionMember3.TypedData;
-
-        value: string | Array<string>;
-      }
-
-      export namespace UnionMember3 {
-        export interface TypedData {
-          primary_type: string;
-
-          types: { [key: string]: Array<TypedData.Type> };
-        }
-
-        export namespace TypedData {
-          export interface Type {
-            name: string;
-
-            type: string;
-          }
-        }
-      }
-
-      export interface UnionMember4 {
-        field: 'contract';
-
-        field_source: 'ethereum_7702_authorization';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember5 {
-        field: 'programId';
-
-        field_source: 'solana_program_instruction';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember6 {
-        field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
-
-        field_source: 'solana_system_program_instruction';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember7 {
-        field:
-          | 'instructionName'
-          | 'Transfer.source'
-          | 'Transfer.destination'
-          | 'Transfer.authority'
-          | 'Transfer.amount'
-          | 'TransferChecked.source'
-          | 'TransferChecked.destination'
-          | 'TransferChecked.authority'
-          | 'TransferChecked.amount'
-          | 'TransferChecked.mint'
-          | 'Burn.account'
-          | 'Burn.mint'
-          | 'Burn.authority'
-          | 'Burn.amount'
-          | 'MintTo.mint'
-          | 'MintTo.account'
-          | 'MintTo.authority'
-          | 'MintTo.amount'
-          | 'CloseAccount.account'
-          | 'CloseAccount.destination'
-          | 'CloseAccount.authority'
-          | 'InitializeAccount3.account'
-          | 'InitializeAccount3.mint'
-          | 'InitializeAccount3.owner';
-
-        field_source: 'solana_token_program_instruction';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember8 {
-        field:
-          | 'TransferContract.to_address'
-          | 'TransferContract.amount'
-          | 'TriggerSmartContract.contract_address'
-          | 'TriggerSmartContract.call_value'
-          | 'TriggerSmartContract.token_id'
-          | 'TriggerSmartContract.call_token_value';
-
-        field_source: 'tron_transaction';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember9 {
-        field: 'current_unix_timestamp';
-
-        field_source: 'system';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember10 {
-        field: string;
-
-        field_source: 'reference';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember11 {
-        abi: Array<UnionMember11.Abi>;
-
-        field: string;
-
-        field_source: 'tron_trigger_smart_contract_data';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export namespace UnionMember11 {
-        export interface Abi {
-          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
-
-          anonymous?: boolean;
-
-          inputs?: Array<Abi.Input>;
-
-          name?: string;
-
-          outputs?: Array<Abi.Output>;
-
-          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
-        }
-
-        export namespace Abi {
-          export interface Input {
-            type: string;
-
-            components?: Array<unknown>;
-
-            indexed?: boolean;
-
-            internalType?: string;
-
-            name?: string;
-          }
-
-          export interface Output {
-            type: string;
-
-            components?: Array<unknown>;
-
-            indexed?: boolean;
-
-            internalType?: string;
-
-            name?: string;
-          }
-        }
-      }
-
-      export interface UnionMember12 {
-        field: 'commandName';
-
-        field_source: 'sui_transaction_command';
-
-        operator: 'eq' | 'in';
-
-        /**
-         * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
-         */
-        value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
-      }
-
-      export interface UnionMember13 {
-        field: 'recipient' | 'amount';
-
-        field_source: 'sui_transfer_objects_command';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-    }
-  }
-
-  export interface UnionMember1 {
-    body: UnionMember1.Body;
-
-    method: 'PATCH';
-
-    url: string;
-  }
-
-  export namespace UnionMember1 {
-    export interface Body {
-      action: 'ALLOW' | 'DENY';
-
-      conditions: Array<
-        | Body.UnionMember0
-        | Body.UnionMember1
-        | Body.UnionMember2
-        | Body.UnionMember3
-        | Body.UnionMember4
-        | Body.UnionMember5
-        | Body.UnionMember6
-        | Body.UnionMember7
-        | Body.UnionMember8
-        | Body.UnionMember9
-        | Body.UnionMember10
-        | Body.UnionMember11
-        | Body.UnionMember12
-        | Body.UnionMember13
-      >;
-
-      method:
-        | 'eth_sendTransaction'
-        | 'eth_signTransaction'
-        | 'eth_signTypedData_v4'
-        | 'eth_signUserOperation'
-        | 'eth_sign7702Authorization'
-        | 'signTransaction'
-        | 'signAndSendTransaction'
-        | 'signTransactionBytes'
-        | 'exportPrivateKey'
-        | '*';
-
-      name: string;
-    }
-
-    export namespace Body {
-      export interface UnionMember0 {
-        field: 'to' | 'value' | 'chain_id';
-
-        field_source: 'ethereum_transaction';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember1 {
-        abi: Array<UnionMember1.Abi>;
-
-        field: string;
-
-        field_source: 'ethereum_calldata';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export namespace UnionMember1 {
-        export interface Abi {
-          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
-
-          anonymous?: boolean;
-
-          inputs?: Array<Abi.Input>;
-
-          name?: string;
-
-          outputs?: Array<Abi.Output>;
-
-          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
-        }
-
-        export namespace Abi {
-          export interface Input {
-            type: string;
-
-            components?: Array<unknown>;
-
-            indexed?: boolean;
-
-            internalType?: string;
-
-            name?: string;
-          }
-
-          export interface Output {
-            type: string;
-
-            components?: Array<unknown>;
-
-            indexed?: boolean;
-
-            internalType?: string;
-
-            name?: string;
-          }
-        }
-      }
-
-      export interface UnionMember2 {
-        field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
-
-        field_source: 'ethereum_typed_data_domain';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember3 {
-        field: string;
-
-        field_source: 'ethereum_typed_data_message';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        typed_data: UnionMember3.TypedData;
-
-        value: string | Array<string>;
-      }
-
-      export namespace UnionMember3 {
-        export interface TypedData {
-          primary_type: string;
-
-          types: { [key: string]: Array<TypedData.Type> };
-        }
-
-        export namespace TypedData {
-          export interface Type {
-            name: string;
-
-            type: string;
-          }
-        }
-      }
-
-      export interface UnionMember4 {
-        field: 'contract';
-
-        field_source: 'ethereum_7702_authorization';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember5 {
-        field: 'programId';
-
-        field_source: 'solana_program_instruction';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember6 {
-        field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
-
-        field_source: 'solana_system_program_instruction';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember7 {
-        field:
-          | 'instructionName'
-          | 'Transfer.source'
-          | 'Transfer.destination'
-          | 'Transfer.authority'
-          | 'Transfer.amount'
-          | 'TransferChecked.source'
-          | 'TransferChecked.destination'
-          | 'TransferChecked.authority'
-          | 'TransferChecked.amount'
-          | 'TransferChecked.mint'
-          | 'Burn.account'
-          | 'Burn.mint'
-          | 'Burn.authority'
-          | 'Burn.amount'
-          | 'MintTo.mint'
-          | 'MintTo.account'
-          | 'MintTo.authority'
-          | 'MintTo.amount'
-          | 'CloseAccount.account'
-          | 'CloseAccount.destination'
-          | 'CloseAccount.authority'
-          | 'InitializeAccount3.account'
-          | 'InitializeAccount3.mint'
-          | 'InitializeAccount3.owner';
-
-        field_source: 'solana_token_program_instruction';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember8 {
-        field:
-          | 'TransferContract.to_address'
-          | 'TransferContract.amount'
-          | 'TriggerSmartContract.contract_address'
-          | 'TriggerSmartContract.call_value'
-          | 'TriggerSmartContract.token_id'
-          | 'TriggerSmartContract.call_token_value';
-
-        field_source: 'tron_transaction';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember9 {
-        field: 'current_unix_timestamp';
-
-        field_source: 'system';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember10 {
-        field: string;
-
-        field_source: 'reference';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export interface UnionMember11 {
-        abi: Array<UnionMember11.Abi>;
-
-        field: string;
-
-        field_source: 'tron_trigger_smart_contract_data';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-
-      export namespace UnionMember11 {
-        export interface Abi {
-          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
-
-          anonymous?: boolean;
-
-          inputs?: Array<Abi.Input>;
-
-          name?: string;
-
-          outputs?: Array<Abi.Output>;
-
-          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
-        }
-
-        export namespace Abi {
-          export interface Input {
-            type: string;
-
-            components?: Array<unknown>;
-
-            indexed?: boolean;
-
-            internalType?: string;
-
-            name?: string;
-          }
-
-          export interface Output {
-            type: string;
-
-            components?: Array<unknown>;
-
-            indexed?: boolean;
-
-            internalType?: string;
-
-            name?: string;
-          }
-        }
-      }
-
-      export interface UnionMember12 {
-        field: 'commandName';
-
-        field_source: 'sui_transaction_command';
-
-        operator: 'eq' | 'in';
-
-        /**
-         * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
-         */
-        value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
-      }
-
-      export interface UnionMember13 {
-        field: 'recipient' | 'amount';
-
-        field_source: 'sui_transfer_objects_command';
-
-        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-        value: string | Array<string>;
-      }
-    }
-  }
-
-  export interface UnionMember2 {
-    method: 'DELETE';
-
-    url: string;
-
-    body?: unknown;
-  }
-}
+  | RuleIntentCreateRequestDetails
+  | RuleIntentUpdateRequestDetails
+  | RuleIntentDeleteRequestDetails;
 
 /**
  * A leaf member (user or key) of a nested key quorum in an intent authorization.
@@ -1055,6 +1483,12 @@ export interface RpcIntentResponse {
   created_by_display_name: string;
 
   /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
    * Unix timestamp when the intent expires
    */
   expires_at: number;
@@ -1093,10 +1527,9 @@ export interface RpcIntentResponse {
   created_by_id?: string;
 
   /**
-   * Current state of the wallet before any changes. If undefined, the resource was
-   * deleted and no longer exists
+   * A wallet managed by Privy's wallet infrastructure.
    */
-  current_resource_data?: RpcIntentResponse.CurrentResourceData;
+  current_resource_data?: WalletsAPI.Wallet;
 
   /**
    * Human-readable reason for dismissal, present when status is 'dismissed'
@@ -1119,617 +1552,14 @@ export namespace RpcIntentResponse {
    * The original RPC request that would be sent to the wallet endpoint
    */
   export interface RequestDetails {
-    body:
-      | RequestDetails.UnionMember0
-      | RequestDetails.UnionMember1
-      | RequestDetails.UnionMember2
-      | RequestDetails.UnionMember3
-      | RequestDetails.UnionMember4
-      | RequestDetails.UnionMember5
-      | RequestDetails.UnionMember6
-      | RequestDetails.UnionMember7
-      | RequestDetails.UnionMember8
-      | RequestDetails.UnionMember9
-      | RequestDetails.UnionMember10
-      | RequestDetails.UnionMember11
-      | RequestDetails.UnionMember12
-      | RequestDetails.UnionMember13
-      | RequestDetails.UnionMember14
-      | RequestDetails.UnionMember15
-      | RequestDetails.UnionMember16
-      | RequestDetails.UnionMember17
-      | RequestDetails.UnionMember18
-      | RequestDetails.UnionMember19;
+    /**
+     * Request body for wallet RPC operations, discriminated by method.
+     */
+    body: WalletsAPI.WalletRpcRequestBody;
 
     method: 'POST';
 
     url: string;
-  }
-
-  export namespace RequestDetails {
-    export interface UnionMember0 {
-      method: 'eth_signTransaction';
-
-      params: UnionMember0.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember0 {
-      export interface Params {
-        transaction: Params.Transaction;
-      }
-
-      export namespace Params {
-        export interface Transaction {
-          authorization_list?: Array<Transaction.AuthorizationList>;
-
-          chain_id?: string | number;
-
-          data?: string;
-
-          from?: string;
-
-          gas_limit?: string | number;
-
-          gas_price?: string | number;
-
-          max_fee_per_gas?: string | number;
-
-          max_priority_fee_per_gas?: string | number;
-
-          nonce?: string | number;
-
-          to?: string;
-
-          type?: 0 | 1 | 2 | 4;
-
-          value?: string | number;
-        }
-
-        export namespace Transaction {
-          export interface AuthorizationList {
-            chain_id: string | number;
-
-            contract: string;
-
-            nonce: string | number;
-
-            r: string;
-
-            s: string;
-
-            y_parity: number;
-          }
-        }
-      }
-    }
-
-    export interface UnionMember1 {
-      caip2: string;
-
-      method: 'eth_sendTransaction';
-
-      params: UnionMember1.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      sponsor?: boolean;
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember1 {
-      export interface Params {
-        transaction: Params.Transaction;
-      }
-
-      export namespace Params {
-        export interface Transaction {
-          authorization_list?: Array<Transaction.AuthorizationList>;
-
-          chain_id?: string | number;
-
-          data?: string;
-
-          from?: string;
-
-          gas_limit?: string | number;
-
-          gas_price?: string | number;
-
-          max_fee_per_gas?: string | number;
-
-          max_priority_fee_per_gas?: string | number;
-
-          nonce?: string | number;
-
-          to?: string;
-
-          type?: 0 | 1 | 2 | 4;
-
-          value?: string | number;
-        }
-
-        export namespace Transaction {
-          export interface AuthorizationList {
-            chain_id: string | number;
-
-            contract: string;
-
-            nonce: string | number;
-
-            r: string;
-
-            s: string;
-
-            y_parity: number;
-          }
-        }
-      }
-    }
-
-    export interface UnionMember2 {
-      method: 'personal_sign';
-
-      params: UnionMember2.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember2 {
-      export interface Params {
-        encoding: 'utf-8' | 'hex';
-
-        message: string;
-      }
-    }
-
-    export interface UnionMember3 {
-      method: 'eth_signTypedData_v4';
-
-      params: UnionMember3.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember3 {
-      export interface Params {
-        typed_data: Params.TypedData;
-      }
-
-      export namespace Params {
-        export interface TypedData {
-          domain: { [key: string]: unknown };
-
-          message: { [key: string]: unknown };
-
-          primary_type: string;
-
-          types: { [key: string]: Array<TypedData.Type> };
-        }
-
-        export namespace TypedData {
-          export interface Type {
-            name: string;
-
-            type: string;
-          }
-        }
-      }
-    }
-
-    export interface UnionMember4 {
-      method: 'secp256k1_sign';
-
-      params: UnionMember4.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember4 {
-      export interface Params {
-        hash: string;
-      }
-    }
-
-    export interface UnionMember5 {
-      method: 'eth_sign7702Authorization';
-
-      params: UnionMember5.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember5 {
-      export interface Params {
-        chain_id: string | number;
-
-        contract: string;
-
-        nonce?: string | number;
-      }
-    }
-
-    export interface UnionMember6 {
-      method: 'eth_signUserOperation';
-
-      params: UnionMember6.Params;
-
-      address?: string;
-
-      chain_type?: 'ethereum';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember6 {
-      export interface Params {
-        chain_id: string | number;
-
-        contract: string;
-
-        user_operation: Params.UserOperation;
-      }
-
-      export namespace Params {
-        export interface UserOperation {
-          call_data: string;
-
-          call_gas_limit: string;
-
-          max_fee_per_gas: string;
-
-          max_priority_fee_per_gas: string;
-
-          nonce: string;
-
-          paymaster: string;
-
-          paymaster_data: string;
-
-          paymaster_post_op_gas_limit: string;
-
-          paymaster_verification_gas_limit: string;
-
-          pre_verification_gas: string;
-
-          sender: string;
-
-          verification_gas_limit: string;
-        }
-      }
-    }
-
-    export interface UnionMember7 {
-      method: 'signTransaction';
-
-      params: UnionMember7.Params;
-
-      address?: string;
-
-      chain_type?: 'solana';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember7 {
-      export interface Params {
-        encoding: 'base64';
-
-        transaction: string;
-      }
-    }
-
-    export interface UnionMember8 {
-      caip2: string;
-
-      method: 'signAndSendTransaction';
-
-      params: UnionMember8.Params;
-
-      address?: string;
-
-      chain_type?: 'solana';
-
-      sponsor?: boolean;
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember8 {
-      export interface Params {
-        encoding: 'base64';
-
-        transaction: string;
-      }
-    }
-
-    export interface UnionMember9 {
-      method: 'signMessage';
-
-      params: UnionMember9.Params;
-
-      address?: string;
-
-      chain_type?: 'solana';
-
-      wallet_id?: string;
-    }
-
-    export namespace UnionMember9 {
-      export interface Params {
-        encoding: 'base64';
-
-        message: string;
-      }
-    }
-
-    export interface UnionMember10 {
-      address: string;
-
-      method: 'exportPrivateKey';
-
-      params: UnionMember10.Params;
-    }
-
-    export namespace UnionMember10 {
-      export interface Params {
-        encryption_type: 'HPKE';
-
-        recipient_public_key: string;
-
-        export_type?: 'display' | 'client';
-      }
-    }
-
-    export interface UnionMember11 {
-      method: 'transfer';
-
-      params: UnionMember11.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember11 {
-      export interface Params {
-        amount_sats: number;
-
-        receiver_spark_address: string;
-      }
-    }
-
-    export interface UnionMember12 {
-      method: 'getBalance';
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export interface UnionMember13 {
-      method: 'transferTokens';
-
-      params: UnionMember13.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember13 {
-      export interface Params {
-        receiver_spark_address: string;
-
-        token_amount: number;
-
-        token_identifier: string;
-
-        output_selection_strategy?: 'SMALL_FIRST' | 'LARGE_FIRST';
-
-        selected_outputs?: Array<Params.SelectedOutput>;
-      }
-
-      export namespace Params {
-        export interface SelectedOutput {
-          previous_transaction_hash: string;
-
-          previous_transaction_vout: number;
-
-          output?: SelectedOutput.Output;
-        }
-
-        export namespace SelectedOutput {
-          export interface Output {
-            owner_public_key: string;
-
-            token_amount: string;
-
-            id?: string;
-
-            revocation_commitment?: string;
-
-            token_identifier?: string;
-
-            token_public_key?: string;
-
-            withdraw_bond_sats?: number;
-
-            withdraw_relative_block_locktime?: number;
-          }
-        }
-      }
-    }
-
-    export interface UnionMember14 {
-      method: 'getStaticDepositAddress';
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export interface UnionMember15 {
-      method: 'getClaimStaticDepositQuote';
-
-      params: UnionMember15.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember15 {
-      export interface Params {
-        transaction_id: string;
-
-        output_index?: number;
-      }
-    }
-
-    export interface UnionMember16 {
-      method: 'claimStaticDeposit';
-
-      params: UnionMember16.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember16 {
-      export interface Params {
-        credit_amount_sats: number;
-
-        signature: string;
-
-        transaction_id: string;
-
-        output_index?: number;
-      }
-    }
-
-    export interface UnionMember17 {
-      method: 'createLightningInvoice';
-
-      params: UnionMember17.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember17 {
-      export interface Params {
-        amount_sats: number;
-
-        description_hash?: string;
-
-        expiry_seconds?: number;
-
-        include_spark_address?: boolean;
-
-        memo?: string;
-
-        receiver_identity_pubkey?: string;
-      }
-    }
-
-    export interface UnionMember18 {
-      method: 'payLightningInvoice';
-
-      params: UnionMember18.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember18 {
-      export interface Params {
-        invoice: string;
-
-        max_fee_sats: number;
-
-        amount_sats_to_send?: number;
-
-        prefer_spark?: boolean;
-      }
-    }
-
-    export interface UnionMember19 {
-      method: 'signMessageWithIdentityKey';
-
-      params: UnionMember19.Params;
-
-      network?: 'MAINNET' | 'REGTEST';
-    }
-
-    export namespace UnionMember19 {
-      export interface Params {
-        message: string;
-
-        compact?: boolean;
-      }
-    }
-  }
-
-  /**
-   * Current state of the wallet before any changes. If undefined, the resource was
-   * deleted and no longer exists
-   */
-  export interface CurrentResourceData {
-    id: string;
-
-    additional_signers: Array<CurrentResourceData.AdditionalSigner>;
-
-    address: string;
-
-    /**
-     * The wallet chain types.
-     */
-    chain_type: WalletsAPI.WalletChainType;
-
-    created_at: number;
-
-    exported_at: number | null;
-
-    imported_at: number | null;
-
-    owner_id: string | null;
-
-    policy_ids: Array<string>;
-
-    authorization_threshold?: number;
-
-    custodian?: CurrentResourceData.Custodian;
-
-    /**
-     * Information about the custodian managing this wallet.
-     */
-    custody?: WalletsAPI.WalletCustodian;
-
-    public_key?: string;
-  }
-
-  export namespace CurrentResourceData {
-    export interface AdditionalSigner {
-      signer_id: string;
-
-      override_policy_ids?: Array<string>;
-    }
-
-    export interface Custodian {
-      name: string;
-    }
   }
 }
 
@@ -1752,6 +1582,12 @@ export interface WalletIntentResponse {
    * Display name of the user who created the intent
    */
   created_by_display_name: string;
+
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
 
   /**
    * Unix timestamp when the intent expires
@@ -1793,10 +1629,9 @@ export interface WalletIntentResponse {
   created_by_id?: string;
 
   /**
-   * Current state of the wallet before any changes. If undefined, the resource was
-   * deleted and no longer exists
+   * A wallet managed by Privy's wallet infrastructure.
    */
-  current_resource_data?: WalletIntentResponse.CurrentResourceData;
+  current_resource_data?: WalletsAPI.Wallet;
 
   /**
    * Human-readable reason for dismissal, present when status is 'dismissed'
@@ -1857,56 +1692,6 @@ export namespace WalletIntentResponse {
       }
     }
   }
-
-  /**
-   * Current state of the wallet before any changes. If undefined, the resource was
-   * deleted and no longer exists
-   */
-  export interface CurrentResourceData {
-    id: string;
-
-    additional_signers: Array<CurrentResourceData.AdditionalSigner>;
-
-    address: string;
-
-    /**
-     * The wallet chain types.
-     */
-    chain_type: WalletsAPI.WalletChainType;
-
-    created_at: number;
-
-    exported_at: number | null;
-
-    imported_at: number | null;
-
-    owner_id: string | null;
-
-    policy_ids: Array<string>;
-
-    authorization_threshold?: number;
-
-    custodian?: CurrentResourceData.Custodian;
-
-    /**
-     * Information about the custodian managing this wallet.
-     */
-    custody?: WalletsAPI.WalletCustodian;
-
-    public_key?: string;
-  }
-
-  export namespace CurrentResourceData {
-    export interface AdditionalSigner {
-      signer_id: string;
-
-      override_policy_ids?: Array<string>;
-    }
-
-    export interface Custodian {
-      name: string;
-    }
-  }
 }
 
 /**
@@ -1928,6 +1713,12 @@ export interface PolicyIntentResponse {
    * Display name of the user who created the intent
    */
   created_by_display_name: string;
+
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
 
   /**
    * Unix timestamp when the intent expires
@@ -2705,6 +2496,12 @@ export interface KeyQuorumIntentResponse {
   created_by_display_name: string;
 
   /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
    * Unix timestamp when the intent expires
    */
   expires_at: number;
@@ -2745,10 +2542,9 @@ export interface KeyQuorumIntentResponse {
   created_by_id?: string;
 
   /**
-   * Current state of the key quorum before any changes. If undefined, the resource
-   * was deleted and no longer exists
+   * A key quorum for authorizing wallet operations.
    */
-  current_resource_data?: KeyQuorumIntentResponse.CurrentResourceData;
+  current_resource_data?: KeyQuorumsAPI.KeyQuorum;
 
   /**
    * Human-readable reason for dismissal, present when status is 'dismissed'
@@ -2772,51 +2568,14 @@ export namespace KeyQuorumIntentResponse {
    * endpoint
    */
   export interface RequestDetails {
-    body: RequestDetails.Body;
+    /**
+     * Request input for updating an existing key quorum.
+     */
+    body: KeyQuorumsAPI.KeyQuorumUpdateParams;
 
     method: 'PATCH';
 
     url: string;
-  }
-
-  export namespace RequestDetails {
-    export interface Body {
-      authorization_threshold?: number;
-
-      display_name?: string;
-
-      key_quorum_ids?: Array<string>;
-
-      public_keys?: Array<string>;
-
-      user_ids?: Array<string>;
-    }
-  }
-
-  /**
-   * Current state of the key quorum before any changes. If undefined, the resource
-   * was deleted and no longer exists
-   */
-  export interface CurrentResourceData {
-    id: string;
-
-    authorization_keys: Array<CurrentResourceData.AuthorizationKey>;
-
-    authorization_threshold: number | null;
-
-    display_name: string | null;
-
-    user_ids: Array<string> | null;
-
-    key_quorum_ids?: Array<string>;
-  }
-
-  export namespace CurrentResourceData {
-    export interface AuthorizationKey {
-      display_name: string | null;
-
-      public_key: string;
-    }
   }
 }
 
@@ -2839,6 +2598,12 @@ export interface RuleIntentResponse {
    * Display name of the user who created the intent
    */
   created_by_display_name: string;
+
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
 
   /**
    * Unix timestamp when the intent expires
@@ -3584,6 +3349,22 @@ export type IntentResponse =
   | RuleIntentResponse
   | KeyQuorumIntentResponse;
 
+/**
+ * Headers required to create an intent.
+ */
+export interface IntentCreationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
 export interface IntentListParams extends CursorParams {
   created_by_id?: string;
 
@@ -3608,10 +3389,13 @@ export interface IntentListParams extends CursorParams {
 
 export interface IntentCreatePolicyRuleParams {
   /**
-   * Action to take if the conditions are true.
+   * Body param: Action to take if the conditions are true.
    */
   action: 'ALLOW' | 'DENY';
 
+  /**
+   * Body param
+   */
   conditions: Array<
     | IntentCreatePolicyRuleParams.EthereumTransactionCondition
     | IntentCreatePolicyRuleParams.EthereumCalldataCondition
@@ -3628,7 +3412,7 @@ export interface IntentCreatePolicyRuleParams {
   >;
 
   /**
-   * Method the rule applies to.
+   * Body param: Method the rule applies to.
    */
   method:
     | 'eth_sendTransaction'
@@ -3642,7 +3426,16 @@ export interface IntentCreatePolicyRuleParams {
     | 'signTransactionBytes'
     | '*';
 
+  /**
+   * Body param
+   */
   name: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace IntentCreatePolicyRuleParams {
@@ -3798,389 +3591,676 @@ export namespace IntentCreatePolicyRuleParams {
 
 export interface IntentDeletePolicyRuleParams {
   /**
-   * ID of the policy.
+   * Path param: ID of the policy.
    */
   policy_id: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export type IntentRpcParams =
+  | IntentRpcParams.EthereumSignTransactionRpcInput
+  | IntentRpcParams.EthereumSendTransactionRpcInput
   | IntentRpcParams.EthereumPersonalSignRpcInput
   | IntentRpcParams.EthereumSignTypedDataRpcInput
-  | IntentRpcParams.EthereumSignTransactionRpcInput
-  | IntentRpcParams.EthereumSignUserOperationRpcInput
-  | IntentRpcParams.EthereumSendTransactionRpcInput
-  | IntentRpcParams.EthereumSign7702AuthorizationRpcInput
   | IntentRpcParams.EthereumSecp256k1SignRpcInput
-  | IntentRpcParams.SolanaSignMessageRpcInput
+  | IntentRpcParams.EthereumSign7702AuthorizationRpcInput
+  | IntentRpcParams.EthereumSignUserOperationRpcInput
   | IntentRpcParams.SolanaSignTransactionRpcInput
-  | IntentRpcParams.SolanaSignAndSendTransactionRpcInput;
+  | IntentRpcParams.SolanaSignAndSendTransactionRpcInput
+  | IntentRpcParams.SolanaSignMessageRpcInput
+  | IntentRpcParams.SparkTransferRpcInput
+  | IntentRpcParams.SparkGetBalanceRpcInput
+  | IntentRpcParams.SparkTransferTokensRpcInput
+  | IntentRpcParams.SparkGetStaticDepositAddressRpcInput
+  | IntentRpcParams.SparkGetClaimStaticDepositQuoteRpcInput
+  | IntentRpcParams.SparkClaimStaticDepositRpcInput
+  | IntentRpcParams.SparkCreateLightningInvoiceRpcInput
+  | IntentRpcParams.SparkPayLightningInvoiceRpcInput
+  | IntentRpcParams.SparkSignMessageWithIdentityKeyRpcInput
+  | IntentRpcParams.ExportPrivateKeyRpcInput;
 
 export declare namespace IntentRpcParams {
-  export interface EthereumPersonalSignRpcInput {
-    method: 'personal_sign';
-
-    params: EthereumPersonalSignRpcInput.Params;
-
-    address?: string;
-
-    chain_type?: 'ethereum';
-  }
-
-  export namespace EthereumPersonalSignRpcInput {
-    export interface Params {
-      encoding: 'utf-8' | 'hex';
-
-      message: string;
-    }
-  }
-
-  export interface EthereumSignTypedDataRpcInput {
-    method: 'eth_signTypedData_v4';
-
-    params: EthereumSignTypedDataRpcInput.Params;
-
-    address?: string;
-
-    chain_type?: 'ethereum';
-  }
-
-  export namespace EthereumSignTypedDataRpcInput {
-    export interface Params {
-      typed_data: Params.TypedData;
-    }
-
-    export namespace Params {
-      export interface TypedData {
-        domain: { [key: string]: unknown };
-
-        message: { [key: string]: unknown };
-
-        primary_type: string;
-
-        types: { [key: string]: Array<TypedData.Type> };
-      }
-
-      export namespace TypedData {
-        export interface Type {
-          name: string;
-
-          type: string;
-        }
-      }
-    }
-  }
-
   export interface EthereumSignTransactionRpcInput {
+    /**
+     * Body param
+     */
     method: 'eth_signTransaction';
 
-    params: EthereumSignTransactionRpcInput.Params;
+    /**
+     * Body param: Parameters for the EVM `eth_signTransaction` RPC.
+     */
+    params: WalletsAPI.EthereumSignTransactionRpcInputParams;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
-  }
 
-  export namespace EthereumSignTransactionRpcInput {
-    export interface Params {
-      transaction: Params.Transaction;
-    }
+    /**
+     * Body param
+     */
+    wallet_id?: string;
 
-    export namespace Params {
-      export interface Transaction {
-        authorization_list?: Array<Transaction.AuthorizationList>;
-
-        chain_id?: string | number;
-
-        data?: string;
-
-        from?: string;
-
-        gas_limit?: string | number;
-
-        gas_price?: string | number;
-
-        max_fee_per_gas?: string | number;
-
-        max_priority_fee_per_gas?: string | number;
-
-        nonce?: string | number;
-
-        to?: string;
-
-        type?: 0 | 1 | 2 | 4;
-
-        value?: string | number;
-      }
-
-      export namespace Transaction {
-        export interface AuthorizationList {
-          chain_id: string | number;
-
-          contract: string;
-
-          nonce: string | number;
-
-          r: string;
-
-          s: string;
-
-          y_parity: number;
-        }
-      }
-    }
-  }
-
-  export interface EthereumSignUserOperationRpcInput {
-    method: 'eth_signUserOperation';
-
-    params: EthereumSignUserOperationRpcInput.Params;
-
-    address?: string;
-
-    chain_type?: 'ethereum';
-  }
-
-  export namespace EthereumSignUserOperationRpcInput {
-    export interface Params {
-      chain_id: string | number;
-
-      contract: string;
-
-      user_operation: Params.UserOperation;
-    }
-
-    export namespace Params {
-      export interface UserOperation {
-        call_data: string;
-
-        call_gas_limit: string;
-
-        max_fee_per_gas: string;
-
-        max_priority_fee_per_gas: string;
-
-        nonce: string;
-
-        paymaster: string;
-
-        paymaster_data: string;
-
-        paymaster_post_op_gas_limit: string;
-
-        paymaster_verification_gas_limit: string;
-
-        pre_verification_gas: string;
-
-        sender: string;
-
-        verification_gas_limit: string;
-      }
-    }
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export interface EthereumSendTransactionRpcInput {
+    /**
+     * Body param
+     */
     caip2: string;
 
+    /**
+     * Body param
+     */
     method: 'eth_sendTransaction';
 
-    params: EthereumSendTransactionRpcInput.Params;
+    /**
+     * Body param: Parameters for the EVM `eth_sendTransaction` RPC.
+     */
+    params: WalletsAPI.EthereumSendTransactionRpcInputParams;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
 
+    /**
+     * Body param
+     */
     sponsor?: boolean;
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
-  export namespace EthereumSendTransactionRpcInput {
-    export interface Params {
-      transaction: Params.Transaction;
-    }
+  export interface EthereumPersonalSignRpcInput {
+    /**
+     * Body param
+     */
+    method: 'personal_sign';
 
-    export namespace Params {
-      export interface Transaction {
-        authorization_list?: Array<Transaction.AuthorizationList>;
+    /**
+     * Body param: Parameters for the EVM `personal_sign` RPC.
+     */
+    params: WalletsAPI.EthereumPersonalSignRpcInputParams;
 
-        chain_id?: string | number;
-
-        data?: string;
-
-        from?: string;
-
-        gas_limit?: string | number;
-
-        gas_price?: string | number;
-
-        max_fee_per_gas?: string | number;
-
-        max_priority_fee_per_gas?: string | number;
-
-        nonce?: string | number;
-
-        to?: string;
-
-        type?: 0 | 1 | 2 | 4;
-
-        value?: string | number;
-      }
-
-      export namespace Transaction {
-        export interface AuthorizationList {
-          chain_id: string | number;
-
-          contract: string;
-
-          nonce: string | number;
-
-          r: string;
-
-          s: string;
-
-          y_parity: number;
-        }
-      }
-    }
-  }
-
-  export interface EthereumSign7702AuthorizationRpcInput {
-    method: 'eth_sign7702Authorization';
-
-    params: EthereumSign7702AuthorizationRpcInput.Params;
-
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
-  export namespace EthereumSign7702AuthorizationRpcInput {
-    export interface Params {
-      chain_id: string | number;
+  export interface EthereumSignTypedDataRpcInput {
+    /**
+     * Body param
+     */
+    method: 'eth_signTypedData_v4';
 
-      contract: string;
+    /**
+     * Body param: Parameters for the EVM `eth_signTypedData_v4` RPC.
+     */
+    params: WalletsAPI.EthereumSignTypedDataRpcInputParams;
 
-      nonce?: string | number;
-    }
+    /**
+     * Body param
+     */
+    address?: string;
+
+    /**
+     * Body param
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export interface EthereumSecp256k1SignRpcInput {
+    /**
+     * Body param
+     */
     method: 'secp256k1_sign';
 
-    params: EthereumSecp256k1SignRpcInput.Params;
+    /**
+     * Body param: Parameters for the EVM `secp256k1_sign` RPC.
+     */
+    params: WalletsAPI.EthereumSecp256k1SignRpcInputParams;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
-  export namespace EthereumSecp256k1SignRpcInput {
-    export interface Params {
-      hash: string;
-    }
-  }
+  export interface EthereumSign7702AuthorizationRpcInput {
+    /**
+     * Body param
+     */
+    method: 'eth_sign7702Authorization';
 
-  export interface SolanaSignMessageRpcInput {
-    method: 'signMessage';
+    /**
+     * Body param: Parameters for the EVM `eth_sign7702Authorization` RPC.
+     */
+    params: WalletsAPI.EthereumSign7702AuthorizationRpcInputParams;
 
-    params: SolanaSignMessageRpcInput.Params;
-
+    /**
+     * Body param
+     */
     address?: string;
 
-    chain_type?: 'solana';
+    /**
+     * Body param
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
-  export namespace SolanaSignMessageRpcInput {
-    export interface Params {
-      encoding: 'base64';
+  export interface EthereumSignUserOperationRpcInput {
+    /**
+     * Body param
+     */
+    method: 'eth_signUserOperation';
 
-      message: string;
-    }
+    /**
+     * Body param: Parameters for the EVM `eth_signUserOperation` RPC.
+     */
+    params: WalletsAPI.EthereumSignUserOperationRpcInputParams;
+
+    /**
+     * Body param
+     */
+    address?: string;
+
+    /**
+     * Body param
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export interface SolanaSignTransactionRpcInput {
+    /**
+     * Body param
+     */
     method: 'signTransaction';
 
-    params: SolanaSignTransactionRpcInput.Params;
+    /**
+     * Body param: Parameters for the SVM `signTransaction` RPC.
+     */
+    params: WalletsAPI.SolanaSignTransactionRpcInputParams;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'solana';
-  }
 
-  export namespace SolanaSignTransactionRpcInput {
-    export interface Params {
-      encoding: 'base64';
+    /**
+     * Body param
+     */
+    wallet_id?: string;
 
-      transaction: string;
-    }
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
   export interface SolanaSignAndSendTransactionRpcInput {
+    /**
+     * Body param
+     */
     caip2: string;
 
+    /**
+     * Body param
+     */
     method: 'signAndSendTransaction';
 
-    params: SolanaSignAndSendTransactionRpcInput.Params;
+    /**
+     * Body param: Parameters for the SVM `signAndSendTransaction` RPC.
+     */
+    params: WalletsAPI.SolanaSignAndSendTransactionRpcInputParams;
 
+    /**
+     * Body param
+     */
     address?: string;
 
+    /**
+     * Body param
+     */
     chain_type?: 'solana';
 
+    /**
+     * Body param
+     */
     sponsor?: boolean;
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 
-  export namespace SolanaSignAndSendTransactionRpcInput {
-    export interface Params {
-      encoding: 'base64';
+  export interface SolanaSignMessageRpcInput {
+    /**
+     * Body param
+     */
+    method: 'signMessage';
 
-      transaction: string;
-    }
+    /**
+     * Body param: Parameters for the SVM `signMessage` RPC.
+     */
+    params: WalletsAPI.SolanaSignMessageRpcInputParams;
+
+    /**
+     * Body param
+     */
+    address?: string;
+
+    /**
+     * Body param
+     */
+    chain_type?: 'solana';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkTransferRpcInput {
+    /**
+     * Body param
+     */
+    method: 'transfer';
+
+    /**
+     * Body param: Parameters for the Spark `transfer` RPC.
+     */
+    params: WalletsAPI.SparkTransferRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkGetBalanceRpcInput {
+    /**
+     * Body param
+     */
+    method: 'getBalance';
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkTransferTokensRpcInput {
+    /**
+     * Body param
+     */
+    method: 'transferTokens';
+
+    /**
+     * Body param: Parameters for the Spark `transferTokens` RPC.
+     */
+    params: WalletsAPI.SparkTransferTokensRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkGetStaticDepositAddressRpcInput {
+    /**
+     * Body param
+     */
+    method: 'getStaticDepositAddress';
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkGetClaimStaticDepositQuoteRpcInput {
+    /**
+     * Body param
+     */
+    method: 'getClaimStaticDepositQuote';
+
+    /**
+     * Body param: Parameters for the Spark `getClaimStaticDepositQuote` RPC.
+     */
+    params: WalletsAPI.SparkGetClaimStaticDepositQuoteRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkClaimStaticDepositRpcInput {
+    /**
+     * Body param
+     */
+    method: 'claimStaticDeposit';
+
+    /**
+     * Body param: Parameters for the Spark `claimStaticDeposit` RPC.
+     */
+    params: WalletsAPI.SparkClaimStaticDepositRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkCreateLightningInvoiceRpcInput {
+    /**
+     * Body param
+     */
+    method: 'createLightningInvoice';
+
+    /**
+     * Body param: Parameters for the Spark `createLightningInvoice` RPC.
+     */
+    params: WalletsAPI.SparkCreateLightningInvoiceRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkPayLightningInvoiceRpcInput {
+    /**
+     * Body param
+     */
+    method: 'payLightningInvoice';
+
+    /**
+     * Body param: Parameters for the Spark `payLightningInvoice` RPC.
+     */
+    params: WalletsAPI.SparkPayLightningInvoiceRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkSignMessageWithIdentityKeyRpcInput {
+    /**
+     * Body param
+     */
+    method: 'signMessageWithIdentityKey';
+
+    /**
+     * Body param: Parameters for the Spark `signMessageWithIdentityKey` RPC.
+     */
+    params: WalletsAPI.SparkSignMessageWithIdentityKeyRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface ExportPrivateKeyRpcInput {
+    /**
+     * Body param
+     */
+    address: string;
+
+    /**
+     * Body param
+     */
+    method: 'exportPrivateKey';
+
+    /**
+     * Body param: Input for exporting a wallet private key with HPKE encryption.
+     */
+    params: WalletsAPI.PrivateKeyExportInput;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
   }
 }
 
 export interface IntentUpdateKeyQuorumParams {
   /**
-   * The number of keys that must sign for an action to be valid. Must be less than
-   * or equal to total number of key quorum members.
+   * Body param: The number of keys that must sign for an action to be valid. Must be
+   * less than or equal to total number of key quorum members.
    */
   authorization_threshold?: number;
 
+  /**
+   * Body param
+   */
   display_name?: string;
 
   /**
-   * List of key quorum IDs that should be members of this key quorum. Key quorums
-   * can only be nested 1 level deep.
+   * Body param: List of key quorum IDs that should be members of this key quorum.
+   * Key quorums can only be nested 1 level deep.
    */
   key_quorum_ids?: Array<string>;
 
   /**
-   * List of P-256 public keys of the keys that should be authorized to sign on the
-   * key quorum, in base64-encoded DER format.
+   * Body param: List of P-256 public keys of the keys that should be authorized to
+   * sign on the key quorum, in base64-encoded DER format.
    */
   public_keys?: Array<string>;
 
   /**
-   * List of user IDs of the users that should be authorized to sign on the key
-   * quorum.
+   * Body param: List of user IDs of the users that should be authorized to sign on
+   * the key quorum.
    */
   user_ids?: Array<string>;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export interface IntentUpdatePolicyParams {
   /**
-   * Name to assign to policy.
+   * Body param: Name to assign to policy.
    */
   name?: string;
 
   /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
+   * Body param: The owner of the resource. If you provide this, do not specify an
+   * owner_id as it will be generated automatically. When updating a wallet, you can
+   * set the owner to null to remove the owner.
    */
   owner?: IntentUpdatePolicyParams.PublicKeyOwner | IntentUpdatePolicyParams.UserOwner | null;
 
+  /**
+   * Body param
+   */
   owner_id?: string | null;
 
+  /**
+   * Body param
+   */
   rules?: Array<IntentUpdatePolicyParams.Rule>;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace IntentUpdatePolicyParams {
@@ -4444,6 +4524,12 @@ export interface IntentUpdatePolicyRuleParams {
    * Body param
    */
   name: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace IntentUpdatePolicyRuleParams {
@@ -4599,24 +4685,33 @@ export namespace IntentUpdatePolicyRuleParams {
 
 export interface IntentUpdateWalletParams {
   /**
-   * Additional signers for the wallet.
+   * Body param: Additional signers for the wallet.
    */
   additional_signers?: Array<IntentUpdateWalletParams.AdditionalSigner>;
 
   /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
+   * Body param: The owner of the resource. If you provide this, do not specify an
+   * owner_id as it will be generated automatically. When updating a wallet, you can
+   * set the owner to null to remove the owner.
    */
   owner?: IntentUpdateWalletParams.PublicKeyOwner | IntentUpdateWalletParams.UserOwner | null;
 
+  /**
+   * Body param
+   */
   owner_id?: string | null;
 
   /**
-   * New policy IDs to enforce on the wallet. Currently, only one policy is supported
-   * per wallet.
+   * Body param: New policy IDs to enforce on the wallet. Currently, only one policy
+   * is supported per wallet.
    */
   policy_ids?: Array<string>;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export namespace IntentUpdateWalletParams {
@@ -4653,6 +4748,11 @@ export declare namespace Intents {
   export {
     type IntentType as IntentType,
     type IntentStatus as IntentStatus,
+    type RpcIntentRequestDetails as RpcIntentRequestDetails,
+    type PolicyIntentRequestDetails as PolicyIntentRequestDetails,
+    type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
+    type RuleIntentUpdateRequestDetails as RuleIntentUpdateRequestDetails,
+    type RuleIntentDeleteRequestDetails as RuleIntentDeleteRequestDetails,
     type RuleIntentRequestDetails as RuleIntentRequestDetails,
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
@@ -4664,6 +4764,7 @@ export declare namespace Intents {
     type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
     type RuleIntentResponse as RuleIntentResponse,
     type IntentResponse as IntentResponse,
+    type IntentCreationHeaders as IntentCreationHeaders,
     type IntentResponsesCursor as IntentResponsesCursor,
     type IntentListParams as IntentListParams,
     type IntentCreatePolicyRuleParams as IntentCreatePolicyRuleParams,

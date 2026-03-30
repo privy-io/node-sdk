@@ -813,6 +813,42 @@ describe('retries', () => {
     expect(count).toEqual(3);
   });
 
+  test('retry on 429 with x-ratelimit-reset', async () => {
+    let count = 0;
+    const testFetch = async (
+      url: string | URL | Request,
+      { signal }: RequestInit = {},
+    ): Promise<Response> => {
+      if (count++ === 0) {
+        return new Response(undefined, {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': '100',
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': `${(Date.now() + 100) / 1000}`,
+          },
+        });
+      }
+      return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
+    };
+
+    const client = new PrivyAPI({
+      appID: 'My App ID',
+      appSecret: 'My App Secret',
+      fetch: testFetch,
+    });
+
+    expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
+    expect(count).toEqual(2);
+    expect(
+      await client
+        .request({ path: '/foo', method: 'get' })
+        .asResponse()
+        .then((r) => r.text()),
+    ).toEqual(JSON.stringify({ a: 1 }));
+    expect(count).toEqual(3);
+  });
+
   test('retry on 429 with retry-after-ms', async () => {
     let count = 0;
     const testFetch = async (

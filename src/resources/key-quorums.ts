@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as SharedAPI from './shared';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -34,7 +35,7 @@ export class KeyQuorums extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.keyQuorums._delete(
+   * const successResponse = await client.keyQuorums._delete(
    *   'key_quorum_id',
    * );
    * ```
@@ -43,8 +44,11 @@ export class KeyQuorums extends APIResource {
     keyQuorumID: string,
     params: KeyQuorumDeleteParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<KeyQuorumDeleteResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature } = params ?? {};
+  ): APIPromise<SharedAPI.SuccessResponse> {
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+    } = params ?? {};
     return this._client.delete(path`/v1/key_quorums/${keyQuorumID}`, {
       ...options,
       headers: buildHeaders([
@@ -52,6 +56,7 @@ export class KeyQuorums extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -80,7 +85,11 @@ export class KeyQuorums extends APIResource {
     params: KeyQuorumUpdateParams,
     options?: RequestOptions,
   ): APIPromise<KeyQuorum> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
     return this._client.patch(path`/v1/key_quorums/${keyQuorumID}`, {
       body,
       ...options,
@@ -89,6 +98,7 @@ export class KeyQuorums extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -106,12 +116,43 @@ export class KeyQuorums extends APIResource {
    * ```
    */
   get(keyQuorumID: string, options?: RequestOptions): APIPromise<KeyQuorum> {
+    if (keyQuorumID === '') {
+      throw new Error('keyQuorumID must not be an empty string');
+    }
     return this._client.get(path`/v1/key_quorums/${keyQuorumID}`, options);
   }
 }
 
 /**
- * Request input for creating or updating a key quorum.
+ * A key quorum for authorizing wallet operations.
+ */
+export interface KeyQuorum {
+  id: string;
+
+  authorization_keys: Array<KeyQuorum.AuthorizationKey>;
+
+  authorization_threshold: number | null;
+
+  display_name: string | null;
+
+  user_ids: Array<string> | null;
+
+  /**
+   * List of nested key quorum IDs that are members of this key quorum.
+   */
+  key_quorum_ids?: Array<string>;
+}
+
+export namespace KeyQuorum {
+  export interface AuthorizationKey {
+    display_name: string | null;
+
+    public_key: string;
+  }
+}
+
+/**
+ * Request input for creating a key quorum.
  */
 export interface KeyQuorumCreateParams {
   /**
@@ -142,38 +183,56 @@ export interface KeyQuorumCreateParams {
 }
 
 /**
- * A key quorum for authorizing wallet operations.
+ * Request input for updating an existing key quorum.
  */
-export interface KeyQuorum {
-  id: string;
-
-  authorization_keys: Array<KeyQuorum.AuthorizationKey>;
-
+export interface KeyQuorumUpdateParams {
+  /**
+   * The number of keys that must sign for an action to be valid. Must be less than
+   * or equal to total number of key quorum members.
+   */
   authorization_threshold?: number;
 
   display_name?: string;
 
   /**
-   * List of nested key quorum IDs that are members of this key quorum.
+   * List of key quorum IDs that should be members of this key quorum. Key quorums
+   * can only be nested 1 level deep.
    */
   key_quorum_ids?: Array<string>;
 
+  /**
+   * List of P-256 public keys of the keys that should be authorized to sign on the
+   * key quorum, in base64-encoded DER format.
+   */
+  public_keys?: Array<string>;
+
+  /**
+   * List of user IDs of the users that should be authorized to sign on the key
+   * quorum.
+   */
   user_ids?: Array<string>;
 }
 
-export namespace KeyQuorum {
-  export interface AuthorizationKey {
-    display_name: string | null;
-
-    public_key: string;
-  }
-}
-
-export interface KeyQuorumDeleteResponse {
+/**
+ * Headers required to authorize modifications to key quorums.
+ */
+export interface KeyQuorumAuthorizationHeaders {
   /**
-   * Whether the key quorum was deleted successfully.
+   * ID of your Privy app.
    */
-  success: boolean;
+  'privy-app-id': string;
+
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export interface KeyQuorumCreateParams {
@@ -210,6 +269,12 @@ export interface KeyQuorumDeleteParams {
    * should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export interface KeyQuorumUpdateParams {
@@ -247,14 +312,20 @@ export interface KeyQuorumUpdateParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export declare namespace KeyQuorums {
   export {
-    type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorum as KeyQuorum,
-    type KeyQuorumDeleteResponse as KeyQuorumDeleteResponse,
-    type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
+    type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
+    type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
+    type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
   };
 }

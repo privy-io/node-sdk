@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as ClientAuthAPI from '../client-auth';
+import * as EmbeddedWalletsAPI from '../embedded-wallets';
 import * as AllowlistAPI from './allowlist';
 import { Allowlist, AllowlistCreateParams, AllowlistDeleteParams, AllowlistListResponse } from './allowlist';
 import { APIPromise } from '../../core/api-promise';
@@ -23,6 +24,9 @@ export class Apps extends APIResource {
    * ```
    */
   get(appID: string, options?: RequestOptions): APIPromise<AppResponse> {
+    if (appID === '') {
+      throw new Error('appID must not be an empty string');
+    }
     return this._client.get(path`/v1/apps/${appID}`, options);
   }
 
@@ -38,6 +42,139 @@ export class Apps extends APIResource {
   getTestCredentials(appID: string, options?: RequestOptions): APIPromise<TestAccountsResponse> {
     return this._client.get(path`/v1/apps/${appID}/test_credentials`, options);
   }
+}
+
+/**
+ * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+ */
+export type Caip2 = string;
+
+/**
+ * A currency asset type.
+ */
+export type CurrencyAsset = 'native-currency' | 'USDC';
+
+/**
+ * A crypto currency identified by a CAIP-2 chain ID and optional asset.
+ */
+export interface Currency {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  chain: Caip2;
+
+  /**
+   * A currency asset type.
+   */
+  asset?: CurrencyAsset;
+}
+
+/**
+ * Whether to create embedded wallets on login.
+ */
+export type EmbeddedWalletCreateOnLogin = 'users-without-wallets' | 'all-users' | 'off';
+
+/**
+ * Chain-specific configuration for embedded wallets.
+ */
+export interface EmbeddedWalletChainConfig {
+  /**
+   * Whether to create embedded wallets on login.
+   */
+  create_on_login: EmbeddedWalletCreateOnLogin;
+}
+
+/**
+ * A user-owned recovery option for embedded wallets.
+ */
+export type UserOwnedRecoveryOption = 'user-passcode' | 'google-drive' | 'icloud';
+
+/**
+ * Input configuration for embedded wallets.
+ */
+export interface EmbeddedWalletInputSchema {
+  /**
+   * Whether to create embedded wallets on login.
+   */
+  create_on_login: EmbeddedWalletCreateOnLogin;
+
+  /**
+   * Chain-specific configuration for embedded wallets.
+   */
+  ethereum: EmbeddedWalletChainConfig;
+
+  /**
+   * Chain-specific configuration for embedded wallets.
+   */
+  solana: EmbeddedWalletChainConfig;
+
+  user_owned_recovery_options: Array<UserOwnedRecoveryOption>;
+
+  require_user_owned_recovery_on_create?: boolean;
+
+  require_user_password_on_create?: boolean;
+}
+
+/**
+ * The mode for embedded wallets.
+ */
+export type EmbeddedWalletMode = 'legacy-embedded-wallets-only' | 'user-controlled-server-wallets-only';
+
+/**
+ * Configuration for embedded wallets including the mode.
+ */
+export interface EmbeddedWalletConfigSchema extends EmbeddedWalletInputSchema {
+  /**
+   * The mode for embedded wallets.
+   */
+  mode: EmbeddedWalletMode;
+}
+
+/**
+ * Configuration for Telegram authentication.
+ */
+export interface TelegramAuthConfigSchema {
+  bot_id: string;
+
+  bot_name: string;
+
+  link_enabled: boolean;
+
+  seamless_auth_enabled: boolean;
+}
+
+/**
+ * A funding method for on-ramp.
+ */
+export type FundingMethodEnum = 'moonpay' | 'coinbase-onramp' | 'external';
+
+/**
+ * A funding option with method and provider.
+ */
+export interface FundingOption {
+  method: string;
+
+  provider: string;
+}
+
+/**
+ * Configuration for funding and on-ramp options.
+ */
+export interface FundingConfigResponseSchema {
+  cross_chain_bridging_enabled: boolean;
+
+  default_recommended_amount: string;
+
+  /**
+   * A crypto currency identified by a CAIP-2 chain ID and optional asset.
+   */
+  default_recommended_currency: Currency;
+
+  methods: Array<FundingMethodEnum>;
+
+  options: Array<FundingOption>;
+
+  prompt_funding_on_wallet_creation: boolean;
 }
 
 /**
@@ -74,7 +211,10 @@ export interface AppResponse {
 
   email_auth: boolean;
 
-  embedded_wallet_config: AppResponse.EmbeddedWalletConfig;
+  /**
+   * Configuration for embedded wallets including the mode.
+   */
+  embedded_wallet_config: EmbeddedWalletConfigSchema;
 
   enabled_captcha_provider: 'turnstile' | 'hcaptcha' | null;
 
@@ -120,7 +260,10 @@ export interface AppResponse {
 
   show_wallet_login_first: boolean;
 
-  smart_wallet_config: AppResponse.Enabled | AppResponse.UnionMember1;
+  /**
+   * The configuration object for smart wallets.
+   */
+  smart_wallet_config: EmbeddedWalletsAPI.SmartWalletConfiguration;
 
   sms_auth: boolean;
 
@@ -152,9 +295,15 @@ export interface AppResponse {
 
   captcha_site_key?: string;
 
-  funding_config?: AppResponse.FundingConfig;
+  /**
+   * Configuration for funding and on-ramp options.
+   */
+  funding_config?: FundingConfigResponseSchema;
 
-  telegram_auth_config?: AppResponse.TelegramAuthConfig;
+  /**
+   * Configuration for Telegram authentication.
+   */
+  telegram_auth_config?: TelegramAuthConfigSchema;
 }
 
 export namespace AppResponse {
@@ -180,112 +329,6 @@ export namespace AppResponse {
     provider_display_name: string;
 
     provider_icon_url: string;
-  }
-
-  export interface EmbeddedWalletConfig {
-    create_on_login: 'users-without-wallets' | 'all-users' | 'off';
-
-    ethereum: EmbeddedWalletConfig.Ethereum;
-
-    mode: 'legacy-embedded-wallets-only' | 'user-controlled-server-wallets-only';
-
-    solana: EmbeddedWalletConfig.Solana;
-
-    user_owned_recovery_options: Array<'user-passcode' | 'google-drive' | 'icloud'>;
-
-    require_user_owned_recovery_on_create?: boolean;
-
-    require_user_password_on_create?: boolean;
-  }
-
-  export namespace EmbeddedWalletConfig {
-    export interface Ethereum {
-      create_on_login: 'users-without-wallets' | 'all-users' | 'off';
-    }
-
-    export interface Solana {
-      create_on_login: 'users-without-wallets' | 'all-users' | 'off';
-    }
-  }
-
-  export interface Enabled {
-    enabled: false;
-  }
-
-  export interface UnionMember1 {
-    configured_networks: Array<UnionMember1.ConfiguredNetwork>;
-
-    enabled: true;
-
-    smart_wallet_type:
-      | 'safe'
-      | 'kernel'
-      | 'light_account'
-      | 'biconomy'
-      | 'coinbase_smart_wallet'
-      | 'thirdweb';
-
-    smart_wallet_version?: string;
-  }
-
-  export namespace UnionMember1 {
-    export interface ConfiguredNetwork {
-      bundler_url: string;
-
-      chain_id: string;
-
-      chain_name?: string;
-
-      paymaster_context?: ConfiguredNetwork.PaymasterContext;
-
-      paymaster_url?: string;
-
-      rpc_url?: string;
-    }
-
-    export namespace ConfiguredNetwork {
-      export interface PaymasterContext {
-        policy_id: string;
-      }
-    }
-  }
-
-  export interface FundingConfig {
-    cross_chain_bridging_enabled: boolean;
-
-    default_recommended_amount: string;
-
-    default_recommended_currency: FundingConfig.DefaultRecommendedCurrency;
-
-    methods: Array<'moonpay' | 'coinbase-onramp' | 'external'>;
-
-    options: Array<FundingConfig.Option>;
-
-    prompt_funding_on_wallet_creation: boolean;
-  }
-
-  export namespace FundingConfig {
-    export interface DefaultRecommendedCurrency {
-      chain: string;
-
-      asset?: 'native-currency' | 'USDC';
-    }
-
-    export interface Option {
-      method: string;
-
-      provider: string;
-    }
-  }
-
-  export interface TelegramAuthConfig {
-    bot_id: string;
-
-    bot_name: string;
-
-    link_enabled: boolean;
-
-    seamless_auth_enabled: boolean;
   }
 }
 
@@ -367,10 +410,45 @@ export interface TestAccountsResponse {
   data: Array<TestAccount>;
 }
 
+/**
+ * Input for configuring gas sponsorship settings for an app.
+ */
+export interface GasSponsorshipConfigurationInput {
+  configured_networks?: Array<Caip2>;
+
+  require_app_secret?: boolean;
+
+  sponsorship_enabled?: boolean;
+}
+
+/**
+ * Gas sponsorship configuration for an app.
+ */
+export interface GasSponsorshipConfiguration {
+  configured_networks: Array<Caip2>;
+
+  require_app_secret: boolean;
+
+  sponsorship_enabled: boolean;
+}
+
 Apps.Allowlist = Allowlist;
 
 export declare namespace Apps {
   export {
+    type Caip2 as Caip2,
+    type CurrencyAsset as CurrencyAsset,
+    type Currency as Currency,
+    type EmbeddedWalletCreateOnLogin as EmbeddedWalletCreateOnLogin,
+    type EmbeddedWalletChainConfig as EmbeddedWalletChainConfig,
+    type UserOwnedRecoveryOption as UserOwnedRecoveryOption,
+    type EmbeddedWalletInputSchema as EmbeddedWalletInputSchema,
+    type EmbeddedWalletMode as EmbeddedWalletMode,
+    type EmbeddedWalletConfigSchema as EmbeddedWalletConfigSchema,
+    type TelegramAuthConfigSchema as TelegramAuthConfigSchema,
+    type FundingMethodEnum as FundingMethodEnum,
+    type FundingOption as FundingOption,
+    type FundingConfigResponseSchema as FundingConfigResponseSchema,
     type AppResponse as AppResponse,
     type EmailInviteInput as EmailInviteInput,
     type WalletInviteInput as WalletInviteInput,
@@ -380,6 +458,8 @@ export declare namespace Apps {
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
     type TestAccount as TestAccount,
     type TestAccountsResponse as TestAccountsResponse,
+    type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
+    type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
   };
 
   export {

@@ -394,6 +394,28 @@ export interface EthereumYieldClaimIDInput {
   id: string;
 }
 
+/**
+ * Headers required to authorize yield operations.
+ */
+export interface YieldAuthorizationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
 export declare namespace Yield {
   export {
     type EvmCaip2ChainID as EvmCaip2ChainID,
@@ -414,5 +436,6 @@ export declare namespace Yield {
     type EthereumYieldClaimReward as EthereumYieldClaimReward,
     type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
     type EthereumYieldClaimIDInput as EthereumYieldClaimIDInput,
+    type YieldAuthorizationHeaders as YieldAuthorizationHeaders,
   };
 }

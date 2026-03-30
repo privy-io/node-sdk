@@ -35,6 +35,23 @@ export type WithIdempotency<Params extends IdempotencyParams> =
   TheOmit<Params, keyof IdempotencyParams> & IdempotencyConfig;
 
 /**
+ * Configuration object that can be set by the caller and is used to generate the right value for
+ * the `privy-request-expiry` HTTP header.
+ */
+export type ExpiryConfig = { request_expiry?: number };
+type ExpiryParams = { 'privy-request-expiry'?: any };
+// prettier-ignore
+/**
+ * Helper type that takes a parameters object (body & headers of an API request) and replaces
+ * the `privy-request-expiry` HTTP header with the expiry config object.
+ *
+ * This is used to turn Params objects that accept the raw header value into ones that accept the
+ * more ergonomic config object instead.
+ */
+export type WithExpiry<Params extends ExpiryParams> =
+  TheOmit<Params, keyof ExpiryParams> & ExpiryConfig;
+
+/**
  * `Omit` loses type info in unions like the `WalletRpcParams` type.
  * @see https://github.com/microsoft/TypeScript/issues/54525
  */

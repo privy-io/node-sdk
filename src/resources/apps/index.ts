@@ -8,6 +8,19 @@ export {
 } from './allowlist';
 export {
   Apps,
+  type Caip2,
+  type CurrencyAsset,
+  type Currency,
+  type EmbeddedWalletCreateOnLogin,
+  type EmbeddedWalletChainConfig,
+  type UserOwnedRecoveryOption,
+  type EmbeddedWalletInputSchema,
+  type EmbeddedWalletMode,
+  type EmbeddedWalletConfigSchema,
+  type TelegramAuthConfigSchema,
+  type FundingMethodEnum,
+  type FundingOption,
+  type FundingConfigResponseSchema,
   type AppResponse,
   type EmailInviteInput,
   type WalletInviteInput,
@@ -17,4 +30,6 @@ export {
   type AllowlistDeletionResponse,
   type TestAccount,
   type TestAccountsResponse,
+  type GasSponsorshipConfigurationInput,
+  type GasSponsorshipConfiguration,
 } from './apps';

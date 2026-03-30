@@ -48,6 +48,40 @@ describe('PrivyEthereumService', () => {
           });
           expect(verified).toBe(true);
         });
+        it('should be able to sign a message with a custom request_expiry', async () => {
+          // Explicitly set expiry to 20 min from now
+          const requestExpiry = Date.now() + 20 * 60 * 1000;
+          const response = await privyClient
+            .wallets()
+            .ethereum()
+            .signMessage(wallet.id, {
+              message: 'Hello, world!',
+              request_expiry: requestExpiry,
+              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
+            });
+
+          expect(response.signature).toBeDefined();
+          const verified = await verifyMessage({
+            address: wallet.address as Hex,
+            message: 'Hello, world!',
+            signature: response.signature as `0x${string}`,
+          });
+          expect(verified).toBe(true);
+        });
+        it('should reject a request with an expired request_expiry', async () => {
+          // expired 1 minute ago
+          const expiredExpiry = Date.now() - 1 * 60 * 1000;
+          await expect(
+            privyClient
+              .wallets()
+              .ethereum()
+              .signMessage(wallet.id, {
+                message: 'Hello, world!',
+                request_expiry: expiredExpiry,
+                ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
+              }),
+          ).rejects.toThrow();
+        });
         it('should be able to sign a hex-encoded message', async () => {
           const response = await privyClient
             .wallets()

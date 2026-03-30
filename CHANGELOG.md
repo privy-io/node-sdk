@@ -1,5 +1,45 @@
 # Changelog
 
+## 0.12.0 (2026-03-30)
+
+Full Changelog: [v0.11.0...v0.12.0](https://github.com/privy-io/node-sdk/compare/v0.11.0...v0.12.0)
+
+### Features
+
+* add support for the x-ratelimit-reset header on 429s ([#106](https://github.com/privy-io/node-sdk/issues/106)) ([e32eee0](https://github.com/privy-io/node-sdk/commit/e32eee081442ae78bc00bd4f72777ccaed419471))
+* **api:** api update ([fa58830](https://github.com/privy-io/node-sdk/commit/fa588301e161703bce6f3074396ba735e044a5fd))
+* **api:** api update ([c552e29](https://github.com/privy-io/node-sdk/commit/c552e29ed748abf74c6d41dabea11f645943497d))
+* **api:** api update ([00fbb6b](https://github.com/privy-io/node-sdk/commit/00fbb6bbcbe5af21558e7fe3342eb7405d2260f5))
+* **api:** api update ([2167cb6](https://github.com/privy-io/node-sdk/commit/2167cb6a5888003bc3f23c461a6d46a3036d2ce5))
+* **api:** api update ([665f220](https://github.com/privy-io/node-sdk/commit/665f220454080918540178d4a0bc3b799fe33497))
+* **api:** api update ([60719f5](https://github.com/privy-io/node-sdk/commit/60719f56afed1b796d58817deb19d6e695139f9e))
+* **api:** api update ([505640f](https://github.com/privy-io/node-sdk/commit/505640fa82c658a2561cc008eb56217a7336d17d))
+* **api:** api update ([8ce26f2](https://github.com/privy-io/node-sdk/commit/8ce26f25fae4cb29f92f24426212152cb9d2b181))
+* **api:** api update ([b55c76c](https://github.com/privy-io/node-sdk/commit/b55c76c254d3f8f92e7d566f820e564f4b6fffe5))
+* **api:** api update ([e29ce25](https://github.com/privy-io/node-sdk/commit/e29ce25ae8725c93a33753beb6efa3b28d96a66f))
+* **api:** api update ([cbc1bba](https://github.com/privy-io/node-sdk/commit/cbc1bbab94f7d17845b147c69d675c989eca584a))
+* **api:** api update ([87ac417](https://github.com/privy-io/node-sdk/commit/87ac41761bd3784cb955673371ad58598127a177))
+* **api:** api update ([021b850](https://github.com/privy-io/node-sdk/commit/021b850c9bb78196aa2d601ce4efbee0c5f6ae51))
+* **api:** api update ([656ea0b](https://github.com/privy-io/node-sdk/commit/656ea0b950561eab68f0cecc71ae1f378a3e985f))
+* **api:** api update ([887d557](https://github.com/privy-io/node-sdk/commit/887d557bbe14b5ed68a62856a56bc460fcd33a14))
+* extract authorizeRequest helper for wallet RPC authorization ([#110](https://github.com/privy-io/node-sdk/issues/110)) ([b540675](https://github.com/privy-io/node-sdk/commit/b54067530e36ad1c229cfd0eccf7d53f4a86f2e2))
+* include expiry header in rpc signature generation ([#109](https://github.com/privy-io/node-sdk/issues/109)) ([1554c32](https://github.com/privy-io/node-sdk/commit/1554c32f44b9842a39c06fb46810c428e609193c))
+
+
+### Bug Fixes
+
+* defaultRequestExpiryMs is now typed as a number ([#114](https://github.com/privy-io/node-sdk/issues/114)) ([d057791](https://github.com/privy-io/node-sdk/commit/d0577912dfbfb9e4043b1f2e229b4a96110e9d16))
+* reference the new wallet rpc types ([#113](https://github.com/privy-io/node-sdk/issues/113)) ([7158ba3](https://github.com/privy-io/node-sdk/commit/7158ba3804932ab9fcdafa1e9b7ccfeb8a5324c6))
+* use SuccessResponse for delete operations in key-quorums and policies ([#115](https://github.com/privy-io/node-sdk/issues/115)) ([2b2a5ba](https://github.com/privy-io/node-sdk/commit/2b2a5ba5e61c9d626aa7f81753001ccd7b8b2d74))
+* validate id parameters are not empty strings in get methods ([#108](https://github.com/privy-io/node-sdk/issues/108)) ([8f0014d](https://github.com/privy-io/node-sdk/commit/8f0014d47da1e6be9bf384369e027c827f5ea710))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([eee4ba0](https://github.com/privy-io/node-sdk/commit/eee4ba0c5601be01ad84cc708f277c4cc21d2534))
+* **internal:** tweak CI branches ([e3ddd2d](https://github.com/privy-io/node-sdk/commit/e3ddd2d346bf1ddef8773b4002e4171dc27b5578))
+* **internal:** update gitignore ([ddbafa2](https://github.com/privy-io/node-sdk/commit/ddbafa22b9f2312caa9b381289a2d65b4c35accd))
+
 ## 0.11.0 (2026-03-13)
 
 Full Changelog: [v0.10.1...v0.11.0](https://github.com/privy-io/node-sdk/compare/v0.10.1...v0.11.0)

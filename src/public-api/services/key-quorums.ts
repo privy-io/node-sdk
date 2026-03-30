@@ -1,15 +1,15 @@
 import { Prettify } from 'viem';
 import { PrivyAPI } from '../../client';
-import { generateAuthorizationSignatures } from '../../lib/authorization';
+import { prepareRequest } from '../../lib/authorization';
 import {
   KeyQuorum,
   KeyQuorumDeleteParams,
-  KeyQuorumDeleteResponse,
   KeyQuorums,
   KeyQuorumUpdateParams,
+  SuccessResponse,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
-import { WithAuthorization } from './types';
+import { WithAuthorization, WithExpiry } from './types';
 
 export class PrivyKeyQuorumsService extends KeyQuorums {
   private privyClient: PrivyClient;
@@ -21,57 +21,45 @@ export class PrivyKeyQuorumsService extends KeyQuorums {
 
   public async update(
     keyQuorumId: string,
-    { authorization_context: authorizationContext = {}, ...params }: PrivyKeyQuorumsService.UpdateInput,
+    {
+      authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
+      ...params
+    }: PrivyKeyQuorumsService.UpdateInput,
   ): Promise<KeyQuorum> {
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'PATCH',
-        url: `${this._client.baseURL}/v1/key_quorums/${keyQuorumId}`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-        },
-      },
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'PATCH',
+      url: `${this._client.baseURL}/v1/key_quorums/${keyQuorumId}`,
+      body: params,
     });
 
-    const response = await this._update(keyQuorumId, {
-      ...params,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-    });
-
-    return response;
+    return await this._update(keyQuorumId, { ...params, ...headers });
   }
 
   public async delete(
     keyQuorumId: string,
-    { authorization_context: authorizationContext = {}, ...params }: PrivyKeyQuorumsService.DeleteInput,
-  ): Promise<KeyQuorumDeleteResponse> {
-    const authorizationSignaturesHeader = await generateAuthorizationSignatures(this.privyClient, {
+    {
+      authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
+      ...params
+    }: PrivyKeyQuorumsService.DeleteInput,
+  ): Promise<SuccessResponse> {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      input: {
-        version: 1,
-        method: 'DELETE',
-        url: `${this._client.baseURL}/v1/key_quorums/${keyQuorumId}`,
-        body: params,
-        headers: {
-          'privy-app-id': this._client.appID,
-        },
-      },
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'DELETE',
+      url: `${this._client.baseURL}/v1/key_quorums/${keyQuorumId}`,
+      body: params,
     });
 
-    const response = await this._delete(keyQuorumId, {
-      ...params,
-      'privy-authorization-signature': authorizationSignaturesHeader.join(','),
-    });
-
-    return response;
+    return await this._delete(keyQuorumId, { ...params, ...headers });
   }
 }
 export namespace PrivyKeyQuorumsService {
   /** The input type for the {@link PrivyKeyQuorumsService.update} method. */
-  export type UpdateInput = Prettify<WithAuthorization<KeyQuorumUpdateParams>>;
+  export type UpdateInput = Prettify<WithExpiry<WithAuthorization<KeyQuorumUpdateParams>>>;
   /** The input type for the {@link PrivyKeyQuorumsService.delete} method. */
-  export type DeleteInput = Prettify<WithAuthorization<KeyQuorumDeleteParams>>;
+  export type DeleteInput = Prettify<WithExpiry<WithAuthorization<KeyQuorumDeleteParams>>>;
 }

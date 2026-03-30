@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as UsersAPI from './users';
 import * as ClientAuthAPI from './client-auth';
+import * as EmbeddedWalletsAPI from './embedded-wallets';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
@@ -73,6 +74,9 @@ export class Users extends APIResource {
    * ```
    */
   _get(userID: string, options?: RequestOptions): APIPromise<User> {
+    if (userID === '') {
+      throw new Error('userID must not be an empty string');
+    }
     return this._client.get(path`/v1/users/${userID}`, options);
   }
 
@@ -390,17 +394,6 @@ export interface LinkedAccountEthereum {
 }
 
 /**
- * The provider for a smart wallet.
- */
-export type SmartWalletType =
-  | 'safe'
-  | 'kernel'
-  | 'light_account'
-  | 'biconomy'
-  | 'coinbase_smart_wallet'
-  | 'thirdweb';
-
-/**
  * A smart wallet account linked to the user.
  */
 export interface LinkedAccountSmartWallet {
@@ -411,9 +404,9 @@ export interface LinkedAccountSmartWallet {
   latest_verified_at: number | null;
 
   /**
-   * The provider for a smart wallet.
+   * The supported smart wallet providers.
    */
-  smart_wallet_type: SmartWalletType;
+  smart_wallet_type: EmbeddedWalletsAPI.SmartWalletType;
 
   type: 'smart_wallet';
 
@@ -1171,9 +1164,72 @@ export type LinkedAccountType =
   | ClientAuthAPI.CustomOAuthProviderID;
 
 /**
+ * A SMS MFA method.
+ */
+export interface SMSMfaMethod {
+  type: 'sms';
+
+  verified_at: number;
+}
+
+/**
+ * A TOTP MFA method.
+ */
+export interface TotpMfaMethod {
+  type: 'totp';
+
+  verified_at: number;
+}
+
+/**
+ * A Passkey MFA method.
+ */
+export interface PasskeyMfaMethod {
+  type: 'passkey';
+
+  verified_at: number;
+}
+
+/**
+ * A multi-factor authentication method linked to the user.
+ */
+export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod;
+
+/**
  * Custom metadata associated with the user.
  */
 export type CustomMetadata = { [key: string]: string | number | boolean };
+
+/**
+ * A Privy user object.
+ */
+export interface User {
+  id: string;
+
+  /**
+   * Unix timestamp of when the user was created in seconds.
+   */
+  created_at: number;
+
+  /**
+   * Indicates if the user has accepted the terms of service.
+   */
+  has_accepted_terms: boolean;
+
+  /**
+   * Indicates if the user is a guest account user.
+   */
+  is_guest: boolean;
+
+  linked_accounts: Array<LinkedAccount>;
+
+  mfa_methods: Array<LinkedMfaMethod>;
+
+  /**
+   * Custom metadata associated with the user.
+   */
+  custom_metadata?: CustomMetadata;
+}
 
 /**
  * The payload for importing a wallet account.
@@ -1462,94 +1518,11 @@ export namespace UserBatchCreateInput {
      */
     custom_metadata?: UsersAPI.CustomMetadata;
 
-    wallets?: Array<User.Wallet>;
+    /**
+     * Wallets to create.
+     */
+    wallets?: Array<EmbeddedWalletsAPI.WalletCreationInput>;
   }
-
-  export namespace User {
-    export interface Wallet {
-      /**
-       * The wallet chain types.
-       */
-      chain_type: WalletsAPI.WalletChainType;
-
-      additional_signers?: Array<Wallet.AdditionalSigner>;
-
-      create_smart_wallet?: boolean;
-
-      policy_ids?: Array<string>;
-    }
-
-    export namespace Wallet {
-      export interface AdditionalSigner {
-        signer_id: string;
-
-        override_policy_ids?: Array<string>;
-      }
-    }
-  }
-}
-
-/**
- * A SMS MFA method.
- */
-export interface SMSMfaMethod {
-  type: 'sms';
-
-  verified_at: number;
-}
-
-/**
- * A TOTP MFA method.
- */
-export interface TotpMfaMethod {
-  type: 'totp';
-
-  verified_at: number;
-}
-
-/**
- * A Passkey MFA method.
- */
-export interface PasskeyMfaMethod {
-  type: 'passkey';
-
-  verified_at: number;
-}
-
-/**
- * A multi-factor authentication method linked to the user.
- */
-export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod;
-
-/**
- * A Privy user object.
- */
-export interface User {
-  id: string;
-
-  /**
-   * Unix timestamp of when the user was created in milliseconds.
-   */
-  created_at: number;
-
-  /**
-   * Indicates if the user has accepted the terms of service.
-   */
-  has_accepted_terms: boolean;
-
-  /**
-   * Indicates if the user is a guest account user.
-   */
-  is_guest: boolean;
-
-  linked_accounts: Array<LinkedAccount>;
-
-  mfa_methods: Array<LinkedMfaMethod>;
-
-  /**
-   * Custom metadata associated with the user.
-   */
-  custom_metadata?: CustomMetadata;
 }
 
 /**
@@ -1718,30 +1691,7 @@ export interface UserGetByWalletAddressParams {
 }
 
 export interface UserPregenerateWalletsParams {
-  wallets: Array<UserPregenerateWalletsParams.Wallet>;
-}
-
-export namespace UserPregenerateWalletsParams {
-  export interface Wallet {
-    /**
-     * The wallet chain types.
-     */
-    chain_type: WalletsAPI.WalletChainType;
-
-    additional_signers?: Array<Wallet.AdditionalSigner>;
-
-    create_smart_wallet?: boolean;
-
-    policy_ids?: Array<string>;
-  }
-
-  export namespace Wallet {
-    export interface AdditionalSigner {
-      signer_id: string;
-
-      override_policy_ids?: Array<string>;
-    }
-  }
+  wallets: Array<EmbeddedWalletsAPI.WalletCreationInput>;
 }
 
 export type UserSearchParams = UserSearchParams.Variant0 | UserSearchParams.Variant1;
@@ -1784,7 +1734,6 @@ export declare namespace Users {
     type LinkedAccountPhone as LinkedAccountPhone,
     type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
     type LinkedAccountEthereum as LinkedAccountEthereum,
-    type SmartWalletType as SmartWalletType,
     type LinkedAccountSmartWallet as LinkedAccountSmartWallet,
     type LinkedAccountSolana as LinkedAccountSolana,
     type LinkedAccountFarcaster as LinkedAccountFarcaster,
@@ -1817,7 +1766,12 @@ export declare namespace Users {
     type LinkedAccountAuthorizationKey as LinkedAccountAuthorizationKey,
     type LinkedAccount as LinkedAccount,
     type LinkedAccountType as LinkedAccountType,
+    type SMSMfaMethod as SMSMfaMethod,
+    type TotpMfaMethod as TotpMfaMethod,
+    type PasskeyMfaMethod as PasskeyMfaMethod,
+    type LinkedMfaMethod as LinkedMfaMethod,
     type CustomMetadata as CustomMetadata,
+    type User as User,
     type LinkedAccountWalletInput as LinkedAccountWalletInput,
     type LinkedAccountEmailInput as LinkedAccountEmailInput,
     type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
@@ -1838,11 +1792,6 @@ export declare namespace Users {
     type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
     type LinkedAccountInput as LinkedAccountInput,
     type UserBatchCreateInput as UserBatchCreateInput,
-    type SMSMfaMethod as SMSMfaMethod,
-    type TotpMfaMethod as TotpMfaMethod,
-    type PasskeyMfaMethod as PasskeyMfaMethod,
-    type LinkedMfaMethod as LinkedMfaMethod,
-    type User as User,
     type OAuthTokens as OAuthTokens,
     type UserWithIdentityToken as UserWithIdentityToken,
     type AuthenticatedUser as AuthenticatedUser,

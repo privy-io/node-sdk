@@ -370,9 +370,9 @@ export interface ConditionSet {
   name: string;
 
   /**
-   * The key quorum ID of the owner of the condition set.
+   * A unique identifier for a key quorum.
    */
-  owner_id: string;
+  owner_id: WalletsAPI.KeyQuorumID;
 }
 
 /**
@@ -507,6 +507,21 @@ export interface TronTransactionCondition {
 }
 
 /**
+ * Decoded calldata from a TRON TriggerSmartContract interaction.
+ */
+export interface TronCalldataCondition {
+  abi: unknown;
+
+  field: string;
+
+  field_source: 'tron_trigger_smart_contract_data';
+
+  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+  value: string | Array<string>;
+}
+
+/**
  * SUI transaction command attributes, enables allowlisting specific command types.
  * Allowed commands: 'TransferObjects', 'SplitCoins', 'MergeCoins'. Only 'eq' and
  * 'in' operators are supported.
@@ -547,6 +562,20 @@ export interface SuiTransferObjectsCommandCondition {
 }
 
 /**
+ * Condition referencing an aggregation value. The field must start with
+ * "aggregation." followed by the aggregation ID.
+ */
+export interface AggregationCondition {
+  field: string;
+
+  field_source: 'reference';
+
+  operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+  value: string | Array<string>;
+}
+
+/**
  * A policy for controlling wallet operations.
  */
 export interface Policy {
@@ -557,9 +586,9 @@ export interface Policy {
   id: string;
 
   /**
-   * The chain type the policy applies to.
+   * The wallet chain types.
    */
-  chain_type: 'ethereum' | 'solana' | 'tron' | 'sui';
+  chain_type: WalletsAPI.WalletChainType;
 
   /**
    * Unix timestamp of when the policy was created in milliseconds.
@@ -608,8 +637,10 @@ export namespace Policy {
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
       | PoliciesAPI.TronTransactionCondition
+      | PoliciesAPI.TronCalldataCondition
       | PoliciesAPI.SuiTransactionCommandCondition
       | PoliciesAPI.SuiTransferObjectsCommandCondition
+      | PoliciesAPI.AggregationCondition
     >;
 
     /**
@@ -666,7 +697,7 @@ export namespace Policy {
      * Attributes from the signing domain that will verify the signature.
      */
     export interface EthereumTypedDataDomainCondition {
-      field: 'chainId' | 'verifyingContract';
+      field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
       field_source: 'ethereum_typed_data_domain';
 
@@ -695,15 +726,10 @@ export namespace Policy {
       export interface TypedData {
         primary_type: string;
 
-        types: { [key: string]: Array<TypedData.Type> };
-      }
-
-      export namespace TypedData {
-        export interface Type {
-          name: string;
-
-          type: string;
-        }
+        /**
+         * The type definitions for EIP-712 typed data signing.
+         */
+        types: WalletsAPI.TypedDataTypesInputParams;
       }
     }
 
@@ -754,11 +780,29 @@ export namespace Policy {
     export interface SolanaTokenProgramInstructionCondition {
       field:
         | 'instructionName'
+        | 'Transfer.source'
+        | 'Transfer.destination'
+        | 'Transfer.authority'
+        | 'Transfer.amount'
         | 'TransferChecked.source'
         | 'TransferChecked.destination'
         | 'TransferChecked.authority'
         | 'TransferChecked.amount'
-        | 'TransferChecked.mint';
+        | 'TransferChecked.mint'
+        | 'Burn.account'
+        | 'Burn.mint'
+        | 'Burn.authority'
+        | 'Burn.amount'
+        | 'MintTo.mint'
+        | 'MintTo.account'
+        | 'MintTo.authority'
+        | 'MintTo.amount'
+        | 'CloseAccount.account'
+        | 'CloseAccount.destination'
+        | 'CloseAccount.authority'
+        | 'InitializeAccount3.account'
+        | 'InitializeAccount3.mint'
+        | 'InitializeAccount3.owner';
 
       field_source: 'solana_token_program_instruction';
 
@@ -849,8 +893,10 @@ export interface PolicyCreateRuleResponse {
     | PolicyCreateRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyCreateRuleResponse.SystemCondition
     | TronTransactionCondition
+    | TronCalldataCondition
     | SuiTransactionCommandCondition
     | SuiTransferObjectsCommandCondition
+    | AggregationCondition
   >;
 
   /**
@@ -907,7 +953,7 @@ export namespace PolicyCreateRuleResponse {
    * Attributes from the signing domain that will verify the signature.
    */
   export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract';
+    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
     field_source: 'ethereum_typed_data_domain';
 
@@ -936,15 +982,10 @@ export namespace PolicyCreateRuleResponse {
     export interface TypedData {
       primary_type: string;
 
-      types: { [key: string]: Array<TypedData.Type> };
-    }
-
-    export namespace TypedData {
-      export interface Type {
-        name: string;
-
-        type: string;
-      }
+      /**
+       * The type definitions for EIP-712 typed data signing.
+       */
+      types: WalletsAPI.TypedDataTypesInputParams;
     }
   }
 
@@ -995,11 +1036,29 @@ export namespace PolicyCreateRuleResponse {
   export interface SolanaTokenProgramInstructionCondition {
     field:
       | 'instructionName'
+      | 'Transfer.source'
+      | 'Transfer.destination'
+      | 'Transfer.authority'
+      | 'Transfer.amount'
       | 'TransferChecked.source'
       | 'TransferChecked.destination'
       | 'TransferChecked.authority'
       | 'TransferChecked.amount'
-      | 'TransferChecked.mint';
+      | 'TransferChecked.mint'
+      | 'Burn.account'
+      | 'Burn.mint'
+      | 'Burn.authority'
+      | 'Burn.amount'
+      | 'MintTo.mint'
+      | 'MintTo.account'
+      | 'MintTo.authority'
+      | 'MintTo.amount'
+      | 'CloseAccount.account'
+      | 'CloseAccount.destination'
+      | 'CloseAccount.authority'
+      | 'InitializeAccount3.account'
+      | 'InitializeAccount3.mint'
+      | 'InitializeAccount3.owner';
 
     field_source: 'solana_token_program_instruction';
 
@@ -1045,8 +1104,10 @@ export interface PolicyUpdateRuleResponse {
     | PolicyUpdateRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyUpdateRuleResponse.SystemCondition
     | TronTransactionCondition
+    | TronCalldataCondition
     | SuiTransactionCommandCondition
     | SuiTransferObjectsCommandCondition
+    | AggregationCondition
   >;
 
   /**
@@ -1103,7 +1164,7 @@ export namespace PolicyUpdateRuleResponse {
    * Attributes from the signing domain that will verify the signature.
    */
   export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract';
+    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
     field_source: 'ethereum_typed_data_domain';
 
@@ -1132,15 +1193,10 @@ export namespace PolicyUpdateRuleResponse {
     export interface TypedData {
       primary_type: string;
 
-      types: { [key: string]: Array<TypedData.Type> };
-    }
-
-    export namespace TypedData {
-      export interface Type {
-        name: string;
-
-        type: string;
-      }
+      /**
+       * The type definitions for EIP-712 typed data signing.
+       */
+      types: WalletsAPI.TypedDataTypesInputParams;
     }
   }
 
@@ -1191,11 +1247,29 @@ export namespace PolicyUpdateRuleResponse {
   export interface SolanaTokenProgramInstructionCondition {
     field:
       | 'instructionName'
+      | 'Transfer.source'
+      | 'Transfer.destination'
+      | 'Transfer.authority'
+      | 'Transfer.amount'
       | 'TransferChecked.source'
       | 'TransferChecked.destination'
       | 'TransferChecked.authority'
       | 'TransferChecked.amount'
-      | 'TransferChecked.mint';
+      | 'TransferChecked.mint'
+      | 'Burn.account'
+      | 'Burn.mint'
+      | 'Burn.authority'
+      | 'Burn.amount'
+      | 'MintTo.mint'
+      | 'MintTo.account'
+      | 'MintTo.authority'
+      | 'MintTo.amount'
+      | 'CloseAccount.account'
+      | 'CloseAccount.destination'
+      | 'CloseAccount.authority'
+      | 'InitializeAccount3.account'
+      | 'InitializeAccount3.mint'
+      | 'InitializeAccount3.owner';
 
     field_source: 'solana_token_program_instruction';
 
@@ -1241,8 +1315,10 @@ export interface PolicyGetRuleResponse {
     | PolicyGetRuleResponse.SolanaTokenProgramInstructionCondition
     | PolicyGetRuleResponse.SystemCondition
     | TronTransactionCondition
+    | TronCalldataCondition
     | SuiTransactionCommandCondition
     | SuiTransferObjectsCommandCondition
+    | AggregationCondition
   >;
 
   /**
@@ -1299,7 +1375,7 @@ export namespace PolicyGetRuleResponse {
    * Attributes from the signing domain that will verify the signature.
    */
   export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract';
+    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
     field_source: 'ethereum_typed_data_domain';
 
@@ -1328,15 +1404,10 @@ export namespace PolicyGetRuleResponse {
     export interface TypedData {
       primary_type: string;
 
-      types: { [key: string]: Array<TypedData.Type> };
-    }
-
-    export namespace TypedData {
-      export interface Type {
-        name: string;
-
-        type: string;
-      }
+      /**
+       * The type definitions for EIP-712 typed data signing.
+       */
+      types: WalletsAPI.TypedDataTypesInputParams;
     }
   }
 
@@ -1387,11 +1458,29 @@ export namespace PolicyGetRuleResponse {
   export interface SolanaTokenProgramInstructionCondition {
     field:
       | 'instructionName'
+      | 'Transfer.source'
+      | 'Transfer.destination'
+      | 'Transfer.authority'
+      | 'Transfer.amount'
       | 'TransferChecked.source'
       | 'TransferChecked.destination'
       | 'TransferChecked.authority'
       | 'TransferChecked.amount'
-      | 'TransferChecked.mint';
+      | 'TransferChecked.mint'
+      | 'Burn.account'
+      | 'Burn.mint'
+      | 'Burn.authority'
+      | 'Burn.amount'
+      | 'MintTo.mint'
+      | 'MintTo.account'
+      | 'MintTo.authority'
+      | 'MintTo.amount'
+      | 'CloseAccount.account'
+      | 'CloseAccount.destination'
+      | 'CloseAccount.authority'
+      | 'InitializeAccount3.account'
+      | 'InitializeAccount3.mint'
+      | 'InitializeAccount3.owner';
 
     field_source: 'solana_token_program_instruction';
 
@@ -1416,9 +1505,9 @@ export namespace PolicyGetRuleResponse {
 
 export interface PolicyCreateParams {
   /**
-   * Body param: The chain type the policy applies to.
+   * Body param: The wallet chain types.
    */
-  chain_type: 'ethereum' | 'solana' | 'tron' | 'sui';
+  chain_type: WalletsAPI.WalletChainType;
 
   /**
    * Body param: Name to assign to policy.
@@ -1475,8 +1564,10 @@ export namespace PolicyCreateParams {
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
       | PoliciesAPI.TronTransactionCondition
+      | PoliciesAPI.TronCalldataCondition
       | PoliciesAPI.SuiTransactionCommandCondition
       | PoliciesAPI.SuiTransferObjectsCommandCondition
+      | PoliciesAPI.AggregationCondition
     >;
 
     /**
@@ -1533,7 +1624,7 @@ export namespace PolicyCreateParams {
      * Attributes from the signing domain that will verify the signature.
      */
     export interface EthereumTypedDataDomainCondition {
-      field: 'chainId' | 'verifyingContract';
+      field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
       field_source: 'ethereum_typed_data_domain';
 
@@ -1562,15 +1653,10 @@ export namespace PolicyCreateParams {
       export interface TypedData {
         primary_type: string;
 
-        types: { [key: string]: Array<TypedData.Type> };
-      }
-
-      export namespace TypedData {
-        export interface Type {
-          name: string;
-
-          type: string;
-        }
+        /**
+         * The type definitions for EIP-712 typed data signing.
+         */
+        types: WalletsAPI.TypedDataTypesInputParams;
       }
     }
 
@@ -1621,11 +1707,29 @@ export namespace PolicyCreateParams {
     export interface SolanaTokenProgramInstructionCondition {
       field:
         | 'instructionName'
+        | 'Transfer.source'
+        | 'Transfer.destination'
+        | 'Transfer.authority'
+        | 'Transfer.amount'
         | 'TransferChecked.source'
         | 'TransferChecked.destination'
         | 'TransferChecked.authority'
         | 'TransferChecked.amount'
-        | 'TransferChecked.mint';
+        | 'TransferChecked.mint'
+        | 'Burn.account'
+        | 'Burn.mint'
+        | 'Burn.authority'
+        | 'Burn.amount'
+        | 'MintTo.mint'
+        | 'MintTo.account'
+        | 'MintTo.authority'
+        | 'MintTo.amount'
+        | 'CloseAccount.account'
+        | 'CloseAccount.destination'
+        | 'CloseAccount.authority'
+        | 'InitializeAccount3.account'
+        | 'InitializeAccount3.mint'
+        | 'InitializeAccount3.owner';
 
       field_source: 'solana_token_program_instruction';
 
@@ -1687,8 +1791,10 @@ export interface PolicyCreateRuleParams {
     | PolicyCreateRuleParams.SolanaTokenProgramInstructionCondition
     | PolicyCreateRuleParams.SystemCondition
     | TronTransactionCondition
+    | TronCalldataCondition
     | SuiTransactionCommandCondition
     | SuiTransferObjectsCommandCondition
+    | AggregationCondition
   >;
 
   /**
@@ -1760,7 +1866,7 @@ export namespace PolicyCreateRuleParams {
    * Attributes from the signing domain that will verify the signature.
    */
   export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract';
+    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
     field_source: 'ethereum_typed_data_domain';
 
@@ -1789,15 +1895,10 @@ export namespace PolicyCreateRuleParams {
     export interface TypedData {
       primary_type: string;
 
-      types: { [key: string]: Array<TypedData.Type> };
-    }
-
-    export namespace TypedData {
-      export interface Type {
-        name: string;
-
-        type: string;
-      }
+      /**
+       * The type definitions for EIP-712 typed data signing.
+       */
+      types: WalletsAPI.TypedDataTypesInputParams;
     }
   }
 
@@ -1848,11 +1949,29 @@ export namespace PolicyCreateRuleParams {
   export interface SolanaTokenProgramInstructionCondition {
     field:
       | 'instructionName'
+      | 'Transfer.source'
+      | 'Transfer.destination'
+      | 'Transfer.authority'
+      | 'Transfer.amount'
       | 'TransferChecked.source'
       | 'TransferChecked.destination'
       | 'TransferChecked.authority'
       | 'TransferChecked.amount'
-      | 'TransferChecked.mint';
+      | 'TransferChecked.mint'
+      | 'Burn.account'
+      | 'Burn.mint'
+      | 'Burn.authority'
+      | 'Burn.amount'
+      | 'MintTo.mint'
+      | 'MintTo.account'
+      | 'MintTo.authority'
+      | 'MintTo.amount'
+      | 'CloseAccount.account'
+      | 'CloseAccount.destination'
+      | 'CloseAccount.authority'
+      | 'InitializeAccount3.account'
+      | 'InitializeAccount3.mint'
+      | 'InitializeAccount3.owner';
 
     field_source: 'solana_token_program_instruction';
 
@@ -1983,8 +2102,10 @@ export namespace PolicyUpdateParams {
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
       | PoliciesAPI.TronTransactionCondition
+      | PoliciesAPI.TronCalldataCondition
       | PoliciesAPI.SuiTransactionCommandCondition
       | PoliciesAPI.SuiTransferObjectsCommandCondition
+      | PoliciesAPI.AggregationCondition
     >;
 
     /**
@@ -2041,7 +2162,7 @@ export namespace PolicyUpdateParams {
      * Attributes from the signing domain that will verify the signature.
      */
     export interface EthereumTypedDataDomainCondition {
-      field: 'chainId' | 'verifyingContract';
+      field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
       field_source: 'ethereum_typed_data_domain';
 
@@ -2070,15 +2191,10 @@ export namespace PolicyUpdateParams {
       export interface TypedData {
         primary_type: string;
 
-        types: { [key: string]: Array<TypedData.Type> };
-      }
-
-      export namespace TypedData {
-        export interface Type {
-          name: string;
-
-          type: string;
-        }
+        /**
+         * The type definitions for EIP-712 typed data signing.
+         */
+        types: WalletsAPI.TypedDataTypesInputParams;
       }
     }
 
@@ -2129,11 +2245,29 @@ export namespace PolicyUpdateParams {
     export interface SolanaTokenProgramInstructionCondition {
       field:
         | 'instructionName'
+        | 'Transfer.source'
+        | 'Transfer.destination'
+        | 'Transfer.authority'
+        | 'Transfer.amount'
         | 'TransferChecked.source'
         | 'TransferChecked.destination'
         | 'TransferChecked.authority'
         | 'TransferChecked.amount'
-        | 'TransferChecked.mint';
+        | 'TransferChecked.mint'
+        | 'Burn.account'
+        | 'Burn.mint'
+        | 'Burn.authority'
+        | 'Burn.amount'
+        | 'MintTo.mint'
+        | 'MintTo.account'
+        | 'MintTo.authority'
+        | 'MintTo.amount'
+        | 'CloseAccount.account'
+        | 'CloseAccount.destination'
+        | 'CloseAccount.authority'
+        | 'InitializeAccount3.account'
+        | 'InitializeAccount3.mint'
+        | 'InitializeAccount3.owner';
 
       field_source: 'solana_token_program_instruction';
 
@@ -2182,8 +2316,10 @@ export interface PolicyUpdateRuleParams {
     | PolicyUpdateRuleParams.SolanaTokenProgramInstructionCondition
     | PolicyUpdateRuleParams.SystemCondition
     | TronTransactionCondition
+    | TronCalldataCondition
     | SuiTransactionCommandCondition
     | SuiTransferObjectsCommandCondition
+    | AggregationCondition
   >;
 
   /**
@@ -2255,7 +2391,7 @@ export namespace PolicyUpdateRuleParams {
    * Attributes from the signing domain that will verify the signature.
    */
   export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract';
+    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
     field_source: 'ethereum_typed_data_domain';
 
@@ -2284,15 +2420,10 @@ export namespace PolicyUpdateRuleParams {
     export interface TypedData {
       primary_type: string;
 
-      types: { [key: string]: Array<TypedData.Type> };
-    }
-
-    export namespace TypedData {
-      export interface Type {
-        name: string;
-
-        type: string;
-      }
+      /**
+       * The type definitions for EIP-712 typed data signing.
+       */
+      types: WalletsAPI.TypedDataTypesInputParams;
     }
   }
 
@@ -2343,11 +2474,29 @@ export namespace PolicyUpdateRuleParams {
   export interface SolanaTokenProgramInstructionCondition {
     field:
       | 'instructionName'
+      | 'Transfer.source'
+      | 'Transfer.destination'
+      | 'Transfer.authority'
+      | 'Transfer.amount'
       | 'TransferChecked.source'
       | 'TransferChecked.destination'
       | 'TransferChecked.authority'
       | 'TransferChecked.amount'
-      | 'TransferChecked.mint';
+      | 'TransferChecked.mint'
+      | 'Burn.account'
+      | 'Burn.mint'
+      | 'Burn.authority'
+      | 'Burn.amount'
+      | 'MintTo.mint'
+      | 'MintTo.account'
+      | 'MintTo.authority'
+      | 'MintTo.amount'
+      | 'CloseAccount.account'
+      | 'CloseAccount.destination'
+      | 'CloseAccount.authority'
+      | 'InitializeAccount3.account'
+      | 'InitializeAccount3.mint'
+      | 'InitializeAccount3.owner';
 
     field_source: 'solana_token_program_instruction';
 
@@ -2389,8 +2538,10 @@ export declare namespace Policies {
     type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
     type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
     type TronTransactionCondition as TronTransactionCondition,
+    type TronCalldataCondition as TronCalldataCondition,
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
+    type AggregationCondition as AggregationCondition,
     type Policy as Policy,
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
     type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,

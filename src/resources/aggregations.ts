@@ -292,15 +292,10 @@ export namespace Aggregation {
     export interface TypedData {
       primary_type: string;
 
-      types: { [key: string]: Array<TypedData.Type> };
-    }
-
-    export namespace TypedData {
-      export interface Type {
-        name: string;
-
-        type: string;
-      }
+      /**
+       * The type definitions for EIP-712 typed data signing.
+       */
+      types: WalletsAPI.TypedDataTypesInputParams;
     }
   }
 
@@ -633,15 +628,10 @@ export namespace AggregationInput {
     export interface TypedData {
       primary_type: string;
 
-      types: { [key: string]: Array<TypedData.Type> };
-    }
-
-    export namespace TypedData {
-      export interface Type {
-        name: string;
-
-        type: string;
-      }
+      /**
+       * The type definitions for EIP-712 typed data signing.
+       */
+      types: WalletsAPI.TypedDataTypesInputParams;
     }
   }
 

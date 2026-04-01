@@ -154,7 +154,7 @@ export namespace KeyQuorum {
 /**
  * Request input for creating a key quorum.
  */
-export interface KeyQuorumCreateParams {
+export interface KeyQuorumCreateRequestBody {
   /**
    * The number of keys that must sign for an action to be valid. Must be less than
    * or equal to total number of key quorum members.
@@ -185,7 +185,7 @@ export interface KeyQuorumCreateParams {
 /**
  * Request input for updating an existing key quorum.
  */
-export interface KeyQuorumUpdateParams {
+export interface KeyQuorumUpdateRequestBody {
   /**
    * The number of keys that must sign for an action to be valid. Must be less than
    * or equal to total number of key quorum members.
@@ -323,9 +323,11 @@ export interface KeyQuorumUpdateParams {
 export declare namespace KeyQuorums {
   export {
     type KeyQuorum as KeyQuorum,
-    type KeyQuorumCreateParams as KeyQuorumCreateParams,
-    type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
+    type KeyQuorumCreateRequestBody as KeyQuorumCreateRequestBody,
+    type KeyQuorumUpdateRequestBody as KeyQuorumUpdateRequestBody,
     type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
+    type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
+    type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
   };
 }

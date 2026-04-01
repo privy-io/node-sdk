@@ -4,7 +4,6 @@ import { APIResource } from '../core/resource';
 import * as IntentsAPI from './intents';
 import * as UsersAPI from './users';
 import * as WalletActionsAPI from './wallet-actions';
-import * as WalletsAPI from './wallets/wallets';
 
 export class Webhooks extends APIResource {}
 
@@ -363,9 +362,9 @@ export interface TransactionStillPendingWebhookPayload {
   transaction_id: string;
 
   /**
-   * An unsigned Ethereum transaction object.
+   * The original transaction request that is still pending.
    */
-  transaction_request: WalletsAPI.UnsignedEthereumTransaction;
+  transaction_request: TransactionStillPendingWebhookPayload.TransactionRequest;
 
   /**
    * The type of webhook event.
@@ -376,6 +375,53 @@ export interface TransactionStillPendingWebhookPayload {
    * The ID of the wallet that initiated the transaction.
    */
   wallet_id: string;
+}
+
+export namespace TransactionStillPendingWebhookPayload {
+  /**
+   * The original transaction request that is still pending.
+   */
+  export interface TransactionRequest {
+    authorization_list?: Array<TransactionRequest.AuthorizationList>;
+
+    chain_id?: string | number;
+
+    data?: string;
+
+    from?: string;
+
+    gas_limit?: string | number;
+
+    gas_price?: string | number;
+
+    max_fee_per_gas?: string | number;
+
+    max_priority_fee_per_gas?: string | number;
+
+    nonce?: string | number;
+
+    to?: string;
+
+    type?: 0 | 1 | 2 | 4;
+
+    value?: string | number;
+  }
+
+  export namespace TransactionRequest {
+    export interface AuthorizationList {
+      chain_id: string | number;
+
+      contract: string;
+
+      nonce: string | number;
+
+      r: string;
+
+      s: string;
+
+      y_parity: number;
+    }
+  }
 }
 
 /**

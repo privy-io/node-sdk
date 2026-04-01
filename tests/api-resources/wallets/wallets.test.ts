@@ -235,7 +235,6 @@ describe('resource wallets', () => {
         },
       },
       additional_signers: [{ signer_id: 'string', override_policy_ids: ['string'] }],
-      owner: {},
       owner_id: 'rkiz0ivz254drv1xw982v3jq',
       policy_ids: ['string'],
     });

@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as WalletsAPI from './wallets';
+import * as AppsAPI from '../apps/apps';
 import * as BalanceAPI from './balance';
 import { Balance, BalanceGetParams, BalanceGetResponse } from './balance';
 import * as TransactionsAPI from './transactions';
@@ -299,6 +300,12 @@ export class Wallets extends APIResource {
 export type WalletsCursor = Cursor<Wallet>;
 
 /**
+ * The owner of the wallet, specified as a Privy user ID, a P-256 public key, or
+ * null to remove the current owner.
+ */
+export type OwnerInput = OwnerUserIDInput | OwnerPublicKeyInput;
+
+/**
  * The wallet chain types that support curve-based signing.
  */
 export type CurveSigningChainType =
@@ -353,6 +360,79 @@ export type WalletChainType =
   | 'spark';
 
 /**
+ * The role of an authorization key, controlling what actions it can authorize on a
+ * wallet.
+ */
+export type AuthorizationKeyRole = 'root' | 'manager' | 'delegated-actions' | null;
+
+/**
+ * The entropy type of the wallet.
+ */
+export type WalletEntropyType = 'hd' | 'private-key';
+
+/**
+ * The derivation strategy used for Solana wallets.
+ */
+export type SolanaWalletDerivationStrategy = 'ENTROPY_TO_SEED' | 'ENTROPY_TO_MNEMONIC_TO_SEED';
+
+/**
+ * A unique identifier for a key quorum.
+ */
+export type KeyQuorumID = string;
+
+/**
+ * A P-256 (secp256r1) public key.
+ */
+export type P256PublicKey = string;
+
+/**
+ * Owner input specifying a Privy user ID.
+ */
+export interface OwnerUserIDInput {
+  user_id: string;
+}
+
+/**
+ * Owner input specifying a P-256 public key.
+ */
+export interface OwnerPublicKeyInput {
+  /**
+   * A P-256 (secp256r1) public key.
+   */
+  public_key: P256PublicKey;
+}
+
+/**
+ * An optional list of up to one policy ID to enforce on the wallet.
+ */
+export type PolicyInput = Array<string>;
+
+/**
+ * A single additional signer for a wallet, with an optional policy override.
+ */
+export interface AdditionalSignerItemInput {
+  /**
+   * A unique identifier for a key quorum.
+   */
+  signer_id: KeyQuorumID;
+
+  /**
+   * An optional list of up to one policy ID to enforce on the wallet.
+   */
+  override_policy_ids?: PolicyInput;
+}
+
+/**
+ * Additional signers for the wallet.
+ */
+export type AdditionalSignerInput = Array<AdditionalSignerItemInput>;
+
+/**
+ * A blockchain wallet address (Ethereum or Solana).
+ */
+export type Address = string;
+
+/**
  * Information about the custodian managing this wallet.
  */
 export interface WalletCustodian {
@@ -397,27 +477,31 @@ export interface CustodialWalletCreateInput {
    */
   provider_user_id: string;
 
-  additional_signers?: Array<CustodialWalletCreateInput.AdditionalSigner>;
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: AdditionalSignerInput;
 
-  owner?: CustodialWalletCreateInput.UserID | CustodialWalletCreateInput.PublicKey | null;
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  owner?: CustodialWalletCreateInput.Owner;
 
-  policy_ids?: Array<string>;
+  /**
+   * An optional list of up to one policy ID to enforce on the wallet.
+   */
+  policy_ids?: PolicyInput;
 }
 
 export namespace CustodialWalletCreateInput {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    override_policy_ids?: Array<string>;
-  }
-
-  export interface UserID {
-    user_id: string;
-  }
-
-  export interface PublicKey {
-    public_key: string;
-  }
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  export type Owner = WalletsAPI.OwnerInput | (null & {});
 }
 
 /**
@@ -440,23 +524,13 @@ export interface CustodialWallet {
 
   owner_id: string | null;
 
-  additional_signers?: Array<CustodialWallet.AdditionalSigner>;
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: AdditionalSignerInput;
 
   policy_ids?: Array<string>;
 }
-
-export namespace CustodialWallet {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    override_policy_ids?: Array<string>;
-  }
-}
-
-/**
- * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
- */
-export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
 
 /**
  * The encryption type of the wallet to import. Currently only supports `HPKE`.
@@ -566,6 +640,32 @@ export interface HpkeImportConfig {
 }
 
 /**
+ * The cryptographic curve type used by the wallet.
+ */
+export type CurveType = 'secp256k1' | 'ed25519' | 'starknet';
+
+/**
+ * A BIP-32 hierarchical deterministic wallet derivation path.
+ */
+export type HDPath = string;
+
+/**
+ * The signing algorithm used by the wallet.
+ */
+export type SigningAlgorithm = 'ECDSA' | 'EdDSA';
+
+/**
+ * A hex-encoded string prefixed with '0x'.
+ */
+export type Hex = string;
+
+/**
+ * A quantity value that can be either a hex string starting with '0x' or a
+ * non-negative integer.
+ */
+export type Quantity = Hex | number;
+
+/**
  * Exports the private key of the wallet.
  */
 export interface ExportPrivateKeyRpcInput {
@@ -596,9 +696,9 @@ export interface ExportPrivateKeyRpcResponse {
  */
 export interface RawSignHashParams {
   /**
-   * The hash to sign.
+   * A hex-encoded string prefixed with '0x'.
    */
-  hash: string;
+  hash: Hex;
 }
 
 /**
@@ -653,7 +753,10 @@ export interface RawSignInput {
 export interface RawSignResponseData {
   encoding: 'hex';
 
-  signature: string;
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  signature: Hex;
 }
 
 /**
@@ -667,6 +770,176 @@ export interface RawSignResponse {
 
   method: 'raw_sign';
 }
+
+/**
+ * A signed EIP-7702 authorization that delegates code execution to a contract
+ * address.
+ */
+export interface EthereumSign7702Authorization {
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id: Quantity;
+
+  contract: string;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce: Quantity;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  r: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  s: Hex;
+
+  y_parity: number;
+}
+
+/**
+ * An unsigned Ethereum transaction object.
+ */
+export interface UnsignedEthereumTransaction {
+  authorization_list?: Array<EthereumSign7702Authorization>;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id?: Quantity;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  data?: Hex;
+
+  from?: string;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  gas_limit?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  gas_price?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  max_fee_per_gas?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  max_priority_fee_per_gas?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce?: Quantity;
+
+  to?: string;
+
+  type?: 0 | 1 | 2 | 4;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  value?: Quantity;
+}
+
+/**
+ * An ERC-4337 user operation.
+ */
+export interface UserOperationInput {
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  call_data: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  call_gas_limit: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  max_fee_per_gas: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  max_priority_fee_per_gas: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  nonce: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  pre_verification_gas: Hex;
+
+  sender: string;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  verification_gas_limit: Hex;
+
+  paymaster?: string;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  paymaster_data?: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  paymaster_post_op_gas_limit?: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  paymaster_verification_gas_limit?: Hex;
+}
+
+/**
+ * The domain parameters for EIP-712 typed data signing.
+ */
+export type TypedDataDomainInputParams = { [key: string]: unknown };
+
+/**
+ * A single field definition in an EIP-712 typed data type.
+ */
+export interface TypedDataTypeFieldInput {
+  name: string;
+
+  type: string;
+}
+
+/**
+ * The type definitions for EIP-712 typed data signing.
+ */
+export type TypedDataTypesInputParams = { [key: string]: Array<TypedDataTypeFieldInput> };
 
 /**
  * Parameters for the EVM `personal_sign` RPC.
@@ -699,51 +972,10 @@ export interface EthereumPersonalSignRpcInput {
  * Parameters for the EVM `eth_signTransaction` RPC.
  */
 export interface EthereumSignTransactionRpcInputParams {
-  transaction: EthereumSignTransactionRpcInputParams.Transaction;
-}
-
-export namespace EthereumSignTransactionRpcInputParams {
-  export interface Transaction {
-    authorization_list?: Array<Transaction.AuthorizationList>;
-
-    chain_id?: string | number;
-
-    data?: string;
-
-    from?: string;
-
-    gas_limit?: string | number;
-
-    gas_price?: string | number;
-
-    max_fee_per_gas?: string | number;
-
-    max_priority_fee_per_gas?: string | number;
-
-    nonce?: string | number;
-
-    to?: string;
-
-    type?: 0 | 1 | 2 | 4;
-
-    value?: string | number;
-  }
-
-  export namespace Transaction {
-    export interface AuthorizationList {
-      chain_id: string | number;
-
-      contract: string;
-
-      nonce: string | number;
-
-      r: string;
-
-      s: string;
-
-      y_parity: number;
-    }
-  }
+  /**
+   * An unsigned Ethereum transaction object.
+   */
+  transaction: UnsignedEthereumTransaction;
 }
 
 /**
@@ -768,58 +1000,20 @@ export interface EthereumSignTransactionRpcInput {
  * Parameters for the EVM `eth_sendTransaction` RPC.
  */
 export interface EthereumSendTransactionRpcInputParams {
-  transaction: EthereumSendTransactionRpcInputParams.Transaction;
-}
-
-export namespace EthereumSendTransactionRpcInputParams {
-  export interface Transaction {
-    authorization_list?: Array<Transaction.AuthorizationList>;
-
-    chain_id?: string | number;
-
-    data?: string;
-
-    from?: string;
-
-    gas_limit?: string | number;
-
-    gas_price?: string | number;
-
-    max_fee_per_gas?: string | number;
-
-    max_priority_fee_per_gas?: string | number;
-
-    nonce?: string | number;
-
-    to?: string;
-
-    type?: 0 | 1 | 2 | 4;
-
-    value?: string | number;
-  }
-
-  export namespace Transaction {
-    export interface AuthorizationList {
-      chain_id: string | number;
-
-      contract: string;
-
-      nonce: string | number;
-
-      r: string;
-
-      s: string;
-
-      y_parity: number;
-    }
-  }
+  /**
+   * An unsigned Ethereum transaction object.
+   */
+  transaction: UnsignedEthereumTransaction;
 }
 
 /**
  * Executes the EVM `eth_sendTransaction` RPC to sign and broadcast a transaction.
  */
 export interface EthereumSendTransactionRpcInput {
-  caip2: string;
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
 
   method: 'eth_sendTransaction';
 
@@ -841,21 +1035,19 @@ export interface EthereumSendTransactionRpcInput {
  * EIP-712 typed data object.
  */
 export interface EthereumTypedDataInput {
-  domain: { [key: string]: unknown };
+  /**
+   * The domain parameters for EIP-712 typed data signing.
+   */
+  domain: TypedDataDomainInputParams;
 
   message: { [key: string]: unknown };
 
   primary_type: string;
 
-  types: { [key: string]: Array<EthereumTypedDataInput.Type> };
-}
-
-export namespace EthereumTypedDataInput {
-  export interface Type {
-    name: string;
-
-    type: string;
-  }
+  /**
+   * The type definitions for EIP-712 typed data signing.
+   */
+  types: TypedDataTypesInputParams;
 }
 
 /**
@@ -891,7 +1083,10 @@ export interface EthereumSignTypedDataRpcInput {
  * Parameters for the EVM `secp256k1_sign` RPC.
  */
 export interface EthereumSecp256k1SignRpcInputParams {
-  hash: string;
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  hash: Hex;
 }
 
 /**
@@ -916,13 +1111,21 @@ export interface EthereumSecp256k1SignRpcInput {
  * Parameters for the EVM `eth_sign7702Authorization` RPC.
  */
 export interface EthereumSign7702AuthorizationRpcInputParams {
-  chain_id: string | number;
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id: Quantity;
 
   contract: string;
 
   executor?: 'self';
 
-  nonce?: string | number;
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce?: Quantity;
 }
 
 /**
@@ -947,39 +1150,18 @@ export interface EthereumSign7702AuthorizationRpcInput {
  * Parameters for the EVM `eth_signUserOperation` RPC.
  */
 export interface EthereumSignUserOperationRpcInputParams {
-  chain_id: string | number;
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id: Quantity;
 
   contract: string;
 
-  user_operation: EthereumSignUserOperationRpcInputParams.UserOperation;
-}
-
-export namespace EthereumSignUserOperationRpcInputParams {
-  export interface UserOperation {
-    call_data: string;
-
-    call_gas_limit: string;
-
-    max_fee_per_gas: string;
-
-    max_priority_fee_per_gas: string;
-
-    nonce: string;
-
-    pre_verification_gas: string;
-
-    sender: string;
-
-    verification_gas_limit: string;
-
-    paymaster?: string;
-
-    paymaster_data?: string;
-
-    paymaster_post_op_gas_limit?: string;
-
-    paymaster_verification_gas_limit?: string;
-  }
+  /**
+   * An ERC-4337 user operation.
+   */
+  user_operation: UserOperationInput;
 }
 
 /**
@@ -1058,59 +1240,21 @@ export interface EthereumSignTransactionRpcResponse {
  * Data returned by the EVM `eth_sendTransaction` RPC.
  */
 export interface EthereumSendTransactionRpcResponseData {
-  caip2: string;
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
 
   hash: string;
 
   transaction_id?: string;
 
-  transaction_request?: EthereumSendTransactionRpcResponseData.TransactionRequest;
+  /**
+   * An unsigned Ethereum transaction object.
+   */
+  transaction_request?: UnsignedEthereumTransaction;
 
   user_operation_hash?: string;
-}
-
-export namespace EthereumSendTransactionRpcResponseData {
-  export interface TransactionRequest {
-    authorization_list?: Array<TransactionRequest.AuthorizationList>;
-
-    chain_id?: string | number;
-
-    data?: string;
-
-    from?: string;
-
-    gas_limit?: string | number;
-
-    gas_price?: string | number;
-
-    max_fee_per_gas?: string | number;
-
-    max_priority_fee_per_gas?: string | number;
-
-    nonce?: string | number;
-
-    to?: string;
-
-    type?: 0 | 1 | 2 | 4;
-
-    value?: string | number;
-  }
-
-  export namespace TransactionRequest {
-    export interface AuthorizationList {
-      chain_id: string | number;
-
-      contract: string;
-
-      nonce: string | number;
-
-      r: string;
-
-      s: string;
-
-      y_parity: number;
-    }
-  }
 }
 
 /**
@@ -1152,7 +1296,10 @@ export interface EthereumSignTypedDataRpcResponse {
 export interface EthereumSecp256k1SignRpcResponseData {
   encoding: 'hex';
 
-  signature: string;
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  signature: Hex;
 }
 
 /**
@@ -1171,23 +1318,11 @@ export interface EthereumSecp256k1SignRpcResponse {
  * Data returned by the EVM `eth_sign7702Authorization` RPC.
  */
 export interface EthereumSign7702AuthorizationRpcResponseData {
-  authorization: EthereumSign7702AuthorizationRpcResponseData.Authorization;
-}
-
-export namespace EthereumSign7702AuthorizationRpcResponseData {
-  export interface Authorization {
-    chain_id: string | number;
-
-    contract: string;
-
-    nonce: string | number;
-
-    r: string;
-
-    s: string;
-
-    y_parity: number;
-  }
+  /**
+   * A signed EIP-7702 authorization that delegates code execution to a contract
+   * address.
+   */
+  authorization: EthereumSign7702Authorization;
 }
 
 /**
@@ -1276,7 +1411,10 @@ export interface SolanaSignAndSendTransactionRpcInputParams {
  * transaction.
  */
 export interface SolanaSignAndSendTransactionRpcInput {
-  caip2: string;
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
 
   method: 'signAndSendTransaction';
 
@@ -1354,7 +1492,10 @@ export interface SolanaSignTransactionRpcResponse {
  * Data returned by the SVM `signAndSendTransaction` RPC.
  */
 export interface SolanaSignAndSendTransactionRpcResponseData {
-  caip2: string;
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
 
   hash: string;
 
@@ -2138,9 +2279,9 @@ export namespace Wallet {
  */
 export interface GetByWalletAddressRequestBody {
   /**
-   * The blockchain address of the wallet to look up.
+   * A blockchain wallet address (Ethereum or Solana).
    */
-  address: string;
+  address: Address;
 }
 
 /**
@@ -2451,6 +2592,67 @@ export interface CreateTokenTransferRequest {
    * The source asset, amount, and chain for a token transfer.
    */
   source: TokenTransferSource;
+}
+
+/**
+ * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+ */
+export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
+
+/**
+ * Input for registering or updating an application public signing key for
+ * API-based wallet actions.
+ */
+export interface WalletAPIRegisterAuthorizationKeyInput {
+  public_key: string;
+
+  display_name?: string;
+
+  /**
+   * The role of an authorization key, controlling what actions it can authorize on a
+   * wallet.
+   */
+  role?: AuthorizationKeyRole | null;
+}
+
+/**
+ * Input for revoking an application authorization key.
+ */
+export interface WalletAPIRevokeAuthorizationKeyInput {
+  id: string;
+}
+
+/**
+ * Dashboard response for a wallet authorization key (includes role, which is an
+ * internal-only concept).
+ */
+export interface AuthorizationKeyDashboardResponse {
+  id: string;
+
+  created_at: number;
+
+  display_name: string | null;
+
+  public_key: string;
+
+  /**
+   * The role of an authorization key, controlling what actions it can authorize on a
+   * wallet.
+   */
+  role: AuthorizationKeyRole | null;
+}
+
+/**
+ * Public-facing response for a wallet authorization key.
+ */
+export interface AuthorizationKeyResponse {
+  id: string;
+
+  created_at: number;
+
+  display_name: string | null;
+
+  public_key: string;
 }
 
 /**
@@ -2836,9 +3038,9 @@ export declare namespace WalletRpcParams {
 
   export interface EthereumSendTransactionRpcInput {
     /**
-     * Body param
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
      */
-    caip2: string;
+    caip2: AppsAPI.Caip2;
 
     /**
      * Body param
@@ -3161,9 +3363,9 @@ export declare namespace WalletRpcParams {
 
   export interface SolanaSignAndSendTransactionRpcInput {
     /**
-     * Body param
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
      */
-    caip2: string;
+    caip2: AppsAPI.Caip2;
 
     /**
      * Body param
@@ -3603,13 +3805,24 @@ export declare namespace WalletRpcParams {
 export interface WalletSubmitImportParams {
   wallet: WalletSubmitImportParams.HDSubmitInput | WalletSubmitImportParams.PrivateKeySubmitInput;
 
-  additional_signers?: Array<WalletSubmitImportParams.AdditionalSigner>;
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: AdditionalSignerInput;
 
-  owner?: WalletSubmitImportParams.UserID | WalletSubmitImportParams.PublicKey | null;
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  owner?: WalletSubmitImportParams.Owner;
 
   owner_id?: string | null;
 
-  policy_ids?: Array<string>;
+  /**
+   * An optional list of up to one policy ID to enforce on the wallet.
+   */
+  policy_ids?: PolicyInput;
 }
 
 export namespace WalletSubmitImportParams {
@@ -3697,19 +3910,12 @@ export namespace WalletSubmitImportParams {
     hpke_config?: WalletsAPI.HpkeImportConfig;
   }
 
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    override_policy_ids?: Array<string>;
-  }
-
-  export interface UserID {
-    user_id: string;
-  }
-
-  export interface PublicKey {
-    public_key: string;
-  }
+  /**
+   * The owner of the resource. If you provide this, do not specify an owner_id as it
+   * will be generated automatically. When updating a wallet, you can set the owner
+   * to null to remove the owner.
+   */
+  export type Owner = WalletsAPI.OwnerInput | (null & {});
 }
 
 export interface WalletUpdateParams {
@@ -3857,16 +4063,27 @@ Wallets.Balance = Balance;
 
 export declare namespace Wallets {
   export {
+    type OwnerInput as OwnerInput,
     type CurveSigningChainType as CurveSigningChainType,
     type ExtendedChainType as ExtendedChainType,
     type FirstClassChainType as FirstClassChainType,
     type WalletChainType as WalletChainType,
+    type AuthorizationKeyRole as AuthorizationKeyRole,
+    type WalletEntropyType as WalletEntropyType,
+    type SolanaWalletDerivationStrategy as SolanaWalletDerivationStrategy,
+    type KeyQuorumID as KeyQuorumID,
+    type P256PublicKey as P256PublicKey,
+    type OwnerUserIDInput as OwnerUserIDInput,
+    type OwnerPublicKeyInput as OwnerPublicKeyInput,
+    type PolicyInput as PolicyInput,
+    type AdditionalSignerItemInput as AdditionalSignerItemInput,
+    type AdditionalSignerInput as AdditionalSignerInput,
+    type Address as Address,
     type WalletCustodian as WalletCustodian,
     type CustodialWalletProvider as CustodialWalletProvider,
     type CustodialWalletChainType as CustodialWalletChainType,
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWallet as CustodialWallet,
-    type SuiCommandName as SuiCommandName,
     type HpkeEncryption as HpkeEncryption,
     type RecipientPublicKey as RecipientPublicKey,
     type ExportType as ExportType,
@@ -3877,6 +4094,11 @@ export declare namespace Wallets {
     type WalletImportInitResponse as WalletImportInitResponse,
     type HpkeAeadAlgorithm as HpkeAeadAlgorithm,
     type HpkeImportConfig as HpkeImportConfig,
+    type CurveType as CurveType,
+    type HDPath as HDPath,
+    type SigningAlgorithm as SigningAlgorithm,
+    type Hex as Hex,
+    type Quantity as Quantity,
     type ExportPrivateKeyRpcInput as ExportPrivateKeyRpcInput,
     type ExportPrivateKeyRpcResponse as ExportPrivateKeyRpcResponse,
     type RawSignHashParams as RawSignHashParams,
@@ -3887,6 +4109,12 @@ export declare namespace Wallets {
     type RawSignInput as RawSignInput,
     type RawSignResponseData as RawSignResponseData,
     type RawSignResponse as RawSignResponse,
+    type EthereumSign7702Authorization as EthereumSign7702Authorization,
+    type UnsignedEthereumTransaction as UnsignedEthereumTransaction,
+    type UserOperationInput as UserOperationInput,
+    type TypedDataDomainInputParams as TypedDataDomainInputParams,
+    type TypedDataTypeFieldInput as TypedDataTypeFieldInput,
+    type TypedDataTypesInputParams as TypedDataTypesInputParams,
     type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumSignTransactionRpcInputParams as EthereumSignTransactionRpcInputParams,
@@ -3991,6 +4219,11 @@ export declare namespace Wallets {
     type TokenTransferSource as TokenTransferSource,
     type TokenTransferDestination as TokenTransferDestination,
     type CreateTokenTransferRequest as CreateTokenTransferRequest,
+    type SuiCommandName as SuiCommandName,
+    type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
+    type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
+    type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
+    type AuthorizationKeyResponse as AuthorizationKeyResponse,
     type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
     type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,

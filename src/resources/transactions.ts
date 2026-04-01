@@ -240,8 +240,6 @@ export interface TransactionGetResponse {
 
   wallet_id: string;
 
-  reference_id?: string | null;
-
   sponsored?: boolean;
 }
 

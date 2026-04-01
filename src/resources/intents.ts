@@ -4,7 +4,6 @@ import { APIResource } from '../core/resource';
 import * as IntentsAPI from './intents';
 import * as KeyQuorumsAPI from './key-quorums';
 import * as PoliciesAPI from './policies';
-import * as AppsAPI from './apps/apps';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
@@ -265,7 +264,7 @@ export type IntentResponsesCursor = Cursor<IntentResponse>;
 /**
  * Type of intent.
  */
-export type IntentType = 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'TRANSFER' | 'WALLET';
+export type IntentType = 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'WALLET';
 
 /**
  * Current status of an intent.
@@ -287,20 +286,6 @@ export interface RpcIntentRequestDetails {
 }
 
 /**
- * Request details for a transfer intent.
- */
-export interface TransferIntentRequestDetails {
-  /**
-   * Request body for initiating a sponsored token transfer from an embedded wallet.
-   */
-  body: WalletsAPI.CreateTokenTransferRequest;
-
-  method: 'POST';
-
-  url: string;
-}
-
-/**
  * Request details for a policy intent.
  */
 export interface PolicyIntentRequestDetails {
@@ -313,17 +298,9 @@ export interface PolicyIntentRequestDetails {
 
 export namespace PolicyIntentRequestDetails {
   export interface Body {
-    /**
-     * Name to assign to policy.
-     */
     name?: string;
 
-    /**
-     * The owner of the resource. If you provide this, do not specify an owner_id as it
-     * will be generated automatically. When updating a wallet, you can set the owner
-     * to null to remove the owner.
-     */
-    owner?: Body.PublicKeyOwner | Body.UserOwner | null;
+    owner?: Body.UserID | Body.PublicKey | null;
 
     owner_id?: string | null;
 
@@ -331,74 +308,51 @@ export namespace PolicyIntentRequestDetails {
   }
 
   export namespace Body {
-    /**
-     * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-     * If you provide this, do not specify an owner_id as it will be generated
-     * automatically.
-     */
-    export interface PublicKeyOwner {
-      public_key: string;
-    }
-
-    /**
-     * The user ID of the owner of the resource. The user must already exist, and this
-     * value must start with "did:privy:". If you provide this, do not specify an
-     * owner_id as it will be generated automatically.
-     */
-    export interface UserOwner {
+    export interface UserID {
       user_id: string;
     }
 
-    /**
-     * The rules that apply to each method the policy covers.
-     */
+    export interface PublicKey {
+      public_key: string;
+    }
+
     export interface Rule {
-      /**
-       * Action to take if the conditions are true.
-       */
       action: 'ALLOW' | 'DENY';
 
       conditions: Array<
-        | Rule.EthereumTransactionCondition
-        | Rule.EthereumCalldataCondition
-        | Rule.EthereumTypedDataDomainCondition
-        | Rule.EthereumTypedDataMessageCondition
-        | Rule.Ethereum7702AuthorizationCondition
-        | Rule.SolanaProgramInstructionCondition
-        | Rule.SolanaSystemProgramInstructionCondition
-        | Rule.SolanaTokenProgramInstructionCondition
-        | Rule.SystemCondition
-        | PoliciesAPI.TronTransactionCondition
-        | PoliciesAPI.TronCalldataCondition
-        | PoliciesAPI.SuiTransactionCommandCondition
-        | PoliciesAPI.SuiTransferObjectsCommandCondition
-        | PoliciesAPI.AggregationCondition
+        | Rule.UnionMember0
+        | Rule.UnionMember1
+        | Rule.UnionMember2
+        | Rule.UnionMember3
+        | Rule.UnionMember4
+        | Rule.UnionMember5
+        | Rule.UnionMember6
+        | Rule.UnionMember7
+        | Rule.UnionMember8
+        | Rule.UnionMember9
+        | Rule.UnionMember10
+        | Rule.UnionMember11
+        | Rule.UnionMember12
+        | Rule.UnionMember13
       >;
 
-      /**
-       * Method the rule applies to.
-       */
       method:
         | 'eth_sendTransaction'
         | 'eth_signTransaction'
-        | 'eth_signUserOperation'
         | 'eth_signTypedData_v4'
+        | 'eth_signUserOperation'
         | 'eth_sign7702Authorization'
         | 'signTransaction'
         | 'signAndSendTransaction'
-        | 'exportPrivateKey'
         | 'signTransactionBytes'
+        | 'exportPrivateKey'
         | '*';
 
       name: string;
     }
 
     export namespace Rule {
-      /**
-       * The verbatim Ethereum transaction object in an eth_signTransaction or
-       * eth_sendTransaction request.
-       */
-      export interface EthereumTransactionCondition {
+      export interface UnionMember0 {
         field: 'to' | 'value' | 'chain_id';
 
         field_source: 'ethereum_transaction';
@@ -408,13 +362,8 @@ export namespace PolicyIntentRequestDetails {
         value: string | Array<string>;
       }
 
-      /**
-       * The decoded calldata in a smart contract interaction as the smart contract
-       * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-       * an abi parameter with the JSON ABI of the smart contract.
-       */
-      export interface EthereumCalldataCondition {
-        abi: unknown;
+      export interface UnionMember1 {
+        abi: Array<UnionMember1.Abi>;
 
         field: string;
 
@@ -425,10 +374,49 @@ export namespace PolicyIntentRequestDetails {
         value: string | Array<string>;
       }
 
-      /**
-       * Attributes from the signing domain that will verify the signature.
-       */
-      export interface EthereumTypedDataDomainCondition {
+      export namespace UnionMember1 {
+        export interface Abi {
+          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+          anonymous?: boolean;
+
+          inputs?: Array<Abi.Input>;
+
+          name?: string;
+
+          outputs?: Array<Abi.Output>;
+
+          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+        }
+
+        export namespace Abi {
+          export interface Input {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+
+          export interface Output {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+        }
+      }
+
+      export interface UnionMember2 {
         field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
         field_source: 'ethereum_typed_data_domain';
@@ -438,37 +426,35 @@ export namespace PolicyIntentRequestDetails {
         value: string | Array<string>;
       }
 
-      /**
-       * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-       * EIP-712.
-       */
-      export interface EthereumTypedDataMessageCondition {
+      export interface UnionMember3 {
         field: string;
 
         field_source: 'ethereum_typed_data_message';
 
         operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
-        typed_data: EthereumTypedDataMessageCondition.TypedData;
+        typed_data: UnionMember3.TypedData;
 
         value: string | Array<string>;
       }
 
-      export namespace EthereumTypedDataMessageCondition {
+      export namespace UnionMember3 {
         export interface TypedData {
           primary_type: string;
 
-          /**
-           * The type definitions for EIP-712 typed data signing.
-           */
-          types: WalletsAPI.TypedDataTypesInputParams;
+          types: { [key: string]: Array<TypedData.Type> };
+        }
+
+        export namespace TypedData {
+          export interface Type {
+            name: string;
+
+            type: string;
+          }
         }
       }
 
-      /**
-       * Allowed contract addresses for eth_sign7702Authorization requests.
-       */
-      export interface Ethereum7702AuthorizationCondition {
+      export interface UnionMember4 {
         field: 'contract';
 
         field_source: 'ethereum_7702_authorization';
@@ -478,10 +464,7 @@ export namespace PolicyIntentRequestDetails {
         value: string | Array<string>;
       }
 
-      /**
-       * Solana Program attributes, enables allowlisting Solana Programs.
-       */
-      export interface SolanaProgramInstructionCondition {
+      export interface UnionMember5 {
         field: 'programId';
 
         field_source: 'solana_program_instruction';
@@ -491,11 +474,7 @@ export namespace PolicyIntentRequestDetails {
         value: string | Array<string>;
       }
 
-      /**
-       * Solana System Program attributes, including more granular Transfer instruction
-       * fields.
-       */
-      export interface SolanaSystemProgramInstructionCondition {
+      export interface UnionMember6 {
         field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
 
         field_source: 'solana_system_program_instruction';
@@ -505,11 +484,7 @@ export namespace PolicyIntentRequestDetails {
         value: string | Array<string>;
       }
 
-      /**
-       * Solana Token Program attributes, including more granular TransferChecked
-       * instruction fields.
-       */
-      export interface SolanaTokenProgramInstructionCondition {
+      export interface UnionMember7 {
         field:
           | 'instructionName'
           | 'Transfer.source'
@@ -543,13 +518,113 @@ export namespace PolicyIntentRequestDetails {
         value: string | Array<string>;
       }
 
-      /**
-       * System attributes, including current unix timestamp (in seconds).
-       */
-      export interface SystemCondition {
+      export interface UnionMember8 {
+        field:
+          | 'TransferContract.to_address'
+          | 'TransferContract.amount'
+          | 'TriggerSmartContract.contract_address'
+          | 'TriggerSmartContract.call_value'
+          | 'TriggerSmartContract.token_id'
+          | 'TriggerSmartContract.call_token_value';
+
+        field_source: 'tron_transaction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember9 {
         field: 'current_unix_timestamp';
 
         field_source: 'system';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember10 {
+        field: string;
+
+        field_source: 'reference';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember11 {
+        abi: Array<UnionMember11.Abi>;
+
+        field: string;
+
+        field_source: 'tron_trigger_smart_contract_data';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export namespace UnionMember11 {
+        export interface Abi {
+          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+          anonymous?: boolean;
+
+          inputs?: Array<Abi.Input>;
+
+          name?: string;
+
+          outputs?: Array<Abi.Output>;
+
+          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+        }
+
+        export namespace Abi {
+          export interface Input {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+
+          export interface Output {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+        }
+      }
+
+      export interface UnionMember12 {
+        field: 'commandName';
+
+        field_source: 'sui_transaction_command';
+
+        operator: 'eq' | 'in';
+
+        /**
+         * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+         */
+        value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+      }
+
+      export interface UnionMember13 {
+        field: 'recipient' | 'amount';
+
+        field_source: 'sui_transfer_objects_command';
 
         operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
@@ -563,9 +638,6 @@ export namespace PolicyIntentRequestDetails {
  * Request details for creating a rule via intent.
  */
 export interface RuleIntentCreateRequestDetails {
-  /**
-   * The rules that apply to each method the policy covers.
-   */
   body: RuleIntentCreateRequestDetails.Body;
 
   method: 'POST';
@@ -574,56 +646,43 @@ export interface RuleIntentCreateRequestDetails {
 }
 
 export namespace RuleIntentCreateRequestDetails {
-  /**
-   * The rules that apply to each method the policy covers.
-   */
   export interface Body {
-    /**
-     * Action to take if the conditions are true.
-     */
     action: 'ALLOW' | 'DENY';
 
     conditions: Array<
-      | Body.EthereumTransactionCondition
-      | Body.EthereumCalldataCondition
-      | Body.EthereumTypedDataDomainCondition
-      | Body.EthereumTypedDataMessageCondition
-      | Body.Ethereum7702AuthorizationCondition
-      | Body.SolanaProgramInstructionCondition
-      | Body.SolanaSystemProgramInstructionCondition
-      | Body.SolanaTokenProgramInstructionCondition
-      | Body.SystemCondition
-      | PoliciesAPI.TronTransactionCondition
-      | PoliciesAPI.TronCalldataCondition
-      | PoliciesAPI.SuiTransactionCommandCondition
-      | PoliciesAPI.SuiTransferObjectsCommandCondition
-      | PoliciesAPI.AggregationCondition
+      | Body.UnionMember0
+      | Body.UnionMember1
+      | Body.UnionMember2
+      | Body.UnionMember3
+      | Body.UnionMember4
+      | Body.UnionMember5
+      | Body.UnionMember6
+      | Body.UnionMember7
+      | Body.UnionMember8
+      | Body.UnionMember9
+      | Body.UnionMember10
+      | Body.UnionMember11
+      | Body.UnionMember12
+      | Body.UnionMember13
     >;
 
-    /**
-     * Method the rule applies to.
-     */
     method:
       | 'eth_sendTransaction'
       | 'eth_signTransaction'
-      | 'eth_signUserOperation'
       | 'eth_signTypedData_v4'
+      | 'eth_signUserOperation'
       | 'eth_sign7702Authorization'
       | 'signTransaction'
       | 'signAndSendTransaction'
-      | 'exportPrivateKey'
       | 'signTransactionBytes'
+      | 'exportPrivateKey'
       | '*';
 
     name: string;
   }
 
   export namespace Body {
-    /**
-     * The verbatim Ethereum transaction object in an eth_signTransaction or
-     * eth_sendTransaction request.
-     */
-    export interface EthereumTransactionCondition {
+    export interface UnionMember0 {
       field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
@@ -633,13 +692,8 @@ export namespace RuleIntentCreateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * The decoded calldata in a smart contract interaction as the smart contract
-     * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-     * an abi parameter with the JSON ABI of the smart contract.
-     */
-    export interface EthereumCalldataCondition {
-      abi: unknown;
+    export interface UnionMember1 {
+      abi: Array<UnionMember1.Abi>;
 
       field: string;
 
@@ -650,10 +704,49 @@ export namespace RuleIntentCreateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * Attributes from the signing domain that will verify the signature.
-     */
-    export interface EthereumTypedDataDomainCondition {
+    export namespace UnionMember1 {
+      export interface Abi {
+        type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+        anonymous?: boolean;
+
+        inputs?: Array<Abi.Input>;
+
+        name?: string;
+
+        outputs?: Array<Abi.Output>;
+
+        stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+      }
+
+      export namespace Abi {
+        export interface Input {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+
+        export interface Output {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+      }
+    }
+
+    export interface UnionMember2 {
       field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
       field_source: 'ethereum_typed_data_domain';
@@ -663,37 +756,35 @@ export namespace RuleIntentCreateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-     * EIP-712.
-     */
-    export interface EthereumTypedDataMessageCondition {
+    export interface UnionMember3 {
       field: string;
 
       field_source: 'ethereum_typed_data_message';
 
       operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
-      typed_data: EthereumTypedDataMessageCondition.TypedData;
+      typed_data: UnionMember3.TypedData;
 
       value: string | Array<string>;
     }
 
-    export namespace EthereumTypedDataMessageCondition {
+    export namespace UnionMember3 {
       export interface TypedData {
         primary_type: string;
 
-        /**
-         * The type definitions for EIP-712 typed data signing.
-         */
-        types: WalletsAPI.TypedDataTypesInputParams;
+        types: { [key: string]: Array<TypedData.Type> };
+      }
+
+      export namespace TypedData {
+        export interface Type {
+          name: string;
+
+          type: string;
+        }
       }
     }
 
-    /**
-     * Allowed contract addresses for eth_sign7702Authorization requests.
-     */
-    export interface Ethereum7702AuthorizationCondition {
+    export interface UnionMember4 {
       field: 'contract';
 
       field_source: 'ethereum_7702_authorization';
@@ -703,10 +794,7 @@ export namespace RuleIntentCreateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * Solana Program attributes, enables allowlisting Solana Programs.
-     */
-    export interface SolanaProgramInstructionCondition {
+    export interface UnionMember5 {
       field: 'programId';
 
       field_source: 'solana_program_instruction';
@@ -716,11 +804,7 @@ export namespace RuleIntentCreateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * Solana System Program attributes, including more granular Transfer instruction
-     * fields.
-     */
-    export interface SolanaSystemProgramInstructionCondition {
+    export interface UnionMember6 {
       field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
 
       field_source: 'solana_system_program_instruction';
@@ -730,11 +814,7 @@ export namespace RuleIntentCreateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * Solana Token Program attributes, including more granular TransferChecked
-     * instruction fields.
-     */
-    export interface SolanaTokenProgramInstructionCondition {
+    export interface UnionMember7 {
       field:
         | 'instructionName'
         | 'Transfer.source'
@@ -768,13 +848,113 @@ export namespace RuleIntentCreateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * System attributes, including current unix timestamp (in seconds).
-     */
-    export interface SystemCondition {
+    export interface UnionMember8 {
+      field:
+        | 'TransferContract.to_address'
+        | 'TransferContract.amount'
+        | 'TriggerSmartContract.contract_address'
+        | 'TriggerSmartContract.call_value'
+        | 'TriggerSmartContract.token_id'
+        | 'TriggerSmartContract.call_token_value';
+
+      field_source: 'tron_transaction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember9 {
       field: 'current_unix_timestamp';
 
       field_source: 'system';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember10 {
+      field: string;
+
+      field_source: 'reference';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember11 {
+      abi: Array<UnionMember11.Abi>;
+
+      field: string;
+
+      field_source: 'tron_trigger_smart_contract_data';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export namespace UnionMember11 {
+      export interface Abi {
+        type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+        anonymous?: boolean;
+
+        inputs?: Array<Abi.Input>;
+
+        name?: string;
+
+        outputs?: Array<Abi.Output>;
+
+        stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+      }
+
+      export namespace Abi {
+        export interface Input {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+
+        export interface Output {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+      }
+    }
+
+    export interface UnionMember12 {
+      field: 'commandName';
+
+      field_source: 'sui_transaction_command';
+
+      operator: 'eq' | 'in';
+
+      /**
+       * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+       */
+      value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+    }
+
+    export interface UnionMember13 {
+      field: 'recipient' | 'amount';
+
+      field_source: 'sui_transfer_objects_command';
 
       operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
@@ -787,9 +967,6 @@ export namespace RuleIntentCreateRequestDetails {
  * Request details for updating a rule via intent.
  */
 export interface RuleIntentUpdateRequestDetails {
-  /**
-   * The rules that apply to each method the policy covers.
-   */
   body: RuleIntentUpdateRequestDetails.Body;
 
   method: 'PATCH';
@@ -798,56 +975,43 @@ export interface RuleIntentUpdateRequestDetails {
 }
 
 export namespace RuleIntentUpdateRequestDetails {
-  /**
-   * The rules that apply to each method the policy covers.
-   */
   export interface Body {
-    /**
-     * Action to take if the conditions are true.
-     */
     action: 'ALLOW' | 'DENY';
 
     conditions: Array<
-      | Body.EthereumTransactionCondition
-      | Body.EthereumCalldataCondition
-      | Body.EthereumTypedDataDomainCondition
-      | Body.EthereumTypedDataMessageCondition
-      | Body.Ethereum7702AuthorizationCondition
-      | Body.SolanaProgramInstructionCondition
-      | Body.SolanaSystemProgramInstructionCondition
-      | Body.SolanaTokenProgramInstructionCondition
-      | Body.SystemCondition
-      | PoliciesAPI.TronTransactionCondition
-      | PoliciesAPI.TronCalldataCondition
-      | PoliciesAPI.SuiTransactionCommandCondition
-      | PoliciesAPI.SuiTransferObjectsCommandCondition
-      | PoliciesAPI.AggregationCondition
+      | Body.UnionMember0
+      | Body.UnionMember1
+      | Body.UnionMember2
+      | Body.UnionMember3
+      | Body.UnionMember4
+      | Body.UnionMember5
+      | Body.UnionMember6
+      | Body.UnionMember7
+      | Body.UnionMember8
+      | Body.UnionMember9
+      | Body.UnionMember10
+      | Body.UnionMember11
+      | Body.UnionMember12
+      | Body.UnionMember13
     >;
 
-    /**
-     * Method the rule applies to.
-     */
     method:
       | 'eth_sendTransaction'
       | 'eth_signTransaction'
-      | 'eth_signUserOperation'
       | 'eth_signTypedData_v4'
+      | 'eth_signUserOperation'
       | 'eth_sign7702Authorization'
       | 'signTransaction'
       | 'signAndSendTransaction'
-      | 'exportPrivateKey'
       | 'signTransactionBytes'
+      | 'exportPrivateKey'
       | '*';
 
     name: string;
   }
 
   export namespace Body {
-    /**
-     * The verbatim Ethereum transaction object in an eth_signTransaction or
-     * eth_sendTransaction request.
-     */
-    export interface EthereumTransactionCondition {
+    export interface UnionMember0 {
       field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
@@ -857,13 +1021,8 @@ export namespace RuleIntentUpdateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * The decoded calldata in a smart contract interaction as the smart contract
-     * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-     * an abi parameter with the JSON ABI of the smart contract.
-     */
-    export interface EthereumCalldataCondition {
-      abi: unknown;
+    export interface UnionMember1 {
+      abi: Array<UnionMember1.Abi>;
 
       field: string;
 
@@ -874,10 +1033,49 @@ export namespace RuleIntentUpdateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * Attributes from the signing domain that will verify the signature.
-     */
-    export interface EthereumTypedDataDomainCondition {
+    export namespace UnionMember1 {
+      export interface Abi {
+        type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+        anonymous?: boolean;
+
+        inputs?: Array<Abi.Input>;
+
+        name?: string;
+
+        outputs?: Array<Abi.Output>;
+
+        stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+      }
+
+      export namespace Abi {
+        export interface Input {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+
+        export interface Output {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+      }
+    }
+
+    export interface UnionMember2 {
       field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
       field_source: 'ethereum_typed_data_domain';
@@ -887,37 +1085,35 @@ export namespace RuleIntentUpdateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-     * EIP-712.
-     */
-    export interface EthereumTypedDataMessageCondition {
+    export interface UnionMember3 {
       field: string;
 
       field_source: 'ethereum_typed_data_message';
 
       operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
-      typed_data: EthereumTypedDataMessageCondition.TypedData;
+      typed_data: UnionMember3.TypedData;
 
       value: string | Array<string>;
     }
 
-    export namespace EthereumTypedDataMessageCondition {
+    export namespace UnionMember3 {
       export interface TypedData {
         primary_type: string;
 
-        /**
-         * The type definitions for EIP-712 typed data signing.
-         */
-        types: WalletsAPI.TypedDataTypesInputParams;
+        types: { [key: string]: Array<TypedData.Type> };
+      }
+
+      export namespace TypedData {
+        export interface Type {
+          name: string;
+
+          type: string;
+        }
       }
     }
 
-    /**
-     * Allowed contract addresses for eth_sign7702Authorization requests.
-     */
-    export interface Ethereum7702AuthorizationCondition {
+    export interface UnionMember4 {
       field: 'contract';
 
       field_source: 'ethereum_7702_authorization';
@@ -927,10 +1123,7 @@ export namespace RuleIntentUpdateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * Solana Program attributes, enables allowlisting Solana Programs.
-     */
-    export interface SolanaProgramInstructionCondition {
+    export interface UnionMember5 {
       field: 'programId';
 
       field_source: 'solana_program_instruction';
@@ -940,11 +1133,7 @@ export namespace RuleIntentUpdateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * Solana System Program attributes, including more granular Transfer instruction
-     * fields.
-     */
-    export interface SolanaSystemProgramInstructionCondition {
+    export interface UnionMember6 {
       field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
 
       field_source: 'solana_system_program_instruction';
@@ -954,11 +1143,7 @@ export namespace RuleIntentUpdateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * Solana Token Program attributes, including more granular TransferChecked
-     * instruction fields.
-     */
-    export interface SolanaTokenProgramInstructionCondition {
+    export interface UnionMember7 {
       field:
         | 'instructionName'
         | 'Transfer.source'
@@ -992,13 +1177,113 @@ export namespace RuleIntentUpdateRequestDetails {
       value: string | Array<string>;
     }
 
-    /**
-     * System attributes, including current unix timestamp (in seconds).
-     */
-    export interface SystemCondition {
+    export interface UnionMember8 {
+      field:
+        | 'TransferContract.to_address'
+        | 'TransferContract.amount'
+        | 'TriggerSmartContract.contract_address'
+        | 'TriggerSmartContract.call_value'
+        | 'TriggerSmartContract.token_id'
+        | 'TriggerSmartContract.call_token_value';
+
+      field_source: 'tron_transaction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember9 {
       field: 'current_unix_timestamp';
 
       field_source: 'system';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember10 {
+      field: string;
+
+      field_source: 'reference';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember11 {
+      abi: Array<UnionMember11.Abi>;
+
+      field: string;
+
+      field_source: 'tron_trigger_smart_contract_data';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export namespace UnionMember11 {
+      export interface Abi {
+        type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+        anonymous?: boolean;
+
+        inputs?: Array<Abi.Input>;
+
+        name?: string;
+
+        outputs?: Array<Abi.Output>;
+
+        stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+      }
+
+      export namespace Abi {
+        export interface Input {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+
+        export interface Output {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+      }
+    }
+
+    export interface UnionMember12 {
+      field: 'commandName';
+
+      field_source: 'sui_transaction_command';
+
+      operator: 'eq' | 'in';
+
+      /**
+       * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+       */
+      value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+    }
+
+    export interface UnionMember13 {
+      field: 'recipient' | 'amount';
+
+      field_source: 'sui_transfer_objects_command';
 
       operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
@@ -1153,9 +1438,34 @@ export interface IntentAuthorization {
 }
 
 /**
- * Common fields shared by all intent response types.
+ * Common fields for intent action execution results.
  */
-export interface BaseIntentResponse {
+export interface BaseActionResult {
+  /**
+   * Unix timestamp when the action was executed
+   */
+  executed_at: number;
+
+  /**
+   * HTTP status code from the action execution
+   */
+  status_code: number;
+
+  /**
+   * Display name of the key quorum that authorized execution
+   */
+  authorized_by_display_name?: string;
+
+  /**
+   * ID of the key quorum that authorized execution
+   */
+  authorized_by_id?: string;
+}
+
+/**
+ * Response for an RPC intent
+ */
+export interface RpcIntentResponse {
   /**
    * Detailed authorization information including key quorum members, thresholds, and
    * signature status
@@ -1188,6 +1498,13 @@ export interface BaseIntentResponse {
    */
   intent_id: string;
 
+  intent_type: 'RPC';
+
+  /**
+   * The original RPC request that would be sent to the wallet endpoint
+   */
+  request_details: RpcIntentResponse.RequestDetails;
+
   /**
    * ID of the resource being modified (wallet_id, policy_id, etc)
    */
@@ -1199,10 +1516,20 @@ export interface BaseIntentResponse {
   status: IntentStatus;
 
   /**
+   * Result of RPC execution (only present if status is 'executed' or 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
    * ID of the user who created the intent. If undefined, the intent was created
    * using the app secret
    */
   created_by_id?: string;
+
+  /**
+   * A wallet managed by Privy's wallet infrastructure.
+   */
+  current_resource_data?: WalletsAPI.Wallet;
 
   /**
    * Human-readable reason for dismissal, present when status is 'dismissed'
@@ -1218,53 +1545,6 @@ export interface BaseIntentResponse {
    * Unix timestamp when the intent was rejected, present when status is 'rejected'
    */
   rejected_at?: number;
-}
-
-/**
- * Common fields for intent action execution results.
- */
-export interface BaseActionResult {
-  /**
-   * Unix timestamp when the action was executed
-   */
-  executed_at: number;
-
-  /**
-   * HTTP status code from the action execution
-   */
-  status_code: number;
-
-  /**
-   * Display name of the key quorum that authorized execution
-   */
-  authorized_by_display_name?: string;
-
-  /**
-   * ID of the key quorum that authorized execution
-   */
-  authorized_by_id?: string;
-}
-
-/**
- * Response for an RPC intent
- */
-export interface RpcIntentResponse extends BaseIntentResponse {
-  intent_type: 'RPC';
-
-  /**
-   * The original RPC request that would be sent to the wallet endpoint
-   */
-  request_details: RpcIntentResponse.RequestDetails;
-
-  /**
-   * Result of RPC execution (only present if status is 'executed' or 'failed')
-   */
-  action_result?: BaseActionResult;
-
-  /**
-   * A wallet managed by Privy's wallet infrastructure.
-   */
-  current_resource_data?: WalletsAPI.Wallet;
 }
 
 export namespace RpcIntentResponse {
@@ -1284,48 +1564,41 @@ export namespace RpcIntentResponse {
 }
 
 /**
- * Response for a transfer intent
- */
-export interface TransferIntentResponse extends BaseIntentResponse {
-  intent_type: 'TRANSFER';
-
-  /**
-   * The original transfer request that would be sent to the wallet transfer endpoint
-   */
-  request_details: TransferIntentResponse.RequestDetails;
-
-  /**
-   * Result of transfer execution (only present if intent status is 'executed' or
-   * 'failed')
-   */
-  action_result?: BaseActionResult;
-
-  /**
-   * A wallet managed by Privy's wallet infrastructure.
-   */
-  current_resource_data?: WalletsAPI.Wallet;
-}
-
-export namespace TransferIntentResponse {
-  /**
-   * The original transfer request that would be sent to the wallet transfer endpoint
-   */
-  export interface RequestDetails {
-    /**
-     * Request body for initiating a sponsored token transfer from an embedded wallet.
-     */
-    body: WalletsAPI.CreateTokenTransferRequest;
-
-    method: 'POST';
-
-    url: string;
-  }
-}
-
-/**
  * Response for a wallet intent
  */
-export interface WalletIntentResponse extends BaseIntentResponse {
+export interface WalletIntentResponse {
+  /**
+   * Detailed authorization information including key quorum members, thresholds, and
+   * signature status
+   */
+  authorization_details: Array<IntentAuthorization>;
+
+  /**
+   * Unix timestamp when the intent was created
+   */
+  created_at: number;
+
+  /**
+   * Display name of the user who created the intent
+   */
+  created_by_display_name: string;
+
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
+   * Unix timestamp when the intent expires
+   */
+  expires_at: number;
+
+  /**
+   * Unique ID for the intent
+   */
+  intent_id: string;
+
   intent_type: 'WALLET';
 
   /**
@@ -1334,15 +1607,46 @@ export interface WalletIntentResponse extends BaseIntentResponse {
   request_details: WalletIntentResponse.RequestDetails;
 
   /**
+   * ID of the resource being modified (wallet_id, policy_id, etc)
+   */
+  resource_id: string;
+
+  /**
+   * Current status of an intent.
+   */
+  status: IntentStatus;
+
+  /**
    * Result of wallet update execution (only present if status is 'executed' or
    * 'failed')
    */
   action_result?: BaseActionResult;
 
   /**
+   * ID of the user who created the intent. If undefined, the intent was created
+   * using the app secret
+   */
+  created_by_id?: string;
+
+  /**
    * A wallet managed by Privy's wallet infrastructure.
    */
   current_resource_data?: WalletsAPI.Wallet;
+
+  /**
+   * Human-readable reason for dismissal, present when status is 'dismissed'
+   */
+  dismissal_reason?: string;
+
+  /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
 }
 
 export namespace WalletIntentResponse {
@@ -1359,37 +1663,33 @@ export namespace WalletIntentResponse {
 
   export namespace RequestDetails {
     export interface Body {
-      /**
-       * Additional signers for the wallet.
-       */
-      additional_signers?: WalletsAPI.AdditionalSignerInput;
+      additional_signers?: Array<Body.AdditionalSigner>;
 
       authorization_key_ids?: Array<string>;
 
       authorization_threshold?: number;
 
-      /**
-       * The owner of the resource. If you provide this, do not specify an owner_id as it
-       * will be generated automatically. When updating a wallet, you can set the owner
-       * to null to remove the owner.
-       */
-      owner?: Body.Owner;
+      owner?: Body.UserID | Body.PublicKey | null;
 
       owner_id?: string | null;
 
-      /**
-       * An optional list of up to one policy ID to enforce on the wallet.
-       */
-      policy_ids?: WalletsAPI.PolicyInput;
+      policy_ids?: Array<string>;
     }
 
     export namespace Body {
-      /**
-       * The owner of the resource. If you provide this, do not specify an owner_id as it
-       * will be generated automatically. When updating a wallet, you can set the owner
-       * to null to remove the owner.
-       */
-      export type Owner = WalletsAPI.OwnerInput | (null & {});
+      export interface AdditionalSigner {
+        signer_id: string;
+
+        override_policy_ids?: Array<string>;
+      }
+
+      export interface UserID {
+        user_id: string;
+      }
+
+      export interface PublicKey {
+        public_key: string;
+      }
     }
   }
 }
@@ -1397,7 +1697,39 @@ export namespace WalletIntentResponse {
 /**
  * Response for a policy intent
  */
-export interface PolicyIntentResponse extends BaseIntentResponse {
+export interface PolicyIntentResponse {
+  /**
+   * Detailed authorization information including key quorum members, thresholds, and
+   * signature status
+   */
+  authorization_details: Array<IntentAuthorization>;
+
+  /**
+   * Unix timestamp when the intent was created
+   */
+  created_at: number;
+
+  /**
+   * Display name of the user who created the intent
+   */
+  created_by_display_name: string;
+
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
+   * Unix timestamp when the intent expires
+   */
+  expires_at: number;
+
+  /**
+   * Unique ID for the intent
+   */
+  intent_id: string;
+
   intent_type: 'POLICY';
 
   /**
@@ -1406,15 +1738,47 @@ export interface PolicyIntentResponse extends BaseIntentResponse {
   request_details: PolicyIntentResponse.RequestDetails;
 
   /**
+   * ID of the resource being modified (wallet_id, policy_id, etc)
+   */
+  resource_id: string;
+
+  /**
+   * Current status of an intent.
+   */
+  status: IntentStatus;
+
+  /**
    * Result of policy update execution (only present if status is 'executed' or
    * 'failed')
    */
   action_result?: BaseActionResult;
 
   /**
-   * A policy for controlling wallet operations.
+   * ID of the user who created the intent. If undefined, the intent was created
+   * using the app secret
    */
-  current_resource_data?: PoliciesAPI.Policy;
+  created_by_id?: string;
+
+  /**
+   * Current state of the policy before any changes. If undefined, the resource was
+   * deleted and no longer exists
+   */
+  current_resource_data?: PolicyIntentResponse.CurrentResourceData;
+
+  /**
+   * Human-readable reason for dismissal, present when status is 'dismissed'
+   */
+  dismissal_reason?: string;
+
+  /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
 }
 
 export namespace PolicyIntentResponse {
@@ -1431,17 +1795,9 @@ export namespace PolicyIntentResponse {
 
   export namespace RequestDetails {
     export interface Body {
-      /**
-       * Name to assign to policy.
-       */
       name?: string;
 
-      /**
-       * The owner of the resource. If you provide this, do not specify an owner_id as it
-       * will be generated automatically. When updating a wallet, you can set the owner
-       * to null to remove the owner.
-       */
-      owner?: Body.PublicKeyOwner | Body.UserOwner | null;
+      owner?: Body.UserID | Body.PublicKey | null;
 
       owner_id?: string | null;
 
@@ -1449,74 +1805,51 @@ export namespace PolicyIntentResponse {
     }
 
     export namespace Body {
-      /**
-       * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-       * If you provide this, do not specify an owner_id as it will be generated
-       * automatically.
-       */
-      export interface PublicKeyOwner {
-        public_key: string;
-      }
-
-      /**
-       * The user ID of the owner of the resource. The user must already exist, and this
-       * value must start with "did:privy:". If you provide this, do not specify an
-       * owner_id as it will be generated automatically.
-       */
-      export interface UserOwner {
+      export interface UserID {
         user_id: string;
       }
 
-      /**
-       * The rules that apply to each method the policy covers.
-       */
+      export interface PublicKey {
+        public_key: string;
+      }
+
       export interface Rule {
-        /**
-         * Action to take if the conditions are true.
-         */
         action: 'ALLOW' | 'DENY';
 
         conditions: Array<
-          | Rule.EthereumTransactionCondition
-          | Rule.EthereumCalldataCondition
-          | Rule.EthereumTypedDataDomainCondition
-          | Rule.EthereumTypedDataMessageCondition
-          | Rule.Ethereum7702AuthorizationCondition
-          | Rule.SolanaProgramInstructionCondition
-          | Rule.SolanaSystemProgramInstructionCondition
-          | Rule.SolanaTokenProgramInstructionCondition
-          | Rule.SystemCondition
-          | PoliciesAPI.TronTransactionCondition
-          | PoliciesAPI.TronCalldataCondition
-          | PoliciesAPI.SuiTransactionCommandCondition
-          | PoliciesAPI.SuiTransferObjectsCommandCondition
-          | PoliciesAPI.AggregationCondition
+          | Rule.UnionMember0
+          | Rule.UnionMember1
+          | Rule.UnionMember2
+          | Rule.UnionMember3
+          | Rule.UnionMember4
+          | Rule.UnionMember5
+          | Rule.UnionMember6
+          | Rule.UnionMember7
+          | Rule.UnionMember8
+          | Rule.UnionMember9
+          | Rule.UnionMember10
+          | Rule.UnionMember11
+          | Rule.UnionMember12
+          | Rule.UnionMember13
         >;
 
-        /**
-         * Method the rule applies to.
-         */
         method:
           | 'eth_sendTransaction'
           | 'eth_signTransaction'
-          | 'eth_signUserOperation'
           | 'eth_signTypedData_v4'
+          | 'eth_signUserOperation'
           | 'eth_sign7702Authorization'
           | 'signTransaction'
           | 'signAndSendTransaction'
-          | 'exportPrivateKey'
           | 'signTransactionBytes'
+          | 'exportPrivateKey'
           | '*';
 
         name: string;
       }
 
       export namespace Rule {
-        /**
-         * The verbatim Ethereum transaction object in an eth_signTransaction or
-         * eth_sendTransaction request.
-         */
-        export interface EthereumTransactionCondition {
+        export interface UnionMember0 {
           field: 'to' | 'value' | 'chain_id';
 
           field_source: 'ethereum_transaction';
@@ -1526,13 +1859,8 @@ export namespace PolicyIntentResponse {
           value: string | Array<string>;
         }
 
-        /**
-         * The decoded calldata in a smart contract interaction as the smart contract
-         * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-         * an abi parameter with the JSON ABI of the smart contract.
-         */
-        export interface EthereumCalldataCondition {
-          abi: unknown;
+        export interface UnionMember1 {
+          abi: Array<UnionMember1.Abi>;
 
           field: string;
 
@@ -1543,10 +1871,49 @@ export namespace PolicyIntentResponse {
           value: string | Array<string>;
         }
 
-        /**
-         * Attributes from the signing domain that will verify the signature.
-         */
-        export interface EthereumTypedDataDomainCondition {
+        export namespace UnionMember1 {
+          export interface Abi {
+            type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+            anonymous?: boolean;
+
+            inputs?: Array<Abi.Input>;
+
+            name?: string;
+
+            outputs?: Array<Abi.Output>;
+
+            stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+          }
+
+          export namespace Abi {
+            export interface Input {
+              type: string;
+
+              components?: Array<unknown>;
+
+              indexed?: boolean;
+
+              internalType?: string;
+
+              name?: string;
+            }
+
+            export interface Output {
+              type: string;
+
+              components?: Array<unknown>;
+
+              indexed?: boolean;
+
+              internalType?: string;
+
+              name?: string;
+            }
+          }
+        }
+
+        export interface UnionMember2 {
           field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
           field_source: 'ethereum_typed_data_domain';
@@ -1556,37 +1923,35 @@ export namespace PolicyIntentResponse {
           value: string | Array<string>;
         }
 
-        /**
-         * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-         * EIP-712.
-         */
-        export interface EthereumTypedDataMessageCondition {
+        export interface UnionMember3 {
           field: string;
 
           field_source: 'ethereum_typed_data_message';
 
           operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
-          typed_data: EthereumTypedDataMessageCondition.TypedData;
+          typed_data: UnionMember3.TypedData;
 
           value: string | Array<string>;
         }
 
-        export namespace EthereumTypedDataMessageCondition {
+        export namespace UnionMember3 {
           export interface TypedData {
             primary_type: string;
 
-            /**
-             * The type definitions for EIP-712 typed data signing.
-             */
-            types: WalletsAPI.TypedDataTypesInputParams;
+            types: { [key: string]: Array<TypedData.Type> };
+          }
+
+          export namespace TypedData {
+            export interface Type {
+              name: string;
+
+              type: string;
+            }
           }
         }
 
-        /**
-         * Allowed contract addresses for eth_sign7702Authorization requests.
-         */
-        export interface Ethereum7702AuthorizationCondition {
+        export interface UnionMember4 {
           field: 'contract';
 
           field_source: 'ethereum_7702_authorization';
@@ -1596,10 +1961,7 @@ export namespace PolicyIntentResponse {
           value: string | Array<string>;
         }
 
-        /**
-         * Solana Program attributes, enables allowlisting Solana Programs.
-         */
-        export interface SolanaProgramInstructionCondition {
+        export interface UnionMember5 {
           field: 'programId';
 
           field_source: 'solana_program_instruction';
@@ -1609,11 +1971,7 @@ export namespace PolicyIntentResponse {
           value: string | Array<string>;
         }
 
-        /**
-         * Solana System Program attributes, including more granular Transfer instruction
-         * fields.
-         */
-        export interface SolanaSystemProgramInstructionCondition {
+        export interface UnionMember6 {
           field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
 
           field_source: 'solana_system_program_instruction';
@@ -1623,11 +1981,7 @@ export namespace PolicyIntentResponse {
           value: string | Array<string>;
         }
 
-        /**
-         * Solana Token Program attributes, including more granular TransferChecked
-         * instruction fields.
-         */
-        export interface SolanaTokenProgramInstructionCondition {
+        export interface UnionMember7 {
           field:
             | 'instructionName'
             | 'Transfer.source'
@@ -1661,10 +2015,23 @@ export namespace PolicyIntentResponse {
           value: string | Array<string>;
         }
 
-        /**
-         * System attributes, including current unix timestamp (in seconds).
-         */
-        export interface SystemCondition {
+        export interface UnionMember8 {
+          field:
+            | 'TransferContract.to_address'
+            | 'TransferContract.amount'
+            | 'TriggerSmartContract.contract_address'
+            | 'TriggerSmartContract.call_value'
+            | 'TriggerSmartContract.token_id'
+            | 'TriggerSmartContract.call_token_value';
+
+          field_source: 'tron_transaction';
+
+          operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+          value: string | Array<string>;
+        }
+
+        export interface UnionMember9 {
           field: 'current_unix_timestamp';
 
           field_source: 'system';
@@ -1673,6 +2040,436 @@ export namespace PolicyIntentResponse {
 
           value: string | Array<string>;
         }
+
+        export interface UnionMember10 {
+          field: string;
+
+          field_source: 'reference';
+
+          operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+          value: string | Array<string>;
+        }
+
+        export interface UnionMember11 {
+          abi: Array<UnionMember11.Abi>;
+
+          field: string;
+
+          field_source: 'tron_trigger_smart_contract_data';
+
+          operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+          value: string | Array<string>;
+        }
+
+        export namespace UnionMember11 {
+          export interface Abi {
+            type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+            anonymous?: boolean;
+
+            inputs?: Array<Abi.Input>;
+
+            name?: string;
+
+            outputs?: Array<Abi.Output>;
+
+            stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+          }
+
+          export namespace Abi {
+            export interface Input {
+              type: string;
+
+              components?: Array<unknown>;
+
+              indexed?: boolean;
+
+              internalType?: string;
+
+              name?: string;
+            }
+
+            export interface Output {
+              type: string;
+
+              components?: Array<unknown>;
+
+              indexed?: boolean;
+
+              internalType?: string;
+
+              name?: string;
+            }
+          }
+        }
+
+        export interface UnionMember12 {
+          field: 'commandName';
+
+          field_source: 'sui_transaction_command';
+
+          operator: 'eq' | 'in';
+
+          /**
+           * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+           */
+          value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+        }
+
+        export interface UnionMember13 {
+          field: 'recipient' | 'amount';
+
+          field_source: 'sui_transfer_objects_command';
+
+          operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+          value: string | Array<string>;
+        }
+      }
+    }
+  }
+
+  /**
+   * Current state of the policy before any changes. If undefined, the resource was
+   * deleted and no longer exists
+   */
+  export interface CurrentResourceData {
+    id: string;
+
+    /**
+     * The wallet chain types.
+     */
+    chain_type: WalletsAPI.WalletChainType;
+
+    created_at: number;
+
+    name: string;
+
+    owner_id: string | null;
+
+    rules: Array<CurrentResourceData.Rule>;
+
+    version: '1.0';
+  }
+
+  export namespace CurrentResourceData {
+    export interface Rule {
+      id: string;
+
+      action: 'ALLOW' | 'DENY';
+
+      conditions: Array<
+        | Rule.UnionMember0
+        | Rule.UnionMember1
+        | Rule.UnionMember2
+        | Rule.UnionMember3
+        | Rule.UnionMember4
+        | Rule.UnionMember5
+        | Rule.UnionMember6
+        | Rule.UnionMember7
+        | Rule.UnionMember8
+        | Rule.UnionMember9
+        | Rule.UnionMember10
+        | Rule.UnionMember11
+        | Rule.UnionMember12
+        | Rule.UnionMember13
+      >;
+
+      method:
+        | 'eth_sendTransaction'
+        | 'eth_signTransaction'
+        | 'eth_signTypedData_v4'
+        | 'eth_signUserOperation'
+        | 'eth_sign7702Authorization'
+        | 'signTransaction'
+        | 'signAndSendTransaction'
+        | 'signTransactionBytes'
+        | 'exportPrivateKey'
+        | '*';
+
+      name: string;
+    }
+
+    export namespace Rule {
+      export interface UnionMember0 {
+        field: 'to' | 'value' | 'chain_id';
+
+        field_source: 'ethereum_transaction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember1 {
+        abi: Array<UnionMember1.Abi>;
+
+        field: string;
+
+        field_source: 'ethereum_calldata';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export namespace UnionMember1 {
+        export interface Abi {
+          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+          anonymous?: boolean;
+
+          inputs?: Array<Abi.Input>;
+
+          name?: string;
+
+          outputs?: Array<Abi.Output>;
+
+          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+        }
+
+        export namespace Abi {
+          export interface Input {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+
+          export interface Output {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+        }
+      }
+
+      export interface UnionMember2 {
+        field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+
+        field_source: 'ethereum_typed_data_domain';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember3 {
+        field: string;
+
+        field_source: 'ethereum_typed_data_message';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        typed_data: UnionMember3.TypedData;
+
+        value: string | Array<string>;
+      }
+
+      export namespace UnionMember3 {
+        export interface TypedData {
+          primary_type: string;
+
+          types: { [key: string]: Array<TypedData.Type> };
+        }
+
+        export namespace TypedData {
+          export interface Type {
+            name: string;
+
+            type: string;
+          }
+        }
+      }
+
+      export interface UnionMember4 {
+        field: 'contract';
+
+        field_source: 'ethereum_7702_authorization';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember5 {
+        field: 'programId';
+
+        field_source: 'solana_program_instruction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember6 {
+        field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+
+        field_source: 'solana_system_program_instruction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember7 {
+        field:
+          | 'instructionName'
+          | 'Transfer.source'
+          | 'Transfer.destination'
+          | 'Transfer.authority'
+          | 'Transfer.amount'
+          | 'TransferChecked.source'
+          | 'TransferChecked.destination'
+          | 'TransferChecked.authority'
+          | 'TransferChecked.amount'
+          | 'TransferChecked.mint'
+          | 'Burn.account'
+          | 'Burn.mint'
+          | 'Burn.authority'
+          | 'Burn.amount'
+          | 'MintTo.mint'
+          | 'MintTo.account'
+          | 'MintTo.authority'
+          | 'MintTo.amount'
+          | 'CloseAccount.account'
+          | 'CloseAccount.destination'
+          | 'CloseAccount.authority'
+          | 'InitializeAccount3.account'
+          | 'InitializeAccount3.mint'
+          | 'InitializeAccount3.owner';
+
+        field_source: 'solana_token_program_instruction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember8 {
+        field:
+          | 'TransferContract.to_address'
+          | 'TransferContract.amount'
+          | 'TriggerSmartContract.contract_address'
+          | 'TriggerSmartContract.call_value'
+          | 'TriggerSmartContract.token_id'
+          | 'TriggerSmartContract.call_token_value';
+
+        field_source: 'tron_transaction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember9 {
+        field: 'current_unix_timestamp';
+
+        field_source: 'system';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember10 {
+        field: string;
+
+        field_source: 'reference';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember11 {
+        abi: Array<UnionMember11.Abi>;
+
+        field: string;
+
+        field_source: 'tron_trigger_smart_contract_data';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export namespace UnionMember11 {
+        export interface Abi {
+          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+          anonymous?: boolean;
+
+          inputs?: Array<Abi.Input>;
+
+          name?: string;
+
+          outputs?: Array<Abi.Output>;
+
+          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+        }
+
+        export namespace Abi {
+          export interface Input {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+
+          export interface Output {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+        }
+      }
+
+      export interface UnionMember12 {
+        field: 'commandName';
+
+        field_source: 'sui_transaction_command';
+
+        operator: 'eq' | 'in';
+
+        /**
+         * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+         */
+        value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+      }
+
+      export interface UnionMember13 {
+        field: 'recipient' | 'amount';
+
+        field_source: 'sui_transfer_objects_command';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
       }
     }
   }
@@ -1681,7 +2478,39 @@ export namespace PolicyIntentResponse {
 /**
  * Response for a key quorum intent
  */
-export interface KeyQuorumIntentResponse extends BaseIntentResponse {
+export interface KeyQuorumIntentResponse {
+  /**
+   * Detailed authorization information including key quorum members, thresholds, and
+   * signature status
+   */
+  authorization_details: Array<IntentAuthorization>;
+
+  /**
+   * Unix timestamp when the intent was created
+   */
+  created_at: number;
+
+  /**
+   * Display name of the user who created the intent
+   */
+  created_by_display_name: string;
+
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
+   * Unix timestamp when the intent expires
+   */
+  expires_at: number;
+
+  /**
+   * Unique ID for the intent
+   */
+  intent_id: string;
+
   intent_type: 'KEY_QUORUM';
 
   /**
@@ -1691,15 +2520,46 @@ export interface KeyQuorumIntentResponse extends BaseIntentResponse {
   request_details: KeyQuorumIntentResponse.RequestDetails;
 
   /**
+   * ID of the resource being modified (wallet_id, policy_id, etc)
+   */
+  resource_id: string;
+
+  /**
+   * Current status of an intent.
+   */
+  status: IntentStatus;
+
+  /**
    * Result of key quorum update execution (only present if status is 'executed' or
    * 'failed')
    */
   action_result?: BaseActionResult;
 
   /**
+   * ID of the user who created the intent. If undefined, the intent was created
+   * using the app secret
+   */
+  created_by_id?: string;
+
+  /**
    * A key quorum for authorizing wallet operations.
    */
   current_resource_data?: KeyQuorumsAPI.KeyQuorum;
+
+  /**
+   * Human-readable reason for dismissal, present when status is 'dismissed'
+   */
+  dismissal_reason?: string;
+
+  /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
 }
 
 export namespace KeyQuorumIntentResponse {
@@ -1711,7 +2571,7 @@ export namespace KeyQuorumIntentResponse {
     /**
      * Request input for updating an existing key quorum.
      */
-    body: KeyQuorumsAPI.KeyQuorumUpdateRequestBody;
+    body: KeyQuorumsAPI.KeyQuorumUpdateParams;
 
     method: 'PATCH';
 
@@ -1722,7 +2582,39 @@ export namespace KeyQuorumIntentResponse {
 /**
  * Response for a rule intent
  */
-export interface RuleIntentResponse extends BaseIntentResponse {
+export interface RuleIntentResponse {
+  /**
+   * Detailed authorization information including key quorum members, thresholds, and
+   * signature status
+   */
+  authorization_details: Array<IntentAuthorization>;
+
+  /**
+   * Unix timestamp when the intent was created
+   */
+  created_at: number;
+
+  /**
+   * Display name of the user who created the intent
+   */
+  created_by_display_name: string;
+
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
+   * Unix timestamp when the intent expires
+   */
+  expires_at: number;
+
+  /**
+   * Unique ID for the intent
+   */
+  intent_id: string;
+
   intent_type: 'RULE';
 
   /**
@@ -1732,9 +2624,25 @@ export interface RuleIntentResponse extends BaseIntentResponse {
   request_details: RuleIntentRequestDetails;
 
   /**
+   * ID of the resource being modified (wallet_id, policy_id, etc)
+   */
+  resource_id: string;
+
+  /**
+   * Current status of an intent.
+   */
+  status: IntentStatus;
+
+  /**
    * Result of rule execution (only present if status is 'executed' or 'failed')
    */
   action_result?: BaseActionResult;
+
+  /**
+   * ID of the user who created the intent. If undefined, the intent was created
+   * using the app secret
+   */
+  created_by_id?: string;
 
   /**
    * Current state of the rule before any changes. Undefined for create intents or if
@@ -1743,9 +2651,25 @@ export interface RuleIntentResponse extends BaseIntentResponse {
   current_resource_data?: RuleIntentResponse.CurrentResourceData;
 
   /**
-   * A policy for controlling wallet operations.
+   * Human-readable reason for dismissal, present when status is 'dismissed'
    */
-  policy?: PoliciesAPI.Policy;
+  dismissal_reason?: string;
+
+  /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
+   * Parent policy containing this rule, including sibling rules for contextual
+   * display
+   */
+  policy?: RuleIntentResponse.Policy;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
 }
 
 export namespace RuleIntentResponse {
@@ -1756,52 +2680,42 @@ export namespace RuleIntentResponse {
   export interface CurrentResourceData {
     id: string;
 
-    /**
-     * Action to take if the conditions are true.
-     */
     action: 'ALLOW' | 'DENY';
 
     conditions: Array<
-      | CurrentResourceData.EthereumTransactionCondition
-      | CurrentResourceData.EthereumCalldataCondition
-      | CurrentResourceData.EthereumTypedDataDomainCondition
-      | CurrentResourceData.EthereumTypedDataMessageCondition
-      | CurrentResourceData.Ethereum7702AuthorizationCondition
-      | CurrentResourceData.SolanaProgramInstructionCondition
-      | CurrentResourceData.SolanaSystemProgramInstructionCondition
-      | CurrentResourceData.SolanaTokenProgramInstructionCondition
-      | CurrentResourceData.SystemCondition
-      | PoliciesAPI.TronTransactionCondition
-      | PoliciesAPI.TronCalldataCondition
-      | PoliciesAPI.SuiTransactionCommandCondition
-      | PoliciesAPI.SuiTransferObjectsCommandCondition
-      | PoliciesAPI.AggregationCondition
+      | CurrentResourceData.UnionMember0
+      | CurrentResourceData.UnionMember1
+      | CurrentResourceData.UnionMember2
+      | CurrentResourceData.UnionMember3
+      | CurrentResourceData.UnionMember4
+      | CurrentResourceData.UnionMember5
+      | CurrentResourceData.UnionMember6
+      | CurrentResourceData.UnionMember7
+      | CurrentResourceData.UnionMember8
+      | CurrentResourceData.UnionMember9
+      | CurrentResourceData.UnionMember10
+      | CurrentResourceData.UnionMember11
+      | CurrentResourceData.UnionMember12
+      | CurrentResourceData.UnionMember13
     >;
 
-    /**
-     * Method the rule applies to.
-     */
     method:
       | 'eth_sendTransaction'
       | 'eth_signTransaction'
-      | 'eth_signUserOperation'
       | 'eth_signTypedData_v4'
+      | 'eth_signUserOperation'
       | 'eth_sign7702Authorization'
       | 'signTransaction'
       | 'signAndSendTransaction'
-      | 'exportPrivateKey'
       | 'signTransactionBytes'
+      | 'exportPrivateKey'
       | '*';
 
     name: string;
   }
 
   export namespace CurrentResourceData {
-    /**
-     * The verbatim Ethereum transaction object in an eth_signTransaction or
-     * eth_sendTransaction request.
-     */
-    export interface EthereumTransactionCondition {
+    export interface UnionMember0 {
       field: 'to' | 'value' | 'chain_id';
 
       field_source: 'ethereum_transaction';
@@ -1811,13 +2725,8 @@ export namespace RuleIntentResponse {
       value: string | Array<string>;
     }
 
-    /**
-     * The decoded calldata in a smart contract interaction as the smart contract
-     * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-     * an abi parameter with the JSON ABI of the smart contract.
-     */
-    export interface EthereumCalldataCondition {
-      abi: unknown;
+    export interface UnionMember1 {
+      abi: Array<UnionMember1.Abi>;
 
       field: string;
 
@@ -1828,10 +2737,49 @@ export namespace RuleIntentResponse {
       value: string | Array<string>;
     }
 
-    /**
-     * Attributes from the signing domain that will verify the signature.
-     */
-    export interface EthereumTypedDataDomainCondition {
+    export namespace UnionMember1 {
+      export interface Abi {
+        type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+        anonymous?: boolean;
+
+        inputs?: Array<Abi.Input>;
+
+        name?: string;
+
+        outputs?: Array<Abi.Output>;
+
+        stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+      }
+
+      export namespace Abi {
+        export interface Input {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+
+        export interface Output {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+      }
+    }
+
+    export interface UnionMember2 {
       field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
 
       field_source: 'ethereum_typed_data_domain';
@@ -1841,37 +2789,35 @@ export namespace RuleIntentResponse {
       value: string | Array<string>;
     }
 
-    /**
-     * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-     * EIP-712.
-     */
-    export interface EthereumTypedDataMessageCondition {
+    export interface UnionMember3 {
       field: string;
 
       field_source: 'ethereum_typed_data_message';
 
       operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
-      typed_data: EthereumTypedDataMessageCondition.TypedData;
+      typed_data: UnionMember3.TypedData;
 
       value: string | Array<string>;
     }
 
-    export namespace EthereumTypedDataMessageCondition {
+    export namespace UnionMember3 {
       export interface TypedData {
         primary_type: string;
 
-        /**
-         * The type definitions for EIP-712 typed data signing.
-         */
-        types: WalletsAPI.TypedDataTypesInputParams;
+        types: { [key: string]: Array<TypedData.Type> };
+      }
+
+      export namespace TypedData {
+        export interface Type {
+          name: string;
+
+          type: string;
+        }
       }
     }
 
-    /**
-     * Allowed contract addresses for eth_sign7702Authorization requests.
-     */
-    export interface Ethereum7702AuthorizationCondition {
+    export interface UnionMember4 {
       field: 'contract';
 
       field_source: 'ethereum_7702_authorization';
@@ -1881,10 +2827,7 @@ export namespace RuleIntentResponse {
       value: string | Array<string>;
     }
 
-    /**
-     * Solana Program attributes, enables allowlisting Solana Programs.
-     */
-    export interface SolanaProgramInstructionCondition {
+    export interface UnionMember5 {
       field: 'programId';
 
       field_source: 'solana_program_instruction';
@@ -1894,11 +2837,7 @@ export namespace RuleIntentResponse {
       value: string | Array<string>;
     }
 
-    /**
-     * Solana System Program attributes, including more granular Transfer instruction
-     * fields.
-     */
-    export interface SolanaSystemProgramInstructionCondition {
+    export interface UnionMember6 {
       field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
 
       field_source: 'solana_system_program_instruction';
@@ -1908,11 +2847,7 @@ export namespace RuleIntentResponse {
       value: string | Array<string>;
     }
 
-    /**
-     * Solana Token Program attributes, including more granular TransferChecked
-     * instruction fields.
-     */
-    export interface SolanaTokenProgramInstructionCondition {
+    export interface UnionMember7 {
       field:
         | 'instructionName'
         | 'Transfer.source'
@@ -1946,10 +2881,23 @@ export namespace RuleIntentResponse {
       value: string | Array<string>;
     }
 
-    /**
-     * System attributes, including current unix timestamp (in seconds).
-     */
-    export interface SystemCondition {
+    export interface UnionMember8 {
+      field:
+        | 'TransferContract.to_address'
+        | 'TransferContract.amount'
+        | 'TriggerSmartContract.contract_address'
+        | 'TriggerSmartContract.call_value'
+        | 'TriggerSmartContract.token_id'
+        | 'TriggerSmartContract.call_token_value';
+
+      field_source: 'tron_transaction';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember9 {
       field: 'current_unix_timestamp';
 
       field_source: 'system';
@@ -1957,6 +2905,436 @@ export namespace RuleIntentResponse {
       operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
 
       value: string | Array<string>;
+    }
+
+    export interface UnionMember10 {
+      field: string;
+
+      field_source: 'reference';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export interface UnionMember11 {
+      abi: Array<UnionMember11.Abi>;
+
+      field: string;
+
+      field_source: 'tron_trigger_smart_contract_data';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+
+    export namespace UnionMember11 {
+      export interface Abi {
+        type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+        anonymous?: boolean;
+
+        inputs?: Array<Abi.Input>;
+
+        name?: string;
+
+        outputs?: Array<Abi.Output>;
+
+        stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+      }
+
+      export namespace Abi {
+        export interface Input {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+
+        export interface Output {
+          type: string;
+
+          components?: Array<unknown>;
+
+          indexed?: boolean;
+
+          internalType?: string;
+
+          name?: string;
+        }
+      }
+    }
+
+    export interface UnionMember12 {
+      field: 'commandName';
+
+      field_source: 'sui_transaction_command';
+
+      operator: 'eq' | 'in';
+
+      /**
+       * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+       */
+      value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+    }
+
+    export interface UnionMember13 {
+      field: 'recipient' | 'amount';
+
+      field_source: 'sui_transfer_objects_command';
+
+      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+      value: string | Array<string>;
+    }
+  }
+
+  /**
+   * Parent policy containing this rule, including sibling rules for contextual
+   * display
+   */
+  export interface Policy {
+    id: string;
+
+    /**
+     * The wallet chain types.
+     */
+    chain_type: WalletsAPI.WalletChainType;
+
+    created_at: number;
+
+    name: string;
+
+    owner_id: string | null;
+
+    rules: Array<Policy.Rule>;
+
+    version: '1.0';
+  }
+
+  export namespace Policy {
+    export interface Rule {
+      id: string;
+
+      action: 'ALLOW' | 'DENY';
+
+      conditions: Array<
+        | Rule.UnionMember0
+        | Rule.UnionMember1
+        | Rule.UnionMember2
+        | Rule.UnionMember3
+        | Rule.UnionMember4
+        | Rule.UnionMember5
+        | Rule.UnionMember6
+        | Rule.UnionMember7
+        | Rule.UnionMember8
+        | Rule.UnionMember9
+        | Rule.UnionMember10
+        | Rule.UnionMember11
+        | Rule.UnionMember12
+        | Rule.UnionMember13
+      >;
+
+      method:
+        | 'eth_sendTransaction'
+        | 'eth_signTransaction'
+        | 'eth_signTypedData_v4'
+        | 'eth_signUserOperation'
+        | 'eth_sign7702Authorization'
+        | 'signTransaction'
+        | 'signAndSendTransaction'
+        | 'signTransactionBytes'
+        | 'exportPrivateKey'
+        | '*';
+
+      name: string;
+    }
+
+    export namespace Rule {
+      export interface UnionMember0 {
+        field: 'to' | 'value' | 'chain_id';
+
+        field_source: 'ethereum_transaction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember1 {
+        abi: Array<UnionMember1.Abi>;
+
+        field: string;
+
+        field_source: 'ethereum_calldata';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export namespace UnionMember1 {
+        export interface Abi {
+          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+          anonymous?: boolean;
+
+          inputs?: Array<Abi.Input>;
+
+          name?: string;
+
+          outputs?: Array<Abi.Output>;
+
+          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+        }
+
+        export namespace Abi {
+          export interface Input {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+
+          export interface Output {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+        }
+      }
+
+      export interface UnionMember2 {
+        field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+
+        field_source: 'ethereum_typed_data_domain';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember3 {
+        field: string;
+
+        field_source: 'ethereum_typed_data_message';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        typed_data: UnionMember3.TypedData;
+
+        value: string | Array<string>;
+      }
+
+      export namespace UnionMember3 {
+        export interface TypedData {
+          primary_type: string;
+
+          types: { [key: string]: Array<TypedData.Type> };
+        }
+
+        export namespace TypedData {
+          export interface Type {
+            name: string;
+
+            type: string;
+          }
+        }
+      }
+
+      export interface UnionMember4 {
+        field: 'contract';
+
+        field_source: 'ethereum_7702_authorization';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember5 {
+        field: 'programId';
+
+        field_source: 'solana_program_instruction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember6 {
+        field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+
+        field_source: 'solana_system_program_instruction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember7 {
+        field:
+          | 'instructionName'
+          | 'Transfer.source'
+          | 'Transfer.destination'
+          | 'Transfer.authority'
+          | 'Transfer.amount'
+          | 'TransferChecked.source'
+          | 'TransferChecked.destination'
+          | 'TransferChecked.authority'
+          | 'TransferChecked.amount'
+          | 'TransferChecked.mint'
+          | 'Burn.account'
+          | 'Burn.mint'
+          | 'Burn.authority'
+          | 'Burn.amount'
+          | 'MintTo.mint'
+          | 'MintTo.account'
+          | 'MintTo.authority'
+          | 'MintTo.amount'
+          | 'CloseAccount.account'
+          | 'CloseAccount.destination'
+          | 'CloseAccount.authority'
+          | 'InitializeAccount3.account'
+          | 'InitializeAccount3.mint'
+          | 'InitializeAccount3.owner';
+
+        field_source: 'solana_token_program_instruction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember8 {
+        field:
+          | 'TransferContract.to_address'
+          | 'TransferContract.amount'
+          | 'TriggerSmartContract.contract_address'
+          | 'TriggerSmartContract.call_value'
+          | 'TriggerSmartContract.token_id'
+          | 'TriggerSmartContract.call_token_value';
+
+        field_source: 'tron_transaction';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember9 {
+        field: 'current_unix_timestamp';
+
+        field_source: 'system';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember10 {
+        field: string;
+
+        field_source: 'reference';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export interface UnionMember11 {
+        abi: Array<UnionMember11.Abi>;
+
+        field: string;
+
+        field_source: 'tron_trigger_smart_contract_data';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
+
+      export namespace UnionMember11 {
+        export interface Abi {
+          type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+          anonymous?: boolean;
+
+          inputs?: Array<Abi.Input>;
+
+          name?: string;
+
+          outputs?: Array<Abi.Output>;
+
+          stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+        }
+
+        export namespace Abi {
+          export interface Input {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+
+          export interface Output {
+            type: string;
+
+            components?: Array<unknown>;
+
+            indexed?: boolean;
+
+            internalType?: string;
+
+            name?: string;
+          }
+        }
+      }
+
+      export interface UnionMember12 {
+        field: 'commandName';
+
+        field_source: 'sui_transaction_command';
+
+        operator: 'eq' | 'in';
+
+        /**
+         * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+         */
+        value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+      }
+
+      export interface UnionMember13 {
+        field: 'recipient' | 'amount';
+
+        field_source: 'sui_transfer_objects_command';
+
+        operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+        value: string | Array<string>;
+      }
     }
   }
 }
@@ -1966,7 +3344,6 @@ export namespace RuleIntentResponse {
  */
 export type IntentResponse =
   | RpcIntentResponse
-  | TransferIntentResponse
   | WalletIntentResponse
   | PolicyIntentResponse
   | RuleIntentResponse
@@ -2030,10 +3407,8 @@ export interface IntentCreatePolicyRuleParams {
     | IntentCreatePolicyRuleParams.SolanaTokenProgramInstructionCondition
     | IntentCreatePolicyRuleParams.SystemCondition
     | PoliciesAPI.TronTransactionCondition
-    | PoliciesAPI.TronCalldataCondition
     | PoliciesAPI.SuiTransactionCommandCondition
     | PoliciesAPI.SuiTransferObjectsCommandCondition
-    | PoliciesAPI.AggregationCondition
   >;
 
   /**
@@ -2099,7 +3474,7 @@ export namespace IntentCreatePolicyRuleParams {
    * Attributes from the signing domain that will verify the signature.
    */
   export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+    field: 'chainId' | 'verifyingContract';
 
     field_source: 'ethereum_typed_data_domain';
 
@@ -2128,10 +3503,15 @@ export namespace IntentCreatePolicyRuleParams {
     export interface TypedData {
       primary_type: string;
 
-      /**
-       * The type definitions for EIP-712 typed data signing.
-       */
-      types: WalletsAPI.TypedDataTypesInputParams;
+      types: { [key: string]: Array<TypedData.Type> };
+    }
+
+    export namespace TypedData {
+      export interface Type {
+        name: string;
+
+        type: string;
+      }
     }
   }
 
@@ -2182,29 +3562,11 @@ export namespace IntentCreatePolicyRuleParams {
   export interface SolanaTokenProgramInstructionCondition {
     field:
       | 'instructionName'
-      | 'Transfer.source'
-      | 'Transfer.destination'
-      | 'Transfer.authority'
-      | 'Transfer.amount'
       | 'TransferChecked.source'
       | 'TransferChecked.destination'
       | 'TransferChecked.authority'
       | 'TransferChecked.amount'
-      | 'TransferChecked.mint'
-      | 'Burn.account'
-      | 'Burn.mint'
-      | 'Burn.authority'
-      | 'Burn.amount'
-      | 'MintTo.mint'
-      | 'MintTo.account'
-      | 'MintTo.authority'
-      | 'MintTo.amount'
-      | 'CloseAccount.account'
-      | 'CloseAccount.destination'
-      | 'CloseAccount.authority'
-      | 'InitializeAccount3.account'
-      | 'InitializeAccount3.mint'
-      | 'InitializeAccount3.owner';
+      | 'TransferChecked.mint';
 
     field_source: 'solana_token_program_instruction';
 
@@ -2248,7 +3610,6 @@ export type IntentRpcParams =
   | IntentRpcParams.EthereumSecp256k1SignRpcInput
   | IntentRpcParams.EthereumSign7702AuthorizationRpcInput
   | IntentRpcParams.EthereumSignUserOperationRpcInput
-  | IntentRpcParams.EthereumSendCallsRpcInput
   | IntentRpcParams.SolanaSignTransactionRpcInput
   | IntentRpcParams.SolanaSignAndSendTransactionRpcInput
   | IntentRpcParams.SolanaSignMessageRpcInput
@@ -2299,9 +3660,9 @@ export declare namespace IntentRpcParams {
 
   export interface EthereumSendTransactionRpcInput {
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param
      */
-    caip2: AppsAPI.Caip2;
+    caip2: string;
 
     /**
      * Body param
@@ -2322,11 +3683,6 @@ export declare namespace IntentRpcParams {
      * Body param
      */
     chain_type?: 'ethereum';
-
-    /**
-     * Body param
-     */
-    reference_id?: string;
 
     /**
      * Body param
@@ -2510,49 +3866,6 @@ export declare namespace IntentRpcParams {
     'privy-request-expiry'?: string;
   }
 
-  export interface EthereumSendCallsRpcInput {
-    /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
-     */
-    caip2: AppsAPI.Caip2;
-
-    /**
-     * Body param
-     */
-    method: 'wallet_sendCalls';
-
-    /**
-     * Body param: Parameters for the `wallet_sendCalls` RPC.
-     */
-    params: WalletsAPI.EthereumSendCallsRpcInputParams;
-
-    /**
-     * Body param
-     */
-    address?: string;
-
-    /**
-     * Body param
-     */
-    chain_type?: 'ethereum';
-
-    /**
-     * Body param
-     */
-    sponsor?: boolean;
-
-    /**
-     * Body param
-     */
-    wallet_id?: string;
-
-    /**
-     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
-     * representing the deadline by which the request must be processed.
-     */
-    'privy-request-expiry'?: string;
-  }
-
   export interface SolanaSignTransactionRpcInput {
     /**
      * Body param
@@ -2588,9 +3901,9 @@ export declare namespace IntentRpcParams {
 
   export interface SolanaSignAndSendTransactionRpcInput {
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param
      */
-    caip2: AppsAPI.Caip2;
+    caip2: string;
 
     /**
      * Body param
@@ -2611,11 +3924,6 @@ export declare namespace IntentRpcParams {
      * Body param
      */
     chain_type?: 'solana';
-
-    /**
-     * Body param
-     */
-    reference_id?: string;
 
     /**
      * Body param
@@ -2994,10 +4302,8 @@ export namespace IntentUpdatePolicyParams {
       | Rule.SolanaTokenProgramInstructionCondition
       | Rule.SystemCondition
       | PoliciesAPI.TronTransactionCondition
-      | PoliciesAPI.TronCalldataCondition
       | PoliciesAPI.SuiTransactionCommandCondition
       | PoliciesAPI.SuiTransferObjectsCommandCondition
-      | PoliciesAPI.AggregationCondition
     >;
 
     /**
@@ -3054,7 +4360,7 @@ export namespace IntentUpdatePolicyParams {
      * Attributes from the signing domain that will verify the signature.
      */
     export interface EthereumTypedDataDomainCondition {
-      field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+      field: 'chainId' | 'verifyingContract';
 
       field_source: 'ethereum_typed_data_domain';
 
@@ -3083,10 +4389,15 @@ export namespace IntentUpdatePolicyParams {
       export interface TypedData {
         primary_type: string;
 
-        /**
-         * The type definitions for EIP-712 typed data signing.
-         */
-        types: WalletsAPI.TypedDataTypesInputParams;
+        types: { [key: string]: Array<TypedData.Type> };
+      }
+
+      export namespace TypedData {
+        export interface Type {
+          name: string;
+
+          type: string;
+        }
       }
     }
 
@@ -3137,29 +4448,11 @@ export namespace IntentUpdatePolicyParams {
     export interface SolanaTokenProgramInstructionCondition {
       field:
         | 'instructionName'
-        | 'Transfer.source'
-        | 'Transfer.destination'
-        | 'Transfer.authority'
-        | 'Transfer.amount'
         | 'TransferChecked.source'
         | 'TransferChecked.destination'
         | 'TransferChecked.authority'
         | 'TransferChecked.amount'
-        | 'TransferChecked.mint'
-        | 'Burn.account'
-        | 'Burn.mint'
-        | 'Burn.authority'
-        | 'Burn.amount'
-        | 'MintTo.mint'
-        | 'MintTo.account'
-        | 'MintTo.authority'
-        | 'MintTo.amount'
-        | 'CloseAccount.account'
-        | 'CloseAccount.destination'
-        | 'CloseAccount.authority'
-        | 'InitializeAccount3.account'
-        | 'InitializeAccount3.mint'
-        | 'InitializeAccount3.owner';
+        | 'TransferChecked.mint';
 
       field_source: 'solana_token_program_instruction';
 
@@ -3208,10 +4501,8 @@ export interface IntentUpdatePolicyRuleParams {
     | IntentUpdatePolicyRuleParams.SolanaTokenProgramInstructionCondition
     | IntentUpdatePolicyRuleParams.SystemCondition
     | PoliciesAPI.TronTransactionCondition
-    | PoliciesAPI.TronCalldataCondition
     | PoliciesAPI.SuiTransactionCommandCondition
     | PoliciesAPI.SuiTransferObjectsCommandCondition
-    | PoliciesAPI.AggregationCondition
   >;
 
   /**
@@ -3277,7 +4568,7 @@ export namespace IntentUpdatePolicyRuleParams {
    * Attributes from the signing domain that will verify the signature.
    */
   export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+    field: 'chainId' | 'verifyingContract';
 
     field_source: 'ethereum_typed_data_domain';
 
@@ -3306,10 +4597,15 @@ export namespace IntentUpdatePolicyRuleParams {
     export interface TypedData {
       primary_type: string;
 
-      /**
-       * The type definitions for EIP-712 typed data signing.
-       */
-      types: WalletsAPI.TypedDataTypesInputParams;
+      types: { [key: string]: Array<TypedData.Type> };
+    }
+
+    export namespace TypedData {
+      export interface Type {
+        name: string;
+
+        type: string;
+      }
     }
   }
 
@@ -3360,29 +4656,11 @@ export namespace IntentUpdatePolicyRuleParams {
   export interface SolanaTokenProgramInstructionCondition {
     field:
       | 'instructionName'
-      | 'Transfer.source'
-      | 'Transfer.destination'
-      | 'Transfer.authority'
-      | 'Transfer.amount'
       | 'TransferChecked.source'
       | 'TransferChecked.destination'
       | 'TransferChecked.authority'
       | 'TransferChecked.amount'
-      | 'TransferChecked.mint'
-      | 'Burn.account'
-      | 'Burn.mint'
-      | 'Burn.authority'
-      | 'Burn.amount'
-      | 'MintTo.mint'
-      | 'MintTo.account'
-      | 'MintTo.authority'
-      | 'MintTo.amount'
-      | 'CloseAccount.account'
-      | 'CloseAccount.destination'
-      | 'CloseAccount.authority'
-      | 'InitializeAccount3.account'
-      | 'InitializeAccount3.mint'
-      | 'InitializeAccount3.owner';
+      | 'TransferChecked.mint';
 
     field_source: 'solana_token_program_instruction';
 
@@ -3471,7 +4749,6 @@ export declare namespace Intents {
     type IntentType as IntentType,
     type IntentStatus as IntentStatus,
     type RpcIntentRequestDetails as RpcIntentRequestDetails,
-    type TransferIntentRequestDetails as TransferIntentRequestDetails,
     type PolicyIntentRequestDetails as PolicyIntentRequestDetails,
     type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
     type RuleIntentUpdateRequestDetails as RuleIntentUpdateRequestDetails,
@@ -3480,10 +4757,8 @@ export declare namespace Intents {
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
     type IntentAuthorization as IntentAuthorization,
-    type BaseIntentResponse as BaseIntentResponse,
     type BaseActionResult as BaseActionResult,
     type RpcIntentResponse as RpcIntentResponse,
-    type TransferIntentResponse as TransferIntentResponse,
     type WalletIntentResponse as WalletIntentResponse,
     type PolicyIntentResponse as PolicyIntentResponse,
     type KeyQuorumIntentResponse as KeyQuorumIntentResponse,

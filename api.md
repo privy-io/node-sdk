@@ -2,27 +2,16 @@
 
 Types:
 
-- <code><a href="./src/resources/wallets/wallets.ts">OwnerInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyRole</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">WalletEntropyType</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">SolanaWalletDerivationStrategy</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">KeyQuorumID</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">P256PublicKey</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">OwnerUserIDInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">OwnerPublicKeyInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">PolicyInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">AdditionalSignerItemInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">AdditionalSignerInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">Address</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCustodian</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeEncryption</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RecipientPublicKey</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExportType</a></code>
@@ -33,11 +22,6 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletImportInitResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeAeadAlgorithm</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">CurveType</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">HDPath</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">SigningAlgorithm</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">Hex</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">Quantity</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExportPrivateKeyRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExportPrivateKeyRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignHashParams</a></code>
@@ -48,12 +32,6 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702Authorization</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">UnsignedEthereumTransaction</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">UserOperationInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">TypedDataDomainInputParams</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">TypedDataTypeFieldInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">TypedDataTypesInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignTransactionRpcInputParams</a></code>
@@ -69,9 +47,6 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsCall</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcInputParams</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
@@ -87,8 +62,6 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcResponseData</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcInput</a></code>
@@ -163,11 +136,6 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferSource</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferDestination</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CreateTokenTransferRequest</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">WalletAPIRegisterAuthorizationKeyInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">WalletAPIRevokeAuthorizationKeyInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyDashboardResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
@@ -318,10 +286,8 @@ Types:
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandOperator</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
 - <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">TronCalldataCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
-- <code><a href="./src/resources/policies.ts">AggregationCondition</a></code>
 - <code><a href="./src/resources/policies.ts">Policy</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/policies.ts">ConditionSetAuthorizationHeaders</a></code>
@@ -371,8 +337,8 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
-- <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateRequestBody</a></code>
-- <code><a href="./src/resources/key-quorums.ts">KeyQuorumUpdateRequestBody</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateParams</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumUpdateParams</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumAuthorizationHeaders</a></code>
 
 Methods:
@@ -389,7 +355,6 @@ Types:
 - <code><a href="./src/resources/intents.ts">IntentType</a></code>
 - <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentRequestDetails</a></code>
-- <code><a href="./src/resources/intents.ts">TransferIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">PolicyIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentCreateRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentUpdateRequestDetails</a></code>
@@ -398,10 +363,8 @@ Types:
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
-- <code><a href="./src/resources/intents.ts">BaseIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">TransferIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
@@ -477,8 +440,6 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">OAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeOnrampProvider</a></code>
 - <code><a href="./src/resources/client-auth.ts">OnrampProvider</a></code>
-- <code><a href="./src/resources/client-auth.ts">AuthenticateModeOption</a></code>
-- <code><a href="./src/resources/client-auth.ts">AuthenticateMode</a></code>
 - <code><a href="./src/resources/client-auth.ts">PasskeyCredPropsResult</a></code>
 - <code><a href="./src/resources/client-auth.ts">PasskeyClientExtensionResults</a></code>
 - <code><a href="./src/resources/client-auth.ts">PasskeyCredentialDescriptor</a></code>

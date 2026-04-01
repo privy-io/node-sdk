@@ -49,21 +49,6 @@ export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
 export type OnrampProvider = 'bridge' | 'bridge-sandbox';
 
 /**
- * Whether to allow sign-up during authentication.
- */
-export type AuthenticateModeOption = 'no-signup' | 'login-or-sign-up';
-
-/**
- * The authentication mode settings for the ceremony.
- */
-export interface AuthenticateMode {
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
-}
-
-/**
  * The result of the WebAuthn credProps extension.
  */
 export interface PasskeyCredPropsResult {
@@ -439,10 +424,7 @@ export interface PasswordlessAuthenticateRequestBody {
 
   email: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 }
 
 /**
@@ -498,10 +480,7 @@ export interface PasswordlessSMSAuthenticateRequestBody {
 
   phoneNumber: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 }
 
 /**
@@ -519,10 +498,7 @@ export interface PasswordlessSMSTransferRequestBody {
 export interface AuthenticateJwtInput {
   token?: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 }
 
 /**
@@ -538,10 +514,7 @@ export interface LinkJwtInput {
 export interface CustomJwtAuthenticateRequestBody {
   token?: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 }
 
 /**
@@ -1090,10 +1063,7 @@ export interface OAuthAuthenticateRequestBody {
 
   code_verifier?: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 }
 
 /**
@@ -1247,10 +1217,7 @@ export interface AuthenticateSiweInput {
 
   connectorType?: string | null;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 
   walletClientType?: string | null;
 }
@@ -1327,10 +1294,7 @@ export interface SiweAuthenticateRequestBody {
 
   connectorType?: string | null;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 
   walletClientType?: string | null;
 }
@@ -1400,10 +1364,7 @@ export interface AuthenticateSiwsInput {
 
   message_type?: 'transaction' | 'plain';
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 
   walletClientType?: string | null;
 }
@@ -1478,10 +1439,7 @@ export interface SiwsAuthenticateRequestBody {
 
   message_type?: 'transaction' | 'plain';
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 
   walletClientType?: string | null;
 }
@@ -1556,10 +1514,7 @@ export interface TelegramWebAppData {
 export interface TelegramAuthenticateInput {
   captcha_token?: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 
   /**
    * Auth result object returned by Telegram when a user authenticates using the
@@ -1606,10 +1561,7 @@ export interface TransferTelegramInput {
 export interface TelegramAuthenticateRequestBody {
   captcha_token?: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 
   /**
    * Auth result object returned by Telegram when a user authenticates using the
@@ -1630,10 +1582,7 @@ export interface TelegramAuthenticateRequestBody {
 export interface TelegramLinkRequestBody {
   captcha_token?: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 
   /**
    * Auth result object returned by Telegram when a user authenticates using the
@@ -1708,10 +1657,7 @@ export interface FarcasterAuthenticateInput {
 
   signature: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 }
 
 /**
@@ -1780,10 +1726,7 @@ export interface FarcasterV2AuthenticateInput {
 
   signature: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 }
 
 /**
@@ -1798,10 +1741,7 @@ export interface FarcasterAuthenticateRequestBody {
 
   signature: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 }
 
 /**
@@ -1900,10 +1840,7 @@ export interface FarcasterV2AuthenticateRequestBody {
 
   signature: string;
 
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
+  mode?: 'no-signup' | 'login-or-sign-up';
 }
 
 /**
@@ -2090,8 +2027,6 @@ export declare namespace ClientAuth {
     type OAuthProviderID as OAuthProviderID,
     type BridgeOnrampProvider as BridgeOnrampProvider,
     type OnrampProvider as OnrampProvider,
-    type AuthenticateModeOption as AuthenticateModeOption,
-    type AuthenticateMode as AuthenticateMode,
     type PasskeyCredPropsResult as PasskeyCredPropsResult,
     type PasskeyClientExtensionResults as PasskeyClientExtensionResults,
     type PasskeyCredentialDescriptor as PasskeyCredentialDescriptor,

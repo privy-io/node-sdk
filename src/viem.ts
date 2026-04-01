@@ -172,7 +172,7 @@ const formatViemPersonalSignMessage = (message: SignMessageParameters['message']
  */
 const formatViemTransaction = (
   tx: SignTransactionParameters['transaction'],
-): EthereumSignTransactionRpcInputParams.Transaction => {
+): EthereumSignTransactionRpcInputParams['transaction'] => {
   return {
     type: formatViemTransactionType(tx.type),
     ...(tx.to ? { to: tx.to } : {}),

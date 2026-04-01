@@ -389,6 +389,7 @@ Types:
 - <code><a href="./src/resources/intents.ts">IntentType</a></code>
 - <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">TransferIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">PolicyIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentCreateRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentUpdateRequestDetails</a></code>
@@ -397,8 +398,10 @@ Types:
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
+- <code><a href="./src/resources/intents.ts">BaseIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">TransferIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>

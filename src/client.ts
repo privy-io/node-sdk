@@ -274,6 +274,7 @@ import {
 } from './resources/funding';
 import {
   BaseActionResult,
+  BaseIntentResponse,
   IntentAuthorization,
   IntentAuthorizationKeyQuorumMember,
   IntentAuthorizationMember,
@@ -301,6 +302,8 @@ import {
   RuleIntentRequestDetails,
   RuleIntentResponse,
   RuleIntentUpdateRequestDetails,
+  TransferIntentRequestDetails,
+  TransferIntentResponse,
   WalletIntentResponse,
 } from './resources/intents';
 import {
@@ -1945,6 +1948,7 @@ export declare namespace PrivyAPI {
     type IntentType as IntentType,
     type IntentStatus as IntentStatus,
     type RpcIntentRequestDetails as RpcIntentRequestDetails,
+    type TransferIntentRequestDetails as TransferIntentRequestDetails,
     type PolicyIntentRequestDetails as PolicyIntentRequestDetails,
     type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
     type RuleIntentUpdateRequestDetails as RuleIntentUpdateRequestDetails,
@@ -1953,8 +1957,10 @@ export declare namespace PrivyAPI {
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
     type IntentAuthorization as IntentAuthorization,
+    type BaseIntentResponse as BaseIntentResponse,
     type BaseActionResult as BaseActionResult,
     type RpcIntentResponse as RpcIntentResponse,
+    type TransferIntentResponse as TransferIntentResponse,
     type WalletIntentResponse as WalletIntentResponse,
     type PolicyIntentResponse as PolicyIntentResponse,
     type KeyQuorumIntentResponse as KeyQuorumIntentResponse,

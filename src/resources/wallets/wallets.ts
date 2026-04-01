@@ -1026,6 +1026,8 @@ export interface EthereumSendTransactionRpcInput {
 
   chain_type?: 'ethereum';
 
+  reference_id?: string;
+
   sponsor?: boolean;
 
   wallet_id?: string;
@@ -1299,6 +1301,8 @@ export interface EthereumSendTransactionRpcResponseData {
 
   hash: string;
 
+  reference_id?: string | null;
+
   transaction_id?: string;
 
   /**
@@ -1504,6 +1508,8 @@ export interface SolanaSignAndSendTransactionRpcInput {
 
   chain_type?: 'solana';
 
+  reference_id?: string;
+
   sponsor?: boolean;
 
   wallet_id?: string;
@@ -1575,6 +1581,8 @@ export interface SolanaSignAndSendTransactionRpcResponseData {
   caip2: AppsAPI.Caip2;
 
   hash: string;
+
+  reference_id?: string | null;
 
   transaction_id?: string;
 }
@@ -3145,6 +3153,11 @@ export declare namespace WalletRpcParams {
     /**
      * Body param
      */
+    reference_id?: string;
+
+    /**
+     * Body param
+     */
     sponsor?: boolean;
 
     /**
@@ -3521,6 +3534,11 @@ export declare namespace WalletRpcParams {
      * Body param
      */
     chain_type?: 'solana';
+
+    /**
+     * Body param
+     */
+    reference_id?: string;
 
     /**
      * Body param

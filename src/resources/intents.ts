@@ -262,7 +262,7 @@ export type IntentResponsesCursor = Cursor<IntentResponse>;
 /**
  * Type of intent.
  */
-export type IntentType = 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'WALLET';
+export type IntentType = 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'TRANSFER' | 'WALLET';
 
 /**
  * Current status of an intent.
@@ -277,6 +277,20 @@ export interface RpcIntentRequestDetails {
    * Request body for wallet RPC operations, discriminated by method.
    */
   body: WalletsAPI.WalletRpcRequestBody;
+
+  method: 'POST';
+
+  url: string;
+}
+
+/**
+ * Request details for a transfer intent.
+ */
+export interface TransferIntentRequestDetails {
+  /**
+   * Request body for initiating a sponsored token transfer from an embedded wallet.
+   */
+  body: WalletsAPI.CreateTokenTransferRequest;
 
   method: 'POST';
 
@@ -1136,6 +1150,74 @@ export interface IntentAuthorization {
 }
 
 /**
+ * Common fields shared by all intent response types.
+ */
+export interface BaseIntentResponse {
+  /**
+   * Detailed authorization information including key quorum members, thresholds, and
+   * signature status
+   */
+  authorization_details: Array<IntentAuthorization>;
+
+  /**
+   * Unix timestamp when the intent was created
+   */
+  created_at: number;
+
+  /**
+   * Display name of the user who created the intent
+   */
+  created_by_display_name: string;
+
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
+   * Unix timestamp when the intent expires
+   */
+  expires_at: number;
+
+  /**
+   * Unique ID for the intent
+   */
+  intent_id: string;
+
+  /**
+   * ID of the resource being modified (wallet_id, policy_id, etc)
+   */
+  resource_id: string;
+
+  /**
+   * Current status of an intent.
+   */
+  status: IntentStatus;
+
+  /**
+   * ID of the user who created the intent. If undefined, the intent was created
+   * using the app secret
+   */
+  created_by_id?: string;
+
+  /**
+   * Human-readable reason for dismissal, present when status is 'dismissed'
+   */
+  dismissal_reason?: string;
+
+  /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
+}
+
+/**
  * Common fields for intent action execution results.
  */
 export interface BaseActionResult {
@@ -1163,39 +1245,7 @@ export interface BaseActionResult {
 /**
  * Response for an RPC intent
  */
-export interface RpcIntentResponse {
-  /**
-   * Detailed authorization information including key quorum members, thresholds, and
-   * signature status
-   */
-  authorization_details: Array<IntentAuthorization>;
-
-  /**
-   * Unix timestamp when the intent was created
-   */
-  created_at: number;
-
-  /**
-   * Display name of the user who created the intent
-   */
-  created_by_display_name: string;
-
-  /**
-   * Whether this intent has a custom expiry time set by the client. If false, the
-   * intent expires after a default duration.
-   */
-  custom_expiry: boolean;
-
-  /**
-   * Unix timestamp when the intent expires
-   */
-  expires_at: number;
-
-  /**
-   * Unique ID for the intent
-   */
-  intent_id: string;
-
+export interface RpcIntentResponse extends BaseIntentResponse {
   intent_type: 'RPC';
 
   /**
@@ -1204,45 +1254,14 @@ export interface RpcIntentResponse {
   request_details: RpcIntentResponse.RequestDetails;
 
   /**
-   * ID of the resource being modified (wallet_id, policy_id, etc)
-   */
-  resource_id: string;
-
-  /**
-   * Current status of an intent.
-   */
-  status: IntentStatus;
-
-  /**
    * Result of RPC execution (only present if status is 'executed' or 'failed')
    */
   action_result?: BaseActionResult;
 
   /**
-   * ID of the user who created the intent. If undefined, the intent was created
-   * using the app secret
-   */
-  created_by_id?: string;
-
-  /**
    * A wallet managed by Privy's wallet infrastructure.
    */
   current_resource_data?: WalletsAPI.Wallet;
-
-  /**
-   * Human-readable reason for dismissal, present when status is 'dismissed'
-   */
-  dismissal_reason?: string;
-
-  /**
-   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
-   */
-  dismissed_at?: number;
-
-  /**
-   * Unix timestamp when the intent was rejected, present when status is 'rejected'
-   */
-  rejected_at?: number;
 }
 
 export namespace RpcIntentResponse {
@@ -1262,41 +1281,48 @@ export namespace RpcIntentResponse {
 }
 
 /**
+ * Response for a transfer intent
+ */
+export interface TransferIntentResponse extends BaseIntentResponse {
+  intent_type: 'TRANSFER';
+
+  /**
+   * The original transfer request that would be sent to the wallet transfer endpoint
+   */
+  request_details: TransferIntentResponse.RequestDetails;
+
+  /**
+   * Result of transfer execution (only present if intent status is 'executed' or
+   * 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A wallet managed by Privy's wallet infrastructure.
+   */
+  current_resource_data?: WalletsAPI.Wallet;
+}
+
+export namespace TransferIntentResponse {
+  /**
+   * The original transfer request that would be sent to the wallet transfer endpoint
+   */
+  export interface RequestDetails {
+    /**
+     * Request body for initiating a sponsored token transfer from an embedded wallet.
+     */
+    body: WalletsAPI.CreateTokenTransferRequest;
+
+    method: 'POST';
+
+    url: string;
+  }
+}
+
+/**
  * Response for a wallet intent
  */
-export interface WalletIntentResponse {
-  /**
-   * Detailed authorization information including key quorum members, thresholds, and
-   * signature status
-   */
-  authorization_details: Array<IntentAuthorization>;
-
-  /**
-   * Unix timestamp when the intent was created
-   */
-  created_at: number;
-
-  /**
-   * Display name of the user who created the intent
-   */
-  created_by_display_name: string;
-
-  /**
-   * Whether this intent has a custom expiry time set by the client. If false, the
-   * intent expires after a default duration.
-   */
-  custom_expiry: boolean;
-
-  /**
-   * Unix timestamp when the intent expires
-   */
-  expires_at: number;
-
-  /**
-   * Unique ID for the intent
-   */
-  intent_id: string;
-
+export interface WalletIntentResponse extends BaseIntentResponse {
   intent_type: 'WALLET';
 
   /**
@@ -1305,46 +1331,15 @@ export interface WalletIntentResponse {
   request_details: WalletIntentResponse.RequestDetails;
 
   /**
-   * ID of the resource being modified (wallet_id, policy_id, etc)
-   */
-  resource_id: string;
-
-  /**
-   * Current status of an intent.
-   */
-  status: IntentStatus;
-
-  /**
    * Result of wallet update execution (only present if status is 'executed' or
    * 'failed')
    */
   action_result?: BaseActionResult;
 
   /**
-   * ID of the user who created the intent. If undefined, the intent was created
-   * using the app secret
-   */
-  created_by_id?: string;
-
-  /**
    * A wallet managed by Privy's wallet infrastructure.
    */
   current_resource_data?: WalletsAPI.Wallet;
-
-  /**
-   * Human-readable reason for dismissal, present when status is 'dismissed'
-   */
-  dismissal_reason?: string;
-
-  /**
-   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
-   */
-  dismissed_at?: number;
-
-  /**
-   * Unix timestamp when the intent was rejected, present when status is 'rejected'
-   */
-  rejected_at?: number;
 }
 
 export namespace WalletIntentResponse {
@@ -1399,39 +1394,7 @@ export namespace WalletIntentResponse {
 /**
  * Response for a policy intent
  */
-export interface PolicyIntentResponse {
-  /**
-   * Detailed authorization information including key quorum members, thresholds, and
-   * signature status
-   */
-  authorization_details: Array<IntentAuthorization>;
-
-  /**
-   * Unix timestamp when the intent was created
-   */
-  created_at: number;
-
-  /**
-   * Display name of the user who created the intent
-   */
-  created_by_display_name: string;
-
-  /**
-   * Whether this intent has a custom expiry time set by the client. If false, the
-   * intent expires after a default duration.
-   */
-  custom_expiry: boolean;
-
-  /**
-   * Unix timestamp when the intent expires
-   */
-  expires_at: number;
-
-  /**
-   * Unique ID for the intent
-   */
-  intent_id: string;
-
+export interface PolicyIntentResponse extends BaseIntentResponse {
   intent_type: 'POLICY';
 
   /**
@@ -1440,46 +1403,15 @@ export interface PolicyIntentResponse {
   request_details: PolicyIntentResponse.RequestDetails;
 
   /**
-   * ID of the resource being modified (wallet_id, policy_id, etc)
-   */
-  resource_id: string;
-
-  /**
-   * Current status of an intent.
-   */
-  status: IntentStatus;
-
-  /**
    * Result of policy update execution (only present if status is 'executed' or
    * 'failed')
    */
   action_result?: BaseActionResult;
 
   /**
-   * ID of the user who created the intent. If undefined, the intent was created
-   * using the app secret
-   */
-  created_by_id?: string;
-
-  /**
    * A policy for controlling wallet operations.
    */
   current_resource_data?: PoliciesAPI.Policy;
-
-  /**
-   * Human-readable reason for dismissal, present when status is 'dismissed'
-   */
-  dismissal_reason?: string;
-
-  /**
-   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
-   */
-  dismissed_at?: number;
-
-  /**
-   * Unix timestamp when the intent was rejected, present when status is 'rejected'
-   */
-  rejected_at?: number;
 }
 
 export namespace PolicyIntentResponse {
@@ -1746,39 +1678,7 @@ export namespace PolicyIntentResponse {
 /**
  * Response for a key quorum intent
  */
-export interface KeyQuorumIntentResponse {
-  /**
-   * Detailed authorization information including key quorum members, thresholds, and
-   * signature status
-   */
-  authorization_details: Array<IntentAuthorization>;
-
-  /**
-   * Unix timestamp when the intent was created
-   */
-  created_at: number;
-
-  /**
-   * Display name of the user who created the intent
-   */
-  created_by_display_name: string;
-
-  /**
-   * Whether this intent has a custom expiry time set by the client. If false, the
-   * intent expires after a default duration.
-   */
-  custom_expiry: boolean;
-
-  /**
-   * Unix timestamp when the intent expires
-   */
-  expires_at: number;
-
-  /**
-   * Unique ID for the intent
-   */
-  intent_id: string;
-
+export interface KeyQuorumIntentResponse extends BaseIntentResponse {
   intent_type: 'KEY_QUORUM';
 
   /**
@@ -1788,46 +1688,15 @@ export interface KeyQuorumIntentResponse {
   request_details: KeyQuorumIntentResponse.RequestDetails;
 
   /**
-   * ID of the resource being modified (wallet_id, policy_id, etc)
-   */
-  resource_id: string;
-
-  /**
-   * Current status of an intent.
-   */
-  status: IntentStatus;
-
-  /**
    * Result of key quorum update execution (only present if status is 'executed' or
    * 'failed')
    */
   action_result?: BaseActionResult;
 
   /**
-   * ID of the user who created the intent. If undefined, the intent was created
-   * using the app secret
-   */
-  created_by_id?: string;
-
-  /**
    * A key quorum for authorizing wallet operations.
    */
   current_resource_data?: KeyQuorumsAPI.KeyQuorum;
-
-  /**
-   * Human-readable reason for dismissal, present when status is 'dismissed'
-   */
-  dismissal_reason?: string;
-
-  /**
-   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
-   */
-  dismissed_at?: number;
-
-  /**
-   * Unix timestamp when the intent was rejected, present when status is 'rejected'
-   */
-  rejected_at?: number;
 }
 
 export namespace KeyQuorumIntentResponse {
@@ -1850,39 +1719,7 @@ export namespace KeyQuorumIntentResponse {
 /**
  * Response for a rule intent
  */
-export interface RuleIntentResponse {
-  /**
-   * Detailed authorization information including key quorum members, thresholds, and
-   * signature status
-   */
-  authorization_details: Array<IntentAuthorization>;
-
-  /**
-   * Unix timestamp when the intent was created
-   */
-  created_at: number;
-
-  /**
-   * Display name of the user who created the intent
-   */
-  created_by_display_name: string;
-
-  /**
-   * Whether this intent has a custom expiry time set by the client. If false, the
-   * intent expires after a default duration.
-   */
-  custom_expiry: boolean;
-
-  /**
-   * Unix timestamp when the intent expires
-   */
-  expires_at: number;
-
-  /**
-   * Unique ID for the intent
-   */
-  intent_id: string;
-
+export interface RuleIntentResponse extends BaseIntentResponse {
   intent_type: 'RULE';
 
   /**
@@ -1892,25 +1729,9 @@ export interface RuleIntentResponse {
   request_details: RuleIntentRequestDetails;
 
   /**
-   * ID of the resource being modified (wallet_id, policy_id, etc)
-   */
-  resource_id: string;
-
-  /**
-   * Current status of an intent.
-   */
-  status: IntentStatus;
-
-  /**
    * Result of rule execution (only present if status is 'executed' or 'failed')
    */
   action_result?: BaseActionResult;
-
-  /**
-   * ID of the user who created the intent. If undefined, the intent was created
-   * using the app secret
-   */
-  created_by_id?: string;
 
   /**
    * Current state of the rule before any changes. Undefined for create intents or if
@@ -1919,24 +1740,9 @@ export interface RuleIntentResponse {
   current_resource_data?: RuleIntentResponse.CurrentResourceData;
 
   /**
-   * Human-readable reason for dismissal, present when status is 'dismissed'
-   */
-  dismissal_reason?: string;
-
-  /**
-   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
-   */
-  dismissed_at?: number;
-
-  /**
    * A policy for controlling wallet operations.
    */
   policy?: PoliciesAPI.Policy;
-
-  /**
-   * Unix timestamp when the intent was rejected, present when status is 'rejected'
-   */
-  rejected_at?: number;
 }
 
 export namespace RuleIntentResponse {
@@ -2157,6 +1963,7 @@ export namespace RuleIntentResponse {
  */
 export type IntentResponse =
   | RpcIntentResponse
+  | TransferIntentResponse
   | WalletIntentResponse
   | PolicyIntentResponse
   | RuleIntentResponse
@@ -2516,6 +2323,11 @@ export declare namespace IntentRpcParams {
     /**
      * Body param
      */
+    reference_id?: string;
+
+    /**
+     * Body param
+     */
     sponsor?: boolean;
 
     /**
@@ -2796,6 +2608,11 @@ export declare namespace IntentRpcParams {
      * Body param
      */
     chain_type?: 'solana';
+
+    /**
+     * Body param
+     */
+    reference_id?: string;
 
     /**
      * Body param
@@ -3651,6 +3468,7 @@ export declare namespace Intents {
     type IntentType as IntentType,
     type IntentStatus as IntentStatus,
     type RpcIntentRequestDetails as RpcIntentRequestDetails,
+    type TransferIntentRequestDetails as TransferIntentRequestDetails,
     type PolicyIntentRequestDetails as PolicyIntentRequestDetails,
     type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
     type RuleIntentUpdateRequestDetails as RuleIntentUpdateRequestDetails,
@@ -3659,8 +3477,10 @@ export declare namespace Intents {
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
     type IntentAuthorization as IntentAuthorization,
+    type BaseIntentResponse as BaseIntentResponse,
     type BaseActionResult as BaseActionResult,
     type RpcIntentResponse as RpcIntentResponse,
+    type TransferIntentResponse as TransferIntentResponse,
     type WalletIntentResponse as WalletIntentResponse,
     type PolicyIntentResponse as PolicyIntentResponse,
     type KeyQuorumIntentResponse as KeyQuorumIntentResponse,

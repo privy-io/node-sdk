@@ -69,6 +69,9 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsCall</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
@@ -84,6 +87,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcInput</a></code>

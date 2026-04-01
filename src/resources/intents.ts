@@ -2441,6 +2441,7 @@ export type IntentRpcParams =
   | IntentRpcParams.EthereumSecp256k1SignRpcInput
   | IntentRpcParams.EthereumSign7702AuthorizationRpcInput
   | IntentRpcParams.EthereumSignUserOperationRpcInput
+  | IntentRpcParams.EthereumSendCallsRpcInput
   | IntentRpcParams.SolanaSignTransactionRpcInput
   | IntentRpcParams.SolanaSignAndSendTransactionRpcInput
   | IntentRpcParams.SolanaSignMessageRpcInput
@@ -2684,6 +2685,49 @@ export declare namespace IntentRpcParams {
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface EthereumSendCallsRpcInput {
+    /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2: AppsAPI.Caip2;
+
+    /**
+     * Body param
+     */
+    method: 'wallet_sendCalls';
+
+    /**
+     * Body param: Parameters for the `wallet_sendCalls` RPC.
+     */
+    params: WalletsAPI.EthereumSendCallsRpcInputParams;
+
+    /**
+     * Body param
+     */
+    address?: string;
+
+    /**
+     * Body param
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    sponsor?: boolean;
 
     /**
      * Body param

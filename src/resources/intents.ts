@@ -740,6 +740,8 @@ export namespace WalletIntentResponse {
 
       authorization_threshold?: number;
 
+      display_name?: string | null;
+
       /**
        * The owner of the resource. If you provide this, do not specify an owner_id as it
        * will be generated automatically. When updating a wallet, you can set the owner
@@ -1023,7 +1025,8 @@ export type IntentRpcParams =
   | IntentRpcParams.SparkCreateLightningInvoiceRpcInput
   | IntentRpcParams.SparkPayLightningInvoiceRpcInput
   | IntentRpcParams.SparkSignMessageWithIdentityKeyRpcInput
-  | IntentRpcParams.ExportPrivateKeyRpcInput;
+  | IntentRpcParams.ExportPrivateKeyRpcInput
+  | IntentRpcParams.ExportSeedPhraseRpcInput;
 
 export declare namespace IntentRpcParams {
   export interface EthereumSignTransactionRpcInput {
@@ -1638,9 +1641,34 @@ export declare namespace IntentRpcParams {
     method: 'exportPrivateKey';
 
     /**
-     * Body param: Input for exporting a wallet private key with HPKE encryption.
+     * Body param: Input for exporting a wallet (private key or seed phrase) with HPKE
+     * encryption.
      */
     params: WalletsAPI.PrivateKeyExportInput;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface ExportSeedPhraseRpcInput {
+    /**
+     * Body param
+     */
+    address: string;
+
+    /**
+     * Body param
+     */
+    method: 'exportSeedPhrase';
+
+    /**
+     * Body param: Input for exporting a wallet (private key or seed phrase) with HPKE
+     * encryption.
+     */
+    params: WalletsAPI.SeedPhraseExportInput;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -1775,6 +1803,11 @@ export interface IntentUpdateWalletParams {
    * Body param: Additional signers for the wallet.
    */
   additional_signers?: Array<IntentUpdateWalletParams.AdditionalSigner>;
+
+  /**
+   * Body param: A human-readable label for the wallet. Set to null to clear.
+   */
+  display_name?: string | null;
 
   /**
    * Body param: The owner of the resource. If you provide this, do not specify an

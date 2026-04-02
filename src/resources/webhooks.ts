@@ -1419,6 +1419,33 @@ export interface PrivateKeyExportWebhookPayload {
 }
 
 /**
+ * Payload for the wallet.seed_phrase_export webhook event.
+ */
+export interface SeedPhraseExportWebhookPayload {
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet.seed_phrase_export';
+
+  /**
+   * The ID of the user who exported the seed phrase.
+   */
+  user_id: string;
+
+  /**
+   * The address of the wallet.
+   */
+  wallet_address: string;
+
+  /**
+   * The ID of the wallet.
+   */
+  wallet_id: string;
+
+  export_source?: 'display' | 'client';
+}
+
+/**
  * Payload for the wallet.recovery_setup webhook event.
  */
 export interface WalletRecoverySetupWebhookPayload {
@@ -1574,6 +1601,7 @@ export type WebhookPayload =
   | FundsDepositedWebhookPayload
   | FundsWithdrawnWebhookPayload
   | PrivateKeyExportWebhookPayload
+  | SeedPhraseExportWebhookPayload
   | WalletRecoverySetupWebhookPayload
   | WalletRecoveredWebhookPayload
   | MfaEnabledWebhookPayload
@@ -1776,6 +1804,7 @@ export declare namespace Webhooks {
     type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
     type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,
     type PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload,
+    type SeedPhraseExportWebhookPayload as SeedPhraseExportWebhookPayload,
     type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
     type WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload,
     type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,

@@ -819,6 +819,7 @@ export type PolicyMethod =
   | 'signTransaction'
   | 'signAndSendTransaction'
   | 'exportPrivateKey'
+  | 'exportSeedPhrase'
   | 'signTransactionBytes'
   | '*';
 

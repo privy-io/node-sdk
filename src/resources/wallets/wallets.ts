@@ -1029,6 +1029,8 @@ export interface EthereumSendTransactionRpcInput {
 
   chain_type?: 'ethereum';
 
+  reference_id?: string;
+
   sponsor?: boolean;
 
   wallet_id?: string;
@@ -1186,6 +1188,57 @@ export interface EthereumSignUserOperationRpcInput {
 }
 
 /**
+ * A single call within a batched wallet_sendCalls request.
+ */
+export interface EthereumSendCallsCall {
+  to: string;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  data?: Hex;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  value?: Quantity;
+}
+
+/**
+ * Parameters for the `wallet_sendCalls` RPC.
+ */
+export interface EthereumSendCallsRpcInputParams {
+  calls: Array<EthereumSendCallsCall>;
+}
+
+/**
+ * Executes the `wallet_sendCalls` RPC (EIP-5792) to batch multiple calls into a
+ * single atomic transaction.
+ */
+export interface EthereumSendCallsRpcInput {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
+
+  method: 'wallet_sendCalls';
+
+  /**
+   * Parameters for the `wallet_sendCalls` RPC.
+   */
+  params: EthereumSendCallsRpcInputParams;
+
+  address?: string;
+
+  chain_type?: 'ethereum';
+
+  sponsor?: boolean;
+
+  wallet_id?: string;
+}
+
+/**
  * Request body for Ethereum wallet RPC operations, discriminated by method.
  */
 export type EthereumRpcInput =
@@ -1195,7 +1248,8 @@ export type EthereumRpcInput =
   | EthereumSignTypedDataRpcInput
   | EthereumSecp256k1SignRpcInput
   | EthereumSign7702AuthorizationRpcInput
-  | EthereumSignUserOperationRpcInput;
+  | EthereumSignUserOperationRpcInput
+  | EthereumSendCallsRpcInput;
 
 /**
  * Data returned by the EVM `personal_sign` RPC.
@@ -1249,6 +1303,8 @@ export interface EthereumSendTransactionRpcResponseData {
   caip2: AppsAPI.Caip2;
 
   hash: string;
+
+  reference_id?: string | null;
 
   transaction_id?: string;
 
@@ -1362,6 +1418,30 @@ export interface EthereumSignUserOperationRpcResponse {
 }
 
 /**
+ * Data returned by the `wallet_sendCalls` RPC.
+ */
+export interface EthereumSendCallsRpcResponseData {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
+
+  transaction_id: string;
+}
+
+/**
+ * Response to the `wallet_sendCalls` RPC.
+ */
+export interface EthereumSendCallsRpcResponse {
+  /**
+   * Data returned by the `wallet_sendCalls` RPC.
+   */
+  data: EthereumSendCallsRpcResponseData;
+
+  method: 'wallet_sendCalls';
+}
+
+/**
  * Response body for Ethereum wallet RPC operations, discriminated by method.
  */
 export type EthereumRpcResponse =
@@ -1371,7 +1451,8 @@ export type EthereumRpcResponse =
   | EthereumSendTransactionRpcResponse
   | EthereumSignUserOperationRpcResponse
   | EthereumSign7702AuthorizationRpcResponse
-  | EthereumSecp256k1SignRpcResponse;
+  | EthereumSecp256k1SignRpcResponse
+  | EthereumSendCallsRpcResponse;
 
 /**
  * Parameters for the SVM `signTransaction` RPC.
@@ -1429,6 +1510,8 @@ export interface SolanaSignAndSendTransactionRpcInput {
   address?: string;
 
   chain_type?: 'solana';
+
+  reference_id?: string;
 
   sponsor?: boolean;
 
@@ -1501,6 +1584,8 @@ export interface SolanaSignAndSendTransactionRpcResponseData {
   caip2: AppsAPI.Caip2;
 
   hash: string;
+
+  reference_id?: string | null;
 
   transaction_id?: string;
 }
@@ -2486,6 +2571,7 @@ export type WalletRpcRequestBody =
   | EthereumSecp256k1SignRpcInput
   | EthereumSign7702AuthorizationRpcInput
   | EthereumSignUserOperationRpcInput
+  | EthereumSendCallsRpcInput
   | SolanaSignTransactionRpcInput
   | SolanaSignAndSendTransactionRpcInput
   | SolanaSignMessageRpcInput
@@ -2511,6 +2597,7 @@ export type WalletRpcResponse =
   | EthereumSignUserOperationRpcResponse
   | EthereumSign7702AuthorizationRpcResponse
   | EthereumSecp256k1SignRpcResponse
+  | EthereumSendCallsRpcResponse
   | SolanaSignMessageRpcResponse
   | SolanaSignTransactionRpcResponse
   | SolanaSignAndSendTransactionRpcResponse
@@ -2979,6 +3066,7 @@ export type WalletRpcParams =
   | WalletRpcParams.EthereumSecp256k1SignRpcInput
   | WalletRpcParams.EthereumSign7702AuthorizationRpcInput
   | WalletRpcParams.EthereumSignUserOperationRpcInput
+  | WalletRpcParams.EthereumSendCallsRpcInput
   | WalletRpcParams.SolanaSignTransactionRpcInput
   | WalletRpcParams.SolanaSignAndSendTransactionRpcInput
   | WalletRpcParams.SolanaSignMessageRpcInput
@@ -3064,6 +3152,11 @@ export declare namespace WalletRpcParams {
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    reference_id?: string;
 
     /**
      * Body param
@@ -3319,6 +3412,61 @@ export declare namespace WalletRpcParams {
     'privy-request-expiry'?: string;
   }
 
+  export interface EthereumSendCallsRpcInput {
+    /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2: AppsAPI.Caip2;
+
+    /**
+     * Body param
+     */
+    method: 'wallet_sendCalls';
+
+    /**
+     * Body param: Parameters for the `wallet_sendCalls` RPC.
+     */
+    params: EthereumSendCallsRpcInputParams;
+
+    /**
+     * Body param
+     */
+    address?: string;
+
+    /**
+     * Body param
+     */
+    chain_type?: 'ethereum';
+
+    /**
+     * Body param
+     */
+    sponsor?: boolean;
+
+    /**
+     * Body param
+     */
+    wallet_id?: string;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
   export interface SolanaSignTransactionRpcInput {
     /**
      * Body param
@@ -3389,6 +3537,11 @@ export declare namespace WalletRpcParams {
      * Body param
      */
     chain_type?: 'solana';
+
+    /**
+     * Body param
+     */
+    reference_id?: string;
 
     /**
      * Body param
@@ -4133,6 +4286,9 @@ export declare namespace Wallets {
     type EthereumSign7702AuthorizationRpcInput as EthereumSign7702AuthorizationRpcInput,
     type EthereumSignUserOperationRpcInputParams as EthereumSignUserOperationRpcInputParams,
     type EthereumSignUserOperationRpcInput as EthereumSignUserOperationRpcInput,
+    type EthereumSendCallsCall as EthereumSendCallsCall,
+    type EthereumSendCallsRpcInputParams as EthereumSendCallsRpcInputParams,
+    type EthereumSendCallsRpcInput as EthereumSendCallsRpcInput,
     type EthereumRpcInput as EthereumRpcInput,
     type EthereumPersonalSignRpcResponseData as EthereumPersonalSignRpcResponseData,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
@@ -4148,6 +4304,8 @@ export declare namespace Wallets {
     type EthereumSign7702AuthorizationRpcResponse as EthereumSign7702AuthorizationRpcResponse,
     type EthereumSignUserOperationRpcResponseData as EthereumSignUserOperationRpcResponseData,
     type EthereumSignUserOperationRpcResponse as EthereumSignUserOperationRpcResponse,
+    type EthereumSendCallsRpcResponseData as EthereumSendCallsRpcResponseData,
+    type EthereumSendCallsRpcResponse as EthereumSendCallsRpcResponse,
     type EthereumRpcResponse as EthereumRpcResponse,
     type SolanaSignTransactionRpcInputParams as SolanaSignTransactionRpcInputParams,
     type SolanaSignTransactionRpcInput as SolanaSignTransactionRpcInput,

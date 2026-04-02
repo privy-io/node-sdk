@@ -31,6 +31,9 @@ import {
   AccountsDashboardListResponse,
   AccountsListResponse,
   AssetAccountWithBalance,
+  BalanceAsset,
+  BalanceAssetByChain,
+  BalanceResponse,
   CreateAccountInput,
   UpdateAccountInput,
 } from './resources/accounts';
@@ -274,6 +277,7 @@ import {
 } from './resources/funding';
 import {
   BaseActionResult,
+  BaseIntentResponse,
   IntentAuthorization,
   IntentAuthorizationKeyQuorumMember,
   IntentAuthorizationMember,
@@ -301,6 +305,8 @@ import {
   RuleIntentRequestDetails,
   RuleIntentResponse,
   RuleIntentUpdateRequestDetails,
+  TransferIntentRequestDetails,
+  TransferIntentResponse,
   WalletIntentResponse,
 } from './resources/intents';
 import {
@@ -320,6 +326,8 @@ import {
   KrakenEmbedGetPortfolioSummaryResponse,
 } from './resources/kraken-embed';
 import {
+  AbiParameter,
+  AbiSchema,
   AggregationCondition,
   ConditionSet,
   ConditionSetAuthorizationHeaders,
@@ -333,17 +341,18 @@ import {
   ConditionSetRequestParams,
   Policies,
   Policy,
+  PolicyAction,
   PolicyAuthorizationHeaders,
+  PolicyCondition,
   PolicyCreateParams,
   PolicyCreateRuleParams,
-  PolicyCreateRuleResponse,
   PolicyDeleteParams,
   PolicyDeleteRuleParams,
   PolicyGetRuleParams,
-  PolicyGetRuleResponse,
+  PolicyMethod,
+  PolicyRuleRequestBody,
   PolicyUpdateParams,
   PolicyUpdateRuleParams,
-  PolicyUpdateRuleResponse,
   SuiTransactionCommandCondition,
   SuiTransactionCommandOperator,
   SuiTransferObjectsCommandCondition,
@@ -352,7 +361,7 @@ import {
   TronTransactionCondition,
   UpdateConditionSetRequestBody,
 } from './resources/policies';
-import { Shared, SuccessResponse } from './resources/shared';
+import { CurrencyAmount, Shared, SuccessResponse } from './resources/shared';
 import { SwapAmountType, SwapQuoteRequest, SwapQuoteResponse, SwapRequest, Swaps } from './resources/swaps';
 import {
   TransactionGetResponse,
@@ -595,6 +604,11 @@ import {
   EthereumSecp256k1SignRpcInputParams,
   EthereumSecp256k1SignRpcResponse,
   EthereumSecp256k1SignRpcResponseData,
+  EthereumSendCallsCall,
+  EthereumSendCallsRpcInput,
+  EthereumSendCallsRpcInputParams,
+  EthereumSendCallsRpcResponse,
+  EthereumSendCallsRpcResponseData,
   EthereumSendTransactionRpcInput,
   EthereumSendTransactionRpcInputParams,
   EthereumSendTransactionRpcResponse,
@@ -1674,6 +1688,9 @@ export declare namespace PrivyAPI {
     type EthereumSign7702AuthorizationRpcInput as EthereumSign7702AuthorizationRpcInput,
     type EthereumSignUserOperationRpcInputParams as EthereumSignUserOperationRpcInputParams,
     type EthereumSignUserOperationRpcInput as EthereumSignUserOperationRpcInput,
+    type EthereumSendCallsCall as EthereumSendCallsCall,
+    type EthereumSendCallsRpcInputParams as EthereumSendCallsRpcInputParams,
+    type EthereumSendCallsRpcInput as EthereumSendCallsRpcInput,
     type EthereumRpcInput as EthereumRpcInput,
     type EthereumPersonalSignRpcResponseData as EthereumPersonalSignRpcResponseData,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
@@ -1689,6 +1706,8 @@ export declare namespace PrivyAPI {
     type EthereumSign7702AuthorizationRpcResponse as EthereumSign7702AuthorizationRpcResponse,
     type EthereumSignUserOperationRpcResponseData as EthereumSignUserOperationRpcResponseData,
     type EthereumSignUserOperationRpcResponse as EthereumSignUserOperationRpcResponse,
+    type EthereumSendCallsRpcResponseData as EthereumSendCallsRpcResponseData,
+    type EthereumSendCallsRpcResponse as EthereumSendCallsRpcResponse,
     type EthereumRpcResponse as EthereumRpcResponse,
     type SolanaSignTransactionRpcInputParams as SolanaSignTransactionRpcInputParams,
     type SolanaSignTransactionRpcInput as SolanaSignTransactionRpcInput,
@@ -1886,6 +1905,9 @@ export declare namespace PrivyAPI {
     type ConditionSetItem as ConditionSetItem,
     type ConditionSetItems as ConditionSetItems,
     type ConditionSetItemsResponse as ConditionSetItemsResponse,
+    type PolicyAction as PolicyAction,
+    type AbiParameter as AbiParameter,
+    type AbiSchema as AbiSchema,
     type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
     type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
     type TronTransactionCondition as TronTransactionCondition,
@@ -1893,12 +1915,12 @@ export declare namespace PrivyAPI {
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
     type AggregationCondition as AggregationCondition,
+    type PolicyCondition as PolicyCondition,
+    type PolicyMethod as PolicyMethod,
+    type PolicyRuleRequestBody as PolicyRuleRequestBody,
     type Policy as Policy,
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
     type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
-    type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
-    type PolicyUpdateRuleResponse as PolicyUpdateRuleResponse,
-    type PolicyGetRuleResponse as PolicyGetRuleResponse,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,
     type PolicyDeleteParams as PolicyDeleteParams,
@@ -1945,6 +1967,7 @@ export declare namespace PrivyAPI {
     type IntentType as IntentType,
     type IntentStatus as IntentStatus,
     type RpcIntentRequestDetails as RpcIntentRequestDetails,
+    type TransferIntentRequestDetails as TransferIntentRequestDetails,
     type PolicyIntentRequestDetails as PolicyIntentRequestDetails,
     type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
     type RuleIntentUpdateRequestDetails as RuleIntentUpdateRequestDetails,
@@ -1953,8 +1976,10 @@ export declare namespace PrivyAPI {
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
     type IntentAuthorization as IntentAuthorization,
+    type BaseIntentResponse as BaseIntentResponse,
     type BaseActionResult as BaseActionResult,
     type RpcIntentResponse as RpcIntentResponse,
+    type TransferIntentResponse as TransferIntentResponse,
     type WalletIntentResponse as WalletIntentResponse,
     type PolicyIntentResponse as PolicyIntentResponse,
     type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
@@ -2177,7 +2202,7 @@ export declare namespace PrivyAPI {
     type MfaPasskeyEnrollmentRequestBody as MfaPasskeyEnrollmentRequestBody,
   };
 
-  export { Shared as Shared, type SuccessResponse as SuccessResponse };
+  export { Shared as Shared, type SuccessResponse as SuccessResponse, type CurrencyAmount as CurrencyAmount };
 
   export {
     WalletActions as WalletActions,
@@ -2309,6 +2334,9 @@ export declare namespace PrivyAPI {
 
   export {
     Accounts as Accounts,
+    type BalanceAsset as BalanceAsset,
+    type BalanceAssetByChain as BalanceAssetByChain,
+    type BalanceResponse as BalanceResponse,
     type AccountWallet as AccountWallet,
     type AccountResponse as AccountResponse,
     type AccountWalletConfigurationItem as AccountWalletConfigurationItem,

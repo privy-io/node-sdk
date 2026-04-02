@@ -69,6 +69,9 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsCall</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
@@ -84,6 +87,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702AuthorizationRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSignUserOperationRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EthereumSendCallsRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaSignTransactionRpcInput</a></code>
@@ -310,6 +315,9 @@ Types:
 - <code><a href="./src/resources/policies.ts">ConditionSetItem</a></code>
 - <code><a href="./src/resources/policies.ts">ConditionSetItems</a></code>
 - <code><a href="./src/resources/policies.ts">ConditionSetItemsResponse</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyAction</a></code>
+- <code><a href="./src/resources/policies.ts">AbiParameter</a></code>
+- <code><a href="./src/resources/policies.ts">AbiSchema</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandOperator</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
 - <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
@@ -317,23 +325,23 @@ Types:
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">AggregationCondition</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyCondition</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyMethod</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyRuleRequestBody</a></code>
 - <code><a href="./src/resources/policies.ts">Policy</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/policies.ts">ConditionSetAuthorizationHeaders</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyCreateRuleResponse</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyUpdateRuleResponse</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyGetRuleResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/policies">client.policies.<a href="./src/resources/policies.ts">create</a>({ ...params }) -> Policy</code>
-- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/resources/policies.ts">\_createRule</a>(policyID, { ...params }) -> PolicyCreateRuleResponse</code>
+- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/resources/policies.ts">\_createRule</a>(policyID, { ...params }) -> PolicyRuleRequestBody</code>
 - <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_delete</a>(policyID, { ...params }) -> SuccessResponse</code>
 - <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_deleteRule</a>(ruleID, { ...params }) -> SuccessResponse</code>
 - <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
-- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_updateRule</a>(ruleID, { ...params }) -> PolicyUpdateRuleResponse</code>
+- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_updateRule</a>(ruleID, { ...params }) -> PolicyRuleRequestBody</code>
 - <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">get</a>(policyID) -> Policy</code>
-- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">getRule</a>(ruleID, { ...params }) -> PolicyGetRuleResponse</code>
+- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">getRule</a>(ruleID, { ...params }) -> PolicyRuleRequestBody</code>
 
 # Transactions
 
@@ -384,6 +392,7 @@ Types:
 - <code><a href="./src/resources/intents.ts">IntentType</a></code>
 - <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">TransferIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">PolicyIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentCreateRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentUpdateRequestDetails</a></code>
@@ -392,8 +401,10 @@ Types:
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
+- <code><a href="./src/resources/intents.ts">BaseIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">TransferIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
@@ -642,6 +653,7 @@ Types:
 Types:
 
 - <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
+- <code><a href="./src/resources/shared.ts">CurrencyAmount</a></code>
 
 # WalletActions
 
@@ -784,6 +796,9 @@ Types:
 
 Types:
 
+- <code><a href="./src/resources/accounts.ts">BalanceAsset</a></code>
+- <code><a href="./src/resources/accounts.ts">BalanceAssetByChain</a></code>
+- <code><a href="./src/resources/accounts.ts">BalanceResponse</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountWallet</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountResponse</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountWalletConfigurationItem</a></code>

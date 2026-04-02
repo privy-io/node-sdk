@@ -57,29 +57,30 @@ export class Policies extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.policies._createRule(
-   *   'xxxxxxxxxxxxxxxxxxxxxxxx',
-   *   {
-   *     action: 'ALLOW',
-   *     conditions: [
-   *       {
-   *         field: 'to',
-   *         field_source: 'ethereum_transaction',
-   *         operator: 'eq',
-   *         value: 'string',
-   *       },
-   *     ],
-   *     method: 'eth_sendTransaction',
-   *     name: 'x',
-   *   },
-   * );
+   * const policyRuleRequestBody =
+   *   await client.policies._createRule(
+   *     'xxxxxxxxxxxxxxxxxxxxxxxx',
+   *     {
+   *       action: 'ALLOW',
+   *       conditions: [
+   *         {
+   *           field: 'to',
+   *           field_source: 'ethereum_transaction',
+   *           operator: 'eq',
+   *           value: 'string',
+   *         },
+   *       ],
+   *       method: 'eth_sendTransaction',
+   *       name: 'x',
+   *     },
+   *   );
    * ```
    */
   _createRule(
     policyID: string,
     params: PolicyCreateRuleParams,
     options?: RequestOptions,
-  ): APIPromise<PolicyCreateRuleResponse> {
+  ): APIPromise<PolicyRuleRequestBody> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-request-expiry': privyRequestExpiry,
@@ -204,30 +205,31 @@ export class Policies extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.policies._updateRule(
-   *   'xxxxxxxxxxxxxxxxxxxxxxxx',
-   *   {
-   *     policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
-   *     action: 'ALLOW',
-   *     conditions: [
-   *       {
-   *         field: 'to',
-   *         field_source: 'ethereum_transaction',
-   *         operator: 'eq',
-   *         value: 'string',
-   *       },
-   *     ],
-   *     method: 'eth_sendTransaction',
-   *     name: 'x',
-   *   },
-   * );
+   * const policyRuleRequestBody =
+   *   await client.policies._updateRule(
+   *     'xxxxxxxxxxxxxxxxxxxxxxxx',
+   *     {
+   *       policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
+   *       action: 'ALLOW',
+   *       conditions: [
+   *         {
+   *           field: 'to',
+   *           field_source: 'ethereum_transaction',
+   *           operator: 'eq',
+   *           value: 'string',
+   *         },
+   *       ],
+   *       method: 'eth_sendTransaction',
+   *       name: 'x',
+   *     },
+   *   );
    * ```
    */
   _updateRule(
     ruleID: string,
     params: PolicyUpdateRuleParams,
     options?: RequestOptions,
-  ): APIPromise<PolicyUpdateRuleResponse> {
+  ): APIPromise<PolicyRuleRequestBody> {
     const {
       policy_id,
       'privy-authorization-signature': privyAuthorizationSignature,
@@ -268,7 +270,7 @@ export class Policies extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.policies.getRule(
+   * const policyRuleRequestBody = await client.policies.getRule(
    *   'xxxxxxxxxxxxxxxxxxxxxxxx',
    *   { policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx' },
    * );
@@ -278,7 +280,7 @@ export class Policies extends APIResource {
     ruleID: string,
     params: PolicyGetRuleParams,
     options?: RequestOptions,
-  ): APIPromise<PolicyGetRuleResponse> {
+  ): APIPromise<PolicyRuleRequestBody> {
     const { policy_id } = params;
     return this._client.get(path`/v1/policies/${policy_id}/rules/${ruleID}`, options);
   }
@@ -463,6 +465,47 @@ export interface ConditionSetItemsResponse {
 }
 
 /**
+ * The action to take when a policy rule matches.
+ */
+export type PolicyAction = 'ALLOW' | 'DENY';
+
+/**
+ * A parameter in a Solidity ABI function or event definition.
+ */
+export interface AbiParameter {
+  type: string;
+
+  components?: Array<unknown>;
+
+  indexed?: boolean;
+
+  internalType?: string;
+
+  name?: string;
+}
+
+/**
+ * A Solidity ABI definition for decoding smart contract calldata.
+ */
+export type AbiSchema = Array<AbiSchema.AbiSchemaItem>;
+
+export namespace AbiSchema {
+  export interface AbiSchemaItem {
+    type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+
+    anonymous?: boolean;
+
+    inputs?: Array<PoliciesAPI.AbiParameter>;
+
+    name?: string;
+
+    outputs?: Array<PoliciesAPI.AbiParameter>;
+
+    stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+  }
+}
+
+/**
  * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
  * supported for command names.
  */
@@ -501,7 +544,10 @@ export interface TronTransactionCondition {
  * Decoded calldata from a TRON TriggerSmartContract interaction.
  */
 export interface TronCalldataCondition {
-  abi: unknown;
+  /**
+   * A Solidity ABI definition for decoding smart contract calldata.
+   */
+  abi: AbiSchema;
 
   field: string;
 
@@ -567,6 +613,226 @@ export interface AggregationCondition {
 }
 
 /**
+ * A condition that must be true for the rule action to be applied.
+ */
+export type PolicyCondition =
+  | PolicyCondition.EthereumTransactionCondition
+  | PolicyCondition.EthereumCalldataCondition
+  | PolicyCondition.EthereumTypedDataDomainCondition
+  | PolicyCondition.EthereumTypedDataMessageCondition
+  | PolicyCondition.Ethereum7702AuthorizationCondition
+  | PolicyCondition.SolanaProgramInstructionCondition
+  | PolicyCondition.SolanaSystemProgramInstructionCondition
+  | PolicyCondition.SolanaTokenProgramInstructionCondition
+  | PolicyCondition.SystemCondition
+  | TronTransactionCondition
+  | TronCalldataCondition
+  | SuiTransactionCommandCondition
+  | SuiTransferObjectsCommandCondition
+  | AggregationCondition;
+
+export namespace PolicyCondition {
+  /**
+   * The verbatim Ethereum transaction object in an eth_signTransaction or
+   * eth_sendTransaction request.
+   */
+  export interface EthereumTransactionCondition {
+    field: 'to' | 'value' | 'chain_id';
+
+    field_source: 'ethereum_transaction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * The decoded calldata in a smart contract interaction as the smart contract
+   * method's parameters. Note that that 'ethereum_calldata' conditions must contain
+   * an abi parameter with the JSON ABI of the smart contract.
+   */
+  export interface EthereumCalldataCondition {
+    /**
+     * A Solidity ABI definition for decoding smart contract calldata.
+     */
+    abi: PoliciesAPI.AbiSchema;
+
+    field: string;
+
+    field_source: 'ethereum_calldata';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Attributes from the signing domain that will verify the signature.
+   */
+  export interface EthereumTypedDataDomainCondition {
+    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+
+    field_source: 'ethereum_typed_data_domain';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
+   * EIP-712.
+   */
+  export interface EthereumTypedDataMessageCondition {
+    field: string;
+
+    field_source: 'ethereum_typed_data_message';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    typed_data: EthereumTypedDataMessageCondition.TypedData;
+
+    value: string | Array<string>;
+  }
+
+  export namespace EthereumTypedDataMessageCondition {
+    export interface TypedData {
+      primary_type: string;
+
+      /**
+       * The type definitions for EIP-712 typed data signing.
+       */
+      types: WalletsAPI.TypedDataTypesInputParams;
+    }
+  }
+
+  /**
+   * Allowed contract addresses for eth_sign7702Authorization requests.
+   */
+  export interface Ethereum7702AuthorizationCondition {
+    field: 'contract';
+
+    field_source: 'ethereum_7702_authorization';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Solana Program attributes, enables allowlisting Solana Programs.
+   */
+  export interface SolanaProgramInstructionCondition {
+    field: 'programId';
+
+    field_source: 'solana_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Solana System Program attributes, including more granular Transfer instruction
+   * fields.
+   */
+  export interface SolanaSystemProgramInstructionCondition {
+    field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+
+    field_source: 'solana_system_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * Solana Token Program attributes, including more granular TransferChecked
+   * instruction fields.
+   */
+  export interface SolanaTokenProgramInstructionCondition {
+    field:
+      | 'instructionName'
+      | 'Transfer.source'
+      | 'Transfer.destination'
+      | 'Transfer.authority'
+      | 'Transfer.amount'
+      | 'TransferChecked.source'
+      | 'TransferChecked.destination'
+      | 'TransferChecked.authority'
+      | 'TransferChecked.amount'
+      | 'TransferChecked.mint'
+      | 'Burn.account'
+      | 'Burn.mint'
+      | 'Burn.authority'
+      | 'Burn.amount'
+      | 'MintTo.mint'
+      | 'MintTo.account'
+      | 'MintTo.authority'
+      | 'MintTo.amount'
+      | 'CloseAccount.account'
+      | 'CloseAccount.destination'
+      | 'CloseAccount.authority'
+      | 'InitializeAccount3.account'
+      | 'InitializeAccount3.mint'
+      | 'InitializeAccount3.owner';
+
+    field_source: 'solana_token_program_instruction';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+
+  /**
+   * System attributes, including current unix timestamp (in seconds).
+   */
+  export interface SystemCondition {
+    field: 'current_unix_timestamp';
+
+    field_source: 'system';
+
+    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+    value: string | Array<string>;
+  }
+}
+
+/**
+ * Method the rule applies to.
+ */
+export type PolicyMethod =
+  | 'eth_sendTransaction'
+  | 'eth_signTransaction'
+  | 'eth_signUserOperation'
+  | 'eth_signTypedData_v4'
+  | 'eth_sign7702Authorization'
+  | 'signTransaction'
+  | 'signAndSendTransaction'
+  | 'exportPrivateKey'
+  | 'signTransactionBytes'
+  | '*';
+
+/**
+ * The rules that apply to each method the policy covers.
+ */
+export interface PolicyRuleRequestBody {
+  /**
+   * The action to take when a policy rule matches.
+   */
+  action: PolicyAction;
+
+  conditions: Array<PolicyCondition>;
+
+  /**
+   * Method the rule applies to.
+   */
+  method: PolicyMethod;
+
+  name: string;
+}
+
+/**
  * A policy for controlling wallet operations.
  */
 export interface Policy {
@@ -596,225 +862,12 @@ export interface Policy {
    */
   owner_id: string | null;
 
-  rules: Array<Policy.Rule>;
+  rules: Array<PolicyRuleRequestBody>;
 
   /**
    * Version of the policy. Currently, 1.0 is the only version.
    */
   version: '1.0';
-}
-
-export namespace Policy {
-  /**
-   * A rule that defines the conditions and action to take if the conditions are
-   * true.
-   */
-  export interface Rule {
-    id: string;
-
-    /**
-     * Action to take if the conditions are true.
-     */
-    action: 'ALLOW' | 'DENY';
-
-    conditions: Array<
-      | Rule.EthereumTransactionCondition
-      | Rule.EthereumCalldataCondition
-      | Rule.EthereumTypedDataDomainCondition
-      | Rule.EthereumTypedDataMessageCondition
-      | Rule.Ethereum7702AuthorizationCondition
-      | Rule.SolanaProgramInstructionCondition
-      | Rule.SolanaSystemProgramInstructionCondition
-      | Rule.SolanaTokenProgramInstructionCondition
-      | Rule.SystemCondition
-      | PoliciesAPI.TronTransactionCondition
-      | PoliciesAPI.TronCalldataCondition
-      | PoliciesAPI.SuiTransactionCommandCondition
-      | PoliciesAPI.SuiTransferObjectsCommandCondition
-      | PoliciesAPI.AggregationCondition
-    >;
-
-    /**
-     * Method the rule applies to.
-     */
-    method:
-      | 'eth_sendTransaction'
-      | 'eth_signTransaction'
-      | 'eth_signUserOperation'
-      | 'eth_signTypedData_v4'
-      | 'eth_sign7702Authorization'
-      | 'signTransaction'
-      | 'signAndSendTransaction'
-      | 'exportPrivateKey'
-      | 'signTransactionBytes'
-      | '*';
-
-    name: string;
-  }
-
-  export namespace Rule {
-    /**
-     * The verbatim Ethereum transaction object in an eth_signTransaction or
-     * eth_sendTransaction request.
-     */
-    export interface EthereumTransactionCondition {
-      field: 'to' | 'value' | 'chain_id';
-
-      field_source: 'ethereum_transaction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * The decoded calldata in a smart contract interaction as the smart contract
-     * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-     * an abi parameter with the JSON ABI of the smart contract.
-     */
-    export interface EthereumCalldataCondition {
-      abi: unknown;
-
-      field: string;
-
-      field_source: 'ethereum_calldata';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Attributes from the signing domain that will verify the signature.
-     */
-    export interface EthereumTypedDataDomainCondition {
-      field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
-
-      field_source: 'ethereum_typed_data_domain';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-     * EIP-712.
-     */
-    export interface EthereumTypedDataMessageCondition {
-      field: string;
-
-      field_source: 'ethereum_typed_data_message';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      typed_data: EthereumTypedDataMessageCondition.TypedData;
-
-      value: string | Array<string>;
-    }
-
-    export namespace EthereumTypedDataMessageCondition {
-      export interface TypedData {
-        primary_type: string;
-
-        /**
-         * The type definitions for EIP-712 typed data signing.
-         */
-        types: WalletsAPI.TypedDataTypesInputParams;
-      }
-    }
-
-    /**
-     * Allowed contract addresses for eth_sign7702Authorization requests.
-     */
-    export interface Ethereum7702AuthorizationCondition {
-      field: 'contract';
-
-      field_source: 'ethereum_7702_authorization';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Solana Program attributes, enables allowlisting Solana Programs.
-     */
-    export interface SolanaProgramInstructionCondition {
-      field: 'programId';
-
-      field_source: 'solana_program_instruction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Solana System Program attributes, including more granular Transfer instruction
-     * fields.
-     */
-    export interface SolanaSystemProgramInstructionCondition {
-      field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
-
-      field_source: 'solana_system_program_instruction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Solana Token Program attributes, including more granular TransferChecked
-     * instruction fields.
-     */
-    export interface SolanaTokenProgramInstructionCondition {
-      field:
-        | 'instructionName'
-        | 'Transfer.source'
-        | 'Transfer.destination'
-        | 'Transfer.authority'
-        | 'Transfer.amount'
-        | 'TransferChecked.source'
-        | 'TransferChecked.destination'
-        | 'TransferChecked.authority'
-        | 'TransferChecked.amount'
-        | 'TransferChecked.mint'
-        | 'Burn.account'
-        | 'Burn.mint'
-        | 'Burn.authority'
-        | 'Burn.amount'
-        | 'MintTo.mint'
-        | 'MintTo.account'
-        | 'MintTo.authority'
-        | 'MintTo.amount'
-        | 'CloseAccount.account'
-        | 'CloseAccount.destination'
-        | 'CloseAccount.authority'
-        | 'InitializeAccount3.account'
-        | 'InitializeAccount3.mint'
-        | 'InitializeAccount3.owner';
-
-      field_source: 'solana_token_program_instruction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * System attributes, including current unix timestamp (in seconds).
-     */
-    export interface SystemCondition {
-      field: 'current_unix_timestamp';
-
-      field_source: 'system';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-  }
 }
 
 /**
@@ -861,639 +914,6 @@ export interface ConditionSetAuthorizationHeaders {
   'privy-request-expiry'?: string;
 }
 
-/**
- * A rule that defines the conditions and action to take if the conditions are
- * true.
- */
-export interface PolicyCreateRuleResponse {
-  id: string;
-
-  /**
-   * Action to take if the conditions are true.
-   */
-  action: 'ALLOW' | 'DENY';
-
-  conditions: Array<
-    | PolicyCreateRuleResponse.EthereumTransactionCondition
-    | PolicyCreateRuleResponse.EthereumCalldataCondition
-    | PolicyCreateRuleResponse.EthereumTypedDataDomainCondition
-    | PolicyCreateRuleResponse.EthereumTypedDataMessageCondition
-    | PolicyCreateRuleResponse.Ethereum7702AuthorizationCondition
-    | PolicyCreateRuleResponse.SolanaProgramInstructionCondition
-    | PolicyCreateRuleResponse.SolanaSystemProgramInstructionCondition
-    | PolicyCreateRuleResponse.SolanaTokenProgramInstructionCondition
-    | PolicyCreateRuleResponse.SystemCondition
-    | TronTransactionCondition
-    | TronCalldataCondition
-    | SuiTransactionCommandCondition
-    | SuiTransferObjectsCommandCondition
-    | AggregationCondition
-  >;
-
-  /**
-   * Method the rule applies to.
-   */
-  method:
-    | 'eth_sendTransaction'
-    | 'eth_signTransaction'
-    | 'eth_signUserOperation'
-    | 'eth_signTypedData_v4'
-    | 'eth_sign7702Authorization'
-    | 'signTransaction'
-    | 'signAndSendTransaction'
-    | 'exportPrivateKey'
-    | 'signTransactionBytes'
-    | '*';
-
-  name: string;
-}
-
-export namespace PolicyCreateRuleResponse {
-  /**
-   * The verbatim Ethereum transaction object in an eth_signTransaction or
-   * eth_sendTransaction request.
-   */
-  export interface EthereumTransactionCondition {
-    field: 'to' | 'value' | 'chain_id';
-
-    field_source: 'ethereum_transaction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * The decoded calldata in a smart contract interaction as the smart contract
-   * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-   * an abi parameter with the JSON ABI of the smart contract.
-   */
-  export interface EthereumCalldataCondition {
-    abi: unknown;
-
-    field: string;
-
-    field_source: 'ethereum_calldata';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Attributes from the signing domain that will verify the signature.
-   */
-  export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
-
-    field_source: 'ethereum_typed_data_domain';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-   * EIP-712.
-   */
-  export interface EthereumTypedDataMessageCondition {
-    field: string;
-
-    field_source: 'ethereum_typed_data_message';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    typed_data: EthereumTypedDataMessageCondition.TypedData;
-
-    value: string | Array<string>;
-  }
-
-  export namespace EthereumTypedDataMessageCondition {
-    export interface TypedData {
-      primary_type: string;
-
-      /**
-       * The type definitions for EIP-712 typed data signing.
-       */
-      types: WalletsAPI.TypedDataTypesInputParams;
-    }
-  }
-
-  /**
-   * Allowed contract addresses for eth_sign7702Authorization requests.
-   */
-  export interface Ethereum7702AuthorizationCondition {
-    field: 'contract';
-
-    field_source: 'ethereum_7702_authorization';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana Program attributes, enables allowlisting Solana Programs.
-   */
-  export interface SolanaProgramInstructionCondition {
-    field: 'programId';
-
-    field_source: 'solana_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana System Program attributes, including more granular Transfer instruction
-   * fields.
-   */
-  export interface SolanaSystemProgramInstructionCondition {
-    field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
-
-    field_source: 'solana_system_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana Token Program attributes, including more granular TransferChecked
-   * instruction fields.
-   */
-  export interface SolanaTokenProgramInstructionCondition {
-    field:
-      | 'instructionName'
-      | 'Transfer.source'
-      | 'Transfer.destination'
-      | 'Transfer.authority'
-      | 'Transfer.amount'
-      | 'TransferChecked.source'
-      | 'TransferChecked.destination'
-      | 'TransferChecked.authority'
-      | 'TransferChecked.amount'
-      | 'TransferChecked.mint'
-      | 'Burn.account'
-      | 'Burn.mint'
-      | 'Burn.authority'
-      | 'Burn.amount'
-      | 'MintTo.mint'
-      | 'MintTo.account'
-      | 'MintTo.authority'
-      | 'MintTo.amount'
-      | 'CloseAccount.account'
-      | 'CloseAccount.destination'
-      | 'CloseAccount.authority'
-      | 'InitializeAccount3.account'
-      | 'InitializeAccount3.mint'
-      | 'InitializeAccount3.owner';
-
-    field_source: 'solana_token_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * System attributes, including current unix timestamp (in seconds).
-   */
-  export interface SystemCondition {
-    field: 'current_unix_timestamp';
-
-    field_source: 'system';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-}
-
-/**
- * A rule that defines the conditions and action to take if the conditions are
- * true.
- */
-export interface PolicyUpdateRuleResponse {
-  id: string;
-
-  /**
-   * Action to take if the conditions are true.
-   */
-  action: 'ALLOW' | 'DENY';
-
-  conditions: Array<
-    | PolicyUpdateRuleResponse.EthereumTransactionCondition
-    | PolicyUpdateRuleResponse.EthereumCalldataCondition
-    | PolicyUpdateRuleResponse.EthereumTypedDataDomainCondition
-    | PolicyUpdateRuleResponse.EthereumTypedDataMessageCondition
-    | PolicyUpdateRuleResponse.Ethereum7702AuthorizationCondition
-    | PolicyUpdateRuleResponse.SolanaProgramInstructionCondition
-    | PolicyUpdateRuleResponse.SolanaSystemProgramInstructionCondition
-    | PolicyUpdateRuleResponse.SolanaTokenProgramInstructionCondition
-    | PolicyUpdateRuleResponse.SystemCondition
-    | TronTransactionCondition
-    | TronCalldataCondition
-    | SuiTransactionCommandCondition
-    | SuiTransferObjectsCommandCondition
-    | AggregationCondition
-  >;
-
-  /**
-   * Method the rule applies to.
-   */
-  method:
-    | 'eth_sendTransaction'
-    | 'eth_signTransaction'
-    | 'eth_signUserOperation'
-    | 'eth_signTypedData_v4'
-    | 'eth_sign7702Authorization'
-    | 'signTransaction'
-    | 'signAndSendTransaction'
-    | 'exportPrivateKey'
-    | 'signTransactionBytes'
-    | '*';
-
-  name: string;
-}
-
-export namespace PolicyUpdateRuleResponse {
-  /**
-   * The verbatim Ethereum transaction object in an eth_signTransaction or
-   * eth_sendTransaction request.
-   */
-  export interface EthereumTransactionCondition {
-    field: 'to' | 'value' | 'chain_id';
-
-    field_source: 'ethereum_transaction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * The decoded calldata in a smart contract interaction as the smart contract
-   * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-   * an abi parameter with the JSON ABI of the smart contract.
-   */
-  export interface EthereumCalldataCondition {
-    abi: unknown;
-
-    field: string;
-
-    field_source: 'ethereum_calldata';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Attributes from the signing domain that will verify the signature.
-   */
-  export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
-
-    field_source: 'ethereum_typed_data_domain';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-   * EIP-712.
-   */
-  export interface EthereumTypedDataMessageCondition {
-    field: string;
-
-    field_source: 'ethereum_typed_data_message';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    typed_data: EthereumTypedDataMessageCondition.TypedData;
-
-    value: string | Array<string>;
-  }
-
-  export namespace EthereumTypedDataMessageCondition {
-    export interface TypedData {
-      primary_type: string;
-
-      /**
-       * The type definitions for EIP-712 typed data signing.
-       */
-      types: WalletsAPI.TypedDataTypesInputParams;
-    }
-  }
-
-  /**
-   * Allowed contract addresses for eth_sign7702Authorization requests.
-   */
-  export interface Ethereum7702AuthorizationCondition {
-    field: 'contract';
-
-    field_source: 'ethereum_7702_authorization';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana Program attributes, enables allowlisting Solana Programs.
-   */
-  export interface SolanaProgramInstructionCondition {
-    field: 'programId';
-
-    field_source: 'solana_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana System Program attributes, including more granular Transfer instruction
-   * fields.
-   */
-  export interface SolanaSystemProgramInstructionCondition {
-    field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
-
-    field_source: 'solana_system_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana Token Program attributes, including more granular TransferChecked
-   * instruction fields.
-   */
-  export interface SolanaTokenProgramInstructionCondition {
-    field:
-      | 'instructionName'
-      | 'Transfer.source'
-      | 'Transfer.destination'
-      | 'Transfer.authority'
-      | 'Transfer.amount'
-      | 'TransferChecked.source'
-      | 'TransferChecked.destination'
-      | 'TransferChecked.authority'
-      | 'TransferChecked.amount'
-      | 'TransferChecked.mint'
-      | 'Burn.account'
-      | 'Burn.mint'
-      | 'Burn.authority'
-      | 'Burn.amount'
-      | 'MintTo.mint'
-      | 'MintTo.account'
-      | 'MintTo.authority'
-      | 'MintTo.amount'
-      | 'CloseAccount.account'
-      | 'CloseAccount.destination'
-      | 'CloseAccount.authority'
-      | 'InitializeAccount3.account'
-      | 'InitializeAccount3.mint'
-      | 'InitializeAccount3.owner';
-
-    field_source: 'solana_token_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * System attributes, including current unix timestamp (in seconds).
-   */
-  export interface SystemCondition {
-    field: 'current_unix_timestamp';
-
-    field_source: 'system';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-}
-
-/**
- * A rule that defines the conditions and action to take if the conditions are
- * true.
- */
-export interface PolicyGetRuleResponse {
-  id: string;
-
-  /**
-   * Action to take if the conditions are true.
-   */
-  action: 'ALLOW' | 'DENY';
-
-  conditions: Array<
-    | PolicyGetRuleResponse.EthereumTransactionCondition
-    | PolicyGetRuleResponse.EthereumCalldataCondition
-    | PolicyGetRuleResponse.EthereumTypedDataDomainCondition
-    | PolicyGetRuleResponse.EthereumTypedDataMessageCondition
-    | PolicyGetRuleResponse.Ethereum7702AuthorizationCondition
-    | PolicyGetRuleResponse.SolanaProgramInstructionCondition
-    | PolicyGetRuleResponse.SolanaSystemProgramInstructionCondition
-    | PolicyGetRuleResponse.SolanaTokenProgramInstructionCondition
-    | PolicyGetRuleResponse.SystemCondition
-    | TronTransactionCondition
-    | TronCalldataCondition
-    | SuiTransactionCommandCondition
-    | SuiTransferObjectsCommandCondition
-    | AggregationCondition
-  >;
-
-  /**
-   * Method the rule applies to.
-   */
-  method:
-    | 'eth_sendTransaction'
-    | 'eth_signTransaction'
-    | 'eth_signUserOperation'
-    | 'eth_signTypedData_v4'
-    | 'eth_sign7702Authorization'
-    | 'signTransaction'
-    | 'signAndSendTransaction'
-    | 'exportPrivateKey'
-    | 'signTransactionBytes'
-    | '*';
-
-  name: string;
-}
-
-export namespace PolicyGetRuleResponse {
-  /**
-   * The verbatim Ethereum transaction object in an eth_signTransaction or
-   * eth_sendTransaction request.
-   */
-  export interface EthereumTransactionCondition {
-    field: 'to' | 'value' | 'chain_id';
-
-    field_source: 'ethereum_transaction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * The decoded calldata in a smart contract interaction as the smart contract
-   * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-   * an abi parameter with the JSON ABI of the smart contract.
-   */
-  export interface EthereumCalldataCondition {
-    abi: unknown;
-
-    field: string;
-
-    field_source: 'ethereum_calldata';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Attributes from the signing domain that will verify the signature.
-   */
-  export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
-
-    field_source: 'ethereum_typed_data_domain';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-   * EIP-712.
-   */
-  export interface EthereumTypedDataMessageCondition {
-    field: string;
-
-    field_source: 'ethereum_typed_data_message';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    typed_data: EthereumTypedDataMessageCondition.TypedData;
-
-    value: string | Array<string>;
-  }
-
-  export namespace EthereumTypedDataMessageCondition {
-    export interface TypedData {
-      primary_type: string;
-
-      /**
-       * The type definitions for EIP-712 typed data signing.
-       */
-      types: WalletsAPI.TypedDataTypesInputParams;
-    }
-  }
-
-  /**
-   * Allowed contract addresses for eth_sign7702Authorization requests.
-   */
-  export interface Ethereum7702AuthorizationCondition {
-    field: 'contract';
-
-    field_source: 'ethereum_7702_authorization';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana Program attributes, enables allowlisting Solana Programs.
-   */
-  export interface SolanaProgramInstructionCondition {
-    field: 'programId';
-
-    field_source: 'solana_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana System Program attributes, including more granular Transfer instruction
-   * fields.
-   */
-  export interface SolanaSystemProgramInstructionCondition {
-    field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
-
-    field_source: 'solana_system_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana Token Program attributes, including more granular TransferChecked
-   * instruction fields.
-   */
-  export interface SolanaTokenProgramInstructionCondition {
-    field:
-      | 'instructionName'
-      | 'Transfer.source'
-      | 'Transfer.destination'
-      | 'Transfer.authority'
-      | 'Transfer.amount'
-      | 'TransferChecked.source'
-      | 'TransferChecked.destination'
-      | 'TransferChecked.authority'
-      | 'TransferChecked.amount'
-      | 'TransferChecked.mint'
-      | 'Burn.account'
-      | 'Burn.mint'
-      | 'Burn.authority'
-      | 'Burn.amount'
-      | 'MintTo.mint'
-      | 'MintTo.account'
-      | 'MintTo.authority'
-      | 'MintTo.amount'
-      | 'CloseAccount.account'
-      | 'CloseAccount.destination'
-      | 'CloseAccount.authority'
-      | 'InitializeAccount3.account'
-      | 'InitializeAccount3.mint'
-      | 'InitializeAccount3.owner';
-
-    field_source: 'solana_token_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * System attributes, including current unix timestamp (in seconds).
-   */
-  export interface SystemCondition {
-    field: 'current_unix_timestamp';
-
-    field_source: 'system';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-}
-
 export interface PolicyCreateParams {
   /**
    * Body param: The wallet chain types.
@@ -1508,7 +928,7 @@ export interface PolicyCreateParams {
   /**
    * Body param
    */
-  rules: Array<PolicyCreateParams.Rule>;
+  rules: Array<PolicyRuleRequestBody>;
 
   /**
    * Body param: Version of the policy. Currently, 1.0 is the only version.
@@ -1536,214 +956,6 @@ export interface PolicyCreateParams {
 
 export namespace PolicyCreateParams {
   /**
-   * The rules that apply to each method the policy covers.
-   */
-  export interface Rule {
-    /**
-     * Action to take if the conditions are true.
-     */
-    action: 'ALLOW' | 'DENY';
-
-    conditions: Array<
-      | Rule.EthereumTransactionCondition
-      | Rule.EthereumCalldataCondition
-      | Rule.EthereumTypedDataDomainCondition
-      | Rule.EthereumTypedDataMessageCondition
-      | Rule.Ethereum7702AuthorizationCondition
-      | Rule.SolanaProgramInstructionCondition
-      | Rule.SolanaSystemProgramInstructionCondition
-      | Rule.SolanaTokenProgramInstructionCondition
-      | Rule.SystemCondition
-      | PoliciesAPI.TronTransactionCondition
-      | PoliciesAPI.TronCalldataCondition
-      | PoliciesAPI.SuiTransactionCommandCondition
-      | PoliciesAPI.SuiTransferObjectsCommandCondition
-      | PoliciesAPI.AggregationCondition
-    >;
-
-    /**
-     * Method the rule applies to.
-     */
-    method:
-      | 'eth_sendTransaction'
-      | 'eth_signTransaction'
-      | 'eth_signUserOperation'
-      | 'eth_signTypedData_v4'
-      | 'eth_sign7702Authorization'
-      | 'signTransaction'
-      | 'signAndSendTransaction'
-      | 'exportPrivateKey'
-      | 'signTransactionBytes'
-      | '*';
-
-    name: string;
-  }
-
-  export namespace Rule {
-    /**
-     * The verbatim Ethereum transaction object in an eth_signTransaction or
-     * eth_sendTransaction request.
-     */
-    export interface EthereumTransactionCondition {
-      field: 'to' | 'value' | 'chain_id';
-
-      field_source: 'ethereum_transaction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * The decoded calldata in a smart contract interaction as the smart contract
-     * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-     * an abi parameter with the JSON ABI of the smart contract.
-     */
-    export interface EthereumCalldataCondition {
-      abi: unknown;
-
-      field: string;
-
-      field_source: 'ethereum_calldata';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Attributes from the signing domain that will verify the signature.
-     */
-    export interface EthereumTypedDataDomainCondition {
-      field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
-
-      field_source: 'ethereum_typed_data_domain';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-     * EIP-712.
-     */
-    export interface EthereumTypedDataMessageCondition {
-      field: string;
-
-      field_source: 'ethereum_typed_data_message';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      typed_data: EthereumTypedDataMessageCondition.TypedData;
-
-      value: string | Array<string>;
-    }
-
-    export namespace EthereumTypedDataMessageCondition {
-      export interface TypedData {
-        primary_type: string;
-
-        /**
-         * The type definitions for EIP-712 typed data signing.
-         */
-        types: WalletsAPI.TypedDataTypesInputParams;
-      }
-    }
-
-    /**
-     * Allowed contract addresses for eth_sign7702Authorization requests.
-     */
-    export interface Ethereum7702AuthorizationCondition {
-      field: 'contract';
-
-      field_source: 'ethereum_7702_authorization';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Solana Program attributes, enables allowlisting Solana Programs.
-     */
-    export interface SolanaProgramInstructionCondition {
-      field: 'programId';
-
-      field_source: 'solana_program_instruction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Solana System Program attributes, including more granular Transfer instruction
-     * fields.
-     */
-    export interface SolanaSystemProgramInstructionCondition {
-      field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
-
-      field_source: 'solana_system_program_instruction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Solana Token Program attributes, including more granular TransferChecked
-     * instruction fields.
-     */
-    export interface SolanaTokenProgramInstructionCondition {
-      field:
-        | 'instructionName'
-        | 'Transfer.source'
-        | 'Transfer.destination'
-        | 'Transfer.authority'
-        | 'Transfer.amount'
-        | 'TransferChecked.source'
-        | 'TransferChecked.destination'
-        | 'TransferChecked.authority'
-        | 'TransferChecked.amount'
-        | 'TransferChecked.mint'
-        | 'Burn.account'
-        | 'Burn.mint'
-        | 'Burn.authority'
-        | 'Burn.amount'
-        | 'MintTo.mint'
-        | 'MintTo.account'
-        | 'MintTo.authority'
-        | 'MintTo.amount'
-        | 'CloseAccount.account'
-        | 'CloseAccount.destination'
-        | 'CloseAccount.authority'
-        | 'InitializeAccount3.account'
-        | 'InitializeAccount3.mint'
-        | 'InitializeAccount3.owner';
-
-      field_source: 'solana_token_program_instruction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * System attributes, including current unix timestamp (in seconds).
-     */
-    export interface SystemCondition {
-      field: 'current_unix_timestamp';
-
-      field_source: 'system';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-  }
-
-  /**
    * The P-256 public key of the owner of the resource, in base64-encoded DER format.
    * If you provide this, do not specify an owner_id as it will be generated
    * automatically.
@@ -1764,44 +976,19 @@ export namespace PolicyCreateParams {
 
 export interface PolicyCreateRuleParams {
   /**
-   * Body param: Action to take if the conditions are true.
+   * Body param: The action to take when a policy rule matches.
    */
-  action: 'ALLOW' | 'DENY';
+  action: PolicyAction;
 
   /**
    * Body param
    */
-  conditions: Array<
-    | PolicyCreateRuleParams.EthereumTransactionCondition
-    | PolicyCreateRuleParams.EthereumCalldataCondition
-    | PolicyCreateRuleParams.EthereumTypedDataDomainCondition
-    | PolicyCreateRuleParams.EthereumTypedDataMessageCondition
-    | PolicyCreateRuleParams.Ethereum7702AuthorizationCondition
-    | PolicyCreateRuleParams.SolanaProgramInstructionCondition
-    | PolicyCreateRuleParams.SolanaSystemProgramInstructionCondition
-    | PolicyCreateRuleParams.SolanaTokenProgramInstructionCondition
-    | PolicyCreateRuleParams.SystemCondition
-    | TronTransactionCondition
-    | TronCalldataCondition
-    | SuiTransactionCommandCondition
-    | SuiTransferObjectsCommandCondition
-    | AggregationCondition
-  >;
+  conditions: Array<PolicyCondition>;
 
   /**
    * Body param: Method the rule applies to.
    */
-  method:
-    | 'eth_sendTransaction'
-    | 'eth_signTransaction'
-    | 'eth_signUserOperation'
-    | 'eth_signTypedData_v4'
-    | 'eth_sign7702Authorization'
-    | 'signTransaction'
-    | 'signAndSendTransaction'
-    | 'exportPrivateKey'
-    | 'signTransactionBytes'
-    | '*';
+  method: PolicyMethod;
 
   /**
    * Body param
@@ -1819,170 +1006,6 @@ export interface PolicyCreateRuleParams {
    * representing the deadline by which the request must be processed.
    */
   'privy-request-expiry'?: string;
-}
-
-export namespace PolicyCreateRuleParams {
-  /**
-   * The verbatim Ethereum transaction object in an eth_signTransaction or
-   * eth_sendTransaction request.
-   */
-  export interface EthereumTransactionCondition {
-    field: 'to' | 'value' | 'chain_id';
-
-    field_source: 'ethereum_transaction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * The decoded calldata in a smart contract interaction as the smart contract
-   * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-   * an abi parameter with the JSON ABI of the smart contract.
-   */
-  export interface EthereumCalldataCondition {
-    abi: unknown;
-
-    field: string;
-
-    field_source: 'ethereum_calldata';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Attributes from the signing domain that will verify the signature.
-   */
-  export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
-
-    field_source: 'ethereum_typed_data_domain';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-   * EIP-712.
-   */
-  export interface EthereumTypedDataMessageCondition {
-    field: string;
-
-    field_source: 'ethereum_typed_data_message';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    typed_data: EthereumTypedDataMessageCondition.TypedData;
-
-    value: string | Array<string>;
-  }
-
-  export namespace EthereumTypedDataMessageCondition {
-    export interface TypedData {
-      primary_type: string;
-
-      /**
-       * The type definitions for EIP-712 typed data signing.
-       */
-      types: WalletsAPI.TypedDataTypesInputParams;
-    }
-  }
-
-  /**
-   * Allowed contract addresses for eth_sign7702Authorization requests.
-   */
-  export interface Ethereum7702AuthorizationCondition {
-    field: 'contract';
-
-    field_source: 'ethereum_7702_authorization';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana Program attributes, enables allowlisting Solana Programs.
-   */
-  export interface SolanaProgramInstructionCondition {
-    field: 'programId';
-
-    field_source: 'solana_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana System Program attributes, including more granular Transfer instruction
-   * fields.
-   */
-  export interface SolanaSystemProgramInstructionCondition {
-    field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
-
-    field_source: 'solana_system_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana Token Program attributes, including more granular TransferChecked
-   * instruction fields.
-   */
-  export interface SolanaTokenProgramInstructionCondition {
-    field:
-      | 'instructionName'
-      | 'Transfer.source'
-      | 'Transfer.destination'
-      | 'Transfer.authority'
-      | 'Transfer.amount'
-      | 'TransferChecked.source'
-      | 'TransferChecked.destination'
-      | 'TransferChecked.authority'
-      | 'TransferChecked.amount'
-      | 'TransferChecked.mint'
-      | 'Burn.account'
-      | 'Burn.mint'
-      | 'Burn.authority'
-      | 'Burn.amount'
-      | 'MintTo.mint'
-      | 'MintTo.account'
-      | 'MintTo.authority'
-      | 'MintTo.amount'
-      | 'CloseAccount.account'
-      | 'CloseAccount.destination'
-      | 'CloseAccount.authority'
-      | 'InitializeAccount3.account'
-      | 'InitializeAccount3.mint'
-      | 'InitializeAccount3.owner';
-
-    field_source: 'solana_token_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * System attributes, including current unix timestamp (in seconds).
-   */
-  export interface SystemCondition {
-    field: 'current_unix_timestamp';
-
-    field_source: 'system';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
 }
 
 export interface PolicyDeleteParams {
@@ -2039,7 +1062,7 @@ export interface PolicyUpdateParams {
   /**
    * Body param
    */
-  rules?: Array<PolicyUpdateParams.Rule>;
+  rules?: Array<PolicyRuleRequestBody>;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are
@@ -2072,214 +1095,6 @@ export namespace PolicyUpdateParams {
   export interface UserOwner {
     user_id: string;
   }
-
-  /**
-   * The rules that apply to each method the policy covers.
-   */
-  export interface Rule {
-    /**
-     * Action to take if the conditions are true.
-     */
-    action: 'ALLOW' | 'DENY';
-
-    conditions: Array<
-      | Rule.EthereumTransactionCondition
-      | Rule.EthereumCalldataCondition
-      | Rule.EthereumTypedDataDomainCondition
-      | Rule.EthereumTypedDataMessageCondition
-      | Rule.Ethereum7702AuthorizationCondition
-      | Rule.SolanaProgramInstructionCondition
-      | Rule.SolanaSystemProgramInstructionCondition
-      | Rule.SolanaTokenProgramInstructionCondition
-      | Rule.SystemCondition
-      | PoliciesAPI.TronTransactionCondition
-      | PoliciesAPI.TronCalldataCondition
-      | PoliciesAPI.SuiTransactionCommandCondition
-      | PoliciesAPI.SuiTransferObjectsCommandCondition
-      | PoliciesAPI.AggregationCondition
-    >;
-
-    /**
-     * Method the rule applies to.
-     */
-    method:
-      | 'eth_sendTransaction'
-      | 'eth_signTransaction'
-      | 'eth_signUserOperation'
-      | 'eth_signTypedData_v4'
-      | 'eth_sign7702Authorization'
-      | 'signTransaction'
-      | 'signAndSendTransaction'
-      | 'exportPrivateKey'
-      | 'signTransactionBytes'
-      | '*';
-
-    name: string;
-  }
-
-  export namespace Rule {
-    /**
-     * The verbatim Ethereum transaction object in an eth_signTransaction or
-     * eth_sendTransaction request.
-     */
-    export interface EthereumTransactionCondition {
-      field: 'to' | 'value' | 'chain_id';
-
-      field_source: 'ethereum_transaction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * The decoded calldata in a smart contract interaction as the smart contract
-     * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-     * an abi parameter with the JSON ABI of the smart contract.
-     */
-    export interface EthereumCalldataCondition {
-      abi: unknown;
-
-      field: string;
-
-      field_source: 'ethereum_calldata';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Attributes from the signing domain that will verify the signature.
-     */
-    export interface EthereumTypedDataDomainCondition {
-      field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
-
-      field_source: 'ethereum_typed_data_domain';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-     * EIP-712.
-     */
-    export interface EthereumTypedDataMessageCondition {
-      field: string;
-
-      field_source: 'ethereum_typed_data_message';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      typed_data: EthereumTypedDataMessageCondition.TypedData;
-
-      value: string | Array<string>;
-    }
-
-    export namespace EthereumTypedDataMessageCondition {
-      export interface TypedData {
-        primary_type: string;
-
-        /**
-         * The type definitions for EIP-712 typed data signing.
-         */
-        types: WalletsAPI.TypedDataTypesInputParams;
-      }
-    }
-
-    /**
-     * Allowed contract addresses for eth_sign7702Authorization requests.
-     */
-    export interface Ethereum7702AuthorizationCondition {
-      field: 'contract';
-
-      field_source: 'ethereum_7702_authorization';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Solana Program attributes, enables allowlisting Solana Programs.
-     */
-    export interface SolanaProgramInstructionCondition {
-      field: 'programId';
-
-      field_source: 'solana_program_instruction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Solana System Program attributes, including more granular Transfer instruction
-     * fields.
-     */
-    export interface SolanaSystemProgramInstructionCondition {
-      field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
-
-      field_source: 'solana_system_program_instruction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * Solana Token Program attributes, including more granular TransferChecked
-     * instruction fields.
-     */
-    export interface SolanaTokenProgramInstructionCondition {
-      field:
-        | 'instructionName'
-        | 'Transfer.source'
-        | 'Transfer.destination'
-        | 'Transfer.authority'
-        | 'Transfer.amount'
-        | 'TransferChecked.source'
-        | 'TransferChecked.destination'
-        | 'TransferChecked.authority'
-        | 'TransferChecked.amount'
-        | 'TransferChecked.mint'
-        | 'Burn.account'
-        | 'Burn.mint'
-        | 'Burn.authority'
-        | 'Burn.amount'
-        | 'MintTo.mint'
-        | 'MintTo.account'
-        | 'MintTo.authority'
-        | 'MintTo.amount'
-        | 'CloseAccount.account'
-        | 'CloseAccount.destination'
-        | 'CloseAccount.authority'
-        | 'InitializeAccount3.account'
-        | 'InitializeAccount3.mint'
-        | 'InitializeAccount3.owner';
-
-      field_source: 'solana_token_program_instruction';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-
-    /**
-     * System attributes, including current unix timestamp (in seconds).
-     */
-    export interface SystemCondition {
-      field: 'current_unix_timestamp';
-
-      field_source: 'system';
-
-      operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-      value: string | Array<string>;
-    }
-  }
 }
 
 export interface PolicyUpdateRuleParams {
@@ -2289,44 +1104,19 @@ export interface PolicyUpdateRuleParams {
   policy_id: string;
 
   /**
-   * Body param: Action to take if the conditions are true.
+   * Body param: The action to take when a policy rule matches.
    */
-  action: 'ALLOW' | 'DENY';
+  action: PolicyAction;
 
   /**
    * Body param
    */
-  conditions: Array<
-    | PolicyUpdateRuleParams.EthereumTransactionCondition
-    | PolicyUpdateRuleParams.EthereumCalldataCondition
-    | PolicyUpdateRuleParams.EthereumTypedDataDomainCondition
-    | PolicyUpdateRuleParams.EthereumTypedDataMessageCondition
-    | PolicyUpdateRuleParams.Ethereum7702AuthorizationCondition
-    | PolicyUpdateRuleParams.SolanaProgramInstructionCondition
-    | PolicyUpdateRuleParams.SolanaSystemProgramInstructionCondition
-    | PolicyUpdateRuleParams.SolanaTokenProgramInstructionCondition
-    | PolicyUpdateRuleParams.SystemCondition
-    | TronTransactionCondition
-    | TronCalldataCondition
-    | SuiTransactionCommandCondition
-    | SuiTransferObjectsCommandCondition
-    | AggregationCondition
-  >;
+  conditions: Array<PolicyCondition>;
 
   /**
    * Body param: Method the rule applies to.
    */
-  method:
-    | 'eth_sendTransaction'
-    | 'eth_signTransaction'
-    | 'eth_signUserOperation'
-    | 'eth_signTypedData_v4'
-    | 'eth_sign7702Authorization'
-    | 'signTransaction'
-    | 'signAndSendTransaction'
-    | 'exportPrivateKey'
-    | 'signTransactionBytes'
-    | '*';
+  method: PolicyMethod;
 
   /**
    * Body param
@@ -2346,170 +1136,6 @@ export interface PolicyUpdateRuleParams {
   'privy-request-expiry'?: string;
 }
 
-export namespace PolicyUpdateRuleParams {
-  /**
-   * The verbatim Ethereum transaction object in an eth_signTransaction or
-   * eth_sendTransaction request.
-   */
-  export interface EthereumTransactionCondition {
-    field: 'to' | 'value' | 'chain_id';
-
-    field_source: 'ethereum_transaction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * The decoded calldata in a smart contract interaction as the smart contract
-   * method's parameters. Note that that 'ethereum_calldata' conditions must contain
-   * an abi parameter with the JSON ABI of the smart contract.
-   */
-  export interface EthereumCalldataCondition {
-    abi: unknown;
-
-    field: string;
-
-    field_source: 'ethereum_calldata';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Attributes from the signing domain that will verify the signature.
-   */
-  export interface EthereumTypedDataDomainCondition {
-    field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
-
-    field_source: 'ethereum_typed_data_domain';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
-   * EIP-712.
-   */
-  export interface EthereumTypedDataMessageCondition {
-    field: string;
-
-    field_source: 'ethereum_typed_data_message';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    typed_data: EthereumTypedDataMessageCondition.TypedData;
-
-    value: string | Array<string>;
-  }
-
-  export namespace EthereumTypedDataMessageCondition {
-    export interface TypedData {
-      primary_type: string;
-
-      /**
-       * The type definitions for EIP-712 typed data signing.
-       */
-      types: WalletsAPI.TypedDataTypesInputParams;
-    }
-  }
-
-  /**
-   * Allowed contract addresses for eth_sign7702Authorization requests.
-   */
-  export interface Ethereum7702AuthorizationCondition {
-    field: 'contract';
-
-    field_source: 'ethereum_7702_authorization';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana Program attributes, enables allowlisting Solana Programs.
-   */
-  export interface SolanaProgramInstructionCondition {
-    field: 'programId';
-
-    field_source: 'solana_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana System Program attributes, including more granular Transfer instruction
-   * fields.
-   */
-  export interface SolanaSystemProgramInstructionCondition {
-    field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
-
-    field_source: 'solana_system_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * Solana Token Program attributes, including more granular TransferChecked
-   * instruction fields.
-   */
-  export interface SolanaTokenProgramInstructionCondition {
-    field:
-      | 'instructionName'
-      | 'Transfer.source'
-      | 'Transfer.destination'
-      | 'Transfer.authority'
-      | 'Transfer.amount'
-      | 'TransferChecked.source'
-      | 'TransferChecked.destination'
-      | 'TransferChecked.authority'
-      | 'TransferChecked.amount'
-      | 'TransferChecked.mint'
-      | 'Burn.account'
-      | 'Burn.mint'
-      | 'Burn.authority'
-      | 'Burn.amount'
-      | 'MintTo.mint'
-      | 'MintTo.account'
-      | 'MintTo.authority'
-      | 'MintTo.amount'
-      | 'CloseAccount.account'
-      | 'CloseAccount.destination'
-      | 'CloseAccount.authority'
-      | 'InitializeAccount3.account'
-      | 'InitializeAccount3.mint'
-      | 'InitializeAccount3.owner';
-
-    field_source: 'solana_token_program_instruction';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-
-  /**
-   * System attributes, including current unix timestamp (in seconds).
-   */
-  export interface SystemCondition {
-    field: 'current_unix_timestamp';
-
-    field_source: 'system';
-
-    operator: 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
-
-    value: string | Array<string>;
-  }
-}
-
 export interface PolicyGetRuleParams {
   policy_id: string;
 }
@@ -2526,6 +1152,9 @@ export declare namespace Policies {
     type ConditionSetItem as ConditionSetItem,
     type ConditionSetItems as ConditionSetItems,
     type ConditionSetItemsResponse as ConditionSetItemsResponse,
+    type PolicyAction as PolicyAction,
+    type AbiParameter as AbiParameter,
+    type AbiSchema as AbiSchema,
     type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
     type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
     type TronTransactionCondition as TronTransactionCondition,
@@ -2533,12 +1162,12 @@ export declare namespace Policies {
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
     type AggregationCondition as AggregationCondition,
+    type PolicyCondition as PolicyCondition,
+    type PolicyMethod as PolicyMethod,
+    type PolicyRuleRequestBody as PolicyRuleRequestBody,
     type Policy as Policy,
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
     type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
-    type PolicyCreateRuleResponse as PolicyCreateRuleResponse,
-    type PolicyUpdateRuleResponse as PolicyUpdateRuleResponse,
-    type PolicyGetRuleResponse as PolicyGetRuleResponse,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,
     type PolicyDeleteParams as PolicyDeleteParams,

@@ -11,6 +11,21 @@ export interface SuccessResponse {
   success: boolean;
 }
 
+/**
+ * A monetary value with its currency denomination.
+ */
+export interface CurrencyAmount {
+  /**
+   * Currency code
+   */
+  currency: 'usd';
+
+  /**
+   * The monetary value as a string.
+   */
+  value: string;
+}
+
 export declare namespace Shared {
-  export { type SuccessResponse as SuccessResponse };
+  export { type SuccessResponse as SuccessResponse, type CurrencyAmount as CurrencyAmount };
 }

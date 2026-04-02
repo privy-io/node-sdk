@@ -178,6 +178,12 @@ export interface EthereumVaultDetailsResponse {
   id: string;
 
   /**
+   * Annual percentage yield earned by the app from fee wrapper fees, in basis
+   * points. Null when APY data is unavailable.
+   */
+  app_apy: number | null;
+
+  /**
    * Underlying asset token address.
    */
   asset_address: string;

@@ -1,9 +1,78 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as SharedAPI from './shared';
 import * as WalletsAPI from './wallets/wallets';
 
 export class Accounts extends APIResource {}
+
+/**
+ * A single asset entry in a balance, representing holdings across all supported
+ * chains.
+ */
+export interface BalanceAsset {
+  /**
+   * The amount of the asset held, denominated in the unit of the asset itself, with
+   * 1 decimal of precision.
+   */
+  amount: string;
+
+  /**
+   * A monetary value with its currency denomination.
+   */
+  price: SharedAPI.CurrencyAmount;
+
+  /**
+   * The symbol of the asset (e.g. USDC, ETH).
+   */
+  symbol: string;
+}
+
+/**
+ * A single asset entry scoped to a specific chain.
+ */
+export interface BalanceAssetByChain {
+  /**
+   * The amount of the asset held on this chain, denominated in the unit of the asset
+   * itself.
+   */
+  amount: string;
+
+  /**
+   * The CAIP-2 chain identifier (e.g. eip155:8453).
+   */
+  chain_id: string;
+
+  /**
+   * A monetary value with its currency denomination.
+   */
+  price: SharedAPI.CurrencyAmount;
+
+  /**
+   * The symbol of the asset (e.g. USDC, ETH).
+   */
+  symbol: string;
+}
+
+/**
+ * Balances for an asset account or wallet
+ */
+export interface BalanceResponse {
+  /**
+   * The individual asset balances, each computed across all supported chains.
+   */
+  assets: Array<BalanceAsset>;
+
+  /**
+   * A monetary value with its currency denomination.
+   */
+  total: SharedAPI.CurrencyAmount;
+
+  /**
+   * Individual asset balances per chain.
+   */
+  assets_by_chain?: Array<BalanceAssetByChain>;
+}
 
 /**
  * A wallet belonging to a digital asset account.
@@ -130,7 +199,10 @@ export interface AssetAccountWithBalance {
    */
   id: string;
 
-  balance: AssetAccountWithBalance.Balance;
+  /**
+   * Balances for an asset account or wallet
+   */
+  balance: BalanceResponse;
 
   /**
    * An optional display name for the account.
@@ -141,72 +213,6 @@ export interface AssetAccountWithBalance {
    * The wallets belonging to this account.
    */
   wallets: Array<AccountWallet>;
-}
-
-export namespace AssetAccountWithBalance {
-  export interface Balance {
-    /**
-     * The individual asset balances, each computed across all supported chains.
-     */
-    assets: Array<Balance.Asset>;
-
-    /**
-     * The total balance across all assets.
-     */
-    total: Balance.Total;
-  }
-
-  export namespace Balance {
-    export interface Asset {
-      /**
-       * The amount of the asset held, denominated in the unit of the asset itself, with
-       * 1 decimal of precision.
-       */
-      amount: string;
-
-      /**
-       * The price of the asset in the provided currency.
-       */
-      price: Asset.Price;
-
-      /**
-       * The symbol of the asset (e.g. USDC, ETH).
-       */
-      symbol: string;
-    }
-
-    export namespace Asset {
-      /**
-       * The price of the asset in the provided currency.
-       */
-      export interface Price {
-        /**
-         * The currency code.
-         */
-        currency: 'usd';
-
-        /**
-         * The monetary value as a string.
-         */
-        value: string;
-      }
-    }
-
-    /**
-     * The total balance across all assets.
-     */
-    export interface Total {
-      /**
-       * The currency code.
-       */
-      currency: 'usd';
-
-      /**
-       * The monetary value as a string.
-       */
-      value: string;
-    }
-  }
 }
 
 /**
@@ -232,64 +238,17 @@ export interface AccountBalanceResponse {
   /**
    * The individual asset balances, each computed across all supported chains.
    */
-  assets: Array<AccountBalanceResponse.Asset>;
+  assets: Array<BalanceAsset>;
 
   /**
-   * The total balance across all assets.
+   * A monetary value with its currency denomination.
    */
-  total: AccountBalanceResponse.Total;
-}
-
-export namespace AccountBalanceResponse {
-  export interface Asset {
-    /**
-     * The amount of the asset held, denominated in the unit of the asset itself, with
-     * 1 decimal of precision.
-     */
-    amount: string;
-
-    /**
-     * The price of the asset in the provided currency.
-     */
-    price: Asset.Price;
-
-    /**
-     * The symbol of the asset (e.g. USDC, ETH).
-     */
-    symbol: string;
-  }
-
-  export namespace Asset {
-    /**
-     * The price of the asset in the provided currency.
-     */
-    export interface Price {
-      /**
-       * The currency code.
-       */
-      currency: 'usd';
-
-      /**
-       * The monetary value as a string.
-       */
-      value: string;
-    }
-  }
+  total: SharedAPI.CurrencyAmount;
 
   /**
-   * The total balance across all assets.
+   * Individual asset balances per chain.
    */
-  export interface Total {
-    /**
-     * The currency code.
-     */
-    currency: 'usd';
-
-    /**
-     * The monetary value as a string.
-     */
-    value: string;
-  }
+  assets_by_chain?: Array<BalanceAssetByChain>;
 }
 
 /**
@@ -304,6 +263,9 @@ export interface AccountBalanceParams {
 
 export declare namespace Accounts {
   export {
+    type BalanceAsset as BalanceAsset,
+    type BalanceAssetByChain as BalanceAssetByChain,
+    type BalanceResponse as BalanceResponse,
     type AccountWallet as AccountWallet,
     type AccountResponse as AccountResponse,
     type AccountWalletConfigurationItem as AccountWalletConfigurationItem,

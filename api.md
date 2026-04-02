@@ -28,6 +28,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">ExportType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeyExportInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeyExportResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletImportSupportedChains</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletImportSupportedEntropyTypes</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletImportInitResponse</a></code>
@@ -40,6 +42,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">Quantity</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExportPrivateKeyRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExportPrivateKeyRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">ExportSeedPhraseRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">ExportSeedPhraseRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignHashParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesEncoding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesHashFunction</a></code>
@@ -779,6 +783,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">SeedPhraseExportWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>

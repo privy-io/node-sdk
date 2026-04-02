@@ -550,7 +550,7 @@ export type RecipientPublicKey = string;
 export type ExportType = 'display' | 'client';
 
 /**
- * Input for exporting a wallet private key with HPKE encryption.
+ * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
  */
 export interface PrivateKeyExportInput {
   /**
@@ -564,6 +564,8 @@ export interface PrivateKeyExportInput {
    */
   recipient_public_key: RecipientPublicKey;
 
+  export_seed_phrase?: boolean;
+
   /**
    * The export type. 'display' is for showing the key to the user in the UI,
    * 'client' is for exporting to the client application.
@@ -572,9 +574,47 @@ export interface PrivateKeyExportInput {
 }
 
 /**
- * Response containing the HPKE-encrypted private key.
+ * Response containing HPKE-encrypted wallet data (private key or seed phrase).
  */
 export interface PrivateKeyExportResponse {
+  ciphertext: string;
+
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+}
+
+/**
+ * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
+ */
+export interface SeedPhraseExportInput {
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  /**
+   * The recipient public key for HPKE encryption, in PEM or DER (base64-encoded)
+   * format.
+   */
+  recipient_public_key: RecipientPublicKey;
+
+  export_seed_phrase?: boolean;
+
+  /**
+   * The export type. 'display' is for showing the key to the user in the UI,
+   * 'client' is for exporting to the client application.
+   */
+  export_type?: ExportType;
+}
+
+/**
+ * Response containing HPKE-encrypted wallet data (private key or seed phrase).
+ */
+export interface SeedPhraseExportResponse {
   ciphertext: string;
 
   encapsulated_key: string;
@@ -674,7 +714,7 @@ export interface ExportPrivateKeyRpcInput {
   method: 'exportPrivateKey';
 
   /**
-   * Input for exporting a wallet private key with HPKE encryption.
+   * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
    */
   params: PrivateKeyExportInput;
 }
@@ -684,11 +724,37 @@ export interface ExportPrivateKeyRpcInput {
  */
 export interface ExportPrivateKeyRpcResponse {
   /**
-   * Input for exporting a wallet private key with HPKE encryption.
+   * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
    */
   data: PrivateKeyExportInput;
 
   method: 'exportPrivateKey';
+}
+
+/**
+ * Exports the seed phrase of the wallet.
+ */
+export interface ExportSeedPhraseRpcInput {
+  address: string;
+
+  method: 'exportSeedPhrase';
+
+  /**
+   * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
+   */
+  params: SeedPhraseExportInput;
+}
+
+/**
+ * Response to the `exportSeedPhrase` RPC.
+ */
+export interface ExportSeedPhraseRpcResponse {
+  /**
+   * Response containing HPKE-encrypted wallet data (private key or seed phrase).
+   */
+  data: SeedPhraseExportResponse;
+
+  method: 'exportSeedPhrase';
 }
 
 /**
@@ -2341,6 +2407,17 @@ export interface Wallet {
   custody?: WalletCustodian;
 
   /**
+   * A human-readable label for the wallet.
+   */
+  display_name?: string;
+
+  /**
+   * A customer-provided identifier for mapping to external systems. Write-once, set
+   * only at creation.
+   */
+  external_id?: string;
+
+  /**
    * The compressed, raw public key for the wallet along the chain cryptographic
    * curve.
    */
@@ -2377,6 +2454,11 @@ export interface WalletUpdateRequestBody {
    * Additional signers for the wallet.
    */
   additional_signers?: Array<WalletUpdateRequestBody.AdditionalSigner>;
+
+  /**
+   * A human-readable label for the wallet. Set to null to clear.
+   */
+  display_name?: string | null;
 
   /**
    * The owner of the resource. If you provide this, do not specify an owner_id as it
@@ -2437,6 +2519,18 @@ export interface WalletBatchItemInput {
    * Additional signers for the wallet.
    */
   additional_signers?: Array<WalletBatchItemInput.AdditionalSigner>;
+
+  /**
+   * A human-readable label for the wallet.
+   */
+  display_name?: string;
+
+  /**
+   * A customer-provided identifier for mapping to external systems. URL-safe
+   * characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
+   * after creation.
+   */
+  external_id?: string;
 
   /**
    * The owner of the resource. If you provide this, do not specify an owner_id as it
@@ -2581,7 +2675,8 @@ export type WalletRpcRequestBody =
   | SparkCreateLightningInvoiceRpcInput
   | SparkPayLightningInvoiceRpcInput
   | SparkSignMessageWithIdentityKeyRpcInput
-  | ExportPrivateKeyRpcInput;
+  | ExportPrivateKeyRpcInput
+  | ExportSeedPhraseRpcInput;
 
 /**
  * Response body for wallet RPC operations, discriminated by method.
@@ -2607,7 +2702,8 @@ export type WalletRpcResponse =
   | SparkCreateLightningInvoiceRpcResponse
   | SparkPayLightningInvoiceRpcResponse
   | SparkSignMessageWithIdentityKeyRpcResponse
-  | ExportPrivateKeyRpcResponse;
+  | ExportPrivateKeyRpcResponse
+  | ExportSeedPhraseRpcResponse;
 
 /**
  * Request body for wallet authentication with HPKE-encrypted response.
@@ -2876,6 +2972,18 @@ export interface WalletCreateParams {
   additional_signers?: Array<WalletCreateParams.AdditionalSigner>;
 
   /**
+   * Body param: A human-readable label for the wallet.
+   */
+  display_name?: string;
+
+  /**
+   * Body param: A customer-provided identifier for mapping to external systems.
+   * URL-safe characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be
+   * changed after creation.
+   */
+  external_id?: string;
+
+  /**
    * Body param: The owner of the resource. If you provide this, do not specify an
    * owner_id as it will be generated automatically. When updating a wallet, you can
    * set the owner to null to remove the owner.
@@ -2945,6 +3053,11 @@ export interface WalletListParams extends CursorParams {
   chain_type?: WalletChainType;
 
   /**
+   * Filter wallets by external ID.
+   */
+  external_id?: string;
+
+  /**
    * Filter wallets by user ID. Cannot be used together with authorization_key.
    */
   user_id?: string;
@@ -2962,6 +3075,11 @@ export interface WalletExportParams {
    * private key with.
    */
   recipient_public_key: string;
+
+  /**
+   * Body param
+   */
+  export_seed_phrase?: boolean;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are
@@ -3076,7 +3194,8 @@ export type WalletRpcParams =
   | WalletRpcParams.SparkCreateLightningInvoiceRpcInput
   | WalletRpcParams.SparkPayLightningInvoiceRpcInput
   | WalletRpcParams.SparkSignMessageWithIdentityKeyRpcInput
-  | WalletRpcParams.ExportPrivateKeyRpcInput;
+  | WalletRpcParams.ExportPrivateKeyRpcInput
+  | WalletRpcParams.ExportSeedPhraseRpcInput;
 
 export declare namespace WalletRpcParams {
   export interface EthereumSignTransactionRpcInput {
@@ -3931,9 +4050,46 @@ export declare namespace WalletRpcParams {
     method: 'exportPrivateKey';
 
     /**
-     * Body param: Input for exporting a wallet private key with HPKE encryption.
+     * Body param: Input for exporting a wallet (private key or seed phrase) with HPKE
+     * encryption.
      */
     params: PrivateKeyExportInput;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface ExportSeedPhraseRpcInput {
+    /**
+     * Body param
+     */
+    address: string;
+
+    /**
+     * Body param
+     */
+    method: 'exportSeedPhrase';
+
+    /**
+     * Body param: Input for exporting a wallet (private key or seed phrase) with HPKE
+     * encryption.
+     */
+    params: SeedPhraseExportInput;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -3962,6 +4118,10 @@ export interface WalletSubmitImportParams {
    * Additional signers for the wallet.
    */
   additional_signers?: AdditionalSignerInput;
+
+  display_name?: string;
+
+  external_id?: string;
 
   /**
    * The owner of the resource. If you provide this, do not specify an owner_id as it
@@ -4076,6 +4236,11 @@ export interface WalletUpdateParams {
    * Body param: Additional signers for the wallet.
    */
   additional_signers?: Array<WalletUpdateParams.AdditionalSigner>;
+
+  /**
+   * Body param: A human-readable label for the wallet. Set to null to clear.
+   */
+  display_name?: string | null;
 
   /**
    * Body param: The owner of the resource. If you provide this, do not specify an
@@ -4204,6 +4369,18 @@ export namespace WalletCreateWalletsWithRecoveryParams {
     chain_type: WalletsAPI.WalletChainType;
 
     /**
+     * A human-readable label for the wallet.
+     */
+    display_name?: string;
+
+    /**
+     * A customer-provided identifier for mapping to external systems. URL-safe
+     * characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
+     * after creation.
+     */
+    external_id?: string;
+
+    /**
      * List of policy IDs for policies that should be enforced on the wallet.
      * Currently, only one policy is supported per wallet.
      */
@@ -4242,6 +4419,8 @@ export declare namespace Wallets {
     type ExportType as ExportType,
     type PrivateKeyExportInput as PrivateKeyExportInput,
     type PrivateKeyExportResponse as PrivateKeyExportResponse,
+    type SeedPhraseExportInput as SeedPhraseExportInput,
+    type SeedPhraseExportResponse as SeedPhraseExportResponse,
     type WalletImportSupportedChains as WalletImportSupportedChains,
     type WalletImportSupportedEntropyTypes as WalletImportSupportedEntropyTypes,
     type WalletImportInitResponse as WalletImportInitResponse,
@@ -4254,6 +4433,8 @@ export declare namespace Wallets {
     type Quantity as Quantity,
     type ExportPrivateKeyRpcInput as ExportPrivateKeyRpcInput,
     type ExportPrivateKeyRpcResponse as ExportPrivateKeyRpcResponse,
+    type ExportSeedPhraseRpcInput as ExportSeedPhraseRpcInput,
+    type ExportSeedPhraseRpcResponse as ExportSeedPhraseRpcResponse,
     type RawSignHashParams as RawSignHashParams,
     type RawSignBytesEncoding as RawSignBytesEncoding,
     type RawSignBytesHashFunction as RawSignBytesHashFunction,

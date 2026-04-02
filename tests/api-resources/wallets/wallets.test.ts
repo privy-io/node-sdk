@@ -26,6 +26,8 @@ describe('resource wallets', () => {
     const response = await client.wallets.create({
       chain_type: 'ethereum',
       additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['string'] }],
+      display_name: 'display_name',
+      external_id: 'my-order-123',
       owner: { public_key: 'public_key' },
       owner_id: 'owner_id',
       policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
@@ -54,6 +56,7 @@ describe('resource wallets', () => {
           authorization_key: 's=-/fw-L-+N\n',
           chain_type: 'ethereum',
           cursor: 'x',
+          external_id: 'external_id',
           limit: 100,
           user_id: 'user_id',
         },
@@ -84,6 +87,7 @@ describe('resource wallets', () => {
       encryption_type: 'HPKE',
       recipient_public_key:
         'BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=',
+      export_seed_phrase: true,
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-request-expiry': 'privy-request-expiry',
     });
@@ -235,6 +239,8 @@ describe('resource wallets', () => {
         },
       },
       additional_signers: [{ signer_id: 'string', override_policy_ids: ['string'] }],
+      display_name: 'display_name',
+      external_id: 'external_id',
       owner: {},
       owner_id: 'rkiz0ivz254drv1xw982v3jq',
       policy_ids: ['string'],
@@ -302,8 +308,18 @@ describe('resource wallets', () => {
       primary_signer: { subject_id: 'cm7oxq1el000e11o8iwp7d0d0' },
       recovery_user: { linked_accounts: [{ address: 'john@doe.com', type: 'email' }] },
       wallets: [
-        { chain_type: 'ethereum', policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] },
-        { chain_type: 'solana', policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] },
+        {
+          chain_type: 'ethereum',
+          display_name: 'display_name',
+          external_id: 'external_id',
+          policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
+        },
+        {
+          chain_type: 'solana',
+          display_name: 'display_name',
+          external_id: 'external_id',
+          policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
+        },
       ],
     });
   });

@@ -281,6 +281,12 @@ export interface TransactionBroadcastedWebhookPayload {
    * The ID of the wallet that initiated the transaction.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID for transaction reconciliation, if one was
+   * provided.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -311,6 +317,12 @@ export interface TransactionConfirmedWebhookPayload {
    * The ID of the wallet that initiated the transaction.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID for transaction reconciliation, if one was
+   * provided.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -341,6 +353,12 @@ export interface TransactionExecutionRevertedWebhookPayload {
    * The ID of the wallet that initiated the transaction.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID for transaction reconciliation, if one was
+   * provided.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -376,6 +394,12 @@ export interface TransactionStillPendingWebhookPayload {
    * The ID of the wallet that initiated the transaction.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID for transaction reconciliation, if one was
+   * provided.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -406,6 +430,12 @@ export interface TransactionFailedWebhookPayload {
    * The ID of the wallet that initiated the transaction.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID for transaction reconciliation, if one was
+   * provided.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -436,6 +466,12 @@ export interface TransactionReplacedWebhookPayload {
    * The ID of the wallet that initiated the transaction.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID for transaction reconciliation, if one was
+   * provided.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -466,6 +502,12 @@ export interface TransactionProviderErrorWebhookPayload {
    * The ID of the wallet that initiated the transaction.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID for transaction reconciliation, if one was
+   * provided.
+   */
+  reference_id?: string | null;
 }
 
 /**

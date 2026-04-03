@@ -4,7 +4,6 @@ export { Balance, type BalanceGetResponse, type BalanceGetParams } from './balan
 export { Transactions, type TransactionGetResponse, type TransactionGetParams } from './transactions';
 export {
   Wallets,
-  type OwnerInput,
   type CurveSigningChainType,
   type ExtendedChainType,
   type FirstClassChainType,
@@ -12,10 +11,6 @@ export {
   type AuthorizationKeyRole,
   type WalletEntropyType,
   type SolanaWalletDerivationStrategy,
-  type KeyQuorumID,
-  type P256PublicKey,
-  type OwnerUserIDInput,
-  type OwnerPublicKeyInput,
   type PolicyInput,
   type AdditionalSignerItemInput,
   type AdditionalSignerInput,

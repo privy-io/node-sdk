@@ -322,33 +322,16 @@ export interface ConditionSetRequestBody {
   name: string;
 
   /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
    */
-  owner?: ConditionSetRequestBody.PublicKeyOwner | ConditionSetRequestBody.UserOwner | null;
-
-  owner_id?: string | null;
-}
-
-export namespace ConditionSetRequestBody {
-  /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
+   * The key quorum ID to set as the owner of the resource. If you provide this, do
+   * not specify an owner.
    */
-  export interface UserOwner {
-    user_id: string;
-  }
+  owner_id?: SharedAPI.OwnerIDInput | null;
 }
 
 /**
@@ -374,7 +357,7 @@ export interface ConditionSet {
   /**
    * A unique identifier for a key quorum.
    */
-  owner_id: WalletsAPI.KeyQuorumID;
+  owner_id: SharedAPI.KeyQuorumID;
 }
 
 /**
@@ -387,33 +370,16 @@ export interface UpdateConditionSetRequestBody {
   name?: string;
 
   /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
    */
-  owner?: UpdateConditionSetRequestBody.PublicKeyOwner | UpdateConditionSetRequestBody.UserOwner | null;
-
-  owner_id?: string | null;
-}
-
-export namespace UpdateConditionSetRequestBody {
-  /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
+   * The key quorum ID to set as the owner of the resource. If you provide this, do
+   * not specify an owner.
    */
-  export interface UserOwner {
-    user_id: string;
-  }
+  owner_id?: SharedAPI.OwnerIDInput | null;
 }
 
 /**
@@ -938,7 +904,7 @@ export interface PolicyCreateParams {
   /**
    * Body param
    */
-  rules: Array<PolicyRuleRequestBody>;
+  rules: Array<PolicyCreateParams.Rule>;
 
   /**
    * Body param: Version of the policy. Currently, 1.0 is the only version.
@@ -946,16 +912,16 @@ export interface PolicyCreateParams {
   version: '1.0';
 
   /**
-   * Body param: The owner of the resource. If you provide this, do not specify an
-   * owner_id as it will be generated automatically. When updating a wallet, you can
-   * set the owner to null to remove the owner.
+   * Body param: The owner of the resource, specified as a Privy user ID, a P-256
+   * public key, or null to remove the current owner.
    */
-  owner?: PolicyCreateParams.PublicKeyOwner | PolicyCreateParams.UserOwner | null;
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
-   * Body param
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
    */
-  owner_id?: string | null;
+  owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
    * Header param: Idempotency keys ensure API requests are executed only once within
@@ -965,22 +931,22 @@ export interface PolicyCreateParams {
 }
 
 export namespace PolicyCreateParams {
-  /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
+  export interface Rule {
+    /**
+     * The action to take when a policy rule matches.
+     */
+    action: PoliciesAPI.PolicyAction;
 
-  /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
-   */
-  export interface UserOwner {
-    user_id: string;
+    conditions: Array<PoliciesAPI.PolicyCondition>;
+
+    /**
+     * Method the rule applies to.
+     */
+    method: PoliciesAPI.PolicyMethod;
+
+    name: string;
+
+    id?: string;
   }
 }
 
@@ -1058,16 +1024,16 @@ export interface PolicyUpdateParams {
   name?: string;
 
   /**
-   * Body param: The owner of the resource. If you provide this, do not specify an
-   * owner_id as it will be generated automatically. When updating a wallet, you can
-   * set the owner to null to remove the owner.
+   * Body param: The owner of the resource, specified as a Privy user ID, a P-256
+   * public key, or null to remove the current owner.
    */
-  owner?: PolicyUpdateParams.PublicKeyOwner | PolicyUpdateParams.UserOwner | null;
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
-   * Body param
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
    */
-  owner_id?: string | null;
+  owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
    * Body param
@@ -1085,26 +1051,6 @@ export interface PolicyUpdateParams {
    * representing the deadline by which the request must be processed.
    */
   'privy-request-expiry'?: string;
-}
-
-export namespace PolicyUpdateParams {
-  /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
-
-  /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
-   */
-  export interface UserOwner {
-    user_id: string;
-  }
 }
 
 export interface PolicyUpdateRuleParams {

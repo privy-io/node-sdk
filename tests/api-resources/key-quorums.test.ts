@@ -23,7 +23,7 @@ describe('resource keyQuorums', () => {
 
   // Mock server tests are disabled
   test.skip('_delete', async () => {
-    const responsePromise = client.keyQuorums._delete('key_quorum_id');
+    const responsePromise = client.keyQuorums._delete('string');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -38,7 +38,7 @@ describe('resource keyQuorums', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.keyQuorums._delete(
-        'key_quorum_id',
+        'string',
         {
           'privy-authorization-signature': 'privy-authorization-signature',
           'privy-request-expiry': 'privy-request-expiry',
@@ -50,7 +50,7 @@ describe('resource keyQuorums', () => {
 
   // Mock server tests are disabled
   test.skip('_update', async () => {
-    const responsePromise = client.keyQuorums._update('key_quorum_id', {});
+    const responsePromise = client.keyQuorums._update('string', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -62,7 +62,7 @@ describe('resource keyQuorums', () => {
 
   // Mock server tests are disabled
   test.skip('get', async () => {
-    const responsePromise = client.keyQuorums.get('key_quorum_id');
+    const responsePromise = client.keyQuorums.get('string');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

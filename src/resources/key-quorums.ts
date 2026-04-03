@@ -36,12 +36,12 @@ export class KeyQuorums extends APIResource {
    * @example
    * ```ts
    * const successResponse = await client.keyQuorums._delete(
-   *   'key_quorum_id',
+   *   'string',
    * );
    * ```
    */
   _delete(
-    keyQuorumID: string,
+    keyQuorumID: SharedAPI.KeyQuorumID,
     params: KeyQuorumDeleteParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<SharedAPI.SuccessResponse> {
@@ -69,7 +69,7 @@ export class KeyQuorums extends APIResource {
    * @example
    * ```ts
    * const keyQuorum = await client.keyQuorums._update(
-   *   'key_quorum_id',
+   *   'string',
    *   {
    *     authorization_threshold: 1,
    *     display_name: 'Prod key quorum',
@@ -81,7 +81,7 @@ export class KeyQuorums extends APIResource {
    * ```
    */
   _update(
-    keyQuorumID: string,
+    keyQuorumID: SharedAPI.KeyQuorumID,
     params: KeyQuorumUpdateParams,
     options?: RequestOptions,
   ): APIPromise<KeyQuorum> {
@@ -110,12 +110,10 @@ export class KeyQuorums extends APIResource {
    *
    * @example
    * ```ts
-   * const keyQuorum = await client.keyQuorums.get(
-   *   'key_quorum_id',
-   * );
+   * const keyQuorum = await client.keyQuorums.get('string');
    * ```
    */
-  get(keyQuorumID: string, options?: RequestOptions): APIPromise<KeyQuorum> {
+  get(keyQuorumID: SharedAPI.KeyQuorumID, options?: RequestOptions): APIPromise<KeyQuorum> {
     if (keyQuorumID === '') {
       throw new Error('keyQuorumID must not be an empty string');
     }

@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import * as UsersAPI from './users';
 import * as ClientAuthAPI from './client-auth';
 import * as EmbeddedWalletsAPI from './embedded-wallets';
+import * as SharedAPI from './shared';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
@@ -1626,9 +1627,9 @@ export namespace UserCreateParams {
   export namespace Wallet {
     export interface AdditionalSigner {
       /**
-       * The key quorum ID for the signer.
+       * A unique identifier for a key quorum.
        */
-      signer_id: string;
+      signer_id: SharedAPI.KeyQuorumID;
 
       /**
        * The array of policy IDs that will be applied to wallet requests. If specified,

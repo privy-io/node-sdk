@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as SharedAPI from './shared';
 import * as WalletsAPI from './wallets/wallets';
 
 export class EmbeddedWallets extends APIResource {}
@@ -219,9 +220,9 @@ export interface RecoveryConfigurationICloudResponse {
  */
 export interface WalletCreationAdditionalSignerItem {
   /**
-   * The key quorum ID for the signer.
+   * A unique identifier for a key quorum.
    */
-  signer_id: string;
+  signer_id: SharedAPI.KeyQuorumID;
 
   /**
    * The array of policy IDs that will be applied to wallet requests. If specified,

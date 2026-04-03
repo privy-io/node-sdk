@@ -369,7 +369,17 @@ export {
   type PolicyUpdateRuleParams,
   type PolicyGetRuleParams,
 } from './policies';
-export { Shared, type SuccessResponse, type CurrencyAmount } from './shared';
+export {
+  Shared,
+  type SuccessResponse,
+  type P256PublicKey,
+  type KeyQuorumID,
+  type OwnerInputUser,
+  type OwnerInputPublicKey,
+  type OwnerInput,
+  type OwnerIDInput,
+  type CurrencyAmount,
+} from './shared';
 export {
   Swaps,
   type SwapAmountType,
@@ -500,7 +510,6 @@ export {
 } from './wallet-actions';
 export {
   Wallets,
-  type OwnerInput,
   type CurveSigningChainType,
   type ExtendedChainType,
   type FirstClassChainType,
@@ -508,10 +517,6 @@ export {
   type AuthorizationKeyRole,
   type WalletEntropyType,
   type SolanaWalletDerivationStrategy,
-  type KeyQuorumID,
-  type P256PublicKey,
-  type OwnerUserIDInput,
-  type OwnerPublicKeyInput,
   type PolicyInput,
   type AdditionalSignerItemInput,
   type AdditionalSignerInput,

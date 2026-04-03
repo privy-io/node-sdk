@@ -2,7 +2,6 @@
 
 Types:
 
-- <code><a href="./src/resources/wallets/wallets.ts">OwnerInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
@@ -10,10 +9,6 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyRole</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletEntropyType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaWalletDerivationStrategy</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">KeyQuorumID</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">P256PublicKey</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">OwnerUserIDInput</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">OwnerPublicKeyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PolicyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AdditionalSignerItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AdditionalSignerInput</a></code>
@@ -657,6 +652,12 @@ Types:
 Types:
 
 - <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
+- <code><a href="./src/resources/shared.ts">P256PublicKey</a></code>
+- <code><a href="./src/resources/shared.ts">KeyQuorumID</a></code>
+- <code><a href="./src/resources/shared.ts">OwnerInputUser</a></code>
+- <code><a href="./src/resources/shared.ts">OwnerInputPublicKey</a></code>
+- <code><a href="./src/resources/shared.ts">OwnerInput</a></code>
+- <code><a href="./src/resources/shared.ts">OwnerIDInput</a></code>
 - <code><a href="./src/resources/shared.ts">CurrencyAmount</a></code>
 
 # WalletActions

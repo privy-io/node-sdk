@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as WalletsAPI from './wallets';
+import * as SharedAPI from '../shared';
 import * as AppsAPI from '../apps/apps';
 import * as BalanceAPI from './balance';
 import { Balance, BalanceGetParams, BalanceGetResponse } from './balance';
@@ -303,12 +304,6 @@ export class Wallets extends APIResource {
 export type WalletsCursor = Cursor<Wallet>;
 
 /**
- * The owner of the wallet, specified as a Privy user ID, a P-256 public key, or
- * null to remove the current owner.
- */
-export type OwnerInput = OwnerUserIDInput | OwnerPublicKeyInput;
-
-/**
  * The wallet chain types that support curve-based signing.
  */
 export type CurveSigningChainType =
@@ -379,33 +374,6 @@ export type WalletEntropyType = 'hd' | 'private-key';
 export type SolanaWalletDerivationStrategy = 'ENTROPY_TO_SEED' | 'ENTROPY_TO_MNEMONIC_TO_SEED';
 
 /**
- * A unique identifier for a key quorum.
- */
-export type KeyQuorumID = string;
-
-/**
- * A P-256 (secp256r1) public key.
- */
-export type P256PublicKey = string;
-
-/**
- * Owner input specifying a Privy user ID.
- */
-export interface OwnerUserIDInput {
-  user_id: string;
-}
-
-/**
- * Owner input specifying a P-256 public key.
- */
-export interface OwnerPublicKeyInput {
-  /**
-   * A P-256 (secp256r1) public key.
-   */
-  public_key: P256PublicKey;
-}
-
-/**
  * An optional list of up to one policy ID to enforce on the wallet.
  */
 export type PolicyInput = Array<string>;
@@ -417,7 +385,7 @@ export interface AdditionalSignerItemInput {
   /**
    * A unique identifier for a key quorum.
    */
-  signer_id: KeyQuorumID;
+  signer_id: SharedAPI.KeyQuorumID;
 
   /**
    * An optional list of up to one policy ID to enforce on the wallet.
@@ -486,25 +454,15 @@ export interface CustodialWalletCreateInput {
   additional_signers?: AdditionalSignerInput;
 
   /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
    */
-  owner?: CustodialWalletCreateInput.Owner;
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
    * An optional list of up to one policy ID to enforce on the wallet.
    */
   policy_ids?: PolicyInput;
-}
-
-export namespace CustodialWalletCreateInput {
-  /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
-   */
-  export type Owner = WalletsAPI.OwnerInput | (null & {});
 }
 
 /**
@@ -2464,13 +2422,16 @@ export interface WalletUpdateRequestBody {
   display_name?: string | null;
 
   /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
    */
-  owner?: WalletUpdateRequestBody.PublicKeyOwner | WalletUpdateRequestBody.UserOwner | null;
+  owner?: SharedAPI.OwnerInput | null;
 
-  owner_id?: string | null;
+  /**
+   * The key quorum ID to set as the owner of the resource. If you provide this, do
+   * not specify an owner.
+   */
+  owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
    * New policy IDs to enforce on the wallet. Currently, only one policy is supported
@@ -2488,24 +2449,6 @@ export namespace WalletUpdateRequestBody {
      * this will override the base policy IDs set on the wallet.
      */
     override_policy_ids?: Array<string>;
-  }
-
-  /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
-
-  /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
-   */
-  export interface UserOwner {
-    user_id: string;
   }
 }
 
@@ -2536,17 +2479,16 @@ export interface WalletBatchItemInput {
   external_id?: string;
 
   /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
    */
-  owner?: WalletBatchItemInput.PublicKeyOwner | WalletBatchItemInput.UserOwner | null;
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
    * The key quorum ID to set as the owner of the resource. If you provide this, do
    * not specify an owner.
    */
-  owner_id?: string;
+  owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
    * List of policy IDs for policies that should be enforced on the wallet.
@@ -2564,24 +2506,6 @@ export namespace WalletBatchItemInput {
      * this will override the base policy IDs set on the wallet.
      */
     override_policy_ids?: Array<string>;
-  }
-
-  /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
-
-  /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
-   */
-  export interface UserOwner {
-    user_id: string;
   }
 }
 
@@ -2987,17 +2911,16 @@ export interface WalletCreateParams {
   external_id?: string;
 
   /**
-   * Body param: The owner of the resource. If you provide this, do not specify an
-   * owner_id as it will be generated automatically. When updating a wallet, you can
-   * set the owner to null to remove the owner.
+   * Body param: The owner of the resource, specified as a Privy user ID, a P-256
+   * public key, or null to remove the current owner.
    */
-  owner?: WalletCreateParams.PublicKeyOwner | WalletCreateParams.UserOwner | null;
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
    * Body param: The key quorum ID to set as the owner of the resource. If you
    * provide this, do not specify an owner.
    */
-  owner_id?: string;
+  owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
    * Body param: List of policy IDs for policies that should be enforced on the
@@ -3021,24 +2944,6 @@ export namespace WalletCreateParams {
      * this will override the base policy IDs set on the wallet.
      */
     override_policy_ids?: Array<string>;
-  }
-
-  /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
-
-  /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
-   */
-  export interface UserOwner {
-    user_id: string;
   }
 }
 
@@ -4127,13 +4032,16 @@ export interface WalletSubmitImportParams {
   external_id?: string;
 
   /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
    */
-  owner?: WalletSubmitImportParams.Owner;
+  owner?: SharedAPI.OwnerInput | null;
 
-  owner_id?: string | null;
+  /**
+   * The key quorum ID to set as the owner of the resource. If you provide this, do
+   * not specify an owner.
+   */
+  owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
    * An optional list of up to one policy ID to enforce on the wallet.
@@ -4225,13 +4133,6 @@ export namespace WalletSubmitImportParams {
      */
     hpke_config?: WalletsAPI.HpkeImportConfig;
   }
-
-  /**
-   * The owner of the resource. If you provide this, do not specify an owner_id as it
-   * will be generated automatically. When updating a wallet, you can set the owner
-   * to null to remove the owner.
-   */
-  export type Owner = WalletsAPI.OwnerInput | (null & {});
 }
 
 export interface WalletUpdateParams {
@@ -4246,16 +4147,16 @@ export interface WalletUpdateParams {
   display_name?: string | null;
 
   /**
-   * Body param: The owner of the resource. If you provide this, do not specify an
-   * owner_id as it will be generated automatically. When updating a wallet, you can
-   * set the owner to null to remove the owner.
+   * Body param: The owner of the resource, specified as a Privy user ID, a P-256
+   * public key, or null to remove the current owner.
    */
-  owner?: WalletUpdateParams.PublicKeyOwner | WalletUpdateParams.UserOwner | null;
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
-   * Body param
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
    */
-  owner_id?: string | null;
+  owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
    * Body param: New policy IDs to enforce on the wallet. Currently, only one policy
@@ -4285,24 +4186,6 @@ export namespace WalletUpdateParams {
      * this will override the base policy IDs set on the wallet.
      */
     override_policy_ids?: Array<string>;
-  }
-
-  /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
-
-  /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
-   */
-  export interface UserOwner {
-    user_id: string;
   }
 }
 
@@ -4396,7 +4279,6 @@ Wallets.Balance = Balance;
 
 export declare namespace Wallets {
   export {
-    type OwnerInput as OwnerInput,
     type CurveSigningChainType as CurveSigningChainType,
     type ExtendedChainType as ExtendedChainType,
     type FirstClassChainType as FirstClassChainType,
@@ -4404,10 +4286,6 @@ export declare namespace Wallets {
     type AuthorizationKeyRole as AuthorizationKeyRole,
     type WalletEntropyType as WalletEntropyType,
     type SolanaWalletDerivationStrategy as SolanaWalletDerivationStrategy,
-    type KeyQuorumID as KeyQuorumID,
-    type P256PublicKey as P256PublicKey,
-    type OwnerUserIDInput as OwnerUserIDInput,
-    type OwnerPublicKeyInput as OwnerPublicKeyInput,
     type PolicyInput as PolicyInput,
     type AdditionalSignerItemInput as AdditionalSignerItemInput,
     type AdditionalSignerInput as AdditionalSignerInput,

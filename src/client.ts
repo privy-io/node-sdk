@@ -361,7 +361,17 @@ import {
   TronTransactionCondition,
   UpdateConditionSetRequestBody,
 } from './resources/policies';
-import { CurrencyAmount, Shared, SuccessResponse } from './resources/shared';
+import {
+  CurrencyAmount,
+  KeyQuorumID,
+  OwnerIDInput,
+  OwnerInput,
+  OwnerInputPublicKey,
+  OwnerInputUser,
+  P256PublicKey,
+  Shared,
+  SuccessResponse,
+} from './resources/shared';
 import { SwapAmountType, SwapQuoteRequest, SwapQuoteResponse, SwapRequest, Swaps } from './resources/swaps';
 import {
   TransactionGetResponse,
@@ -645,12 +655,7 @@ import {
   HpkeAeadAlgorithm,
   HpkeEncryption,
   HpkeImportConfig,
-  KeyQuorumID,
   OutputWithPreviousTransactionData,
-  OwnerInput,
-  OwnerPublicKeyInput,
-  OwnerUserIDInput,
-  P256PublicKey,
   PolicyInput,
   PrivateKeyExportInput,
   PrivateKeyExportResponse,
@@ -1626,7 +1631,6 @@ export declare namespace PrivyAPI {
 
   export {
     Wallets as Wallets,
-    type OwnerInput as OwnerInput,
     type CurveSigningChainType as CurveSigningChainType,
     type ExtendedChainType as ExtendedChainType,
     type FirstClassChainType as FirstClassChainType,
@@ -1634,10 +1638,6 @@ export declare namespace PrivyAPI {
     type AuthorizationKeyRole as AuthorizationKeyRole,
     type WalletEntropyType as WalletEntropyType,
     type SolanaWalletDerivationStrategy as SolanaWalletDerivationStrategy,
-    type KeyQuorumID as KeyQuorumID,
-    type P256PublicKey as P256PublicKey,
-    type OwnerUserIDInput as OwnerUserIDInput,
-    type OwnerPublicKeyInput as OwnerPublicKeyInput,
     type PolicyInput as PolicyInput,
     type AdditionalSignerItemInput as AdditionalSignerItemInput,
     type AdditionalSignerInput as AdditionalSignerInput,
@@ -2211,7 +2211,17 @@ export declare namespace PrivyAPI {
     type MfaPasskeyEnrollmentRequestBody as MfaPasskeyEnrollmentRequestBody,
   };
 
-  export { Shared as Shared, type SuccessResponse as SuccessResponse, type CurrencyAmount as CurrencyAmount };
+  export {
+    Shared as Shared,
+    type SuccessResponse as SuccessResponse,
+    type P256PublicKey as P256PublicKey,
+    type KeyQuorumID as KeyQuorumID,
+    type OwnerInputUser as OwnerInputUser,
+    type OwnerInputPublicKey as OwnerInputPublicKey,
+    type OwnerInput as OwnerInput,
+    type OwnerIDInput as OwnerIDInput,
+    type CurrencyAmount as CurrencyAmount,
+  };
 
   export {
     WalletActions as WalletActions,

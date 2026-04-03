@@ -31,7 +31,7 @@ describe('resource users', () => {
       wallets: [
         {
           chain_type: 'ethereum',
-          additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+          additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
           create_smart_wallet: true,
           policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
         },
@@ -307,7 +307,7 @@ describe('resource users', () => {
       wallets: [
         {
           chain_type: 'ethereum',
-          additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+          additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
           create_smart_wallet: true,
           policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
         },

@@ -135,6 +135,11 @@ export interface SwapActionResponse {
   caip2: string;
 
   /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
    * Exact base-unit amount of input token. Populated after on-chain confirmation.
    */
   input_amount: string | null;
@@ -180,6 +185,11 @@ export interface TransferActionResponse {
    * The ID of the wallet action.
    */
   id: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
 
   /**
    * Recipient address.

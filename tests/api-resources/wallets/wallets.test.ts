@@ -28,8 +28,8 @@ describe('resource wallets', () => {
       additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['string'] }],
       display_name: 'display_name',
       external_id: 'my-order-123',
-      owner: { public_key: 'public_key' },
-      owner_id: 'owner_id',
+      owner: { user_id: 'user_id' },
+      owner_id: 'string',
       policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
       'privy-idempotency-key': 'privy-idempotency-key',
     });
@@ -241,7 +241,7 @@ describe('resource wallets', () => {
       additional_signers: [{ signer_id: 'string', override_policy_ids: ['string'] }],
       display_name: 'display_name',
       external_id: 'external_id',
-      owner: {},
+      owner: { user_id: 'user_id' },
       owner_id: 'rkiz0ivz254drv1xw982v3jq',
       policy_ids: ['string'],
     });

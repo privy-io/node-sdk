@@ -58,11 +58,12 @@ describe('resource policies', () => {
           ],
           method: 'eth_sendTransaction',
           name: 'x',
+          id: 'id',
         },
       ],
       version: '1.0',
-      owner: { public_key: 'public_key' },
-      owner_id: 'owner_id',
+      owner: { user_id: 'user_id' },
+      owner_id: 'string',
       'privy-idempotency-key': 'privy-idempotency-key',
     });
   });

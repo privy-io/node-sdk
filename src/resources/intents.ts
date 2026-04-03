@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import * as IntentsAPI from './intents';
 import * as KeyQuorumsAPI from './key-quorums';
 import * as PoliciesAPI from './policies';
+import * as SharedAPI from './shared';
 import * as AppsAPI from './apps/apps';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
@@ -316,35 +317,18 @@ export namespace PolicyIntentRequestDetails {
     name?: string;
 
     /**
-     * The owner of the resource. If you provide this, do not specify an owner_id as it
-     * will be generated automatically. When updating a wallet, you can set the owner
-     * to null to remove the owner.
+     * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+     * null to remove the current owner.
      */
-    owner?: Body.PublicKeyOwner | Body.UserOwner | null;
+    owner?: SharedAPI.OwnerInput | null;
 
-    owner_id?: string | null;
+    /**
+     * The key quorum ID to set as the owner of the resource. If you provide this, do
+     * not specify an owner.
+     */
+    owner_id?: SharedAPI.OwnerIDInput | null;
 
     rules?: Array<PoliciesAPI.PolicyRuleRequestBody>;
-  }
-
-  export namespace Body {
-    /**
-     * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-     * If you provide this, do not specify an owner_id as it will be generated
-     * automatically.
-     */
-    export interface PublicKeyOwner {
-      public_key: string;
-    }
-
-    /**
-     * The user ID of the owner of the resource. The user must already exist, and this
-     * value must start with "did:privy:". If you provide this, do not specify an
-     * owner_id as it will be generated automatically.
-     */
-    export interface UserOwner {
-      user_id: string;
-    }
   }
 }
 
@@ -740,27 +724,21 @@ export namespace WalletIntentResponse {
       display_name?: string | null;
 
       /**
-       * The owner of the resource. If you provide this, do not specify an owner_id as it
-       * will be generated automatically. When updating a wallet, you can set the owner
-       * to null to remove the owner.
+       * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+       * null to remove the current owner.
        */
-      owner?: Body.Owner;
+      owner?: SharedAPI.OwnerInput | null;
 
-      owner_id?: string | null;
+      /**
+       * The key quorum ID to set as the owner of the resource. If you provide this, do
+       * not specify an owner.
+       */
+      owner_id?: SharedAPI.OwnerIDInput | null;
 
       /**
        * An optional list of up to one policy ID to enforce on the wallet.
        */
       policy_ids?: WalletsAPI.PolicyInput;
-    }
-
-    export namespace Body {
-      /**
-       * The owner of the resource. If you provide this, do not specify an owner_id as it
-       * will be generated automatically. When updating a wallet, you can set the owner
-       * to null to remove the owner.
-       */
-      export type Owner = WalletsAPI.OwnerInput | (null & {});
     }
   }
 }
@@ -808,35 +786,18 @@ export namespace PolicyIntentResponse {
       name?: string;
 
       /**
-       * The owner of the resource. If you provide this, do not specify an owner_id as it
-       * will be generated automatically. When updating a wallet, you can set the owner
-       * to null to remove the owner.
+       * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+       * null to remove the current owner.
        */
-      owner?: Body.PublicKeyOwner | Body.UserOwner | null;
+      owner?: SharedAPI.OwnerInput | null;
 
-      owner_id?: string | null;
+      /**
+       * The key quorum ID to set as the owner of the resource. If you provide this, do
+       * not specify an owner.
+       */
+      owner_id?: SharedAPI.OwnerIDInput | null;
 
       rules?: Array<PoliciesAPI.PolicyRuleRequestBody>;
-    }
-
-    export namespace Body {
-      /**
-       * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-       * If you provide this, do not specify an owner_id as it will be generated
-       * automatically.
-       */
-      export interface PublicKeyOwner {
-        public_key: string;
-      }
-
-      /**
-       * The user ID of the owner of the resource. The user must already exist, and this
-       * value must start with "did:privy:". If you provide this, do not specify an
-       * owner_id as it will be generated automatically.
-       */
-      export interface UserOwner {
-        user_id: string;
-      }
     }
   }
 }
@@ -1719,16 +1680,16 @@ export interface IntentUpdatePolicyParams {
   name?: string;
 
   /**
-   * Body param: The owner of the resource. If you provide this, do not specify an
-   * owner_id as it will be generated automatically. When updating a wallet, you can
-   * set the owner to null to remove the owner.
+   * Body param: The owner of the resource, specified as a Privy user ID, a P-256
+   * public key, or null to remove the current owner.
    */
-  owner?: IntentUpdatePolicyParams.PublicKeyOwner | IntentUpdatePolicyParams.UserOwner | null;
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
-   * Body param
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
    */
-  owner_id?: string | null;
+  owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
    * Body param
@@ -1740,26 +1701,6 @@ export interface IntentUpdatePolicyParams {
    * representing the deadline by which the request must be processed.
    */
   'privy-request-expiry'?: string;
-}
-
-export namespace IntentUpdatePolicyParams {
-  /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
-
-  /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
-   */
-  export interface UserOwner {
-    user_id: string;
-  }
 }
 
 export interface IntentUpdatePolicyRuleParams {
@@ -1807,16 +1748,16 @@ export interface IntentUpdateWalletParams {
   display_name?: string | null;
 
   /**
-   * Body param: The owner of the resource. If you provide this, do not specify an
-   * owner_id as it will be generated automatically. When updating a wallet, you can
-   * set the owner to null to remove the owner.
+   * Body param: The owner of the resource, specified as a Privy user ID, a P-256
+   * public key, or null to remove the current owner.
    */
-  owner?: IntentUpdateWalletParams.PublicKeyOwner | IntentUpdateWalletParams.UserOwner | null;
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
-   * Body param
+   * Body param: The key quorum ID to set as the owner of the resource. If you
+   * provide this, do not specify an owner.
    */
-  owner_id?: string | null;
+  owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
    * Body param: New policy IDs to enforce on the wallet. Currently, only one policy
@@ -1840,24 +1781,6 @@ export namespace IntentUpdateWalletParams {
      * this will override the base policy IDs set on the wallet.
      */
     override_policy_ids?: Array<string>;
-  }
-
-  /**
-   * The P-256 public key of the owner of the resource, in base64-encoded DER format.
-   * If you provide this, do not specify an owner_id as it will be generated
-   * automatically.
-   */
-  export interface PublicKeyOwner {
-    public_key: string;
-  }
-
-  /**
-   * The user ID of the owner of the resource. The user must already exist, and this
-   * value must start with "did:privy:". If you provide this, do not specify an
-   * owner_id as it will be generated automatically.
-   */
-  export interface UserOwner {
-    user_id: string;
   }
 }
 

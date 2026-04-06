@@ -867,7 +867,7 @@ export interface RuleIntentResponse extends BaseIntentResponse {
    * A rule that defines the conditions and action to take if the conditions are
    * true.
    */
-  current_resource_data?: PoliciesAPI.PolicyRuleRequestBody;
+  current_resource_data?: PoliciesAPI.PolicyRuleResponse;
 
   /**
    * A policy for controlling wallet operations.

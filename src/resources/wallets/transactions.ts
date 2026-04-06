@@ -63,6 +63,8 @@ export namespace TransactionGetResponse {
     wallet_id: string;
 
     sponsored?: boolean;
+
+    user_operation_hash?: string;
   }
 
   export namespace Transaction {

@@ -219,6 +219,43 @@ export interface TransactionScanningResponseBody {
   validation: TransactionScanningValidationResult;
 }
 
+/**
+ * A list of transactions.
+ */
+export interface TransactionList {
+  transactions: Array<TransactionList.Transaction>;
+}
+
+export namespace TransactionList {
+  export interface Transaction {
+    id: string;
+
+    caip2: string;
+
+    created_at: number;
+
+    status:
+      | 'broadcasted'
+      | 'confirmed'
+      | 'execution_reverted'
+      | 'failed'
+      | 'replaced'
+      | 'finalized'
+      | 'provider_error'
+      | 'pending';
+
+    transaction_hash: string | null;
+
+    wallet_id: string;
+
+    reference_id?: string | null;
+
+    sponsored?: boolean;
+
+    user_operation_hash?: string;
+  }
+}
+
 export interface TransactionGetResponse {
   id: string;
 
@@ -243,6 +280,8 @@ export interface TransactionGetResponse {
   reference_id?: string | null;
 
   sponsored?: boolean;
+
+  user_operation_hash?: string;
 }
 
 export declare namespace Transactions {
@@ -263,6 +302,7 @@ export declare namespace Transactions {
     type TransactionScanningSimulationSuccessResult as TransactionScanningSimulationSuccessResult,
     type TransactionScanningSimulationResult as TransactionScanningSimulationResult,
     type TransactionScanningResponseBody as TransactionScanningResponseBody,
+    type TransactionList as TransactionList,
     type TransactionGetResponse as TransactionGetResponse,
   };
 }

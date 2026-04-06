@@ -57,7 +57,7 @@ export class Policies extends APIResource {
    *
    * @example
    * ```ts
-   * const policyRuleRequestBody =
+   * const policyRuleResponse =
    *   await client.policies._createRule(
    *     'xxxxxxxxxxxxxxxxxxxxxxxx',
    *     {
@@ -80,7 +80,7 @@ export class Policies extends APIResource {
     policyID: string,
     params: PolicyCreateRuleParams,
     options?: RequestOptions,
-  ): APIPromise<PolicyRuleRequestBody> {
+  ): APIPromise<PolicyRuleResponse> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-request-expiry': privyRequestExpiry,
@@ -205,7 +205,7 @@ export class Policies extends APIResource {
    *
    * @example
    * ```ts
-   * const policyRuleRequestBody =
+   * const policyRuleResponse =
    *   await client.policies._updateRule(
    *     'xxxxxxxxxxxxxxxxxxxxxxxx',
    *     {
@@ -229,7 +229,7 @@ export class Policies extends APIResource {
     ruleID: string,
     params: PolicyUpdateRuleParams,
     options?: RequestOptions,
-  ): APIPromise<PolicyRuleRequestBody> {
+  ): APIPromise<PolicyRuleResponse> {
     const {
       policy_id,
       'privy-authorization-signature': privyAuthorizationSignature,
@@ -273,7 +273,7 @@ export class Policies extends APIResource {
    *
    * @example
    * ```ts
-   * const policyRuleRequestBody = await client.policies.getRule(
+   * const policyRuleResponse = await client.policies.getRule(
    *   'xxxxxxxxxxxxxxxxxxxxxxxx',
    *   { policy_id: 'xxxxxxxxxxxxxxxxxxxxxxxx' },
    * );
@@ -283,7 +283,7 @@ export class Policies extends APIResource {
     ruleID: string,
     params: PolicyGetRuleParams,
     options?: RequestOptions,
-  ): APIPromise<PolicyRuleRequestBody> {
+  ): APIPromise<PolicyRuleResponse> {
     if (ruleID === '') {
       throw new Error('ruleID must not be an empty string');
     }
@@ -782,6 +782,7 @@ export type PolicyMethod =
   | 'eth_signUserOperation'
   | 'eth_signTypedData_v4'
   | 'eth_sign7702Authorization'
+  | 'wallet_sendCalls'
   | 'signTransaction'
   | 'signAndSendTransaction'
   | 'exportPrivateKey'
@@ -793,6 +794,28 @@ export type PolicyMethod =
  * The rules that apply to each method the policy covers.
  */
 export interface PolicyRuleRequestBody {
+  /**
+   * The action to take when a policy rule matches.
+   */
+  action: PolicyAction;
+
+  conditions: Array<PolicyCondition>;
+
+  /**
+   * Method the rule applies to.
+   */
+  method: PolicyMethod;
+
+  name: string;
+}
+
+/**
+ * A rule that defines the conditions and action to take if the conditions are
+ * true.
+ */
+export interface PolicyRuleResponse {
+  id: string;
+
   /**
    * The action to take when a policy rule matches.
    */
@@ -838,7 +861,7 @@ export interface Policy {
    */
   owner_id: string | null;
 
-  rules: Array<PolicyRuleRequestBody>;
+  rules: Array<PolicyRuleResponse>;
 
   /**
    * Version of the policy. Currently, 1.0 is the only version.
@@ -1121,6 +1144,7 @@ export declare namespace Policies {
     type PolicyCondition as PolicyCondition,
     type PolicyMethod as PolicyMethod,
     type PolicyRuleRequestBody as PolicyRuleRequestBody,
+    type PolicyRuleResponse as PolicyRuleResponse,
     type Policy as Policy,
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
     type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,

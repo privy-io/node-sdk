@@ -327,6 +327,7 @@ Types:
 - <code><a href="./src/resources/policies.ts">PolicyCondition</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyMethod</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyRuleRequestBody</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyRuleResponse</a></code>
 - <code><a href="./src/resources/policies.ts">Policy</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/policies.ts">ConditionSetAuthorizationHeaders</a></code>
@@ -334,13 +335,13 @@ Types:
 Methods:
 
 - <code title="post /v1/policies">client.policies.<a href="./src/resources/policies.ts">create</a>({ ...params }) -> Policy</code>
-- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/resources/policies.ts">\_createRule</a>(policyID, { ...params }) -> PolicyRuleRequestBody</code>
+- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/resources/policies.ts">\_createRule</a>(policyID, { ...params }) -> PolicyRuleResponse</code>
 - <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_delete</a>(policyID, { ...params }) -> SuccessResponse</code>
 - <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_deleteRule</a>(ruleID, { ...params }) -> SuccessResponse</code>
 - <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
-- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_updateRule</a>(ruleID, { ...params }) -> PolicyRuleRequestBody</code>
+- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_updateRule</a>(ruleID, { ...params }) -> PolicyRuleResponse</code>
 - <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">get</a>(policyID) -> Policy</code>
-- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">getRule</a>(ruleID, { ...params }) -> PolicyRuleRequestBody</code>
+- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">getRule</a>(ruleID, { ...params }) -> PolicyRuleResponse</code>
 
 # Transactions
 
@@ -362,6 +363,7 @@ Types:
 - <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationSuccessResult</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationResult</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionScanningResponseBody</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionList</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionGetResponse</a></code>
 
 Methods:

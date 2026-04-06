@@ -351,6 +351,7 @@ import {
   PolicyGetRuleParams,
   PolicyMethod,
   PolicyRuleRequestBody,
+  PolicyRuleResponse,
   PolicyUpdateParams,
   PolicyUpdateRuleParams,
   SuiTransactionCommandCondition,
@@ -375,6 +376,7 @@ import {
 import { SwapAmountType, SwapQuoteRequest, SwapQuoteResponse, SwapRequest, Swaps } from './resources/swaps';
 import {
   TransactionGetResponse,
+  TransactionList,
   TransactionScanningAssetDiff,
   TransactionScanningAssetInfo,
   TransactionScanningAssetValue,
@@ -1917,6 +1919,7 @@ export declare namespace PrivyAPI {
     type PolicyCondition as PolicyCondition,
     type PolicyMethod as PolicyMethod,
     type PolicyRuleRequestBody as PolicyRuleRequestBody,
+    type PolicyRuleResponse as PolicyRuleResponse,
     type Policy as Policy,
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
     type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
@@ -1947,6 +1950,7 @@ export declare namespace PrivyAPI {
     type TransactionScanningSimulationSuccessResult as TransactionScanningSimulationSuccessResult,
     type TransactionScanningSimulationResult as TransactionScanningSimulationResult,
     type TransactionScanningResponseBody as TransactionScanningResponseBody,
+    type TransactionList as TransactionList,
     type TransactionGetResponse as TransactionGetResponse,
   };
 

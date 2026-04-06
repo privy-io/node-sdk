@@ -358,6 +358,7 @@ export {
   type PolicyCondition,
   type PolicyMethod,
   type PolicyRuleRequestBody,
+  type PolicyRuleResponse,
   type Policy,
   type PolicyAuthorizationHeaders,
   type ConditionSetAuthorizationHeaders,
@@ -405,6 +406,7 @@ export {
   type TransactionScanningSimulationSuccessResult,
   type TransactionScanningSimulationResult,
   type TransactionScanningResponseBody,
+  type TransactionList,
   type TransactionGetResponse,
 } from './transactions';
 export {

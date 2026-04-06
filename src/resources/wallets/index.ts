@@ -14,6 +14,8 @@ export {
   type PolicyInput,
   type AdditionalSignerItemInput,
   type AdditionalSignerInput,
+  type WalletAdditionalSignerItem,
+  type WalletAdditionalSigner,
   type Address,
   type WalletCustodian,
   type CustodialWalletProvider,

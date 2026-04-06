@@ -12,6 +12,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">PolicyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AdditionalSignerItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AdditionalSignerInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAdditionalSignerItem</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAdditionalSigner</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Address</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCustodian</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>

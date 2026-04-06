@@ -1,21 +1,14 @@
 import { PrivyClient, generateP256KeyPair, P256KeyPair } from '@privy-io/node';
-import { PrivyAPI } from '@privy-io/node/client';
 import { TEST_APP } from '../test-config';
 
-describe('Intents', () => {
+describe('PrivyIntentsService', () => {
   let privyClient: PrivyClient;
-  let apiClient: PrivyAPI;
 
   beforeAll(() => {
     privyClient = new PrivyClient({
       appId: TEST_APP.id,
       appSecret: TEST_APP.secret,
       apiUrl: TEST_APP.apiUrl,
-    });
-    apiClient = new PrivyAPI({
-      appID: TEST_APP.id,
-      appSecret: TEST_APP.secret,
-      baseURL: TEST_APP.apiUrl,
     });
   });
 
@@ -33,7 +26,7 @@ describe('Intents', () => {
     });
 
     it('should create an RPC intent for a wallet with an owner', async () => {
-      const intent = await apiClient.intents.rpc(walletId, {
+      const intent = await privyClient.intents().rpc(walletId, {
         method: 'personal_sign',
         params: { message: 'Hello from intents test', encoding: 'utf-8' },
       });
@@ -50,11 +43,11 @@ describe('Intents', () => {
     });
 
     it('should create an RPC intent with a custom expiry', async () => {
-      const expiryMs = Date.now() + 60 * 60 * 1000; // 1 hour from now
-      const intent = await apiClient.intents.rpc(walletId, {
+      const expiryMs = Date.now() + 60 * 60 * 1000;
+      const intent = await privyClient.intents().rpc(walletId, {
         method: 'personal_sign',
         params: { message: 'Expiry test', encoding: 'utf-8' },
-        'privy-request-expiry': String(expiryMs),
+        request_expiry: expiryMs,
       });
 
       expect(intent.intent_id).toBeDefined();
@@ -63,12 +56,12 @@ describe('Intents', () => {
     });
 
     it('should get an intent by ID', async () => {
-      const created = await apiClient.intents.rpc(walletId, {
+      const created = await privyClient.intents().rpc(walletId, {
         method: 'personal_sign',
         params: { message: 'Get test', encoding: 'utf-8' },
       });
 
-      const fetched = await apiClient.intents.get(created.intent_id);
+      const fetched = await privyClient.intents().get(created.intent_id);
       expect(fetched.intent_id).toBe(created.intent_id);
       expect(fetched.intent_type).toBe('RPC');
       expect(fetched.status).toBe('pending');
@@ -76,13 +69,13 @@ describe('Intents', () => {
     });
 
     it('should list intents and include a created intent', async () => {
-      const created = await apiClient.intents.rpc(walletId, {
+      const created = await privyClient.intents().rpc(walletId, {
         method: 'personal_sign',
         params: { message: 'List test', encoding: 'utf-8' },
       });
 
       let found = false;
-      for await (const intent of apiClient.intents.list({
+      for await (const intent of privyClient.intents().list({
         resource_id: walletId,
         intent_type: 'RPC',
       })) {
@@ -95,13 +88,13 @@ describe('Intents', () => {
     });
 
     it('should list intents filtered by status', async () => {
-      await apiClient.intents.rpc(walletId, {
+      await privyClient.intents().rpc(walletId, {
         method: 'personal_sign',
         params: { message: 'Status filter test', encoding: 'utf-8' },
       });
 
       const pendingIntents: string[] = [];
-      for await (const intent of apiClient.intents.list({
+      for await (const intent of privyClient.intents().list({
         resource_id: walletId,
         status: 'pending',
       })) {
@@ -125,7 +118,7 @@ describe('Intents', () => {
     });
 
     it('should create an intent to update a wallet display name', async () => {
-      const intent = await apiClient.intents.updateWallet(walletId, {
+      const intent = await privyClient.intents().updateWallet(walletId, {
         display_name: 'My Updated Wallet',
       });
 
@@ -178,7 +171,7 @@ describe('Intents', () => {
     });
 
     it('should create an intent to update a policy', async () => {
-      const intent = await apiClient.intents.updatePolicy(policyId, {
+      const intent = await privyClient.intents().updatePolicy(policyId, {
         name: 'Renamed Policy',
       });
 
@@ -192,7 +185,7 @@ describe('Intents', () => {
     });
 
     it('should create an intent to add a rule to a policy', async () => {
-      const intent = await apiClient.intents.createPolicyRule(policyId, {
+      const intent = await privyClient.intents().createPolicyRule(policyId, {
         name: 'Restrict destination address',
         method: 'eth_sendTransaction',
         action: 'ALLOW',
@@ -215,7 +208,7 @@ describe('Intents', () => {
     });
 
     it('should create an intent to update a rule on a policy', async () => {
-      const intent = await apiClient.intents.updatePolicyRule(ruleId, {
+      const intent = await privyClient.intents().updatePolicyRule(ruleId, {
         policy_id: policyId,
         name: 'Updated rule name',
         method: 'eth_sendTransaction',
@@ -239,7 +232,7 @@ describe('Intents', () => {
     });
 
     it('should create an intent to delete a rule from a policy', async () => {
-      const intent = await apiClient.intents.deletePolicyRule(ruleId, {
+      const intent = await privyClient.intents().deletePolicyRule(ruleId, {
         policy_id: policyId,
       });
 
@@ -277,7 +270,7 @@ describe('Intents', () => {
     });
 
     it('should create an intent to update a key quorum', async () => {
-      const intent = await apiClient.intents.updateKeyQuorum(keyQuorumId, {
+      const intent = await privyClient.intents().updateKeyQuorum(keyQuorumId, {
         authorization_threshold: 1,
       });
 

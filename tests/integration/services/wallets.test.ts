@@ -61,7 +61,7 @@ describe('PrivyWalletsService', () => {
       expect(wallet.id).toBeDefined();
       expect(wallet.chain_type).toBe('ethereum');
 
-      const exported = await privyClient.wallets().export(wallet.id, {
+      const exported = await privyClient.wallets().exportPrivateKey(wallet.id, {
         authorization_context: { authorization_private_keys: [keypair.privateKey] },
       });
       expect(exported.private_key).toBeDefined();
@@ -81,7 +81,7 @@ describe('PrivyWalletsService', () => {
       expect(wallet.id).toBeDefined();
       expect(wallet.chain_type).toBe('solana');
 
-      const exported = await privyClient.wallets().export(wallet.id, {
+      const exported = await privyClient.wallets().exportPrivateKey(wallet.id, {
         authorization_context: { authorization_private_keys: [keypair.privateKey] },
       });
       expect(exported.private_key).toBeDefined();
@@ -106,7 +106,7 @@ describe('PrivyWalletsService', () => {
 
       const publicKey = hex.decode(wallet.public_key!);
 
-      const exported = await privyClient.wallets().export(wallet.id, {
+      const exported = await privyClient.wallets().exportPrivateKey(wallet.id, {
         authorization_context: { authorization_private_keys: [keypair.privateKey] },
       });
       expect(exported.private_key).toBeDefined();
@@ -114,6 +114,29 @@ describe('PrivyWalletsService', () => {
 
       // The public_key we got on creation matches what is derived from the exported private_key
       expect(secp256k1.getPublicKey(privateKey, true)).toEqual(publicKey);
+    });
+    it('should be able to export a seed phrase for an Ethereum wallet', async () => {
+      const keypair = await generateP256KeyPair();
+      const wallet = await privyClient.wallets().create({
+        chain_type: 'ethereum',
+        owner: { public_key: keypair.publicKey },
+      });
+      expect(wallet.id).toBeDefined();
+      expect(wallet.chain_type).toBe('ethereum');
+
+      const exported = await privyClient.wallets().exportSeedPhrase(wallet.id, {
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
+      });
+      expect(exported.seed_phrase).toBeDefined();
+      const words = exported.seed_phrase.split(' ');
+      expect(words.length).toBeGreaterThanOrEqual(12);
+      expect(words.length).toBeLessThanOrEqual(24);
+      for (const word of words) {
+        expect(word).toMatch(/^[a-z]+$/);
+      }
+
+      const mnemonicAccount = mnemonicToAccount(exported.seed_phrase);
+      expect(mnemonicAccount.address).toBe(wallet.address);
     });
   });
   describe('import', () => {

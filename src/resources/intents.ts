@@ -1743,7 +1743,7 @@ export interface IntentUpdateWalletParams {
   /**
    * Body param: Additional signers for the wallet.
    */
-  additional_signers?: Array<IntentUpdateWalletParams.AdditionalSigner>;
+  additional_signers?: WalletsAPI.AdditionalSignerInput;
 
   /**
    * Body param: A human-readable label for the wallet. Set to null to clear.
@@ -1773,18 +1773,6 @@ export interface IntentUpdateWalletParams {
    * representing the deadline by which the request must be processed.
    */
   'privy-request-expiry'?: string;
-}
-
-export namespace IntentUpdateWalletParams {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
-  }
 }
 
 export declare namespace Intents {

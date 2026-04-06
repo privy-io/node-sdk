@@ -399,6 +399,26 @@ export interface AdditionalSignerItemInput {
 export type AdditionalSignerInput = Array<AdditionalSignerItemInput>;
 
 /**
+ * A single additional signer on a wallet, with an optional policy override.
+ */
+export interface WalletAdditionalSignerItem {
+  /**
+   * A unique identifier for a key quorum.
+   */
+  signer_id: SharedAPI.KeyQuorumID;
+
+  /**
+   * An optional list of up to one policy ID to enforce on the wallet.
+   */
+  override_policy_ids?: PolicyInput;
+}
+
+/**
+ * Additional signers for the wallet.
+ */
+export type WalletAdditionalSigner = Array<WalletAdditionalSignerItem>;
+
+/**
  * A blockchain wallet address (Ethereum or Solana).
  */
 export type Address = string;
@@ -488,7 +508,7 @@ export interface CustodialWallet {
   /**
    * Additional signers for the wallet.
    */
-  additional_signers?: AdditionalSignerInput;
+  additional_signers?: WalletAdditionalSigner;
 
   policy_ids?: Array<string>;
 }
@@ -2318,7 +2338,7 @@ export interface Wallet {
   /**
    * Additional signers for the wallet.
    */
-  additional_signers: Array<Wallet.AdditionalSigner>;
+  additional_signers: WalletAdditionalSigner;
 
   /**
    * Address of the wallet.
@@ -2385,18 +2405,6 @@ export interface Wallet {
   public_key?: string;
 }
 
-export namespace Wallet {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
-  }
-}
-
 /**
  * Request body for looking up a wallet by its blockchain address.
  */
@@ -2414,7 +2422,7 @@ export interface WalletUpdateRequestBody {
   /**
    * Additional signers for the wallet.
    */
-  additional_signers?: Array<WalletUpdateRequestBody.AdditionalSigner>;
+  additional_signers?: AdditionalSignerInput;
 
   /**
    * A human-readable label for the wallet. Set to null to clear.
@@ -2440,18 +2448,6 @@ export interface WalletUpdateRequestBody {
   policy_ids?: Array<string>;
 }
 
-export namespace WalletUpdateRequestBody {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
-  }
-}
-
 /**
  * Input for a single wallet in a batch creation request.
  */
@@ -2464,7 +2460,7 @@ export interface WalletBatchItemInput {
   /**
    * Additional signers for the wallet.
    */
-  additional_signers?: Array<WalletBatchItemInput.AdditionalSigner>;
+  additional_signers?: AdditionalSignerInput;
 
   /**
    * A human-readable label for the wallet.
@@ -2495,18 +2491,6 @@ export interface WalletBatchItemInput {
    * Currently, only one policy is supported per wallet.
    */
   policy_ids?: Array<string>;
-}
-
-export namespace WalletBatchItemInput {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
-  }
 }
 
 /**
@@ -2896,7 +2880,7 @@ export interface WalletCreateParams {
   /**
    * Body param: Additional signers for the wallet.
    */
-  additional_signers?: Array<WalletCreateParams.AdditionalSigner>;
+  additional_signers?: AdditionalSignerInput;
 
   /**
    * Body param: A human-readable label for the wallet.
@@ -2923,28 +2907,15 @@ export interface WalletCreateParams {
   owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
-   * Body param: List of policy IDs for policies that should be enforced on the
-   * wallet. Currently, only one policy is supported per wallet.
+   * Body param: An optional list of up to one policy ID to enforce on the wallet.
    */
-  policy_ids?: Array<string>;
+  policy_ids?: PolicyInput;
 
   /**
    * Header param: Idempotency keys ensure API requests are executed only once within
    * a 24-hour window.
    */
   'privy-idempotency-key'?: string;
-}
-
-export namespace WalletCreateParams {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
-  }
 }
 
 export interface WalletListParams extends CursorParams {
@@ -4027,8 +3998,16 @@ export interface WalletSubmitImportParams {
    */
   additional_signers?: AdditionalSignerInput;
 
+  /**
+   * A human-readable label for the wallet.
+   */
   display_name?: string;
 
+  /**
+   * A customer-provided identifier for mapping to external systems. URL-safe
+   * characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
+   * after creation.
+   */
   external_id?: string;
 
   /**
@@ -4139,7 +4118,7 @@ export interface WalletUpdateParams {
   /**
    * Body param: Additional signers for the wallet.
    */
-  additional_signers?: Array<WalletUpdateParams.AdditionalSigner>;
+  additional_signers?: AdditionalSignerInput;
 
   /**
    * Body param: A human-readable label for the wallet. Set to null to clear.
@@ -4175,18 +4154,6 @@ export interface WalletUpdateParams {
    * representing the deadline by which the request must be processed.
    */
   'privy-request-expiry'?: string;
-}
-
-export namespace WalletUpdateParams {
-  export interface AdditionalSigner {
-    signer_id: string;
-
-    /**
-     * The array of policy IDs that will be applied to wallet requests. If specified,
-     * this will override the base policy IDs set on the wallet.
-     */
-    override_policy_ids?: Array<string>;
-  }
 }
 
 export interface WalletAuthenticateWithJwtParams {
@@ -4267,10 +4234,9 @@ export namespace WalletCreateWalletsWithRecoveryParams {
     external_id?: string;
 
     /**
-     * List of policy IDs for policies that should be enforced on the wallet.
-     * Currently, only one policy is supported per wallet.
+     * An optional list of up to one policy ID to enforce on the wallet.
      */
-    policy_ids?: Array<string>;
+    policy_ids?: WalletsAPI.PolicyInput;
   }
 }
 
@@ -4289,6 +4255,8 @@ export declare namespace Wallets {
     type PolicyInput as PolicyInput,
     type AdditionalSignerItemInput as AdditionalSignerItemInput,
     type AdditionalSignerInput as AdditionalSignerInput,
+    type WalletAdditionalSignerItem as WalletAdditionalSignerItem,
+    type WalletAdditionalSigner as WalletAdditionalSigner,
     type Address as Address,
     type WalletCustodian as WalletCustodian,
     type CustodialWalletProvider as CustodialWalletProvider,

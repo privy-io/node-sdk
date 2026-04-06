@@ -25,7 +25,7 @@ describe('resource wallets', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.wallets.create({
       chain_type: 'ethereum',
-      additional_signers: [{ signer_id: 'signer_id', override_policy_ids: ['string'] }],
+      additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
       display_name: 'display_name',
       external_id: 'my-order-123',
       owner: { user_id: 'user_id' },
@@ -238,12 +238,12 @@ describe('resource wallets', () => {
           info: 'info',
         },
       },
-      additional_signers: [{ signer_id: 'string', override_policy_ids: ['string'] }],
+      additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
       display_name: 'display_name',
       external_id: 'external_id',
       owner: { user_id: 'user_id' },
       owner_id: 'rkiz0ivz254drv1xw982v3jq',
-      policy_ids: ['string'],
+      policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
     });
   });
 

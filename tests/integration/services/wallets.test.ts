@@ -1,6 +1,9 @@
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { PrivyClient } from '@privy-io/node';
 import { base58, base64, hex } from '@scure/base';
+import { mnemonicToSeed } from 'bip39';
+import { derivePath } from 'ed25519-hd-key';
+import { Keypair } from '@solana/web3.js';
 
 import nacl from 'tweetnacl';
 import { hexToBytes, verifyMessage } from 'viem';
@@ -93,6 +96,35 @@ describe('PrivyWalletsService', () => {
       const signature = nacl.sign.detached(message, privateKey);
       const verified = nacl.sign.detached.verify(message, signature, base58.decode(wallet.address));
       expect(verified).toBe(true);
+    });
+    it('should be able to export a seed phrase for a Solana wallet', async () => {
+      const keypair = await generateP256KeyPair();
+      const wallet = await privyClient.wallets().create({
+        chain_type: 'solana',
+        owner: { public_key: keypair.publicKey },
+      });
+      expect(wallet.id).toBeDefined();
+      expect(wallet.chain_type).toBe('solana');
+
+      const exported = await privyClient.wallets().exportSeedPhrase(wallet.id, {
+        authorization_context: { authorization_private_keys: [keypair.privateKey] },
+      });
+      expect(exported.seed_phrase).toBeDefined();
+      const words = exported.seed_phrase.split(' ');
+      expect(words.length).toBeGreaterThanOrEqual(12);
+      expect(words.length).toBeLessThanOrEqual(24);
+      for (const word of words) {
+        expect(word).toMatch(/^[a-z]+$/);
+      }
+
+      // Verify the seed phrase produces the correct Solana address
+      const seed = await mnemonicToSeed(exported.seed_phrase);
+      const derivedSeed = derivePath("m/44'/501'/0'/0'", seed.toString('hex')).key;
+      // Create keypair from the 32-byte private key
+      const solanaKeypair = Keypair.fromSeed(new Uint8Array(derivedSeed));
+      const solanaAddress = solanaKeypair.publicKey.toBase58();
+
+      expect(solanaAddress).toBe(wallet.address);
     });
     it('should be able to export a Tier 2 wallet', async () => {
       const keypair = await generateP256KeyPair();

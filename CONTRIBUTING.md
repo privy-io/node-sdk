@@ -34,7 +34,7 @@ Manual edits persist across regeneration but may cause merge conflicts with chan
 
 ### End-to-end tests
 
-End-to-end tests run against the staging environment. Create a `.env` file with `TEST_APP_SECRET` set, then run:
+End-to-end tests run against the staging environment. Create a `.env` file with `TEST_APP_SECRET` set, and optionally `TEST_APP_ID` and `TEST_API_URL`, then run:
 
 ```sh
 yarn test:integration

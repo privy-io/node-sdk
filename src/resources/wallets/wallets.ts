@@ -63,18 +63,19 @@ export class Wallets extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.wallets._export('wallet_id', {
-   *   encryption_type: 'HPKE',
-   *   recipient_public_key:
-   *     'BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=',
-   * });
+   * const walletExportResponseBody =
+   *   await client.wallets._export('wallet_id', {
+   *     encryption_type: 'HPKE',
+   *     recipient_public_key:
+   *       'BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=',
+   *   });
    * ```
    */
   _export(
     walletID: string,
     params: WalletExportParams,
     options?: RequestOptions,
-  ): APIPromise<WalletExportResponse> {
+  ): APIPromise<WalletExportResponseBody> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-request-expiry': privyRequestExpiry,
@@ -2636,6 +2637,195 @@ export interface WalletAuthenticateRequestBody {
 }
 
 /**
+ * The input for private key wallets.
+ */
+export interface PrivateKeyInitInput {
+  /**
+   * The address of the wallet to import.
+   */
+  address: string;
+
+  /**
+   * The chain type of the wallet to import. Currently supports `ethereum` and
+   * `solana`.
+   */
+  chain_type: WalletImportSupportedChains;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  entropy_type: 'private-key';
+}
+
+/**
+ * The input for HD wallets.
+ */
+export interface HDInitInput {
+  /**
+   * The address of the wallet to import.
+   */
+  address: string;
+
+  /**
+   * The chain type of the wallet to import. Currently supports `ethereum` and
+   * `solana`.
+   */
+  chain_type: WalletImportSupportedChains;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  /**
+   * The entropy type of the wallet to import.
+   */
+  entropy_type: 'hd';
+
+  /**
+   * The index of the wallet to import.
+   */
+  index: number;
+}
+
+/**
+ * The submission input for importing a private key wallet.
+ */
+export interface PrivateKeySubmitInput {
+  /**
+   * The address of the wallet to import.
+   */
+  address: string;
+
+  /**
+   * The chain type of the wallet to import. Currently supports `ethereum` and
+   * `solana`.
+   */
+  chain_type: WalletImportSupportedChains;
+
+  /**
+   * The encrypted entropy of the wallet to import.
+   */
+  ciphertext: string;
+
+  /**
+   * The base64-encoded encapsulated key that was generated during encryption, for
+   * use during decryption inside the TEE.
+   */
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  entropy_type: 'private-key';
+
+  /**
+   * Optional HPKE configuration for wallet import decryption. These parameters allow
+   * importing wallets encrypted by external providers that use different HPKE
+   * configurations.
+   */
+  hpke_config?: HpkeImportConfig;
+}
+
+/**
+ * The submission input for importing an HD wallet.
+ */
+export interface HDSubmitInput {
+  /**
+   * The address of the wallet to import.
+   */
+  address: string;
+
+  /**
+   * The chain type of the wallet to import. Currently supports `ethereum` and
+   * `solana`.
+   */
+  chain_type: WalletImportSupportedChains;
+
+  /**
+   * The encrypted entropy of the wallet to import.
+   */
+  ciphertext: string;
+
+  /**
+   * The base64-encoded encapsulated key that was generated during encryption, for
+   * use during decryption inside the TEE.
+   */
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  /**
+   * The entropy type of the wallet to import.
+   */
+  entropy_type: 'hd';
+
+  /**
+   * The index of the wallet to import.
+   */
+  index: number;
+
+  /**
+   * Optional HPKE configuration for wallet import decryption. These parameters allow
+   * importing wallets encrypted by external providers that use different HPKE
+   * configurations.
+   */
+  hpke_config?: HpkeImportConfig;
+}
+
+/**
+ * Request body for exporting a wallet private key.
+ */
+export interface WalletExportRequestBody {
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  /**
+   * The base64-encoded encryption public key to encrypt the wallet private key with.
+   */
+  recipient_public_key: string;
+
+  export_seed_phrase?: boolean;
+}
+
+/**
+ * The response body from revoking a wallet delegation.
+ */
+export interface WalletRevokeResponse {
+  message: string;
+}
+
+/**
+ * Response body containing the encrypted wallet private key.
+ */
+export interface WalletExportResponseBody {
+  /**
+   * The encrypted private key.
+   */
+  ciphertext: string;
+
+  /**
+   * The base64-encoded encapsulated key that was generated during encryption, for
+   * use during decryption.
+   */
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+}
+
+/**
  * The source asset, amount, and chain for a token transfer.
  */
 export interface TokenTransferSource {
@@ -2673,7 +2863,7 @@ export interface TokenTransferDestination {
 /**
  * Request body for initiating a sponsored token transfer from an embedded wallet.
  */
-export interface CreateTokenTransferRequest {
+export interface TransferRequestBody {
   /**
    * The destination address for a token transfer.
    */
@@ -2766,24 +2956,6 @@ export interface WalletAuthorizationHeaders {
    * deadline by which the request must be processed.
    */
   'privy-request-expiry'?: string;
-}
-
-export interface WalletExportResponse {
-  /**
-   * The encrypted private key.
-   */
-  ciphertext: string;
-
-  /**
-   * The base64-encoded encapsulated key that was generated during encryption, for
-   * use during decryption.
-   */
-  encapsulated_key: string;
-
-  /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
-   */
-  encryption_type: HpkeEncryption;
 }
 
 export interface WalletInitImportResponse {
@@ -3988,7 +4160,10 @@ export declare namespace WalletRpcParams {
 }
 
 export interface WalletSubmitImportParams {
-  wallet: WalletSubmitImportParams.HDSubmitInput | WalletSubmitImportParams.PrivateKeySubmitInput;
+  /**
+   * The submission input for importing an HD wallet.
+   */
+  wallet: HDSubmitInput | PrivateKeySubmitInput;
 
   /**
    * Additional signers for the wallet.
@@ -4023,92 +4198,6 @@ export interface WalletSubmitImportParams {
    * An optional list of up to one policy ID to enforce on the wallet.
    */
   policy_ids?: PolicyInput;
-}
-
-export namespace WalletSubmitImportParams {
-  export interface HDSubmitInput {
-    /**
-     * The address of the wallet to import.
-     */
-    address: string;
-
-    /**
-     * The chain type of the wallet to import. Currently supports `ethereum` and
-     * `solana`.
-     */
-    chain_type: WalletsAPI.WalletImportSupportedChains;
-
-    /**
-     * The encrypted entropy of the wallet to import.
-     */
-    ciphertext: string;
-
-    /**
-     * The base64-encoded encapsulated key that was generated during encryption, for
-     * use during decryption inside the TEE.
-     */
-    encapsulated_key: string;
-
-    /**
-     * The encryption type of the wallet to import. Currently only supports `HPKE`.
-     */
-    encryption_type: WalletsAPI.HpkeEncryption;
-
-    /**
-     * The entropy type of the wallet to import.
-     */
-    entropy_type: 'hd';
-
-    /**
-     * The index of the wallet to import.
-     */
-    index: number;
-
-    /**
-     * Optional HPKE configuration for wallet import decryption. These parameters allow
-     * importing wallets encrypted by external providers that use different HPKE
-     * configurations.
-     */
-    hpke_config?: WalletsAPI.HpkeImportConfig;
-  }
-
-  export interface PrivateKeySubmitInput {
-    /**
-     * The address of the wallet to import.
-     */
-    address: string;
-
-    /**
-     * The chain type of the wallet to import. Currently supports `ethereum` and
-     * `solana`.
-     */
-    chain_type: WalletsAPI.WalletImportSupportedChains;
-
-    /**
-     * The encrypted entropy of the wallet to import.
-     */
-    ciphertext: string;
-
-    /**
-     * The base64-encoded encapsulated key that was generated during encryption, for
-     * use during decryption inside the TEE.
-     */
-    encapsulated_key: string;
-
-    /**
-     * The encryption type of the wallet to import. Currently only supports `HPKE`.
-     */
-    encryption_type: WalletsAPI.HpkeEncryption;
-
-    entropy_type: 'private-key';
-
-    /**
-     * Optional HPKE configuration for wallet import decryption. These parameters allow
-     * importing wallets encrypted by external providers that use different HPKE
-     * configurations.
-     */
-    hpke_config?: WalletsAPI.HpkeImportConfig;
-  }
 }
 
 export interface WalletUpdateParams {
@@ -4401,16 +4490,22 @@ export declare namespace Wallets {
     type WalletRpcRequestBody as WalletRpcRequestBody,
     type WalletRpcResponse as WalletRpcResponse,
     type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
+    type PrivateKeyInitInput as PrivateKeyInitInput,
+    type HDInitInput as HDInitInput,
+    type PrivateKeySubmitInput as PrivateKeySubmitInput,
+    type HDSubmitInput as HDSubmitInput,
+    type WalletExportRequestBody as WalletExportRequestBody,
+    type WalletRevokeResponse as WalletRevokeResponse,
+    type WalletExportResponseBody as WalletExportResponseBody,
     type TokenTransferSource as TokenTransferSource,
     type TokenTransferDestination as TokenTransferDestination,
-    type CreateTokenTransferRequest as CreateTokenTransferRequest,
+    type TransferRequestBody as TransferRequestBody,
     type SuiCommandName as SuiCommandName,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
     type AuthorizationKeyResponse as AuthorizationKeyResponse,
     type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
-    type WalletExportResponse as WalletExportResponse,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,

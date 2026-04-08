@@ -291,7 +291,7 @@ export interface TransferIntentRequestDetails {
   /**
    * Request body for initiating a sponsored token transfer from an embedded wallet.
    */
-  body: WalletsAPI.CreateTokenTransferRequest;
+  body: WalletsAPI.TransferRequestBody;
 
   method: 'POST';
 
@@ -667,7 +667,7 @@ export namespace TransferIntentResponse {
     /**
      * Request body for initiating a sponsored token transfer from an embedded wallet.
      */
-    body: WalletsAPI.CreateTokenTransferRequest;
+    body: WalletsAPI.TransferRequestBody;
 
     method: 'POST';
 

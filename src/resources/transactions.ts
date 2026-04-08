@@ -19,7 +19,7 @@ export class Transactions extends APIResource {
    * );
    * ```
    */
-  get(transactionID: string, options?: RequestOptions): APIPromise<TransactionGetResponse> {
+  get(transactionID: string, options?: RequestOptions): APIPromise<Transaction> {
     return this._client.get(path`/v1/transactions/${transactionID}`, options);
   }
 }
@@ -217,43 +217,9 @@ export interface TransactionScanningResponseBody {
 }
 
 /**
- * A list of transactions.
+ * A transaction from a Privy wallet.
  */
-export interface TransactionList {
-  transactions: Array<TransactionList.Transaction>;
-}
-
-export namespace TransactionList {
-  export interface Transaction {
-    id: string;
-
-    caip2: string;
-
-    created_at: number;
-
-    status:
-      | 'broadcasted'
-      | 'confirmed'
-      | 'execution_reverted'
-      | 'failed'
-      | 'replaced'
-      | 'finalized'
-      | 'provider_error'
-      | 'pending';
-
-    transaction_hash: string | null;
-
-    wallet_id: string;
-
-    reference_id?: string | null;
-
-    sponsored?: boolean;
-
-    user_operation_hash?: string;
-  }
-}
-
-export interface TransactionGetResponse {
+export interface Transaction {
   id: string;
 
   caip2: string;
@@ -281,6 +247,13 @@ export interface TransactionGetResponse {
   user_operation_hash?: string;
 }
 
+/**
+ * A list of transactions.
+ */
+export interface TransactionList {
+  transactions: Array<Transaction>;
+}
+
 export declare namespace Transactions {
   export {
     type TransactionScanningMetadata as TransactionScanningMetadata,
@@ -299,7 +272,7 @@ export declare namespace Transactions {
     type TransactionScanningSimulationSuccessResult as TransactionScanningSimulationSuccessResult,
     type TransactionScanningSimulationResult as TransactionScanningSimulationResult,
     type TransactionScanningResponseBody as TransactionScanningResponseBody,
+    type Transaction as Transaction,
     type TransactionList as TransactionList,
-    type TransactionGetResponse as TransactionGetResponse,
   };
 }

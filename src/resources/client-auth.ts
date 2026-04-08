@@ -7,6 +7,21 @@ import * as UsersAPI from './users';
 export class ClientAuth extends APIResource {}
 
 /**
+ * Whether to allow sign-up during authentication.
+ */
+export type AuthenticateModeOption = 'no-signup' | 'login-or-sign-up';
+
+/**
+ * The authentication mode settings for the ceremony.
+ */
+export interface AuthenticateMode {
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+}
+
+/**
  * The ID of an external OAuth provider.
  */
 export type ExternalOAuthProviderID =
@@ -47,21 +62,6 @@ export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
  * Valid set of onramp providers
  */
 export type OnrampProvider = 'bridge' | 'bridge-sandbox';
-
-/**
- * Whether to allow sign-up during authentication.
- */
-export type AuthenticateModeOption = 'no-signup' | 'login-or-sign-up';
-
-/**
- * The authentication mode settings for the ceremony.
- */
-export interface AuthenticateMode {
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
-}
 
 /**
  * The result of the WebAuthn credProps extension.
@@ -2084,14 +2084,14 @@ export interface MfaPasskeyEnrollmentRequestBody {
 
 export declare namespace ClientAuth {
   export {
+    type AuthenticateModeOption as AuthenticateModeOption,
+    type AuthenticateMode as AuthenticateMode,
     type ExternalOAuthProviderID as ExternalOAuthProviderID,
     type PrivyOAuthProviderID as PrivyOAuthProviderID,
     type CustomOAuthProviderID as CustomOAuthProviderID,
     type OAuthProviderID as OAuthProviderID,
     type BridgeOnrampProvider as BridgeOnrampProvider,
     type OnrampProvider as OnrampProvider,
-    type AuthenticateModeOption as AuthenticateModeOption,
-    type AuthenticateMode as AuthenticateMode,
     type PasskeyCredPropsResult as PasskeyCredPropsResult,
     type PasskeyClientExtensionResults as PasskeyClientExtensionResults,
     type PasskeyCredentialDescriptor as PasskeyCredentialDescriptor,

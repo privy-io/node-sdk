@@ -1146,6 +1146,838 @@ export interface WalletActionTransferFailedWebhookPayload {
 }
 
 /**
+ * Payload for the wallet_action.earn_deposit.created webhook event.
+ */
+export interface WalletActionEarnDepositCreatedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * Base-unit amount of asset deposited (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_deposit.created';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of asset deposited (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_deposit.succeeded webhook event.
+ */
+export interface WalletActionEarnDepositSucceededWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * Base-unit amount of asset deposited (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * Vault shares received in base units.
+   */
+  share_amount: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action, including transaction hashes.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_deposit.succeeded';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of asset deposited (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_deposit.rejected webhook event.
+ */
+export interface WalletActionEarnDepositRejectedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: WalletActionsAPI.FailureReason;
+
+  /**
+   * Base-unit amount of asset deposited (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action at the time of rejection.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_deposit.rejected';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of asset deposited (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_deposit.failed webhook event.
+ */
+export interface WalletActionEarnDepositFailedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: WalletActionsAPI.FailureReason;
+
+  /**
+   * Base-unit amount of asset deposited (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action. Completed steps will have transaction hashes;
+   * the failing step will have a failure_reason.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_deposit.failed';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of asset deposited (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_withdraw.created webhook event.
+ */
+export interface WalletActionEarnWithdrawCreatedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * Base-unit amount of asset withdrawn (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_withdraw.created';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of asset withdrawn (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_withdraw.succeeded webhook event.
+ */
+export interface WalletActionEarnWithdrawSucceededWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * Base-unit amount of asset withdrawn (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * Vault shares burned in base units.
+   */
+  share_amount: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action, including transaction hashes.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_withdraw.succeeded';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of asset withdrawn (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_withdraw.rejected webhook event.
+ */
+export interface WalletActionEarnWithdrawRejectedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: WalletActionsAPI.FailureReason;
+
+  /**
+   * Base-unit amount of asset withdrawn (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action at the time of rejection.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_withdraw.rejected';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of asset withdrawn (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_withdraw.failed webhook event.
+ */
+export interface WalletActionEarnWithdrawFailedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: WalletActionsAPI.FailureReason;
+
+  /**
+   * Base-unit amount of asset withdrawn (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action. Completed steps will have transaction hashes;
+   * the failing step will have a failure_reason.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_withdraw.failed';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of asset withdrawn (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_incentive_claim.created webhook event.
+ */
+export interface WalletActionEarnIncentiveClaimCreatedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * EVM chain name (e.g. "base", "ethereum").
+   */
+  chain: string;
+
+  /**
+   * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
+   */
+  rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_incentive_claim.created';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
+ * Payload for the wallet_action.earn_incentive_claim.succeeded webhook event.
+ */
+export interface WalletActionEarnIncentiveClaimSucceededWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * EVM chain name (e.g. "base", "ethereum").
+   */
+  chain: string;
+
+  /**
+   * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
+   */
+  rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action, including transaction hashes.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_incentive_claim.succeeded';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
+ * Payload for the wallet_action.earn_incentive_claim.rejected webhook event.
+ */
+export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * EVM chain name (e.g. "base", "ethereum").
+   */
+  chain: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: WalletActionsAPI.FailureReason;
+
+  /**
+   * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
+   */
+  rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action at the time of rejection.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_incentive_claim.rejected';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
+ * Payload for the wallet_action.earn_incentive_claim.failed webhook event.
+ */
+export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * EVM chain name (e.g. "base", "ethereum").
+   */
+  chain: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: WalletActionsAPI.FailureReason;
+
+  /**
+   * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
+   */
+  rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionsAPI.WalletActionStatus;
+
+  /**
+   * The steps of the wallet action. Completed steps will have transaction hashes;
+   * the failing step will have a failure_reason.
+   */
+  steps: Array<WalletActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_incentive_claim.failed';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
  * Payload for the wallet.funds_deposited webhook event.
  */
 export interface FundsDepositedWebhookPayload {
@@ -1663,7 +2495,19 @@ export type WebhookPayload =
   | WalletActionTransferCreatedWebhookPayload
   | WalletActionTransferSucceededWebhookPayload
   | WalletActionTransferRejectedWebhookPayload
-  | WalletActionTransferFailedWebhookPayload;
+  | WalletActionTransferFailedWebhookPayload
+  | WalletActionEarnDepositCreatedWebhookPayload
+  | WalletActionEarnDepositSucceededWebhookPayload
+  | WalletActionEarnDepositRejectedWebhookPayload
+  | WalletActionEarnDepositFailedWebhookPayload
+  | WalletActionEarnWithdrawCreatedWebhookPayload
+  | WalletActionEarnWithdrawSucceededWebhookPayload
+  | WalletActionEarnWithdrawRejectedWebhookPayload
+  | WalletActionEarnWithdrawFailedWebhookPayload
+  | WalletActionEarnIncentiveClaimCreatedWebhookPayload
+  | WalletActionEarnIncentiveClaimSucceededWebhookPayload
+  | WalletActionEarnIncentiveClaimRejectedWebhookPayload
+  | WalletActionEarnIncentiveClaimFailedWebhookPayload;
 
 /**
  * Payload for the kraken_embed.quote_executed webhook event.
@@ -1843,6 +2687,18 @@ export declare namespace Webhooks {
     type WalletActionTransferSucceededWebhookPayload as WalletActionTransferSucceededWebhookPayload,
     type WalletActionTransferRejectedWebhookPayload as WalletActionTransferRejectedWebhookPayload,
     type WalletActionTransferFailedWebhookPayload as WalletActionTransferFailedWebhookPayload,
+    type WalletActionEarnDepositCreatedWebhookPayload as WalletActionEarnDepositCreatedWebhookPayload,
+    type WalletActionEarnDepositSucceededWebhookPayload as WalletActionEarnDepositSucceededWebhookPayload,
+    type WalletActionEarnDepositRejectedWebhookPayload as WalletActionEarnDepositRejectedWebhookPayload,
+    type WalletActionEarnDepositFailedWebhookPayload as WalletActionEarnDepositFailedWebhookPayload,
+    type WalletActionEarnWithdrawCreatedWebhookPayload as WalletActionEarnWithdrawCreatedWebhookPayload,
+    type WalletActionEarnWithdrawSucceededWebhookPayload as WalletActionEarnWithdrawSucceededWebhookPayload,
+    type WalletActionEarnWithdrawRejectedWebhookPayload as WalletActionEarnWithdrawRejectedWebhookPayload,
+    type WalletActionEarnWithdrawFailedWebhookPayload as WalletActionEarnWithdrawFailedWebhookPayload,
+    type WalletActionEarnIncentiveClaimCreatedWebhookPayload as WalletActionEarnIncentiveClaimCreatedWebhookPayload,
+    type WalletActionEarnIncentiveClaimSucceededWebhookPayload as WalletActionEarnIncentiveClaimSucceededWebhookPayload,
+    type WalletActionEarnIncentiveClaimRejectedWebhookPayload as WalletActionEarnIncentiveClaimRejectedWebhookPayload,
+    type WalletActionEarnIncentiveClaimFailedWebhookPayload as WalletActionEarnIncentiveClaimFailedWebhookPayload,
     type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
     type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,
     type PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload,

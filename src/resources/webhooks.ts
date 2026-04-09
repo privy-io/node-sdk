@@ -1978,6 +1978,159 @@ export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
 }
 
 /**
+ * A native token asset (e.g. ETH, SOL).
+ */
+export interface WalletFundsNativeTokenAsset {
+  address: null;
+
+  type: 'native-token';
+}
+
+/**
+ * An ERC-20 token asset.
+ */
+export interface WalletFundsErc20Asset {
+  address: string;
+
+  type: 'erc20';
+}
+
+/**
+ * A Solana SPL token asset.
+ */
+export interface WalletFundsSplAsset {
+  mint: string;
+
+  type: 'spl';
+}
+
+/**
+ * A Stellar Asset Contract (SAC) asset.
+ */
+export interface WalletFundsSacAsset {
+  address: string;
+
+  type: 'sac';
+}
+
+/**
+ * An asset involved in a wallet transfer.
+ */
+export type WalletFundsAsset =
+  | WalletFundsNativeTokenAsset
+  | WalletFundsErc20Asset
+  | WalletFundsSplAsset
+  | WalletFundsSacAsset;
+
+/**
+ * Bridge metadata for a crypto deposit via liquidation address.
+ */
+export interface BridgeCryptoDepositMetadata {
+  drain_id: string;
+
+  /**
+   * The crypto address of the liquidation address that received the deposit.
+   */
+  liquidation_address: string;
+
+  liquidation_address_id: string;
+
+  method: 'liquidation_address';
+
+  /**
+   * The address that sent the deposit.
+   */
+  source_wallet_address: string;
+
+  type: 'crypto_deposit';
+}
+
+/**
+ * Bridge metadata for a refund via liquidation address.
+ */
+export interface BridgeRefundMetadata {
+  drain_id: string;
+
+  liquidation_address_id: string;
+
+  method: 'liquidation_address';
+
+  /**
+   * The original deposit transaction hash that triggered the failed drain.
+   */
+  original_transaction_hash: string;
+
+  type: 'refund';
+}
+
+/**
+ * Bridge metadata for a fiat deposit via virtual account.
+ */
+export interface BridgeFiatDepositMetadata {
+  activity_id: string;
+
+  method: 'virtual_account';
+
+  type: 'fiat_deposit';
+
+  virtual_account_id: string;
+}
+
+/**
+ * Bridge metadata for a crypto deposit via transfer.
+ */
+export interface BridgeCryptoTransferMetadata {
+  method: 'transfer';
+
+  /**
+   * The wallet address that sent the transfer.
+   */
+  source_wallet_address: string;
+
+  transfer_id: string;
+
+  type: 'crypto_deposit';
+}
+
+/**
+ * Bridge metadata for a fiat deposit via transfer.
+ */
+export interface BridgeFiatTransferMetadata {
+  method: 'transfer';
+
+  transfer_id: string;
+
+  type: 'fiat_deposit';
+}
+
+/**
+ * Bridge metadata for a transfer refund.
+ */
+export interface BridgeTransferRefundMetadata {
+  method: 'transfer';
+
+  transfer_id: string;
+
+  type: 'refund';
+
+  /**
+   * The original transfer transaction hash (if available).
+   */
+  original_transaction_hash?: string;
+}
+
+/**
+ * Metadata about a Bridge transaction associated with a wallet event.
+ */
+export type BridgeMetadata =
+  | BridgeCryptoDepositMetadata
+  | BridgeRefundMetadata
+  | BridgeFiatDepositMetadata
+  | BridgeCryptoTransferMetadata
+  | BridgeFiatTransferMetadata
+  | BridgeTransferRefundMetadata;
+
+/**
  * Payload for the wallet.funds_deposited webhook event.
  */
 export interface FundsDepositedWebhookPayload {
@@ -1987,13 +2140,9 @@ export interface FundsDepositedWebhookPayload {
   amount: string;
 
   /**
-   * The asset type being transferred.
+   * An asset involved in a wallet transfer.
    */
-  asset:
-    | FundsDepositedWebhookPayload.UnionMember0
-    | FundsDepositedWebhookPayload.UnionMember1
-    | FundsDepositedWebhookPayload.UnionMember2
-    | FundsDepositedWebhookPayload.UnionMember3;
+  asset: WalletFundsAsset;
 
   block: FundsDepositedWebhookPayload.Block;
 
@@ -2033,15 +2182,9 @@ export interface FundsDepositedWebhookPayload {
   wallet_id: string;
 
   /**
-   * Optional Bridge metadata for custodial wallet deposits.
+   * Metadata about a Bridge transaction associated with a wallet event.
    */
-  bridge_metadata?:
-    | FundsDepositedWebhookPayload.UnionMember0
-    | FundsDepositedWebhookPayload.UnionMember1
-    | FundsDepositedWebhookPayload.UnionMember2
-    | FundsDepositedWebhookPayload.UnionMember3
-    | FundsDepositedWebhookPayload.UnionMember4
-    | FundsDepositedWebhookPayload.UnionMember5;
+  bridge_metadata?: BridgeMetadata;
 
   /**
    * The transaction fee paid, as a stringified bigint in the chain's native token.
@@ -2050,30 +2193,6 @@ export interface FundsDepositedWebhookPayload {
 }
 
 export namespace FundsDepositedWebhookPayload {
-  export interface UnionMember0 {
-    address: null;
-
-    type: 'native-token';
-  }
-
-  export interface UnionMember1 {
-    address: string;
-
-    type: 'erc20';
-  }
-
-  export interface UnionMember2 {
-    mint: string;
-
-    type: 'spl';
-  }
-
-  export interface UnionMember3 {
-    address: string;
-
-    type: 'sac';
-  }
-
   export interface Block {
     /**
      * The block number.
@@ -2084,85 +2203,6 @@ export namespace FundsDepositedWebhookPayload {
      * The block timestamp.
      */
     timestamp: number;
-  }
-
-  export interface UnionMember0 {
-    drain_id: string;
-
-    /**
-     * The crypto address of the liquidation address that received the deposit.
-     */
-    liquidation_address: string;
-
-    liquidation_address_id: string;
-
-    method: 'liquidation_address';
-
-    /**
-     * The address that sent the deposit.
-     */
-    source_wallet_address: string;
-
-    type: 'crypto_deposit';
-  }
-
-  export interface UnionMember1 {
-    drain_id: string;
-
-    liquidation_address_id: string;
-
-    method: 'liquidation_address';
-
-    /**
-     * The original deposit transaction hash that triggered the failed drain.
-     */
-    original_transaction_hash: string;
-
-    type: 'refund';
-  }
-
-  export interface UnionMember2 {
-    activity_id: string;
-
-    method: 'virtual_account';
-
-    type: 'fiat_deposit';
-
-    virtual_account_id: string;
-  }
-
-  export interface UnionMember3 {
-    method: 'transfer';
-
-    /**
-     * The wallet address that sent the transfer.
-     */
-    source_wallet_address: string;
-
-    transfer_id: string;
-
-    type: 'crypto_deposit';
-  }
-
-  export interface UnionMember4 {
-    method: 'transfer';
-
-    transfer_id: string;
-
-    type: 'fiat_deposit';
-  }
-
-  export interface UnionMember5 {
-    method: 'transfer';
-
-    transfer_id: string;
-
-    type: 'refund';
-
-    /**
-     * The original transfer transaction hash (if available).
-     */
-    original_transaction_hash?: string;
   }
 }
 
@@ -2176,13 +2216,9 @@ export interface FundsWithdrawnWebhookPayload {
   amount: string;
 
   /**
-   * The asset type being transferred.
+   * An asset involved in a wallet transfer.
    */
-  asset:
-    | FundsWithdrawnWebhookPayload.UnionMember0
-    | FundsWithdrawnWebhookPayload.UnionMember1
-    | FundsWithdrawnWebhookPayload.UnionMember2
-    | FundsWithdrawnWebhookPayload.UnionMember3;
+  asset: WalletFundsAsset;
 
   block: FundsWithdrawnWebhookPayload.Block;
 
@@ -2228,30 +2264,6 @@ export interface FundsWithdrawnWebhookPayload {
 }
 
 export namespace FundsWithdrawnWebhookPayload {
-  export interface UnionMember0 {
-    address: null;
-
-    type: 'native-token';
-  }
-
-  export interface UnionMember1 {
-    address: string;
-
-    type: 'erc20';
-  }
-
-  export interface UnionMember2 {
-    mint: string;
-
-    type: 'spl';
-  }
-
-  export interface UnionMember3 {
-    address: string;
-
-    type: 'sac';
-  }
-
   export interface Block {
     /**
      * The block number.
@@ -2699,6 +2711,18 @@ export declare namespace Webhooks {
     type WalletActionEarnIncentiveClaimSucceededWebhookPayload as WalletActionEarnIncentiveClaimSucceededWebhookPayload,
     type WalletActionEarnIncentiveClaimRejectedWebhookPayload as WalletActionEarnIncentiveClaimRejectedWebhookPayload,
     type WalletActionEarnIncentiveClaimFailedWebhookPayload as WalletActionEarnIncentiveClaimFailedWebhookPayload,
+    type WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset,
+    type WalletFundsErc20Asset as WalletFundsErc20Asset,
+    type WalletFundsSplAsset as WalletFundsSplAsset,
+    type WalletFundsSacAsset as WalletFundsSacAsset,
+    type WalletFundsAsset as WalletFundsAsset,
+    type BridgeCryptoDepositMetadata as BridgeCryptoDepositMetadata,
+    type BridgeRefundMetadata as BridgeRefundMetadata,
+    type BridgeFiatDepositMetadata as BridgeFiatDepositMetadata,
+    type BridgeCryptoTransferMetadata as BridgeCryptoTransferMetadata,
+    type BridgeFiatTransferMetadata as BridgeFiatTransferMetadata,
+    type BridgeTransferRefundMetadata as BridgeTransferRefundMetadata,
+    type BridgeMetadata as BridgeMetadata,
     type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
     type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,
     type PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload,

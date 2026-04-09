@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as WalletsAPI from './wallets';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -41,7 +42,10 @@ export namespace TransactionGetResponse {
 
     created_at: number;
 
-    details: Transaction.UnionMember0 | Transaction.UnionMember1 | null;
+    /**
+     * Details of a wallet transaction, varying by transaction type.
+     */
+    details: Transaction.Details;
 
     privy_transaction_id: string;
 
@@ -65,83 +69,10 @@ export namespace TransactionGetResponse {
   }
 
   export namespace Transaction {
-    export interface UnionMember0 {
-      asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
-
-      chain:
-        | 'ethereum'
-        | 'arbitrum'
-        | 'base'
-        | 'tempo'
-        | 'linea'
-        | 'optimism'
-        | 'polygon'
-        | 'solana'
-        | 'zksync_era'
-        | 'sepolia'
-        | 'arbitrum_sepolia'
-        | 'base_sepolia'
-        | 'linea_testnet'
-        | 'optimism_sepolia'
-        | 'polygon_amoy'
-        | 'solana_devnet'
-        | 'solana_testnet';
-
-      display_values: { [key: string]: string };
-
-      raw_value: string;
-
-      raw_value_decimals: number;
-
-      recipient: string;
-
-      recipient_privy_user_id: string | null;
-
-      sender: string;
-
-      sender_privy_user_id: string | null;
-
-      type: 'transfer_sent';
-    }
-
-    export interface UnionMember1 {
-      asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
-
-      chain:
-        | 'ethereum'
-        | 'arbitrum'
-        | 'base'
-        | 'tempo'
-        | 'linea'
-        | 'optimism'
-        | 'polygon'
-        | 'solana'
-        | 'zksync_era'
-        | 'sepolia'
-        | 'arbitrum_sepolia'
-        | 'base_sepolia'
-        | 'linea_testnet'
-        | 'optimism_sepolia'
-        | 'polygon_amoy'
-        | 'solana_devnet'
-        | 'solana_testnet';
-
-      display_values: { [key: string]: string };
-
-      raw_value: string;
-
-      raw_value_decimals: number;
-
-      recipient: string;
-
-      recipient_privy_user_id: string | null;
-
-      sender: string;
-
-      sender_privy_user_id: string | null;
-
-      type: 'transfer_received';
-    }
+    /**
+     * Details of a wallet transaction, varying by transaction type.
+     */
+    export type Details = WalletsAPI.TransactionDetail & {};
   }
 }
 

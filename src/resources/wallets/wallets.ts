@@ -3,6 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as WalletsAPI from './wallets';
 import * as SharedAPI from '../shared';
+import * as UsersAPI from '../users';
 import * as AppsAPI from '../apps/apps';
 import * as BalanceAPI from './balance';
 import { Balance, BalanceGetParams, BalanceGetResponse } from './balance';
@@ -2881,6 +2882,95 @@ export interface TransferRequestBody {
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
 
 /**
+ * Details for a sent transfer transaction.
+ */
+export interface TransferSentTransactionDetail {
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+
+  chain:
+    | 'ethereum'
+    | 'arbitrum'
+    | 'base'
+    | 'tempo'
+    | 'linea'
+    | 'optimism'
+    | 'polygon'
+    | 'solana'
+    | 'zksync_era'
+    | 'sepolia'
+    | 'arbitrum_sepolia'
+    | 'base_sepolia'
+    | 'linea_testnet'
+    | 'optimism_sepolia'
+    | 'polygon_amoy'
+    | 'solana_devnet'
+    | 'solana_testnet';
+
+  display_values: { [key: string]: string };
+
+  raw_value: string;
+
+  raw_value_decimals: number;
+
+  recipient: string;
+
+  recipient_privy_user_id: string | null;
+
+  sender: string;
+
+  sender_privy_user_id: string | null;
+
+  type: 'transfer_sent';
+}
+
+/**
+ * Details for a received transfer transaction.
+ */
+export interface TransferReceivedTransactionDetail {
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+
+  chain:
+    | 'ethereum'
+    | 'arbitrum'
+    | 'base'
+    | 'tempo'
+    | 'linea'
+    | 'optimism'
+    | 'polygon'
+    | 'solana'
+    | 'zksync_era'
+    | 'sepolia'
+    | 'arbitrum_sepolia'
+    | 'base_sepolia'
+    | 'linea_testnet'
+    | 'optimism_sepolia'
+    | 'polygon_amoy'
+    | 'solana_devnet'
+    | 'solana_testnet';
+
+  display_values: { [key: string]: string };
+
+  raw_value: string;
+
+  raw_value_decimals: number;
+
+  recipient: string;
+
+  recipient_privy_user_id: string | null;
+
+  sender: string;
+
+  sender_privy_user_id: string | null;
+
+  type: 'transfer_received';
+}
+
+/**
+ * Details of a wallet transaction, varying by transaction type.
+ */
+export type TransactionDetail = TransferSentTransactionDetail | TransferReceivedTransactionDetail;
+
+/**
  * Input for registering or updating an application public signing key for
  * API-based wallet actions.
  */
@@ -4278,27 +4368,7 @@ export namespace WalletCreateWalletsWithRecoveryParams {
   }
 
   export interface RecoveryUser {
-    linked_accounts: Array<RecoveryUser.UnionMember0 | RecoveryUser.UnionMember1>;
-  }
-
-  export namespace RecoveryUser {
-    export interface UnionMember0 {
-      /**
-       * The email address of the user.
-       */
-      address: string;
-
-      type: 'email';
-    }
-
-    export interface UnionMember1 {
-      /**
-       * The JWT subject ID of the user.
-       */
-      custom_user_id: string;
-
-      type: 'custom_auth';
-    }
+    linked_accounts: Array<UsersAPI.LinkedAccountEmailInput | UsersAPI.LinkedAccountCustomJwtInput>;
   }
 
   export interface Wallet {
@@ -4501,6 +4571,9 @@ export declare namespace Wallets {
     type TokenTransferDestination as TokenTransferDestination,
     type TransferRequestBody as TransferRequestBody,
     type SuiCommandName as SuiCommandName,
+    type TransferSentTransactionDetail as TransferSentTransactionDetail,
+    type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
+    type TransactionDetail as TransactionDetail,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,

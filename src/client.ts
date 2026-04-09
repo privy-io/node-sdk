@@ -527,6 +527,13 @@ import {
   WalletActions,
 } from './resources/wallet-actions';
 import {
+  BridgeCryptoDepositMetadata,
+  BridgeCryptoTransferMetadata,
+  BridgeFiatDepositMetadata,
+  BridgeFiatTransferMetadata,
+  BridgeMetadata,
+  BridgeRefundMetadata,
+  BridgeTransferRefundMetadata,
   FundsDepositedWebhookPayload,
   FundsWithdrawnWebhookPayload,
   IntentAuthorizedWebhookPayload,
@@ -578,6 +585,11 @@ import {
   WalletActionTransferFailedWebhookPayload,
   WalletActionTransferRejectedWebhookPayload,
   WalletActionTransferSucceededWebhookPayload,
+  WalletFundsAsset,
+  WalletFundsErc20Asset,
+  WalletFundsNativeTokenAsset,
+  WalletFundsSacAsset,
+  WalletFundsSplAsset,
   WalletRecoveredWebhookPayload,
   WalletRecoverySetupWebhookPayload,
   WebhookPayload,
@@ -782,7 +794,10 @@ import {
   TokenOutput,
   TokenTransferDestination,
   TokenTransferSource,
+  TransactionDetail,
+  TransferReceivedTransactionDetail,
   TransferRequestBody,
+  TransferSentTransactionDetail,
   TypedDataDomainInputParams,
   TypedDataTypeFieldInput,
   TypedDataTypesInputParams,
@@ -1631,9 +1646,9 @@ export class PrivyAPI {
   apps: API.Apps = new API.Apps(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
   shared: API.Shared = new API.Shared(this);
+  embeddedWallets: API.EmbeddedWallets = new API.EmbeddedWallets(this);
   walletActions: API.WalletActions = new API.WalletActions(this);
   analytics: API.Analytics = new API.Analytics(this);
-  embeddedWallets: API.EmbeddedWallets = new API.EmbeddedWallets(this);
   funding: API.Funding = new API.Funding(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
@@ -1653,9 +1668,9 @@ PrivyAPI.Intents = Intents;
 PrivyAPI.Apps = Apps;
 PrivyAPI.ClientAuth = ClientAuth;
 PrivyAPI.Shared = Shared;
+PrivyAPI.EmbeddedWallets = EmbeddedWallets;
 PrivyAPI.WalletActions = WalletActions;
 PrivyAPI.Analytics = Analytics;
-PrivyAPI.EmbeddedWallets = EmbeddedWallets;
 PrivyAPI.Funding = Funding;
 PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.Webhooks = Webhooks;
@@ -1843,6 +1858,9 @@ export declare namespace PrivyAPI {
     type TokenTransferDestination as TokenTransferDestination,
     type TransferRequestBody as TransferRequestBody,
     type SuiCommandName as SuiCommandName,
+    type TransferSentTransactionDetail as TransferSentTransactionDetail,
+    type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
+    type TransactionDetail as TransactionDetail,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
@@ -1866,6 +1884,27 @@ export declare namespace PrivyAPI {
 
   export {
     Users as Users,
+    type CustomMetadata as CustomMetadata,
+    type LinkedAccountWalletInput as LinkedAccountWalletInput,
+    type LinkedAccountEmailInput as LinkedAccountEmailInput,
+    type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
+    type LinkedAccountGoogleInput as LinkedAccountGoogleInput,
+    type LinkedAccountTwitterInput as LinkedAccountTwitterInput,
+    type LinkedAccountDiscordInput as LinkedAccountDiscordInput,
+    type LinkedAccountGitHubInput as LinkedAccountGitHubInput,
+    type LinkedAccountSpotifyInput as LinkedAccountSpotifyInput,
+    type LinkedAccountInstagramInput as LinkedAccountInstagramInput,
+    type LinkedAccountTiktokInput as LinkedAccountTiktokInput,
+    type LinkedAccountLineInput as LinkedAccountLineInput,
+    type LinkedAccountTwitchInput as LinkedAccountTwitchInput,
+    type LinkedAccountAppleInput as LinkedAccountAppleInput,
+    type LinkedAccountLinkedInInput as LinkedAccountLinkedInInput,
+    type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
+    type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
+    type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
+    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
+    type LinkedAccountInput as LinkedAccountInput,
+    type UserBatchCreateInput as UserBatchCreateInput,
     type LinkedAccountEmail as LinkedAccountEmail,
     type LinkedAccountPhone as LinkedAccountPhone,
     type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
@@ -1906,28 +1945,7 @@ export declare namespace PrivyAPI {
     type TotpMfaMethod as TotpMfaMethod,
     type PasskeyMfaMethod as PasskeyMfaMethod,
     type LinkedMfaMethod as LinkedMfaMethod,
-    type CustomMetadata as CustomMetadata,
     type User as User,
-    type LinkedAccountWalletInput as LinkedAccountWalletInput,
-    type LinkedAccountEmailInput as LinkedAccountEmailInput,
-    type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
-    type LinkedAccountGoogleInput as LinkedAccountGoogleInput,
-    type LinkedAccountTwitterInput as LinkedAccountTwitterInput,
-    type LinkedAccountDiscordInput as LinkedAccountDiscordInput,
-    type LinkedAccountGitHubInput as LinkedAccountGitHubInput,
-    type LinkedAccountSpotifyInput as LinkedAccountSpotifyInput,
-    type LinkedAccountInstagramInput as LinkedAccountInstagramInput,
-    type LinkedAccountTiktokInput as LinkedAccountTiktokInput,
-    type LinkedAccountLineInput as LinkedAccountLineInput,
-    type LinkedAccountTwitchInput as LinkedAccountTwitchInput,
-    type LinkedAccountAppleInput as LinkedAccountAppleInput,
-    type LinkedAccountLinkedInInput as LinkedAccountLinkedInInput,
-    type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
-    type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
-    type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
-    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
-    type LinkedAccountInput as LinkedAccountInput,
-    type UserBatchCreateInput as UserBatchCreateInput,
     type OAuthTokens as OAuthTokens,
     type UserWithIdentityToken as UserWithIdentityToken,
     type AuthenticatedUser as AuthenticatedUser,
@@ -2289,6 +2307,32 @@ export declare namespace PrivyAPI {
   };
 
   export {
+    EmbeddedWallets as EmbeddedWallets,
+    type WalletCreationAdditionalSignerItem as WalletCreationAdditionalSignerItem,
+    type WalletCreationInput as WalletCreationInput,
+    type EmbeddedWalletCreationInput as EmbeddedWalletCreationInput,
+    type SmartWalletType as SmartWalletType,
+    type AlchemyPaymasterContext as AlchemyPaymasterContext,
+    type SmartWalletNetworkConfiguration as SmartWalletNetworkConfiguration,
+    type SmartWalletNetworkConfigurationInput as SmartWalletNetworkConfigurationInput,
+    type SmartWalletConfigurationDisabled as SmartWalletConfigurationDisabled,
+    type SmartWalletConfigurationEnabled as SmartWalletConfigurationEnabled,
+    type SmartWalletConfigurationInputEnabled as SmartWalletConfigurationInputEnabled,
+    type SmartWalletConfiguration as SmartWalletConfiguration,
+    type SmartWalletConfigurationInput as SmartWalletConfigurationInput,
+    type RecoveryType as RecoveryType,
+    type ICloudClientType as ICloudClientType,
+    type RecoveryKeyMaterialInput as RecoveryKeyMaterialInput,
+    type RecoveryKeyMaterialResponse as RecoveryKeyMaterialResponse,
+    type OAuthInitRecoveryInput as OAuthInitRecoveryInput,
+    type OAuthAuthenticateRecoveryResponse as OAuthAuthenticateRecoveryResponse,
+    type OAuthInitICloudRecoveryInput as OAuthInitICloudRecoveryInput,
+    type OAuthCallbackICloudExpoInput as OAuthCallbackICloudExpoInput,
+    type RecoveryConfigurationICloudInput as RecoveryConfigurationICloudInput,
+    type RecoveryConfigurationICloudResponse as RecoveryConfigurationICloudResponse,
+  };
+
+  export {
     WalletActions as WalletActions,
     type WalletActionType as WalletActionType,
     type WalletActionStatus as WalletActionStatus,
@@ -2311,32 +2355,6 @@ export declare namespace PrivyAPI {
   };
 
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
-
-  export {
-    EmbeddedWallets as EmbeddedWallets,
-    type SmartWalletType as SmartWalletType,
-    type AlchemyPaymasterContext as AlchemyPaymasterContext,
-    type SmartWalletNetworkConfiguration as SmartWalletNetworkConfiguration,
-    type SmartWalletNetworkConfigurationInput as SmartWalletNetworkConfigurationInput,
-    type SmartWalletConfigurationDisabled as SmartWalletConfigurationDisabled,
-    type SmartWalletConfigurationEnabled as SmartWalletConfigurationEnabled,
-    type SmartWalletConfigurationInputEnabled as SmartWalletConfigurationInputEnabled,
-    type SmartWalletConfiguration as SmartWalletConfiguration,
-    type SmartWalletConfigurationInput as SmartWalletConfigurationInput,
-    type RecoveryType as RecoveryType,
-    type ICloudClientType as ICloudClientType,
-    type RecoveryKeyMaterialInput as RecoveryKeyMaterialInput,
-    type RecoveryKeyMaterialResponse as RecoveryKeyMaterialResponse,
-    type OAuthInitRecoveryInput as OAuthInitRecoveryInput,
-    type OAuthAuthenticateRecoveryResponse as OAuthAuthenticateRecoveryResponse,
-    type OAuthInitICloudRecoveryInput as OAuthInitICloudRecoveryInput,
-    type OAuthCallbackICloudExpoInput as OAuthCallbackICloudExpoInput,
-    type RecoveryConfigurationICloudInput as RecoveryConfigurationICloudInput,
-    type RecoveryConfigurationICloudResponse as RecoveryConfigurationICloudResponse,
-    type WalletCreationAdditionalSignerItem as WalletCreationAdditionalSignerItem,
-    type WalletCreationInput as WalletCreationInput,
-    type EmbeddedWalletCreationInput as EmbeddedWalletCreationInput,
-  };
 
   export {
     Funding as Funding,
@@ -2418,6 +2436,18 @@ export declare namespace PrivyAPI {
     type WalletActionEarnIncentiveClaimSucceededWebhookPayload as WalletActionEarnIncentiveClaimSucceededWebhookPayload,
     type WalletActionEarnIncentiveClaimRejectedWebhookPayload as WalletActionEarnIncentiveClaimRejectedWebhookPayload,
     type WalletActionEarnIncentiveClaimFailedWebhookPayload as WalletActionEarnIncentiveClaimFailedWebhookPayload,
+    type WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset,
+    type WalletFundsErc20Asset as WalletFundsErc20Asset,
+    type WalletFundsSplAsset as WalletFundsSplAsset,
+    type WalletFundsSacAsset as WalletFundsSacAsset,
+    type WalletFundsAsset as WalletFundsAsset,
+    type BridgeCryptoDepositMetadata as BridgeCryptoDepositMetadata,
+    type BridgeRefundMetadata as BridgeRefundMetadata,
+    type BridgeFiatDepositMetadata as BridgeFiatDepositMetadata,
+    type BridgeCryptoTransferMetadata as BridgeCryptoTransferMetadata,
+    type BridgeFiatTransferMetadata as BridgeFiatTransferMetadata,
+    type BridgeTransferRefundMetadata as BridgeTransferRefundMetadata,
+    type BridgeMetadata as BridgeMetadata,
     type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
     type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,
     type PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload,

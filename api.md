@@ -172,6 +172,9 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferDestination</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferSentTransactionDetail</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferReceivedTransactionDetail</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAPIRegisterAuthorizationKeyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAPIRevokeAuthorizationKeyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyDashboardResponse</a></code>
@@ -219,6 +222,27 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/users.ts">CustomMetadata</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountWalletInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountEmailInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountPhoneInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountGoogleInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTwitterInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountDiscordInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountGitHubInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountSpotifyInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountInstagramInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTiktokInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountLineInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTwitchInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountAppleInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountLinkedInInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountFarcasterInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountTelegramInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountCustomJwtInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountPasskeyInput</a></code>
+- <code><a href="./src/resources/users.ts">LinkedAccountInput</a></code>
+- <code><a href="./src/resources/users.ts">UserBatchCreateInput</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountEmail</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountPhone</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountBaseWallet</a></code>
@@ -259,28 +283,7 @@ Types:
 - <code><a href="./src/resources/users.ts">TotpMfaMethod</a></code>
 - <code><a href="./src/resources/users.ts">PasskeyMfaMethod</a></code>
 - <code><a href="./src/resources/users.ts">LinkedMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">CustomMetadata</a></code>
 - <code><a href="./src/resources/users.ts">User</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountWalletInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountEmailInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountPhoneInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountGoogleInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTwitterInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountDiscordInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountGitHubInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountSpotifyInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountInstagramInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTiktokInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountLineInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTwitchInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountAppleInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountLinkedInInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountFarcasterInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTelegramInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountCustomJwtInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountPasskeyInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountInput</a></code>
-- <code><a href="./src/resources/users.ts">UserBatchCreateInput</a></code>
 - <code><a href="./src/resources/users.ts">OAuthTokens</a></code>
 - <code><a href="./src/resources/users.ts">UserWithIdentityToken</a></code>
 - <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
@@ -683,6 +686,33 @@ Types:
 - <code><a href="./src/resources/shared.ts">OwnerIDInput</a></code>
 - <code><a href="./src/resources/shared.ts">CurrencyAmount</a></code>
 
+# EmbeddedWallets
+
+Types:
+
+- <code><a href="./src/resources/embedded-wallets.ts">WalletCreationAdditionalSignerItem</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">WalletCreationInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">EmbeddedWalletCreationInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletType</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">AlchemyPaymasterContext</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletNetworkConfiguration</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletNetworkConfigurationInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationDisabled</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationEnabled</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationInputEnabled</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfiguration</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">RecoveryType</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">ICloudClientType</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">RecoveryKeyMaterialInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">RecoveryKeyMaterialResponse</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">OAuthInitRecoveryInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">OAuthAuthenticateRecoveryResponse</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">OAuthInitICloudRecoveryInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">OAuthCallbackICloudExpoInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">RecoveryConfigurationICloudInput</a></code>
+- <code><a href="./src/resources/embedded-wallets.ts">RecoveryConfigurationICloudResponse</a></code>
+
 # WalletActions
 
 Types:
@@ -711,33 +741,6 @@ Types:
 Types:
 
 - <code><a href="./src/resources/analytics.ts">AnalyticsEventInput</a></code>
-
-# EmbeddedWallets
-
-Types:
-
-- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletType</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">AlchemyPaymasterContext</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletNetworkConfiguration</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletNetworkConfigurationInput</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationDisabled</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationEnabled</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationInputEnabled</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfiguration</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">SmartWalletConfigurationInput</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">RecoveryType</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">ICloudClientType</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">RecoveryKeyMaterialInput</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">RecoveryKeyMaterialResponse</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">OAuthInitRecoveryInput</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">OAuthAuthenticateRecoveryResponse</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">OAuthInitICloudRecoveryInput</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">OAuthCallbackICloudExpoInput</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">RecoveryConfigurationICloudInput</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">RecoveryConfigurationICloudResponse</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">WalletCreationAdditionalSignerItem</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">WalletCreationInput</a></code>
-- <code><a href="./src/resources/embedded-wallets.ts">EmbeddedWalletCreationInput</a></code>
 
 # Funding
 
@@ -823,6 +826,18 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimSucceededWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimRejectedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsNativeTokenAsset</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsErc20Asset</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsSplAsset</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsSacAsset</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsAsset</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeCryptoDepositMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeRefundMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeFiatDepositMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeCryptoTransferMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeFiatTransferMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeTransferRefundMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>

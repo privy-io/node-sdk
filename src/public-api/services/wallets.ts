@@ -15,6 +15,8 @@ import {
   Wallets,
   WalletSubmitImportParams,
   WalletUpdateParams,
+  HDSubmitInput,
+  PrivateKeySubmitInput,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
 import { PrivyEthereumService } from './ethereum';
@@ -243,8 +245,8 @@ export namespace PrivyWalletsService {
   export type ExportSeedPhraseResponse = { seed_phrase: string };
   export type ImportInputWallet = Prettify<
     (
-      | Omit<WalletSubmitImportParams.HDSubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
-      | Omit<WalletSubmitImportParams.PrivateKeySubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
+      | Omit<HDSubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
+      | Omit<PrivateKeySubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
     ) & { private_key: Uint8Array | string }
   >;
   /** The input type for the {@link PrivyWalletsService.import} method. */

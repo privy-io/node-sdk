@@ -825,6 +825,7 @@ import {
   WalletExportParams,
   WalletExportRequestBody,
   WalletExportResponseBody,
+  WalletGetWalletByAddressParams,
   WalletImportInitResponse,
   WalletImportSupportedChains,
   WalletImportSupportedEntropyTypes,
@@ -1880,6 +1881,7 @@ export declare namespace PrivyAPI {
     type WalletUpdateParams as WalletUpdateParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
+    type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };
 
   export {

@@ -335,4 +335,25 @@ describe('resource wallets', () => {
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
   });
+
+  // Mock server tests are disabled
+  test.skip('getWalletByAddress: only required params', async () => {
+    const responsePromise = client.wallets.getWalletByAddress({
+      address: '0xF1DBff66C993EE895C8cb176c30b07A559d76496',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('getWalletByAddress: required and optional params', async () => {
+    const response = await client.wallets.getWalletByAddress({
+      address: '0xF1DBff66C993EE895C8cb176c30b07A559d76496',
+    });
+  });
 });

@@ -330,6 +330,11 @@ export namespace AppResponse {
 }
 
 /**
+ * An email domain.
+ */
+export type EmailDomain = string;
+
+/**
  * Allowlist invite input for an email address.
  */
 export interface EmailInviteInput {
@@ -357,9 +362,25 @@ export interface PhoneInviteInput {
 }
 
 /**
+ * Allowlist invite input for an email domain.
+ */
+export interface EmailDomainInviteInput {
+  type: 'emailDomain';
+
+  /**
+   * An email domain.
+   */
+  value: EmailDomain;
+}
+
+/**
  * Input for adding or removing an allowlist entry. Discriminated by type.
  */
-export type UserInviteInput = EmailInviteInput | WalletInviteInput | PhoneInviteInput;
+export type UserInviteInput =
+  | EmailInviteInput
+  | EmailDomainInviteInput
+  | WalletInviteInput
+  | PhoneInviteInput;
 
 /**
  * An allowlist entry for an app.
@@ -447,9 +468,11 @@ export declare namespace Apps {
     type FundingOption as FundingOption,
     type FundingConfigResponseSchema as FundingConfigResponseSchema,
     type AppResponse as AppResponse,
+    type EmailDomain as EmailDomain,
     type EmailInviteInput as EmailInviteInput,
     type WalletInviteInput as WalletInviteInput,
     type PhoneInviteInput as PhoneInviteInput,
+    type EmailDomainInviteInput as EmailDomainInviteInput,
     type UserInviteInput as UserInviteInput,
     type AllowlistEntry as AllowlistEntry,
     type AllowlistDeletionResponse as AllowlistDeletionResponse,

@@ -468,9 +468,11 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">FundingOption</a></code>
 - <code><a href="./src/resources/apps/apps.ts">FundingConfigResponseSchema</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AppResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmailDomain</a></code>
 - <code><a href="./src/resources/apps/apps.ts">EmailInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">WalletInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">PhoneInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmailDomainInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">UserInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AllowlistEntry</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>

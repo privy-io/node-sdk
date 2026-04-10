@@ -301,6 +301,20 @@ export class Wallets extends APIResource {
     }
     return this._client.get(path`/v1/wallets/${walletID}`, options);
   }
+
+  /**
+   * Look up a wallet by its blockchain address. Returns the wallet object if found.
+   *
+   * @example
+   * ```ts
+   * const wallet = await client.wallets.getWalletByAddress({
+   *   address: '0xF1DBff66C993EE895C8cb176c30b07A559d76496',
+   * });
+   * ```
+   */
+  getWalletByAddress(body: WalletGetWalletByAddressParams, options?: RequestOptions): APIPromise<Wallet> {
+    return this._client.post('/v1/wallets/address', { body, ...options });
+  }
 }
 
 export type WalletsCursor = Cursor<Wallet>;
@@ -631,6 +645,8 @@ export interface WalletImportInitResponse {
    * The encryption type of the wallet to import. Currently only supports `HPKE`.
    */
   encryption_type: HpkeEncryption;
+
+  import_id?: string;
 }
 
 /**
@@ -4399,6 +4415,13 @@ export namespace WalletCreateWalletsWithRecoveryParams {
   }
 }
 
+export interface WalletGetWalletByAddressParams {
+  /**
+   * A blockchain wallet address (Ethereum or Solana).
+   */
+  address: Address;
+}
+
 Wallets.Transactions = Transactions;
 Wallets.Balance = Balance;
 
@@ -4596,6 +4619,7 @@ export declare namespace Wallets {
     type WalletUpdateParams as WalletUpdateParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
+    type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };
 
   export {

@@ -727,6 +727,7 @@ export {
   type WalletUpdateParams,
   type WalletAuthenticateWithJwtParams,
   type WalletCreateWalletsWithRecoveryParams,
+  type WalletGetWalletByAddressParams,
   type WalletsCursor,
 } from './wallets/wallets';
 export {

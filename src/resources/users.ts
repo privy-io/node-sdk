@@ -327,6 +327,305 @@ export class Users extends APIResource {
 export type UsersCursor = Cursor<User>;
 
 /**
+ * Custom metadata associated with the user.
+ */
+export type CustomMetadata = { [key: string]: string | number | boolean };
+
+/**
+ * The payload for importing a wallet account.
+ */
+export interface LinkedAccountWalletInput {
+  address: string;
+
+  chain_type: 'ethereum' | 'solana';
+
+  type: 'wallet';
+}
+
+/**
+ * The payload for importing an email account.
+ */
+export interface LinkedAccountEmailInput {
+  address: string;
+
+  type: 'email';
+}
+
+/**
+ * The payload for importing a phone account.
+ */
+export interface LinkedAccountPhoneInput {
+  number: string;
+
+  type: 'phone';
+}
+
+/**
+ * The payload for importing a Google account.
+ */
+export interface LinkedAccountGoogleInput {
+  email: string;
+
+  name: string;
+
+  subject: string;
+
+  type: 'google_oauth';
+}
+
+/**
+ * The payload for importing a Twitter account.
+ */
+export interface LinkedAccountTwitterInput {
+  name: string;
+
+  subject: string;
+
+  type: 'twitter_oauth';
+
+  username: string;
+
+  profile_picture_url?: string;
+}
+
+/**
+ * The payload for importing a Discord account.
+ */
+export interface LinkedAccountDiscordInput {
+  subject: string;
+
+  type: 'discord_oauth';
+
+  username: string;
+
+  email?: string;
+}
+
+/**
+ * The payload for importing a Github account.
+ */
+export interface LinkedAccountGitHubInput {
+  subject: string;
+
+  type: 'github_oauth';
+
+  username: string;
+
+  email?: string;
+
+  name?: string;
+}
+
+/**
+ * The payload for importing a Spotify account.
+ */
+export interface LinkedAccountSpotifyInput {
+  subject: string;
+
+  type: 'spotify_oauth';
+
+  email?: string;
+
+  name?: string;
+}
+
+/**
+ * The payload for importing an Instagram account.
+ */
+export interface LinkedAccountInstagramInput {
+  subject: string;
+
+  type: 'instagram_oauth';
+
+  username: string;
+}
+
+/**
+ * The payload for importing a Tiktok account.
+ */
+export interface LinkedAccountTiktokInput {
+  name: string | null;
+
+  subject: string;
+
+  type: 'tiktok_oauth';
+
+  username: string;
+}
+
+/**
+ * The payload for importing a LINE account.
+ */
+export interface LinkedAccountLineInput {
+  subject: string;
+
+  type: 'line_oauth';
+
+  email?: string;
+
+  name?: string;
+
+  profile_picture_url?: string;
+}
+
+/**
+ * The payload for importing a Twitch account.
+ */
+export interface LinkedAccountTwitchInput {
+  subject: string;
+
+  type: 'twitch_oauth';
+
+  username?: string;
+}
+
+/**
+ * The payload for importing an Apple account.
+ */
+export interface LinkedAccountAppleInput {
+  subject: string;
+
+  type: 'apple_oauth';
+
+  email?: string;
+}
+
+/**
+ * The payload for importing a LinkedIn account.
+ */
+export interface LinkedAccountLinkedInInput {
+  subject: string;
+
+  type: 'linkedin_oauth';
+
+  email?: string;
+
+  name?: string;
+
+  vanityName?: string;
+}
+
+/**
+ * The payload for importing a Farcaster account.
+ */
+export interface LinkedAccountFarcasterInput {
+  fid: number;
+
+  owner_address: string;
+
+  type: 'farcaster';
+
+  bio?: string;
+
+  display_name?: string;
+
+  homepage_url?: string;
+
+  profile_picture_url?: string;
+
+  username?: string;
+}
+
+/**
+ * The payload for importing a Telegram account.
+ */
+export interface LinkedAccountTelegramInput {
+  telegram_user_id: string;
+
+  type: 'telegram';
+
+  first_name?: string;
+
+  last_name?: string;
+
+  photo_url?: string;
+
+  username?: string;
+}
+
+/**
+ * The payload for importing a Custom JWT account.
+ */
+export interface LinkedAccountCustomJwtInput {
+  custom_user_id: string;
+
+  type: 'custom_auth';
+}
+
+/**
+ * The payload for importing a passkey account.
+ */
+export interface LinkedAccountPasskeyInput {
+  credential_device_type: 'singleDevice' | 'multiDevice';
+
+  credential_id: string;
+
+  credential_public_key: string;
+
+  credential_username: string;
+
+  type: 'passkey';
+}
+
+/**
+ * The input for adding a linked account to a user.
+ */
+export type LinkedAccountInput =
+  | LinkedAccountWalletInput
+  | LinkedAccountEmailInput
+  | LinkedAccountPhoneInput
+  | LinkedAccountGoogleInput
+  | LinkedAccountTwitterInput
+  | LinkedAccountDiscordInput
+  | LinkedAccountGitHubInput
+  | LinkedAccountSpotifyInput
+  | LinkedAccountInstagramInput
+  | LinkedAccountTiktokInput
+  | LinkedAccountLineInput
+  | LinkedAccountTwitchInput
+  | LinkedAccountAppleInput
+  | LinkedAccountLinkedInInput
+  | LinkedAccountFarcasterInput
+  | LinkedAccountTelegramInput
+  | LinkedAccountCustomJwtInput
+  | LinkedAccountPasskeyInput;
+
+/**
+ * The payload for batch creating users.
+ */
+export interface UserBatchCreateInput {
+  users: Array<UserBatchCreateInput.User>;
+}
+
+export namespace UserBatchCreateInput {
+  export interface User {
+    linked_accounts: Array<UsersAPI.LinkedAccountInput>;
+
+    create_embedded_wallet?: boolean;
+
+    create_ethereum_smart_wallet?: boolean;
+
+    create_ethereum_wallet?: boolean;
+
+    create_n_embedded_wallets?: number;
+
+    create_n_ethereum_wallets?: number;
+
+    create_solana_wallet?: boolean;
+
+    /**
+     * Custom metadata associated with the user.
+     */
+    custom_metadata?: UsersAPI.CustomMetadata;
+
+    /**
+     * Wallets to create.
+     */
+    wallets?: Array<EmbeddedWalletsAPI.WalletCreationInput>;
+  }
+}
+
+/**
  * An email account linked to the user.
  */
 export interface LinkedAccountEmail {
@@ -1197,11 +1496,6 @@ export interface PasskeyMfaMethod {
 export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod;
 
 /**
- * Custom metadata associated with the user.
- */
-export type CustomMetadata = { [key: string]: string | number | boolean };
-
-/**
  * A Privy user object.
  */
 export interface User {
@@ -1230,300 +1524,6 @@ export interface User {
    * Custom metadata associated with the user.
    */
   custom_metadata?: CustomMetadata;
-}
-
-/**
- * The payload for importing a wallet account.
- */
-export interface LinkedAccountWalletInput {
-  address: string;
-
-  chain_type: 'ethereum' | 'solana';
-
-  type: 'wallet';
-}
-
-/**
- * The payload for importing an email account.
- */
-export interface LinkedAccountEmailInput {
-  address: string;
-
-  type: 'email';
-}
-
-/**
- * The payload for importing a phone account.
- */
-export interface LinkedAccountPhoneInput {
-  number: string;
-
-  type: 'phone';
-}
-
-/**
- * The payload for importing a Google account.
- */
-export interface LinkedAccountGoogleInput {
-  email: string;
-
-  name: string;
-
-  subject: string;
-
-  type: 'google_oauth';
-}
-
-/**
- * The payload for importing a Twitter account.
- */
-export interface LinkedAccountTwitterInput {
-  name: string;
-
-  subject: string;
-
-  type: 'twitter_oauth';
-
-  username: string;
-
-  profile_picture_url?: string;
-}
-
-/**
- * The payload for importing a Discord account.
- */
-export interface LinkedAccountDiscordInput {
-  subject: string;
-
-  type: 'discord_oauth';
-
-  username: string;
-
-  email?: string;
-}
-
-/**
- * The payload for importing a Github account.
- */
-export interface LinkedAccountGitHubInput {
-  subject: string;
-
-  type: 'github_oauth';
-
-  username: string;
-
-  email?: string;
-
-  name?: string;
-}
-
-/**
- * The payload for importing a Spotify account.
- */
-export interface LinkedAccountSpotifyInput {
-  subject: string;
-
-  type: 'spotify_oauth';
-
-  email?: string;
-
-  name?: string;
-}
-
-/**
- * The payload for importing an Instagram account.
- */
-export interface LinkedAccountInstagramInput {
-  subject: string;
-
-  type: 'instagram_oauth';
-
-  username: string;
-}
-
-/**
- * The payload for importing a Tiktok account.
- */
-export interface LinkedAccountTiktokInput {
-  name: string | null;
-
-  subject: string;
-
-  type: 'tiktok_oauth';
-
-  username: string;
-}
-
-/**
- * The payload for importing a LINE account.
- */
-export interface LinkedAccountLineInput {
-  subject: string;
-
-  type: 'line_oauth';
-
-  email?: string;
-
-  name?: string;
-
-  profile_picture_url?: string;
-}
-
-/**
- * The payload for importing a Twitch account.
- */
-export interface LinkedAccountTwitchInput {
-  subject: string;
-
-  type: 'twitch_oauth';
-
-  username?: string;
-}
-
-/**
- * The payload for importing an Apple account.
- */
-export interface LinkedAccountAppleInput {
-  subject: string;
-
-  type: 'apple_oauth';
-
-  email?: string;
-}
-
-/**
- * The payload for importing a LinkedIn account.
- */
-export interface LinkedAccountLinkedInInput {
-  subject: string;
-
-  type: 'linkedin_oauth';
-
-  email?: string;
-
-  name?: string;
-
-  vanityName?: string;
-}
-
-/**
- * The payload for importing a Farcaster account.
- */
-export interface LinkedAccountFarcasterInput {
-  fid: number;
-
-  owner_address: string;
-
-  type: 'farcaster';
-
-  bio?: string;
-
-  display_name?: string;
-
-  homepage_url?: string;
-
-  profile_picture_url?: string;
-
-  username?: string;
-}
-
-/**
- * The payload for importing a Telegram account.
- */
-export interface LinkedAccountTelegramInput {
-  telegram_user_id: string;
-
-  type: 'telegram';
-
-  first_name?: string;
-
-  last_name?: string;
-
-  photo_url?: string;
-
-  username?: string;
-}
-
-/**
- * The payload for importing a Custom JWT account.
- */
-export interface LinkedAccountCustomJwtInput {
-  custom_user_id: string;
-
-  type: 'custom_auth';
-}
-
-/**
- * The payload for importing a passkey account.
- */
-export interface LinkedAccountPasskeyInput {
-  credential_device_type: 'singleDevice' | 'multiDevice';
-
-  credential_id: string;
-
-  credential_public_key: string;
-
-  credential_username: string;
-
-  type: 'passkey';
-}
-
-/**
- * The input for adding a linked account to a user.
- */
-export type LinkedAccountInput =
-  | LinkedAccountWalletInput
-  | LinkedAccountEmailInput
-  | LinkedAccountPhoneInput
-  | LinkedAccountGoogleInput
-  | LinkedAccountTwitterInput
-  | LinkedAccountDiscordInput
-  | LinkedAccountGitHubInput
-  | LinkedAccountSpotifyInput
-  | LinkedAccountInstagramInput
-  | LinkedAccountTiktokInput
-  | LinkedAccountLineInput
-  | LinkedAccountTwitchInput
-  | LinkedAccountAppleInput
-  | LinkedAccountLinkedInInput
-  | LinkedAccountFarcasterInput
-  | LinkedAccountTelegramInput
-  | LinkedAccountCustomJwtInput
-  | LinkedAccountPasskeyInput;
-
-/**
- * The payload for batch creating users.
- */
-export interface UserBatchCreateInput {
-  users: Array<UserBatchCreateInput.User>;
-}
-
-export namespace UserBatchCreateInput {
-  export interface User {
-    linked_accounts: Array<UsersAPI.LinkedAccountInput>;
-
-    create_embedded_wallet?: boolean;
-
-    create_ethereum_smart_wallet?: boolean;
-
-    create_ethereum_wallet?: boolean;
-
-    create_n_embedded_wallets?: number;
-
-    create_n_ethereum_wallets?: number;
-
-    create_solana_wallet?: boolean;
-
-    /**
-     * Custom metadata associated with the user.
-     */
-    custom_metadata?: UsersAPI.CustomMetadata;
-
-    /**
-     * Wallets to create.
-     */
-    wallets?: Array<EmbeddedWalletsAPI.WalletCreationInput>;
-  }
 }
 
 /**
@@ -1731,6 +1731,27 @@ export interface UserUnlinkLinkedAccountParams {
 
 export declare namespace Users {
   export {
+    type CustomMetadata as CustomMetadata,
+    type LinkedAccountWalletInput as LinkedAccountWalletInput,
+    type LinkedAccountEmailInput as LinkedAccountEmailInput,
+    type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
+    type LinkedAccountGoogleInput as LinkedAccountGoogleInput,
+    type LinkedAccountTwitterInput as LinkedAccountTwitterInput,
+    type LinkedAccountDiscordInput as LinkedAccountDiscordInput,
+    type LinkedAccountGitHubInput as LinkedAccountGitHubInput,
+    type LinkedAccountSpotifyInput as LinkedAccountSpotifyInput,
+    type LinkedAccountInstagramInput as LinkedAccountInstagramInput,
+    type LinkedAccountTiktokInput as LinkedAccountTiktokInput,
+    type LinkedAccountLineInput as LinkedAccountLineInput,
+    type LinkedAccountTwitchInput as LinkedAccountTwitchInput,
+    type LinkedAccountAppleInput as LinkedAccountAppleInput,
+    type LinkedAccountLinkedInInput as LinkedAccountLinkedInInput,
+    type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
+    type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
+    type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
+    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
+    type LinkedAccountInput as LinkedAccountInput,
+    type UserBatchCreateInput as UserBatchCreateInput,
     type LinkedAccountEmail as LinkedAccountEmail,
     type LinkedAccountPhone as LinkedAccountPhone,
     type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
@@ -1771,28 +1792,7 @@ export declare namespace Users {
     type TotpMfaMethod as TotpMfaMethod,
     type PasskeyMfaMethod as PasskeyMfaMethod,
     type LinkedMfaMethod as LinkedMfaMethod,
-    type CustomMetadata as CustomMetadata,
     type User as User,
-    type LinkedAccountWalletInput as LinkedAccountWalletInput,
-    type LinkedAccountEmailInput as LinkedAccountEmailInput,
-    type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
-    type LinkedAccountGoogleInput as LinkedAccountGoogleInput,
-    type LinkedAccountTwitterInput as LinkedAccountTwitterInput,
-    type LinkedAccountDiscordInput as LinkedAccountDiscordInput,
-    type LinkedAccountGitHubInput as LinkedAccountGitHubInput,
-    type LinkedAccountSpotifyInput as LinkedAccountSpotifyInput,
-    type LinkedAccountInstagramInput as LinkedAccountInstagramInput,
-    type LinkedAccountTiktokInput as LinkedAccountTiktokInput,
-    type LinkedAccountLineInput as LinkedAccountLineInput,
-    type LinkedAccountTwitchInput as LinkedAccountTwitchInput,
-    type LinkedAccountAppleInput as LinkedAccountAppleInput,
-    type LinkedAccountLinkedInInput as LinkedAccountLinkedInInput,
-    type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
-    type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
-    type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
-    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
-    type LinkedAccountInput as LinkedAccountInput,
-    type UserBatchCreateInput as UserBatchCreateInput,
     type OAuthTokens as OAuthTokens,
     type UserWithIdentityToken as UserWithIdentityToken,
     type AuthenticatedUser as AuthenticatedUser,

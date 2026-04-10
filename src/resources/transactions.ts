@@ -19,7 +19,7 @@ export class Transactions extends APIResource {
    * );
    * ```
    */
-  get(transactionID: string, options?: RequestOptions): APIPromise<TransactionGetResponse> {
+  get(transactionID: string, options?: RequestOptions): APIPromise<Transaction> {
     if (transactionID === '') {
       throw new Error('transactionID must not be an empty string');
     }
@@ -219,7 +219,10 @@ export interface TransactionScanningResponseBody {
   validation: TransactionScanningValidationResult;
 }
 
-export interface TransactionGetResponse {
+/**
+ * A transaction from a Privy wallet.
+ */
+export interface Transaction {
   id: string;
 
   caip2: string;
@@ -240,7 +243,18 @@ export interface TransactionGetResponse {
 
   wallet_id: string;
 
+  reference_id?: string | null;
+
   sponsored?: boolean;
+
+  user_operation_hash?: string;
+}
+
+/**
+ * A list of transactions.
+ */
+export interface TransactionList {
+  transactions: Array<Transaction>;
 }
 
 export declare namespace Transactions {
@@ -261,6 +275,7 @@ export declare namespace Transactions {
     type TransactionScanningSimulationSuccessResult as TransactionScanningSimulationSuccessResult,
     type TransactionScanningSimulationResult as TransactionScanningSimulationResult,
     type TransactionScanningResponseBody as TransactionScanningResponseBody,
-    type TransactionGetResponse as TransactionGetResponse,
+    type Transaction as Transaction,
+    type TransactionList as TransactionList,
   };
 }

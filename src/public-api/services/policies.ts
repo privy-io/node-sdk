@@ -7,12 +7,11 @@ import {
   Policy,
   PolicyCreateParams,
   PolicyCreateRuleParams,
-  PolicyCreateRuleResponse,
   PolicyDeleteParams,
   PolicyDeleteRuleParams,
+  PolicyRuleResponse,
   PolicyUpdateParams,
   PolicyUpdateRuleParams,
-  PolicyUpdateRuleResponse,
   SuccessResponse,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
@@ -81,7 +80,7 @@ export class PrivyPoliciesService extends Policies {
       request_expiry: requestExpiry,
       ...params
     }: PrivyPoliciesService.CreateRuleInput,
-  ): Promise<PolicyCreateRuleResponse> {
+  ): Promise<PolicyRuleResponse> {
     const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
@@ -101,7 +100,7 @@ export class PrivyPoliciesService extends Policies {
       policy_id: policyId,
       ...params
     }: PrivyPoliciesService.UpdateRuleInput,
-  ): Promise<PolicyUpdateRuleResponse> {
+  ): Promise<PolicyRuleResponse> {
     const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),

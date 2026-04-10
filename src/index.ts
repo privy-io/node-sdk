@@ -6,6 +6,7 @@ export { type PrivyPoliciesService } from './public-api/services/policies';
 export { type PrivyTransactionsService } from './public-api/services/transactions';
 export { type PrivyKeyQuorumsService } from './public-api/services/key-quorums';
 export { type PrivyUsersService } from './public-api/services/users';
+export { type PrivyIntentsService } from './public-api/services/intents';
 export { type PrivyAppsService } from './public-api/services/apps';
 export { type PrivyUtils } from './public-api/services/utils';
 export {
@@ -33,6 +34,15 @@ export {
 export { type Wallet } from './resources/wallets';
 export { type Policy } from './resources/policies';
 export { type KeyQuorum } from './resources/key-quorums';
+export {
+  type IntentResponse,
+  type RpcIntentResponse,
+  type WalletIntentResponse,
+  type PolicyIntentResponse,
+  type RuleIntentResponse,
+  type KeyQuorumIntentResponse,
+  type IntentListParams,
+} from './resources/intents';
 
 export {
   type AuthorizationContext,

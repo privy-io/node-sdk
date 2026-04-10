@@ -21,6 +21,26 @@ Releases are managed automatically via
 [release-please](https://github.com/googleapis/release-please).
 All pull requests should be opened against the `next` branch, not `main`.
 
+## Pull requests
+
+PR titles **must** follow [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+```
+type(optional scope): description
+```
+
+Allowed types: `feat`, `fix`, `docs`, `test`, `ci`, `refactor`, `perf`, `chore`, `revert`, `style`, `build`.
+
+Examples:
+
+```
+feat: add wallet balance endpoint
+fix(auth): handle expired tokens
+chore: update dependencies
+```
+
+A CI check will block merge if the PR title does not match this format.
+
 ## Code structure
 
 Most of the SDK is generated code. The following locations are safe to edit by hand:
@@ -34,7 +54,7 @@ Manual edits persist across regeneration but may cause merge conflicts with chan
 
 ### End-to-end tests
 
-End-to-end tests run against the staging environment. Create a `.env` file with `TEST_APP_SECRET` set, then run:
+End-to-end tests run against the staging environment. Create a `.env` file with `TEST_APP_SECRET` set, and optionally `TEST_APP_ID` and `TEST_API_URL`, then run:
 
 ```sh
 yarn test:integration

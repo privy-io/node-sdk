@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.13.0 (2026-04-10)
+
+Full Changelog: [v0.12.0...v0.13.0](https://github.com/privy-io/node-sdk/compare/v0.12.0...v0.13.0)
+
+### Features
+
+* add intents to PrivyClient + tests ([#129](https://github.com/privy-io/node-sdk/issues/129)) ([f905833](https://github.com/privy-io/node-sdk/commit/f9058336061b94a98da3112a8f5676c3813f1ebe))
+* **api:** api update ([a0ec8ad](https://github.com/privy-io/node-sdk/commit/a0ec8ade756c5c3bea86eaacecb1820422a35cbc))
+* **api:** api update ([dde667b](https://github.com/privy-io/node-sdk/commit/dde667ba476faeece8d9d1db43d5d70a25dae148))
+* **api:** api update ([0330147](https://github.com/privy-io/node-sdk/commit/0330147a2934eb85a345ba608137fcb61a324bd9))
+* **api:** api update ([04b6e7e](https://github.com/privy-io/node-sdk/commit/04b6e7eac2de73a4d74217f6c5ade660e521d94e))
+* **api:** api update ([2ea2cc0](https://github.com/privy-io/node-sdk/commit/2ea2cc051589e3380ed1efd0675a4cea21628151))
+* **api:** api update ([e6092f2](https://github.com/privy-io/node-sdk/commit/e6092f28f52c45a8d49d0b5de22ca389e8777e3a))
+* **api:** api update ([8626f85](https://github.com/privy-io/node-sdk/commit/8626f852c780f46bdc8cce96fecf7f8e858a54f2))
+* **api:** api update ([1b62f0d](https://github.com/privy-io/node-sdk/commit/1b62f0d59dd195b5645e0daabf327e95b5c6631e))
+* **api:** api update ([7615854](https://github.com/privy-io/node-sdk/commit/7615854d9a56be9564cb56e8cdbd1d730480abc6))
+* **api:** api update ([2cf1610](https://github.com/privy-io/node-sdk/commit/2cf161020e7157df12683ad101ac19e66d2d5dbd))
+* **api:** api update ([4746b06](https://github.com/privy-io/node-sdk/commit/4746b06a399ce0872263a570ebd249554b59cb89))
+* **api:** api update ([6f12bc0](https://github.com/privy-io/node-sdk/commit/6f12bc04dfbd763ef1fb89b98a0dcac3fc98310f))
+* **api:** staging oad pull ([9b5aa78](https://github.com/privy-io/node-sdk/commit/9b5aa785383642d420d5b52a409ab3d63dd2202a))
+* **wallets:** add exportPrivateKey and exportSeedPhrase convenience methods ([#127](https://github.com/privy-io/node-sdk/issues/127)) ([a43465a](https://github.com/privy-io/node-sdk/commit/a43465a978f43644e495bcba4a555f1d787240ad))
+
+
+### Bug Fixes
+
+* adapts to the latest breaking changes on type rename ([#133](https://github.com/privy-io/node-sdk/issues/133)) ([f4ecd47](https://github.com/privy-io/node-sdk/commit/f4ecd476c1537e577b8065c38c563cc9d0c60575))
+* api breaking changes ([#128](https://github.com/privy-io/node-sdk/issues/128)) ([0866aef](https://github.com/privy-io/node-sdk/commit/0866aefe4f9f540c3a65c4b31d8cdd1c6c99a3cf))
+* **internal:** gitignore generated `oidc` dir ([00e814e](https://github.com/privy-io/node-sdk/commit/00e814e3151bb12885049858f39d56399bcbfe31))
+* updates the breaking changes in type names ([#125](https://github.com/privy-io/node-sdk/issues/125)) ([1fde29f](https://github.com/privy-io/node-sdk/commit/1fde29fd036360b67747f325505cbbe05942722c))
+
+
+### Chores
+
+* **internal:** codegen related update ([89cd402](https://github.com/privy-io/node-sdk/commit/89cd4024dc8b401aaf846f60e1f19f6eeb462019))
+* sets up a claude.md file ([#118](https://github.com/privy-io/node-sdk/issues/118)) ([f77c111](https://github.com/privy-io/node-sdk/commit/f77c1112df48ce96215e1b1a90f8c6b4e6dd249e))
+
 ## 0.12.0 (2026-03-30)
 
 Full Changelog: [v0.11.0...v0.12.0](https://github.com/privy-io/node-sdk/compare/v0.11.0...v0.12.0)

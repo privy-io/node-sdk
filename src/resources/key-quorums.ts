@@ -36,12 +36,12 @@ export class KeyQuorums extends APIResource {
    * @example
    * ```ts
    * const successResponse = await client.keyQuorums._delete(
-   *   'key_quorum_id',
+   *   'string',
    * );
    * ```
    */
   _delete(
-    keyQuorumID: string,
+    keyQuorumID: SharedAPI.KeyQuorumID,
     params: KeyQuorumDeleteParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<SharedAPI.SuccessResponse> {
@@ -69,7 +69,7 @@ export class KeyQuorums extends APIResource {
    * @example
    * ```ts
    * const keyQuorum = await client.keyQuorums._update(
-   *   'key_quorum_id',
+   *   'string',
    *   {
    *     authorization_threshold: 1,
    *     display_name: 'Prod key quorum',
@@ -81,7 +81,7 @@ export class KeyQuorums extends APIResource {
    * ```
    */
   _update(
-    keyQuorumID: string,
+    keyQuorumID: SharedAPI.KeyQuorumID,
     params: KeyQuorumUpdateParams,
     options?: RequestOptions,
   ): APIPromise<KeyQuorum> {
@@ -110,12 +110,10 @@ export class KeyQuorums extends APIResource {
    *
    * @example
    * ```ts
-   * const keyQuorum = await client.keyQuorums.get(
-   *   'key_quorum_id',
-   * );
+   * const keyQuorum = await client.keyQuorums.get('string');
    * ```
    */
-  get(keyQuorumID: string, options?: RequestOptions): APIPromise<KeyQuorum> {
+  get(keyQuorumID: SharedAPI.KeyQuorumID, options?: RequestOptions): APIPromise<KeyQuorum> {
     if (keyQuorumID === '') {
       throw new Error('keyQuorumID must not be an empty string');
     }
@@ -154,7 +152,7 @@ export namespace KeyQuorum {
 /**
  * Request input for creating a key quorum.
  */
-export interface KeyQuorumCreateParams {
+export interface KeyQuorumCreateRequestBody {
   /**
    * The number of keys that must sign for an action to be valid. Must be less than
    * or equal to total number of key quorum members.
@@ -185,7 +183,7 @@ export interface KeyQuorumCreateParams {
 /**
  * Request input for updating an existing key quorum.
  */
-export interface KeyQuorumUpdateParams {
+export interface KeyQuorumUpdateRequestBody {
   /**
    * The number of keys that must sign for an action to be valid. Must be less than
    * or equal to total number of key quorum members.
@@ -323,9 +321,11 @@ export interface KeyQuorumUpdateParams {
 export declare namespace KeyQuorums {
   export {
     type KeyQuorum as KeyQuorum,
-    type KeyQuorumCreateParams as KeyQuorumCreateParams,
-    type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
+    type KeyQuorumCreateRequestBody as KeyQuorumCreateRequestBody,
+    type KeyQuorumUpdateRequestBody as KeyQuorumUpdateRequestBody,
     type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
+    type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
+    type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
   };
 }

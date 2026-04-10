@@ -12,7 +12,7 @@ export type SwapAmountType = 'exact_input' | 'exact_output';
 /**
  * Input for requesting a token swap quote.
  */
-export interface SwapQuoteRequest {
+export interface SwapQuoteRequestBody {
   /**
    * Amount in base units (e.g., wei for ETH).
    */
@@ -88,7 +88,7 @@ export interface SwapQuoteResponse {
 /**
  * Input for executing a token swap.
  */
-export interface SwapRequest {
+export interface SwapRequestBody {
   /**
    * Amount in base units (e.g., wei for ETH).
    */
@@ -129,8 +129,8 @@ export interface SwapRequest {
 export declare namespace Swaps {
   export {
     type SwapAmountType as SwapAmountType,
-    type SwapQuoteRequest as SwapQuoteRequest,
+    type SwapQuoteRequestBody as SwapQuoteRequestBody,
     type SwapQuoteResponse as SwapQuoteResponse,
-    type SwapRequest as SwapRequest,
+    type SwapRequestBody as SwapRequestBody,
   };
 }

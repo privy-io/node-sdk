@@ -15,6 +15,8 @@ import {
   Wallets,
   WalletSubmitImportParams,
   WalletUpdateParams,
+  HDSubmitInput,
+  PrivateKeySubmitInput,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
 import { PrivyEthereumService } from './ethereum';
@@ -118,6 +120,10 @@ export class PrivyWalletsService extends Wallets {
     return await this._update(walletId, { ...params, ...headers });
   }
 
+  /**
+   * @deprecated Use {@link PrivyWalletsService.exportPrivateKey} or {@link PrivyWalletsService.exportSeedPhrase} instead.
+   */
+  // Note: this export function is deprecated function now, but will become a private helper method for other export functions
   public async export(
     walletId: string,
     {
@@ -152,6 +158,21 @@ export class PrivyWalletsService extends Wallets {
     const privateKey = new TextDecoder().decode(decryptedPrivateKey);
 
     return { private_key: privateKey };
+  }
+
+  public async exportPrivateKey(
+    walletId: string,
+    params: PrivyWalletsService.ExportPrivateKeyInput,
+  ): Promise<PrivyWalletsService.ExportResponse> {
+    return this.export(walletId, { ...params, export_seed_phrase: false });
+  }
+
+  public async exportSeedPhrase(
+    walletId: string,
+    params: PrivyWalletsService.ExportSeedPhraseInput,
+  ): Promise<PrivyWalletsService.ExportSeedPhraseResponse> {
+    const { private_key } = await this.export(walletId, { ...params, export_seed_phrase: true });
+    return { seed_phrase: private_key };
   }
 
   public async import({
@@ -216,10 +237,16 @@ export namespace PrivyWalletsService {
   export type ExportInput = Prettify<WithExpiry<WithAuthorization<Omit<WalletExportParams, 'encryption_type' | 'recipient_public_key'>>>>;
   /** The response type for the {@link PrivyWalletsService.export} method. */
   export type ExportResponse = { private_key: string };
+  /** The input type for the {@link PrivyWalletsService.exportPrivateKey} method. */
+  export type ExportPrivateKeyInput = Prettify<Omit<ExportInput, 'export_seed_phrase'>>;
+  /** The input type for the {@link PrivyWalletsService.exportSeedPhrase} method. */
+  export type ExportSeedPhraseInput = Prettify<Omit<ExportInput, 'export_seed_phrase'>>;
+  /** The response type for the {@link PrivyWalletsService.exportSeedPhrase} method. */
+  export type ExportSeedPhraseResponse = { seed_phrase: string };
   export type ImportInputWallet = Prettify<
     (
-      | Omit<WalletSubmitImportParams.HDSubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
-      | Omit<WalletSubmitImportParams.PrivateKeySubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
+      | Omit<HDSubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
+      | Omit<PrivateKeySubmitInput, 'encapsulated_key' | 'ciphertext' | 'encryption_type'>
     ) & { private_key: Uint8Array | string }
   >;
   /** The input type for the {@link PrivyWalletsService.import} method. */

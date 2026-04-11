@@ -330,6 +330,7 @@ export type CurveSigningChainType =
   | 'movement'
   | 'tron'
   | 'bitcoin-segwit'
+  | 'bitcoin-taproot'
   | 'near'
   | 'ton'
   | 'starknet';
@@ -345,6 +346,7 @@ export type ExtendedChainType =
   | 'movement'
   | 'tron'
   | 'bitcoin-segwit'
+  | 'bitcoin-taproot'
   | 'near'
   | 'ton'
   | 'starknet'
@@ -368,6 +370,7 @@ export type WalletChainType =
   | 'movement'
   | 'tron'
   | 'bitcoin-segwit'
+  | 'bitcoin-taproot'
   | 'near'
   | 'ton'
   | 'starknet'
@@ -691,7 +694,7 @@ export type HDPath = string;
 /**
  * The signing algorithm used by the wallet.
  */
-export type SigningAlgorithm = 'ECDSA' | 'EdDSA';
+export type SigningAlgorithm = 'ECDSA' | 'EdDSA' | 'Schnorr';
 
 /**
  * A hex-encoded string prefixed with '0x'.

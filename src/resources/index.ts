@@ -44,9 +44,11 @@ export {
   type FundingOption,
   type FundingConfigResponseSchema,
   type AppResponse,
+  type EmailDomain,
   type EmailInviteInput,
   type WalletInviteInput,
   type PhoneInviteInput,
+  type EmailDomainInviteInput,
   type UserInviteInput,
   type AllowlistEntry,
   type AllowlistDeletionResponse,
@@ -727,6 +729,7 @@ export {
   type WalletUpdateParams,
   type WalletAuthenticateWithJwtParams,
   type WalletCreateWalletsWithRecoveryParams,
+  type WalletGetWalletByAddressParams,
   type WalletsCursor,
 } from './wallets/wallets';
 export {

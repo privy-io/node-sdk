@@ -628,6 +628,8 @@ import {
   Caip2,
   Currency,
   CurrencyAsset,
+  EmailDomain,
+  EmailDomainInviteInput,
   EmailInviteInput,
   EmbeddedWalletChainConfig,
   EmbeddedWalletConfigSchema,
@@ -825,6 +827,7 @@ import {
   WalletExportParams,
   WalletExportRequestBody,
   WalletExportResponseBody,
+  WalletGetWalletByAddressParams,
   WalletImportInitResponse,
   WalletImportSupportedChains,
   WalletImportSupportedEntropyTypes,
@@ -1890,6 +1893,7 @@ export declare namespace PrivyAPI {
     type WalletUpdateParams as WalletUpdateParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
+    type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };
 
   export {
@@ -2115,9 +2119,11 @@ export declare namespace PrivyAPI {
     type FundingOption as FundingOption,
     type FundingConfigResponseSchema as FundingConfigResponseSchema,
     type AppResponse as AppResponse,
+    type EmailDomain as EmailDomain,
     type EmailInviteInput as EmailInviteInput,
     type WalletInviteInput as WalletInviteInput,
     type PhoneInviteInput as PhoneInviteInput,
+    type EmailDomainInviteInput as EmailDomainInviteInput,
     type UserInviteInput as UserInviteInput,
     type AllowlistEntry as AllowlistEntry,
     type AllowlistDeletionResponse as AllowlistDeletionResponse,

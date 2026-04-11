@@ -69,6 +69,7 @@ export type AllowlistListResponse = Array<AppsAPI.AllowlistEntry>;
 
 export type AllowlistCreateParams =
   | AllowlistCreateParams.EmailInviteInput
+  | AllowlistCreateParams.EmailDomainInviteInput
   | AllowlistCreateParams.WalletInviteInput
   | AllowlistCreateParams.PhoneInviteInput;
 
@@ -77,6 +78,15 @@ export declare namespace AllowlistCreateParams {
     type: 'email';
 
     value: string;
+  }
+
+  export interface EmailDomainInviteInput {
+    type: 'emailDomain';
+
+    /**
+     * An email domain.
+     */
+    value: AppsAPI.EmailDomain;
   }
 
   export interface WalletInviteInput {
@@ -94,6 +104,7 @@ export declare namespace AllowlistCreateParams {
 
 export type AllowlistDeleteParams =
   | AllowlistDeleteParams.EmailInviteInput
+  | AllowlistDeleteParams.EmailDomainInviteInput
   | AllowlistDeleteParams.WalletInviteInput
   | AllowlistDeleteParams.PhoneInviteInput;
 
@@ -102,6 +113,15 @@ export declare namespace AllowlistDeleteParams {
     type: 'email';
 
     value: string;
+  }
+
+  export interface EmailDomainInviteInput {
+    type: 'emailDomain';
+
+    /**
+     * An email domain.
+     */
+    value: AppsAPI.EmailDomain;
   }
 
   export interface WalletInviteInput {

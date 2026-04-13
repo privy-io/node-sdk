@@ -2901,6 +2901,21 @@ export interface TransferRequestBody {
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
 
 /**
+ * A named asset on Ethereum-compatible chains.
+ */
+export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb';
+
+/**
+ * A named asset on Solana.
+ */
+export type WalletSolanaAsset = 'sol' | 'usdc' | 'eurc' | 'usdb';
+
+/**
+ * A named asset supported across all chains.
+ */
+export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+
+/**
  * Details for a sent transfer transaction.
  */
 export interface TransferSentTransactionDetail {
@@ -4597,6 +4612,9 @@ export declare namespace Wallets {
     type TokenTransferDestination as TokenTransferDestination,
     type TransferRequestBody as TransferRequestBody,
     type SuiCommandName as SuiCommandName,
+    type WalletEthereumAsset as WalletEthereumAsset,
+    type WalletSolanaAsset as WalletSolanaAsset,
+    type WalletAsset as WalletAsset,
     type TransferSentTransactionDetail as TransferSentTransactionDetail,
     type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
     type TransactionDetail as TransactionDetail,

@@ -172,6 +172,9 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferDestination</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletEthereumAsset</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletSolanaAsset</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAsset</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferSentTransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferReceivedTransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionDetail</a></code>

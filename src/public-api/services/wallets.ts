@@ -22,17 +22,20 @@ import { PrivyClient } from '../PrivyClient';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
 import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
+import { PrivyWalletBalanceService } from './wallet-balance';
 
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
   private solanaService: PrivySolanaService;
   private privyClient: PrivyClient;
+  override balance: PrivyWalletBalanceService;
 
   constructor(privyApiClient: PrivyAPI, privyClient: PrivyClient) {
     super(privyApiClient);
     this.privyClient = privyClient;
     this.ethereumService = new PrivyEthereumService(this);
     this.solanaService = new PrivySolanaService(this);
+    this.balance = new PrivyWalletBalanceService(privyApiClient);
   }
 
   public ethereum(): PrivyEthereumService {

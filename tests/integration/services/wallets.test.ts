@@ -326,4 +326,28 @@ describe('PrivyWalletsService', () => {
       });
     });
   });
+  describe('balance', () => {
+    let ethereumWallets: TestWallet[];
+
+    beforeAll(async () => {
+      ethereumWallets = await createTestWallets(resources, 'ethereum');
+    });
+
+    it.each(WALLET_CASES)('should return balances for a $ownership wallet', async ({ index }) => {
+      const wallet = ethereumWallets[index]!;
+      const response = await privyClient
+        .wallets()
+        .balance.get(wallet.id, { chain: 'ethereum', asset: 'eth' });
+
+      expect(response).toMatchObject({
+        balances: [
+          expect.objectContaining({
+            chain: 'ethereum',
+            asset: 'eth',
+            raw_value: '0',
+          }),
+        ],
+      });
+    });
+  });
 });

@@ -141,6 +141,41 @@ export class Intents extends APIResource {
   }
 
   /**
+   * Create an intent to execute a token transfer via a wallet. The intent must be
+   * authorized by either the wallet owner or signers before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const transferIntentResponse =
+   *   await client.intents.transfer('wallet_id', {
+   *     destination: {
+   *       address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
+   *     },
+   *     source: {
+   *       amount: '10.5',
+   *       asset: 'usdc',
+   *       chain: 'base',
+   *     },
+   *   });
+   * ```
+   */
+  transfer(
+    walletID: string,
+    params: IntentTransferParams,
+    options?: RequestOptions,
+  ): APIPromise<TransferIntentResponse> {
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.post(path`/v1/intents/wallets/${walletID}/transfer`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Create an intent to update a key quorum. The intent must be authorized by the
    * key quorum members before it can be executed.
    *
@@ -1636,6 +1671,24 @@ export declare namespace IntentRpcParams {
   }
 }
 
+export interface IntentTransferParams {
+  /**
+   * Body param: The destination address for a token transfer.
+   */
+  destination: WalletsAPI.TokenTransferDestination;
+
+  /**
+   * Body param: The source asset, amount, and chain for a token transfer.
+   */
+  source: WalletsAPI.TokenTransferSource;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
 export interface IntentUpdateKeyQuorumParams {
   /**
    * Body param: The number of keys that must sign for an action to be valid. Must be
@@ -1801,6 +1854,7 @@ export declare namespace Intents {
     type IntentCreatePolicyRuleParams as IntentCreatePolicyRuleParams,
     type IntentDeletePolicyRuleParams as IntentDeletePolicyRuleParams,
     type IntentRpcParams as IntentRpcParams,
+    type IntentTransferParams as IntentTransferParams,
     type IntentUpdateKeyQuorumParams as IntentUpdateKeyQuorumParams,
     type IntentUpdatePolicyParams as IntentUpdatePolicyParams,
     type IntentUpdatePolicyRuleParams as IntentUpdatePolicyRuleParams,

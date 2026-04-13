@@ -313,6 +313,7 @@ export {
   type IntentCreatePolicyRuleParams,
   type IntentDeletePolicyRuleParams,
   type IntentRpcParams,
+  type IntentTransferParams,
   type IntentUpdateKeyQuorumParams,
   type IntentUpdatePolicyParams,
   type IntentUpdatePolicyRuleParams,

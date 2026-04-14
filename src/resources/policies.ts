@@ -441,7 +441,7 @@ export type PolicyAction = 'ALLOW' | 'DENY';
 export interface AbiParameter {
   type: string;
 
-  components?: Array<unknown>;
+  components?: Array<{ [key: string]: unknown }>;
 
   indexed?: boolean;
 

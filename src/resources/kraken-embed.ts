@@ -92,9 +92,9 @@ export namespace KrakenEmbedGetPortfolioSummaryResponse {
   export interface Data {
     result: Data.Result | null;
 
-    error?: Array<unknown>;
+    error?: Array<string>;
 
-    errors?: Array<unknown>;
+    errors?: Array<string>;
   }
 
   export namespace Data {
@@ -117,17 +117,9 @@ export namespace KrakenEmbedGetPortfolioSummaryResponse {
        * Current day profit and loss for a portfolio, calculated from the most recent
        * available balance.
        */
-      current_day_pnl?: Result.CurrentDayPnl;
+      current_day_pnl?: KrakenEmbedAPI.KrakenEmbedCurrentDayPnl | null;
 
       lots_upnl?: string | null;
-    }
-
-    export namespace Result {
-      /**
-       * Current day profit and loss for a portfolio, calculated from the most recent
-       * available balance.
-       */
-      export interface CurrentDayPnl extends KrakenEmbedAPI.KrakenEmbedCurrentDayPnl {}
     }
   }
 }

@@ -1,6 +1,7 @@
 import { P256KeyPair, PrivyClient, generateP256KeyPair } from '@privy-io/node';
 import { NotFoundError } from '@privy-io/node';
 import crypto from 'node:crypto';
+import { erc20Abi, getAbiItem, getAddress } from 'viem';
 import { TEST_APP } from '../test-config';
 
 describe('PrivyPoliciesService', () => {
@@ -42,6 +43,52 @@ describe('PrivyPoliciesService', () => {
         expect.objectContaining({
           name: 'Restrict ETH transfers to a maximum value',
           method: 'eth_sendTransaction',
+        }),
+      ]);
+
+      await privyClient.policies().delete(policy.id, {});
+    });
+  });
+  describe('create with viem abi schema', () => {
+    it('should create a policy with a condition using an abi from viem', async () => {
+      const tokens = ['0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'];
+      const spenders = ['0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'];
+      const policy = await privyClient.policies().create({
+        version: '1.0',
+        name: 'ERC20 Approve allowlist',
+        chain_type: 'ethereum',
+        rules: [
+          {
+            name: 'ERC20 Approve to allowed spenders',
+            method: 'eth_sendTransaction',
+            action: 'ALLOW',
+            conditions: [
+              {
+                field_source: 'ethereum_transaction',
+                field: 'to',
+                operator: 'in',
+                value: tokens.map((token) => getAddress(token)),
+              },
+              {
+                field_source: 'ethereum_calldata',
+                field: 'approve.spender',
+                operator: 'in',
+                value: spenders.map((spender) => getAddress(spender)),
+                abi: [getAbiItem({ abi: erc20Abi, name: 'approve' })],
+              },
+            ],
+          },
+        ],
+      });
+
+      expect(policy.id).toBeDefined();
+      expect(policy.name).toBe('ERC20 Approve allowlist');
+      expect(policy.chain_type).toBe('ethereum');
+      expect(policy.rules).toEqual([
+        expect.objectContaining({
+          name: 'ERC20 Approve to allowed spenders',
+          method: 'eth_sendTransaction',
+          action: 'ALLOW',
         }),
       ]);
 

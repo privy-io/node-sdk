@@ -406,7 +406,11 @@ export interface RuleIntentDeleteRequestDetails {
 
   url: string;
 
-  body?: unknown;
+  body?: RuleIntentDeleteRequestDetails.Body;
+}
+
+export namespace RuleIntentDeleteRequestDetails {
+  export interface Body {}
 }
 
 /**

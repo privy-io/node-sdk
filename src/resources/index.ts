@@ -525,6 +525,8 @@ export {
   type FailureReason,
   type EvmTransactionWalletActionStep,
   type EvmUserOperationWalletActionStep,
+  type SvmWalletActionStepStatus,
+  type SvmTransactionWalletActionStep,
   type WalletActionStep,
   type SwapActionResponse,
   type TransferActionResponse,
@@ -734,6 +736,7 @@ export {
   type WalletAuthenticateWithJwtParams,
   type WalletCreateWalletsWithRecoveryParams,
   type WalletGetWalletByAddressParams,
+  type WalletTransferParams,
   type WalletsCursor,
 } from './wallets/wallets';
 export {

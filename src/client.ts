@@ -518,6 +518,8 @@ import {
   EvmUserOperationWalletActionStep,
   EvmWalletActionStepStatus,
   FailureReason,
+  SvmTransactionWalletActionStep,
+  SvmWalletActionStepStatus,
   SwapActionResponse,
   TransferActionResponse,
   WalletActionResponse,
@@ -844,6 +846,7 @@ import {
   WalletRpcResponse,
   WalletSolanaAsset,
   WalletSubmitImportParams,
+  WalletTransferParams,
   WalletUpdateParams,
   WalletUpdateRequestBody,
   Wallets,
@@ -1891,6 +1894,7 @@ export declare namespace PrivyAPI {
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
+    type WalletTransferParams as WalletTransferParams,
   };
 
   export {
@@ -2355,6 +2359,8 @@ export declare namespace PrivyAPI {
     type FailureReason as FailureReason,
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
+    type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
+    type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type WalletActionStep as WalletActionStep,
     type SwapActionResponse as SwapActionResponse,
     type TransferActionResponse as TransferActionResponse,

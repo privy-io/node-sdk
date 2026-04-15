@@ -1,0 +1,79 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import PrivyAPI from '@privy-io/node';
+
+const client = new PrivyAPI({
+  appID: 'My App ID',
+  appSecret: 'My App Secret',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
+
+describe('resource ethereum', () => {
+  // Mock server tests are disabled
+  test.skip('claimIncentive: only required params', async () => {
+    const responsePromise = client.wallets.earn.ethereum.claimIncentive('wallet_id', { chain: 'base' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('claimIncentive: required and optional params', async () => {
+    const response = await client.wallets.earn.ethereum.claimIncentive('wallet_id', {
+      chain: 'base',
+      'privy-authorization-signature': 'privy-authorization-signature',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('deposit: only required params', async () => {
+    const responsePromise = client.wallets.earn.ethereum.deposit('wallet_id', {
+      vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('deposit: required and optional params', async () => {
+    const response = await client.wallets.earn.ethereum.deposit('wallet_id', {
+      vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+      amount: '1.5',
+      raw_amount: '321669910225',
+      'privy-authorization-signature': 'privy-authorization-signature',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('withdraw: only required params', async () => {
+    const responsePromise = client.wallets.earn.ethereum.withdraw('wallet_id', {
+      vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('withdraw: required and optional params', async () => {
+    const response = await client.wallets.earn.ethereum.withdraw('wallet_id', {
+      vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+      amount: '1.5',
+      raw_amount: '321669910225',
+      'privy-authorization-signature': 'privy-authorization-signature',
+    });
+  });
+});

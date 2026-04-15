@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export { Balance, type BalanceGetResponse, type BalanceGetParams } from './balance';
+export { Earn } from './earn/index';
 export { Transactions, type TransactionGetResponse, type TransactionGetParams } from './transactions';
 export {
   Wallets,
@@ -199,5 +200,6 @@ export {
   type WalletAuthenticateWithJwtParams,
   type WalletCreateWalletsWithRecoveryParams,
   type WalletGetWalletByAddressParams,
+  type WalletTransferParams,
   type WalletsCursor,
 } from './wallets';

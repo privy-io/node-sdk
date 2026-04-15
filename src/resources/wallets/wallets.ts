@@ -4,11 +4,14 @@ import { APIResource } from '../../core/resource';
 import * as WalletsAPI from './wallets';
 import * as SharedAPI from '../shared';
 import * as UsersAPI from '../users';
+import * as WalletActionsAPI from '../wallet-actions';
 import * as AppsAPI from '../apps/apps';
 import * as BalanceAPI from './balance';
 import { Balance, BalanceGetParams, BalanceGetResponse } from './balance';
 import * as TransactionsAPI from './transactions';
 import { TransactionGetParams, TransactionGetResponse, Transactions } from './transactions';
+import * as EarnAPI from './earn/earn';
+import { Earn } from './earn/earn';
 import { APIPromise } from '../../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -16,6 +19,7 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Wallets extends APIResource {
+  earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
 
@@ -314,6 +318,44 @@ export class Wallets extends APIResource {
    */
   getWalletByAddress(body: WalletGetWalletByAddressParams, options?: RequestOptions): APIPromise<Wallet> {
     return this._client.post('/v1/wallets/address', { body, ...options });
+  }
+
+  /**
+   * Transfer tokens from a wallet to a destination address.
+   *
+   * @example
+   * ```ts
+   * const transferActionResponse =
+   *   await client.wallets.transfer('wallet_id', {
+   *     destination: {
+   *       address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
+   *     },
+   *     source: {
+   *       asset: 'usdc',
+   *       amount: '10.5',
+   *       chain: 'base',
+   *     },
+   *   });
+   * ```
+   */
+  transfer(
+    walletID: string,
+    params: WalletTransferParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletActionsAPI.TransferActionResponse> {
+    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/transfer`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -4440,6 +4482,25 @@ export interface WalletGetWalletByAddressParams {
   address: Address;
 }
 
+export interface WalletTransferParams {
+  /**
+   * Body param: The destination address for a token transfer.
+   */
+  destination: TokenTransferDestination;
+
+  /**
+   * Body param: The source asset, amount, and chain for a token transfer.
+   */
+  source: TokenTransferSource;
+
+  /**
+   * Header param: Request authorization signature. If multiple signatures are
+   * required, they should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+}
+
+Wallets.Earn = Earn;
 Wallets.Transactions = Transactions;
 Wallets.Balance = Balance;
 
@@ -4641,7 +4702,10 @@ export declare namespace Wallets {
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
+    type WalletTransferParams as WalletTransferParams,
   };
+
+  export { Earn as Earn };
 
   export {
     Transactions as Transactions,

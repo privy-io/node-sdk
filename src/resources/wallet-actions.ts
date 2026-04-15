@@ -22,7 +22,7 @@ export type WalletActionStatus = 'pending' | 'succeeded' | 'rejected' | 'failed'
 /**
  * Type of a wallet action step.
  */
-export type WalletActionStepType = 'evm_transaction' | 'evm_user_operation';
+export type WalletActionStepType = 'evm_transaction' | 'evm_user_operation' | 'svm_transaction';
 
 /**
  * Status of an EVM step in a wallet action.
@@ -121,9 +121,52 @@ export interface EvmUserOperationWalletActionStep {
 }
 
 /**
+ * Status of an SVM step in a wallet action.
+ */
+export type SvmWalletActionStepStatus =
+  | 'preparing'
+  | 'queued'
+  | 'pending'
+  | 'confirmed'
+  | 'finalized'
+  | 'rejected'
+  | 'reverted'
+  | 'failed';
+
+/**
+ * A wallet action step consisting of an SVM (Solana) transaction.
+ */
+export interface SvmTransactionWalletActionStep {
+  /**
+   * CAIP-2 chain identifier for the Solana network.
+   */
+  caip2: string;
+
+  /**
+   * Status of an SVM step in a wallet action.
+   */
+  status: SvmWalletActionStepStatus;
+
+  /**
+   * The Solana transaction signature (base58-encoded). Null until broadcast.
+   */
+  transaction_signature: string | null;
+
+  type: 'svm_transaction';
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+}
+
+/**
  * A step within a wallet action, representing a single onchain action.
  */
-export type WalletActionStep = EvmTransactionWalletActionStep | EvmUserOperationWalletActionStep;
+export type WalletActionStep =
+  | EvmTransactionWalletActionStep
+  | EvmUserOperationWalletActionStep
+  | SvmTransactionWalletActionStep;
 
 /**
  * Response for a swap action.
@@ -558,6 +601,8 @@ export declare namespace WalletActions {
     type FailureReason as FailureReason,
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
+    type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
+    type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type WalletActionStep as WalletActionStep,
     type SwapActionResponse as SwapActionResponse,
     type TransferActionResponse as TransferActionResponse,

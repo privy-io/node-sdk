@@ -201,6 +201,17 @@ Methods:
 - <code title="post /v1/wallets_with_recovery">client.wallets.<a href="./src/resources/wallets/wallets.ts">createWalletsWithRecovery</a>({ ...params }) -> WalletCreateWalletsWithRecoveryResponse</code>
 - <code title="get /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">get</a>(walletID) -> Wallet</code>
 - <code title="post /v1/wallets/address">client.wallets.<a href="./src/resources/wallets/wallets.ts">getWalletByAddress</a>({ ...params }) -> Wallet</code>
+- <code title="post /v1/wallets/{wallet_id}/transfer">client.wallets.<a href="./src/resources/wallets/wallets.ts">transfer</a>(walletID, { ...params }) -> TransferActionResponse</code>
+
+## Earn
+
+### Ethereum
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum.ts">claimIncentive</a>(walletID, { ...params }) -> EarnIncentiveClaimActionResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/deposit">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum.ts">deposit</a>(walletID, { ...params }) -> EarnDepositActionResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/withdraw">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum.ts">withdraw</a>(walletID, { ...params }) -> EarnWithdrawActionResponse</code>
 
 ## Transactions
 
@@ -731,6 +742,8 @@ Types:
 - <code><a href="./src/resources/wallet-actions.ts">FailureReason</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EvmUserOperationWalletActionStep</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">SvmWalletActionStepStatus</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">SvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">WalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">SwapActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">TransferActionResponse</a></code>

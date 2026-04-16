@@ -50,6 +50,11 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumSign7702Authorization</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">UnsignedStandardEthereumTransaction</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TempoCall</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TempoFeePayerSignature</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TempoAaAuthorization</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">UnsignedTempoTransaction</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">UnsignedEthereumTransaction</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">UserOperationInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TypedDataDomainInputParams</a></code>

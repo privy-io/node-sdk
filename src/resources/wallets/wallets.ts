@@ -228,6 +228,44 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Transfer tokens from a wallet to a destination address.
+   *
+   * @example
+   * ```ts
+   * const transferActionResponse =
+   *   await client.wallets._transfer('wallet_id', {
+   *     destination: {
+   *       address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
+   *     },
+   *     source: {
+   *       asset: 'usdc',
+   *       amount: '10.5',
+   *       chain: 'base',
+   *     },
+   *   });
+   * ```
+   */
+  _transfer(
+    walletID: string,
+    params: WalletTransferParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletActionsAPI.TransferActionResponse> {
+    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/transfer`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Update a wallet's policies or authorization key configuration.
    *
    * @example
@@ -318,44 +356,6 @@ export class Wallets extends APIResource {
    */
   getWalletByAddress(body: WalletGetWalletByAddressParams, options?: RequestOptions): APIPromise<Wallet> {
     return this._client.post('/v1/wallets/address', { body, ...options });
-  }
-
-  /**
-   * Transfer tokens from a wallet to a destination address.
-   *
-   * @example
-   * ```ts
-   * const transferActionResponse =
-   *   await client.wallets.transfer('wallet_id', {
-   *     destination: {
-   *       address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
-   *     },
-   *     source: {
-   *       asset: 'usdc',
-   *       amount: '10.5',
-   *       chain: 'base',
-   *     },
-   *   });
-   * ```
-   */
-  transfer(
-    walletID: string,
-    params: WalletTransferParams,
-    options?: RequestOptions,
-  ): APIPromise<WalletActionsAPI.TransferActionResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
-    return this._client.post(path`/v1/wallets/${walletID}/transfer`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(privyAuthorizationSignature != null ?
-            { 'privy-authorization-signature': privyAuthorizationSignature }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
   }
 }
 
@@ -4536,6 +4536,24 @@ export interface WalletSubmitImportParams {
   policy_ids?: PolicyInput;
 }
 
+export interface WalletTransferParams {
+  /**
+   * Body param: The destination address for a token transfer.
+   */
+  destination: TokenTransferDestination;
+
+  /**
+   * Body param: The source asset, amount, and chain for a token transfer.
+   */
+  source: TokenTransferSource;
+
+  /**
+   * Header param: Request authorization signature. If multiple signatures are
+   * required, they should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+}
+
 export interface WalletUpdateParams {
   /**
    * Body param: Additional signers for the wallet.
@@ -4647,24 +4665,6 @@ export interface WalletGetWalletByAddressParams {
    * A blockchain wallet address (Ethereum or Solana).
    */
   address: Address;
-}
-
-export interface WalletTransferParams {
-  /**
-   * Body param: The destination address for a token transfer.
-   */
-  destination: TokenTransferDestination;
-
-  /**
-   * Body param: The source asset, amount, and chain for a token transfer.
-   */
-  source: TokenTransferSource;
-
-  /**
-   * Header param: Request authorization signature. If multiple signatures are
-   * required, they should be comma separated.
-   */
-  'privy-authorization-signature'?: string;
 }
 
 Wallets.Earn = Earn;
@@ -4870,11 +4870,11 @@ export declare namespace Wallets {
     type WalletRawSignParams as WalletRawSignParams,
     type WalletRpcParams as WalletRpcParams,
     type WalletSubmitImportParams as WalletSubmitImportParams,
+    type WalletTransferParams as WalletTransferParams,
     type WalletUpdateParams as WalletUpdateParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
-    type WalletTransferParams as WalletTransferParams,
   };
 
   export { Earn as Earn };

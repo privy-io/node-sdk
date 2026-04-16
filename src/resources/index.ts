@@ -740,11 +740,11 @@ export {
   type WalletRawSignParams,
   type WalletRpcParams,
   type WalletSubmitImportParams,
+  type WalletTransferParams,
   type WalletUpdateParams,
   type WalletAuthenticateWithJwtParams,
   type WalletCreateWalletsWithRecoveryParams,
   type WalletGetWalletByAddressParams,
-  type WalletTransferParams,
   type WalletsCursor,
 } from './wallets/wallets';
 export {

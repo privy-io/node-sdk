@@ -19,7 +19,7 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Wallets extends APIResource {
-  earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
+  _earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
 

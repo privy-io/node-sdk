@@ -13,7 +13,7 @@ import { path } from '../../../../internal/utils/path';
  * Operations related to wallet actions
  */
 export class Ethereum extends APIResource {
-  incentive: IncentiveAPI.Incentive = new IncentiveAPI.Incentive(this._client);
+  _incentive: IncentiveAPI.Incentive = new IncentiveAPI.Incentive(this._client);
 
   /**
    * Deposit assets into an ERC-4626 vault.

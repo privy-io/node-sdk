@@ -21,6 +21,7 @@ import {
   PrivateKeySubmitInput,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
+import { PrivyEarnService } from './earn';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
 import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
@@ -28,6 +29,7 @@ import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './type
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
   private solanaService: PrivySolanaService;
+  private earnService: PrivyEarnService;
   private privyClient: PrivyClient;
 
   constructor(privyApiClient: PrivyAPI, privyClient: PrivyClient) {
@@ -35,6 +37,11 @@ export class PrivyWalletsService extends Wallets {
     this.privyClient = privyClient;
     this.ethereumService = new PrivyEthereumService(this);
     this.solanaService = new PrivySolanaService(this);
+    this.earnService = new PrivyEarnService(privyApiClient, privyClient);
+  }
+
+  public earn(): PrivyEarnService {
+    return this.earnService;
   }
 
   public ethereum(): PrivyEthereumService {

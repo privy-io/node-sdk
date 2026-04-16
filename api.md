@@ -214,9 +214,14 @@ Methods:
 
 Methods:
 
-- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum.ts">claimIncentive</a>(walletID, { ...params }) -> EarnIncentiveClaimActionResponse</code>
-- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/deposit">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum.ts">deposit</a>(walletID, { ...params }) -> EarnDepositActionResponse</code>
-- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/withdraw">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum.ts">withdraw</a>(walletID, { ...params }) -> EarnWithdrawActionResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/deposit">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">deposit</a>(walletID, { ...params }) -> EarnDepositActionResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/withdraw">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">withdraw</a>(walletID, { ...params }) -> EarnWithdrawActionResponse</code>
+
+#### Incentive
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/resources/wallets/earn/ethereum/incentive.ts">claim</a>(walletID, { ...params }) -> EarnIncentiveClaimActionResponse</code>
 
 ## Transactions
 

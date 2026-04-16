@@ -1089,6 +1089,11 @@ export declare namespace IntentRpcParams {
     chain_type?: 'ethereum';
 
     /**
+     * Body param: A hex-encoded string prefixed with '0x'.
+     */
+    experimental_data_suffix?: WalletsAPI.Hex;
+
+    /**
      * Body param
      */
     reference_id?: string;
@@ -1300,6 +1305,11 @@ export declare namespace IntentRpcParams {
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param: A hex-encoded string prefixed with '0x'.
+     */
+    experimental_data_suffix?: WalletsAPI.Hex;
 
     /**
      * Body param

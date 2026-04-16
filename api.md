@@ -493,6 +493,9 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccountsResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">GasSpendRequestBody</a></code>
+- <code><a href="./src/resources/apps/apps.ts">GasSpendCurrency</a></code>
+- <code><a href="./src/resources/apps/apps.ts">GasSpendResponseBody</a></code>
 - <code><a href="./src/resources/apps/apps.ts">GasSponsorshipConfigurationInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">GasSponsorshipConfiguration</a></code>
 

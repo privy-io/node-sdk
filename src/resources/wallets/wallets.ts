@@ -1136,6 +1136,11 @@ export interface EthereumSendTransactionRpcInput {
 
   chain_type?: 'ethereum';
 
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  experimental_data_suffix?: Hex;
+
   reference_id?: string;
 
   sponsor?: boolean;
@@ -1339,6 +1344,11 @@ export interface EthereumSendCallsRpcInput {
   address?: string;
 
   chain_type?: 'ethereum';
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  experimental_data_suffix?: Hex;
 
   sponsor?: boolean;
 
@@ -3487,6 +3497,11 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
+     * Body param: A hex-encoded string prefixed with '0x'.
+     */
+    experimental_data_suffix?: Hex;
+
+    /**
      * Body param
      */
     reference_id?: string;
@@ -3770,6 +3785,11 @@ export declare namespace WalletRpcParams {
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param: A hex-encoded string prefixed with '0x'.
+     */
+    experimental_data_suffix?: Hex;
 
     /**
      * Body param

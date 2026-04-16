@@ -326,4 +326,32 @@ describe('PrivyWalletsService', () => {
       });
     });
   });
+
+  // Skipped because we don't want to actually transfer funds, but test serves as contract test.
+  describe.skip('transfer', () => {
+    let ethWallets: TestWallet[];
+
+    beforeAll(async () => {
+      ethWallets = await createTestWallets(resources, 'ethereum');
+    });
+
+    it('should be able to transfer tokens', async () => {
+      const wallet = ethWallets[0]!;
+      const response = await privyClient.wallets().transfer(wallet.id, {
+        source: {
+          asset: 'usdc',
+          amount: '0.01',
+          chain: 'base',
+        },
+        destination: {
+          address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
+        },
+        ...(wallet.authorizationContext && {
+          authorization_context: wallet.authorizationContext,
+        }),
+      });
+
+      expect(response).toBeDefined();
+    });
+  });
 });

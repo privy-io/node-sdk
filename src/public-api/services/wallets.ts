@@ -15,6 +15,8 @@ import {
   Wallets,
   WalletSubmitImportParams,
   WalletUpdateParams,
+  WalletTransferParams,
+  TransferActionResponse,
   HDSubmitInput,
   PrivateKeySubmitInput,
 } from '../../resources';
@@ -118,6 +120,26 @@ export class PrivyWalletsService extends Wallets {
     });
 
     return await this._update(walletId, { ...params, ...headers });
+  }
+
+  // @ts-expect-error Async override returns Promise instead of APIPromise, but
+  // callers always await the result so this is functionally equivalent.
+  public override async transfer(
+    walletId: string,
+    {
+      authorization_context: authorizationContext = {},
+      ...params
+    }: PrivyWalletsService.TransferInput,
+  ): Promise<TransferActionResponse> {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
+      authorizationContext,
+      requestExpiry: this.privyClient.getRequestExpiry(),
+      method: 'POST',
+      url: `${this._client.baseURL}/v1/wallets/${walletId}/transfer`,
+      body: params,
+    });
+
+    return await super.transfer(walletId, { ...params, ...headers });
   }
 
   /**
@@ -233,6 +255,8 @@ export namespace PrivyWalletsService {
   export type RawSignInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<WalletRawSignParams>>>>;
   /** The input type for the {@link PrivyWalletsService.update} method. */
   export type UpdateInput = Prettify<WithExpiry<WithAuthorization<WalletUpdateParams>>>;
+  /** The input type for the {@link PrivyWalletsService.transfer} method. */
+  export type TransferInput = Prettify<WithAuthorization<WalletTransferParams>>;
   /** The input type for the {@link PrivyWalletsService.export} method. */
   export type ExportInput = Prettify<WithExpiry<WithAuthorization<Omit<WalletExportParams, 'encryption_type' | 'recipient_public_key'>>>>;
   /** The response type for the {@link PrivyWalletsService.export} method. */

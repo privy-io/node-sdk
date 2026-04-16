@@ -17,13 +17,13 @@ export class Incentive extends APIResource {
    * @example
    * ```ts
    * const earnIncentiveClaimActionResponse =
-   *   await client.wallets.earn.ethereum.incentive.claim(
+   *   await client.wallets.earn.ethereum.incentive._claim(
    *     'wallet_id',
    *     { chain: 'base' },
    *   );
    * ```
    */
-  claim(
+  _claim(
     walletID: string,
     params: IncentiveClaimParams,
     options?: RequestOptions,

@@ -21,13 +21,13 @@ export class Ethereum extends APIResource {
    * @example
    * ```ts
    * const earnDepositActionResponse =
-   *   await client.wallets.earn.ethereum.deposit('wallet_id', {
+   *   await client.wallets.earn.ethereum._deposit('wallet_id', {
    *     vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
    *     amount: '1.5',
    *   });
    * ```
    */
-  deposit(
+  _deposit(
     walletID: string,
     params: EthereumDepositParams,
     options?: RequestOptions,
@@ -53,13 +53,16 @@ export class Ethereum extends APIResource {
    * @example
    * ```ts
    * const earnWithdrawActionResponse =
-   *   await client.wallets.earn.ethereum.withdraw('wallet_id', {
-   *     vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
-   *     amount: '1.5',
-   *   });
+   *   await client.wallets.earn.ethereum._withdraw(
+   *     'wallet_id',
+   *     {
+   *       vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+   *       amount: '1.5',
+   *     },
+   *   );
    * ```
    */
-  withdraw(
+  _withdraw(
     walletID: string,
     params: EthereumWithdrawParams,
     options?: RequestOptions,

@@ -911,9 +911,10 @@ export interface EthereumSign7702Authorization {
 }
 
 /**
- * An unsigned Ethereum transaction object.
+ * An unsigned standard Ethereum transaction object. Supports EVM transaction types
+ * 0, 1, 2, and 4.
  */
-export interface UnsignedEthereumTransaction {
+export interface UnsignedStandardEthereumTransaction {
   authorization_list?: Array<EthereumSign7702Authorization>;
 
   /**
@@ -969,6 +970,149 @@ export interface UnsignedEthereumTransaction {
    */
   value?: Quantity;
 }
+
+/**
+ * A single call within a Tempo batched transaction.
+ */
+export interface TempoCall {
+  to: string;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  data?: Hex;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  value?: Quantity;
+}
+
+/**
+ * A fee payer signature for sponsored Tempo transactions (secp256k1 only).
+ */
+export interface TempoFeePayerSignature {
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  r: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  s: Hex;
+
+  y_parity: 0 | 1;
+}
+
+/**
+ * An AA authorization for Tempo transactions with P256/WebAuthn signatures.
+ */
+export interface TempoAaAuthorization {
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id: Quantity;
+
+  contract: string;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce: Quantity;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  signature: Hex;
+}
+
+/**
+ * An unsigned Tempo transaction (type 118) with batched calls.
+ */
+export interface UnsignedTempoTransaction {
+  calls: Array<TempoCall>;
+
+  type: 118;
+
+  aa_authorization_list?: Array<TempoAaAuthorization>;
+
+  access_list?: Array<UnsignedTempoTransaction.AccessList>;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id?: Quantity;
+
+  /**
+   * A fee payer signature for sponsored Tempo transactions (secp256k1 only).
+   */
+  fee_payer_signature?: TempoFeePayerSignature;
+
+  fee_token?: string;
+
+  from?: string;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  gas_limit?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  max_fee_per_gas?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  max_priority_fee_per_gas?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce_key?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  valid_after?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  valid_before?: Quantity;
+}
+
+export namespace UnsignedTempoTransaction {
+  export interface AccessList {
+    address: string;
+
+    storage_keys: Array<WalletsAPI.Hex>;
+  }
+}
+
+/**
+ * An unsigned Ethereum transaction object. Supports standard EVM transaction types
+ * (0, 1, 2, 4) and Tempo transactions (type 118).
+ */
+export type UnsignedEthereumTransaction = UnsignedStandardEthereumTransaction | UnsignedTempoTransaction;
 
 /**
  * An ERC-4337 user operation.
@@ -1080,9 +1224,10 @@ export interface EthereumPersonalSignRpcInput {
  */
 export interface EthereumSignTransactionRpcInputParams {
   /**
-   * An unsigned Ethereum transaction object.
+   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
+   * 0, 1, 2, and 4.
    */
-  transaction: UnsignedEthereumTransaction;
+  transaction: UnsignedStandardEthereumTransaction;
 }
 
 /**
@@ -1108,9 +1253,10 @@ export interface EthereumSignTransactionRpcInput {
  */
 export interface EthereumSendTransactionRpcInputParams {
   /**
-   * An unsigned Ethereum transaction object.
+   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
+   * 0, 1, 2, and 4.
    */
-  transaction: UnsignedEthereumTransaction;
+  transaction: UnsignedStandardEthereumTransaction;
 }
 
 /**
@@ -1423,9 +1569,10 @@ export interface EthereumSendTransactionRpcResponseData {
   transaction_id?: string;
 
   /**
-   * An unsigned Ethereum transaction object.
+   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
+   * 0, 1, 2, and 4.
    */
-  transaction_request?: UnsignedEthereumTransaction;
+  transaction_request?: UnsignedStandardEthereumTransaction;
 
   user_operation_hash?: string;
 }
@@ -4571,6 +4718,11 @@ export declare namespace Wallets {
     type RawSignResponseData as RawSignResponseData,
     type RawSignResponse as RawSignResponse,
     type EthereumSign7702Authorization as EthereumSign7702Authorization,
+    type UnsignedStandardEthereumTransaction as UnsignedStandardEthereumTransaction,
+    type TempoCall as TempoCall,
+    type TempoFeePayerSignature as TempoFeePayerSignature,
+    type TempoAaAuthorization as TempoAaAuthorization,
+    type UnsignedTempoTransaction as UnsignedTempoTransaction,
     type UnsignedEthereumTransaction as UnsignedEthereumTransaction,
     type UserOperationInput as UserOperationInput,
     type TypedDataDomainInputParams as TypedDataDomainInputParams,

@@ -126,10 +126,7 @@ export class PrivyWalletsService extends Wallets {
   // callers always await the result so this is functionally equivalent.
   public override async transfer(
     walletId: string,
-    {
-      authorization_context: authorizationContext = {},
-      ...params
-    }: PrivyWalletsService.TransferInput,
+    { authorization_context: authorizationContext = {}, ...params }: PrivyWalletsService.TransferInput,
   ): Promise<TransferActionResponse> {
     const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,

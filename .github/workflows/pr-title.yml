@@ -4,8 +4,8 @@ on:
     types: [opened, edited, synchronize, reopened]
 
 permissions:
-  pull-requests: read   # Read PR details
-  contents: read        # Read repository content
+  pull-requests: read # Read PR details
+  contents: read # Read repository content
 
 jobs:
   conventional-commits:

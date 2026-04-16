@@ -122,9 +122,7 @@ export class PrivyWalletsService extends Wallets {
     return await this._update(walletId, { ...params, ...headers });
   }
 
-  // @ts-expect-error Async override returns Promise instead of APIPromise, but
-  // callers always await the result so this is functionally equivalent.
-  public override async transfer(
+  public async transfer(
     walletId: string,
     { authorization_context: authorizationContext = {}, ...params }: PrivyWalletsService.TransferInput,
   ): Promise<TransferActionResponse> {
@@ -136,7 +134,7 @@ export class PrivyWalletsService extends Wallets {
       body: params,
     });
 
-    return await super.transfer(walletId, { ...params, ...headers });
+    return await this._transfer(walletId, { ...params, ...headers });
   }
 
   /**

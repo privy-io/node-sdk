@@ -201,12 +201,12 @@ Methods:
 - <code title="post /v1/wallets/{wallet_id}/raw_sign">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rawSign</a>(walletID, { ...params }) -> RawSignResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/rpc">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rpc</a>(walletID, { ...params }) -> WalletRpcResponse</code>
 - <code title="post /v1/wallets/import/submit">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_submitImport</a>({ ...params }) -> Wallet</code>
+- <code title="post /v1/wallets/{wallet_id}/transfer">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_transfer</a>(walletID, { ...params }) -> TransferActionResponse</code>
 - <code title="patch /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_update</a>(walletID, { ...params }) -> Wallet</code>
 - <code title="post /v1/wallets/authenticate">client.wallets.<a href="./src/resources/wallets/wallets.ts">authenticateWithJwt</a>({ ...params }) -> WalletAuthenticateWithJwtResponse</code>
 - <code title="post /v1/wallets_with_recovery">client.wallets.<a href="./src/resources/wallets/wallets.ts">createWalletsWithRecovery</a>({ ...params }) -> WalletCreateWalletsWithRecoveryResponse</code>
 - <code title="get /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">get</a>(walletID) -> Wallet</code>
 - <code title="post /v1/wallets/address">client.wallets.<a href="./src/resources/wallets/wallets.ts">getWalletByAddress</a>({ ...params }) -> Wallet</code>
-- <code title="post /v1/wallets/{wallet_id}/transfer">client.wallets.<a href="./src/resources/wallets/wallets.ts">transfer</a>(walletID, { ...params }) -> TransferActionResponse</code>
 
 ## Earn
 

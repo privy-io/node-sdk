@@ -1903,11 +1903,11 @@ export declare namespace PrivyAPI {
     type WalletRawSignParams as WalletRawSignParams,
     type WalletRpcParams as WalletRpcParams,
     type WalletSubmitImportParams as WalletSubmitImportParams,
+    type WalletTransferParams as WalletTransferParams,
     type WalletUpdateParams as WalletUpdateParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
-    type WalletTransferParams as WalletTransferParams,
   };
 
   export {

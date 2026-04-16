@@ -248,6 +248,38 @@ describe('resource wallets', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('_transfer: only required params', async () => {
+    const responsePromise = client.wallets._transfer('wallet_id', {
+      destination: { address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2' },
+      source: {
+        amount: '10.5',
+        asset: 'usdc',
+        chain: 'base',
+      },
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('_transfer: required and optional params', async () => {
+    const response = await client.wallets._transfer('wallet_id', {
+      destination: { address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2' },
+      source: {
+        amount: '10.5',
+        asset: 'usdc',
+        chain: 'base',
+      },
+      'privy-authorization-signature': 'privy-authorization-signature',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('_update', async () => {
     const responsePromise = client.wallets._update('wallet_id', {});
     const rawResponse = await responsePromise.asResponse();
@@ -354,38 +386,6 @@ describe('resource wallets', () => {
   test.skip('getWalletByAddress: required and optional params', async () => {
     const response = await client.wallets.getWalletByAddress({
       address: '0xF1DBff66C993EE895C8cb176c30b07A559d76496',
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('transfer: only required params', async () => {
-    const responsePromise = client.wallets.transfer('wallet_id', {
-      destination: { address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2' },
-      source: {
-        amount: '10.5',
-        asset: 'usdc',
-        chain: 'base',
-      },
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('transfer: required and optional params', async () => {
-    const response = await client.wallets.transfer('wallet_id', {
-      destination: { address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2' },
-      source: {
-        amount: '10.5',
-        asset: 'usdc',
-        chain: 'base',
-      },
-      'privy-authorization-signature': 'privy-authorization-signature',
     });
   });
 });

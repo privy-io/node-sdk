@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.15.0 (2026-04-17)
+
+Full Changelog: [v0.14.0...v0.15.0](https://github.com/privy-io/node-sdk/compare/v0.14.0...v0.15.0)
+
+### Features
+
+* add earn.ethereum.deposit convenience method ([#141](https://github.com/privy-io/node-sdk/issues/141)) ([c4bddf5](https://github.com/privy-io/node-sdk/commit/c4bddf574a861c80cd599732cc907088a2514449))
+* add earn.ethereum.incentive.claim convenience method ([#143](https://github.com/privy-io/node-sdk/issues/143)) ([7211122](https://github.com/privy-io/node-sdk/commit/7211122d578cff928cb98178062c1cccf32cb9b1))
+* add earn.ethereum.withdraw convenience method ([#142](https://github.com/privy-io/node-sdk/issues/142)) ([787708e](https://github.com/privy-io/node-sdk/commit/787708e0840e3d5f95fbc249e85f78a0a63ddf27))
+* add transfer convenience method to PrivyWalletsService ([#139](https://github.com/privy-io/node-sdk/issues/139)) ([614cffa](https://github.com/privy-io/node-sdk/commit/614cffa41351eeee388157dc9f7f7380f873e070))
+* **api:** add underscore to earn APIs ([fc20a24](https://github.com/privy-io/node-sdk/commit/fc20a24ddff08e35e3678e5fa1877b87516a1df1))
+* **api:** add underscore to transfer api ([8193361](https://github.com/privy-io/node-sdk/commit/8193361f5201e01f4c820d9a03d9a94818b79e99))
+* **api:** allowlist intents/transfer ([3113e2a](https://github.com/privy-io/node-sdk/commit/3113e2acb09099a5b8b767736b354da11f56c401))
+* **api:** api update ([f22f53c](https://github.com/privy-io/node-sdk/commit/f22f53c7975d813c3d617007af524bbeecad5cab))
+* **api:** api update ([96ebd9e](https://github.com/privy-io/node-sdk/commit/96ebd9e317a1fb5289312c5c540459e08eb19bc0))
+* **api:** api update ([a900c2c](https://github.com/privy-io/node-sdk/commit/a900c2cad051d173724a41c4783a08e861b5b887))
+* **api:** api update ([e974094](https://github.com/privy-io/node-sdk/commit/e974094c392209ff1123eaddd1b0a96e853c035b))
+* **api:** api update ([c604731](https://github.com/privy-io/node-sdk/commit/c6047310a38bcf3551e672cc01c398c2c4cebd0e))
+* **api:** manual updates ([546f355](https://github.com/privy-io/node-sdk/commit/546f35524b079f65922af6bb26aeff71b1dfe4a8))
+* **api:** manual updates ([b92c2dc](https://github.com/privy-io/node-sdk/commit/b92c2dc57ea67c388cba8f09af02026cfcdd2821))
+* **api:** manual updates ([5d25f00](https://github.com/privy-io/node-sdk/commit/5d25f006abd08f726e90bf21baa846fc1ea3314c))
+* **api:** manual updates ([f638c97](https://github.com/privy-io/node-sdk/commit/f638c97861c0749dab5d6a26aa6767652fc81ab9))
+* **api:** manual updates ([622d6fc](https://github.com/privy-io/node-sdk/commit/622d6fc5d122e2f871a656d190525b3cd043dbcf))
+* marks AbiSchema as readonly ([#136](https://github.com/privy-io/node-sdk/issues/136)) ([6853ecb](https://github.com/privy-io/node-sdk/commit/6853ecb7f9f2bae6d71d645a456f5fc697f4a73f))
+
+
+### Bug Fixes
+
+* correct import in auto-generated ethereum test file ([#138](https://github.com/privy-io/node-sdk/issues/138)) ([5991ef8](https://github.com/privy-io/node-sdk/commit/5991ef85a0721a7b5c33273ef1a05c1e396de3e6))
+* correct import in auto-generated incentive test file, formatting, use _format in format convenience ([#140](https://github.com/privy-io/node-sdk/issues/140)) ([134d93e](https://github.com/privy-io/node-sdk/commit/134d93eab6e12a54e4716ec91ff61eebe23d25d4))
+
+
+### Chores
+
+* **internal:** codegen related update ([5bdeda0](https://github.com/privy-io/node-sdk/commit/5bdeda08ed17e4c20e512c4be260d337e7c7b1d5))
+
 ## 0.14.0 (2026-04-11)
 
 Full Changelog: [v0.13.0...v0.14.0](https://github.com/privy-io/node-sdk/compare/v0.13.0...v0.14.0)

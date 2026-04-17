@@ -7,14 +7,21 @@ import {
 } from '../../../resources/wallets/earn/ethereum/ethereum';
 import { prepareRequest } from '../../../lib/authorization';
 import { PrivyClient } from '../../PrivyClient';
+import { PrivyEarnEthereumIncentiveService } from './ethereum-incentive';
 import { Prettify, WithAuthorization } from '../types';
 
 export class PrivyEarnEthereumService extends Ethereum {
+  private incentiveService: PrivyEarnEthereumIncentiveService;
   private privyClient: PrivyClient;
 
   constructor(privyApiClient: PrivyAPI, privyClient: PrivyClient) {
     super(privyApiClient);
     this.privyClient = privyClient;
+    this.incentiveService = new PrivyEarnEthereumIncentiveService(privyApiClient, privyClient);
+  }
+
+  public incentive(): PrivyEarnEthereumIncentiveService {
+    return this.incentiveService;
   }
 
   public async deposit(

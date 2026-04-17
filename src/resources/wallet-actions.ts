@@ -597,6 +597,66 @@ export interface EarnIncentiveClaimRequestBody {
   chain: string;
 }
 
+/**
+ * Query parameters for fetching an earn vault position.
+ */
+export interface EthereumEarnPositionQuery {
+  /**
+   * The vault ID to get position for.
+   */
+  vault_id: string;
+}
+
+/**
+ * Asset metadata for an earn vault position.
+ */
+export interface EarnPositionAsset {
+  /**
+   * Token contract address.
+   */
+  address: string;
+
+  /**
+   * Number of decimals for the asset (e.g. 6 for USDC).
+   */
+  decimals: number;
+
+  /**
+   * Lowercase token symbol (e.g. "usdc").
+   */
+  symbol: string;
+}
+
+/**
+ * A wallet's position in an earn vault.
+ */
+export interface EthereumEarnPositionResponse {
+  /**
+   * Asset metadata for an earn vault position.
+   */
+  asset: EarnPositionAsset;
+
+  /**
+   * Current asset value in the vault (realtime from ERC-4626), in smallest unit.
+   */
+  assets_in_vault: string;
+
+  /**
+   * Current vault shares held (realtime from ERC-4626).
+   */
+  shares_in_vault: string;
+
+  /**
+   * Total amount deposited into the vault, in smallest unit.
+   */
+  total_deposited: string;
+
+  /**
+   * Total amount withdrawn from the vault, in smallest unit.
+   */
+  total_withdrawn: string;
+}
+
 export declare namespace WalletActions {
   export {
     type WalletActionType as WalletActionType,
@@ -619,5 +679,8 @@ export declare namespace WalletActions {
     type EarnDepositRequestBody as EarnDepositRequestBody,
     type EarnWithdrawRequestBody as EarnWithdrawRequestBody,
     type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
+    type EthereumEarnPositionQuery as EthereumEarnPositionQuery,
+    type EarnPositionAsset as EarnPositionAsset,
+    type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
   };
 }

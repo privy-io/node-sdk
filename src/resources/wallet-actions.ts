@@ -305,6 +305,11 @@ export interface EarnIncetiveClaimRewardEntry {
    * Symbol of the reward token (e.g. "MORPHO").
    */
   token_symbol: string;
+
+  /**
+   * Number of decimal places for the reward token.
+   */
+  token_decimals?: number;
 }
 
 /**

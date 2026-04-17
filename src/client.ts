@@ -626,6 +626,7 @@ import {
 import {
   AllowlistDeletionResponse,
   AllowlistEntry,
+  AppGetGasSpendParams,
   AppResponse,
   Apps,
   Caip2,
@@ -2159,6 +2160,7 @@ export declare namespace PrivyAPI {
     type GasSpendResponseBody as GasSpendResponseBody,
     type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
     type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
+    type AppGetGasSpendParams as AppGetGasSpendParams,
   };
 
   export {

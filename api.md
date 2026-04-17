@@ -512,6 +512,7 @@ Types:
 Methods:
 
 - <code title="get /v1/apps/{app_id}">client.apps.<a href="./src/resources/apps/apps.ts">get</a>(appID) -> AppResponse</code>
+- <code title="get /v1/apps/gas_spend">client.apps.<a href="./src/resources/apps/apps.ts">getGasSpend</a>({ ...params }) -> GasSpendResponseBody</code>
 - <code title="get /v1/apps/{app_id}/test_credentials">client.apps.<a href="./src/resources/apps/apps.ts">getTestCredentials</a>(appID) -> TestAccountsResponse</code>
 
 ## Allowlist

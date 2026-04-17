@@ -20,6 +20,7 @@ Each service in `src/public-api/services/` extends its generated counterpart fro
 Callers use method access: `client.wallets().get(walletID)`.
 
 To add a sub-service on an existing service class:
+
 1. Create a new file in `src/public-api/services/` that extends the generated resource class.
 2. Override the inherited property in the parent service using `override field: NewType`.
 3. Initialize it in the constructor after `super()`.
@@ -27,6 +28,7 @@ To add a sub-service on an existing service class:
 ## Integration Tests
 
 Tests live in `tests/integration/services/`. Key helpers:
+
 - `test-setup.ts` — `setupTestWalletResources()`, `createTestWallets()`, `WALLET_CASES`
 - `test-config.ts` — app credentials backed by env vars
 

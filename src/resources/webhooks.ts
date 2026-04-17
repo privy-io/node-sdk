@@ -381,9 +381,10 @@ export interface TransactionStillPendingWebhookPayload {
   transaction_id: string;
 
   /**
-   * An unsigned Ethereum transaction object.
+   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
+   * 0, 1, 2, and 4.
    */
-  transaction_request: WalletsAPI.UnsignedEthereumTransaction;
+  transaction_request: WalletsAPI.UnsignedStandardEthereumTransaction;
 
   /**
    * The type of webhook event.
@@ -717,9 +718,9 @@ export interface WalletActionSwapCreatedWebhookPayload {
   output_token: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'pending';
 
   /**
    * The type of webhook event.
@@ -773,9 +774,9 @@ export interface WalletActionSwapSucceededWebhookPayload {
   output_token: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'succeeded';
 
   /**
    * The steps of the wallet action, including transaction hashes.
@@ -833,9 +834,9 @@ export interface WalletActionSwapRejectedWebhookPayload {
   output_token: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'rejected';
 
   /**
    * The steps of the wallet action at the time of rejection.
@@ -893,9 +894,9 @@ export interface WalletActionSwapFailedWebhookPayload {
   output_token: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'failed';
 
   /**
    * The steps of the wallet action. Completed steps will have transaction hashes;
@@ -949,9 +950,9 @@ export interface WalletActionTransferCreatedWebhookPayload {
   source_chain: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'pending';
 
   /**
    * The type of webhook event.
@@ -999,9 +1000,9 @@ export interface WalletActionTransferSucceededWebhookPayload {
   source_chain: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'succeeded';
 
   /**
    * The steps of the wallet action, including transaction hashes.
@@ -1059,9 +1060,9 @@ export interface WalletActionTransferRejectedWebhookPayload {
   source_chain: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'rejected';
 
   /**
    * The steps of the wallet action at the time of rejection.
@@ -1119,9 +1120,9 @@ export interface WalletActionTransferFailedWebhookPayload {
   source_chain: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'failed';
 
   /**
    * The steps of the wallet action. Completed steps will have transaction hashes;
@@ -1170,9 +1171,9 @@ export interface WalletActionEarnDepositCreatedWebhookPayload {
   raw_amount: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'pending';
 
   /**
    * The type of webhook event.
@@ -1248,9 +1249,9 @@ export interface WalletActionEarnDepositSucceededWebhookPayload {
   share_amount: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'succeeded';
 
   /**
    * The steps of the wallet action, including transaction hashes.
@@ -1331,9 +1332,9 @@ export interface WalletActionEarnDepositRejectedWebhookPayload {
   raw_amount: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'rejected';
 
   /**
    * The steps of the wallet action at the time of rejection.
@@ -1414,9 +1415,9 @@ export interface WalletActionEarnDepositFailedWebhookPayload {
   raw_amount: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'failed';
 
   /**
    * The steps of the wallet action. Completed steps will have transaction hashes;
@@ -1493,9 +1494,9 @@ export interface WalletActionEarnWithdrawCreatedWebhookPayload {
   raw_amount: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'pending';
 
   /**
    * The type of webhook event.
@@ -1571,9 +1572,9 @@ export interface WalletActionEarnWithdrawSucceededWebhookPayload {
   share_amount: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'succeeded';
 
   /**
    * The steps of the wallet action, including transaction hashes.
@@ -1654,9 +1655,9 @@ export interface WalletActionEarnWithdrawRejectedWebhookPayload {
   raw_amount: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'rejected';
 
   /**
    * The steps of the wallet action at the time of rejection.
@@ -1737,9 +1738,9 @@ export interface WalletActionEarnWithdrawFailedWebhookPayload {
   raw_amount: string;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'failed';
 
   /**
    * The steps of the wallet action. Completed steps will have transaction hashes;
@@ -1811,9 +1812,9 @@ export interface WalletActionEarnIncentiveClaimCreatedWebhookPayload {
   rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'pending';
 
   /**
    * The type of webhook event.
@@ -1851,9 +1852,9 @@ export interface WalletActionEarnIncentiveClaimSucceededWebhookPayload {
   rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'succeeded';
 
   /**
    * The steps of the wallet action, including transaction hashes.
@@ -1901,9 +1902,9 @@ export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
   rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'rejected';
 
   /**
    * The steps of the wallet action at the time of rejection.
@@ -1951,9 +1952,9 @@ export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
   rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
 
   /**
-   * Status of a wallet action.
+   * The status of the wallet action.
    */
-  status: WalletActionsAPI.WalletActionStatus;
+  status: 'failed';
 
   /**
    * The steps of the wallet action. Completed steps will have transaction hashes;

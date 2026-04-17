@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export { Balance, type BalanceGetResponse, type BalanceGetParams } from './balance';
+export { Earn } from './earn/index';
 export { Transactions, type TransactionGetResponse, type TransactionGetParams } from './transactions';
 export {
   Wallets,
@@ -52,6 +53,11 @@ export {
   type RawSignResponseData,
   type RawSignResponse,
   type EthereumSign7702Authorization,
+  type UnsignedStandardEthereumTransaction,
+  type TempoCall,
+  type TempoFeePayerSignature,
+  type TempoAaAuthorization,
+  type UnsignedTempoTransaction,
   type UnsignedEthereumTransaction,
   type UserOperationInput,
   type TypedDataDomainInputParams,
@@ -174,6 +180,9 @@ export {
   type TokenTransferDestination,
   type TransferRequestBody,
   type SuiCommandName,
+  type WalletEthereumAsset,
+  type WalletSolanaAsset,
+  type WalletAsset,
   type TransferSentTransactionDetail,
   type TransferReceivedTransactionDetail,
   type TransactionDetail,
@@ -192,6 +201,7 @@ export {
   type WalletRawSignParams,
   type WalletRpcParams,
   type WalletSubmitImportParams,
+  type WalletTransferParams,
   type WalletUpdateParams,
   type WalletAuthenticateWithJwtParams,
   type WalletCreateWalletsWithRecoveryParams,

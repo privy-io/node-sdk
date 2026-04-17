@@ -8,25 +8,11 @@ const client = new PrivyAPI({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource apps', () => {
+describe('resource ethereum', () => {
   // Mock server tests are disabled
-  test.skip('get', async () => {
-    const responsePromise = client.apps.get('app_id');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('getGasSpend: only required params', async () => {
-    const responsePromise = client.apps.getGasSpend({
-      end_timestamp: 0,
-      start_timestamp: 0,
-      wallet_ids: ['string'],
+  test.skip('_deposit: only required params', async () => {
+    const responsePromise = client.wallets._earn._ethereum._deposit('wallet_id', {
+      vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -38,17 +24,20 @@ describe('resource apps', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('getGasSpend: required and optional params', async () => {
-    const response = await client.apps.getGasSpend({
-      end_timestamp: 0,
-      start_timestamp: 0,
-      wallet_ids: ['string'],
+  test.skip('_deposit: required and optional params', async () => {
+    const response = await client.wallets._earn._ethereum._deposit('wallet_id', {
+      vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+      amount: '1.5',
+      raw_amount: '321669910225',
+      'privy-authorization-signature': 'privy-authorization-signature',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('getTestCredentials', async () => {
-    const responsePromise = client.apps.getTestCredentials('app_id');
+  test.skip('_withdraw: only required params', async () => {
+    const responsePromise = client.wallets._earn._ethereum._withdraw('wallet_id', {
+      vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -56,5 +45,15 @@ describe('resource apps', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('_withdraw: required and optional params', async () => {
+    const response = await client.wallets._earn._ethereum._withdraw('wallet_id', {
+      vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+      amount: '1.5',
+      raw_amount: '321669910225',
+      'privy-authorization-signature': 'privy-authorization-signature',
+    });
   });
 });

@@ -32,6 +32,10 @@ export {
   type AllowlistDeletionResponse,
   type TestAccount,
   type TestAccountsResponse,
+  type GasSpendRequestBody,
+  type GasSpendCurrency,
+  type GasSpendResponseBody,
   type GasSponsorshipConfigurationInput,
   type GasSponsorshipConfiguration,
+  type AppGetGasSpendParams,
 } from './apps';

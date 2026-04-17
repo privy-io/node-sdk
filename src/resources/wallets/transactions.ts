@@ -80,16 +80,7 @@ export namespace TransactionGetResponse {
 }
 
 export interface TransactionGetParams {
-  asset:
-    | 'usdc'
-    | 'usdc.e'
-    | 'eth'
-    | 'pol'
-    | 'usdt'
-    | 'eurc'
-    | 'usdb'
-    | 'sol'
-    | Array<'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol'>;
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | Array<WalletsAPI.WalletAsset>;
 
   chain: 'ethereum' | 'arbitrum' | 'base' | 'tempo' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'sepolia';
 

@@ -448,35 +448,35 @@ export type PolicyAction = 'ALLOW' | 'DENY';
  * A parameter in a Solidity ABI function or event definition.
  */
 export interface AbiParameter {
-  type: string;
+  readonly type: string;
 
-  components?: Array<unknown>;
+  readonly components?: ReadonlyArray<{ [key: string]: unknown }>;
 
-  indexed?: boolean;
+  readonly indexed?: boolean;
 
-  internalType?: string;
+  readonly internalType?: string;
 
-  name?: string;
+  readonly name?: string;
 }
 
 /**
  * A Solidity ABI definition for decoding smart contract calldata.
  */
-export type AbiSchema = Array<AbiSchema.AbiSchemaItem>;
+export type AbiSchema = ReadonlyArray<AbiSchema.AbiSchemaItem>;
 
 export namespace AbiSchema {
   export interface AbiSchemaItem {
-    type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
+    readonly type: 'function' | 'constructor' | 'event' | 'fallback' | 'receive';
 
-    anonymous?: boolean;
+    readonly anonymous?: boolean;
 
-    inputs?: Array<PoliciesAPI.AbiParameter>;
+    readonly inputs?: ReadonlyArray<PoliciesAPI.AbiParameter>;
 
-    name?: string;
+    readonly name?: string;
 
-    outputs?: Array<PoliciesAPI.AbiParameter>;
+    readonly outputs?: ReadonlyArray<PoliciesAPI.AbiParameter>;
 
-    stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
+    readonly stateMutability?: 'pure' | 'view' | 'nonpayable' | 'payable';
   }
 }
 

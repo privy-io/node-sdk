@@ -326,4 +326,110 @@ describe('PrivyWalletsService', () => {
       });
     });
   });
+
+  // Skipped because we don't want to actually transfer funds, but test serves as contract test.
+  describe.skip('transfer', () => {
+    let ethWallets: TestWallet[];
+
+    beforeAll(async () => {
+      ethWallets = await createTestWallets(resources, 'ethereum');
+    });
+
+    it('should be able to transfer tokens', async () => {
+      const wallet = ethWallets[0]!;
+      const response = await privyClient.wallets().transfer(wallet.id, {
+        source: {
+          asset: 'usdc',
+          amount: '0.01',
+          chain: 'base',
+        },
+        destination: {
+          address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
+        },
+        ...(wallet.authorizationContext && {
+          authorization_context: wallet.authorizationContext,
+        }),
+      });
+
+      expect(response).toBeDefined();
+    });
+  });
+
+  // Skipped because we don't want to actually deposit funds, but test serves as contract test.
+  describe.skip('earn deposit', () => {
+    let ethWallets: TestWallet[];
+
+    beforeAll(async () => {
+      ethWallets = await createTestWallets(resources, 'ethereum');
+    });
+
+    it('should be able to deposit into a vault', async () => {
+      const wallet = ethWallets[0]!;
+      const response = await privyClient
+        .wallets()
+        .earn()
+        .ethereum()
+        .deposit(wallet.id, {
+          vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+          amount: '1.0',
+          ...(wallet.authorizationContext && {
+            authorization_context: wallet.authorizationContext,
+          }),
+        });
+
+      expect(response).toBeDefined();
+    });
+  });
+
+  // Skipped because we don't want to actually withdraw funds, but test serves as contract test.
+  describe.skip('earn withdraw', () => {
+    let ethWallets: TestWallet[];
+
+    beforeAll(async () => {
+      ethWallets = await createTestWallets(resources, 'ethereum');
+    });
+
+    it('should be able to withdraw from a vault', async () => {
+      const wallet = ethWallets[0]!;
+      const response = await privyClient
+        .wallets()
+        .earn()
+        .ethereum()
+        .withdraw(wallet.id, {
+          vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+          amount: '1.0',
+          ...(wallet.authorizationContext && {
+            authorization_context: wallet.authorizationContext,
+          }),
+        });
+
+      expect(response).toBeDefined();
+    });
+  });
+
+  // Skipped because we don't want to actually claim incentives, but test serves as contract test.
+  describe.skip('earn incentive claim', () => {
+    let ethWallets: TestWallet[];
+
+    beforeAll(async () => {
+      ethWallets = await createTestWallets(resources, 'ethereum');
+    });
+
+    it('should be able to claim incentive rewards', async () => {
+      const wallet = ethWallets[0]!;
+      const response = await privyClient
+        .wallets()
+        .earn()
+        .ethereum()
+        .incentive()
+        .claim(wallet.id, {
+          chain: 'base',
+          ...(wallet.authorizationContext && {
+            authorization_context: wallet.authorizationContext,
+          }),
+        });
+
+      expect(response).toBeDefined();
+    });
+  });
 });

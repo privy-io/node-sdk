@@ -4,11 +4,14 @@ import { APIResource } from '../../core/resource';
 import * as WalletsAPI from './wallets';
 import * as SharedAPI from '../shared';
 import * as UsersAPI from '../users';
+import * as WalletActionsAPI from '../wallet-actions';
 import * as AppsAPI from '../apps/apps';
 import * as BalanceAPI from './balance';
 import { Balance, BalanceGetParams, BalanceGetResponse } from './balance';
 import * as TransactionsAPI from './transactions';
 import { TransactionGetParams, TransactionGetResponse, Transactions } from './transactions';
+import * as EarnAPI from './earn/earn';
+import { Earn } from './earn/earn';
 import { APIPromise } from '../../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -16,6 +19,7 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Wallets extends APIResource {
+  _earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
 
@@ -221,6 +225,44 @@ export class Wallets extends APIResource {
    */
   _submitImport(body: WalletSubmitImportParams, options?: RequestOptions): APIPromise<Wallet> {
     return this._client.post('/v1/wallets/import/submit', { body, ...options });
+  }
+
+  /**
+   * Transfer tokens from a wallet to a destination address.
+   *
+   * @example
+   * ```ts
+   * const transferActionResponse =
+   *   await client.wallets._transfer('wallet_id', {
+   *     destination: {
+   *       address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
+   *     },
+   *     source: {
+   *       asset: 'usdc',
+   *       amount: '10.5',
+   *       chain: 'base',
+   *     },
+   *   });
+   * ```
+   */
+  _transfer(
+    walletID: string,
+    params: WalletTransferParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletActionsAPI.TransferActionResponse> {
+    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/transfer`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -872,9 +914,10 @@ export interface EthereumSign7702Authorization {
 }
 
 /**
- * An unsigned Ethereum transaction object.
+ * An unsigned standard Ethereum transaction object. Supports EVM transaction types
+ * 0, 1, 2, and 4.
  */
-export interface UnsignedEthereumTransaction {
+export interface UnsignedStandardEthereumTransaction {
   authorization_list?: Array<EthereumSign7702Authorization>;
 
   /**
@@ -930,6 +973,149 @@ export interface UnsignedEthereumTransaction {
    */
   value?: Quantity;
 }
+
+/**
+ * A single call within a Tempo batched transaction.
+ */
+export interface TempoCall {
+  to: string;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  data?: Hex;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  value?: Quantity;
+}
+
+/**
+ * A fee payer signature for sponsored Tempo transactions (secp256k1 only).
+ */
+export interface TempoFeePayerSignature {
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  r: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  s: Hex;
+
+  y_parity: 0 | 1;
+}
+
+/**
+ * An AA authorization for Tempo transactions with P256/WebAuthn signatures.
+ */
+export interface TempoAaAuthorization {
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id: Quantity;
+
+  contract: string;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce: Quantity;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  signature: Hex;
+}
+
+/**
+ * An unsigned Tempo transaction (type 118) with batched calls.
+ */
+export interface UnsignedTempoTransaction {
+  calls: Array<TempoCall>;
+
+  type: 118;
+
+  aa_authorization_list?: Array<TempoAaAuthorization>;
+
+  access_list?: Array<UnsignedTempoTransaction.AccessList>;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id?: Quantity;
+
+  /**
+   * A fee payer signature for sponsored Tempo transactions (secp256k1 only).
+   */
+  fee_payer_signature?: TempoFeePayerSignature;
+
+  fee_token?: string;
+
+  from?: string;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  gas_limit?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  max_fee_per_gas?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  max_priority_fee_per_gas?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce_key?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  valid_after?: Quantity;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  valid_before?: Quantity;
+}
+
+export namespace UnsignedTempoTransaction {
+  export interface AccessList {
+    address: string;
+
+    storage_keys: Array<WalletsAPI.Hex>;
+  }
+}
+
+/**
+ * An unsigned Ethereum transaction object. Supports standard EVM transaction types
+ * (0, 1, 2, 4) and Tempo transactions (type 118).
+ */
+export type UnsignedEthereumTransaction = UnsignedStandardEthereumTransaction | UnsignedTempoTransaction;
 
 /**
  * An ERC-4337 user operation.
@@ -1041,9 +1227,10 @@ export interface EthereumPersonalSignRpcInput {
  */
 export interface EthereumSignTransactionRpcInputParams {
   /**
-   * An unsigned Ethereum transaction object.
+   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
+   * 0, 1, 2, and 4.
    */
-  transaction: UnsignedEthereumTransaction;
+  transaction: UnsignedStandardEthereumTransaction;
 }
 
 /**
@@ -1069,9 +1256,10 @@ export interface EthereumSignTransactionRpcInput {
  */
 export interface EthereumSendTransactionRpcInputParams {
   /**
-   * An unsigned Ethereum transaction object.
+   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
+   * 0, 1, 2, and 4.
    */
-  transaction: UnsignedEthereumTransaction;
+  transaction: UnsignedStandardEthereumTransaction;
 }
 
 /**
@@ -1093,6 +1281,11 @@ export interface EthereumSendTransactionRpcInput {
   address?: string;
 
   chain_type?: 'ethereum';
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  experimental_data_suffix?: Hex;
 
   reference_id?: string;
 
@@ -1298,6 +1491,11 @@ export interface EthereumSendCallsRpcInput {
 
   chain_type?: 'ethereum';
 
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  experimental_data_suffix?: Hex;
+
   sponsor?: boolean;
 
   wallet_id?: string;
@@ -1374,9 +1572,10 @@ export interface EthereumSendTransactionRpcResponseData {
   transaction_id?: string;
 
   /**
-   * An unsigned Ethereum transaction object.
+   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
+   * 0, 1, 2, and 4.
    */
-  transaction_request?: UnsignedEthereumTransaction;
+  transaction_request?: UnsignedStandardEthereumTransaction;
 
   user_operation_hash?: string;
 }
@@ -2904,6 +3103,21 @@ export interface TransferRequestBody {
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
 
 /**
+ * A named asset on Ethereum-compatible chains.
+ */
+export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb';
+
+/**
+ * A named asset on Solana.
+ */
+export type WalletSolanaAsset = 'sol' | 'usdc' | 'eurc' | 'usdb';
+
+/**
+ * A named asset supported across all chains.
+ */
+export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+
+/**
  * Details for a sent transfer transaction.
  */
 export interface TransferSentTransactionDetail {
@@ -3430,6 +3644,11 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
+     * Body param: A hex-encoded string prefixed with '0x'.
+     */
+    experimental_data_suffix?: Hex;
+
+    /**
      * Body param
      */
     reference_id?: string;
@@ -3713,6 +3932,11 @@ export declare namespace WalletRpcParams {
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param: A hex-encoded string prefixed with '0x'.
+     */
+    experimental_data_suffix?: Hex;
 
     /**
      * Body param
@@ -4312,6 +4536,24 @@ export interface WalletSubmitImportParams {
   policy_ids?: PolicyInput;
 }
 
+export interface WalletTransferParams {
+  /**
+   * Body param: The destination address for a token transfer.
+   */
+  destination: TokenTransferDestination;
+
+  /**
+   * Body param: The source asset, amount, and chain for a token transfer.
+   */
+  source: TokenTransferSource;
+
+  /**
+   * Header param: Request authorization signature. If multiple signatures are
+   * required, they should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+}
+
 export interface WalletUpdateParams {
   /**
    * Body param: Additional signers for the wallet.
@@ -4425,6 +4667,7 @@ export interface WalletGetWalletByAddressParams {
   address: Address;
 }
 
+Wallets.Earn = Earn;
 Wallets.Transactions = Transactions;
 Wallets.Balance = Balance;
 
@@ -4478,6 +4721,11 @@ export declare namespace Wallets {
     type RawSignResponseData as RawSignResponseData,
     type RawSignResponse as RawSignResponse,
     type EthereumSign7702Authorization as EthereumSign7702Authorization,
+    type UnsignedStandardEthereumTransaction as UnsignedStandardEthereumTransaction,
+    type TempoCall as TempoCall,
+    type TempoFeePayerSignature as TempoFeePayerSignature,
+    type TempoAaAuthorization as TempoAaAuthorization,
+    type UnsignedTempoTransaction as UnsignedTempoTransaction,
     type UnsignedEthereumTransaction as UnsignedEthereumTransaction,
     type UserOperationInput as UserOperationInput,
     type TypedDataDomainInputParams as TypedDataDomainInputParams,
@@ -4600,6 +4848,9 @@ export declare namespace Wallets {
     type TokenTransferDestination as TokenTransferDestination,
     type TransferRequestBody as TransferRequestBody,
     type SuiCommandName as SuiCommandName,
+    type WalletEthereumAsset as WalletEthereumAsset,
+    type WalletSolanaAsset as WalletSolanaAsset,
+    type WalletAsset as WalletAsset,
     type TransferSentTransactionDetail as TransferSentTransactionDetail,
     type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
     type TransactionDetail as TransactionDetail,
@@ -4619,11 +4870,14 @@ export declare namespace Wallets {
     type WalletRawSignParams as WalletRawSignParams,
     type WalletRpcParams as WalletRpcParams,
     type WalletSubmitImportParams as WalletSubmitImportParams,
+    type WalletTransferParams as WalletTransferParams,
     type WalletUpdateParams as WalletUpdateParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };
+
+  export { Earn as Earn };
 
   export {
     Transactions as Transactions,

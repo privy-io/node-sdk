@@ -31,6 +31,23 @@ export class Apps extends APIResource {
   }
 
   /**
+   * Get aggregated Privy gas credits charged for a set of wallets over a time range.
+   * Maximum 100 wallet IDs and 30-day range per request.
+   *
+   * @example
+   * ```ts
+   * const gasSpendResponseBody = await client.apps.getGasSpend({
+   *   end_timestamp: 0,
+   *   start_timestamp: 0,
+   *   wallet_ids: ['string'],
+   * });
+   * ```
+   */
+  getGasSpend(query: AppGetGasSpendParams, options?: RequestOptions): APIPromise<GasSpendResponseBody> {
+    return this._client.get('/v1/apps/gas_spend', { query, ...options });
+  }
+
+  /**
    * Get the test accounts and credentials for an app.
    *
    * @example
@@ -432,6 +449,46 @@ export interface TestAccountsResponse {
 }
 
 /**
+ * Query parameters for getting gas spend for a set of wallets.
+ */
+export interface GasSpendRequestBody {
+  /**
+   * Unix timestamp in milliseconds, exclusive.
+   */
+  end_timestamp: number;
+
+  /**
+   * Unix timestamp in milliseconds, inclusive.
+   */
+  start_timestamp: number;
+
+  /**
+   * List of wallet IDs to query gas spend for. Maximum 100.
+   */
+  wallet_ids: Array<string>;
+}
+
+/**
+ * Currency for gas spend values.
+ */
+export type GasSpendCurrency = 'usd';
+
+/**
+ * Aggregated Privy gas credits charged for a set of wallets over a time range.
+ */
+export interface GasSpendResponseBody {
+  /**
+   * Currency for gas spend values.
+   */
+  currency: GasSpendCurrency;
+
+  /**
+   * Total Privy credits charged as a decimal string.
+   */
+  value: string;
+}
+
+/**
  * Input for configuring gas sponsorship settings for an app.
  */
 export interface GasSponsorshipConfigurationInput {
@@ -451,6 +508,14 @@ export interface GasSponsorshipConfiguration {
   require_app_secret: boolean;
 
   sponsorship_enabled: boolean;
+}
+
+export interface AppGetGasSpendParams {
+  end_timestamp: number;
+
+  start_timestamp: number;
+
+  wallet_ids: Array<string>;
 }
 
 Apps.Allowlist = Allowlist;
@@ -481,8 +546,12 @@ export declare namespace Apps {
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
     type TestAccount as TestAccount,
     type TestAccountsResponse as TestAccountsResponse,
+    type GasSpendRequestBody as GasSpendRequestBody,
+    type GasSpendCurrency as GasSpendCurrency,
+    type GasSpendResponseBody as GasSpendResponseBody,
     type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
     type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
+    type AppGetGasSpendParams as AppGetGasSpendParams,
   };
 
   export {

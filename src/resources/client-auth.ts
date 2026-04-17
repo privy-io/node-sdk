@@ -165,7 +165,7 @@ export interface PasskeyAttestationResponse {
 
   public_key_algorithm?: number;
 
-  transports?: Array<unknown>;
+  transports?: Array<string>;
 }
 
 /**
@@ -1759,7 +1759,7 @@ export interface TransferFarcasterInput {
 /**
  * Input for initiating a Farcaster V2 connection.
  */
-export type FarcasterV2InitInput = unknown;
+export interface FarcasterV2InitInput {}
 
 /**
  * Response for initiating a Farcaster V2 connection.
@@ -1879,7 +1879,7 @@ export interface FarcasterLinkRequestBody {
 /**
  * The request body for initiating a Farcaster V2 connection.
  */
-export type FarcasterV2InitRequestBody = unknown;
+export interface FarcasterV2InitRequestBody {}
 
 /**
  * The response body for initiating a Farcaster V2 connection.

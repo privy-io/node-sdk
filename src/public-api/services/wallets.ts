@@ -15,10 +15,13 @@ import {
   Wallets,
   WalletSubmitImportParams,
   WalletUpdateParams,
+  WalletTransferParams,
+  TransferActionResponse,
   HDSubmitInput,
   PrivateKeySubmitInput,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
+import { PrivyEarnService } from './earn';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
 import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
@@ -26,6 +29,7 @@ import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './type
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
   private solanaService: PrivySolanaService;
+  private earnService: PrivyEarnService;
   private privyClient: PrivyClient;
 
   constructor(privyApiClient: PrivyAPI, privyClient: PrivyClient) {
@@ -33,6 +37,11 @@ export class PrivyWalletsService extends Wallets {
     this.privyClient = privyClient;
     this.ethereumService = new PrivyEthereumService(this);
     this.solanaService = new PrivySolanaService(this);
+    this.earnService = new PrivyEarnService(privyApiClient, privyClient);
+  }
+
+  public earn(): PrivyEarnService {
+    return this.earnService;
   }
 
   public ethereum(): PrivyEthereumService {
@@ -118,6 +127,21 @@ export class PrivyWalletsService extends Wallets {
     });
 
     return await this._update(walletId, { ...params, ...headers });
+  }
+
+  public async transfer(
+    walletId: string,
+    { authorization_context: authorizationContext = {}, ...params }: PrivyWalletsService.TransferInput,
+  ): Promise<TransferActionResponse> {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
+      authorizationContext,
+      requestExpiry: this.privyClient.getRequestExpiry(),
+      method: 'POST',
+      url: `${this._client.baseURL}/v1/wallets/${walletId}/transfer`,
+      body: params,
+    });
+
+    return await this._transfer(walletId, { ...params, ...headers });
   }
 
   /**
@@ -233,6 +257,8 @@ export namespace PrivyWalletsService {
   export type RawSignInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<WalletRawSignParams>>>>;
   /** The input type for the {@link PrivyWalletsService.update} method. */
   export type UpdateInput = Prettify<WithExpiry<WithAuthorization<WalletUpdateParams>>>;
+  /** The input type for the {@link PrivyWalletsService.transfer} method. */
+  export type TransferInput = Prettify<WithAuthorization<WalletTransferParams>>;
   /** The input type for the {@link PrivyWalletsService.export} method. */
   export type ExportInput = Prettify<WithExpiry<WithAuthorization<Omit<WalletExportParams, 'encryption_type' | 'recipient_public_key'>>>>;
   /** The response type for the {@link PrivyWalletsService.export} method. */

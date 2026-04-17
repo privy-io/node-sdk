@@ -28,6 +28,23 @@ export class Apps extends APIResource {
   }
 
   /**
+   * Get aggregated Privy gas credits charged for a set of wallets over a time range.
+   * Maximum 100 wallet IDs and 30-day range per request.
+   *
+   * @example
+   * ```ts
+   * const gasSpendResponseBody = await client.apps.getGasSpend({
+   *   end_timestamp: 0,
+   *   start_timestamp: 0,
+   *   wallet_ids: ['string'],
+   * });
+   * ```
+   */
+  getGasSpend(query: AppGetGasSpendParams, options?: RequestOptions): APIPromise<GasSpendResponseBody> {
+    return this._client.get('/v1/apps/gas_spend', { query, ...options });
+  }
+
+  /**
    * Get the test accounts and credentials for an app.
    *
    * @example
@@ -490,6 +507,14 @@ export interface GasSponsorshipConfiguration {
   sponsorship_enabled: boolean;
 }
 
+export interface AppGetGasSpendParams {
+  end_timestamp: number;
+
+  start_timestamp: number;
+
+  wallet_ids: Array<string>;
+}
+
 Apps.Allowlist = Allowlist;
 
 export declare namespace Apps {
@@ -523,6 +548,7 @@ export declare namespace Apps {
     type GasSpendResponseBody as GasSpendResponseBody,
     type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
     type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
+    type AppGetGasSpendParams as AppGetGasSpendParams,
   };
 
   export {

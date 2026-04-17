@@ -37,4 +37,5 @@ export {
   type GasSpendResponseBody,
   type GasSponsorshipConfigurationInput,
   type GasSponsorshipConfiguration,
+  type AppGetGasSpendParams,
 } from './apps';

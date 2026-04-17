@@ -380,4 +380,30 @@ describe('PrivyWalletsService', () => {
       expect(response).toBeDefined();
     });
   });
+
+  // Skipped because we don't want to actually withdraw funds, but test serves as contract test.
+  describe.skip('earn withdraw', () => {
+    let ethWallets: TestWallet[];
+
+    beforeAll(async () => {
+      ethWallets = await createTestWallets(resources, 'ethereum');
+    });
+
+    it('should be able to withdraw from a vault', async () => {
+      const wallet = ethWallets[0]!;
+      const response = await privyClient
+        .wallets()
+        .earn()
+        .ethereum()
+        .withdraw(wallet.id, {
+          vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
+          amount: '1.0',
+          ...(wallet.authorizationContext && {
+            authorization_context: wallet.authorizationContext,
+          }),
+        });
+
+      expect(response).toBeDefined();
+    });
+  });
 });

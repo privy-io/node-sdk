@@ -5,7 +5,7 @@ import * as EthereumAPI from './ethereum/ethereum';
 import { Ethereum, EthereumDepositParams, EthereumWithdrawParams } from './ethereum/ethereum';
 
 export class Earn extends APIResource {
-  ethereum: EthereumAPI.Ethereum = new EthereumAPI.Ethereum(this._client);
+  _ethereum: EthereumAPI.Ethereum = new EthereumAPI.Ethereum(this._client);
 }
 
 Earn.Ethereum = Ethereum;

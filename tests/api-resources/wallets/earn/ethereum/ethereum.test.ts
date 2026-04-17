@@ -11,7 +11,7 @@ const client = new PrivyAPI({
 describe('resource ethereum', () => {
   // Mock server tests are disabled
   test.skip('_deposit: only required params', async () => {
-    const responsePromise = client.wallets.earn.ethereum._deposit('wallet_id', {
+    const responsePromise = client.wallets._earn._ethereum._deposit('wallet_id', {
       vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -25,7 +25,7 @@ describe('resource ethereum', () => {
 
   // Mock server tests are disabled
   test.skip('_deposit: required and optional params', async () => {
-    const response = await client.wallets.earn.ethereum._deposit('wallet_id', {
+    const response = await client.wallets._earn._ethereum._deposit('wallet_id', {
       vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
       amount: '1.5',
       raw_amount: '321669910225',
@@ -35,7 +35,7 @@ describe('resource ethereum', () => {
 
   // Mock server tests are disabled
   test.skip('_withdraw: only required params', async () => {
-    const responsePromise = client.wallets.earn.ethereum._withdraw('wallet_id', {
+    const responsePromise = client.wallets._earn._ethereum._withdraw('wallet_id', {
       vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -49,7 +49,7 @@ describe('resource ethereum', () => {
 
   // Mock server tests are disabled
   test.skip('_withdraw: required and optional params', async () => {
-    const response = await client.wallets.earn.ethereum._withdraw('wallet_id', {
+    const response = await client.wallets._earn._ethereum._withdraw('wallet_id', {
       vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
       amount: '1.5',
       raw_amount: '321669910225',

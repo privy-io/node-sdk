@@ -406,4 +406,30 @@ describe('PrivyWalletsService', () => {
       expect(response).toBeDefined();
     });
   });
+
+  // Skipped because we don't want to actually claim incentives, but test serves as contract test.
+  describe.skip('earn incentive claim', () => {
+    let ethWallets: TestWallet[];
+
+    beforeAll(async () => {
+      ethWallets = await createTestWallets(resources, 'ethereum');
+    });
+
+    it('should be able to claim incentive rewards', async () => {
+      const wallet = ethWallets[0]!;
+      const response = await privyClient
+        .wallets()
+        .earn()
+        .ethereum()
+        .incentive()
+        .claim(wallet.id, {
+          chain: 'base',
+          ...(wallet.authorizationContext && {
+            authorization_context: wallet.authorizationContext,
+          }),
+        });
+
+      expect(response).toBeDefined();
+    });
+  });
 });

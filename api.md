@@ -769,6 +769,9 @@ Types:
 - <code><a href="./src/resources/wallet-actions.ts">EarnDepositRequestBody</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnWithdrawRequestBody</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveClaimRequestBody</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EthereumEarnPositionQuery</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EarnPositionAsset</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EthereumEarnPositionResponse</a></code>
 
 # Analytics
 

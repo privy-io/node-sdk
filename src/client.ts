@@ -512,8 +512,11 @@ import {
   EarnIncentiveClaimActionResponse,
   EarnIncentiveClaimRequestBody,
   EarnIncetiveClaimRewardEntry,
+  EarnPositionAsset,
   EarnWithdrawActionResponse,
   EarnWithdrawRequestBody,
+  EthereumEarnPositionQuery,
+  EthereumEarnPositionResponse,
   EvmTransactionWalletActionStep,
   EvmUserOperationWalletActionStep,
   EvmWalletActionStepStatus,
@@ -2400,6 +2403,9 @@ export declare namespace PrivyAPI {
     type EarnDepositRequestBody as EarnDepositRequestBody,
     type EarnWithdrawRequestBody as EarnWithdrawRequestBody,
     type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
+    type EthereumEarnPositionQuery as EthereumEarnPositionQuery,
+    type EarnPositionAsset as EarnPositionAsset,
+    type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
   };
 
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };

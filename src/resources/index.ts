@@ -542,6 +542,9 @@ export {
   type EarnDepositRequestBody,
   type EarnWithdrawRequestBody,
   type EarnIncentiveClaimRequestBody,
+  type EthereumEarnPositionQuery,
+  type EarnPositionAsset,
+  type EthereumEarnPositionResponse,
 } from './wallet-actions';
 export {
   Wallets,

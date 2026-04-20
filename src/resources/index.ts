@@ -376,6 +376,7 @@ export {
   type TronCalldataCondition,
   type SuiTransactionCommandCondition,
   type SuiTransferObjectsCommandCondition,
+  type ActionRequestBodyCondition,
   type AggregationCondition,
   type PolicyCondition,
   type PolicyMethod,

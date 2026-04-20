@@ -825,6 +825,26 @@ export interface SuiTransferObjectsCommandCondition {
 }
 
 /**
+ * Condition on the original wallet action API request body fields.
+ */
+export interface ActionRequestBodyCondition {
+  field: string;
+
+  field_source: 'action_request_body';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
+}
+
+/**
  * Condition referencing an aggregation value. The field must start with
  * "aggregation." followed by the aggregation ID.
  */
@@ -862,6 +882,7 @@ export type PolicyCondition =
   | TronCalldataCondition
   | SuiTransactionCommandCondition
   | SuiTransferObjectsCommandCondition
+  | ActionRequestBodyCondition
   | AggregationCondition;
 
 /**
@@ -879,6 +900,8 @@ export type PolicyMethod =
   | 'exportPrivateKey'
   | 'exportSeedPhrase'
   | 'signTransactionBytes'
+  | 'earn_deposit'
+  | 'earn_withdraw'
   | '*';
 
 /**
@@ -1258,6 +1281,7 @@ export declare namespace Policies {
     type TronCalldataCondition as TronCalldataCondition,
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
+    type ActionRequestBodyCondition as ActionRequestBodyCondition,
     type AggregationCondition as AggregationCondition,
     type PolicyCondition as PolicyCondition,
     type PolicyMethod as PolicyMethod,

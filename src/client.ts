@@ -333,6 +333,7 @@ import {
 import {
   AbiParameter,
   AbiSchema,
+  ActionRequestBodyCondition,
   AggregationCondition,
   ConditionOperator,
   ConditionSet,
@@ -2034,6 +2035,7 @@ export declare namespace PrivyAPI {
     type TronCalldataCondition as TronCalldataCondition,
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
+    type ActionRequestBodyCondition as ActionRequestBodyCondition,
     type AggregationCondition as AggregationCondition,
     type PolicyCondition as PolicyCondition,
     type PolicyMethod as PolicyMethod,

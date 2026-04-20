@@ -370,6 +370,7 @@ Types:
 - <code><a href="./src/resources/policies.ts">TronCalldataCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
+- <code><a href="./src/resources/policies.ts">ActionRequestBodyCondition</a></code>
 - <code><a href="./src/resources/policies.ts">AggregationCondition</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyCondition</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyMethod</a></code>

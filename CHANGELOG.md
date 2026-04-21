@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.16.0 (2026-04-21)
+
+Full Changelog: [v0.15.0...v0.16.0](https://github.com/privy-io/node-sdk/compare/v0.15.0...v0.16.0)
+
+### Features
+
+* **api:** api update ([e3e927e](https://github.com/privy-io/node-sdk/commit/e3e927e099107e5ae91160e30aceb48c53051ef7))
+* **api:** api update ([73b0829](https://github.com/privy-io/node-sdk/commit/73b0829a2bdc0400c541c1208539d5c3ef70ede9))
+* **api:** api update ([c690f4b](https://github.com/privy-io/node-sdk/commit/c690f4b3af4feb1515addbf634dde7e2dc638bdc))
+* **api:** api update ([3baf9b7](https://github.com/privy-io/node-sdk/commit/3baf9b700d63edcc517f5b0b380b07ba0b9e6499))
+* **api:** api update ([ad086ae](https://github.com/privy-io/node-sdk/commit/ad086ae1ea9f52b5c02436c7e90faddd26568a68))
+
 ## 0.15.0 (2026-04-17)
 
 Full Changelog: [v0.14.0...v0.15.0](https://github.com/privy-io/node-sdk/compare/v0.14.0...v0.15.0)

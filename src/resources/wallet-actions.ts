@@ -540,6 +540,11 @@ export type WalletActionResponse =
   | EarnIncentiveClaimActionResponse;
 
 /**
+ * Supported earn provider protocols.
+ */
+export type EthereumEarnProvider = 'morpho' | 'aave';
+
+/**
  * Input for depositing assets into an ERC-4626 vault. Exactly one of `amount` or
  * `raw_amount` must be provided.
  */
@@ -610,7 +615,7 @@ export interface EthereumEarnPositionQuery {
 /**
  * Asset metadata for an earn vault position.
  */
-export interface EarnPositionAsset {
+export interface EarnAsset {
   /**
    * Token contract address.
    */
@@ -634,7 +639,7 @@ export interface EthereumEarnPositionResponse {
   /**
    * Asset metadata for an earn vault position.
    */
-  asset: EarnPositionAsset;
+  asset: EarnAsset;
 
   /**
    * Current asset value in the vault (realtime from ERC-4626), in smallest unit.
@@ -657,6 +662,63 @@ export interface EthereumEarnPositionResponse {
   total_withdrawn: string;
 }
 
+/**
+ * Detailed vault information including current APY, liquidity, and asset metadata.
+ */
+export interface EthereumEarnVaultDetailsResponse {
+  /**
+   * Vault identifier.
+   */
+  id: string;
+
+  /**
+   * Annual percentage yield earned by the app from fee wrapper fees, in basis
+   * points.
+   */
+  app_apy: number | null;
+
+  /**
+   * Asset metadata for an earn vault position.
+   */
+  asset: EarnAsset;
+
+  /**
+   * Available liquidity in USD.
+   */
+  available_liquidity_usd: number | null;
+
+  /**
+   * CAIP-2 chain identifier (e.g. "eip155:8453").
+   */
+  caip2: string;
+
+  /**
+   * Human-readable vault name from the yield provider.
+   */
+  name: string;
+
+  /**
+   * Supported earn provider protocols.
+   */
+  provider: EthereumEarnProvider;
+
+  /**
+   * Total value locked in USD.
+   */
+  tvl_usd: number | null;
+
+  /**
+   * Current annual percentage yield in basis points (e.g. 500 for 5%). 1 basis point
+   * = 0.01%.
+   */
+  user_apy: number | null;
+
+  /**
+   * Onchain vault contract address.
+   */
+  vault_address: string;
+}
+
 export declare namespace WalletActions {
   export {
     type WalletActionType as WalletActionType,
@@ -676,11 +738,13 @@ export declare namespace WalletActions {
     type EarnWithdrawActionResponse as EarnWithdrawActionResponse,
     type EarnIncentiveClaimActionResponse as EarnIncentiveClaimActionResponse,
     type WalletActionResponse as WalletActionResponse,
+    type EthereumEarnProvider as EthereumEarnProvider,
     type EarnDepositRequestBody as EarnDepositRequestBody,
     type EarnWithdrawRequestBody as EarnWithdrawRequestBody,
     type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
     type EthereumEarnPositionQuery as EthereumEarnPositionQuery,
-    type EarnPositionAsset as EarnPositionAsset,
+    type EarnAsset as EarnAsset,
     type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
+    type EthereumEarnVaultDetailsResponse as EthereumEarnVaultDetailsResponse,
   };
 }

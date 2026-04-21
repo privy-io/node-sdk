@@ -27,6 +27,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeyExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AmountType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletImportSupportedChains</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletImportSupportedEntropyTypes</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletImportInitResponse</a></code>
@@ -767,12 +768,14 @@ Types:
 - <code><a href="./src/resources/wallet-actions.ts">EarnWithdrawActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveClaimActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">WalletActionResponse</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EthereumEarnProvider</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnDepositRequestBody</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnWithdrawRequestBody</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveClaimRequestBody</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EthereumEarnPositionQuery</a></code>
-- <code><a href="./src/resources/wallet-actions.ts">EarnPositionAsset</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EarnAsset</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EthereumEarnPositionResponse</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EthereumEarnVaultDetailsResponse</a></code>
 
 # Analytics
 
@@ -941,7 +944,6 @@ Types:
 
 Types:
 
-- <code><a href="./src/resources/swaps.ts">SwapAmountType</a></code>
 - <code><a href="./src/resources/swaps.ts">SwapQuoteRequestBody</a></code>
 - <code><a href="./src/resources/swaps.ts">SwapQuoteResponse</a></code>
 - <code><a href="./src/resources/swaps.ts">SwapRequestBody</a></code>

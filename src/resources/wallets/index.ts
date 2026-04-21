@@ -30,6 +30,7 @@ export {
   type PrivateKeyExportResponse,
   type SeedPhraseExportInput,
   type SeedPhraseExportResponse,
+  type AmountType,
   type WalletImportSupportedChains,
   type WalletImportSupportedEntropyTypes,
   type WalletImportInitResponse,

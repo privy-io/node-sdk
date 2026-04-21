@@ -540,12 +540,14 @@ export {
   type EarnWithdrawActionResponse,
   type EarnIncentiveClaimActionResponse,
   type WalletActionResponse,
+  type EthereumEarnProvider,
   type EarnDepositRequestBody,
   type EarnWithdrawRequestBody,
   type EarnIncentiveClaimRequestBody,
   type EthereumEarnPositionQuery,
-  type EarnPositionAsset,
+  type EarnAsset,
   type EthereumEarnPositionResponse,
+  type EthereumEarnVaultDetailsResponse,
 } from './wallet-actions';
 export {
   Wallets,

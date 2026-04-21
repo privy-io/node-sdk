@@ -189,12 +189,18 @@ describe('resource intents', () => {
   // Mock server tests are disabled
   test.skip('transfer: required and optional params', async () => {
     const response = await client.intents.transfer('wallet_id', {
-      destination: { address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2' },
+      destination: {
+        address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
+        asset: 'asset',
+        chain: 'chain',
+      },
       source: {
         amount: '10.5',
         asset: 'usdc',
         chain: 'base',
       },
+      amount_type: 'exact_input',
+      slippage_bps: 0,
       'privy-request-expiry': 'privy-request-expiry',
     });
   });

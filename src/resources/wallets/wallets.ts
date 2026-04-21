@@ -235,6 +235,8 @@ export class Wallets extends APIResource {
    * const transferActionResponse =
    *   await client.wallets._transfer('wallet_id', {
    *     destination: {
+   *       asset: 'usdc',
+   *       chain: 'base',
    *       address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
    *     },
    *     source: {
@@ -242,6 +244,8 @@ export class Wallets extends APIResource {
    *       amount: '10.5',
    *       chain: 'base',
    *     },
+   *     amount_type: 'exact_input',
+   *     slippage_bps: 100,
    *   });
    * ```
    */
@@ -663,6 +667,11 @@ export interface SeedPhraseExportResponse {
    */
   encryption_type: HpkeEncryption;
 }
+
+/**
+ * Whether the amount refers to the input token or output token.
+ */
+export type AmountType = 'exact_input' | 'exact_output';
 
 /**
  * The chain type of the wallet to import. Currently supports `ethereum` and
@@ -3070,13 +3079,26 @@ export interface TokenTransferSource {
 }
 
 /**
- * The destination address for a token transfer.
+ * The destination address for a token transfer. Optionally specify a different
+ * asset or chain for cross-asset or cross-chain transfers.
  */
 export interface TokenTransferDestination {
   /**
    * Recipient address (hex for EVM, base58 for Solana)
    */
   address: string;
+
+  /**
+   * The destination asset. Required for cross-asset transfers (e.g., source 'usdt'
+   * to destination 'usdc').
+   */
+  asset?: string;
+
+  /**
+   * The destination blockchain network. Required for cross-chain transfers (e.g.,
+   * source 'base' to destination 'arbitrum').
+   */
+  chain?: string;
 }
 
 /**
@@ -3084,7 +3106,8 @@ export interface TokenTransferDestination {
  */
 export interface TransferRequestBody {
   /**
-   * The destination address for a token transfer.
+   * The destination address for a token transfer. Optionally specify a different
+   * asset or chain for cross-asset or cross-chain transfers.
    */
   destination: TokenTransferDestination;
 
@@ -3092,6 +3115,16 @@ export interface TransferRequestBody {
    * The source asset, amount, and chain for a token transfer.
    */
   source: TokenTransferSource;
+
+  /**
+   * Whether the amount refers to the input token or output token.
+   */
+  amount_type?: AmountType;
+
+  /**
+   * Maximum allowed slippage in basis points (1 bps = 0.01%).
+   */
+  slippage_bps?: number;
 }
 
 /**
@@ -4535,7 +4568,8 @@ export interface WalletSubmitImportParams {
 
 export interface WalletTransferParams {
   /**
-   * Body param: The destination address for a token transfer.
+   * Body param: The destination address for a token transfer. Optionally specify a
+   * different asset or chain for cross-asset or cross-chain transfers.
    */
   destination: TokenTransferDestination;
 
@@ -4543,6 +4577,16 @@ export interface WalletTransferParams {
    * Body param: The source asset, amount, and chain for a token transfer.
    */
   source: TokenTransferSource;
+
+  /**
+   * Body param: Whether the amount refers to the input token or output token.
+   */
+  amount_type?: AmountType;
+
+  /**
+   * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%).
+   */
+  slippage_bps?: number;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are
@@ -4695,6 +4739,7 @@ export declare namespace Wallets {
     type PrivateKeyExportResponse as PrivateKeyExportResponse,
     type SeedPhraseExportInput as SeedPhraseExportInput,
     type SeedPhraseExportResponse as SeedPhraseExportResponse,
+    type AmountType as AmountType,
     type WalletImportSupportedChains as WalletImportSupportedChains,
     type WalletImportSupportedEntropyTypes as WalletImportSupportedEntropyTypes,
     type WalletImportInitResponse as WalletImportInitResponse,

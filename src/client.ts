@@ -508,16 +508,18 @@ import {
   UsersCursor,
 } from './resources/users';
 import {
+  EarnAsset,
   EarnDepositActionResponse,
   EarnDepositRequestBody,
   EarnIncentiveClaimActionResponse,
   EarnIncentiveClaimRequestBody,
   EarnIncetiveClaimRewardEntry,
-  EarnPositionAsset,
   EarnWithdrawActionResponse,
   EarnWithdrawRequestBody,
   EthereumEarnPositionQuery,
   EthereumEarnPositionResponse,
+  EthereumEarnProvider,
+  EthereumEarnVaultDetailsResponse,
   EvmTransactionWalletActionStep,
   EvmUserOperationWalletActionStep,
   EvmWalletActionStepStatus,
@@ -2402,12 +2404,14 @@ export declare namespace PrivyAPI {
     type EarnWithdrawActionResponse as EarnWithdrawActionResponse,
     type EarnIncentiveClaimActionResponse as EarnIncentiveClaimActionResponse,
     type WalletActionResponse as WalletActionResponse,
+    type EthereumEarnProvider as EthereumEarnProvider,
     type EarnDepositRequestBody as EarnDepositRequestBody,
     type EarnWithdrawRequestBody as EarnWithdrawRequestBody,
     type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
     type EthereumEarnPositionQuery as EthereumEarnPositionQuery,
-    type EarnPositionAsset as EarnPositionAsset,
+    type EarnAsset as EarnAsset,
     type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
+    type EthereumEarnVaultDetailsResponse as EthereumEarnVaultDetailsResponse,
   };
 
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };

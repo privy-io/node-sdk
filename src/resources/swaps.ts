@@ -1,13 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as WalletsAPI from './wallets/wallets';
 
 export class Swaps extends APIResource {}
-
-/**
- * Whether the swap amount refers to the input token or output token.
- */
-export type SwapAmountType = 'exact_input' | 'exact_output';
 
 /**
  * Input for requesting a token swap quote.
@@ -34,9 +30,9 @@ export interface SwapQuoteRequestBody {
   output_token: string;
 
   /**
-   * Whether the swap amount refers to the input token or output token.
+   * Whether the amount refers to the input token or output token.
    */
-  amount_type?: SwapAmountType;
+  amount_type?: WalletsAPI.AmountType;
 
   /**
    * Maximum slippage tolerance in basis points (e.g., 50 for 0.5%). If omitted,
@@ -110,9 +106,9 @@ export interface SwapRequestBody {
   output_token: string;
 
   /**
-   * Whether the swap amount refers to the input token or output token.
+   * Whether the amount refers to the input token or output token.
    */
-  amount_type?: SwapAmountType;
+  amount_type?: WalletsAPI.AmountType;
 
   /**
    * Address to receive the output tokens. Defaults to the wallet address if not
@@ -128,7 +124,6 @@ export interface SwapRequestBody {
 
 export declare namespace Swaps {
   export {
-    type SwapAmountType as SwapAmountType,
     type SwapQuoteRequestBody as SwapQuoteRequestBody,
     type SwapQuoteResponse as SwapQuoteResponse,
     type SwapRequestBody as SwapRequestBody,

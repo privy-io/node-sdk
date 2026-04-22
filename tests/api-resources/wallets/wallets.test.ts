@@ -269,12 +269,18 @@ describe('resource wallets', () => {
   // Mock server tests are disabled
   test.skip('_transfer: required and optional params', async () => {
     const response = await client.wallets._transfer('wallet_id', {
-      destination: { address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2' },
+      destination: {
+        address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
+        asset: 'usdc',
+        chain: 'base',
+      },
       source: {
         amount: '10.5',
         asset: 'usdc',
         chain: 'base',
       },
+      amount_type: 'exact_input',
+      slippage_bps: 100,
       'privy-authorization-signature': 'privy-authorization-signature',
     });
   });

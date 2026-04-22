@@ -376,6 +376,7 @@ export {
   type TronCalldataCondition,
   type SuiTransactionCommandCondition,
   type SuiTransferObjectsCommandCondition,
+  type ActionRequestBodyCondition,
   type AggregationCondition,
   type PolicyCondition,
   type PolicyMethod,
@@ -405,13 +406,7 @@ export {
   type OwnerIDInput,
   type CurrencyAmount,
 } from './shared';
-export {
-  Swaps,
-  type SwapAmountType,
-  type SwapQuoteRequestBody,
-  type SwapQuoteResponse,
-  type SwapRequestBody,
-} from './swaps';
+export { Swaps, type SwapQuoteRequestBody, type SwapQuoteResponse, type SwapRequestBody } from './swaps';
 export {
   Transactions,
   type TransactionScanningMetadata,
@@ -539,9 +534,14 @@ export {
   type EarnWithdrawActionResponse,
   type EarnIncentiveClaimActionResponse,
   type WalletActionResponse,
+  type EthereumEarnProvider,
   type EarnDepositRequestBody,
   type EarnWithdrawRequestBody,
   type EarnIncentiveClaimRequestBody,
+  type EthereumEarnPositionQuery,
+  type EarnAsset,
+  type EthereumEarnPositionResponse,
+  type EthereumEarnVaultDetailsResponse,
 } from './wallet-actions';
 export {
   Wallets,
@@ -570,6 +570,7 @@ export {
   type PrivateKeyExportResponse,
   type SeedPhraseExportInput,
   type SeedPhraseExportResponse,
+  type AmountType,
   type WalletImportSupportedChains,
   type WalletImportSupportedEntropyTypes,
   type WalletImportInitResponse,

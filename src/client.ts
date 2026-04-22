@@ -333,6 +333,7 @@ import {
 import {
   AbiParameter,
   AbiSchema,
+  ActionRequestBodyCondition,
   AggregationCondition,
   ConditionOperator,
   ConditionSet,
@@ -391,13 +392,7 @@ import {
   Shared,
   SuccessResponse,
 } from './resources/shared';
-import {
-  SwapAmountType,
-  SwapQuoteRequestBody,
-  SwapQuoteResponse,
-  SwapRequestBody,
-  Swaps,
-} from './resources/swaps';
+import { SwapQuoteRequestBody, SwapQuoteResponse, SwapRequestBody, Swaps } from './resources/swaps';
 import {
   Transaction,
   TransactionList,
@@ -507,6 +502,7 @@ import {
   UsersCursor,
 } from './resources/users';
 import {
+  EarnAsset,
   EarnDepositActionResponse,
   EarnDepositRequestBody,
   EarnIncentiveClaimActionResponse,
@@ -514,6 +510,10 @@ import {
   EarnIncetiveClaimRewardEntry,
   EarnWithdrawActionResponse,
   EarnWithdrawRequestBody,
+  EthereumEarnPositionQuery,
+  EthereumEarnPositionResponse,
+  EthereumEarnProvider,
+  EthereumEarnVaultDetailsResponse,
   EvmTransactionWalletActionStep,
   EvmUserOperationWalletActionStep,
   EvmWalletActionStepStatus,
@@ -660,6 +660,7 @@ import {
   AdditionalSignerInput,
   AdditionalSignerItemInput,
   Address,
+  AmountType,
   AuthorizationKeyDashboardResponse,
   AuthorizationKeyResponse,
   AuthorizationKeyRole,
@@ -1742,6 +1743,7 @@ export declare namespace PrivyAPI {
     type PrivateKeyExportResponse as PrivateKeyExportResponse,
     type SeedPhraseExportInput as SeedPhraseExportInput,
     type SeedPhraseExportResponse as SeedPhraseExportResponse,
+    type AmountType as AmountType,
     type WalletImportSupportedChains as WalletImportSupportedChains,
     type WalletImportSupportedEntropyTypes as WalletImportSupportedEntropyTypes,
     type WalletImportInitResponse as WalletImportInitResponse,
@@ -2041,6 +2043,7 @@ export declare namespace PrivyAPI {
     type TronCalldataCondition as TronCalldataCondition,
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
+    type ActionRequestBodyCondition as ActionRequestBodyCondition,
     type AggregationCondition as AggregationCondition,
     type PolicyCondition as PolicyCondition,
     type PolicyMethod as PolicyMethod,
@@ -2397,9 +2400,14 @@ export declare namespace PrivyAPI {
     type EarnWithdrawActionResponse as EarnWithdrawActionResponse,
     type EarnIncentiveClaimActionResponse as EarnIncentiveClaimActionResponse,
     type WalletActionResponse as WalletActionResponse,
+    type EthereumEarnProvider as EthereumEarnProvider,
     type EarnDepositRequestBody as EarnDepositRequestBody,
     type EarnWithdrawRequestBody as EarnWithdrawRequestBody,
     type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
+    type EthereumEarnPositionQuery as EthereumEarnPositionQuery,
+    type EarnAsset as EarnAsset,
+    type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
+    type EthereumEarnVaultDetailsResponse as EthereumEarnVaultDetailsResponse,
   };
 
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
@@ -2558,7 +2566,6 @@ export declare namespace PrivyAPI {
 
   export {
     Swaps as Swaps,
-    type SwapAmountType as SwapAmountType,
     type SwapQuoteRequestBody as SwapQuoteRequestBody,
     type SwapQuoteResponse as SwapQuoteResponse,
     type SwapRequestBody as SwapRequestBody,

@@ -1690,7 +1690,8 @@ export declare namespace IntentRpcParams {
 
 export interface IntentTransferParams {
   /**
-   * Body param: The destination address for a token transfer.
+   * Body param: The destination address for a token transfer. Optionally specify a
+   * different asset or chain for cross-asset or cross-chain transfers.
    */
   destination: WalletsAPI.TokenTransferDestination;
 
@@ -1698,6 +1699,16 @@ export interface IntentTransferParams {
    * Body param: The source asset, amount, and chain for a token transfer.
    */
   source: WalletsAPI.TokenTransferSource;
+
+  /**
+   * Body param: Whether the amount refers to the input token or output token.
+   */
+  amount_type?: WalletsAPI.AmountType;
+
+  /**
+   * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%).
+   */
+  slippage_bps?: number;
 
   /**
    * Header param: Request expiry. Value is a Unix timestamp in milliseconds

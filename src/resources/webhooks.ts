@@ -935,16 +935,6 @@ export interface WalletActionTransferCreatedWebhookPayload {
   destination_address: string;
 
   /**
-   * Decimal amount as provided by the user (e.g. "1.5").
-   */
-  source_amount: string;
-
-  /**
-   * Asset identifier (e.g. "usdc", "eth").
-   */
-  source_asset: string;
-
-  /**
    * Chain name (e.g. "base", "ethereum").
    */
   source_chain: string;
@@ -968,6 +958,30 @@ export interface WalletActionTransferCreatedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
+   * cross-chain transfers until the source amount is determined.
+   */
+  source_amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Present when the transfer was initiated
+   * with a named asset; omitted for custom-token transfers.
+   */
+  source_asset?: string;
+
+  /**
+   * Token contract address (EVM) or mint address (Solana). Present when the transfer
+   * was initiated with `asset_address`.
+   */
+  source_asset_address?: string;
+
+  /**
+   * Number of decimals for the transferred token. Present when the transfer was
+   * initiated with `asset_address` and the decimals were resolved on-chain.
+   */
+  source_asset_decimals?: number;
 }
 
 /**
@@ -983,16 +997,6 @@ export interface WalletActionTransferSucceededWebhookPayload {
    * Recipient address.
    */
   destination_address: string;
-
-  /**
-   * Decimal amount as provided by the user (e.g. "1.5").
-   */
-  source_amount: string;
-
-  /**
-   * Asset identifier (e.g. "usdc", "eth").
-   */
-  source_asset: string;
 
   /**
    * Chain name (e.g. "base", "ethereum").
@@ -1023,6 +1027,30 @@ export interface WalletActionTransferSucceededWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
+   * cross-chain transfers until the source amount is determined.
+   */
+  source_amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Present when the transfer was initiated
+   * with a named asset; omitted for custom-token transfers.
+   */
+  source_asset?: string;
+
+  /**
+   * Token contract address (EVM) or mint address (Solana). Present when the transfer
+   * was initiated with `asset_address`.
+   */
+  source_asset_address?: string;
+
+  /**
+   * Number of decimals for the transferred token. Present when the transfer was
+   * initiated with `asset_address` and the decimals were resolved on-chain.
+   */
+  source_asset_decimals?: number;
 }
 
 /**
@@ -1043,16 +1071,6 @@ export interface WalletActionTransferRejectedWebhookPayload {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason: WalletActionsAPI.FailureReason;
-
-  /**
-   * Decimal amount as provided by the user (e.g. "1.5").
-   */
-  source_amount: string;
-
-  /**
-   * Asset identifier (e.g. "usdc", "eth").
-   */
-  source_asset: string;
 
   /**
    * Chain name (e.g. "base", "ethereum").
@@ -1083,6 +1101,30 @@ export interface WalletActionTransferRejectedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
+   * cross-chain transfers until the source amount is determined.
+   */
+  source_amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Present when the transfer was initiated
+   * with a named asset; omitted for custom-token transfers.
+   */
+  source_asset?: string;
+
+  /**
+   * Token contract address (EVM) or mint address (Solana). Present when the transfer
+   * was initiated with `asset_address`.
+   */
+  source_asset_address?: string;
+
+  /**
+   * Number of decimals for the transferred token. Present when the transfer was
+   * initiated with `asset_address` and the decimals were resolved on-chain.
+   */
+  source_asset_decimals?: number;
 }
 
 /**
@@ -1103,16 +1145,6 @@ export interface WalletActionTransferFailedWebhookPayload {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason: WalletActionsAPI.FailureReason;
-
-  /**
-   * Decimal amount as provided by the user (e.g. "1.5").
-   */
-  source_amount: string;
-
-  /**
-   * Asset identifier (e.g. "usdc", "eth").
-   */
-  source_asset: string;
 
   /**
    * Chain name (e.g. "base", "ethereum").
@@ -1144,6 +1176,30 @@ export interface WalletActionTransferFailedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
+   * cross-chain transfers until the source amount is determined.
+   */
+  source_amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Present when the transfer was initiated
+   * with a named asset; omitted for custom-token transfers.
+   */
+  source_asset?: string;
+
+  /**
+   * Token contract address (EVM) or mint address (Solana). Present when the transfer
+   * was initiated with `asset_address`.
+   */
+  source_asset_address?: string;
+
+  /**
+   * Number of decimals for the transferred token. Present when the transfer was
+   * initiated with `asset_address` and the decimals were resolved on-chain.
+   */
+  source_asset_decimals?: number;
 }
 
 /**

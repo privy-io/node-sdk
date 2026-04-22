@@ -1696,7 +1696,8 @@ export interface IntentTransferParams {
   destination: WalletsAPI.TokenTransferDestination;
 
   /**
-   * Body param: The source asset, amount, and chain for a token transfer.
+   * Body param: The source asset, amount, and chain for a token transfer. Specify
+   * either `asset` (named) or `asset_address` (custom), not both.
    */
   source: WalletsAPI.TokenTransferSource;
 

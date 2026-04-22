@@ -1585,6 +1585,16 @@ export interface AuthenticatedUser {
   oauth_tokens?: OAuthTokens;
 }
 
+/**
+ * The payload for partially updating custom metadata on a user.
+ */
+export interface PatchUsersCustomMetadata {
+  /**
+   * Custom metadata associated with the user.
+   */
+  custom_metadata: CustomMetadata;
+}
+
 export interface UserCreateParams {
   linked_accounts: Array<LinkedAccountInput>;
 
@@ -1796,6 +1806,7 @@ export declare namespace Users {
     type OAuthTokens as OAuthTokens,
     type UserWithIdentityToken as UserWithIdentityToken,
     type AuthenticatedUser as AuthenticatedUser,
+    type PatchUsersCustomMetadata as PatchUsersCustomMetadata,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,

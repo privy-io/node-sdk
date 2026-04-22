@@ -3057,9 +3057,10 @@ export interface WalletExportResponseBody {
 }
 
 /**
- * The source asset, amount, and chain for a token transfer.
+ * Source for a transfer identified by a named asset (e.g. "usdc", "eth"). Use this
+ * variant for first-class assets maintained by Privy.
  */
-export interface TokenTransferSource {
+export interface NamedTokenTransferSource {
   /**
    * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
    * USDC, "0.01" for 0.01 ETH). Not in the smallest on-chain unit (wei, lamports,
@@ -3080,6 +3081,38 @@ export interface TokenTransferSource {
    */
   chain: string;
 }
+
+/**
+ * Source for a transfer identified by a token contract address (EVM) or mint
+ * address (Solana). Use this variant for tokens that are not first-class assets.
+ */
+export interface CustomTokenTransferSource {
+  /**
+   * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
+   * USDC, "0.01" for 0.01 ETH). Not in the smallest on-chain unit (wei, lamports,
+   * etc.).
+   */
+  amount: string;
+
+  /**
+   * The token contract address (EVM) or mint address (Solana) of the asset to
+   * transfer.
+   */
+  asset_address: string;
+
+  /**
+   * The blockchain network on which to perform the transfer. Supported chains
+   * include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and their
+   * respective testnets.
+   */
+  chain: string;
+}
+
+/**
+ * The source asset, amount, and chain for a token transfer. Specify either `asset`
+ * (named) or `asset_address` (custom), not both.
+ */
+export type TokenTransferSource = NamedTokenTransferSource | CustomTokenTransferSource;
 
 /**
  * The destination address for a token transfer. Optionally specify a different
@@ -3115,7 +3148,8 @@ export interface TransferRequestBody {
   destination: TokenTransferDestination;
 
   /**
-   * The source asset, amount, and chain for a token transfer.
+   * The source asset, amount, and chain for a token transfer. Specify either `asset`
+   * (named) or `asset_address` (custom), not both.
    */
   source: TokenTransferSource;
 
@@ -4577,7 +4611,8 @@ export interface WalletTransferParams {
   destination: TokenTransferDestination;
 
   /**
-   * Body param: The source asset, amount, and chain for a token transfer.
+   * Body param: The source asset, amount, and chain for a token transfer. Specify
+   * either `asset` (named) or `asset_address` (custom), not both.
    */
   source: TokenTransferSource;
 
@@ -4889,6 +4924,8 @@ export declare namespace Wallets {
     type WalletExportRequestBody as WalletExportRequestBody,
     type WalletRevokeResponse as WalletRevokeResponse,
     type WalletExportResponseBody as WalletExportResponseBody,
+    type NamedTokenTransferSource as NamedTokenTransferSource,
+    type CustomTokenTransferSource as CustomTokenTransferSource,
     type TokenTransferSource as TokenTransferSource,
     type TokenTransferDestination as TokenTransferDestination,
     type TransferRequestBody as TransferRequestBody,

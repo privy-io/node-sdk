@@ -250,16 +250,6 @@ export interface TransferActionResponse {
   destination_address: string;
 
   /**
-   * Decimal amount as the user provided (e.g. "1.5").
-   */
-  source_amount: string;
-
-  /**
-   * Asset identifier (e.g. "usdc", "eth").
-   */
-  source_asset: string;
-
-  /**
    * Chain name (e.g. "base", "ethereum").
    */
   source_chain: string;
@@ -277,9 +267,49 @@ export interface TransferActionResponse {
   wallet_id: string;
 
   /**
+   * Amount received on the destination chain. Populated immediately for exact_output
+   * transfers, or after fill confirmation for exact_input transfers.
+   */
+  destination_amount?: string;
+
+  /**
+   * Destination asset for cross-asset transfers. Omitted for same-asset transfers.
+   */
+  destination_asset?: string;
+
+  /**
+   * Destination chain for cross-chain transfers. Omitted for same-chain transfers.
+   */
+  destination_chain?: string;
+
+  /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
+
+  /**
+   * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
+   * cross-chain transfers until the source amount is determined.
+   */
+  source_amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Present when the transfer was initiated
+   * with a named asset; omitted for custom-token transfers.
+   */
+  source_asset?: string;
+
+  /**
+   * Token contract address (EVM) or mint address (Solana). Present when the transfer
+   * was initiated with `asset_address`.
+   */
+  source_asset_address?: string;
+
+  /**
+   * Number of decimals for the transferred token. Present when the transfer was
+   * initiated with `asset_address` and the decimals were resolved on-chain.
+   */
+  source_asset_decimals?: number;
 
   /**
    * The steps of the wallet action. Only returned if `?include=steps` is provided.

@@ -145,9 +145,15 @@ export type AccountDisplayName = string;
 export type AccountWalletsConfiguration = Array<AccountWalletConfigurationItem>;
 
 /**
- * Input for creating a digital asset account.
+ * IDs for wallets to include in this account.
  */
-export interface CreateAccountInput {
+export type AccountWalletIDs = Array<string>;
+
+/**
+ * Input for creating a digital asset account from new wallets with a
+ * `wallets_configuration` specification.
+ */
+export interface CreateAccountFromWalletsConfigurationInput {
   /**
    * Configuration for the wallets on this account.
    */
@@ -160,9 +166,31 @@ export interface CreateAccountInput {
 }
 
 /**
- * Input for updating a digital asset account.
+ * Input for creating a digital asset account from existing wallets with a
+ * `wallet_ids` parameter.
  */
-export interface UpdateAccountInput {
+export interface CreateAccountFromWalletIDsInput {
+  /**
+   * IDs for wallets to include in this account.
+   */
+  wallet_ids: AccountWalletIDs;
+
+  /**
+   * An optional display name for the account.
+   */
+  display_name?: AccountDisplayName;
+}
+
+/**
+ * Input for creating a digital asset account.
+ */
+export type CreateAccountInput = CreateAccountFromWalletsConfigurationInput | CreateAccountFromWalletIDsInput;
+
+/**
+ * Input for updating a digital asset account with a `wallets_configuration`
+ * specification.
+ */
+export interface UpdateAccountFromWalletsConfigurationInput {
   /**
    * An optional display name for the account.
    */
@@ -173,6 +201,27 @@ export interface UpdateAccountInput {
    */
   wallets_configuration?: AccountWalletsConfiguration;
 }
+
+/**
+ * Input for updating a digital asset account by adding existing wallets with a
+ * `wallet_ids` parameter.
+ */
+export interface UpdateAccountFromWalletIDsInput {
+  /**
+   * IDs for wallets to include in this account.
+   */
+  wallet_ids: AccountWalletIDs;
+
+  /**
+   * An optional display name for the account.
+   */
+  display_name?: AccountDisplayName;
+}
+
+/**
+ * Input for updating a digital asset account.
+ */
+export type UpdateAccountInput = UpdateAccountFromWalletsConfigurationInput | UpdateAccountFromWalletIDsInput;
 
 /**
  * Paginated list of digital asset accounts.
@@ -271,7 +320,12 @@ export declare namespace Accounts {
     type AccountWalletConfigurationItem as AccountWalletConfigurationItem,
     type AccountDisplayName as AccountDisplayName,
     type AccountWalletsConfiguration as AccountWalletsConfiguration,
+    type AccountWalletIDs as AccountWalletIDs,
+    type CreateAccountFromWalletsConfigurationInput as CreateAccountFromWalletsConfigurationInput,
+    type CreateAccountFromWalletIDsInput as CreateAccountFromWalletIDsInput,
     type CreateAccountInput as CreateAccountInput,
+    type UpdateAccountFromWalletsConfigurationInput as UpdateAccountFromWalletsConfigurationInput,
+    type UpdateAccountFromWalletIDsInput as UpdateAccountFromWalletIDsInput,
     type UpdateAccountInput as UpdateAccountInput,
     type AccountsListResponse as AccountsListResponse,
     type AssetAccountWithBalance as AssetAccountWithBalance,

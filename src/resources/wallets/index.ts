@@ -177,6 +177,8 @@ export {
   type WalletExportRequestBody,
   type WalletRevokeResponse,
   type WalletExportResponseBody,
+  type NamedTokenTransferSource,
+  type CustomTokenTransferSource,
   type TokenTransferSource,
   type TokenTransferDestination,
   type TransferRequestBody,

@@ -174,6 +174,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRevokeResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponseBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">NamedTokenTransferSource</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CustomTokenTransferSource</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferSource</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferDestination</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferRequestBody</a></code>
@@ -313,6 +315,7 @@ Types:
 - <code><a href="./src/resources/users.ts">OAuthTokens</a></code>
 - <code><a href="./src/resources/users.ts">UserWithIdentityToken</a></code>
 - <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
+- <code><a href="./src/resources/users.ts">PatchUsersCustomMetadata</a></code>
 
 Methods:
 
@@ -908,7 +911,12 @@ Types:
 - <code><a href="./src/resources/accounts.ts">AccountWalletConfigurationItem</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountDisplayName</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountWalletsConfiguration</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountWalletIDs</a></code>
+- <code><a href="./src/resources/accounts.ts">CreateAccountFromWalletsConfigurationInput</a></code>
+- <code><a href="./src/resources/accounts.ts">CreateAccountFromWalletIDsInput</a></code>
 - <code><a href="./src/resources/accounts.ts">CreateAccountInput</a></code>
+- <code><a href="./src/resources/accounts.ts">UpdateAccountFromWalletsConfigurationInput</a></code>
+- <code><a href="./src/resources/accounts.ts">UpdateAccountFromWalletIDsInput</a></code>
 - <code><a href="./src/resources/accounts.ts">UpdateAccountInput</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountsListResponse</a></code>
 - <code><a href="./src/resources/accounts.ts">AssetAccountWithBalance</a></code>

@@ -28,44 +28,6 @@ export class Transactions extends APIResource {
 }
 
 /**
- * A transaction from a Privy wallet.
- */
-export interface Transaction {
-  id: string;
-
-  caip2: string;
-
-  created_at: number;
-
-  status:
-    | 'broadcasted'
-    | 'confirmed'
-    | 'execution_reverted'
-    | 'failed'
-    | 'replaced'
-    | 'finalized'
-    | 'provider_error'
-    | 'pending';
-
-  transaction_hash: string | null;
-
-  wallet_id: string;
-
-  reference_id?: string | null;
-
-  sponsored?: boolean;
-
-  user_operation_hash?: string;
-}
-
-/**
- * A list of transactions.
- */
-export interface TransactionList {
-  transactions: Array<Transaction>;
-}
-
-/**
  * Additional information for Blockaid to validate against.
  */
 export interface TransactionScanningMetadata {
@@ -257,10 +219,46 @@ export interface TransactionScanningResponseBody {
   validation: TransactionScanningValidationResult;
 }
 
+/**
+ * A transaction from a Privy wallet.
+ */
+export interface Transaction {
+  id: string;
+
+  caip2: string;
+
+  created_at: number;
+
+  status:
+    | 'broadcasted'
+    | 'confirmed'
+    | 'execution_reverted'
+    | 'failed'
+    | 'replaced'
+    | 'finalized'
+    | 'provider_error'
+    | 'pending';
+
+  transaction_hash: string | null;
+
+  wallet_id: string;
+
+  reference_id?: string | null;
+
+  sponsored?: boolean;
+
+  user_operation_hash?: string;
+}
+
+/**
+ * A list of transactions.
+ */
+export interface TransactionList {
+  transactions: Array<Transaction>;
+}
+
 export declare namespace Transactions {
   export {
-    type Transaction as Transaction,
-    type TransactionList as TransactionList,
     type TransactionScanningMetadata as TransactionScanningMetadata,
     type TransactionScanningRpcRequest as TransactionScanningRpcRequest,
     type TransactionScanningRequestBody as TransactionScanningRequestBody,
@@ -277,5 +275,7 @@ export declare namespace Transactions {
     type TransactionScanningSimulationSuccessResult as TransactionScanningSimulationSuccessResult,
     type TransactionScanningSimulationResult as TransactionScanningSimulationResult,
     type TransactionScanningResponseBody as TransactionScanningResponseBody,
+    type Transaction as Transaction,
+    type TransactionList as TransactionList,
   };
 }

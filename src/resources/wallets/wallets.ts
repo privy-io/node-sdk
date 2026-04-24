@@ -489,21 +489,6 @@ export type WalletAdditionalSigner = Array<WalletAdditionalSignerItem>;
 export type Address = string;
 
 /**
- * A named asset on Ethereum-compatible chains.
- */
-export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb';
-
-/**
- * A named asset on Solana.
- */
-export type WalletSolanaAsset = 'sol' | 'usdc' | 'eurc' | 'usdb';
-
-/**
- * A named asset supported across all chains.
- */
-export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
-
-/**
  * Information about the custodian managing this wallet.
  */
 export interface WalletCustodian {
@@ -3072,122 +3057,6 @@ export interface WalletExportResponseBody {
 }
 
 /**
- * Details for a sent transfer transaction.
- */
-export interface TransferSentTransactionDetail {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
-
-  chain:
-    | 'ethereum'
-    | 'arbitrum'
-    | 'base'
-    | 'tempo'
-    | 'linea'
-    | 'optimism'
-    | 'polygon'
-    | 'solana'
-    | 'zksync_era'
-    | 'sepolia'
-    | 'arbitrum_sepolia'
-    | 'base_sepolia'
-    | 'linea_testnet'
-    | 'optimism_sepolia'
-    | 'polygon_amoy'
-    | 'solana_devnet'
-    | 'solana_testnet';
-
-  display_values: { [key: string]: string };
-
-  raw_value: string;
-
-  raw_value_decimals: number;
-
-  recipient: string;
-
-  recipient_privy_user_id: string | null;
-
-  sender: string;
-
-  sender_privy_user_id: string | null;
-
-  type: 'transfer_sent';
-}
-
-/**
- * Details for a received transfer transaction.
- */
-export interface TransferReceivedTransactionDetail {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
-
-  chain:
-    | 'ethereum'
-    | 'arbitrum'
-    | 'base'
-    | 'tempo'
-    | 'linea'
-    | 'optimism'
-    | 'polygon'
-    | 'solana'
-    | 'zksync_era'
-    | 'sepolia'
-    | 'arbitrum_sepolia'
-    | 'base_sepolia'
-    | 'linea_testnet'
-    | 'optimism_sepolia'
-    | 'polygon_amoy'
-    | 'solana_devnet'
-    | 'solana_testnet';
-
-  display_values: { [key: string]: string };
-
-  raw_value: string;
-
-  raw_value_decimals: number;
-
-  recipient: string;
-
-  recipient_privy_user_id: string | null;
-
-  sender: string;
-
-  sender_privy_user_id: string | null;
-
-  type: 'transfer_received';
-}
-
-/**
- * Details of a wallet transaction, varying by transaction type.
- */
-export type TransactionDetail = TransferSentTransactionDetail | TransferReceivedTransactionDetail;
-
-/**
- * Headers required to authorize wallet operations.
- */
-export interface WalletAuthorizationHeaders {
-  /**
-   * ID of your Privy app.
-   */
-  'privy-app-id': string;
-
-  /**
-   * Request authorization signature. If multiple signatures are required, they
-   * should be comma separated.
-   */
-  'privy-authorization-signature'?: string;
-
-  /**
-   * Request expiry. Value is a Unix timestamp in milliseconds representing the
-   * deadline by which the request must be processed.
-   */
-  'privy-request-expiry'?: string;
-}
-
-/**
- * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
- */
-export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
-
-/**
  * Source for a transfer identified by a named asset (e.g. "usdc", "eth"). Use this
  * variant for first-class assets maintained by Privy.
  */
@@ -3296,6 +3165,115 @@ export interface TransferRequestBody {
 }
 
 /**
+ * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+ */
+export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
+
+/**
+ * A named asset on Ethereum-compatible chains.
+ */
+export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb';
+
+/**
+ * A named asset on Solana.
+ */
+export type WalletSolanaAsset = 'sol' | 'usdc' | 'eurc' | 'usdb';
+
+/**
+ * A named asset supported across all chains.
+ */
+export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+
+/**
+ * Details for a sent transfer transaction.
+ */
+export interface TransferSentTransactionDetail {
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+
+  chain:
+    | 'ethereum'
+    | 'arbitrum'
+    | 'base'
+    | 'tempo'
+    | 'linea'
+    | 'optimism'
+    | 'polygon'
+    | 'solana'
+    | 'zksync_era'
+    | 'sepolia'
+    | 'arbitrum_sepolia'
+    | 'base_sepolia'
+    | 'linea_testnet'
+    | 'optimism_sepolia'
+    | 'polygon_amoy'
+    | 'solana_devnet'
+    | 'solana_testnet';
+
+  display_values: { [key: string]: string };
+
+  raw_value: string;
+
+  raw_value_decimals: number;
+
+  recipient: string;
+
+  recipient_privy_user_id: string | null;
+
+  sender: string;
+
+  sender_privy_user_id: string | null;
+
+  type: 'transfer_sent';
+}
+
+/**
+ * Details for a received transfer transaction.
+ */
+export interface TransferReceivedTransactionDetail {
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+
+  chain:
+    | 'ethereum'
+    | 'arbitrum'
+    | 'base'
+    | 'tempo'
+    | 'linea'
+    | 'optimism'
+    | 'polygon'
+    | 'solana'
+    | 'zksync_era'
+    | 'sepolia'
+    | 'arbitrum_sepolia'
+    | 'base_sepolia'
+    | 'linea_testnet'
+    | 'optimism_sepolia'
+    | 'polygon_amoy'
+    | 'solana_devnet'
+    | 'solana_testnet';
+
+  display_values: { [key: string]: string };
+
+  raw_value: string;
+
+  raw_value_decimals: number;
+
+  recipient: string;
+
+  recipient_privy_user_id: string | null;
+
+  sender: string;
+
+  sender_privy_user_id: string | null;
+
+  type: 'transfer_received';
+}
+
+/**
+ * Details of a wallet transaction, varying by transaction type.
+ */
+export type TransactionDetail = TransferSentTransactionDetail | TransferReceivedTransactionDetail;
+
+/**
  * Input for registering or updating an application public signing key for
  * API-based wallet actions.
  */
@@ -3349,6 +3327,28 @@ export interface AuthorizationKeyResponse {
   display_name: string | null;
 
   public_key: string;
+}
+
+/**
+ * Headers required to authorize wallet operations.
+ */
+export interface WalletAuthorizationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export interface WalletInitImportResponse {
@@ -4765,9 +4765,6 @@ export declare namespace Wallets {
     type WalletAdditionalSignerItem as WalletAdditionalSignerItem,
     type WalletAdditionalSigner as WalletAdditionalSigner,
     type Address as Address,
-    type WalletEthereumAsset as WalletEthereumAsset,
-    type WalletSolanaAsset as WalletSolanaAsset,
-    type WalletAsset as WalletAsset,
     type WalletCustodian as WalletCustodian,
     type CustodialWalletProvider as CustodialWalletProvider,
     type CustodialWalletChainType as CustodialWalletChainType,
@@ -4927,20 +4924,23 @@ export declare namespace Wallets {
     type WalletExportRequestBody as WalletExportRequestBody,
     type WalletRevokeResponse as WalletRevokeResponse,
     type WalletExportResponseBody as WalletExportResponseBody,
-    type TransferSentTransactionDetail as TransferSentTransactionDetail,
-    type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
-    type TransactionDetail as TransactionDetail,
-    type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
-    type SuiCommandName as SuiCommandName,
     type NamedTokenTransferSource as NamedTokenTransferSource,
     type CustomTokenTransferSource as CustomTokenTransferSource,
     type TokenTransferSource as TokenTransferSource,
     type TokenTransferDestination as TokenTransferDestination,
     type TransferRequestBody as TransferRequestBody,
+    type SuiCommandName as SuiCommandName,
+    type WalletEthereumAsset as WalletEthereumAsset,
+    type WalletSolanaAsset as WalletSolanaAsset,
+    type WalletAsset as WalletAsset,
+    type TransferSentTransactionDetail as TransferSentTransactionDetail,
+    type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
+    type TransactionDetail as TransactionDetail,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
     type AuthorizationKeyResponse as AuthorizationKeyResponse,
+    type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,

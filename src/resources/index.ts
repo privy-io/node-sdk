@@ -811,6 +811,7 @@ export {
   type BridgeCryptoTransferMetadata,
   type BridgeFiatTransferMetadata,
   type BridgeTransferRefundMetadata,
+  type BridgeStaticMemoDepositMetadata,
   type BridgeMetadata,
   type FundsDepositedWebhookPayload,
   type FundsWithdrawnWebhookPayload,

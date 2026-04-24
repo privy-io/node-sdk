@@ -296,6 +296,150 @@ export class Policies extends APIResource {
 }
 
 /**
+ * Unique ID of the condition set to take actions on.
+ */
+export interface ConditionSetRequestParams {
+  condition_set_id: string;
+}
+
+/**
+ * Unique IDs of the condition set and the condition set item within the condition
+ * set to take actions on.
+ */
+export interface ConditionSetItemRequestParams {
+  condition_set_id: string;
+
+  condition_set_item_id: string;
+}
+
+/**
+ * Request body for creating a condition set.
+ */
+export interface ConditionSetRequestBody {
+  /**
+   * Name to assign to condition set.
+   */
+  name: string;
+
+  /**
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
+   */
+  owner?: SharedAPI.OwnerInput | null;
+
+  /**
+   * The key quorum ID to set as the owner of the resource. If you provide this, do
+   * not specify an owner.
+   */
+  owner_id?: SharedAPI.OwnerIDInput | null;
+}
+
+/**
+ * A condition set for grouping related condition values.
+ */
+export interface ConditionSet {
+  /**
+   * Unique ID of the created condition set. This will be the primary identifier when
+   * using the condition set in the future.
+   */
+  id: string;
+
+  /**
+   * Unix timestamp of when the condition set was created in milliseconds.
+   */
+  created_at: number;
+
+  /**
+   * Name of the condition set.
+   */
+  name: string;
+
+  /**
+   * A unique identifier for a key quorum.
+   */
+  owner_id: SharedAPI.KeyQuorumID;
+}
+
+/**
+ * Request body for updating a condition set.
+ */
+export interface UpdateConditionSetRequestBody {
+  /**
+   * Name to assign to condition set.
+   */
+  name?: string;
+
+  /**
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
+   */
+  owner?: SharedAPI.OwnerInput | null;
+
+  /**
+   * The key quorum ID to set as the owner of the resource. If you provide this, do
+   * not specify an owner.
+   */
+  owner_id?: SharedAPI.OwnerIDInput | null;
+}
+
+/**
+ * A single value to add to a condition set.
+ */
+export interface ConditionSetItemValueInput {
+  value: string;
+}
+
+/**
+ * Array of values to add to the condition set. Maximum 100 items per request.
+ */
+export type ConditionSetItemsRequestBody = Array<ConditionSetItemValueInput>;
+
+/**
+ * A single item in a condition set.
+ */
+export interface ConditionSetItem {
+  /**
+   * Unique ID of the created condition set item.
+   */
+  id: string;
+
+  /**
+   * Unique ID of the condition set this item belongs to.
+   */
+  condition_set_id: string;
+
+  /**
+   * Unix timestamp of when the condition set item was created in milliseconds.
+   */
+  created_at: number;
+
+  /**
+   * The value stored in this condition set item.
+   */
+  value: string;
+}
+
+/**
+ * Array of condition set items.
+ */
+export type ConditionSetItems = Array<ConditionSetItem>;
+
+/**
+ * Paginated list of condition set items.
+ */
+export interface ConditionSetItemsResponse {
+  /**
+   * List of condition set items.
+   */
+  items: Array<ConditionSetItem>;
+
+  /**
+   * Cursor for pagination. Null if there are no more items.
+   */
+  next_cursor: string | null;
+}
+
+/**
  * The action to take when a policy rule matches.
  */
 export type PolicyAction = 'ALLOW' | 'DENY';
@@ -887,150 +1031,6 @@ export interface PolicyAuthorizationHeaders {
 }
 
 /**
- * Unique ID of the condition set to take actions on.
- */
-export interface ConditionSetRequestParams {
-  condition_set_id: string;
-}
-
-/**
- * Unique IDs of the condition set and the condition set item within the condition
- * set to take actions on.
- */
-export interface ConditionSetItemRequestParams {
-  condition_set_id: string;
-
-  condition_set_item_id: string;
-}
-
-/**
- * Request body for creating a condition set.
- */
-export interface ConditionSetRequestBody {
-  /**
-   * Name to assign to condition set.
-   */
-  name: string;
-
-  /**
-   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
-   * null to remove the current owner.
-   */
-  owner?: SharedAPI.OwnerInput | null;
-
-  /**
-   * The key quorum ID to set as the owner of the resource. If you provide this, do
-   * not specify an owner.
-   */
-  owner_id?: SharedAPI.OwnerIDInput | null;
-}
-
-/**
- * A condition set for grouping related condition values.
- */
-export interface ConditionSet {
-  /**
-   * Unique ID of the created condition set. This will be the primary identifier when
-   * using the condition set in the future.
-   */
-  id: string;
-
-  /**
-   * Unix timestamp of when the condition set was created in milliseconds.
-   */
-  created_at: number;
-
-  /**
-   * Name of the condition set.
-   */
-  name: string;
-
-  /**
-   * A unique identifier for a key quorum.
-   */
-  owner_id: SharedAPI.KeyQuorumID;
-}
-
-/**
- * Request body for updating a condition set.
- */
-export interface UpdateConditionSetRequestBody {
-  /**
-   * Name to assign to condition set.
-   */
-  name?: string;
-
-  /**
-   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
-   * null to remove the current owner.
-   */
-  owner?: SharedAPI.OwnerInput | null;
-
-  /**
-   * The key quorum ID to set as the owner of the resource. If you provide this, do
-   * not specify an owner.
-   */
-  owner_id?: SharedAPI.OwnerIDInput | null;
-}
-
-/**
- * A single value to add to a condition set.
- */
-export interface ConditionSetItemValueInput {
-  value: string;
-}
-
-/**
- * Array of values to add to the condition set. Maximum 100 items per request.
- */
-export type ConditionSetItemsRequestBody = Array<ConditionSetItemValueInput>;
-
-/**
- * A single item in a condition set.
- */
-export interface ConditionSetItem {
-  /**
-   * Unique ID of the created condition set item.
-   */
-  id: string;
-
-  /**
-   * Unique ID of the condition set this item belongs to.
-   */
-  condition_set_id: string;
-
-  /**
-   * Unix timestamp of when the condition set item was created in milliseconds.
-   */
-  created_at: number;
-
-  /**
-   * The value stored in this condition set item.
-   */
-  value: string;
-}
-
-/**
- * Array of condition set items.
- */
-export type ConditionSetItems = Array<ConditionSetItem>;
-
-/**
- * Paginated list of condition set items.
- */
-export interface ConditionSetItemsResponse {
-  /**
-   * List of condition set items.
-   */
-  items: Array<ConditionSetItem>;
-
-  /**
-   * Cursor for pagination. Null if there are no more items.
-   */
-  next_cursor: string | null;
-}
-
-/**
  * Headers required to authorize modifications to condition sets.
  */
 export interface ConditionSetAuthorizationHeaders {
@@ -1260,6 +1260,16 @@ export interface PolicyGetRuleParams {
 
 export declare namespace Policies {
   export {
+    type ConditionSetRequestParams as ConditionSetRequestParams,
+    type ConditionSetItemRequestParams as ConditionSetItemRequestParams,
+    type ConditionSetRequestBody as ConditionSetRequestBody,
+    type ConditionSet as ConditionSet,
+    type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
+    type ConditionSetItemValueInput as ConditionSetItemValueInput,
+    type ConditionSetItemsRequestBody as ConditionSetItemsRequestBody,
+    type ConditionSetItem as ConditionSetItem,
+    type ConditionSetItems as ConditionSetItems,
+    type ConditionSetItemsResponse as ConditionSetItemsResponse,
     type PolicyAction as PolicyAction,
     type AbiParameter as AbiParameter,
     type AbiSchema as AbiSchema,
@@ -1290,16 +1300,6 @@ export declare namespace Policies {
     type PolicyRequestBody as PolicyRequestBody,
     type PolicyRuleRequestParams as PolicyRuleRequestParams,
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
-    type ConditionSetRequestParams as ConditionSetRequestParams,
-    type ConditionSetItemRequestParams as ConditionSetItemRequestParams,
-    type ConditionSetRequestBody as ConditionSetRequestBody,
-    type ConditionSet as ConditionSet,
-    type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
-    type ConditionSetItemValueInput as ConditionSetItemValueInput,
-    type ConditionSetItemsRequestBody as ConditionSetItemsRequestBody,
-    type ConditionSetItem as ConditionSetItem,
-    type ConditionSetItems as ConditionSetItems,
-    type ConditionSetItemsResponse as ConditionSetItemsResponse,
     type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,

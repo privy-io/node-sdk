@@ -1233,10 +1233,10 @@ export interface EthereumPersonalSignRpcInput {
  */
 export interface EthereumSignTransactionRpcInputParams {
   /**
-   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
-   * 0, 1, 2, and 4.
+   * An unsigned Ethereum transaction object. Supports standard EVM transaction types
+   * (0, 1, 2, 4) and Tempo transactions (type 118).
    */
-  transaction: UnsignedStandardEthereumTransaction;
+  transaction: UnsignedEthereumTransaction;
 }
 
 /**

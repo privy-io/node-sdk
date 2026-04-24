@@ -881,6 +881,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">BridgeCryptoTransferMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeFiatTransferMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeTransferRefundMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeStaticMemoDepositMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>

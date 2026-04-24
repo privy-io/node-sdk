@@ -2177,6 +2177,19 @@ export interface BridgeTransferRefundMetadata {
 }
 
 /**
+ * Bridge metadata for a fiat deposit via static memo.
+ */
+export interface BridgeStaticMemoDepositMetadata {
+  method: 'static_memo';
+
+  static_memo_event_id: string;
+
+  static_memo_id: string;
+
+  type: 'fiat_deposit';
+}
+
+/**
  * Metadata about a Bridge transaction associated with a wallet event.
  */
 export type BridgeMetadata =
@@ -2185,7 +2198,8 @@ export type BridgeMetadata =
   | BridgeFiatDepositMetadata
   | BridgeCryptoTransferMetadata
   | BridgeFiatTransferMetadata
-  | BridgeTransferRefundMetadata;
+  | BridgeTransferRefundMetadata
+  | BridgeStaticMemoDepositMetadata;
 
 /**
  * Payload for the wallet.funds_deposited webhook event.
@@ -2779,6 +2793,7 @@ export declare namespace Webhooks {
     type BridgeCryptoTransferMetadata as BridgeCryptoTransferMetadata,
     type BridgeFiatTransferMetadata as BridgeFiatTransferMetadata,
     type BridgeTransferRefundMetadata as BridgeTransferRefundMetadata,
+    type BridgeStaticMemoDepositMetadata as BridgeStaticMemoDepositMetadata,
     type BridgeMetadata as BridgeMetadata,
     type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
     type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,

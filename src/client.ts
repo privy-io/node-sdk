@@ -1687,15 +1687,15 @@ export class PrivyAPI {
   shared: API.Shared = new API.Shared(this);
   embeddedWallets: API.EmbeddedWallets = new API.EmbeddedWallets(this);
   walletActions: API.WalletActions = new API.WalletActions(this);
+  aggregations: API.Aggregations = new API.Aggregations(this);
   analytics: API.Analytics = new API.Analytics(this);
   funding: API.Funding = new API.Funding(this);
-  aggregations: API.Aggregations = new API.Aggregations(this);
-  webhooks: API.Webhooks = new API.Webhooks(this);
-  accounts: API.Accounts = new API.Accounts(this);
-  yield: API.Yield = new API.Yield(this);
-  swaps: API.Swaps = new API.Swaps(this);
-  krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
   crossApp: API.CrossApp = new API.CrossApp(this);
+  krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
+  yield: API.Yield = new API.Yield(this);
+  accounts: API.Accounts = new API.Accounts(this);
+  swaps: API.Swaps = new API.Swaps(this);
 }
 
 PrivyAPI.Wallets = Wallets;
@@ -1709,15 +1709,15 @@ PrivyAPI.ClientAuth = ClientAuth;
 PrivyAPI.Shared = Shared;
 PrivyAPI.EmbeddedWallets = EmbeddedWallets;
 PrivyAPI.WalletActions = WalletActions;
+PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.Analytics = Analytics;
 PrivyAPI.Funding = Funding;
-PrivyAPI.Aggregations = Aggregations;
-PrivyAPI.Webhooks = Webhooks;
-PrivyAPI.Accounts = Accounts;
-PrivyAPI.Yield = Yield;
-PrivyAPI.Swaps = Swaps;
-PrivyAPI.KrakenEmbed = KrakenEmbed;
 PrivyAPI.CrossApp = CrossApp;
+PrivyAPI.KrakenEmbed = KrakenEmbed;
+PrivyAPI.Webhooks = Webhooks;
+PrivyAPI.Yield = Yield;
+PrivyAPI.Accounts = Accounts;
+PrivyAPI.Swaps = Swaps;
 
 export declare namespace PrivyAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -1740,6 +1740,9 @@ export declare namespace PrivyAPI {
     type WalletAdditionalSignerItem as WalletAdditionalSignerItem,
     type WalletAdditionalSigner as WalletAdditionalSigner,
     type Address as Address,
+    type WalletEthereumAsset as WalletEthereumAsset,
+    type WalletSolanaAsset as WalletSolanaAsset,
+    type WalletAsset as WalletAsset,
     type WalletCustodian as WalletCustodian,
     type CustodialWalletProvider as CustodialWalletProvider,
     type CustodialWalletChainType as CustodialWalletChainType,
@@ -1899,23 +1902,20 @@ export declare namespace PrivyAPI {
     type WalletExportRequestBody as WalletExportRequestBody,
     type WalletRevokeResponse as WalletRevokeResponse,
     type WalletExportResponseBody as WalletExportResponseBody,
+    type TransferSentTransactionDetail as TransferSentTransactionDetail,
+    type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
+    type TransactionDetail as TransactionDetail,
+    type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
+    type SuiCommandName as SuiCommandName,
     type NamedTokenTransferSource as NamedTokenTransferSource,
     type CustomTokenTransferSource as CustomTokenTransferSource,
     type TokenTransferSource as TokenTransferSource,
     type TokenTransferDestination as TokenTransferDestination,
     type TransferRequestBody as TransferRequestBody,
-    type SuiCommandName as SuiCommandName,
-    type WalletEthereumAsset as WalletEthereumAsset,
-    type WalletSolanaAsset as WalletSolanaAsset,
-    type WalletAsset as WalletAsset,
-    type TransferSentTransactionDetail as TransferSentTransactionDetail,
-    type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
-    type TransactionDetail as TransactionDetail,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
     type AuthorizationKeyResponse as AuthorizationKeyResponse,
-    type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
@@ -1937,26 +1937,6 @@ export declare namespace PrivyAPI {
   export {
     Users as Users,
     type CustomMetadata as CustomMetadata,
-    type LinkedAccountWalletInput as LinkedAccountWalletInput,
-    type LinkedAccountEmailInput as LinkedAccountEmailInput,
-    type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
-    type LinkedAccountGoogleInput as LinkedAccountGoogleInput,
-    type LinkedAccountTwitterInput as LinkedAccountTwitterInput,
-    type LinkedAccountDiscordInput as LinkedAccountDiscordInput,
-    type LinkedAccountGitHubInput as LinkedAccountGitHubInput,
-    type LinkedAccountSpotifyInput as LinkedAccountSpotifyInput,
-    type LinkedAccountInstagramInput as LinkedAccountInstagramInput,
-    type LinkedAccountTiktokInput as LinkedAccountTiktokInput,
-    type LinkedAccountLineInput as LinkedAccountLineInput,
-    type LinkedAccountTwitchInput as LinkedAccountTwitchInput,
-    type LinkedAccountAppleInput as LinkedAccountAppleInput,
-    type LinkedAccountLinkedInInput as LinkedAccountLinkedInInput,
-    type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
-    type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
-    type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
-    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
-    type LinkedAccountInput as LinkedAccountInput,
-    type UserBatchCreateInput as UserBatchCreateInput,
     type LinkedAccountEmail as LinkedAccountEmail,
     type LinkedAccountPhone as LinkedAccountPhone,
     type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
@@ -1998,6 +1978,26 @@ export declare namespace PrivyAPI {
     type PasskeyMfaMethod as PasskeyMfaMethod,
     type LinkedMfaMethod as LinkedMfaMethod,
     type User as User,
+    type LinkedAccountWalletInput as LinkedAccountWalletInput,
+    type LinkedAccountEmailInput as LinkedAccountEmailInput,
+    type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
+    type LinkedAccountGoogleInput as LinkedAccountGoogleInput,
+    type LinkedAccountTwitterInput as LinkedAccountTwitterInput,
+    type LinkedAccountDiscordInput as LinkedAccountDiscordInput,
+    type LinkedAccountGitHubInput as LinkedAccountGitHubInput,
+    type LinkedAccountSpotifyInput as LinkedAccountSpotifyInput,
+    type LinkedAccountInstagramInput as LinkedAccountInstagramInput,
+    type LinkedAccountTiktokInput as LinkedAccountTiktokInput,
+    type LinkedAccountLineInput as LinkedAccountLineInput,
+    type LinkedAccountTwitchInput as LinkedAccountTwitchInput,
+    type LinkedAccountAppleInput as LinkedAccountAppleInput,
+    type LinkedAccountLinkedInInput as LinkedAccountLinkedInInput,
+    type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
+    type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
+    type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
+    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
+    type LinkedAccountInput as LinkedAccountInput,
+    type UserBatchCreateInput as UserBatchCreateInput,
     type OAuthTokens as OAuthTokens,
     type UserWithIdentityToken as UserWithIdentityToken,
     type AuthenticatedUser as AuthenticatedUser,
@@ -2025,16 +2025,6 @@ export declare namespace PrivyAPI {
 
   export {
     Policies as Policies,
-    type ConditionSetRequestParams as ConditionSetRequestParams,
-    type ConditionSetItemRequestParams as ConditionSetItemRequestParams,
-    type ConditionSetRequestBody as ConditionSetRequestBody,
-    type ConditionSet as ConditionSet,
-    type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
-    type ConditionSetItemValueInput as ConditionSetItemValueInput,
-    type ConditionSetItemsRequestBody as ConditionSetItemsRequestBody,
-    type ConditionSetItem as ConditionSetItem,
-    type ConditionSetItems as ConditionSetItems,
-    type ConditionSetItemsResponse as ConditionSetItemsResponse,
     type PolicyAction as PolicyAction,
     type AbiParameter as AbiParameter,
     type AbiSchema as AbiSchema,
@@ -2065,6 +2055,16 @@ export declare namespace PrivyAPI {
     type PolicyRequestBody as PolicyRequestBody,
     type PolicyRuleRequestParams as PolicyRuleRequestParams,
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
+    type ConditionSetRequestParams as ConditionSetRequestParams,
+    type ConditionSetItemRequestParams as ConditionSetItemRequestParams,
+    type ConditionSetRequestBody as ConditionSetRequestBody,
+    type ConditionSet as ConditionSet,
+    type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
+    type ConditionSetItemValueInput as ConditionSetItemValueInput,
+    type ConditionSetItemsRequestBody as ConditionSetItemsRequestBody,
+    type ConditionSetItem as ConditionSetItem,
+    type ConditionSetItems as ConditionSetItems,
+    type ConditionSetItemsResponse as ConditionSetItemsResponse,
     type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,
@@ -2077,6 +2077,8 @@ export declare namespace PrivyAPI {
 
   export {
     Transactions as Transactions,
+    type Transaction as Transaction,
+    type TransactionList as TransactionList,
     type TransactionScanningMetadata as TransactionScanningMetadata,
     type TransactionScanningRpcRequest as TransactionScanningRpcRequest,
     type TransactionScanningRequestBody as TransactionScanningRequestBody,
@@ -2093,8 +2095,6 @@ export declare namespace PrivyAPI {
     type TransactionScanningSimulationSuccessResult as TransactionScanningSimulationSuccessResult,
     type TransactionScanningSimulationResult as TransactionScanningSimulationResult,
     type TransactionScanningResponseBody as TransactionScanningResponseBody,
-    type Transaction as Transaction,
-    type TransactionList as TransactionList,
   };
 
   export {
@@ -2422,6 +2422,16 @@ export declare namespace PrivyAPI {
     type EthereumEarnVaultDetailsResponse as EthereumEarnVaultDetailsResponse,
   };
 
+  export {
+    Aggregations as Aggregations,
+    type AggregationMethod as AggregationMethod,
+    type AggregationMetric as AggregationMetric,
+    type AggregationWindow as AggregationWindow,
+    type AggregationGroupBy as AggregationGroupBy,
+    type Aggregation as Aggregation,
+    type AggregationInput as AggregationInput,
+  };
+
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
 
   export {
@@ -2452,17 +2462,30 @@ export declare namespace PrivyAPI {
   };
 
   export {
-    Aggregations as Aggregations,
-    type AggregationMethod as AggregationMethod,
-    type AggregationMetric as AggregationMetric,
-    type AggregationWindow as AggregationWindow,
-    type AggregationGroupBy as AggregationGroupBy,
-    type Aggregation as Aggregation,
-    type AggregationInput as AggregationInput,
+    CrossApp as CrossApp,
+    type CrossAppConnection as CrossAppConnection,
+    type CrossAppConnectionsResponse as CrossAppConnectionsResponse,
+  };
+
+  export {
+    KrakenEmbed as KrakenEmbed,
+    type KrakenEmbedGetAssetListQueryParamsSchema as KrakenEmbedGetAssetListQueryParamsSchema,
+    type KrakenEmbedGetPortfolioDetailsQueryParamsSchema as KrakenEmbedGetPortfolioDetailsQueryParamsSchema,
+    type KrakenEmbedGetPortfolioSummaryQueryParams as KrakenEmbedGetPortfolioSummaryQueryParams,
+    type KrakenEmbedCurrentDayPnl as KrakenEmbedCurrentDayPnl,
+    type KrakenEmbedGetPortfolioSummaryResponse as KrakenEmbedGetPortfolioSummaryResponse,
+    type KrakenEmbedGetPortfolioTransactionsQueryParamsSchema as KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
+    type KrakenEmbedGetQuoteQueryParams as KrakenEmbedGetQuoteQueryParams,
   };
 
   export {
     Webhooks as Webhooks,
+    type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
+    type KrakenEmbedQuoteExecutionFailedWebhookPayload as KrakenEmbedQuoteExecutionFailedWebhookPayload,
+    type KrakenEmbedQuoteCancelledWebhookPayload as KrakenEmbedQuoteCancelledWebhookPayload,
+    type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
+    type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
+    type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
     type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
     type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
     type IntentExecutedWebhookPayload as IntentExecutedWebhookPayload,
@@ -2527,12 +2550,29 @@ export declare namespace PrivyAPI {
     type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
     type YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
     type WebhookPayload as WebhookPayload,
-    type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
-    type KrakenEmbedQuoteExecutionFailedWebhookPayload as KrakenEmbedQuoteExecutionFailedWebhookPayload,
-    type KrakenEmbedQuoteCancelledWebhookPayload as KrakenEmbedQuoteCancelledWebhookPayload,
-    type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
-    type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
-    type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
+  };
+
+  export {
+    Yield as Yield,
+    type EvmCaip2ChainID as EvmCaip2ChainID,
+    type EthereumYieldProvider as EthereumYieldProvider,
+    type EthereumYieldSweepType as EthereumYieldSweepType,
+    type EthereumYieldSweepStatus as EthereumYieldSweepStatus,
+    type EthereumYieldDepositInput as EthereumYieldDepositInput,
+    type EthereumYieldWithdrawInput as EthereumYieldWithdrawInput,
+    type EthereumYieldSweepResponse as EthereumYieldSweepResponse,
+    type EthereumVaultDetailsInput as EthereumVaultDetailsInput,
+    type EthereumYieldSweepIDInput as EthereumYieldSweepIDInput,
+    type EthereumVaultResponse as EthereumVaultResponse,
+    type EthereumVaultDetailsResponse as EthereumVaultDetailsResponse,
+    type EthereumYieldPositionsInput as EthereumYieldPositionsInput,
+    type EthereumVaultPosition as EthereumVaultPosition,
+    type EthereumYieldPositionResponse as EthereumYieldPositionResponse,
+    type EthereumYieldClaimInput as EthereumYieldClaimInput,
+    type EthereumYieldClaimReward as EthereumYieldClaimReward,
+    type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
+    type EthereumYieldClaimIDInput as EthereumYieldClaimIDInput,
+    type YieldAuthorizationHeaders as YieldAuthorizationHeaders,
   };
 
   export {
@@ -2560,49 +2600,9 @@ export declare namespace PrivyAPI {
   };
 
   export {
-    Yield as Yield,
-    type EvmCaip2ChainID as EvmCaip2ChainID,
-    type EthereumYieldProvider as EthereumYieldProvider,
-    type EthereumYieldSweepType as EthereumYieldSweepType,
-    type EthereumYieldSweepStatus as EthereumYieldSweepStatus,
-    type EthereumYieldDepositInput as EthereumYieldDepositInput,
-    type EthereumYieldWithdrawInput as EthereumYieldWithdrawInput,
-    type EthereumYieldSweepResponse as EthereumYieldSweepResponse,
-    type EthereumVaultDetailsInput as EthereumVaultDetailsInput,
-    type EthereumYieldSweepIDInput as EthereumYieldSweepIDInput,
-    type EthereumVaultResponse as EthereumVaultResponse,
-    type EthereumVaultDetailsResponse as EthereumVaultDetailsResponse,
-    type EthereumYieldPositionsInput as EthereumYieldPositionsInput,
-    type EthereumVaultPosition as EthereumVaultPosition,
-    type EthereumYieldPositionResponse as EthereumYieldPositionResponse,
-    type EthereumYieldClaimInput as EthereumYieldClaimInput,
-    type EthereumYieldClaimReward as EthereumYieldClaimReward,
-    type EthereumYieldClaimResponse as EthereumYieldClaimResponse,
-    type EthereumYieldClaimIDInput as EthereumYieldClaimIDInput,
-    type YieldAuthorizationHeaders as YieldAuthorizationHeaders,
-  };
-
-  export {
     Swaps as Swaps,
     type SwapQuoteRequestBody as SwapQuoteRequestBody,
     type SwapQuoteResponse as SwapQuoteResponse,
     type SwapRequestBody as SwapRequestBody,
-  };
-
-  export {
-    KrakenEmbed as KrakenEmbed,
-    type KrakenEmbedGetAssetListQueryParamsSchema as KrakenEmbedGetAssetListQueryParamsSchema,
-    type KrakenEmbedGetPortfolioDetailsQueryParamsSchema as KrakenEmbedGetPortfolioDetailsQueryParamsSchema,
-    type KrakenEmbedGetPortfolioSummaryQueryParams as KrakenEmbedGetPortfolioSummaryQueryParams,
-    type KrakenEmbedCurrentDayPnl as KrakenEmbedCurrentDayPnl,
-    type KrakenEmbedGetPortfolioSummaryResponse as KrakenEmbedGetPortfolioSummaryResponse,
-    type KrakenEmbedGetPortfolioTransactionsQueryParamsSchema as KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
-    type KrakenEmbedGetQuoteQueryParams as KrakenEmbedGetQuoteQueryParams,
-  };
-
-  export {
-    CrossApp as CrossApp,
-    type CrossAppConnection as CrossAppConnection,
-    type CrossAppConnectionsResponse as CrossAppConnectionsResponse,
   };
 }

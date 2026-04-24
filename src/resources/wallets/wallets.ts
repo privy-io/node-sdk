@@ -3372,7 +3372,7 @@ export namespace WalletAuthenticateWithJwtResponse {
     encrypted_authorization_key: WithEncryption.EncryptedAuthorizationKey;
 
     /**
-     * The expiration time of the authorization key in seconds since the epoch.
+     * The expiration time of the authorization key in milliseconds since the epoch.
      */
     expires_at: number;
 
@@ -3410,7 +3410,7 @@ export namespace WalletAuthenticateWithJwtResponse {
     authorization_key: string;
 
     /**
-     * The expiration time of the authorization key in seconds since the epoch.
+     * The expiration time of the authorization key in milliseconds since the epoch.
      */
     expires_at: number;
 

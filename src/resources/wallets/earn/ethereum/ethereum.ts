@@ -32,7 +32,11 @@ export class Ethereum extends APIResource {
     params: EthereumDepositParams,
     options?: RequestOptions,
   ): APIPromise<WalletActionsAPI.EarnDepositActionResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      ...body
+    } = params;
     return this._client.post(path`/v1/wallets/${walletID}/earn/ethereum/deposit`, {
       body,
       ...options,
@@ -41,6 +45,7 @@ export class Ethereum extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
         },
         options?.headers,
       ]),
@@ -67,7 +72,11 @@ export class Ethereum extends APIResource {
     params: EthereumWithdrawParams,
     options?: RequestOptions,
   ): APIPromise<WalletActionsAPI.EarnWithdrawActionResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      ...body
+    } = params;
     return this._client.post(path`/v1/wallets/${walletID}/earn/ethereum/withdraw`, {
       body,
       ...options,
@@ -76,6 +85,7 @@ export class Ethereum extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
         },
         options?.headers,
       ]),
@@ -106,6 +116,11 @@ export interface EthereumDepositParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: A unique key for this request to enable idempotency.
+   */
+  'privy-idempotency-key'?: string;
 }
 
 export interface EthereumWithdrawParams {
@@ -131,6 +146,11 @@ export interface EthereumWithdrawParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: A unique key for this request to enable idempotency.
+   */
+  'privy-idempotency-key'?: string;
 }
 
 Ethereum.Incentive = Incentive;

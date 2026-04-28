@@ -372,6 +372,7 @@ describe('PrivyWalletsService', () => {
         .deposit(wallet.id, {
           vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
           amount: '1.0',
+          idempotency_key: 'earn-deposit-idempotency-key',
           ...(wallet.authorizationContext && {
             authorization_context: wallet.authorizationContext,
           }),
@@ -398,6 +399,7 @@ describe('PrivyWalletsService', () => {
         .withdraw(wallet.id, {
           vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
           amount: '1.0',
+          idempotency_key: 'earn-withdraw-idempotency-key',
           ...(wallet.authorizationContext && {
             authorization_context: wallet.authorizationContext,
           }),

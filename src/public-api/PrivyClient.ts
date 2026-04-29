@@ -21,11 +21,11 @@ export interface PrivyClientOptions extends InternalClientOptions {
   /** Default request expiry duration in milliseconds from now. Defaults to 15 minutes. */
   defaultRequestExpiryMs?: number;
   /**
-   * Whether to automatically set the `privy-request-expiry` header on requests.
-   * Defaults to `true`. Set to `false` to disable — no expiry header will be sent
-   * unless explicitly provided per-request.
+   * Set to `true` to disable automatically setting the `privy-request-expiry` header
+   * on requests. When disabled, no expiry header will be sent unless explicitly
+   * provided per-request. Defaults to `false`.
    */
-  requestExpiryEnabled?: boolean;
+  disableRequestExpiry?: boolean;
   jwtVerificationKey?: string;
   webhookSigningSecret?: string;
 }
@@ -47,7 +47,7 @@ export class PrivyClient {
   private utilsService: PrivyUtils;
   private jwtExchangeService: JwtExchangeService;
   private _defaultRequestExpiryMs: number;
-  private _requestExpiryEnabled: boolean;
+  private _disableRequestExpiry: boolean;
 
   /** @internal */
   _jwtExchange(): JwtExchangeService {
@@ -60,7 +60,7 @@ export class PrivyClient {
     apiUrl,
     authorizationKeyCacheMaxCapacity = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
     defaultRequestExpiryMs = DEFAULT_REQUEST_EXPIRY_MS,
-    requestExpiryEnabled = true,
+    disableRequestExpiry = false,
     defaultHeaders,
     jwtVerificationKey,
     webhookSigningSecret,
@@ -84,7 +84,7 @@ export class PrivyClient {
       verificationKeyOverride: jwtVerificationKey,
     });
 
-    this._requestExpiryEnabled = requestExpiryEnabled;
+    this._disableRequestExpiry = disableRequestExpiry;
     this._defaultRequestExpiryMs = defaultRequestExpiryMs;
     this.jwtExchangeService = new JwtExchangeService(
       this.privyApiClient.wallets,
@@ -143,10 +143,10 @@ export class PrivyClient {
    *
    * If `expiryMsFromNow` is provided, uses that duration. Otherwise falls back to the
    * `defaultRequestExpiryMs` configured on the client (defaults to 15 minutes).
-   * Returns `undefined` when `requestExpiryEnabled` is `false`.
+   * Returns `undefined` when `disableRequestExpiry` is `true`.
    */
   public getRequestExpiry(expiryMsFromNow?: number): number | undefined {
-    if (!this._requestExpiryEnabled) {
+    if (this._disableRequestExpiry) {
       return undefined;
     }
     return Date.now() + (expiryMsFromNow ?? this._defaultRequestExpiryMs);

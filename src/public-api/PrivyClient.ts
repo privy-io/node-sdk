@@ -89,7 +89,7 @@ export class PrivyClient {
     this.usersService = new PrivyUsersService(this.privyApiClient, appJwks);
     this.appsService = new PrivyAppsService(this.privyApiClient);
     this.utilsService = new PrivyUtils(this.privyApiClient, this, appJwks);
-    this.webhooksService = new PrivyWebhooksService(webhookSigningSecret);
+    this.webhooksService = new PrivyWebhooksService(this.privyApiClient.webhooks, webhookSigningSecret);
   }
 
   public webhooks(): PrivyWebhooksService {

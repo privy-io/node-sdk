@@ -45,14 +45,14 @@ describe('PrivyWebhooksService', () => {
 
       jest.useFakeTimers({ now: timestamp * 1000 + 1000 * 60 * 1 }); // 1 minute after the timestamp
 
-      const verifiedPayload = await privyClient.webhooks().verify({
+      const verifiedPayload = privyClient.webhooks().verify({
         payload: userCreatedPayload,
-        svix: {
-          id: payloadId,
-          timestamp: timestamp.toString(),
-          signature: signature,
+        headers: {
+          'svix-id': payloadId,
+          'svix-timestamp': timestamp.toString(),
+          'svix-signature': signature,
         },
-        signing_secret: signingSecret,
+        signingSecret: signingSecret,
       });
 
       expect(verifiedPayload).toEqual(userCreatedPayload);
@@ -95,12 +95,12 @@ describe('PrivyWebhooksService', () => {
 
       jest.useFakeTimers({ now: timestamp * 1000 + 1000 * 60 * 1 }); // 1 minute after the timestamp
 
-      const verifiedPayload = await privyClient.webhooks().verify({
+      const verifiedPayload = privyClient.webhooks().verify({
         payload: userCreatedPayload,
-        svix: {
-          id: payloadId,
-          timestamp: timestamp.toString(),
-          signature: signature,
+        headers: {
+          'svix-id': payloadId,
+          'svix-timestamp': timestamp.toString(),
+          'svix-signature': signature,
         },
       });
 

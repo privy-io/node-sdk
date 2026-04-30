@@ -3,7 +3,7 @@ import { EarnIncentiveClaimActionResponse } from '../../../resources';
 import { Incentive, IncentiveClaimParams } from '../../../resources/wallets/earn/ethereum/incentive';
 import { prepareRequest } from '../../../lib/authorization';
 import { PrivyClient } from '../../PrivyClient';
-import { Prettify, WithAuthorization } from '../types';
+import { AuthorizationConfig, IdempotencyConfig, Prettify } from '../types';
 
 export class PrivyEarnEthereumIncentiveService extends Incentive {
   private privyClient: PrivyClient;
@@ -17,11 +17,13 @@ export class PrivyEarnEthereumIncentiveService extends Incentive {
     walletId: string,
     {
       authorization_context: authorizationContext = {},
+      idempotency_key: idempotencyKey,
       ...params
     }: PrivyEarnEthereumIncentiveService.ClaimInput,
   ): Promise<EarnIncentiveClaimActionResponse> {
     const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
+      idempotencyKey,
       requestExpiry: this.privyClient.getRequestExpiry(),
       method: 'POST',
       url: `${this._client.baseURL}/v1/wallets/${walletId}/earn/ethereum/incentive/claim`,
@@ -35,5 +37,7 @@ export class PrivyEarnEthereumIncentiveService extends Incentive {
 // prettier-ignore
 export namespace PrivyEarnEthereumIncentiveService {
   /** The input type for the {@link PrivyEarnEthereumIncentiveService.claim} method. */
-  export type ClaimInput = Prettify<WithAuthorization<IncentiveClaimParams>>;
+  export type ClaimInput = Prettify<
+    Omit<IncentiveClaimParams, 'privy-authorization-signature'> & AuthorizationConfig & IdempotencyConfig
+  >;
 }

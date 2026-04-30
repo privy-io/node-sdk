@@ -350,6 +350,14 @@ export {
   type KrakenEmbedGetQuoteQueryParams,
 } from './kraken-embed';
 export {
+  Organizations,
+  type OrganizationSecretView,
+  type CreateOrganizationSecretResponse,
+  type OrganizationSecretsListResponse,
+  type OrganizationSecretIDInput,
+  type UpdateOrganizationSecretSigningKeyInput,
+} from './organizations';
+export {
   Policies,
   type PolicyAction,
   type AbiParameter,

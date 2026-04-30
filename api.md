@@ -797,6 +797,16 @@ Types:
 
 - <code><a href="./src/resources/analytics.ts">AnalyticsEventInput</a></code>
 
+# Organizations
+
+Types:
+
+- <code><a href="./src/resources/organizations.ts">OrganizationSecretView</a></code>
+- <code><a href="./src/resources/organizations.ts">CreateOrganizationSecretResponse</a></code>
+- <code><a href="./src/resources/organizations.ts">OrganizationSecretsListResponse</a></code>
+- <code><a href="./src/resources/organizations.ts">OrganizationSecretIDInput</a></code>
+- <code><a href="./src/resources/organizations.ts">UpdateOrganizationSecretSigningKeyInput</a></code>
+
 # Funding
 
 Types:

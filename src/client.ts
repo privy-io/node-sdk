@@ -336,6 +336,14 @@ import {
   KrakenEmbedGetQuoteQueryParams,
 } from './resources/kraken-embed';
 import {
+  CreateOrganizationSecretResponse,
+  OrganizationSecretIDInput,
+  OrganizationSecretView,
+  OrganizationSecretsListResponse,
+  Organizations,
+  UpdateOrganizationSecretSigningKeyInput,
+} from './resources/organizations';
+import {
   AbiParameter,
   AbiSchema,
   ActionRequestBodyCondition,
@@ -1701,6 +1709,7 @@ export class PrivyAPI {
   walletActions: API.WalletActions = new API.WalletActions(this);
   aggregations: API.Aggregations = new API.Aggregations(this);
   analytics: API.Analytics = new API.Analytics(this);
+  organizations: API.Organizations = new API.Organizations(this);
   funding: API.Funding = new API.Funding(this);
   crossApp: API.CrossApp = new API.CrossApp(this);
   krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
@@ -1723,6 +1732,7 @@ PrivyAPI.EmbeddedWallets = EmbeddedWallets;
 PrivyAPI.WalletActions = WalletActions;
 PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.Analytics = Analytics;
+PrivyAPI.Organizations = Organizations;
 PrivyAPI.Funding = Funding;
 PrivyAPI.CrossApp = CrossApp;
 PrivyAPI.KrakenEmbed = KrakenEmbed;
@@ -2445,6 +2455,15 @@ export declare namespace PrivyAPI {
   };
 
   export { Analytics as Analytics, type AnalyticsEventInput as AnalyticsEventInput };
+
+  export {
+    Organizations as Organizations,
+    type OrganizationSecretView as OrganizationSecretView,
+    type CreateOrganizationSecretResponse as CreateOrganizationSecretResponse,
+    type OrganizationSecretsListResponse as OrganizationSecretsListResponse,
+    type OrganizationSecretIDInput as OrganizationSecretIDInput,
+    type UpdateOrganizationSecretSigningKeyInput as UpdateOrganizationSecretSigningKeyInput,
+  };
 
   export {
     Funding as Funding,

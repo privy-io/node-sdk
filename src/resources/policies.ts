@@ -382,8 +382,8 @@ export interface EthereumTransactionCondition {
 
 /**
  * The decoded calldata in a smart contract interaction as the smart contract
- * method's parameters. Note that that 'ethereum_calldata' conditions must contain
- * an abi parameter with the JSON ABI of the smart contract.
+ * method's parameters. Note that 'ethereum_calldata' conditions must contain an
+ * abi parameter with the JSON ABI of the smart contract.
  */
 export interface EthereumCalldataCondition {
   /**
@@ -769,6 +769,7 @@ export type PolicyMethod =
   | 'signTransactionBytes'
   | 'earn_deposit'
   | 'earn_withdraw'
+  | 'transfer'
   | '*';
 
 /**

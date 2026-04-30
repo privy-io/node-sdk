@@ -1,8 +1,9 @@
 import { Webhook } from 'svix';
 import { PrivyAPIError } from '../../core/error';
-import { Webhooks, type UnsafeUnwrapWebhookEvent } from '../../resources/webhooks';
+import { Webhooks, type WebhookPayload } from '../../resources/webhooks';
 
-export { UnsafeUnwrapWebhookEvent as WebhookEvent } from '../../resources/webhooks';
+export { WebhookPayload as WebhookEvent } from '../../resources/webhooks';
+export type { WebhookPayload } from '../../resources/webhooks';
 
 export class PrivyWebhooksService {
   private webhookSigningSecret: string | undefined;
@@ -23,7 +24,7 @@ export class PrivyWebhooksService {
    * @returns The verified and typed webhook event payload.
    * @throws {InvalidWebhookError} If the signature is invalid or the timestamp is stale.
    */
-  verify({ payload, headers, signingSecret }: PrivyWebhooksService.VerifyInput): UnsafeUnwrapWebhookEvent {
+  verify({ payload, headers, signingSecret }: PrivyWebhooksService.VerifyInput): WebhookPayload {
     const secret = signingSecret ?? this.webhookSigningSecret;
     if (!secret) {
       throw new InvalidWebhookError(
@@ -48,7 +49,7 @@ export class PrivyWebhooksService {
       throw new InvalidWebhookError('Webhook verification failed');
     }
 
-    return this.webhooksResource.unsafeUnwrap(body);
+    return this.webhooksResource.unsafeUnwrap(body) as WebhookPayload;
   }
 }
 

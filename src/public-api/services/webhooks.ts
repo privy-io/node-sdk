@@ -2,8 +2,10 @@ import { Webhook } from 'svix';
 import { PrivyAPIError } from '../../core/error';
 import { Webhooks, type WebhookPayload } from '../../resources/webhooks';
 
-export { WebhookPayload as WebhookEvent } from '../../resources/webhooks';
 export type { WebhookPayload } from '../../resources/webhooks';
+
+/** @deprecated Use {@link WebhookPayload} instead. */
+export type WebhookEvent = WebhookPayload;
 
 export class PrivyWebhooksService {
   private webhookSigningSecret: string | undefined;

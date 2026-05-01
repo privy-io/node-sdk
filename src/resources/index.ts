@@ -734,6 +734,7 @@ export {
   type WalletExportRequestBody,
   type WalletRevokeResponse,
   type WalletExportResponseBody,
+  type TransactionTokenAddressInput,
   type TransferSentTransactionDetail,
   type TransferReceivedTransactionDetail,
   type TransactionDetail,
@@ -837,6 +838,7 @@ export {
   type YieldWithdrawConfirmedWebhookPayload,
   type YieldClaimConfirmedWebhookPayload,
   type WebhookPayload,
+  type UnsafeUnwrapWebhookEvent,
 } from './webhooks';
 export {
   Yield,

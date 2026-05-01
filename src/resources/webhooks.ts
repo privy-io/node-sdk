@@ -6,7 +6,11 @@ import * as UsersAPI from './users';
 import * as WalletActionsAPI from './wallet-actions';
 import * as WalletsAPI from './wallets/wallets';
 
-export class Webhooks extends APIResource {}
+export class Webhooks extends APIResource {
+  unsafeUnwrap(body: string): UnsafeUnwrapWebhookEvent {
+    return JSON.parse(body) as UnsafeUnwrapWebhookEvent;
+  }
+}
 
 /**
  * Payload for the kraken_embed.quote_executed webhook event.
@@ -2739,6 +2743,60 @@ export type WebhookPayload =
   | WalletActionEarnIncentiveClaimRejectedWebhookPayload
   | WalletActionEarnIncentiveClaimFailedWebhookPayload;
 
+/**
+ * Payload for the user.created webhook event.
+ */
+export type UnsafeUnwrapWebhookEvent =
+  | UserCreatedWebhookPayload
+  | UserAuthenticatedWebhookPayload
+  | UserLinkedAccountWebhookPayload
+  | UserUnlinkedAccountWebhookPayload
+  | UserUpdatedAccountWebhookPayload
+  | UserTransferredAccountWebhookPayload
+  | UserWalletCreatedWebhookPayload
+  | TransactionBroadcastedWebhookPayload
+  | TransactionConfirmedWebhookPayload
+  | TransactionExecutionRevertedWebhookPayload
+  | TransactionStillPendingWebhookPayload
+  | TransactionFailedWebhookPayload
+  | TransactionReplacedWebhookPayload
+  | TransactionProviderErrorWebhookPayload
+  | UserOperationCompletedWebhookPayload
+  | FundsDepositedWebhookPayload
+  | FundsWithdrawnWebhookPayload
+  | PrivateKeyExportWebhookPayload
+  | WalletRecoverySetupWebhookPayload
+  | WalletRecoveredWebhookPayload
+  | WalletActionSwapCreatedWebhookPayload
+  | WalletActionSwapSucceededWebhookPayload
+  | WalletActionSwapRejectedWebhookPayload
+  | WalletActionSwapFailedWebhookPayload
+  | WalletActionTransferCreatedWebhookPayload
+  | WalletActionTransferSucceededWebhookPayload
+  | WalletActionTransferRejectedWebhookPayload
+  | WalletActionTransferFailedWebhookPayload
+  | WalletActionEarnDepositCreatedWebhookPayload
+  | WalletActionEarnDepositSucceededWebhookPayload
+  | WalletActionEarnDepositRejectedWebhookPayload
+  | WalletActionEarnDepositFailedWebhookPayload
+  | WalletActionEarnWithdrawCreatedWebhookPayload
+  | WalletActionEarnWithdrawSucceededWebhookPayload
+  | WalletActionEarnWithdrawRejectedWebhookPayload
+  | WalletActionEarnWithdrawFailedWebhookPayload
+  | WalletActionEarnIncentiveClaimCreatedWebhookPayload
+  | WalletActionEarnIncentiveClaimSucceededWebhookPayload
+  | WalletActionEarnIncentiveClaimRejectedWebhookPayload
+  | WalletActionEarnIncentiveClaimFailedWebhookPayload
+  | MfaEnabledWebhookPayload
+  | MfaDisabledWebhookPayload
+  | IntentCreatedWebhookPayload
+  | IntentAuthorizedWebhookPayload
+  | IntentExecutedWebhookPayload
+  | IntentFailedWebhookPayload
+  | YieldDepositConfirmedWebhookPayload
+  | YieldWithdrawConfirmedWebhookPayload
+  | YieldClaimConfirmedWebhookPayload;
+
 export declare namespace Webhooks {
   export {
     type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
@@ -2811,5 +2869,6 @@ export declare namespace Webhooks {
     type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
     type YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
     type WebhookPayload as WebhookPayload,
+    type UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent,
   };
 }

@@ -3072,6 +3072,12 @@ export interface WalletExportResponseBody {
 }
 
 /**
+ * Token contract address (EVM: 0x-prefixed hex) or mint address (Solana: base58),
+ * used to filter wallet transactions.
+ */
+export type TransactionTokenAddressInput = string;
+
+/**
  * Details for a sent transfer transaction.
  */
 export interface TransferSentTransactionDetail {
@@ -4927,6 +4933,7 @@ export declare namespace Wallets {
     type WalletExportRequestBody as WalletExportRequestBody,
     type WalletRevokeResponse as WalletRevokeResponse,
     type WalletExportResponseBody as WalletExportResponseBody,
+    type TransactionTokenAddressInput as TransactionTokenAddressInput,
     type TransferSentTransactionDetail as TransferSentTransactionDetail,
     type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
     type TransactionDetail as TransactionDetail,

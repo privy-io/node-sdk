@@ -54,7 +54,7 @@ describe('PrivyWebhooksService', () => {
           'svix-timestamp': timestamp.toString(),
           'svix-signature': signature,
         },
-        signingSecret,
+        signing_secret: signingSecret,
       });
 
       expect(result).toEqual(userCreatedPayload);
@@ -100,7 +100,36 @@ describe('PrivyWebhooksService', () => {
           'svix-timestamp': timestamp.toString(),
           'svix-signature': signature,
         },
-        signingSecret,
+        signing_secret: signingSecret,
+      });
+
+      expect(result).toEqual(userCreatedPayload);
+    });
+
+    it('should accept deprecated svix property for backwards compat', () => {
+      const userCreatedPayload = {
+        type: 'user.created',
+        user: { id: 'did:privy:cfbsvtqo2c22202mo08847jdux2z' },
+      };
+
+      const signingSecret = crypto.randomBytes(32).toString('base64');
+      const stringPayload = JSON.stringify(userCreatedPayload);
+      const msgId = `msg_${crypto.randomUUID()}`;
+      const timestamp = Math.floor(Date.now() / 1000);
+
+      const wh = new Webhook(signingSecret);
+      const signature = wh.sign(msgId, new Date(timestamp * 1000), stringPayload);
+
+      jest.useFakeTimers({ now: timestamp * 1000 + 60_000 });
+
+      const result = privyClient.webhooks().verify({
+        payload: userCreatedPayload,
+        svix: {
+          id: msgId,
+          timestamp: timestamp.toString(),
+          signature: signature,
+        },
+        signing_secret: signingSecret,
       });
 
       expect(result).toEqual(userCreatedPayload);
@@ -151,7 +180,7 @@ describe('PrivyWebhooksService', () => {
             'svix-timestamp': Math.floor(Date.now() / 1000).toString(),
             'svix-signature': 'v1,invalidSignature==',
           },
-          signingSecret,
+          signing_secret: signingSecret,
         }),
       ).toThrow('Webhook verification failed');
     });

@@ -21,13 +21,14 @@ export class PrivyWebhooksService {
    * is within tolerance to prevent replay attacks, then returns the typed event payload.
    *
    * @param input.payload The raw JSON string body of the webhook request, or a parsed object for backwards compat.
-   * @param input.headers The webhook headers containing svix-id, svix-timestamp, and svix-signature.
-   * @param input.signingSecret Optional per-call override for the webhook signing secret.
+   * @param input.headers The webhook headers containing svix-id, svix-timestamp, and svix-signature. Provide either this or `svix`.
+   * @param input.svix @deprecated Use `headers` instead.
+   * @param input.signing_secret Optional per-call override for the webhook signing secret.
    * @returns The verified and typed webhook event payload.
    * @throws {InvalidWebhookError} If the signature is invalid or the timestamp is stale.
    */
-  verify({ payload, headers, signingSecret }: PrivyWebhooksService.VerifyInput): WebhookPayload {
-    const secret = signingSecret ?? this.webhookSigningSecret;
+  verify({ payload, headers, svix, signing_secret }: PrivyWebhooksService.VerifyInput): WebhookPayload {
+    const secret = signing_secret ?? this.webhookSigningSecret;
     if (!secret) {
       throw new InvalidWebhookError(
         'Webhook signing secret is required. Pass it to PrivyClient constructor or to verify().',
@@ -36,13 +37,20 @@ export class PrivyWebhooksService {
 
     const body = typeof payload === 'string' ? payload : JSON.stringify(payload);
 
+    const svixHeaders: Record<string, string> = headers
+      ? {
+          'svix-id': headers['svix-id'],
+          'svix-timestamp': headers['svix-timestamp'],
+          'svix-signature': headers['svix-signature'],
+        }
+      : {
+          'svix-id': svix!.id,
+          'svix-timestamp': svix!.timestamp,
+          'svix-signature': svix!.signature,
+        };
+
     try {
       const wh = new Webhook(secret);
-      const svixHeaders = {
-        'svix-id': headers['svix-id'],
-        'svix-timestamp': headers['svix-timestamp'],
-        'svix-signature': headers['svix-signature'],
-      };
       wh.verify(body, svixHeaders);
     } catch (error) {
       if (error instanceof Error) {
@@ -55,18 +63,25 @@ export class PrivyWebhooksService {
   }
 }
 
+// prettier-ignore
 export namespace PrivyWebhooksService {
   export type VerifyInput = {
     /** The webhook request body — either the raw JSON string or a parsed object. Prefer passing the raw string for guaranteed signature integrity. */
     payload: string | object;
-    /** The request headers. Must include svix-id, svix-timestamp, svix-signature. */
-    headers: {
-      'svix-id': string;
-      'svix-timestamp': string;
-      'svix-signature': string;
+    /** The request headers. Must include svix-id, svix-timestamp, svix-signature. Provide either this or `svix`. */
+    headers?: {
+      'svix-id': string,
+      'svix-timestamp': string,
+      'svix-signature': string,
+    };
+    /** @deprecated Use `headers` instead. */
+    svix?: {
+      id: string,
+      timestamp: string,
+      signature: string,
     };
     /** Per-call signing secret override. Falls back to client-level secret. */
-    signingSecret?: string;
+    signing_secret?: string,
   };
 }
 

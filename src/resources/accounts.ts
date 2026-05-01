@@ -7,6 +7,168 @@ import * as WalletsAPI from './wallets/wallets';
 export class Accounts extends APIResource {}
 
 /**
+ * Query parameters for the account balance endpoint.
+ */
+export interface AccountBalanceParams {
+  /**
+   * When set to true, returns balances from testnet chains instead of mainnets.
+   */
+  testnet_mode?: 'true' | 'false';
+}
+
+/**
+ * The balance of a digital asset account, aggregated across all wallets and
+ * supported chains.
+ */
+export interface AccountBalanceResponse {
+  /**
+   * The individual asset balances, each computed across all supported chains.
+   */
+  assets: Array<BalanceAsset>;
+
+  /**
+   * A monetary value with its currency denomination.
+   */
+  total: SharedAPI.CurrencyAmount;
+
+  /**
+   * Individual asset balances per chain.
+   */
+  assets_by_chain?: Array<BalanceAssetByChain>;
+}
+
+/**
+ * An optional display name for the account.
+ */
+export type AccountDisplayName = string;
+
+/**
+ * A digital asset account that groups wallets under a single entity.
+ */
+export interface AccountResponse {
+  /**
+   * The account ID.
+   */
+  id: string;
+
+  /**
+   * An optional display name for the account.
+   */
+  display_name: string | null;
+
+  /**
+   * The wallets belonging to this account.
+   */
+  wallets: Array<AccountWallet>;
+}
+
+/**
+ * A wallet belonging to a digital asset account.
+ */
+export interface AccountWallet {
+  /**
+   * The wallet ID.
+   */
+  id: string;
+
+  /**
+   * The on-chain address of the wallet.
+   */
+  address: string;
+
+  /**
+   * The wallet chain types that offer first class support.
+   */
+  chain_type: WalletsAPI.FirstClassChainType;
+
+  /**
+   * Information about the custodian managing this wallet.
+   */
+  custody?: WalletsAPI.WalletCustodian;
+}
+
+/**
+ * Configuration for a wallet to create within an account.
+ */
+export interface AccountWalletConfigurationItem {
+  /**
+   * The wallet chain types that offer first class support.
+   */
+  chain_type: WalletsAPI.FirstClassChainType;
+
+  /**
+   * Information about the custodian managing this wallet.
+   */
+  custody?: WalletsAPI.WalletCustodian;
+}
+
+/**
+ * IDs for wallets to include in this account.
+ */
+export type AccountWalletIDs = Array<string>;
+
+/**
+ * Configuration for the wallets on this account.
+ */
+export type AccountWalletsConfiguration = Array<AccountWalletConfigurationItem>;
+
+/**
+ * Paginated list of digital asset accounts for the dashboard.
+ */
+export interface AccountsDashboardListResponse {
+  /**
+   * The list of accounts, with balances included for dashboard display.
+   */
+  data: Array<AssetAccountWithBalance>;
+
+  /**
+   * Cursor for fetching the next page of results, or null if no more results.
+   */
+  next_cursor: string | null;
+}
+
+/**
+ * Paginated list of digital asset accounts.
+ */
+export interface AccountsListResponse {
+  /**
+   * The list of accounts.
+   */
+  data: Array<AccountResponse>;
+
+  /**
+   * Cursor for fetching the next page of results, or null if no more results.
+   */
+  next_cursor: string | null;
+}
+
+/**
+ * A digital asset account with its aggregated balance across all wallets and
+ * chains.
+ */
+export interface AssetAccountWithBalance {
+  /**
+   * The account ID.
+   */
+  id: string;
+
+  /**
+   * Balances for an asset account or wallet
+   */
+  balance: BalanceResponse;
+
+  /**
+   * An optional display name for the account.
+   */
+  display_name: string | null;
+
+  /**
+   * The wallets belonging to this account.
+   */
+  wallets: Array<AccountWallet>;
+}
+
+/**
  * A single asset entry in a balance, representing holdings across all supported
  * chains.
  */
@@ -75,79 +237,20 @@ export interface BalanceResponse {
 }
 
 /**
- * A wallet belonging to a digital asset account.
+ * Input for creating a digital asset account from existing wallets with a
+ * `wallet_ids` parameter.
  */
-export interface AccountWallet {
+export interface CreateAccountFromWalletIDsInput {
   /**
-   * The wallet ID.
+   * IDs for wallets to include in this account.
    */
-  id: string;
-
-  /**
-   * The on-chain address of the wallet.
-   */
-  address: string;
-
-  /**
-   * The wallet chain types that offer first class support.
-   */
-  chain_type: WalletsAPI.FirstClassChainType;
-
-  /**
-   * Information about the custodian managing this wallet.
-   */
-  custody?: WalletsAPI.WalletCustodian;
-}
-
-/**
- * A digital asset account that groups wallets under a single entity.
- */
-export interface AccountResponse {
-  /**
-   * The account ID.
-   */
-  id: string;
+  wallet_ids: AccountWalletIDs;
 
   /**
    * An optional display name for the account.
    */
-  display_name: string | null;
-
-  /**
-   * The wallets belonging to this account.
-   */
-  wallets: Array<AccountWallet>;
+  display_name?: AccountDisplayName;
 }
-
-/**
- * Configuration for a wallet to create within an account.
- */
-export interface AccountWalletConfigurationItem {
-  /**
-   * The wallet chain types that offer first class support.
-   */
-  chain_type: WalletsAPI.FirstClassChainType;
-
-  /**
-   * Information about the custodian managing this wallet.
-   */
-  custody?: WalletsAPI.WalletCustodian;
-}
-
-/**
- * An optional display name for the account.
- */
-export type AccountDisplayName = string;
-
-/**
- * Configuration for the wallets on this account.
- */
-export type AccountWalletsConfiguration = Array<AccountWalletConfigurationItem>;
-
-/**
- * IDs for wallets to include in this account.
- */
-export type AccountWalletIDs = Array<string>;
 
 /**
  * Input for creating a digital asset account from new wallets with a
@@ -166,41 +269,9 @@ export interface CreateAccountFromWalletsConfigurationInput {
 }
 
 /**
- * Input for creating a digital asset account from existing wallets with a
- * `wallet_ids` parameter.
- */
-export interface CreateAccountFromWalletIDsInput {
-  /**
-   * IDs for wallets to include in this account.
-   */
-  wallet_ids: AccountWalletIDs;
-
-  /**
-   * An optional display name for the account.
-   */
-  display_name?: AccountDisplayName;
-}
-
-/**
  * Input for creating a digital asset account.
  */
 export type CreateAccountInput = CreateAccountFromWalletsConfigurationInput | CreateAccountFromWalletIDsInput;
-
-/**
- * Input for updating a digital asset account with a `wallets_configuration`
- * specification.
- */
-export interface UpdateAccountFromWalletsConfigurationInput {
-  /**
-   * An optional display name for the account.
-   */
-  display_name?: AccountDisplayName;
-
-  /**
-   * Configuration for the wallets on this account.
-   */
-  wallets_configuration?: AccountWalletsConfiguration;
-}
 
 /**
  * Input for updating a digital asset account by adding existing wallets with a
@@ -219,118 +290,47 @@ export interface UpdateAccountFromWalletIDsInput {
 }
 
 /**
+ * Input for updating a digital asset account with a `wallets_configuration`
+ * specification.
+ */
+export interface UpdateAccountFromWalletsConfigurationInput {
+  /**
+   * An optional display name for the account.
+   */
+  display_name?: AccountDisplayName;
+
+  /**
+   * Configuration for the wallets on this account.
+   */
+  wallets_configuration?: AccountWalletsConfiguration;
+}
+
+/**
  * Input for updating a digital asset account.
  */
 export type UpdateAccountInput = UpdateAccountFromWalletsConfigurationInput | UpdateAccountFromWalletIDsInput;
 
-/**
- * Paginated list of digital asset accounts.
- */
-export interface AccountsListResponse {
-  /**
-   * The list of accounts.
-   */
-  data: Array<AccountResponse>;
-
-  /**
-   * Cursor for fetching the next page of results, or null if no more results.
-   */
-  next_cursor: string | null;
-}
-
-/**
- * A digital asset account with its aggregated balance across all wallets and
- * chains.
- */
-export interface AssetAccountWithBalance {
-  /**
-   * The account ID.
-   */
-  id: string;
-
-  /**
-   * Balances for an asset account or wallet
-   */
-  balance: BalanceResponse;
-
-  /**
-   * An optional display name for the account.
-   */
-  display_name: string | null;
-
-  /**
-   * The wallets belonging to this account.
-   */
-  wallets: Array<AccountWallet>;
-}
-
-/**
- * Paginated list of digital asset accounts for the dashboard.
- */
-export interface AccountsDashboardListResponse {
-  /**
-   * The list of accounts, with balances included for dashboard display.
-   */
-  data: Array<AssetAccountWithBalance>;
-
-  /**
-   * Cursor for fetching the next page of results, or null if no more results.
-   */
-  next_cursor: string | null;
-}
-
-/**
- * The balance of a digital asset account, aggregated across all wallets and
- * supported chains.
- */
-export interface AccountBalanceResponse {
-  /**
-   * The individual asset balances, each computed across all supported chains.
-   */
-  assets: Array<BalanceAsset>;
-
-  /**
-   * A monetary value with its currency denomination.
-   */
-  total: SharedAPI.CurrencyAmount;
-
-  /**
-   * Individual asset balances per chain.
-   */
-  assets_by_chain?: Array<BalanceAssetByChain>;
-}
-
-/**
- * Query parameters for the account balance endpoint.
- */
-export interface AccountBalanceParams {
-  /**
-   * When set to true, returns balances from testnet chains instead of mainnets.
-   */
-  testnet_mode?: 'true' | 'false';
-}
-
 export declare namespace Accounts {
   export {
+    type AccountBalanceParams as AccountBalanceParams,
+    type AccountBalanceResponse as AccountBalanceResponse,
+    type AccountDisplayName as AccountDisplayName,
+    type AccountResponse as AccountResponse,
+    type AccountWallet as AccountWallet,
+    type AccountWalletConfigurationItem as AccountWalletConfigurationItem,
+    type AccountWalletIDs as AccountWalletIDs,
+    type AccountWalletsConfiguration as AccountWalletsConfiguration,
+    type AccountsDashboardListResponse as AccountsDashboardListResponse,
+    type AccountsListResponse as AccountsListResponse,
+    type AssetAccountWithBalance as AssetAccountWithBalance,
     type BalanceAsset as BalanceAsset,
     type BalanceAssetByChain as BalanceAssetByChain,
     type BalanceResponse as BalanceResponse,
-    type AccountWallet as AccountWallet,
-    type AccountResponse as AccountResponse,
-    type AccountWalletConfigurationItem as AccountWalletConfigurationItem,
-    type AccountDisplayName as AccountDisplayName,
-    type AccountWalletsConfiguration as AccountWalletsConfiguration,
-    type AccountWalletIDs as AccountWalletIDs,
-    type CreateAccountFromWalletsConfigurationInput as CreateAccountFromWalletsConfigurationInput,
     type CreateAccountFromWalletIDsInput as CreateAccountFromWalletIDsInput,
+    type CreateAccountFromWalletsConfigurationInput as CreateAccountFromWalletsConfigurationInput,
     type CreateAccountInput as CreateAccountInput,
-    type UpdateAccountFromWalletsConfigurationInput as UpdateAccountFromWalletsConfigurationInput,
     type UpdateAccountFromWalletIDsInput as UpdateAccountFromWalletIDsInput,
+    type UpdateAccountFromWalletsConfigurationInput as UpdateAccountFromWalletsConfigurationInput,
     type UpdateAccountInput as UpdateAccountInput,
-    type AccountsListResponse as AccountsListResponse,
-    type AssetAccountWithBalance as AssetAccountWithBalance,
-    type AccountsDashboardListResponse as AccountsDashboardListResponse,
-    type AccountBalanceResponse as AccountBalanceResponse,
-    type AccountBalanceParams as AccountBalanceParams,
   };
 }

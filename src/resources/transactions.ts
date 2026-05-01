@@ -63,62 +63,18 @@ export interface TransactionList {
 }
 
 /**
- * Additional information for Blockaid to validate against.
+ * An asset diff representing assets entering/leaving a wallet.
  */
-export interface TransactionScanningMetadata {
-  domain: string;
-}
-
-/**
- * Raw RPC request to execute with the wallet.
- */
-export interface TransactionScanningRpcRequest {
-  method: string;
-
-  params: Array<unknown>;
-}
-
-/**
- * The request body for scanning a transaction.
- */
-export interface TransactionScanningRequestBody {
-  chain_id: string;
-
+export interface TransactionScanningAssetDiff {
   /**
-   * Additional information for Blockaid to validate against.
+   * Information about the moving asset in a transaction scan.
    */
-  metadata: TransactionScanningMetadata;
+  asset: TransactionScanningAssetInfo;
 
-  /**
-   * Raw RPC request to execute with the wallet.
-   */
-  request: TransactionScanningRpcRequest;
+  in: Array<TransactionScanningAssetValue>;
+
+  out: Array<TransactionScanningAssetValue>;
 }
-
-/**
- * A failed validation result from a transaction scan.
- */
-export interface TransactionScanningValidationErrorResult {
-  error: string;
-
-  status: 'Error';
-}
-
-/**
- * A successful validation result from a transaction scan.
- */
-export interface TransactionScanningValidationSuccessResult {
-  result_type: string;
-
-  status: 'Success';
-}
-
-/**
- * The validation result from a transaction scan.
- */
-export type TransactionScanningValidationResult =
-  | TransactionScanningValidationErrorResult
-  | TransactionScanningValidationSuccessResult;
 
 /**
  * Information about the moving asset in a transaction scan.
@@ -145,17 +101,14 @@ export interface TransactionScanningAssetValue {
 }
 
 /**
- * An asset diff representing assets entering/leaving a wallet.
+ * Decoded calldata from a scanned transaction.
  */
-export interface TransactionScanningAssetDiff {
-  /**
-   * Information about the moving asset in a transaction scan.
-   */
-  asset: TransactionScanningAssetInfo;
+export interface TransactionScanningCalldata {
+  function_selector: string;
 
-  in: Array<TransactionScanningAssetValue>;
+  function_declaration?: string;
 
-  out: Array<TransactionScanningAssetValue>;
+  function_signature?: string;
 }
 
 /**
@@ -171,14 +124,10 @@ export interface TransactionScanningExposure {
 }
 
 /**
- * Decoded calldata from a scanned transaction.
+ * Additional information for Blockaid to validate against.
  */
-export interface TransactionScanningCalldata {
-  function_selector: string;
-
-  function_declaration?: string;
-
-  function_signature?: string;
+export interface TransactionScanningMetadata {
+  domain: string;
 }
 
 /**
@@ -208,6 +157,47 @@ export interface TransactionScanningParams {
 }
 
 /**
+ * The request body for scanning a transaction.
+ */
+export interface TransactionScanningRequestBody {
+  chain_id: string;
+
+  /**
+   * Additional information for Blockaid to validate against.
+   */
+  metadata: TransactionScanningMetadata;
+
+  /**
+   * Raw RPC request to execute with the wallet.
+   */
+  request: TransactionScanningRpcRequest;
+}
+
+/**
+ * The response from scanning a transaction.
+ */
+export interface TransactionScanningResponseBody {
+  /**
+   * The simulation result from a transaction scan.
+   */
+  simulation: TransactionScanningSimulationResult;
+
+  /**
+   * The validation result from a transaction scan.
+   */
+  validation: TransactionScanningValidationResult;
+}
+
+/**
+ * Raw RPC request to execute with the wallet.
+ */
+export interface TransactionScanningRpcRequest {
+  method: string;
+
+  params: Array<unknown>;
+}
+
+/**
  * A failed simulation result from a transaction scan.
  */
 export interface TransactionScanningSimulationErrorResult {
@@ -215,6 +205,13 @@ export interface TransactionScanningSimulationErrorResult {
 
   status: 'Error';
 }
+
+/**
+ * The simulation result from a transaction scan.
+ */
+export type TransactionScanningSimulationResult =
+  | TransactionScanningSimulationErrorResult
+  | TransactionScanningSimulationSuccessResult;
 
 /**
  * A successful simulation result from a transaction scan.
@@ -233,46 +230,49 @@ export interface TransactionScanningSimulationSuccessResult {
 }
 
 /**
- * The simulation result from a transaction scan.
+ * A failed validation result from a transaction scan.
  */
-export type TransactionScanningSimulationResult =
-  | TransactionScanningSimulationErrorResult
-  | TransactionScanningSimulationSuccessResult;
+export interface TransactionScanningValidationErrorResult {
+  error: string;
+
+  status: 'Error';
+}
 
 /**
- * The response from scanning a transaction.
+ * The validation result from a transaction scan.
  */
-export interface TransactionScanningResponseBody {
-  /**
-   * The simulation result from a transaction scan.
-   */
-  simulation: TransactionScanningSimulationResult;
+export type TransactionScanningValidationResult =
+  | TransactionScanningValidationErrorResult
+  | TransactionScanningValidationSuccessResult;
 
-  /**
-   * The validation result from a transaction scan.
-   */
-  validation: TransactionScanningValidationResult;
+/**
+ * A successful validation result from a transaction scan.
+ */
+export interface TransactionScanningValidationSuccessResult {
+  result_type: string;
+
+  status: 'Success';
 }
 
 export declare namespace Transactions {
   export {
     type Transaction as Transaction,
     type TransactionList as TransactionList,
-    type TransactionScanningMetadata as TransactionScanningMetadata,
-    type TransactionScanningRpcRequest as TransactionScanningRpcRequest,
-    type TransactionScanningRequestBody as TransactionScanningRequestBody,
-    type TransactionScanningValidationErrorResult as TransactionScanningValidationErrorResult,
-    type TransactionScanningValidationSuccessResult as TransactionScanningValidationSuccessResult,
-    type TransactionScanningValidationResult as TransactionScanningValidationResult,
+    type TransactionScanningAssetDiff as TransactionScanningAssetDiff,
     type TransactionScanningAssetInfo as TransactionScanningAssetInfo,
     type TransactionScanningAssetValue as TransactionScanningAssetValue,
-    type TransactionScanningAssetDiff as TransactionScanningAssetDiff,
-    type TransactionScanningExposure as TransactionScanningExposure,
     type TransactionScanningCalldata as TransactionScanningCalldata,
+    type TransactionScanningExposure as TransactionScanningExposure,
+    type TransactionScanningMetadata as TransactionScanningMetadata,
     type TransactionScanningParams as TransactionScanningParams,
-    type TransactionScanningSimulationErrorResult as TransactionScanningSimulationErrorResult,
-    type TransactionScanningSimulationSuccessResult as TransactionScanningSimulationSuccessResult,
-    type TransactionScanningSimulationResult as TransactionScanningSimulationResult,
+    type TransactionScanningRequestBody as TransactionScanningRequestBody,
     type TransactionScanningResponseBody as TransactionScanningResponseBody,
+    type TransactionScanningRpcRequest as TransactionScanningRpcRequest,
+    type TransactionScanningSimulationErrorResult as TransactionScanningSimulationErrorResult,
+    type TransactionScanningSimulationResult as TransactionScanningSimulationResult,
+    type TransactionScanningSimulationSuccessResult as TransactionScanningSimulationSuccessResult,
+    type TransactionScanningValidationErrorResult as TransactionScanningValidationErrorResult,
+    type TransactionScanningValidationResult as TransactionScanningValidationResult,
+    type TransactionScanningValidationSuccessResult as TransactionScanningValidationSuccessResult,
   };
 }

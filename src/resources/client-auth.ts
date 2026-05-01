@@ -7,9 +7,16 @@ import * as UsersAPI from './users';
 export class ClientAuth extends APIResource {}
 
 /**
- * Whether to allow sign-up during authentication.
+ * Input for authenticating with a custom JWT.
  */
-export type AuthenticateModeOption = 'no-signup' | 'login-or-sign-up';
+export interface AuthenticateJwtInput {
+  token?: string;
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+}
 
 /**
  * The authentication mode settings for the ceremony.
@@ -20,6 +27,342 @@ export interface AuthenticateMode {
    */
   mode?: AuthenticateModeOption;
 }
+
+/**
+ * Whether to allow sign-up during authentication.
+ */
+export type AuthenticateModeOption = 'no-signup' | 'login-or-sign-up';
+
+/**
+ * Input for authenticating a SIWE ceremony.
+ */
+export interface AuthenticateSiweInput {
+  message: string;
+
+  signature: string;
+
+  chainId?: string | null;
+
+  connectorType?: string | null;
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+
+  walletClientType?: string | null;
+}
+
+/**
+ * Input for authenticating a SIWS ceremony.
+ */
+export interface AuthenticateSiwsInput {
+  message: string;
+
+  signature: string;
+
+  connectorType?: string | null;
+
+  message_type?: 'transaction' | 'plain';
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+
+  walletClientType?: string | null;
+}
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export interface BridgeBrlFiatVirtualAccountDepositInstructions {
+  account_holder_name: string;
+
+  asset: 'brl';
+
+  bank_address: string;
+
+  bank_name: string;
+
+  br_code: string;
+
+  payment_rails: Array<'pix'>;
+}
+
+export type BridgeDestinationAsset = 'usdb' | 'usdc' | 'usdt' | 'dai' | 'pyusd' | 'eurc';
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export interface BridgeEurFiatVirtualAccountDepositInstructions {
+  account_holder_name: string;
+
+  asset: 'eur';
+
+  bank_address: string;
+
+  bank_name: string;
+
+  bic: string;
+
+  iban: string;
+
+  payment_rails: Array<'sepa'>;
+}
+
+/**
+ * The response for getting a native onramp provider customer.
+ */
+export interface BridgeFiatCustomerResponse {
+  has_accepted_terms: boolean;
+
+  provider: 'bridge';
+
+  /**
+   * Status of the KYC verification process.
+   */
+  status:
+    | 'not_found'
+    | 'active'
+    | 'awaiting_questionnaire'
+    | 'awaiting_ubo'
+    | 'incomplete'
+    | 'not_started'
+    | 'offboarded'
+    | 'paused'
+    | 'rejected'
+    | 'under_review';
+
+  kyc_url?: string;
+
+  rejection_reasons?: Array<BridgeFiatRejectionReason>;
+}
+
+/**
+ * A rejection reason for a customer KYC verification.
+ */
+export interface BridgeFiatRejectionReason {
+  reason: string;
+}
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export type BridgeFiatVirtualAccountDepositInstructions =
+  | BridgeUsdFiatVirtualAccountDepositInstructions
+  | BridgeEurFiatVirtualAccountDepositInstructions
+  | BridgeMxnFiatVirtualAccountDepositInstructions
+  | BridgeBrlFiatVirtualAccountDepositInstructions
+  | BridgeGbpFiatVirtualAccountDepositInstructions;
+
+export interface BridgeFiatVirtualAccountDestination {
+  address: string;
+
+  asset: BridgeDestinationAsset;
+
+  chain: string;
+}
+
+/**
+ * The request input for creating virtual account.
+ */
+export interface BridgeFiatVirtualAccountRequest {
+  destination: BridgeFiatVirtualAccountDestination;
+
+  provider: 'bridge';
+
+  source: BridgeFiatVirtualAccountSource;
+}
+
+/**
+ * The response for creating virtual account.
+ */
+export interface BridgeFiatVirtualAccountResponse {
+  /**
+   * The deposit instructions for a virtual account.
+   */
+  deposit_instructions: BridgeFiatVirtualAccountDepositInstructions;
+
+  destination: BridgeFiatVirtualAccountDestination;
+
+  provider: 'bridge';
+
+  status: string;
+}
+
+export interface BridgeFiatVirtualAccountSource {
+  asset: BridgeSourceAsset;
+}
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export interface BridgeGbpFiatVirtualAccountDepositInstructions {
+  account_holder_name: string;
+
+  account_number: string;
+
+  asset: 'gbp';
+
+  bank_address: string;
+
+  bank_name: string;
+
+  payment_rails: Array<'faster_payments'>;
+
+  sort_code: string;
+}
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export interface BridgeMxnFiatVirtualAccountDepositInstructions {
+  account_holder_name: string;
+
+  asset: 'mxn';
+
+  bank_address: string;
+
+  bank_name: string;
+
+  clabe: string;
+
+  payment_rails: Array<'spei'>;
+}
+
+/**
+ * Bridge provider variant — production or sandbox.
+ */
+export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
+
+/**
+ * The response for getting a native onramp provider customer.
+ */
+export interface BridgeSandboxFiatCustomerResponse {
+  has_accepted_terms: boolean;
+
+  provider: 'bridge-sandbox';
+
+  /**
+   * Status of the KYC verification process.
+   */
+  status:
+    | 'not_found'
+    | 'active'
+    | 'awaiting_questionnaire'
+    | 'awaiting_ubo'
+    | 'incomplete'
+    | 'not_started'
+    | 'offboarded'
+    | 'paused'
+    | 'rejected'
+    | 'under_review';
+
+  kyc_url?: string;
+
+  rejection_reasons?: Array<BridgeFiatRejectionReason>;
+}
+
+/**
+ * The request input for creating virtual account.
+ */
+export interface BridgeSandboxFiatVirtualAccountRequest {
+  destination: BridgeFiatVirtualAccountDestination;
+
+  provider: 'bridge-sandbox';
+
+  source: BridgeFiatVirtualAccountSource;
+}
+
+/**
+ * The response for creating virtual account.
+ */
+export interface BridgeSandboxFiatVirtualAccountResponse {
+  /**
+   * The deposit instructions for a virtual account.
+   */
+  deposit_instructions: BridgeFiatVirtualAccountDepositInstructions;
+
+  destination: BridgeFiatVirtualAccountDestination;
+
+  provider: 'bridge-sandbox';
+
+  status: string;
+}
+
+export type BridgeSourceAsset = 'usd' | 'eur' | 'mxn' | 'brl' | 'gbp';
+
+/**
+ * The deposit instructions for a virtual account.
+ */
+export interface BridgeUsdFiatVirtualAccountDepositInstructions {
+  asset: 'usd';
+
+  bank_account_number: string;
+
+  bank_address: string;
+
+  bank_beneficiary_address: string;
+
+  bank_beneficiary_name: string;
+
+  bank_name: string;
+
+  bank_routing_number: string;
+
+  payment_rails: Array<'ach_push' | 'wire'>;
+}
+
+/**
+ * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
+ * Ethereum mainnet, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
+ */
+export type Caip2ChainID = string;
+
+/**
+ * The request input for creating (or updating) a native onramp provider customer.
+ */
+export interface CreateOrUpdateFiatCustomerRequestInput {
+  has_accepted_terms: boolean;
+
+  /**
+   * Valid set of onramp providers
+   */
+  provider: OnrampProvider;
+
+  kyc_redirect_url?: string;
+}
+
+/**
+ * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
+ */
+export type CryptoCurrencyCode = string;
+
+/**
+ * The request body for authenticating with a custom JWT.
+ */
+export interface CustomJwtAuthenticateRequestBody {
+  token?: string;
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+}
+
+/**
+ * The request body for linking a custom JWT account.
+ */
+export interface CustomJwtLinkRequestBody {
+  token?: string;
+}
+
+/**
+ * The ID of a custom OAuth provider, set up for this app. Must start with
+ * "custom:".
+ */
+export type CustomOAuthProviderID = string;
 
 /**
  * The ID of an external OAuth provider.
@@ -38,15 +381,741 @@ export type ExternalOAuthProviderID =
   | 'twitch';
 
 /**
- * The ID of a Privy app as an OAuth provider. Must start with "privy:".
+ * Input for authenticating with Farcaster.
  */
-export type PrivyOAuthProviderID = string;
+export interface FarcasterAuthenticateInput {
+  channel_token: string;
+
+  fid: number;
+
+  message: string;
+
+  signature: string;
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+}
 
 /**
- * The ID of a custom OAuth provider, set up for this app. Must start with
- * "custom:".
+ * The request body for authenticating with Farcaster.
  */
-export type CustomOAuthProviderID = string;
+export interface FarcasterAuthenticateRequestBody {
+  channel_token: string;
+
+  fid: number;
+
+  message: string;
+
+  signature: string;
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+}
+
+/**
+ * Proxy for the Farcaster Connect init response as defined in FIP-11.
+ */
+export interface FarcasterConnectInitResponse {
+  channel_token: string;
+
+  connect_uri: string;
+}
+
+/**
+ * The response body for initiating a Farcaster connection.
+ */
+export interface FarcasterConnectInitResponseBody {
+  channel_token: string;
+
+  connect_uri: string;
+}
+
+/**
+ * Proxy for the Farcaster Connect completed status response as defined in FIP-11.
+ */
+export interface FarcasterConnectStatusCompletedResponse {
+  bio: string;
+
+  display_name: string;
+
+  fid: number;
+
+  message: string;
+
+  nonce: string;
+
+  pfp_url: string;
+
+  signature: string;
+
+  state: 'completed';
+
+  username: string;
+}
+
+/**
+ * The response body for completing a Farcaster connection.
+ */
+export interface FarcasterConnectStatusCompletedResponseBody {
+  bio: string;
+
+  display_name: string;
+
+  fid: number;
+
+  message: string;
+
+  nonce: string;
+
+  pfp_url: string;
+
+  signature: string;
+
+  state: 'completed';
+
+  username: string;
+}
+
+/**
+ * Proxy for the Farcaster Connect pending status response as defined in FIP-11.
+ */
+export interface FarcasterConnectStatusPendingResponse {
+  nonce: string;
+
+  state: 'pending';
+}
+
+/**
+ * The response body for pending a Farcaster connection.
+ */
+export interface FarcasterConnectStatusPendingResponseBody {
+  nonce: string;
+
+  state: 'pending';
+}
+
+/**
+ * Input for initiating a Farcaster connection.
+ */
+export interface FarcasterInitInput {
+  token?: string;
+
+  redirect_url?: string;
+
+  relying_party?: string;
+}
+
+/**
+ * The request body for initiating a Farcaster connection.
+ */
+export interface FarcasterInitRequestBody {
+  token?: string;
+
+  redirect_url?: string;
+
+  relying_party?: string;
+}
+
+/**
+ * Input for linking a Farcaster account.
+ */
+export interface FarcasterLinkInput {
+  channel_token: string;
+
+  fid: number;
+
+  message: string;
+
+  signature: string;
+}
+
+/**
+ * The request body for linking a Farcaster account.
+ */
+export interface FarcasterLinkRequestBody {
+  channel_token: string;
+
+  fid: number;
+
+  message: string;
+
+  signature: string;
+}
+
+/**
+ * A Farcaster signer response when the signer has been approved.
+ */
+export interface FarcasterSignerApproved {
+  fid: string;
+
+  public_key: string;
+
+  status: 'approved';
+}
+
+/**
+ * A Farcaster signer init response when the signer is pending approval.
+ */
+export interface FarcasterSignerInitPendingApproval {
+  public_key: string;
+
+  signer_approval_url: string;
+
+  status: 'pending_approval';
+}
+
+/**
+ * The request body for initiating a Farcaster signer connection.
+ */
+export interface FarcasterSignerInitRequestBody {
+  ed25519_public_key: string;
+
+  deadline?: string;
+}
+
+/**
+ * The response body from initiating a Farcaster signer connection.
+ */
+export type FarcasterSignerInitResponseBody =
+  | FarcasterSignerInitPendingApproval
+  | FarcasterSignerApproved
+  | FarcasterSignerRevoked;
+
+/**
+ * A Farcaster signer response when the signer has been revoked.
+ */
+export interface FarcasterSignerRevoked {
+  fid: string;
+
+  public_key: string;
+
+  status: 'revoked';
+}
+
+/**
+ * A Farcaster signer status response when the signer is pending approval.
+ */
+export interface FarcasterSignerStatusPendingApproval {
+  public_key: string;
+
+  status: 'pending_approval';
+}
+
+/**
+ * The response body from checking the status of a Farcaster signer connection.
+ */
+export type FarcasterSignerStatusResponseBody =
+  | FarcasterSignerStatusPendingApproval
+  | FarcasterSignerApproved
+  | FarcasterSignerRevoked;
+
+/**
+ * Input for unlinking a Farcaster account.
+ */
+export interface FarcasterUnlinkInput {
+  fid: number;
+}
+
+/**
+ * The request body for unlinking a Farcaster account.
+ */
+export interface FarcasterUnlinkRequestBody {
+  fid: number;
+}
+
+/**
+ * Input for authenticating a Farcaster V2 account.
+ */
+export interface FarcasterV2AuthenticateInput {
+  fid: number;
+
+  message: string;
+
+  signature: string;
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+}
+
+/**
+ * The request body for authenticating a Farcaster V2 account.
+ */
+export interface FarcasterV2AuthenticateRequestBody {
+  fid: number;
+
+  message: string;
+
+  signature: string;
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+}
+
+/**
+ * Input for initiating a Farcaster V2 connection.
+ */
+export interface FarcasterV2InitInput {}
+
+/**
+ * The request body for initiating a Farcaster V2 connection.
+ */
+export interface FarcasterV2InitRequestBody {}
+
+/**
+ * Response for initiating a Farcaster V2 connection.
+ */
+export interface FarcasterV2InitResponse {
+  expires_at: string;
+
+  nonce: string;
+}
+
+/**
+ * The response body for initiating a Farcaster V2 connection.
+ */
+export interface FarcasterV2InitResponseBody {
+  expires_at: string;
+
+  nonce: string;
+}
+
+/**
+ * A positive decimal amount as a string (e.g. "100", "50.25", "0.001").
+ */
+export type FiatAmount = string;
+
+/**
+ * ISO 4217 fiat currency code. Three uppercase ASCII letters.
+ */
+export type FiatCurrencyCode = string;
+
+/**
+ * The response for getting a native onramp provider customer.
+ */
+export type FiatCustomerResponse = BridgeFiatCustomerResponse | BridgeSandboxFiatCustomerResponse;
+
+/**
+ * Destination cryptocurrency details for a fiat onramp quote request.
+ */
+export interface FiatOnrampDestination {
+  address: string;
+
+  /**
+   * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
+   */
+  asset: CryptoCurrencyCode;
+
+  /**
+   * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
+   * Ethereum mainnet, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
+   */
+  chain: Caip2ChainID;
+}
+
+/**
+ * Whether to use the sandbox or production environment for fiat onramp.
+ */
+export type FiatOnrampEnvironment = 'sandbox' | 'production';
+
+/**
+ * The fiat onramp provider to use.
+ */
+export type FiatOnrampProvider =
+  | 'meld'
+  | 'meld-sandbox'
+  | 'moonpay'
+  | 'moonpay-sandbox'
+  | 'coinbase'
+  | 'coinbase-sandbox';
+
+/**
+ * An error from a specific fiat onramp provider when fetching quotes.
+ */
+export interface FiatOnrampProviderError {
+  error: string;
+
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
+}
+
+/**
+ * A single fiat onramp quote from a provider.
+ */
+export interface FiatOnrampQuote {
+  payment_method: string;
+
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
+
+  destination_currency_code?: string | null;
+
+  source_amount?: number | null;
+
+  source_currency_code?: string | null;
+
+  sub_provider?: string | null;
+}
+
+/**
+ * Source currency details for a fiat onramp quote request.
+ */
+export interface FiatOnrampSource {
+  /**
+   * A positive decimal amount as a string (e.g. "100", "50.25", "0.001").
+   */
+  amount: FiatAmount;
+
+  /**
+   * ISO 4217 fiat currency code. Three uppercase ASCII letters.
+   */
+  asset: FiatCurrencyCode;
+}
+
+/**
+ * Normalized fiat onramp transaction status.
+ */
+export type FiatOnrampTransactionStatus =
+  | 'pending'
+  | 'processing'
+  | 'completed'
+  | 'failed'
+  | 'cancelled'
+  | 'refunded'
+  | 'unknown';
+
+/**
+ * The request input for creating virtual account.
+ */
+export type FiatVirtualAccountRequest =
+  | BridgeFiatVirtualAccountRequest
+  | BridgeSandboxFiatVirtualAccountRequest;
+
+/**
+ * The response for creating virtual account.
+ */
+export type FiatVirtualAccountResponse =
+  | BridgeFiatVirtualAccountResponse
+  | BridgeSandboxFiatVirtualAccountResponse;
+
+/**
+ * The request input for getting a native onramp provider customer.
+ */
+export interface GetFiatCustomerRequestInput {
+  /**
+   * Valid set of onramp providers
+   */
+  provider: OnrampProvider;
+
+  kyc_redirect_url?: string;
+}
+
+/**
+ * The request input for getting fiat onramp quotes.
+ */
+export interface GetFiatOnrampQuotesInput {
+  /**
+   * Destination cryptocurrency details for a fiat onramp quote request.
+   */
+  destination: FiatOnrampDestination;
+
+  /**
+   * Whether to use the sandbox or production environment for fiat onramp.
+   */
+  environment: FiatOnrampEnvironment;
+
+  /**
+   * Source currency details for a fiat onramp quote request.
+   */
+  source: FiatOnrampSource;
+}
+
+/**
+ * The response containing fiat onramp quotes.
+ */
+export interface GetFiatOnrampQuotesResponse {
+  quotes: Array<FiatOnrampQuote>;
+
+  provider_errors?: Array<FiatOnrampProviderError>;
+}
+
+/**
+ * The request input for checking a fiat onramp session status.
+ */
+export interface GetFiatOnrampTransactionStatusInput {
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
+
+  session_id: string;
+}
+
+/**
+ * The response containing the fiat onramp session status.
+ */
+export interface GetFiatOnrampTransactionStatusResponse {
+  raw_status: string;
+
+  session_id: string;
+
+  /**
+   * Normalized fiat onramp transaction status.
+   */
+  status: FiatOnrampTransactionStatus;
+
+  transaction_id?: string;
+}
+
+/**
+ * The request input for getting a fiat onramp provider session URL.
+ */
+export interface GetFiatOnrampURLInput {
+  /**
+   * Destination cryptocurrency details for a fiat onramp quote request.
+   */
+  destination: FiatOnrampDestination;
+
+  payment_method: string;
+
+  /**
+   * The fiat onramp provider to use.
+   */
+  provider: FiatOnrampProvider;
+
+  /**
+   * Source currency details for a fiat onramp quote request.
+   */
+  source: FiatOnrampSource;
+
+  redirect_url?: string;
+
+  sub_provider?: string;
+}
+
+/**
+ * The response containing a fiat onramp provider session URL.
+ */
+export interface GetFiatOnrampURLResponse {
+  session_id: string;
+
+  url: string;
+}
+
+/**
+ * The request body for authenticating a guest.
+ */
+export interface GuestAuthenticateRequestBody {
+  guest_credential: string;
+}
+
+/**
+ * Input for linking a custom JWT account.
+ */
+export interface LinkJwtInput {
+  token?: string;
+}
+
+/**
+ * The request body for enrolling a passkey MFA flow.
+ */
+export interface MfaPasskeyEnrollmentRequestBody {
+  credential_ids: Array<string>;
+
+  remove_for_login?: boolean;
+}
+
+/**
+ * The request body for initiating a passkey MFA flow.
+ */
+export interface MfaPasskeyInitRequestBody {
+  relying_party?: string;
+}
+
+/**
+ * The response body for initializing a passkey MFA flow.
+ */
+export interface MfaPasskeyInitResponseBody {
+  /**
+   * WebAuthn authentication options as defined by the Web Authentication
+   * specification.
+   */
+  options: PasskeyAuthenticatorVerifyOptions;
+
+  relying_party?: string;
+}
+
+/**
+ * The request body for verifying a passkey MFA flow.
+ */
+export interface MfaPasskeyVerifyRequestBody {
+  /**
+   * WebAuthn authentication response as defined by the Web Authentication
+   * specification.
+   */
+  authenticator_response: PasskeyAuthenticatorVerifyResponse;
+
+  relying_party?: string;
+}
+
+/**
+ * The request body for enrolling a SMS MFA code.
+ */
+export interface MfaSMSEnrollRequestBody {
+  code: string;
+
+  phoneNumber: string;
+}
+
+/**
+ * Input for enrolling SMS MFA.
+ */
+export interface MfaSMSInitEnrollInput {
+  action: 'enroll';
+
+  phoneNumber: string;
+}
+
+/**
+ * The request body for initiating a SMS MFA flow.
+ */
+export type MfaSMSInitRequestBody = MfaSMSInitVerifyInput | MfaSMSInitEnrollInput;
+
+/**
+ * Input for verifying SMS MFA.
+ */
+export interface MfaSMSInitVerifyInput {
+  action: 'verify';
+}
+
+/**
+ * The request body for verifying a SMS MFA code.
+ */
+export interface MfaSMSVerifyRequestBody {
+  code: string;
+}
+
+/**
+ * The response body for initializing a TOTP MFA code.
+ */
+export interface MfaTotpInitResponseBody {
+  totpAuthUrl: string;
+
+  totpSecret: string;
+}
+
+/**
+ * The input for verifying a TOTP MFA code.
+ */
+export interface MfaTotpInput {
+  code: string;
+}
+
+/**
+ * The response body for verifying a MFA code.
+ */
+export interface MfaVerifyResponseBody {
+  token: string;
+}
+
+/**
+ * The request body for authenticating an OAuth account.
+ */
+export interface OAuthAuthenticateRequestBody {
+  authorization_code: string;
+
+  state_code: string;
+
+  /**
+   * The type of OAuth authorization code.
+   */
+  code_type?: OAuthCodeType;
+
+  code_verifier?: string;
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+}
+
+/**
+ * The request body for getting an OAuth authorization code.
+ */
+export interface OAuthAuthorizationCodeRequestBody {
+  code_challenge: string;
+
+  redirect_to: string;
+
+  state: string;
+}
+
+/**
+ * The type of OAuth authorization code.
+ */
+export type OAuthCodeType = 'raw';
+
+/**
+ * The request body for initiating an OAuth ceremony.
+ */
+export interface OAuthInitRequestBody {
+  /**
+   * The ID of an OAuth provider.
+   */
+  provider: OAuthProviderID;
+
+  redirect_to: string;
+
+  token?: string;
+
+  code_challenge?: string;
+
+  state_code?: string;
+}
+
+/**
+ * The response for initiating an OAuth ceremony.
+ */
+export interface OAuthInitResponseBody {
+  url: string;
+}
+
+/**
+ * The request body for linking an OAuth account.
+ */
+export interface OAuthLinkRequestBody {
+  authorization_code: string;
+
+  state_code: string;
+
+  /**
+   * The type of OAuth authorization code.
+   */
+  code_type?: OAuthCodeType;
+
+  code_verifier?: string;
+}
+
+/**
+ * The response for linking an OAuth account.
+ */
+export interface OAuthLinkResponseBody extends UsersAPI.User {
+  /**
+   * OAuth tokens associated with the user.
+   */
+  oauth_tokens?: UsersAPI.OAuthTokens;
+}
 
 /**
  * The ID of an OAuth provider.
@@ -54,9 +1123,75 @@ export type CustomOAuthProviderID = string;
 export type OAuthProviderID = ExternalOAuthProviderID | PrivyOAuthProviderID;
 
 /**
- * Bridge provider variant — production or sandbox.
+ * The request body for transferring an OAuth account.
  */
-export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
+export interface OAuthTransferRequestBody {
+  nonce: string;
+
+  /**
+   * User info for an OAuth transfer.
+   */
+  userInfo: OAuthTransferUserInfo;
+}
+
+/**
+ * User info for an OAuth transfer.
+ */
+export interface OAuthTransferUserInfo {
+  subject: string;
+
+  email?: string | null;
+
+  embeddedWalletAddresses?: Array<string>;
+
+  /**
+   * Metadata for an OAuth transfer user info.
+   */
+  meta?: OAuthTransferUserInfoMeta;
+
+  name?: string;
+
+  profilePictureUrl?: string;
+
+  smartWalletAddresses?: Array<string>;
+
+  username?: string;
+
+  vanityName?: string;
+}
+
+/**
+ * Metadata for an OAuth transfer user info.
+ */
+export interface OAuthTransferUserInfoMeta {
+  providerAppId?: string;
+}
+
+/**
+ * The request body for unlinking an OAuth account.
+ */
+export interface OAuthUnlinkRequestBody {
+  /**
+   * The ID of an OAuth provider.
+   */
+  provider: OAuthProviderID;
+
+  subject: string;
+}
+
+/**
+ * The request body for verifying a PRAT.
+ */
+export interface OAuthVerifyRequestBody {
+  prat: string;
+}
+
+/**
+ * The response body when verifying a PRAT.
+ */
+export interface OAuthVerifyResponseBody {
+  verified: boolean;
+}
 
 /**
  * Valid set of onramp providers
@@ -64,91 +1199,23 @@ export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
 export type OnrampProvider = 'bridge' | 'bridge-sandbox';
 
 /**
- * The result of the WebAuthn credProps extension.
+ * The input for refreshing a session or logging out.
  */
-export interface PasskeyCredPropsResult {
-  rk?: boolean;
+export interface OptionalRefreshTokenInput {
+  refresh_token?: string;
 }
 
 /**
- * Client extension results returned by the WebAuthn authenticator.
+ * The authenticator assertion response from a WebAuthn authentication ceremony.
  */
-export interface PasskeyClientExtensionResults {
-  app_id?: boolean;
+export interface PasskeyAssertionResponse {
+  authenticator_data: string;
 
-  /**
-   * The result of the WebAuthn credProps extension.
-   */
-  cred_props?: PasskeyCredPropsResult;
+  client_data_json: string;
 
-  hmac_create_secret?: boolean;
-}
+  signature: string;
 
-/**
- * A WebAuthn credential descriptor identifying a specific public key credential.
- */
-export interface PasskeyCredentialDescriptor {
-  id: string;
-
-  type: string;
-
-  transports?: Array<string>;
-}
-
-/**
- * Relying party information for a WebAuthn ceremony.
- */
-export interface PasskeyRelyingParty {
-  name: string;
-
-  id?: string;
-}
-
-/**
- * User entity for a WebAuthn registration ceremony.
- */
-export interface PasskeyUser {
-  id: string;
-
-  display_name: string;
-
-  name: string;
-}
-
-/**
- * A public key credential parameter specifying the algorithm and credential type.
- */
-export interface PasskeyPubKeyCredParam {
-  alg: number;
-
-  type: 'public-key';
-}
-
-/**
- * Authenticator selection criteria for a WebAuthn registration ceremony.
- */
-export interface PasskeyAuthenticatorSelection {
-  authenticator_attachment?: string;
-
-  require_resident_key?: boolean;
-
-  resident_key?: string;
-
-  user_verification?: string;
-}
-
-/**
- * Extensions for a WebAuthn registration ceremony.
- */
-export interface PasskeyEnrollmentExtensions {
-  app_id?: string;
-
-  /**
-   * The result of the WebAuthn credProps extension.
-   */
-  cred_props?: PasskeyCredPropsResult;
-
-  hmac_create_secret?: boolean;
+  user_handle?: string;
 }
 
 /**
@@ -166,6 +1233,21 @@ export interface PasskeyAttestationResponse {
   public_key_algorithm?: number;
 
   transports?: Array<string>;
+}
+
+/**
+ * Input for authenticating with a passkey.
+ */
+export interface PasskeyAuthenticateInput {
+  /**
+   * WebAuthn authentication response as defined by the Web Authentication
+   * specification.
+   */
+  authenticator_response: PasskeyAuthenticatorVerifyResponse;
+
+  challenge: string;
+
+  relying_party?: string;
 }
 
 /**
@@ -229,97 +1311,16 @@ export interface PasskeyAuthenticatorEnrollmentResponse {
 }
 
 /**
- * Response for initiating a passkey link ceremony.
+ * Authenticator selection criteria for a WebAuthn registration ceremony.
  */
-export interface ResponsePasskeyInitLink {
-  /**
-   * WebAuthn registration options as defined by the Web Authentication
-   * specification.
-   */
-  options: PasskeyAuthenticatorEnrollmentOptions;
+export interface PasskeyAuthenticatorSelection {
+  authenticator_attachment?: string;
 
-  relying_party?: string;
-}
+  require_resident_key?: boolean;
 
-/**
- * Response for initiating a passkey registration ceremony.
- */
-export interface ResponsePasskeyInitRegister {
-  /**
-   * WebAuthn registration options as defined by the Web Authentication
-   * specification.
-   */
-  options: PasskeyAuthenticatorEnrollmentOptions;
+  resident_key?: string;
 
-  relying_party?: string;
-}
-
-/**
- * Input for linking a passkey credential.
- */
-export interface PasskeyLinkInput {
-  /**
-   * WebAuthn registration response as defined by the Web Authentication
-   * specification.
-   */
-  authenticator_response: PasskeyAuthenticatorEnrollmentResponse;
-
-  relying_party?: string;
-}
-
-/**
- * Input for registering a passkey credential.
- */
-export interface PasskeyRegisterInput {
-  /**
-   * WebAuthn registration response as defined by the Web Authentication
-   * specification.
-   */
-  authenticator_response: PasskeyAuthenticatorEnrollmentResponse;
-
-  relying_party?: string;
-}
-
-/**
- * Input for initiating a passkey ceremony.
- */
-export interface PasskeyInitInput {
-  token?: string;
-
-  relying_party?: string;
-}
-
-/**
- * Input for unlinking a passkey credential.
- */
-export interface UnlinkPasskeyInput {
-  credential_id: string;
-
-  remove_as_mfa?: boolean;
-}
-
-/**
- * Extensions for a WebAuthn authentication ceremony.
- */
-export interface PasskeyVerifyExtensions {
-  app_id?: string;
-
-  cred_props?: boolean;
-
-  hmac_create_secret?: boolean;
-}
-
-/**
- * The authenticator assertion response from a WebAuthn authentication ceremony.
- */
-export interface PasskeyAssertionResponse {
-  authenticator_data: string;
-
-  client_data_json: string;
-
-  signature: string;
-
-  user_handle?: string;
+  user_verification?: string;
 }
 
 /**
@@ -368,67 +1369,124 @@ export interface PasskeyAuthenticatorVerifyResponse {
 }
 
 /**
- * Response for initiating a passkey authentication ceremony.
+ * Client extension results returned by the WebAuthn authenticator.
  */
-export interface ResponsePasskeyInitAuthenticate {
+export interface PasskeyClientExtensionResults {
+  app_id?: boolean;
+
   /**
-   * WebAuthn authentication options as defined by the Web Authentication
-   * specification.
+   * The result of the WebAuthn credProps extension.
    */
-  options: PasskeyAuthenticatorVerifyOptions;
+  cred_props?: PasskeyCredPropsResult;
 
-  relying_party?: string;
+  hmac_create_secret?: boolean;
 }
 
 /**
- * Input for authenticating with a passkey.
+ * The result of the WebAuthn credProps extension.
  */
-export interface PasskeyAuthenticateInput {
+export interface PasskeyCredPropsResult {
+  rk?: boolean;
+}
+
+/**
+ * A WebAuthn credential descriptor identifying a specific public key credential.
+ */
+export interface PasskeyCredentialDescriptor {
+  id: string;
+
+  type: string;
+
+  transports?: Array<string>;
+}
+
+/**
+ * Extensions for a WebAuthn registration ceremony.
+ */
+export interface PasskeyEnrollmentExtensions {
+  app_id?: string;
+
   /**
-   * WebAuthn authentication response as defined by the Web Authentication
-   * specification.
+   * The result of the WebAuthn credProps extension.
    */
-  authenticator_response: PasskeyAuthenticatorVerifyResponse;
+  cred_props?: PasskeyCredPropsResult;
 
-  challenge: string;
-
-  relying_party?: string;
+  hmac_create_secret?: boolean;
 }
 
 /**
- * The request body for linking a passwordless account.
+ * Input for initiating a passkey ceremony.
  */
-export interface PasswordlessLinkRequestBody {
-  code: string;
-
-  email: string;
-}
-
-/**
- * The request body for initiating a passwordless ceremony.
- */
-export interface PasswordlessInitRequestBody {
-  email: string;
-
+export interface PasskeyInitInput {
   token?: string;
+
+  relying_party?: string;
 }
 
 /**
- * The request body for unlinking a passwordless account.
+ * Input for linking a passkey credential.
  */
-export interface PasswordlessUnlinkRequestBody {
-  address: string;
+export interface PasskeyLinkInput {
+  /**
+   * WebAuthn registration response as defined by the Web Authentication
+   * specification.
+   */
+  authenticator_response: PasskeyAuthenticatorEnrollmentResponse;
+
+  relying_party?: string;
 }
 
 /**
- * The request body for updating a passwordless account.
+ * A public key credential parameter specifying the algorithm and credential type.
  */
-export interface PasswordlessUpdateRequestBody {
-  code: string;
+export interface PasskeyPubKeyCredParam {
+  alg: number;
 
-  newAddress: string;
+  type: 'public-key';
+}
 
-  oldAddress: string;
+/**
+ * Input for registering a passkey credential.
+ */
+export interface PasskeyRegisterInput {
+  /**
+   * WebAuthn registration response as defined by the Web Authentication
+   * specification.
+   */
+  authenticator_response: PasskeyAuthenticatorEnrollmentResponse;
+
+  relying_party?: string;
+}
+
+/**
+ * Relying party information for a WebAuthn ceremony.
+ */
+export interface PasskeyRelyingParty {
+  name: string;
+
+  id?: string;
+}
+
+/**
+ * User entity for a WebAuthn registration ceremony.
+ */
+export interface PasskeyUser {
+  id: string;
+
+  display_name: string;
+
+  name: string;
+}
+
+/**
+ * Extensions for a WebAuthn authentication ceremony.
+ */
+export interface PasskeyVerifyExtensions {
+  app_id?: string;
+
+  cred_props?: boolean;
+
+  hmac_create_secret?: boolean;
 }
 
 /**
@@ -446,12 +1504,44 @@ export interface PasswordlessAuthenticateRequestBody {
 }
 
 /**
- * The request body for transferring a passwordless account.
+ * The request body for initiating a passwordless ceremony.
  */
-export interface PasswordlessTransferRequestBody {
+export interface PasswordlessInitRequestBody {
   email: string;
 
-  nonce: string;
+  token?: string;
+}
+
+/**
+ * The request body for linking a passwordless account.
+ */
+export interface PasswordlessLinkRequestBody {
+  code: string;
+
+  email: string;
+}
+
+/**
+ * The request body for authenticating a passwordless sms account.
+ */
+export interface PasswordlessSMSAuthenticateRequestBody {
+  code: string;
+
+  phoneNumber: string;
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+}
+
+/**
+ * The request body for initiating a passwordless sms ceremony.
+ */
+export interface PasswordlessSMSInitRequestBody {
+  phoneNumber: string;
+
+  token?: string;
 }
 
 /**
@@ -464,12 +1554,12 @@ export interface PasswordlessSMSLinkRequestBody {
 }
 
 /**
- * The request body for initiating a passwordless sms ceremony.
+ * The request body for transferring a passwordless sms account.
  */
-export interface PasswordlessSMSInitRequestBody {
-  phoneNumber: string;
+export interface PasswordlessSMSTransferRequestBody {
+  nonce: string;
 
-  token?: string;
+  phoneNumber: string;
 }
 
 /**
@@ -491,768 +1581,74 @@ export interface PasswordlessSMSUpdateRequestBody {
 }
 
 /**
- * The request body for authenticating a passwordless sms account.
+ * The request body for transferring a passwordless account.
  */
-export interface PasswordlessSMSAuthenticateRequestBody {
+export interface PasswordlessTransferRequestBody {
+  email: string;
+
+  nonce: string;
+}
+
+/**
+ * The request body for unlinking a passwordless account.
+ */
+export interface PasswordlessUnlinkRequestBody {
+  address: string;
+}
+
+/**
+ * The request body for updating a passwordless account.
+ */
+export interface PasswordlessUpdateRequestBody {
   code: string;
 
-  phoneNumber: string;
+  newAddress: string;
 
+  oldAddress: string;
+}
+
+/**
+ * The ID of a Privy app as an OAuth provider. Must start with "privy:".
+ */
+export type PrivyOAuthProviderID = string;
+
+/**
+ * Response for initiating a passkey authentication ceremony.
+ */
+export interface ResponsePasskeyInitAuthenticate {
   /**
-   * Whether to allow sign-up during authentication.
+   * WebAuthn authentication options as defined by the Web Authentication
+   * specification.
    */
-  mode?: AuthenticateModeOption;
+  options: PasskeyAuthenticatorVerifyOptions;
+
+  relying_party?: string;
 }
 
 /**
- * The request body for transferring a passwordless sms account.
+ * Response for initiating a passkey link ceremony.
  */
-export interface PasswordlessSMSTransferRequestBody {
-  nonce: string;
-
-  phoneNumber: string;
-}
-
-/**
- * Input for authenticating with a custom JWT.
- */
-export interface AuthenticateJwtInput {
-  token?: string;
-
+export interface ResponsePasskeyInitLink {
   /**
-   * Whether to allow sign-up during authentication.
+   * WebAuthn registration options as defined by the Web Authentication
+   * specification.
    */
-  mode?: AuthenticateModeOption;
+  options: PasskeyAuthenticatorEnrollmentOptions;
+
+  relying_party?: string;
 }
 
 /**
- * Input for linking a custom JWT account.
+ * Response for initiating a passkey registration ceremony.
  */
-export interface LinkJwtInput {
-  token?: string;
-}
-
-/**
- * The request body for authenticating with a custom JWT.
- */
-export interface CustomJwtAuthenticateRequestBody {
-  token?: string;
-
+export interface ResponsePasskeyInitRegister {
   /**
-   * Whether to allow sign-up during authentication.
+   * WebAuthn registration options as defined by the Web Authentication
+   * specification.
    */
-  mode?: AuthenticateModeOption;
-}
+  options: PasskeyAuthenticatorEnrollmentOptions;
 
-/**
- * The request body for linking a custom JWT account.
- */
-export interface CustomJwtLinkRequestBody {
-  token?: string;
-}
-
-/**
- * The request input for getting a native onramp provider customer.
- */
-export interface GetFiatCustomerRequestInput {
-  /**
-   * Valid set of onramp providers
-   */
-  provider: OnrampProvider;
-
-  kyc_redirect_url?: string;
-}
-
-/**
- * The request input for creating (or updating) a native onramp provider customer.
- */
-export interface CreateOrUpdateFiatCustomerRequestInput {
-  has_accepted_terms: boolean;
-
-  /**
-   * Valid set of onramp providers
-   */
-  provider: OnrampProvider;
-
-  kyc_redirect_url?: string;
-}
-
-/**
- * A rejection reason for a customer KYC verification.
- */
-export interface BridgeFiatRejectionReason {
-  reason: string;
-}
-
-/**
- * The response for getting a native onramp provider customer.
- */
-export interface BridgeFiatCustomerResponse {
-  has_accepted_terms: boolean;
-
-  provider: 'bridge';
-
-  /**
-   * Status of the KYC verification process.
-   */
-  status:
-    | 'not_found'
-    | 'active'
-    | 'awaiting_questionnaire'
-    | 'awaiting_ubo'
-    | 'incomplete'
-    | 'not_started'
-    | 'offboarded'
-    | 'paused'
-    | 'rejected'
-    | 'under_review';
-
-  kyc_url?: string;
-
-  rejection_reasons?: Array<BridgeFiatRejectionReason>;
-}
-
-/**
- * The response for getting a native onramp provider customer.
- */
-export interface BridgeSandboxFiatCustomerResponse {
-  has_accepted_terms: boolean;
-
-  provider: 'bridge-sandbox';
-
-  /**
-   * Status of the KYC verification process.
-   */
-  status:
-    | 'not_found'
-    | 'active'
-    | 'awaiting_questionnaire'
-    | 'awaiting_ubo'
-    | 'incomplete'
-    | 'not_started'
-    | 'offboarded'
-    | 'paused'
-    | 'rejected'
-    | 'under_review';
-
-  kyc_url?: string;
-
-  rejection_reasons?: Array<BridgeFiatRejectionReason>;
-}
-
-/**
- * The response for getting a native onramp provider customer.
- */
-export type FiatCustomerResponse = BridgeFiatCustomerResponse | BridgeSandboxFiatCustomerResponse;
-
-/**
- * ISO 4217 fiat currency code. Three uppercase ASCII letters.
- */
-export type FiatCurrencyCode = string;
-
-/**
- * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
- */
-export type CryptoCurrencyCode = string;
-
-/**
- * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
- * Ethereum mainnet, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
- */
-export type Caip2ChainID = string;
-
-/**
- * A positive decimal amount as a string (e.g. "100", "50.25", "0.001").
- */
-export type FiatAmount = string;
-
-/**
- * Source currency details for a fiat onramp quote request.
- */
-export interface FiatOnrampSource {
-  /**
-   * A positive decimal amount as a string (e.g. "100", "50.25", "0.001").
-   */
-  amount: FiatAmount;
-
-  /**
-   * ISO 4217 fiat currency code. Three uppercase ASCII letters.
-   */
-  asset: FiatCurrencyCode;
-}
-
-/**
- * Destination cryptocurrency details for a fiat onramp quote request.
- */
-export interface FiatOnrampDestination {
-  address: string;
-
-  /**
-   * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
-   */
-  asset: CryptoCurrencyCode;
-
-  /**
-   * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
-   * Ethereum mainnet, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
-   */
-  chain: Caip2ChainID;
-}
-
-/**
- * Whether to use the sandbox or production environment for fiat onramp.
- */
-export type FiatOnrampEnvironment = 'sandbox' | 'production';
-
-/**
- * The fiat onramp provider to use.
- */
-export type FiatOnrampProvider =
-  | 'meld'
-  | 'meld-sandbox'
-  | 'moonpay'
-  | 'moonpay-sandbox'
-  | 'coinbase'
-  | 'coinbase-sandbox';
-
-/**
- * The request input for getting fiat onramp quotes.
- */
-export interface GetFiatOnrampQuotesInput {
-  /**
-   * Destination cryptocurrency details for a fiat onramp quote request.
-   */
-  destination: FiatOnrampDestination;
-
-  /**
-   * Whether to use the sandbox or production environment for fiat onramp.
-   */
-  environment: FiatOnrampEnvironment;
-
-  /**
-   * Source currency details for a fiat onramp quote request.
-   */
-  source: FiatOnrampSource;
-}
-
-/**
- * A single fiat onramp quote from a provider.
- */
-export interface FiatOnrampQuote {
-  payment_method: string;
-
-  /**
-   * The fiat onramp provider to use.
-   */
-  provider: FiatOnrampProvider;
-
-  destination_currency_code?: string | null;
-
-  source_amount?: number | null;
-
-  source_currency_code?: string | null;
-
-  sub_provider?: string | null;
-}
-
-/**
- * An error from a specific fiat onramp provider when fetching quotes.
- */
-export interface FiatOnrampProviderError {
-  error: string;
-
-  /**
-   * The fiat onramp provider to use.
-   */
-  provider: FiatOnrampProvider;
-}
-
-/**
- * The response containing fiat onramp quotes.
- */
-export interface GetFiatOnrampQuotesResponse {
-  quotes: Array<FiatOnrampQuote>;
-
-  provider_errors?: Array<FiatOnrampProviderError>;
-}
-
-/**
- * The request input for getting a fiat onramp provider session URL.
- */
-export interface GetFiatOnrampURLInput {
-  /**
-   * Destination cryptocurrency details for a fiat onramp quote request.
-   */
-  destination: FiatOnrampDestination;
-
-  payment_method: string;
-
-  /**
-   * The fiat onramp provider to use.
-   */
-  provider: FiatOnrampProvider;
-
-  /**
-   * Source currency details for a fiat onramp quote request.
-   */
-  source: FiatOnrampSource;
-
-  redirect_url?: string;
-
-  sub_provider?: string;
-}
-
-/**
- * The response containing a fiat onramp provider session URL.
- */
-export interface GetFiatOnrampURLResponse {
-  session_id: string;
-
-  url: string;
-}
-
-/**
- * Normalized fiat onramp transaction status.
- */
-export type FiatOnrampTransactionStatus =
-  | 'pending'
-  | 'processing'
-  | 'completed'
-  | 'failed'
-  | 'cancelled'
-  | 'refunded'
-  | 'unknown';
-
-/**
- * The request input for checking a fiat onramp session status.
- */
-export interface GetFiatOnrampTransactionStatusInput {
-  /**
-   * The fiat onramp provider to use.
-   */
-  provider: FiatOnrampProvider;
-
-  session_id: string;
-}
-
-/**
- * The response containing the fiat onramp session status.
- */
-export interface GetFiatOnrampTransactionStatusResponse {
-  raw_status: string;
-
-  session_id: string;
-
-  /**
-   * Normalized fiat onramp transaction status.
-   */
-  status: FiatOnrampTransactionStatus;
-
-  transaction_id?: string;
-}
-
-export type BridgeDestinationAsset = 'usdb' | 'usdc' | 'usdt' | 'dai' | 'pyusd' | 'eurc';
-
-export type BridgeSourceAsset = 'usd' | 'eur' | 'mxn' | 'brl' | 'gbp';
-
-export interface BridgeFiatVirtualAccountSource {
-  asset: BridgeSourceAsset;
-}
-
-export interface BridgeFiatVirtualAccountDestination {
-  address: string;
-
-  asset: BridgeDestinationAsset;
-
-  chain: string;
-}
-
-/**
- * The request input for creating virtual account.
- */
-export interface BridgeFiatVirtualAccountRequest {
-  destination: BridgeFiatVirtualAccountDestination;
-
-  provider: 'bridge';
-
-  source: BridgeFiatVirtualAccountSource;
-}
-
-/**
- * The request input for creating virtual account.
- */
-export interface BridgeSandboxFiatVirtualAccountRequest {
-  destination: BridgeFiatVirtualAccountDestination;
-
-  provider: 'bridge-sandbox';
-
-  source: BridgeFiatVirtualAccountSource;
-}
-
-/**
- * The request input for creating virtual account.
- */
-export type FiatVirtualAccountRequest =
-  | BridgeFiatVirtualAccountRequest
-  | BridgeSandboxFiatVirtualAccountRequest;
-
-/**
- * The deposit instructions for a virtual account.
- */
-export interface BridgeUsdFiatVirtualAccountDepositInstructions {
-  asset: 'usd';
-
-  bank_account_number: string;
-
-  bank_address: string;
-
-  bank_beneficiary_address: string;
-
-  bank_beneficiary_name: string;
-
-  bank_name: string;
-
-  bank_routing_number: string;
-
-  payment_rails: Array<'ach_push' | 'wire'>;
-}
-
-/**
- * The deposit instructions for a virtual account.
- */
-export interface BridgeEurFiatVirtualAccountDepositInstructions {
-  account_holder_name: string;
-
-  asset: 'eur';
-
-  bank_address: string;
-
-  bank_name: string;
-
-  bic: string;
-
-  iban: string;
-
-  payment_rails: Array<'sepa'>;
-}
-
-/**
- * The deposit instructions for a virtual account.
- */
-export interface BridgeMxnFiatVirtualAccountDepositInstructions {
-  account_holder_name: string;
-
-  asset: 'mxn';
-
-  bank_address: string;
-
-  bank_name: string;
-
-  clabe: string;
-
-  payment_rails: Array<'spei'>;
-}
-
-/**
- * The deposit instructions for a virtual account.
- */
-export interface BridgeBrlFiatVirtualAccountDepositInstructions {
-  account_holder_name: string;
-
-  asset: 'brl';
-
-  bank_address: string;
-
-  bank_name: string;
-
-  br_code: string;
-
-  payment_rails: Array<'pix'>;
-}
-
-/**
- * The deposit instructions for a virtual account.
- */
-export interface BridgeGbpFiatVirtualAccountDepositInstructions {
-  account_holder_name: string;
-
-  account_number: string;
-
-  asset: 'gbp';
-
-  bank_address: string;
-
-  bank_name: string;
-
-  payment_rails: Array<'faster_payments'>;
-
-  sort_code: string;
-}
-
-/**
- * The deposit instructions for a virtual account.
- */
-export type BridgeFiatVirtualAccountDepositInstructions =
-  | BridgeUsdFiatVirtualAccountDepositInstructions
-  | BridgeEurFiatVirtualAccountDepositInstructions
-  | BridgeMxnFiatVirtualAccountDepositInstructions
-  | BridgeBrlFiatVirtualAccountDepositInstructions
-  | BridgeGbpFiatVirtualAccountDepositInstructions;
-
-/**
- * The response for creating virtual account.
- */
-export interface BridgeFiatVirtualAccountResponse {
-  /**
-   * The deposit instructions for a virtual account.
-   */
-  deposit_instructions: BridgeFiatVirtualAccountDepositInstructions;
-
-  destination: BridgeFiatVirtualAccountDestination;
-
-  provider: 'bridge';
-
-  status: string;
-}
-
-/**
- * The response for creating virtual account.
- */
-export interface BridgeSandboxFiatVirtualAccountResponse {
-  /**
-   * The deposit instructions for a virtual account.
-   */
-  deposit_instructions: BridgeFiatVirtualAccountDepositInstructions;
-
-  destination: BridgeFiatVirtualAccountDestination;
-
-  provider: 'bridge-sandbox';
-
-  status: string;
-}
-
-/**
- * The response for creating virtual account.
- */
-export type FiatVirtualAccountResponse =
-  | BridgeFiatVirtualAccountResponse
-  | BridgeSandboxFiatVirtualAccountResponse;
-
-/**
- * The request body for authenticating a guest.
- */
-export interface GuestAuthenticateRequestBody {
-  guest_credential: string;
-}
-
-/**
- * The type of OAuth authorization code.
- */
-export type OAuthCodeType = 'raw';
-
-/**
- * The request body for initiating an OAuth ceremony.
- */
-export interface OAuthInitRequestBody {
-  /**
-   * The ID of an OAuth provider.
-   */
-  provider: OAuthProviderID;
-
-  redirect_to: string;
-
-  token?: string;
-
-  code_challenge?: string;
-
-  state_code?: string;
-}
-
-/**
- * The response for initiating an OAuth ceremony.
- */
-export interface OAuthInitResponseBody {
-  url: string;
-}
-
-/**
- * The request body for authenticating an OAuth account.
- */
-export interface OAuthAuthenticateRequestBody {
-  authorization_code: string;
-
-  state_code: string;
-
-  /**
-   * The type of OAuth authorization code.
-   */
-  code_type?: OAuthCodeType;
-
-  code_verifier?: string;
-
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
-}
-
-/**
- * The request body for linking an OAuth account.
- */
-export interface OAuthLinkRequestBody {
-  authorization_code: string;
-
-  state_code: string;
-
-  /**
-   * The type of OAuth authorization code.
-   */
-  code_type?: OAuthCodeType;
-
-  code_verifier?: string;
-}
-
-/**
- * The request body for unlinking an OAuth account.
- */
-export interface OAuthUnlinkRequestBody {
-  /**
-   * The ID of an OAuth provider.
-   */
-  provider: OAuthProviderID;
-
-  subject: string;
-}
-
-/**
- * The response for linking an OAuth account.
- */
-export interface OAuthLinkResponseBody extends UsersAPI.User {
-  /**
-   * OAuth tokens associated with the user.
-   */
-  oauth_tokens?: UsersAPI.OAuthTokens;
-}
-
-/**
- * Metadata for an OAuth transfer user info.
- */
-export interface OAuthTransferUserInfoMeta {
-  providerAppId?: string;
-}
-
-/**
- * User info for an OAuth transfer.
- */
-export interface OAuthTransferUserInfo {
-  subject: string;
-
-  email?: string | null;
-
-  embeddedWalletAddresses?: Array<string>;
-
-  /**
-   * Metadata for an OAuth transfer user info.
-   */
-  meta?: OAuthTransferUserInfoMeta;
-
-  name?: string;
-
-  profilePictureUrl?: string;
-
-  smartWalletAddresses?: Array<string>;
-
-  username?: string;
-
-  vanityName?: string;
-}
-
-/**
- * The request body for transferring an OAuth account.
- */
-export interface OAuthTransferRequestBody {
-  nonce: string;
-
-  /**
-   * User info for an OAuth transfer.
-   */
-  userInfo: OAuthTransferUserInfo;
-}
-
-/**
- * The request body for getting an OAuth authorization code.
- */
-export interface OAuthAuthorizationCodeRequestBody {
-  code_challenge: string;
-
-  redirect_to: string;
-
-  state: string;
-}
-
-/**
- * The request body for verifying a PRAT.
- */
-export interface OAuthVerifyRequestBody {
-  prat: string;
-}
-
-/**
- * The response body when verifying a PRAT.
- */
-export interface OAuthVerifyResponseBody {
-  verified: boolean;
-}
-
-/**
- * Input for a SIWE signing ceremony.
- */
-export interface SiweInput {
-  message: string;
-
-  signature: string;
-
-  chainId?: string | null;
-
-  connectorType?: string | null;
-
-  walletClientType?: string | null;
-}
-
-/**
- * Input for a smart wallet SIWE signing ceremony.
- */
-export interface SmartWalletSiweInput {
-  message: string;
-
-  signature: string;
-
-  /**
-   * The supported smart wallet providers.
-   */
-  smart_wallet_type: EmbeddedWalletsAPI.SmartWalletType;
-
-  smart_wallet_version?: string;
-}
-
-/**
- * Input for authenticating a SIWE ceremony.
- */
-export interface AuthenticateSiweInput {
-  message: string;
-
-  signature: string;
-
-  chainId?: string | null;
-
-  connectorType?: string | null;
-
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
-
-  walletClientType?: string | null;
+  relying_party?: string;
 }
 
 /**
@@ -1263,38 +1659,32 @@ export interface SiweAddressInput {
 }
 
 /**
+ * The request body for authenticating a SIWE ceremony.
+ */
+export interface SiweAuthenticateRequestBody {
+  message: string;
+
+  signature: string;
+
+  chainId?: string | null;
+
+  connectorType?: string | null;
+
+  /**
+   * Whether to allow sign-up during authentication.
+   */
+  mode?: AuthenticateModeOption;
+
+  walletClientType?: string | null;
+}
+
+/**
  * Input for initiating a SIWE ceremony.
  */
 export interface SiweInitInput {
   token?: string;
 
   address?: string;
-}
-
-/**
- * A SIWE nonce response.
- */
-export interface SiweNonce {
-  address: string;
-
-  expires_at: string;
-
-  nonce: string;
-}
-
-/**
- * Input for transferring a SIWE account.
- */
-export interface TransferSiweInput {
-  address: string;
-
-  nonce: string;
-
-  chainId?: string | null;
-
-  connectorType?: string | null;
-
-  walletClientType?: string | null;
 }
 
 /**
@@ -1316,9 +1706,9 @@ export interface SiweInitResponseBody {
 }
 
 /**
- * The request body for authenticating a SIWE ceremony.
+ * Input for a SIWE signing ceremony.
  */
-export interface SiweAuthenticateRequestBody {
+export interface SiweInput {
   message: string;
 
   signature: string;
@@ -1326,11 +1716,6 @@ export interface SiweAuthenticateRequestBody {
   chainId?: string | null;
 
   connectorType?: string | null;
-
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
 
   walletClientType?: string | null;
 }
@@ -1367,6 +1752,17 @@ export interface SiweLinkSmartWalletRequestBody {
 }
 
 /**
+ * A SIWE nonce response.
+ */
+export interface SiweNonce {
+  address: string;
+
+  expires_at: string;
+
+  nonce: string;
+}
+
+/**
  * The request body for unlinking a SIWE ceremony.
  */
 export interface SiweUnlinkRequestBody {
@@ -1374,96 +1770,10 @@ export interface SiweUnlinkRequestBody {
 }
 
 /**
- * Input for a SIWS signing ceremony.
- */
-export interface SiwsInput {
-  message: string;
-
-  signature: string;
-
-  connectorType?: string | null;
-
-  message_type?: 'transaction' | 'plain';
-
-  walletClientType?: string | null;
-}
-
-/**
- * Input for authenticating a SIWS ceremony.
- */
-export interface AuthenticateSiwsInput {
-  message: string;
-
-  signature: string;
-
-  connectorType?: string | null;
-
-  message_type?: 'transaction' | 'plain';
-
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
-
-  walletClientType?: string | null;
-}
-
-/**
  * Input containing a SIWS wallet address.
  */
 export interface SiwsAddressInput {
   address: string;
-}
-
-/**
- * Input for initiating a SIWS ceremony.
- */
-export interface SiwsInitInput {
-  address: string;
-
-  token?: string;
-}
-
-/**
- * A SIWS nonce response.
- */
-export interface SiwsNonce {
-  address: string;
-
-  expires_at: string;
-
-  nonce: string;
-}
-
-/**
- * Input for transferring a SIWS account.
- */
-export interface TransferSiwsInput {
-  address: string;
-
-  nonce: string;
-
-  connectorType?: string | null;
-
-  walletClientType?: string | null;
-}
-
-/**
- * The request body for initiating a SIWS ceremony.
- */
-export interface SiwsInitRequestBody {
-  address: string;
-}
-
-/**
- * The response body for initiating a SIWS ceremony.
- */
-export interface SiwsInitResponseBody {
-  address: string;
-
-  expires_at: string;
-
-  nonce: string;
 }
 
 /**
@@ -1487,6 +1797,48 @@ export interface SiwsAuthenticateRequestBody {
 }
 
 /**
+ * Input for initiating a SIWS ceremony.
+ */
+export interface SiwsInitInput {
+  address: string;
+
+  token?: string;
+}
+
+/**
+ * The request body for initiating a SIWS ceremony.
+ */
+export interface SiwsInitRequestBody {
+  address: string;
+}
+
+/**
+ * The response body for initiating a SIWS ceremony.
+ */
+export interface SiwsInitResponseBody {
+  address: string;
+
+  expires_at: string;
+
+  nonce: string;
+}
+
+/**
+ * Input for a SIWS signing ceremony.
+ */
+export interface SiwsInput {
+  message: string;
+
+  signature: string;
+
+  connectorType?: string | null;
+
+  message_type?: 'transaction' | 'plain';
+
+  walletClientType?: string | null;
+}
+
+/**
  * The request body for linking a SIWS ceremony.
  */
 export interface SiwsLinkRequestBody {
@@ -1502,10 +1854,37 @@ export interface SiwsLinkRequestBody {
 }
 
 /**
+ * A SIWS nonce response.
+ */
+export interface SiwsNonce {
+  address: string;
+
+  expires_at: string;
+
+  nonce: string;
+}
+
+/**
  * The request body for unlinking a SIWS ceremony.
  */
 export interface SiwsUnlinkRequestBody {
   address: string;
+}
+
+/**
+ * Input for a smart wallet SIWE signing ceremony.
+ */
+export interface SmartWalletSiweInput {
+  message: string;
+
+  signature: string;
+
+  /**
+   * The supported smart wallet providers.
+   */
+  smart_wallet_type: EmbeddedWalletsAPI.SmartWalletType;
+
+  smart_wallet_version?: string;
 }
 
 /**
@@ -1529,28 +1908,6 @@ export interface TelegramAuthResult {
 }
 
 /**
- * Auth result object returned by Telegram when a user authenticates using a mini
- * app.
- */
-export interface TelegramWebAppData {
-  auth_date: number | null;
-
-  hash: string;
-
-  user: string;
-
-  chat_instance?: string;
-
-  chat_type?: string;
-
-  query_id?: string;
-
-  signature?: string;
-
-  start_param?: string;
-}
-
-/**
  * Input for authenticating with Telegram.
  */
 export interface TelegramAuthenticateInput {
@@ -1560,32 +1917,6 @@ export interface TelegramAuthenticateInput {
    * Whether to allow sign-up during authentication.
    */
   mode?: AuthenticateModeOption;
-
-  /**
-   * Auth result object returned by Telegram when a user authenticates using the
-   * login widget.
-   */
-  telegram_auth_result?: TelegramAuthResult;
-
-  /**
-   * Auth result object returned by Telegram when a user authenticates using a mini
-   * app.
-   */
-  telegram_web_app_data?: TelegramWebAppData;
-}
-
-/**
- * Input for unlinking a Telegram account.
- */
-export interface TelegramUnlinkInput {
-  telegram_user_id: string;
-}
-
-/**
- * Input for transferring a Telegram account.
- */
-export interface TransferTelegramInput {
-  nonce: string;
 
   /**
    * Auth result object returned by Telegram when a user authenticates using the
@@ -1649,6 +1980,13 @@ export interface TelegramLinkRequestBody {
 }
 
 /**
+ * Input for unlinking a Telegram account.
+ */
+export interface TelegramUnlinkInput {
+  telegram_user_id: string;
+}
+
+/**
  * The request body for unlinking a Telegram account.
  */
 export interface TelegramUnlinkRequestBody {
@@ -1656,93 +1994,25 @@ export interface TelegramUnlinkRequestBody {
 }
 
 /**
- * Proxy for the Farcaster Connect init response as defined in FIP-11.
+ * Auth result object returned by Telegram when a user authenticates using a mini
+ * app.
  */
-export interface FarcasterConnectInitResponse {
-  channel_token: string;
+export interface TelegramWebAppData {
+  auth_date: number | null;
 
-  connect_uri: string;
-}
+  hash: string;
 
-/**
- * Proxy for the Farcaster Connect completed status response as defined in FIP-11.
- */
-export interface FarcasterConnectStatusCompletedResponse {
-  bio: string;
+  user: string;
 
-  display_name: string;
+  chat_instance?: string;
 
-  fid: number;
+  chat_type?: string;
 
-  message: string;
+  query_id?: string;
 
-  nonce: string;
+  signature?: string;
 
-  pfp_url: string;
-
-  signature: string;
-
-  state: 'completed';
-
-  username: string;
-}
-
-/**
- * Proxy for the Farcaster Connect pending status response as defined in FIP-11.
- */
-export interface FarcasterConnectStatusPendingResponse {
-  nonce: string;
-
-  state: 'pending';
-}
-
-/**
- * Input for authenticating with Farcaster.
- */
-export interface FarcasterAuthenticateInput {
-  channel_token: string;
-
-  fid: number;
-
-  message: string;
-
-  signature: string;
-
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
-}
-
-/**
- * Input for linking a Farcaster account.
- */
-export interface FarcasterLinkInput {
-  channel_token: string;
-
-  fid: number;
-
-  message: string;
-
-  signature: string;
-}
-
-/**
- * Input for initiating a Farcaster connection.
- */
-export interface FarcasterInitInput {
-  token?: string;
-
-  redirect_url?: string;
-
-  relying_party?: string;
-}
-
-/**
- * Input for unlinking a Farcaster account.
- */
-export interface FarcasterUnlinkInput {
-  fid: number;
+  start_param?: string;
 }
 
 /**
@@ -1757,505 +2027,235 @@ export interface TransferFarcasterInput {
 }
 
 /**
- * Input for initiating a Farcaster V2 connection.
+ * Input for transferring a SIWE account.
  */
-export interface FarcasterV2InitInput {}
-
-/**
- * Response for initiating a Farcaster V2 connection.
- */
-export interface FarcasterV2InitResponse {
-  expires_at: string;
-
-  nonce: string;
-}
-
-/**
- * Input for authenticating a Farcaster V2 account.
- */
-export interface FarcasterV2AuthenticateInput {
-  fid: number;
-
-  message: string;
-
-  signature: string;
-
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
-}
-
-/**
- * The request body for authenticating with Farcaster.
- */
-export interface FarcasterAuthenticateRequestBody {
-  channel_token: string;
-
-  fid: number;
-
-  message: string;
-
-  signature: string;
-
-  /**
-   * Whether to allow sign-up during authentication.
-   */
-  mode?: AuthenticateModeOption;
-}
-
-/**
- * The response body for completing a Farcaster connection.
- */
-export interface FarcasterConnectStatusCompletedResponseBody {
-  bio: string;
-
-  display_name: string;
-
-  fid: number;
-
-  message: string;
+export interface TransferSiweInput {
+  address: string;
 
   nonce: string;
 
-  pfp_url: string;
+  chainId?: string | null;
 
-  signature: string;
+  connectorType?: string | null;
 
-  state: 'completed';
-
-  username: string;
+  walletClientType?: string | null;
 }
 
 /**
- * The response body for pending a Farcaster connection.
+ * Input for transferring a SIWS account.
  */
-export interface FarcasterConnectStatusPendingResponseBody {
+export interface TransferSiwsInput {
+  address: string;
+
   nonce: string;
 
-  state: 'pending';
+  connectorType?: string | null;
+
+  walletClientType?: string | null;
 }
 
 /**
- * The request body for unlinking a Farcaster account.
+ * Input for transferring a Telegram account.
  */
-export interface FarcasterUnlinkRequestBody {
-  fid: number;
-}
-
-/**
- * The request body for initiating a Farcaster connection.
- */
-export interface FarcasterInitRequestBody {
-  token?: string;
-
-  redirect_url?: string;
-
-  relying_party?: string;
-}
-
-/**
- * The response body for initiating a Farcaster connection.
- */
-export interface FarcasterConnectInitResponseBody {
-  channel_token: string;
-
-  connect_uri: string;
-}
-
-/**
- * The request body for linking a Farcaster account.
- */
-export interface FarcasterLinkRequestBody {
-  channel_token: string;
-
-  fid: number;
-
-  message: string;
-
-  signature: string;
-}
-
-/**
- * The request body for initiating a Farcaster V2 connection.
- */
-export interface FarcasterV2InitRequestBody {}
-
-/**
- * The response body for initiating a Farcaster V2 connection.
- */
-export interface FarcasterV2InitResponseBody {
-  expires_at: string;
-
+export interface TransferTelegramInput {
   nonce: string;
-}
-
-/**
- * The request body for authenticating a Farcaster V2 account.
- */
-export interface FarcasterV2AuthenticateRequestBody {
-  fid: number;
-
-  message: string;
-
-  signature: string;
 
   /**
-   * Whether to allow sign-up during authentication.
+   * Auth result object returned by Telegram when a user authenticates using the
+   * login widget.
    */
-  mode?: AuthenticateModeOption;
-}
+  telegram_auth_result?: TelegramAuthResult;
 
-/**
- * The request body for initiating a Farcaster signer connection.
- */
-export interface FarcasterSignerInitRequestBody {
-  ed25519_public_key: string;
-
-  deadline?: string;
-}
-
-/**
- * A Farcaster signer init response when the signer is pending approval.
- */
-export interface FarcasterSignerInitPendingApproval {
-  public_key: string;
-
-  signer_approval_url: string;
-
-  status: 'pending_approval';
-}
-
-/**
- * A Farcaster signer response when the signer has been approved.
- */
-export interface FarcasterSignerApproved {
-  fid: string;
-
-  public_key: string;
-
-  status: 'approved';
-}
-
-/**
- * A Farcaster signer response when the signer has been revoked.
- */
-export interface FarcasterSignerRevoked {
-  fid: string;
-
-  public_key: string;
-
-  status: 'revoked';
-}
-
-/**
- * A Farcaster signer status response when the signer is pending approval.
- */
-export interface FarcasterSignerStatusPendingApproval {
-  public_key: string;
-
-  status: 'pending_approval';
-}
-
-/**
- * The response body from initiating a Farcaster signer connection.
- */
-export type FarcasterSignerInitResponseBody =
-  | FarcasterSignerInitPendingApproval
-  | FarcasterSignerApproved
-  | FarcasterSignerRevoked;
-
-/**
- * The response body from checking the status of a Farcaster signer connection.
- */
-export type FarcasterSignerStatusResponseBody =
-  | FarcasterSignerStatusPendingApproval
-  | FarcasterSignerApproved
-  | FarcasterSignerRevoked;
-
-/**
- * The input for refreshing a session or logging out.
- */
-export interface OptionalRefreshTokenInput {
-  refresh_token?: string;
-}
-
-/**
- * The response body for verifying a MFA code.
- */
-export interface MfaVerifyResponseBody {
-  token: string;
-}
-
-/**
- * Input for verifying SMS MFA.
- */
-export interface MfaSMSInitVerifyInput {
-  action: 'verify';
-}
-
-/**
- * Input for enrolling SMS MFA.
- */
-export interface MfaSMSInitEnrollInput {
-  action: 'enroll';
-
-  phoneNumber: string;
-}
-
-/**
- * The request body for initiating a SMS MFA flow.
- */
-export type MfaSMSInitRequestBody = MfaSMSInitVerifyInput | MfaSMSInitEnrollInput;
-
-/**
- * The request body for enrolling a SMS MFA code.
- */
-export interface MfaSMSEnrollRequestBody {
-  code: string;
-
-  phoneNumber: string;
-}
-
-/**
- * The request body for verifying a SMS MFA code.
- */
-export interface MfaSMSVerifyRequestBody {
-  code: string;
-}
-
-/**
- * The input for verifying a TOTP MFA code.
- */
-export interface MfaTotpInput {
-  code: string;
-}
-
-/**
- * The response body for initializing a TOTP MFA code.
- */
-export interface MfaTotpInitResponseBody {
-  totpAuthUrl: string;
-
-  totpSecret: string;
-}
-
-/**
- * The request body for initiating a passkey MFA flow.
- */
-export interface MfaPasskeyInitRequestBody {
-  relying_party?: string;
-}
-
-/**
- * The response body for initializing a passkey MFA flow.
- */
-export interface MfaPasskeyInitResponseBody {
   /**
-   * WebAuthn authentication options as defined by the Web Authentication
-   * specification.
+   * Auth result object returned by Telegram when a user authenticates using a mini
+   * app.
    */
-  options: PasskeyAuthenticatorVerifyOptions;
-
-  relying_party?: string;
+  telegram_web_app_data?: TelegramWebAppData;
 }
 
 /**
- * The request body for verifying a passkey MFA flow.
+ * Input for unlinking a passkey credential.
  */
-export interface MfaPasskeyVerifyRequestBody {
-  /**
-   * WebAuthn authentication response as defined by the Web Authentication
-   * specification.
-   */
-  authenticator_response: PasskeyAuthenticatorVerifyResponse;
+export interface UnlinkPasskeyInput {
+  credential_id: string;
 
-  relying_party?: string;
-}
-
-/**
- * The request body for enrolling a passkey MFA flow.
- */
-export interface MfaPasskeyEnrollmentRequestBody {
-  credential_ids: Array<string>;
-
-  remove_for_login?: boolean;
+  remove_as_mfa?: boolean;
 }
 
 export declare namespace ClientAuth {
   export {
-    type AuthenticateModeOption as AuthenticateModeOption,
-    type AuthenticateMode as AuthenticateMode,
-    type ExternalOAuthProviderID as ExternalOAuthProviderID,
-    type PrivyOAuthProviderID as PrivyOAuthProviderID,
-    type CustomOAuthProviderID as CustomOAuthProviderID,
-    type OAuthProviderID as OAuthProviderID,
-    type BridgeOnrampProvider as BridgeOnrampProvider,
-    type OnrampProvider as OnrampProvider,
-    type PasskeyCredPropsResult as PasskeyCredPropsResult,
-    type PasskeyClientExtensionResults as PasskeyClientExtensionResults,
-    type PasskeyCredentialDescriptor as PasskeyCredentialDescriptor,
-    type PasskeyRelyingParty as PasskeyRelyingParty,
-    type PasskeyUser as PasskeyUser,
-    type PasskeyPubKeyCredParam as PasskeyPubKeyCredParam,
-    type PasskeyAuthenticatorSelection as PasskeyAuthenticatorSelection,
-    type PasskeyEnrollmentExtensions as PasskeyEnrollmentExtensions,
-    type PasskeyAttestationResponse as PasskeyAttestationResponse,
-    type PasskeyAuthenticatorEnrollmentOptions as PasskeyAuthenticatorEnrollmentOptions,
-    type PasskeyAuthenticatorEnrollmentResponse as PasskeyAuthenticatorEnrollmentResponse,
-    type ResponsePasskeyInitLink as ResponsePasskeyInitLink,
-    type ResponsePasskeyInitRegister as ResponsePasskeyInitRegister,
-    type PasskeyLinkInput as PasskeyLinkInput,
-    type PasskeyRegisterInput as PasskeyRegisterInput,
-    type PasskeyInitInput as PasskeyInitInput,
-    type UnlinkPasskeyInput as UnlinkPasskeyInput,
-    type PasskeyVerifyExtensions as PasskeyVerifyExtensions,
-    type PasskeyAssertionResponse as PasskeyAssertionResponse,
-    type PasskeyAuthenticatorVerifyOptions as PasskeyAuthenticatorVerifyOptions,
-    type PasskeyAuthenticatorVerifyResponse as PasskeyAuthenticatorVerifyResponse,
-    type ResponsePasskeyInitAuthenticate as ResponsePasskeyInitAuthenticate,
-    type PasskeyAuthenticateInput as PasskeyAuthenticateInput,
-    type PasswordlessLinkRequestBody as PasswordlessLinkRequestBody,
-    type PasswordlessInitRequestBody as PasswordlessInitRequestBody,
-    type PasswordlessUnlinkRequestBody as PasswordlessUnlinkRequestBody,
-    type PasswordlessUpdateRequestBody as PasswordlessUpdateRequestBody,
-    type PasswordlessAuthenticateRequestBody as PasswordlessAuthenticateRequestBody,
-    type PasswordlessTransferRequestBody as PasswordlessTransferRequestBody,
-    type PasswordlessSMSLinkRequestBody as PasswordlessSMSLinkRequestBody,
-    type PasswordlessSMSInitRequestBody as PasswordlessSMSInitRequestBody,
-    type PasswordlessSMSUnlinkRequestBody as PasswordlessSMSUnlinkRequestBody,
-    type PasswordlessSMSUpdateRequestBody as PasswordlessSMSUpdateRequestBody,
-    type PasswordlessSMSAuthenticateRequestBody as PasswordlessSMSAuthenticateRequestBody,
-    type PasswordlessSMSTransferRequestBody as PasswordlessSMSTransferRequestBody,
     type AuthenticateJwtInput as AuthenticateJwtInput,
-    type LinkJwtInput as LinkJwtInput,
+    type AuthenticateMode as AuthenticateMode,
+    type AuthenticateModeOption as AuthenticateModeOption,
+    type AuthenticateSiweInput as AuthenticateSiweInput,
+    type AuthenticateSiwsInput as AuthenticateSiwsInput,
+    type BridgeBrlFiatVirtualAccountDepositInstructions as BridgeBrlFiatVirtualAccountDepositInstructions,
+    type BridgeDestinationAsset as BridgeDestinationAsset,
+    type BridgeEurFiatVirtualAccountDepositInstructions as BridgeEurFiatVirtualAccountDepositInstructions,
+    type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
+    type BridgeFiatRejectionReason as BridgeFiatRejectionReason,
+    type BridgeFiatVirtualAccountDepositInstructions as BridgeFiatVirtualAccountDepositInstructions,
+    type BridgeFiatVirtualAccountDestination as BridgeFiatVirtualAccountDestination,
+    type BridgeFiatVirtualAccountRequest as BridgeFiatVirtualAccountRequest,
+    type BridgeFiatVirtualAccountResponse as BridgeFiatVirtualAccountResponse,
+    type BridgeFiatVirtualAccountSource as BridgeFiatVirtualAccountSource,
+    type BridgeGbpFiatVirtualAccountDepositInstructions as BridgeGbpFiatVirtualAccountDepositInstructions,
+    type BridgeMxnFiatVirtualAccountDepositInstructions as BridgeMxnFiatVirtualAccountDepositInstructions,
+    type BridgeOnrampProvider as BridgeOnrampProvider,
+    type BridgeSandboxFiatCustomerResponse as BridgeSandboxFiatCustomerResponse,
+    type BridgeSandboxFiatVirtualAccountRequest as BridgeSandboxFiatVirtualAccountRequest,
+    type BridgeSandboxFiatVirtualAccountResponse as BridgeSandboxFiatVirtualAccountResponse,
+    type BridgeSourceAsset as BridgeSourceAsset,
+    type BridgeUsdFiatVirtualAccountDepositInstructions as BridgeUsdFiatVirtualAccountDepositInstructions,
+    type Caip2ChainID as Caip2ChainID,
+    type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,
+    type CryptoCurrencyCode as CryptoCurrencyCode,
     type CustomJwtAuthenticateRequestBody as CustomJwtAuthenticateRequestBody,
     type CustomJwtLinkRequestBody as CustomJwtLinkRequestBody,
-    type GetFiatCustomerRequestInput as GetFiatCustomerRequestInput,
-    type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,
-    type BridgeFiatRejectionReason as BridgeFiatRejectionReason,
-    type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
-    type BridgeSandboxFiatCustomerResponse as BridgeSandboxFiatCustomerResponse,
-    type FiatCustomerResponse as FiatCustomerResponse,
-    type FiatCurrencyCode as FiatCurrencyCode,
-    type CryptoCurrencyCode as CryptoCurrencyCode,
-    type Caip2ChainID as Caip2ChainID,
+    type CustomOAuthProviderID as CustomOAuthProviderID,
+    type ExternalOAuthProviderID as ExternalOAuthProviderID,
+    type FarcasterAuthenticateInput as FarcasterAuthenticateInput,
+    type FarcasterAuthenticateRequestBody as FarcasterAuthenticateRequestBody,
+    type FarcasterConnectInitResponse as FarcasterConnectInitResponse,
+    type FarcasterConnectInitResponseBody as FarcasterConnectInitResponseBody,
+    type FarcasterConnectStatusCompletedResponse as FarcasterConnectStatusCompletedResponse,
+    type FarcasterConnectStatusCompletedResponseBody as FarcasterConnectStatusCompletedResponseBody,
+    type FarcasterConnectStatusPendingResponse as FarcasterConnectStatusPendingResponse,
+    type FarcasterConnectStatusPendingResponseBody as FarcasterConnectStatusPendingResponseBody,
+    type FarcasterInitInput as FarcasterInitInput,
+    type FarcasterInitRequestBody as FarcasterInitRequestBody,
+    type FarcasterLinkInput as FarcasterLinkInput,
+    type FarcasterLinkRequestBody as FarcasterLinkRequestBody,
+    type FarcasterSignerApproved as FarcasterSignerApproved,
+    type FarcasterSignerInitPendingApproval as FarcasterSignerInitPendingApproval,
+    type FarcasterSignerInitRequestBody as FarcasterSignerInitRequestBody,
+    type FarcasterSignerInitResponseBody as FarcasterSignerInitResponseBody,
+    type FarcasterSignerRevoked as FarcasterSignerRevoked,
+    type FarcasterSignerStatusPendingApproval as FarcasterSignerStatusPendingApproval,
+    type FarcasterSignerStatusResponseBody as FarcasterSignerStatusResponseBody,
+    type FarcasterUnlinkInput as FarcasterUnlinkInput,
+    type FarcasterUnlinkRequestBody as FarcasterUnlinkRequestBody,
+    type FarcasterV2AuthenticateInput as FarcasterV2AuthenticateInput,
+    type FarcasterV2AuthenticateRequestBody as FarcasterV2AuthenticateRequestBody,
+    type FarcasterV2InitInput as FarcasterV2InitInput,
+    type FarcasterV2InitRequestBody as FarcasterV2InitRequestBody,
+    type FarcasterV2InitResponse as FarcasterV2InitResponse,
+    type FarcasterV2InitResponseBody as FarcasterV2InitResponseBody,
     type FiatAmount as FiatAmount,
-    type FiatOnrampSource as FiatOnrampSource,
+    type FiatCurrencyCode as FiatCurrencyCode,
+    type FiatCustomerResponse as FiatCustomerResponse,
     type FiatOnrampDestination as FiatOnrampDestination,
     type FiatOnrampEnvironment as FiatOnrampEnvironment,
     type FiatOnrampProvider as FiatOnrampProvider,
-    type GetFiatOnrampQuotesInput as GetFiatOnrampQuotesInput,
-    type FiatOnrampQuote as FiatOnrampQuote,
     type FiatOnrampProviderError as FiatOnrampProviderError,
-    type GetFiatOnrampQuotesResponse as GetFiatOnrampQuotesResponse,
-    type GetFiatOnrampURLInput as GetFiatOnrampURLInput,
-    type GetFiatOnrampURLResponse as GetFiatOnrampURLResponse,
+    type FiatOnrampQuote as FiatOnrampQuote,
+    type FiatOnrampSource as FiatOnrampSource,
     type FiatOnrampTransactionStatus as FiatOnrampTransactionStatus,
+    type FiatVirtualAccountRequest as FiatVirtualAccountRequest,
+    type FiatVirtualAccountResponse as FiatVirtualAccountResponse,
+    type GetFiatCustomerRequestInput as GetFiatCustomerRequestInput,
+    type GetFiatOnrampQuotesInput as GetFiatOnrampQuotesInput,
+    type GetFiatOnrampQuotesResponse as GetFiatOnrampQuotesResponse,
     type GetFiatOnrampTransactionStatusInput as GetFiatOnrampTransactionStatusInput,
     type GetFiatOnrampTransactionStatusResponse as GetFiatOnrampTransactionStatusResponse,
-    type BridgeDestinationAsset as BridgeDestinationAsset,
-    type BridgeSourceAsset as BridgeSourceAsset,
-    type BridgeFiatVirtualAccountSource as BridgeFiatVirtualAccountSource,
-    type BridgeFiatVirtualAccountDestination as BridgeFiatVirtualAccountDestination,
-    type BridgeFiatVirtualAccountRequest as BridgeFiatVirtualAccountRequest,
-    type BridgeSandboxFiatVirtualAccountRequest as BridgeSandboxFiatVirtualAccountRequest,
-    type FiatVirtualAccountRequest as FiatVirtualAccountRequest,
-    type BridgeUsdFiatVirtualAccountDepositInstructions as BridgeUsdFiatVirtualAccountDepositInstructions,
-    type BridgeEurFiatVirtualAccountDepositInstructions as BridgeEurFiatVirtualAccountDepositInstructions,
-    type BridgeMxnFiatVirtualAccountDepositInstructions as BridgeMxnFiatVirtualAccountDepositInstructions,
-    type BridgeBrlFiatVirtualAccountDepositInstructions as BridgeBrlFiatVirtualAccountDepositInstructions,
-    type BridgeGbpFiatVirtualAccountDepositInstructions as BridgeGbpFiatVirtualAccountDepositInstructions,
-    type BridgeFiatVirtualAccountDepositInstructions as BridgeFiatVirtualAccountDepositInstructions,
-    type BridgeFiatVirtualAccountResponse as BridgeFiatVirtualAccountResponse,
-    type BridgeSandboxFiatVirtualAccountResponse as BridgeSandboxFiatVirtualAccountResponse,
-    type FiatVirtualAccountResponse as FiatVirtualAccountResponse,
+    type GetFiatOnrampURLInput as GetFiatOnrampURLInput,
+    type GetFiatOnrampURLResponse as GetFiatOnrampURLResponse,
     type GuestAuthenticateRequestBody as GuestAuthenticateRequestBody,
-    type OAuthCodeType as OAuthCodeType,
-    type OAuthInitRequestBody as OAuthInitRequestBody,
-    type OAuthInitResponseBody as OAuthInitResponseBody,
-    type OAuthAuthenticateRequestBody as OAuthAuthenticateRequestBody,
-    type OAuthLinkRequestBody as OAuthLinkRequestBody,
-    type OAuthUnlinkRequestBody as OAuthUnlinkRequestBody,
-    type OAuthLinkResponseBody as OAuthLinkResponseBody,
-    type OAuthTransferUserInfoMeta as OAuthTransferUserInfoMeta,
-    type OAuthTransferUserInfo as OAuthTransferUserInfo,
-    type OAuthTransferRequestBody as OAuthTransferRequestBody,
-    type OAuthAuthorizationCodeRequestBody as OAuthAuthorizationCodeRequestBody,
-    type OAuthVerifyRequestBody as OAuthVerifyRequestBody,
-    type OAuthVerifyResponseBody as OAuthVerifyResponseBody,
-    type SiweInput as SiweInput,
-    type SmartWalletSiweInput as SmartWalletSiweInput,
-    type AuthenticateSiweInput as AuthenticateSiweInput,
-    type SiweAddressInput as SiweAddressInput,
-    type SiweInitInput as SiweInitInput,
-    type SiweNonce as SiweNonce,
-    type TransferSiweInput as TransferSiweInput,
-    type SiweInitRequestBody as SiweInitRequestBody,
-    type SiweInitResponseBody as SiweInitResponseBody,
-    type SiweAuthenticateRequestBody as SiweAuthenticateRequestBody,
-    type SiweLinkRequestBody as SiweLinkRequestBody,
-    type SiweLinkSmartWalletRequestBody as SiweLinkSmartWalletRequestBody,
-    type SiweUnlinkRequestBody as SiweUnlinkRequestBody,
-    type SiwsInput as SiwsInput,
-    type AuthenticateSiwsInput as AuthenticateSiwsInput,
-    type SiwsAddressInput as SiwsAddressInput,
-    type SiwsInitInput as SiwsInitInput,
-    type SiwsNonce as SiwsNonce,
-    type TransferSiwsInput as TransferSiwsInput,
-    type SiwsInitRequestBody as SiwsInitRequestBody,
-    type SiwsInitResponseBody as SiwsInitResponseBody,
-    type SiwsAuthenticateRequestBody as SiwsAuthenticateRequestBody,
-    type SiwsLinkRequestBody as SiwsLinkRequestBody,
-    type SiwsUnlinkRequestBody as SiwsUnlinkRequestBody,
-    type TelegramAuthResult as TelegramAuthResult,
-    type TelegramWebAppData as TelegramWebAppData,
-    type TelegramAuthenticateInput as TelegramAuthenticateInput,
-    type TelegramUnlinkInput as TelegramUnlinkInput,
-    type TransferTelegramInput as TransferTelegramInput,
-    type TelegramAuthenticateRequestBody as TelegramAuthenticateRequestBody,
-    type TelegramLinkRequestBody as TelegramLinkRequestBody,
-    type TelegramUnlinkRequestBody as TelegramUnlinkRequestBody,
-    type FarcasterConnectInitResponse as FarcasterConnectInitResponse,
-    type FarcasterConnectStatusCompletedResponse as FarcasterConnectStatusCompletedResponse,
-    type FarcasterConnectStatusPendingResponse as FarcasterConnectStatusPendingResponse,
-    type FarcasterAuthenticateInput as FarcasterAuthenticateInput,
-    type FarcasterLinkInput as FarcasterLinkInput,
-    type FarcasterInitInput as FarcasterInitInput,
-    type FarcasterUnlinkInput as FarcasterUnlinkInput,
-    type TransferFarcasterInput as TransferFarcasterInput,
-    type FarcasterV2InitInput as FarcasterV2InitInput,
-    type FarcasterV2InitResponse as FarcasterV2InitResponse,
-    type FarcasterV2AuthenticateInput as FarcasterV2AuthenticateInput,
-    type FarcasterAuthenticateRequestBody as FarcasterAuthenticateRequestBody,
-    type FarcasterConnectStatusCompletedResponseBody as FarcasterConnectStatusCompletedResponseBody,
-    type FarcasterConnectStatusPendingResponseBody as FarcasterConnectStatusPendingResponseBody,
-    type FarcasterUnlinkRequestBody as FarcasterUnlinkRequestBody,
-    type FarcasterInitRequestBody as FarcasterInitRequestBody,
-    type FarcasterConnectInitResponseBody as FarcasterConnectInitResponseBody,
-    type FarcasterLinkRequestBody as FarcasterLinkRequestBody,
-    type FarcasterV2InitRequestBody as FarcasterV2InitRequestBody,
-    type FarcasterV2InitResponseBody as FarcasterV2InitResponseBody,
-    type FarcasterV2AuthenticateRequestBody as FarcasterV2AuthenticateRequestBody,
-    type FarcasterSignerInitRequestBody as FarcasterSignerInitRequestBody,
-    type FarcasterSignerInitPendingApproval as FarcasterSignerInitPendingApproval,
-    type FarcasterSignerApproved as FarcasterSignerApproved,
-    type FarcasterSignerRevoked as FarcasterSignerRevoked,
-    type FarcasterSignerStatusPendingApproval as FarcasterSignerStatusPendingApproval,
-    type FarcasterSignerInitResponseBody as FarcasterSignerInitResponseBody,
-    type FarcasterSignerStatusResponseBody as FarcasterSignerStatusResponseBody,
-    type OptionalRefreshTokenInput as OptionalRefreshTokenInput,
-    type MfaVerifyResponseBody as MfaVerifyResponseBody,
-    type MfaSMSInitVerifyInput as MfaSMSInitVerifyInput,
-    type MfaSMSInitEnrollInput as MfaSMSInitEnrollInput,
-    type MfaSMSInitRequestBody as MfaSMSInitRequestBody,
-    type MfaSMSEnrollRequestBody as MfaSMSEnrollRequestBody,
-    type MfaSMSVerifyRequestBody as MfaSMSVerifyRequestBody,
-    type MfaTotpInput as MfaTotpInput,
-    type MfaTotpInitResponseBody as MfaTotpInitResponseBody,
+    type LinkJwtInput as LinkJwtInput,
+    type MfaPasskeyEnrollmentRequestBody as MfaPasskeyEnrollmentRequestBody,
     type MfaPasskeyInitRequestBody as MfaPasskeyInitRequestBody,
     type MfaPasskeyInitResponseBody as MfaPasskeyInitResponseBody,
     type MfaPasskeyVerifyRequestBody as MfaPasskeyVerifyRequestBody,
-    type MfaPasskeyEnrollmentRequestBody as MfaPasskeyEnrollmentRequestBody,
+    type MfaSMSEnrollRequestBody as MfaSMSEnrollRequestBody,
+    type MfaSMSInitEnrollInput as MfaSMSInitEnrollInput,
+    type MfaSMSInitRequestBody as MfaSMSInitRequestBody,
+    type MfaSMSInitVerifyInput as MfaSMSInitVerifyInput,
+    type MfaSMSVerifyRequestBody as MfaSMSVerifyRequestBody,
+    type MfaTotpInitResponseBody as MfaTotpInitResponseBody,
+    type MfaTotpInput as MfaTotpInput,
+    type MfaVerifyResponseBody as MfaVerifyResponseBody,
+    type OAuthAuthenticateRequestBody as OAuthAuthenticateRequestBody,
+    type OAuthAuthorizationCodeRequestBody as OAuthAuthorizationCodeRequestBody,
+    type OAuthCodeType as OAuthCodeType,
+    type OAuthInitRequestBody as OAuthInitRequestBody,
+    type OAuthInitResponseBody as OAuthInitResponseBody,
+    type OAuthLinkRequestBody as OAuthLinkRequestBody,
+    type OAuthLinkResponseBody as OAuthLinkResponseBody,
+    type OAuthProviderID as OAuthProviderID,
+    type OAuthTransferRequestBody as OAuthTransferRequestBody,
+    type OAuthTransferUserInfo as OAuthTransferUserInfo,
+    type OAuthTransferUserInfoMeta as OAuthTransferUserInfoMeta,
+    type OAuthUnlinkRequestBody as OAuthUnlinkRequestBody,
+    type OAuthVerifyRequestBody as OAuthVerifyRequestBody,
+    type OAuthVerifyResponseBody as OAuthVerifyResponseBody,
+    type OnrampProvider as OnrampProvider,
+    type OptionalRefreshTokenInput as OptionalRefreshTokenInput,
+    type PasskeyAssertionResponse as PasskeyAssertionResponse,
+    type PasskeyAttestationResponse as PasskeyAttestationResponse,
+    type PasskeyAuthenticateInput as PasskeyAuthenticateInput,
+    type PasskeyAuthenticatorEnrollmentOptions as PasskeyAuthenticatorEnrollmentOptions,
+    type PasskeyAuthenticatorEnrollmentResponse as PasskeyAuthenticatorEnrollmentResponse,
+    type PasskeyAuthenticatorSelection as PasskeyAuthenticatorSelection,
+    type PasskeyAuthenticatorVerifyOptions as PasskeyAuthenticatorVerifyOptions,
+    type PasskeyAuthenticatorVerifyResponse as PasskeyAuthenticatorVerifyResponse,
+    type PasskeyClientExtensionResults as PasskeyClientExtensionResults,
+    type PasskeyCredPropsResult as PasskeyCredPropsResult,
+    type PasskeyCredentialDescriptor as PasskeyCredentialDescriptor,
+    type PasskeyEnrollmentExtensions as PasskeyEnrollmentExtensions,
+    type PasskeyInitInput as PasskeyInitInput,
+    type PasskeyLinkInput as PasskeyLinkInput,
+    type PasskeyPubKeyCredParam as PasskeyPubKeyCredParam,
+    type PasskeyRegisterInput as PasskeyRegisterInput,
+    type PasskeyRelyingParty as PasskeyRelyingParty,
+    type PasskeyUser as PasskeyUser,
+    type PasskeyVerifyExtensions as PasskeyVerifyExtensions,
+    type PasswordlessAuthenticateRequestBody as PasswordlessAuthenticateRequestBody,
+    type PasswordlessInitRequestBody as PasswordlessInitRequestBody,
+    type PasswordlessLinkRequestBody as PasswordlessLinkRequestBody,
+    type PasswordlessSMSAuthenticateRequestBody as PasswordlessSMSAuthenticateRequestBody,
+    type PasswordlessSMSInitRequestBody as PasswordlessSMSInitRequestBody,
+    type PasswordlessSMSLinkRequestBody as PasswordlessSMSLinkRequestBody,
+    type PasswordlessSMSTransferRequestBody as PasswordlessSMSTransferRequestBody,
+    type PasswordlessSMSUnlinkRequestBody as PasswordlessSMSUnlinkRequestBody,
+    type PasswordlessSMSUpdateRequestBody as PasswordlessSMSUpdateRequestBody,
+    type PasswordlessTransferRequestBody as PasswordlessTransferRequestBody,
+    type PasswordlessUnlinkRequestBody as PasswordlessUnlinkRequestBody,
+    type PasswordlessUpdateRequestBody as PasswordlessUpdateRequestBody,
+    type PrivyOAuthProviderID as PrivyOAuthProviderID,
+    type ResponsePasskeyInitAuthenticate as ResponsePasskeyInitAuthenticate,
+    type ResponsePasskeyInitLink as ResponsePasskeyInitLink,
+    type ResponsePasskeyInitRegister as ResponsePasskeyInitRegister,
+    type SiweAddressInput as SiweAddressInput,
+    type SiweAuthenticateRequestBody as SiweAuthenticateRequestBody,
+    type SiweInitInput as SiweInitInput,
+    type SiweInitRequestBody as SiweInitRequestBody,
+    type SiweInitResponseBody as SiweInitResponseBody,
+    type SiweInput as SiweInput,
+    type SiweLinkRequestBody as SiweLinkRequestBody,
+    type SiweLinkSmartWalletRequestBody as SiweLinkSmartWalletRequestBody,
+    type SiweNonce as SiweNonce,
+    type SiweUnlinkRequestBody as SiweUnlinkRequestBody,
+    type SiwsAddressInput as SiwsAddressInput,
+    type SiwsAuthenticateRequestBody as SiwsAuthenticateRequestBody,
+    type SiwsInitInput as SiwsInitInput,
+    type SiwsInitRequestBody as SiwsInitRequestBody,
+    type SiwsInitResponseBody as SiwsInitResponseBody,
+    type SiwsInput as SiwsInput,
+    type SiwsLinkRequestBody as SiwsLinkRequestBody,
+    type SiwsNonce as SiwsNonce,
+    type SiwsUnlinkRequestBody as SiwsUnlinkRequestBody,
+    type SmartWalletSiweInput as SmartWalletSiweInput,
+    type TelegramAuthResult as TelegramAuthResult,
+    type TelegramAuthenticateInput as TelegramAuthenticateInput,
+    type TelegramAuthenticateRequestBody as TelegramAuthenticateRequestBody,
+    type TelegramLinkRequestBody as TelegramLinkRequestBody,
+    type TelegramUnlinkInput as TelegramUnlinkInput,
+    type TelegramUnlinkRequestBody as TelegramUnlinkRequestBody,
+    type TelegramWebAppData as TelegramWebAppData,
+    type TransferFarcasterInput as TransferFarcasterInput,
+    type TransferSiweInput as TransferSiweInput,
+    type TransferSiwsInput as TransferSiwsInput,
+    type TransferTelegramInput as TransferTelegramInput,
+    type UnlinkPasskeyInput as UnlinkPasskeyInput,
   };
 }

@@ -6,6 +6,16 @@ import * as KrakenEmbedAPI from './kraken-embed';
 export class KrakenEmbed extends APIResource {}
 
 /**
+ * Current day profit and loss for a portfolio, calculated from the most recent
+ * available balance.
+ */
+export interface KrakenEmbedCurrentDayPnl {
+  pnl: string;
+
+  since: string;
+}
+
+/**
  * Query parameters for listing and filtering available assets.
  */
 export interface KrakenEmbedGetAssetListQueryParamsSchema {
@@ -68,16 +78,6 @@ export interface KrakenEmbedGetPortfolioSummaryQueryParams {
   'include[current_day_pnl]'?: 'true' | 'false';
 
   quote?: string;
-}
-
-/**
- * Current day profit and loss for a portfolio, calculated from the most recent
- * available balance.
- */
-export interface KrakenEmbedCurrentDayPnl {
-  pnl: string;
-
-  since: string;
 }
 
 /**
@@ -171,10 +171,10 @@ export interface KrakenEmbedGetQuoteQueryParams {
 
 export declare namespace KrakenEmbed {
   export {
+    type KrakenEmbedCurrentDayPnl as KrakenEmbedCurrentDayPnl,
     type KrakenEmbedGetAssetListQueryParamsSchema as KrakenEmbedGetAssetListQueryParamsSchema,
     type KrakenEmbedGetPortfolioDetailsQueryParamsSchema as KrakenEmbedGetPortfolioDetailsQueryParamsSchema,
     type KrakenEmbedGetPortfolioSummaryQueryParams as KrakenEmbedGetPortfolioSummaryQueryParams,
-    type KrakenEmbedCurrentDayPnl as KrakenEmbedCurrentDayPnl,
     type KrakenEmbedGetPortfolioSummaryResponse as KrakenEmbedGetPortfolioSummaryResponse,
     type KrakenEmbedGetPortfolioTransactionsQueryParamsSchema as KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
     type KrakenEmbedGetQuoteQueryParams as KrakenEmbedGetQuoteQueryParams,

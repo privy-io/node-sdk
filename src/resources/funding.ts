@@ -26,23 +26,9 @@ export type CoinbaseBlockchain =
 export type CoinbaseEthereumAsset = 'eth' | 'ETH' | 'USDC' | 'POL' | 'MON';
 
 /**
- * A Solana asset supported by Coinbase on-ramp.
- */
-export type CoinbaseSolanaAsset = 'SOL' | 'USDC';
-
-/**
  * An Ethereum address with supported blockchains for Coinbase on-ramp.
  */
 export interface CoinbaseOnRampEthereumAddress {
-  address: string;
-
-  blockchains: Array<CoinbaseBlockchain>;
-}
-
-/**
- * A Solana address with supported blockchains for Coinbase on-ramp.
- */
-export interface CoinbaseOnRampSolanaAddress {
   address: string;
 
   blockchains: Array<CoinbaseBlockchain>;
@@ -55,15 +41,6 @@ export interface CoinbaseOnRampInitEthereumInput {
   addresses: Array<CoinbaseOnRampEthereumAddress>;
 
   assets?: Array<CoinbaseEthereumAsset>;
-}
-
-/**
- * Input for initializing a Coinbase on-ramp session for Solana.
- */
-export interface CoinbaseOnRampInitSolanaInput {
-  addresses: Array<CoinbaseOnRampSolanaAddress>;
-
-  assets?: Array<CoinbaseSolanaAsset>;
 }
 
 /**
@@ -85,6 +62,24 @@ export interface CoinbaseOnRampInitResponse {
 }
 
 /**
+ * Input for initializing a Coinbase on-ramp session for Solana.
+ */
+export interface CoinbaseOnRampInitSolanaInput {
+  addresses: Array<CoinbaseOnRampSolanaAddress>;
+
+  assets?: Array<CoinbaseSolanaAsset>;
+}
+
+/**
+ * A Solana address with supported blockchains for Coinbase on-ramp.
+ */
+export interface CoinbaseOnRampSolanaAddress {
+  address: string;
+
+  blockchains: Array<CoinbaseBlockchain>;
+}
+
+/**
  * Status of a Coinbase on-ramp session.
  */
 export type CoinbaseOnRampStatus = 'pending' | 'success' | 'failure';
@@ -100,18 +95,9 @@ export interface CoinbaseOnRampStatusResponse {
 }
 
 /**
- * A payment method supported by Moonpay on-ramp.
+ * A Solana asset supported by Coinbase on-ramp.
  */
-export type MoonpayPaymentMethod =
-  | 'ach_bank_transfer'
-  | 'credit_debit_card'
-  | 'gbp_bank_transfer'
-  | 'gbp_open_banking_payment'
-  | 'mobile_wallet'
-  | 'sepa_bank_transfer'
-  | 'sepa_open_banking_payment'
-  | 'pix_instant_payment'
-  | 'yellow_card_bank_transfer';
+export type CoinbaseSolanaAsset = 'SOL' | 'USDC';
 
 /**
  * A Moonpay currency code for an Ethereum-compatible chain asset.
@@ -157,28 +143,6 @@ export type MoonpayCurrencyCode =
   | 'WBTC';
 
 /**
- * The theme for the Moonpay on-ramp widget.
- */
-export type MoonpayUiTheme = 'light' | 'dark';
-
-/**
- * UI configuration for the Moonpay on-ramp widget.
- */
-export interface MoonpayUiConfig {
-  accentColor?: string;
-
-  /**
-   * The theme for the Moonpay on-ramp widget.
-   */
-  theme?: MoonpayUiTheme;
-}
-
-/**
- * A Moonpay currency code for a Solana asset.
- */
-export type MoonpaySolanaCurrencyCode = 'SOL' | 'USDC_SOL';
-
-/**
  * Configuration for a Moonpay fiat on-ramp for an Ethereum-compatible chain.
  */
 export interface MoonpayFiatOnRampEthereumConfig {
@@ -186,30 +150,6 @@ export interface MoonpayFiatOnRampEthereumConfig {
    * A Moonpay currency code for an Ethereum-compatible chain asset.
    */
   currencyCode?: MoonpayCurrencyCode;
-
-  email?: string;
-
-  /**
-   * A payment method supported by Moonpay on-ramp.
-   */
-  paymentMethod?: MoonpayPaymentMethod;
-
-  quoteCurrencyAmount?: number;
-
-  /**
-   * UI configuration for the Moonpay on-ramp widget.
-   */
-  uiConfig?: MoonpayUiConfig;
-}
-
-/**
- * Configuration for a Moonpay fiat on-ramp for Solana.
- */
-export interface MoonpayFiatOnRampSolanaConfig {
-  /**
-   * A Moonpay currency code for a Solana asset.
-   */
-  currencyCode?: MoonpaySolanaCurrencyCode;
 
   email?: string;
 
@@ -236,6 +176,30 @@ export interface MoonpayFiatOnRampEthereumInput {
    * Configuration for a Moonpay fiat on-ramp for an Ethereum-compatible chain.
    */
   config: MoonpayFiatOnRampEthereumConfig;
+}
+
+/**
+ * Configuration for a Moonpay fiat on-ramp for Solana.
+ */
+export interface MoonpayFiatOnRampSolanaConfig {
+  /**
+   * A Moonpay currency code for a Solana asset.
+   */
+  currencyCode?: MoonpaySolanaCurrencyCode;
+
+  email?: string;
+
+  /**
+   * A payment method supported by Moonpay on-ramp.
+   */
+  paymentMethod?: MoonpayPaymentMethod;
+
+  quoteCurrencyAmount?: number;
+
+  /**
+   * UI configuration for the Moonpay on-ramp widget.
+   */
+  uiConfig?: MoonpayUiConfig;
 }
 
 /**
@@ -289,30 +253,66 @@ export interface MoonpayOnRampSignResponse {
   signedUrl: string;
 }
 
+/**
+ * A payment method supported by Moonpay on-ramp.
+ */
+export type MoonpayPaymentMethod =
+  | 'ach_bank_transfer'
+  | 'credit_debit_card'
+  | 'gbp_bank_transfer'
+  | 'gbp_open_banking_payment'
+  | 'mobile_wallet'
+  | 'sepa_bank_transfer'
+  | 'sepa_open_banking_payment'
+  | 'pix_instant_payment'
+  | 'yellow_card_bank_transfer';
+
+/**
+ * A Moonpay currency code for a Solana asset.
+ */
+export type MoonpaySolanaCurrencyCode = 'SOL' | 'USDC_SOL';
+
+/**
+ * UI configuration for the Moonpay on-ramp widget.
+ */
+export interface MoonpayUiConfig {
+  accentColor?: string;
+
+  /**
+   * The theme for the Moonpay on-ramp widget.
+   */
+  theme?: MoonpayUiTheme;
+}
+
+/**
+ * The theme for the Moonpay on-ramp widget.
+ */
+export type MoonpayUiTheme = 'light' | 'dark';
+
 export declare namespace Funding {
   export {
     type CoinbaseBlockchain as CoinbaseBlockchain,
     type CoinbaseEthereumAsset as CoinbaseEthereumAsset,
-    type CoinbaseSolanaAsset as CoinbaseSolanaAsset,
     type CoinbaseOnRampEthereumAddress as CoinbaseOnRampEthereumAddress,
-    type CoinbaseOnRampSolanaAddress as CoinbaseOnRampSolanaAddress,
     type CoinbaseOnRampInitEthereumInput as CoinbaseOnRampInitEthereumInput,
-    type CoinbaseOnRampInitSolanaInput as CoinbaseOnRampInitSolanaInput,
     type CoinbaseOnRampInitInput as CoinbaseOnRampInitInput,
     type CoinbaseOnRampInitResponse as CoinbaseOnRampInitResponse,
+    type CoinbaseOnRampInitSolanaInput as CoinbaseOnRampInitSolanaInput,
+    type CoinbaseOnRampSolanaAddress as CoinbaseOnRampSolanaAddress,
     type CoinbaseOnRampStatus as CoinbaseOnRampStatus,
     type CoinbaseOnRampStatusResponse as CoinbaseOnRampStatusResponse,
-    type MoonpayPaymentMethod as MoonpayPaymentMethod,
+    type CoinbaseSolanaAsset as CoinbaseSolanaAsset,
     type MoonpayCurrencyCode as MoonpayCurrencyCode,
-    type MoonpayUiTheme as MoonpayUiTheme,
-    type MoonpayUiConfig as MoonpayUiConfig,
-    type MoonpaySolanaCurrencyCode as MoonpaySolanaCurrencyCode,
     type MoonpayFiatOnRampEthereumConfig as MoonpayFiatOnRampEthereumConfig,
-    type MoonpayFiatOnRampSolanaConfig as MoonpayFiatOnRampSolanaConfig,
     type MoonpayFiatOnRampEthereumInput as MoonpayFiatOnRampEthereumInput,
+    type MoonpayFiatOnRampSolanaConfig as MoonpayFiatOnRampSolanaConfig,
     type MoonpayFiatOnRampSolanaInput as MoonpayFiatOnRampSolanaInput,
     type MoonpayOnRampSandboxConfig as MoonpayOnRampSandboxConfig,
     type MoonpayOnRampSignInput as MoonpayOnRampSignInput,
     type MoonpayOnRampSignResponse as MoonpayOnRampSignResponse,
+    type MoonpayPaymentMethod as MoonpayPaymentMethod,
+    type MoonpaySolanaCurrencyCode as MoonpaySolanaCurrencyCode,
+    type MoonpayUiConfig as MoonpayUiConfig,
+    type MoonpayUiTheme as MoonpayUiTheme,
   };
 }

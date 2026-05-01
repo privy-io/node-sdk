@@ -5,6 +5,26 @@ import { APIResource } from '../core/resource';
 export class Organizations extends APIResource {}
 
 /**
+ * Response returned when creating a new organization secret.
+ */
+export interface CreateOrganizationSecretResponse extends OrganizationSecretView {
+  /**
+   * The plaintext organization secret. Returned only at creation time.
+   */
+  organization_secret: string;
+}
+
+/**
+ * Request body for targeting a specific organization secret.
+ */
+export interface OrganizationSecretIDInput {
+  /**
+   * The organization secret ID.
+   */
+  secret_id: string;
+}
+
+/**
  * View of an organization secret for list and management endpoints.
  */
 export interface OrganizationSecretView {
@@ -35,30 +55,10 @@ export interface OrganizationSecretView {
 }
 
 /**
- * Response returned when creating a new organization secret.
- */
-export interface CreateOrganizationSecretResponse extends OrganizationSecretView {
-  /**
-   * The plaintext organization secret. Returned only at creation time.
-   */
-  organization_secret: string;
-}
-
-/**
  * Response returned when listing organization secrets for an account.
  */
 export interface OrganizationSecretsListResponse {
   data: Array<OrganizationSecretView>;
-}
-
-/**
- * Request body for targeting a specific organization secret.
- */
-export interface OrganizationSecretIDInput {
-  /**
-   * The organization secret ID.
-   */
-  secret_id: string;
 }
 
 /**
@@ -73,10 +73,10 @@ export interface UpdateOrganizationSecretSigningKeyInput extends OrganizationSec
 
 export declare namespace Organizations {
   export {
-    type OrganizationSecretView as OrganizationSecretView,
     type CreateOrganizationSecretResponse as CreateOrganizationSecretResponse,
-    type OrganizationSecretsListResponse as OrganizationSecretsListResponse,
     type OrganizationSecretIDInput as OrganizationSecretIDInput,
+    type OrganizationSecretView as OrganizationSecretView,
+    type OrganizationSecretsListResponse as OrganizationSecretsListResponse,
     type UpdateOrganizationSecretSigningKeyInput as UpdateOrganizationSecretSigningKeyInput,
   };
 }

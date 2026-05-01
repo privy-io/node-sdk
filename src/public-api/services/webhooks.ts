@@ -37,17 +37,24 @@ export class PrivyWebhooksService {
 
     const body = typeof payload === 'string' ? payload : JSON.stringify(payload);
 
-    const svixHeaders: Record<string, string> = headers
-      ? {
-          'svix-id': headers['svix-id'],
-          'svix-timestamp': headers['svix-timestamp'],
-          'svix-signature': headers['svix-signature'],
-        }
-      : {
-          'svix-id': svix!.id,
-          'svix-timestamp': svix!.timestamp,
-          'svix-signature': svix!.signature,
-        };
+    let svixHeaders: Record<string, string>;
+    if (headers) {
+      svixHeaders = {
+        'svix-id': headers['svix-id'],
+        'svix-timestamp': headers['svix-timestamp'],
+        'svix-signature': headers['svix-signature'],
+      };
+    } else if (svix) {
+      svixHeaders = {
+        'svix-id': svix.id,
+        'svix-timestamp': svix.timestamp,
+        'svix-signature': svix.signature,
+      };
+    } else {
+      throw new InvalidWebhookError(
+        'Webhook headers are required (svix-id, svix-timestamp, svix-signature).',
+      );
+    }
 
     try {
       const wh = new Webhook(secret);

@@ -1,9 +1,9 @@
 import { PrivyClient } from '@privy-io/node';
 
-function makeClient(overrides: {
-  disableRequestExpiry?: boolean;
-  defaultRequestExpiryMs?: number;
-}): { client: PrivyClient; captured: { request: Request | null } } {
+function makeClient(overrides: { disableRequestExpiry?: boolean; defaultRequestExpiryMs?: number }): {
+  client: PrivyClient;
+  captured: { request: Request | null };
+} {
   const captured: { request: Request | null } = { request: null };
   const fetchSpy: typeof fetch = async (input, init) => {
     const req = input instanceof Request ? input : new Request(input, init);

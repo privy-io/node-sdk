@@ -1,108 +1,93 @@
 import { Webhook } from 'svix';
 import { PrivyAPIError } from '../../core/error';
-import type {
-  UserCreatedWebhookPayload,
-  UserAuthenticatedWebhookPayload,
-  UserLinkedAccountWebhookPayload,
-  UserUnlinkedAccountWebhookPayload,
-  UserUpdatedAccountWebhookPayload,
-  UserTransferredAccountWebhookPayload,
-  UserWalletCreatedWebhookPayload,
-  TransactionBroadcastedWebhookPayload,
-  TransactionConfirmedWebhookPayload,
-  TransactionExecutionRevertedWebhookPayload,
-  TransactionStillPendingWebhookPayload,
-  TransactionFailedWebhookPayload,
-  TransactionReplacedWebhookPayload,
-  TransactionProviderErrorWebhookPayload,
-  FundsDepositedWebhookPayload,
-  FundsWithdrawnWebhookPayload,
-  PrivateKeyExportWebhookPayload,
-  WalletRecoverySetupWebhookPayload,
-  WalletRecoveredWebhookPayload,
-  MfaEnabledWebhookPayload,
-  MfaDisabledWebhookPayload,
-} from '../../resources/webhooks';
+import { Webhooks, type WebhookPayload } from '../../resources/webhooks';
 
-export type WebhookEvent =
-  | UserCreatedWebhookPayload
-  | UserAuthenticatedWebhookPayload
-  | UserLinkedAccountWebhookPayload
-  | UserUnlinkedAccountWebhookPayload
-  | UserUpdatedAccountWebhookPayload
-  | UserTransferredAccountWebhookPayload
-  | UserWalletCreatedWebhookPayload
-  | TransactionBroadcastedWebhookPayload
-  | TransactionConfirmedWebhookPayload
-  | TransactionExecutionRevertedWebhookPayload
-  | TransactionStillPendingWebhookPayload
-  | TransactionFailedWebhookPayload
-  | TransactionReplacedWebhookPayload
-  | TransactionProviderErrorWebhookPayload
-  | FundsDepositedWebhookPayload
-  | FundsWithdrawnWebhookPayload
-  | PrivateKeyExportWebhookPayload
-  | WalletRecoverySetupWebhookPayload
-  | WalletRecoveredWebhookPayload
-  | MfaEnabledWebhookPayload
-  | MfaDisabledWebhookPayload;
+export type { WebhookPayload } from '../../resources/webhooks';
+
+/** @deprecated Use {@link WebhookPayload} instead. */
+export type WebhookEvent = WebhookPayload;
 
 export class PrivyWebhooksService {
   private webhookSigningSecret: string | undefined;
+  private webhooksResource: Webhooks;
 
-  constructor(webhookSigningSecret?: string) {
+  constructor(webhooksResource: Webhooks, webhookSigningSecret?: string) {
+    this.webhooksResource = webhooksResource;
     this.webhookSigningSecret = webhookSigningSecret;
   }
 
   /**
-   * Verifies a webhook request by checking the signature and asserting the timestamp is within 5
-   * minutes of the current time to prevent replay attacks.
+   * Verifies a webhook request by checking the svix signature and asserting the timestamp
+   * is within tolerance to prevent replay attacks, then returns the typed event payload.
    *
-   * @param input.payload The raw JSON payload/body of the webhook request. This must be unaltered or signature verification will fail.
-   * @param input.headers A JSON object containing the webhook's ID, timestamp, and signature sent in the headers of the webhook request. This object must contain `id`, `timestamp`, and `signature` keys.
-   * @param input.signing_secret The webhook secret to use for verifying the webhook request.
-   * @returns verified payload if the webhook signature is valid otherwise throws.
+   * @param input.payload The raw JSON string body of the webhook request, or a parsed object for backwards compat.
+   * @param input.headers The webhook headers containing svix-id, svix-timestamp, and svix-signature. Provide either this or `svix`.
+   * @param input.svix @deprecated Use `headers` instead.
+   * @param input.signing_secret Optional per-call override for the webhook signing secret.
+   * @returns The verified and typed webhook event payload.
+   * @throws {InvalidWebhookError} If the signature is invalid or the timestamp is stale.
    */
-  async verify({ payload, svix, signing_secret }: PrivyWebhooksService.VerifyInput): Promise<WebhookEvent> {
-    const signingSecret = signing_secret ?? this.webhookSigningSecret;
-    if (!signingSecret) {
-      throw new InvalidWebhookError('Webhook signing secret is required');
+  verify({ payload, headers, svix, signing_secret }: PrivyWebhooksService.VerifyInput): WebhookPayload {
+    const secret = signing_secret ?? this.webhookSigningSecret;
+    if (!secret) {
+      throw new InvalidWebhookError(
+        'Webhook signing secret is required. Pass it to PrivyClient constructor or to verify().',
+      );
     }
 
-    try {
-      const webhook = new Webhook(signingSecret);
-      const stringPayload = JSON.stringify(payload);
-      const svixHeaders = {
+    const body = typeof payload === 'string' ? payload : JSON.stringify(payload);
+
+    let svixHeaders: Record<string, string>;
+    if (headers) {
+      svixHeaders = {
+        'svix-id': headers['svix-id'],
+        'svix-timestamp': headers['svix-timestamp'],
+        'svix-signature': headers['svix-signature'],
+      };
+    } else if (svix) {
+      svixHeaders = {
         'svix-id': svix.id,
         'svix-timestamp': svix.timestamp,
         'svix-signature': svix.signature,
       };
-      // Casting is safe here because `verify` succeeds meaning the API sent this event.
-      return webhook.verify(stringPayload, svixHeaders) as WebhookEvent;
+    } else {
+      throw new InvalidWebhookError(
+        'Webhook headers are required (svix-id, svix-timestamp, svix-signature).',
+      );
+    }
+
+    try {
+      const wh = new Webhook(secret);
+      wh.verify(body, svixHeaders);
     } catch (error) {
       if (error instanceof Error) {
         throw new InvalidWebhookError(`Webhook verification failed: ${error.message}`);
-      } else {
-        throw new InvalidWebhookError('Webhook verification failed');
       }
+      throw new InvalidWebhookError('Webhook verification failed');
     }
+
+    return this.webhooksResource.unsafeUnwrap(body) as WebhookPayload;
   }
 }
 
 // prettier-ignore
-/**
- * The namespace for types related to the Webhooks service class.
- * @see {@link PrivyWebhooksService} class.
- */
 export namespace PrivyWebhooksService {
-  /** The input type for the {@link PrivyWebhooksService.verify} method. */
   export type VerifyInput = {
-    payload: Object,
-    svix: {
+    /** The webhook request body — either the raw JSON string or a parsed object. Prefer passing the raw string for guaranteed signature integrity. */
+    payload: string | object;
+    /** The request headers. Must include svix-id, svix-timestamp, svix-signature. Provide either this or `svix`. */
+    headers?: {
+      'svix-id': string,
+      'svix-timestamp': string,
+      'svix-signature': string,
+    };
+    /** @deprecated Use `headers` instead. */
+    svix?: {
       id: string,
       timestamp: string,
       signature: string,
-    }
+    };
+    /** Per-call signing secret override. Falls back to client-level secret. */
     signing_secret?: string,
   };
 }

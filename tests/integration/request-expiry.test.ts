@@ -27,8 +27,8 @@ describe('request expiry opt-out', () => {
 
     await client.wallets().rpc('wallet-id', {
       method: 'personal_sign',
-      params: { message: 'hello' },
-    } as any);
+      params: { encoding: 'utf-8', message: 'hello' },
+    });
 
     expect(captured.request?.headers.get('privy-request-expiry')).toMatch(/^\d+$/);
   });
@@ -38,8 +38,8 @@ describe('request expiry opt-out', () => {
 
     await client.wallets().rpc('wallet-id', {
       method: 'personal_sign',
-      params: { message: 'hello' },
-    } as any);
+      params: { encoding: 'utf-8', message: 'hello' },
+    });
 
     expect(captured.request?.headers.get('privy-request-expiry')).toBeNull();
   });
@@ -52,8 +52,8 @@ describe('request expiry opt-out', () => {
 
     await client.wallets().rpc('wallet-id', {
       method: 'personal_sign',
-      params: { message: 'hello' },
-    } as any);
+      params: { encoding: 'utf-8', message: 'hello' },
+    });
 
     expect(captured.request?.headers.get('privy-request-expiry')).toBeNull();
   });

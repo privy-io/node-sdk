@@ -180,6 +180,7 @@ export {
   type WalletExportRequestBody,
   type WalletRevokeResponse,
   type WalletExportResponseBody,
+  type TransactionTokenAddressInput,
   type TransferSentTransactionDetail,
   type TransferReceivedTransactionDetail,
   type TransactionDetail,

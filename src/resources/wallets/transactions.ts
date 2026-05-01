@@ -17,7 +17,7 @@ export class Transactions extends APIResource {
    * ```ts
    * const transaction = await client.wallets.transactions.get(
    *   'wallet_id',
-   *   { asset: 'usdc', chain: 'ethereum' },
+   *   { chain: 'ethereum' },
    * );
    * ```
    */
@@ -77,9 +77,24 @@ export namespace TransactionGetResponse {
 }
 
 export interface TransactionGetParams {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | Array<WalletsAPI.WalletAsset>;
-
   chain: 'ethereum' | 'arbitrum' | 'base' | 'tempo' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'sepolia';
+
+  /**
+   * Token contract address (EVM: 0x-prefixed hex) or mint address (Solana: base58),
+   * used to filter wallet transactions.
+   */
+  token?: WalletsAPI.TransactionTokenAddressInput | Array<WalletsAPI.TransactionTokenAddressInput>;
+
+  asset?:
+    | 'usdc'
+    | 'usdc.e'
+    | 'eth'
+    | 'pol'
+    | 'usdt'
+    | 'eurc'
+    | 'usdb'
+    | 'sol'
+    | Array<WalletsAPI.WalletAsset>;
 
   cursor?: string;
 

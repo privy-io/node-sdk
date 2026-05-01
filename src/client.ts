@@ -575,6 +575,7 @@ import {
   TransactionProviderErrorWebhookPayload,
   TransactionReplacedWebhookPayload,
   TransactionStillPendingWebhookPayload,
+  UnsafeUnwrapWebhookEvent,
   UserAuthenticatedWebhookPayload,
   UserCreatedWebhookPayload,
   UserLinkedAccountWebhookPayload,
@@ -825,6 +826,7 @@ import {
   TokenTransferDestination,
   TokenTransferSource,
   TransactionDetail,
+  TransactionTokenAddressInput,
   TransferReceivedTransactionDetail,
   TransferRequestBody,
   TransferSentTransactionDetail,
@@ -1693,6 +1695,7 @@ export class PrivyAPI {
    * Operations related to app settings and allowlist management
    */
   apps: API.Apps = new API.Apps(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
   shared: API.Shared = new API.Shared(this);
   embeddedWallets: API.EmbeddedWallets = new API.EmbeddedWallets(this);
@@ -1703,7 +1706,6 @@ export class PrivyAPI {
   funding: API.Funding = new API.Funding(this);
   crossApp: API.CrossApp = new API.CrossApp(this);
   krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
-  webhooks: API.Webhooks = new API.Webhooks(this);
   yield: API.Yield = new API.Yield(this);
   accounts: API.Accounts = new API.Accounts(this);
   swaps: API.Swaps = new API.Swaps(this);
@@ -1716,6 +1718,7 @@ PrivyAPI.Transactions = Transactions;
 PrivyAPI.KeyQuorums = KeyQuorums;
 PrivyAPI.Intents = Intents;
 PrivyAPI.Apps = Apps;
+PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.ClientAuth = ClientAuth;
 PrivyAPI.Shared = Shared;
 PrivyAPI.EmbeddedWallets = EmbeddedWallets;
@@ -1726,7 +1729,6 @@ PrivyAPI.Organizations = Organizations;
 PrivyAPI.Funding = Funding;
 PrivyAPI.CrossApp = CrossApp;
 PrivyAPI.KrakenEmbed = KrakenEmbed;
-PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.Yield = Yield;
 PrivyAPI.Accounts = Accounts;
 PrivyAPI.Swaps = Swaps;
@@ -1914,6 +1916,7 @@ export declare namespace PrivyAPI {
     type WalletExportRequestBody as WalletExportRequestBody,
     type WalletRevokeResponse as WalletRevokeResponse,
     type WalletExportResponseBody as WalletExportResponseBody,
+    type TransactionTokenAddressInput as TransactionTokenAddressInput,
     type TransferSentTransactionDetail as TransferSentTransactionDetail,
     type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
     type TransactionDetail as TransactionDetail,
@@ -2188,6 +2191,81 @@ export declare namespace PrivyAPI {
     type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
     type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
     type AppGetGasSpendParams as AppGetGasSpendParams,
+  };
+
+  export {
+    Webhooks as Webhooks,
+    type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
+    type KrakenEmbedQuoteExecutionFailedWebhookPayload as KrakenEmbedQuoteExecutionFailedWebhookPayload,
+    type KrakenEmbedQuoteCancelledWebhookPayload as KrakenEmbedQuoteCancelledWebhookPayload,
+    type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
+    type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
+    type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
+    type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
+    type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
+    type IntentExecutedWebhookPayload as IntentExecutedWebhookPayload,
+    type IntentFailedWebhookPayload as IntentFailedWebhookPayload,
+    type MfaEnabledWebhookPayload as MfaEnabledWebhookPayload,
+    type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
+    type TransactionBroadcastedWebhookPayload as TransactionBroadcastedWebhookPayload,
+    type TransactionConfirmedWebhookPayload as TransactionConfirmedWebhookPayload,
+    type TransactionExecutionRevertedWebhookPayload as TransactionExecutionRevertedWebhookPayload,
+    type TransactionStillPendingWebhookPayload as TransactionStillPendingWebhookPayload,
+    type TransactionFailedWebhookPayload as TransactionFailedWebhookPayload,
+    type TransactionReplacedWebhookPayload as TransactionReplacedWebhookPayload,
+    type TransactionProviderErrorWebhookPayload as TransactionProviderErrorWebhookPayload,
+    type UserOperationCompletedWebhookPayload as UserOperationCompletedWebhookPayload,
+    type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
+    type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
+    type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
+    type UserUnlinkedAccountWebhookPayload as UserUnlinkedAccountWebhookPayload,
+    type UserUpdatedAccountWebhookPayload as UserUpdatedAccountWebhookPayload,
+    type UserTransferredAccountWebhookPayload as UserTransferredAccountWebhookPayload,
+    type UserWalletCreatedWebhookPayload as UserWalletCreatedWebhookPayload,
+    type WalletActionSwapCreatedWebhookPayload as WalletActionSwapCreatedWebhookPayload,
+    type WalletActionSwapSucceededWebhookPayload as WalletActionSwapSucceededWebhookPayload,
+    type WalletActionSwapRejectedWebhookPayload as WalletActionSwapRejectedWebhookPayload,
+    type WalletActionSwapFailedWebhookPayload as WalletActionSwapFailedWebhookPayload,
+    type WalletActionTransferCreatedWebhookPayload as WalletActionTransferCreatedWebhookPayload,
+    type WalletActionTransferSucceededWebhookPayload as WalletActionTransferSucceededWebhookPayload,
+    type WalletActionTransferRejectedWebhookPayload as WalletActionTransferRejectedWebhookPayload,
+    type WalletActionTransferFailedWebhookPayload as WalletActionTransferFailedWebhookPayload,
+    type WalletActionEarnDepositCreatedWebhookPayload as WalletActionEarnDepositCreatedWebhookPayload,
+    type WalletActionEarnDepositSucceededWebhookPayload as WalletActionEarnDepositSucceededWebhookPayload,
+    type WalletActionEarnDepositRejectedWebhookPayload as WalletActionEarnDepositRejectedWebhookPayload,
+    type WalletActionEarnDepositFailedWebhookPayload as WalletActionEarnDepositFailedWebhookPayload,
+    type WalletActionEarnWithdrawCreatedWebhookPayload as WalletActionEarnWithdrawCreatedWebhookPayload,
+    type WalletActionEarnWithdrawSucceededWebhookPayload as WalletActionEarnWithdrawSucceededWebhookPayload,
+    type WalletActionEarnWithdrawRejectedWebhookPayload as WalletActionEarnWithdrawRejectedWebhookPayload,
+    type WalletActionEarnWithdrawFailedWebhookPayload as WalletActionEarnWithdrawFailedWebhookPayload,
+    type WalletActionEarnIncentiveClaimCreatedWebhookPayload as WalletActionEarnIncentiveClaimCreatedWebhookPayload,
+    type WalletActionEarnIncentiveClaimSucceededWebhookPayload as WalletActionEarnIncentiveClaimSucceededWebhookPayload,
+    type WalletActionEarnIncentiveClaimRejectedWebhookPayload as WalletActionEarnIncentiveClaimRejectedWebhookPayload,
+    type WalletActionEarnIncentiveClaimFailedWebhookPayload as WalletActionEarnIncentiveClaimFailedWebhookPayload,
+    type WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset,
+    type WalletFundsErc20Asset as WalletFundsErc20Asset,
+    type WalletFundsSplAsset as WalletFundsSplAsset,
+    type WalletFundsSacAsset as WalletFundsSacAsset,
+    type WalletFundsAsset as WalletFundsAsset,
+    type BridgeCryptoDepositMetadata as BridgeCryptoDepositMetadata,
+    type BridgeRefundMetadata as BridgeRefundMetadata,
+    type BridgeFiatDepositMetadata as BridgeFiatDepositMetadata,
+    type BridgeCryptoTransferMetadata as BridgeCryptoTransferMetadata,
+    type BridgeFiatTransferMetadata as BridgeFiatTransferMetadata,
+    type BridgeTransferRefundMetadata as BridgeTransferRefundMetadata,
+    type BridgeStaticMemoDepositMetadata as BridgeStaticMemoDepositMetadata,
+    type BridgeMetadata as BridgeMetadata,
+    type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
+    type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,
+    type PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload,
+    type SeedPhraseExportWebhookPayload as SeedPhraseExportWebhookPayload,
+    type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
+    type WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload,
+    type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
+    type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
+    type YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
+    type WebhookPayload as WebhookPayload,
+    type UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent,
   };
 
   export {
@@ -2497,80 +2575,6 @@ export declare namespace PrivyAPI {
     type KrakenEmbedGetPortfolioSummaryResponse as KrakenEmbedGetPortfolioSummaryResponse,
     type KrakenEmbedGetPortfolioTransactionsQueryParamsSchema as KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
     type KrakenEmbedGetQuoteQueryParams as KrakenEmbedGetQuoteQueryParams,
-  };
-
-  export {
-    Webhooks as Webhooks,
-    type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
-    type KrakenEmbedQuoteExecutionFailedWebhookPayload as KrakenEmbedQuoteExecutionFailedWebhookPayload,
-    type KrakenEmbedQuoteCancelledWebhookPayload as KrakenEmbedQuoteCancelledWebhookPayload,
-    type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
-    type KrakenEmbedUserDisabledWebhookPayload as KrakenEmbedUserDisabledWebhookPayload,
-    type KrakenEmbedUserClosedWebhookPayload as KrakenEmbedUserClosedWebhookPayload,
-    type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
-    type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
-    type IntentExecutedWebhookPayload as IntentExecutedWebhookPayload,
-    type IntentFailedWebhookPayload as IntentFailedWebhookPayload,
-    type MfaEnabledWebhookPayload as MfaEnabledWebhookPayload,
-    type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
-    type TransactionBroadcastedWebhookPayload as TransactionBroadcastedWebhookPayload,
-    type TransactionConfirmedWebhookPayload as TransactionConfirmedWebhookPayload,
-    type TransactionExecutionRevertedWebhookPayload as TransactionExecutionRevertedWebhookPayload,
-    type TransactionStillPendingWebhookPayload as TransactionStillPendingWebhookPayload,
-    type TransactionFailedWebhookPayload as TransactionFailedWebhookPayload,
-    type TransactionReplacedWebhookPayload as TransactionReplacedWebhookPayload,
-    type TransactionProviderErrorWebhookPayload as TransactionProviderErrorWebhookPayload,
-    type UserOperationCompletedWebhookPayload as UserOperationCompletedWebhookPayload,
-    type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
-    type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
-    type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
-    type UserUnlinkedAccountWebhookPayload as UserUnlinkedAccountWebhookPayload,
-    type UserUpdatedAccountWebhookPayload as UserUpdatedAccountWebhookPayload,
-    type UserTransferredAccountWebhookPayload as UserTransferredAccountWebhookPayload,
-    type UserWalletCreatedWebhookPayload as UserWalletCreatedWebhookPayload,
-    type WalletActionSwapCreatedWebhookPayload as WalletActionSwapCreatedWebhookPayload,
-    type WalletActionSwapSucceededWebhookPayload as WalletActionSwapSucceededWebhookPayload,
-    type WalletActionSwapRejectedWebhookPayload as WalletActionSwapRejectedWebhookPayload,
-    type WalletActionSwapFailedWebhookPayload as WalletActionSwapFailedWebhookPayload,
-    type WalletActionTransferCreatedWebhookPayload as WalletActionTransferCreatedWebhookPayload,
-    type WalletActionTransferSucceededWebhookPayload as WalletActionTransferSucceededWebhookPayload,
-    type WalletActionTransferRejectedWebhookPayload as WalletActionTransferRejectedWebhookPayload,
-    type WalletActionTransferFailedWebhookPayload as WalletActionTransferFailedWebhookPayload,
-    type WalletActionEarnDepositCreatedWebhookPayload as WalletActionEarnDepositCreatedWebhookPayload,
-    type WalletActionEarnDepositSucceededWebhookPayload as WalletActionEarnDepositSucceededWebhookPayload,
-    type WalletActionEarnDepositRejectedWebhookPayload as WalletActionEarnDepositRejectedWebhookPayload,
-    type WalletActionEarnDepositFailedWebhookPayload as WalletActionEarnDepositFailedWebhookPayload,
-    type WalletActionEarnWithdrawCreatedWebhookPayload as WalletActionEarnWithdrawCreatedWebhookPayload,
-    type WalletActionEarnWithdrawSucceededWebhookPayload as WalletActionEarnWithdrawSucceededWebhookPayload,
-    type WalletActionEarnWithdrawRejectedWebhookPayload as WalletActionEarnWithdrawRejectedWebhookPayload,
-    type WalletActionEarnWithdrawFailedWebhookPayload as WalletActionEarnWithdrawFailedWebhookPayload,
-    type WalletActionEarnIncentiveClaimCreatedWebhookPayload as WalletActionEarnIncentiveClaimCreatedWebhookPayload,
-    type WalletActionEarnIncentiveClaimSucceededWebhookPayload as WalletActionEarnIncentiveClaimSucceededWebhookPayload,
-    type WalletActionEarnIncentiveClaimRejectedWebhookPayload as WalletActionEarnIncentiveClaimRejectedWebhookPayload,
-    type WalletActionEarnIncentiveClaimFailedWebhookPayload as WalletActionEarnIncentiveClaimFailedWebhookPayload,
-    type WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset,
-    type WalletFundsErc20Asset as WalletFundsErc20Asset,
-    type WalletFundsSplAsset as WalletFundsSplAsset,
-    type WalletFundsSacAsset as WalletFundsSacAsset,
-    type WalletFundsAsset as WalletFundsAsset,
-    type BridgeCryptoDepositMetadata as BridgeCryptoDepositMetadata,
-    type BridgeRefundMetadata as BridgeRefundMetadata,
-    type BridgeFiatDepositMetadata as BridgeFiatDepositMetadata,
-    type BridgeCryptoTransferMetadata as BridgeCryptoTransferMetadata,
-    type BridgeFiatTransferMetadata as BridgeFiatTransferMetadata,
-    type BridgeTransferRefundMetadata as BridgeTransferRefundMetadata,
-    type BridgeStaticMemoDepositMetadata as BridgeStaticMemoDepositMetadata,
-    type BridgeMetadata as BridgeMetadata,
-    type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
-    type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,
-    type PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload,
-    type SeedPhraseExportWebhookPayload as SeedPhraseExportWebhookPayload,
-    type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
-    type WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload,
-    type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
-    type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
-    type YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
-    type WebhookPayload as WebhookPayload,
   };
 
   export {

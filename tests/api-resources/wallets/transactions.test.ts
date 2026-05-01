@@ -11,10 +11,7 @@ const client = new PrivyAPI({
 describe('resource transactions', () => {
   // Mock server tests are disabled
   test.skip('get: only required params', async () => {
-    const responsePromise = client.wallets.transactions.get('wallet_id', {
-      asset: 'usdc',
-      chain: 'ethereum',
-    });
+    const responsePromise = client.wallets.transactions.get('wallet_id', { chain: 'ethereum' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -27,8 +24,9 @@ describe('resource transactions', () => {
   // Mock server tests are disabled
   test.skip('get: required and optional params', async () => {
     const response = await client.wallets.transactions.get('wallet_id', {
-      asset: 'usdc',
       chain: 'ethereum',
+      token: 'string',
+      asset: 'usdc',
       cursor: 'x',
       limit: 100,
       tx_hash: 'tx_hash',

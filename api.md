@@ -177,6 +177,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRevokeResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportResponseBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransactionTokenAddressInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferSentTransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferReceivedTransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionDetail</a></code>
@@ -532,6 +533,86 @@ Methods:
 - <code title="get /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">list</a>(appID) -> AllowlistListResponse</code>
 - <code title="delete /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">delete</a>(appID, { ...params }) -> AllowlistDeletionResponse</code>
 
+# Webhooks
+
+Types:
+
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteCancelledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentAuthorizedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentExecutedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">MfaEnabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionBroadcastedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionExecutionRevertedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionStillPendingWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionReplacedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TransactionProviderErrorWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserOperationCompletedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserUnlinkedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserUpdatedAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserTransferredAccountWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserWalletCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionSwapFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTransferCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTransferSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTransferRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTransferFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsNativeTokenAsset</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsErc20Asset</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsSplAsset</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsSacAsset</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsAsset</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeCryptoDepositMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeRefundMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeFiatDepositMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeCryptoTransferMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeFiatTransferMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeTransferRefundMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeStaticMemoDepositMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">BridgeMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">SeedPhraseExportWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldClaimConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UnsafeUnwrapWebhookEvent</a></code>
+
+Methods:
+
+- <code>client.webhooks.<a href="./src/resources/webhooks.ts">unsafeUnwrap</a>(body) -> void</code>
+
 # ClientAuth
 
 Types:
@@ -853,81 +934,6 @@ Types:
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryResponse</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioTransactionsQueryParamsSchema</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetQuoteQueryParams</a></code>
-
-# Webhooks
-
-Types:
-
-- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteCancelledWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserDisabledWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserClosedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">IntentCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">IntentAuthorizedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">IntentExecutedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">IntentFailedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">MfaEnabledWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">TransactionBroadcastedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">TransactionConfirmedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">TransactionExecutionRevertedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">TransactionStillPendingWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">TransactionFailedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">TransactionReplacedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">TransactionProviderErrorWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserOperationCompletedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserUnlinkedAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserUpdatedAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserTransferredAccountWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UserWalletCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionSwapCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionSwapSucceededWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionSwapRejectedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionSwapFailedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionTransferCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionTransferSucceededWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionTransferRejectedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionTransferFailedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositSucceededWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositRejectedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositFailedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawSucceededWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawRejectedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawFailedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimCreatedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimSucceededWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimRejectedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimFailedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletFundsNativeTokenAsset</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletFundsErc20Asset</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletFundsSplAsset</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletFundsSacAsset</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletFundsAsset</a></code>
-- <code><a href="./src/resources/webhooks.ts">BridgeCryptoDepositMetadata</a></code>
-- <code><a href="./src/resources/webhooks.ts">BridgeRefundMetadata</a></code>
-- <code><a href="./src/resources/webhooks.ts">BridgeFiatDepositMetadata</a></code>
-- <code><a href="./src/resources/webhooks.ts">BridgeCryptoTransferMetadata</a></code>
-- <code><a href="./src/resources/webhooks.ts">BridgeFiatTransferMetadata</a></code>
-- <code><a href="./src/resources/webhooks.ts">BridgeTransferRefundMetadata</a></code>
-- <code><a href="./src/resources/webhooks.ts">BridgeStaticMemoDepositMetadata</a></code>
-- <code><a href="./src/resources/webhooks.ts">BridgeMetadata</a></code>
-- <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">SeedPhraseExportWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">YieldClaimConfirmedWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">WebhookPayload</a></code>
 
 # Yield
 

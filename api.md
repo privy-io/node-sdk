@@ -173,12 +173,14 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAPIRevokeAuthorizationKeyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAsset</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateWithJwtResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResult</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletCreateWalletsWithRecoveryResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCustodian</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletEntropyType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletEthereumAsset</a></code>
@@ -193,8 +195,6 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletSolanaAsset</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletUpdateRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateWithJwtResponse</a></code>
-- <code><a href="./src/resources/wallets/wallets.ts">WalletCreateWalletsWithRecoveryResponse</a></code>
 
 Methods:
 

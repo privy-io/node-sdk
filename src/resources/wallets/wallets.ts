@@ -308,13 +308,14 @@ export class Wallets extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.wallets.authenticateWithJwt({
-   *   encryption_type: 'HPKE',
-   *   recipient_public_key:
-   *     'DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1',
-   *   user_jwt:
-   *     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
-   * });
+   * const walletAuthenticateWithJwtResponse =
+   *   await client.wallets.authenticateWithJwt({
+   *     encryption_type: 'HPKE',
+   *     recipient_public_key:
+   *       'DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1',
+   *     user_jwt:
+   *       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
+   *   });
    * ```
    */
   authenticateWithJwt(
@@ -3016,6 +3017,68 @@ export interface WalletAuthenticateRequestBody {
 }
 
 /**
+ * The response from authenticating a wallet, containing an authorization key and
+ * wallet data.
+ */
+export type WalletAuthenticateWithJwtResponse =
+  | WalletAuthenticateWithJwtResponse.WithEncryption
+  | WalletAuthenticateWithJwtResponse.WithoutEncryption;
+
+export namespace WalletAuthenticateWithJwtResponse {
+  export interface WithEncryption {
+    /**
+     * The encrypted authorization key data.
+     */
+    encrypted_authorization_key: WithEncryption.EncryptedAuthorizationKey;
+
+    /**
+     * The expiration time of the authorization key in milliseconds since the epoch.
+     */
+    expires_at: number;
+
+    wallets: Array<WalletsAPI.Wallet>;
+  }
+
+  export namespace WithEncryption {
+    /**
+     * The encrypted authorization key data.
+     */
+    export interface EncryptedAuthorizationKey {
+      /**
+       * The encrypted authorization key corresponding to the user's current
+       * authentication session.
+       */
+      ciphertext: string;
+
+      /**
+       * Base64-encoded ephemeral public key used in the HPKE encryption process.
+       * Required for decryption.
+       */
+      encapsulated_key: string;
+
+      /**
+       * The encryption type used. Currently only supports HPKE.
+       */
+      encryption_type: 'HPKE';
+    }
+  }
+
+  export interface WithoutEncryption {
+    /**
+     * The raw authorization key data.
+     */
+    authorization_key: string;
+
+    /**
+     * The expiration time of the authorization key in milliseconds since the epoch.
+     */
+    expires_at: number;
+
+    wallets: Array<WalletsAPI.Wallet>;
+  }
+}
+
+/**
  * Headers required to authorize wallet operations.
  */
 export interface WalletAuthorizationHeaders {
@@ -3170,6 +3233,21 @@ export type WalletChainType =
   | 'ton'
   | 'starknet'
   | 'spark';
+
+/**
+ * The response from creating wallets with an associated recovery user.
+ */
+export interface WalletCreateWalletsWithRecoveryResponse {
+  /**
+   * The ID of the created user.
+   */
+  recovery_user_id: string;
+
+  /**
+   * The wallets that were created.
+   */
+  wallets: Array<Wallet>;
+}
 
 /**
  * Information about the custodian managing this wallet.
@@ -3370,76 +3448,6 @@ export interface WalletInitImportResponse {
    * The encryption type of the wallet to import. Currently only supports `HPKE`.
    */
   encryption_type: HpkeEncryption;
-}
-
-export type WalletAuthenticateWithJwtResponse =
-  | WalletAuthenticateWithJwtResponse.WithEncryption
-  | WalletAuthenticateWithJwtResponse.WithoutEncryption;
-
-export namespace WalletAuthenticateWithJwtResponse {
-  export interface WithEncryption {
-    /**
-     * The encrypted authorization key data.
-     */
-    encrypted_authorization_key: WithEncryption.EncryptedAuthorizationKey;
-
-    /**
-     * The expiration time of the authorization key in milliseconds since the epoch.
-     */
-    expires_at: number;
-
-    wallets: Array<WalletsAPI.Wallet>;
-  }
-
-  export namespace WithEncryption {
-    /**
-     * The encrypted authorization key data.
-     */
-    export interface EncryptedAuthorizationKey {
-      /**
-       * The encrypted authorization key corresponding to the user's current
-       * authentication session.
-       */
-      ciphertext: string;
-
-      /**
-       * Base64-encoded ephemeral public key used in the HPKE encryption process.
-       * Required for decryption.
-       */
-      encapsulated_key: string;
-
-      /**
-       * The encryption type used. Currently only supports HPKE.
-       */
-      encryption_type: 'HPKE';
-    }
-  }
-
-  export interface WithoutEncryption {
-    /**
-     * The raw authorization key data.
-     */
-    authorization_key: string;
-
-    /**
-     * The expiration time of the authorization key in milliseconds since the epoch.
-     */
-    expires_at: number;
-
-    wallets: Array<WalletsAPI.Wallet>;
-  }
-}
-
-export interface WalletCreateWalletsWithRecoveryResponse {
-  /**
-   * The ID of the created user.
-   */
-  recovery_user_id: string;
-
-  /**
-   * The wallets that were created.
-   */
-  wallets: Array<Wallet>;
 }
 
 export interface WalletCreateParams {
@@ -4932,12 +4940,14 @@ export declare namespace Wallets {
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
     type WalletAsset as WalletAsset,
     type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
+    type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
     type WalletBatchCreateInput as WalletBatchCreateInput,
     type WalletBatchCreateResponse as WalletBatchCreateResponse,
     type WalletBatchCreateResult as WalletBatchCreateResult,
     type WalletBatchItemInput as WalletBatchItemInput,
     type WalletChainType as WalletChainType,
+    type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletCustodian as WalletCustodian,
     type WalletEntropyType as WalletEntropyType,
     type WalletEthereumAsset as WalletEthereumAsset,
@@ -4952,8 +4962,6 @@ export declare namespace Wallets {
     type WalletSolanaAsset as WalletSolanaAsset,
     type WalletUpdateRequestBody as WalletUpdateRequestBody,
     type WalletInitImportResponse as WalletInitImportResponse,
-    type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
-    type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
     type WalletListParams as WalletListParams,

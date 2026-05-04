@@ -150,6 +150,28 @@ export namespace KeyQuorum {
 }
 
 /**
+ * Headers required to authorize modifications to key quorums.
+ */
+export interface KeyQuorumAuthorizationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
+/**
  * Request input for creating a key quorum.
  */
 export interface KeyQuorumCreateRequestBody {
@@ -209,28 +231,6 @@ export interface KeyQuorumUpdateRequestBody {
    * quorum.
    */
   user_ids?: Array<string>;
-}
-
-/**
- * Headers required to authorize modifications to key quorums.
- */
-export interface KeyQuorumAuthorizationHeaders {
-  /**
-   * ID of your Privy app.
-   */
-  'privy-app-id': string;
-
-  /**
-   * Request authorization signature. If multiple signatures are required, they
-   * should be comma separated.
-   */
-  'privy-authorization-signature'?: string;
-
-  /**
-   * Request expiry. Value is a Unix timestamp in milliseconds representing the
-   * deadline by which the request must be processed.
-   */
-  'privy-request-expiry'?: string;
 }
 
 export interface KeyQuorumCreateParams {
@@ -321,9 +321,9 @@ export interface KeyQuorumUpdateParams {
 export declare namespace KeyQuorums {
   export {
     type KeyQuorum as KeyQuorum,
+    type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
     type KeyQuorumCreateRequestBody as KeyQuorumCreateRequestBody,
     type KeyQuorumUpdateRequestBody as KeyQuorumUpdateRequestBody,
-    type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,

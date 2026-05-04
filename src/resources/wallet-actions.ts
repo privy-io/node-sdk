@@ -5,55 +5,6 @@ import { APIResource } from '../core/resource';
 export class WalletActions extends APIResource {}
 
 /**
- * Type of wallet action
- */
-export type WalletActionType =
-  | 'swap'
-  | 'transfer'
-  | 'earn_deposit'
-  | 'earn_withdraw'
-  | 'earn_incentive_claim';
-
-/**
- * Status of a wallet action.
- */
-export type WalletActionStatus = 'pending' | 'succeeded' | 'rejected' | 'failed';
-
-/**
- * Type of a wallet action step.
- */
-export type WalletActionStepType = 'evm_transaction' | 'evm_user_operation' | 'svm_transaction';
-
-/**
- * Status of an EVM step in a wallet action.
- */
-export type EvmWalletActionStepStatus =
-  | 'preparing'
-  | 'queued'
-  | 'pending'
-  | 'retrying'
-  | 'confirmed'
-  | 'rejected'
-  | 'reverted'
-  | 'replaced'
-  | 'abandoned';
-
-/**
- * A description of why a wallet action (or a step within a wallet action) failed.
- */
-export interface FailureReason {
-  /**
-   * Human-readable failure message.
-   */
-  message: string;
-
-  /**
-   * Additional error details, if available.
-   */
-  details?: unknown;
-}
-
-/**
  * A wallet action step consisting of an EVM transaction.
  */
 export interface EvmTransactionWalletActionStep {
@@ -121,17 +72,455 @@ export interface EvmUserOperationWalletActionStep {
 }
 
 /**
- * Status of an SVM step in a wallet action.
+ * Status of an EVM step in a wallet action.
  */
-export type SvmWalletActionStepStatus =
+export type EvmWalletActionStepStatus =
   | 'preparing'
   | 'queued'
   | 'pending'
+  | 'retrying'
   | 'confirmed'
-  | 'finalized'
   | 'rejected'
   | 'reverted'
-  | 'failed';
+  | 'replaced'
+  | 'abandoned';
+
+/**
+ * Asset metadata for an earn vault position.
+ */
+export interface EarnAsset {
+  /**
+   * Token contract address.
+   */
+  address: string;
+
+  /**
+   * Number of decimals for the asset (e.g. 6 for USDC).
+   */
+  decimals: number;
+
+  /**
+   * Lowercase token symbol (e.g. "usdc").
+   */
+  symbol: string;
+}
+
+/**
+ * Response for an earn deposit action.
+ */
+export interface EarnDepositActionResponse {
+  /**
+   * The ID of the wallet action.
+   */
+  id: string;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * Base-unit amount of asset deposited (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * Vault shares received in base units. Populated after on-chain confirmation.
+   */
+  share_amount: string | null;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionStatus;
+
+  type: 'earn_deposit';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of asset deposited (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+
+  /**
+   * The steps of the wallet action. Only returned if `?include=steps` is provided.
+   */
+  steps?: Array<WalletActionStep>;
+}
+
+/**
+ * Input for depositing assets into an ERC-4626 vault. Exactly one of `amount` or
+ * `raw_amount` must be provided.
+ */
+export interface EarnDepositRequestBody {
+  /**
+   * The ID of the vault to deposit into.
+   */
+  vault_id: string;
+
+  /**
+   * Human-readable decimal amount to deposit (e.g. "1.5" for 1.5 USDC). Exactly one
+   * of `amount` or `raw_amount` must be provided.
+   */
+  amount?: string;
+
+  /**
+   * Amount in smallest unit to deposit (e.g. "1500000" for 1.5 USDC with 6
+   * decimals). Exactly one of `amount` or `raw_amount` must be provided.
+   */
+  raw_amount?: string;
+}
+
+/**
+ * Response for an earn incentive claim action.
+ */
+export interface EarnIncentiveClaimActionResponse {
+  /**
+   * The ID of the wallet action.
+   */
+  id: string;
+
+  /**
+   * EVM chain name (e.g. "base", "ethereum").
+   */
+  chain: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
+   */
+  rewards: Array<EarnIncetiveClaimRewardEntry> | null;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionStatus;
+
+  type: 'earn_incentive_claim';
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+
+  /**
+   * The steps of the wallet action. Only returned if `?include=steps` is provided.
+   */
+  steps?: Array<WalletActionStep>;
+}
+
+/**
+ * Input for claiming incentive rewards.
+ */
+export interface EarnIncentiveClaimRequestBody {
+  /**
+   * The blockchain network on which to perform the incentive claim. Supported chains
+   * include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and more, along
+   * with their respective testnets.
+   */
+  chain: string;
+}
+
+/**
+ * A specific reward token and amount associated with an earn incentive claim.
+ */
+export interface EarnIncetiveClaimRewardEntry {
+  /**
+   * Claimable amount in base units.
+   */
+  amount: string;
+
+  /**
+   * Address of the reward token.
+   */
+  token_address: string;
+
+  /**
+   * Symbol of the reward token (e.g. "MORPHO").
+   */
+  token_symbol: string;
+
+  /**
+   * Number of decimal places for the reward token.
+   */
+  token_decimals?: number;
+}
+
+/**
+ * Response for an earn withdraw action.
+ */
+export interface EarnWithdrawActionResponse {
+  /**
+   * The ID of the wallet action.
+   */
+  id: string;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * Base-unit amount of asset withdrawn (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * Vault shares burned in base units. Populated after on-chain confirmation.
+   */
+  share_amount: string | null;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionStatus;
+
+  type: 'earn_withdraw';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of asset withdrawn (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+
+  /**
+   * The steps of the wallet action. Only returned if `?include=steps` is provided.
+   */
+  steps?: Array<WalletActionStep>;
+}
+
+/**
+ * Input for withdrawing assets from an ERC-4626 vault. Exactly one of `amount` or
+ * `raw_amount` must be provided.
+ */
+export interface EarnWithdrawRequestBody {
+  /**
+   * The ID of the vault to withdraw from.
+   */
+  vault_id: string;
+
+  /**
+   * Human-readable decimal amount to withdraw (e.g. "1.5" for 1.5 USDC). Exactly one
+   * of `amount` or `raw_amount` must be provided.
+   */
+  amount?: string;
+
+  /**
+   * Amount in smallest unit to withdraw (e.g. "1500000" for 1.5 USDC with 6
+   * decimals). Exactly one of `amount` or `raw_amount` must be provided.
+   */
+  raw_amount?: string;
+}
+
+/**
+ * Query parameters for fetching an earn vault position.
+ */
+export interface EthereumEarnPositionQuery {
+  /**
+   * The vault ID to get position for.
+   */
+  vault_id: string;
+}
+
+/**
+ * A wallet's position in an earn vault.
+ */
+export interface EthereumEarnPositionResponse {
+  /**
+   * Asset metadata for an earn vault position.
+   */
+  asset: EarnAsset;
+
+  /**
+   * Current asset value in the vault (realtime from ERC-4626), in smallest unit.
+   */
+  assets_in_vault: string;
+
+  /**
+   * Current vault shares held (realtime from ERC-4626).
+   */
+  shares_in_vault: string;
+
+  /**
+   * Total amount deposited into the vault, in smallest unit.
+   */
+  total_deposited: string;
+
+  /**
+   * Total amount withdrawn from the vault, in smallest unit.
+   */
+  total_withdrawn: string;
+}
+
+/**
+ * Supported earn provider protocols.
+ */
+export type EthereumEarnProvider = 'morpho' | 'aave';
+
+/**
+ * Detailed vault information including current APY, liquidity, and asset metadata.
+ */
+export interface EthereumEarnVaultDetailsResponse {
+  /**
+   * Vault identifier.
+   */
+  id: string;
+
+  /**
+   * Annual percentage yield earned by the app from fee wrapper fees, in basis
+   * points.
+   */
+  app_apy: number | null;
+
+  /**
+   * Asset metadata for an earn vault position.
+   */
+  asset: EarnAsset;
+
+  /**
+   * Available liquidity in USD.
+   */
+  available_liquidity_usd: number | null;
+
+  /**
+   * CAIP-2 chain identifier (e.g. "eip155:8453").
+   */
+  caip2: string;
+
+  /**
+   * Human-readable vault name from the yield provider.
+   */
+  name: string;
+
+  /**
+   * Supported earn provider protocols.
+   */
+  provider: EthereumEarnProvider;
+
+  /**
+   * Total value locked in USD.
+   */
+  tvl_usd: number | null;
+
+  /**
+   * Current annual percentage yield in basis points (e.g. 500 for 5%). 1 basis point
+   * = 0.01%.
+   */
+  user_apy: number | null;
+
+  /**
+   * Onchain vault contract address.
+   */
+  vault_address: string;
+}
+
+/**
+ * A description of why a wallet action (or a step within a wallet action) failed.
+ */
+export interface FailureReason {
+  /**
+   * Human-readable failure message.
+   */
+  message: string;
+
+  /**
+   * Additional error details, if available.
+   */
+  details?: unknown;
+}
 
 /**
  * A wallet action step consisting of an SVM (Solana) transaction.
@@ -161,12 +550,17 @@ export interface SvmTransactionWalletActionStep {
 }
 
 /**
- * A step within a wallet action, representing a single onchain action.
+ * Status of an SVM step in a wallet action.
  */
-export type WalletActionStep =
-  | EvmTransactionWalletActionStep
-  | EvmUserOperationWalletActionStep
-  | SvmTransactionWalletActionStep;
+export type SvmWalletActionStepStatus =
+  | 'preparing'
+  | 'queued'
+  | 'pending'
+  | 'confirmed'
+  | 'finalized'
+  | 'rejected'
+  | 'reverted'
+  | 'failed';
 
 /**
  * Response for a swap action.
@@ -318,248 +712,6 @@ export interface TransferActionResponse {
 }
 
 /**
- * A specific reward token and amount associated with an earn incentive claim.
- */
-export interface EarnIncetiveClaimRewardEntry {
-  /**
-   * Claimable amount in base units.
-   */
-  amount: string;
-
-  /**
-   * Address of the reward token.
-   */
-  token_address: string;
-
-  /**
-   * Symbol of the reward token (e.g. "MORPHO").
-   */
-  token_symbol: string;
-
-  /**
-   * Number of decimal places for the reward token.
-   */
-  token_decimals?: number;
-}
-
-/**
- * Response for an earn deposit action.
- */
-export interface EarnDepositActionResponse {
-  /**
-   * The ID of the wallet action.
-   */
-  id: string;
-
-  /**
-   * Underlying asset token address.
-   */
-  asset_address: string;
-
-  /**
-   * CAIP-2 chain identifier.
-   */
-  caip2: string;
-
-  /**
-   * ISO 8601 timestamp of when the wallet action was created.
-   */
-  created_at: string;
-
-  /**
-   * Base-unit amount of asset deposited (e.g. "1500000").
-   */
-  raw_amount: string;
-
-  /**
-   * Vault shares received in base units. Populated after on-chain confirmation.
-   */
-  share_amount: string | null;
-
-  /**
-   * Status of a wallet action.
-   */
-  status: WalletActionStatus;
-
-  type: 'earn_deposit';
-
-  /**
-   * ERC-4626 vault contract address.
-   */
-  vault_address: string;
-
-  /**
-   * The vault ID.
-   */
-  vault_id: string;
-
-  /**
-   * The ID of the wallet involved in the action.
-   */
-  wallet_id: string;
-
-  /**
-   * Human-readable decimal amount of asset deposited (e.g. "1.5"). Only present when
-   * the token is known in the asset registry.
-   */
-  amount?: string;
-
-  /**
-   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
-   * the asset registry.
-   */
-  asset?: string;
-
-  /**
-   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
-   * present when the token is known in the asset registry.
-   */
-  decimals?: number;
-
-  /**
-   * A description of why a wallet action (or a step within a wallet action) failed.
-   */
-  failure_reason?: FailureReason;
-
-  /**
-   * The steps of the wallet action. Only returned if `?include=steps` is provided.
-   */
-  steps?: Array<WalletActionStep>;
-}
-
-/**
- * Response for an earn withdraw action.
- */
-export interface EarnWithdrawActionResponse {
-  /**
-   * The ID of the wallet action.
-   */
-  id: string;
-
-  /**
-   * Underlying asset token address.
-   */
-  asset_address: string;
-
-  /**
-   * CAIP-2 chain identifier.
-   */
-  caip2: string;
-
-  /**
-   * ISO 8601 timestamp of when the wallet action was created.
-   */
-  created_at: string;
-
-  /**
-   * Base-unit amount of asset withdrawn (e.g. "1500000").
-   */
-  raw_amount: string;
-
-  /**
-   * Vault shares burned in base units. Populated after on-chain confirmation.
-   */
-  share_amount: string | null;
-
-  /**
-   * Status of a wallet action.
-   */
-  status: WalletActionStatus;
-
-  type: 'earn_withdraw';
-
-  /**
-   * ERC-4626 vault contract address.
-   */
-  vault_address: string;
-
-  /**
-   * The vault ID.
-   */
-  vault_id: string;
-
-  /**
-   * The ID of the wallet involved in the action.
-   */
-  wallet_id: string;
-
-  /**
-   * Human-readable decimal amount of asset withdrawn (e.g. "1.5"). Only present when
-   * the token is known in the asset registry.
-   */
-  amount?: string;
-
-  /**
-   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
-   * the asset registry.
-   */
-  asset?: string;
-
-  /**
-   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
-   * present when the token is known in the asset registry.
-   */
-  decimals?: number;
-
-  /**
-   * A description of why a wallet action (or a step within a wallet action) failed.
-   */
-  failure_reason?: FailureReason;
-
-  /**
-   * The steps of the wallet action. Only returned if `?include=steps` is provided.
-   */
-  steps?: Array<WalletActionStep>;
-}
-
-/**
- * Response for an earn incentive claim action.
- */
-export interface EarnIncentiveClaimActionResponse {
-  /**
-   * The ID of the wallet action.
-   */
-  id: string;
-
-  /**
-   * EVM chain name (e.g. "base", "ethereum").
-   */
-  chain: string;
-
-  /**
-   * ISO 8601 timestamp of when the wallet action was created.
-   */
-  created_at: string;
-
-  /**
-   * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
-   */
-  rewards: Array<EarnIncetiveClaimRewardEntry> | null;
-
-  /**
-   * Status of a wallet action.
-   */
-  status: WalletActionStatus;
-
-  type: 'earn_incentive_claim';
-
-  /**
-   * The ID of the wallet involved in the action.
-   */
-  wallet_id: string;
-
-  /**
-   * A description of why a wallet action (or a step within a wallet action) failed.
-   */
-  failure_reason?: FailureReason;
-
-  /**
-   * The steps of the wallet action. Only returned if `?include=steps` is provided.
-   */
-  steps?: Array<WalletActionStep>;
-}
-
-/**
  * Response for a wallet action, discriminated on type.
  */
 export type WalletActionResponse =
@@ -570,211 +722,59 @@ export type WalletActionResponse =
   | EarnIncentiveClaimActionResponse;
 
 /**
- * Supported earn provider protocols.
+ * Status of a wallet action.
  */
-export type EthereumEarnProvider = 'morpho' | 'aave';
+export type WalletActionStatus = 'pending' | 'succeeded' | 'rejected' | 'failed';
 
 /**
- * Input for depositing assets into an ERC-4626 vault. Exactly one of `amount` or
- * `raw_amount` must be provided.
+ * A step within a wallet action, representing a single onchain action.
  */
-export interface EarnDepositRequestBody {
-  /**
-   * The ID of the vault to deposit into.
-   */
-  vault_id: string;
-
-  /**
-   * Human-readable decimal amount to deposit (e.g. "1.5" for 1.5 USDC). Exactly one
-   * of `amount` or `raw_amount` must be provided.
-   */
-  amount?: string;
-
-  /**
-   * Amount in smallest unit to deposit (e.g. "1500000" for 1.5 USDC with 6
-   * decimals). Exactly one of `amount` or `raw_amount` must be provided.
-   */
-  raw_amount?: string;
-}
+export type WalletActionStep =
+  | EvmTransactionWalletActionStep
+  | EvmUserOperationWalletActionStep
+  | SvmTransactionWalletActionStep;
 
 /**
- * Input for withdrawing assets from an ERC-4626 vault. Exactly one of `amount` or
- * `raw_amount` must be provided.
+ * Type of a wallet action step.
  */
-export interface EarnWithdrawRequestBody {
-  /**
-   * The ID of the vault to withdraw from.
-   */
-  vault_id: string;
-
-  /**
-   * Human-readable decimal amount to withdraw (e.g. "1.5" for 1.5 USDC). Exactly one
-   * of `amount` or `raw_amount` must be provided.
-   */
-  amount?: string;
-
-  /**
-   * Amount in smallest unit to withdraw (e.g. "1500000" for 1.5 USDC with 6
-   * decimals). Exactly one of `amount` or `raw_amount` must be provided.
-   */
-  raw_amount?: string;
-}
+export type WalletActionStepType = 'evm_transaction' | 'evm_user_operation' | 'svm_transaction';
 
 /**
- * Input for claiming incentive rewards.
+ * Type of wallet action
  */
-export interface EarnIncentiveClaimRequestBody {
-  /**
-   * The blockchain network on which to perform the incentive claim. Supported chains
-   * include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and more, along
-   * with their respective testnets.
-   */
-  chain: string;
-}
-
-/**
- * Query parameters for fetching an earn vault position.
- */
-export interface EthereumEarnPositionQuery {
-  /**
-   * The vault ID to get position for.
-   */
-  vault_id: string;
-}
-
-/**
- * Asset metadata for an earn vault position.
- */
-export interface EarnAsset {
-  /**
-   * Token contract address.
-   */
-  address: string;
-
-  /**
-   * Number of decimals for the asset (e.g. 6 for USDC).
-   */
-  decimals: number;
-
-  /**
-   * Lowercase token symbol (e.g. "usdc").
-   */
-  symbol: string;
-}
-
-/**
- * A wallet's position in an earn vault.
- */
-export interface EthereumEarnPositionResponse {
-  /**
-   * Asset metadata for an earn vault position.
-   */
-  asset: EarnAsset;
-
-  /**
-   * Current asset value in the vault (realtime from ERC-4626), in smallest unit.
-   */
-  assets_in_vault: string;
-
-  /**
-   * Current vault shares held (realtime from ERC-4626).
-   */
-  shares_in_vault: string;
-
-  /**
-   * Total amount deposited into the vault, in smallest unit.
-   */
-  total_deposited: string;
-
-  /**
-   * Total amount withdrawn from the vault, in smallest unit.
-   */
-  total_withdrawn: string;
-}
-
-/**
- * Detailed vault information including current APY, liquidity, and asset metadata.
- */
-export interface EthereumEarnVaultDetailsResponse {
-  /**
-   * Vault identifier.
-   */
-  id: string;
-
-  /**
-   * Annual percentage yield earned by the app from fee wrapper fees, in basis
-   * points.
-   */
-  app_apy: number | null;
-
-  /**
-   * Asset metadata for an earn vault position.
-   */
-  asset: EarnAsset;
-
-  /**
-   * Available liquidity in USD.
-   */
-  available_liquidity_usd: number | null;
-
-  /**
-   * CAIP-2 chain identifier (e.g. "eip155:8453").
-   */
-  caip2: string;
-
-  /**
-   * Human-readable vault name from the yield provider.
-   */
-  name: string;
-
-  /**
-   * Supported earn provider protocols.
-   */
-  provider: EthereumEarnProvider;
-
-  /**
-   * Total value locked in USD.
-   */
-  tvl_usd: number | null;
-
-  /**
-   * Current annual percentage yield in basis points (e.g. 500 for 5%). 1 basis point
-   * = 0.01%.
-   */
-  user_apy: number | null;
-
-  /**
-   * Onchain vault contract address.
-   */
-  vault_address: string;
-}
+export type WalletActionType =
+  | 'swap'
+  | 'transfer'
+  | 'earn_deposit'
+  | 'earn_withdraw'
+  | 'earn_incentive_claim';
 
 export declare namespace WalletActions {
   export {
-    type WalletActionType as WalletActionType,
-    type WalletActionStatus as WalletActionStatus,
-    type WalletActionStepType as WalletActionStepType,
-    type EvmWalletActionStepStatus as EvmWalletActionStepStatus,
-    type FailureReason as FailureReason,
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
-    type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
+    type EvmWalletActionStepStatus as EvmWalletActionStepStatus,
+    type EarnAsset as EarnAsset,
+    type EarnDepositActionResponse as EarnDepositActionResponse,
+    type EarnDepositRequestBody as EarnDepositRequestBody,
+    type EarnIncentiveClaimActionResponse as EarnIncentiveClaimActionResponse,
+    type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
+    type EarnIncetiveClaimRewardEntry as EarnIncetiveClaimRewardEntry,
+    type EarnWithdrawActionResponse as EarnWithdrawActionResponse,
+    type EarnWithdrawRequestBody as EarnWithdrawRequestBody,
+    type EthereumEarnPositionQuery as EthereumEarnPositionQuery,
+    type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
+    type EthereumEarnProvider as EthereumEarnProvider,
+    type EthereumEarnVaultDetailsResponse as EthereumEarnVaultDetailsResponse,
+    type FailureReason as FailureReason,
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
-    type WalletActionStep as WalletActionStep,
+    type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
     type SwapActionResponse as SwapActionResponse,
     type TransferActionResponse as TransferActionResponse,
-    type EarnIncetiveClaimRewardEntry as EarnIncetiveClaimRewardEntry,
-    type EarnDepositActionResponse as EarnDepositActionResponse,
-    type EarnWithdrawActionResponse as EarnWithdrawActionResponse,
-    type EarnIncentiveClaimActionResponse as EarnIncentiveClaimActionResponse,
     type WalletActionResponse as WalletActionResponse,
-    type EthereumEarnProvider as EthereumEarnProvider,
-    type EarnDepositRequestBody as EarnDepositRequestBody,
-    type EarnWithdrawRequestBody as EarnWithdrawRequestBody,
-    type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
-    type EthereumEarnPositionQuery as EthereumEarnPositionQuery,
-    type EarnAsset as EarnAsset,
-    type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
-    type EthereumEarnVaultDetailsResponse as EthereumEarnVaultDetailsResponse,
+    type WalletActionStatus as WalletActionStatus,
+    type WalletActionStep as WalletActionStep,
+    type WalletActionStepType as WalletActionStepType,
+    type WalletActionType as WalletActionType,
   };
 }

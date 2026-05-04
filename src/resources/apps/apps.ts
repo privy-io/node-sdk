@@ -62,136 +62,25 @@ export class Apps extends APIResource {
 }
 
 /**
- * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+ * Confirmation response for deleting an allowlist entry.
  */
-export type Caip2 = string;
-
-/**
- * A currency asset type.
- */
-export type CurrencyAsset = 'native-currency' | 'USDC';
-
-/**
- * A crypto currency identified by a CAIP-2 chain ID and optional asset.
- */
-export interface Currency {
-  /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
-   */
-  chain: Caip2;
-
-  /**
-   * A currency asset type.
-   */
-  asset?: CurrencyAsset;
+export interface AllowlistDeletionResponse {
+  message: string;
 }
 
 /**
- * Whether to create embedded wallets on login.
+ * An allowlist entry for an app.
  */
-export type EmbeddedWalletCreateOnLogin = 'users-without-wallets' | 'all-users' | 'off';
+export interface AllowlistEntry {
+  id: string;
 
-/**
- * Chain-specific configuration for embedded wallets.
- */
-export interface EmbeddedWalletChainConfig {
-  /**
-   * Whether to create embedded wallets on login.
-   */
-  create_on_login: EmbeddedWalletCreateOnLogin;
-}
+  acceptedAt: number | null;
 
-/**
- * A user-owned recovery option for embedded wallets.
- */
-export type UserOwnedRecoveryOption = 'user-passcode' | 'google-drive' | 'icloud';
+  appId: string;
 
-/**
- * Input configuration for embedded wallets.
- */
-export interface EmbeddedWalletInputSchema {
-  /**
-   * Whether to create embedded wallets on login.
-   */
-  create_on_login: EmbeddedWalletCreateOnLogin;
+  type: string;
 
-  /**
-   * Chain-specific configuration for embedded wallets.
-   */
-  ethereum: EmbeddedWalletChainConfig;
-
-  /**
-   * Chain-specific configuration for embedded wallets.
-   */
-  solana: EmbeddedWalletChainConfig;
-
-  user_owned_recovery_options: Array<UserOwnedRecoveryOption>;
-
-  require_user_owned_recovery_on_create?: boolean;
-
-  require_user_password_on_create?: boolean;
-}
-
-/**
- * The mode for embedded wallets.
- */
-export type EmbeddedWalletMode = 'legacy-embedded-wallets-only' | 'user-controlled-server-wallets-only';
-
-/**
- * Configuration for embedded wallets including the mode.
- */
-export interface EmbeddedWalletConfigSchema extends EmbeddedWalletInputSchema {
-  /**
-   * The mode for embedded wallets.
-   */
-  mode: EmbeddedWalletMode;
-}
-
-/**
- * Configuration for Telegram authentication.
- */
-export interface TelegramAuthConfigSchema {
-  bot_id: string;
-
-  bot_name: string;
-
-  link_enabled: boolean;
-
-  seamless_auth_enabled: boolean;
-}
-
-/**
- * A funding method for on-ramp.
- */
-export type FundingMethodEnum = 'moonpay' | 'coinbase-onramp' | 'external';
-
-/**
- * A funding option with method and provider.
- */
-export interface FundingOption {
-  method: string;
-
-  provider: string;
-}
-
-/**
- * Configuration for funding and on-ramp options.
- */
-export interface FundingConfigResponseSchema {
-  cross_chain_bridging_enabled: boolean;
-
-  default_recommended_amount: string;
-
-  /**
-   * A crypto currency identified by a CAIP-2 chain ID and optional asset.
-   */
-  default_recommended_currency: Currency;
-
-  methods: Array<FundingMethodEnum>;
-
-  options: Array<FundingOption>;
-
-  prompt_funding_on_wallet_creation: boolean;
+  value: string;
 }
 
 /**
@@ -350,36 +239,34 @@ export namespace AppResponse {
 }
 
 /**
+ * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+ */
+export type Caip2 = string;
+
+/**
+ * A crypto currency identified by a CAIP-2 chain ID and optional asset.
+ */
+export interface Currency {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  chain: Caip2;
+
+  /**
+   * A currency asset type.
+   */
+  asset?: CurrencyAsset;
+}
+
+/**
+ * A currency asset type.
+ */
+export type CurrencyAsset = 'native-currency' | 'USDC';
+
+/**
  * An email domain.
  */
 export type EmailDomain = string;
-
-/**
- * Allowlist invite input for an email address.
- */
-export interface EmailInviteInput {
-  type: 'email';
-
-  value: string;
-}
-
-/**
- * Allowlist invite input for a wallet address.
- */
-export interface WalletInviteInput {
-  type: 'wallet';
-
-  value: string;
-}
-
-/**
- * Allowlist invite input for a phone number.
- */
-export interface PhoneInviteInput {
-  type: 'phone';
-
-  value: string;
-}
 
 /**
  * Allowlist invite input for an email domain.
@@ -394,34 +281,186 @@ export interface EmailDomainInviteInput {
 }
 
 /**
- * Input for adding or removing an allowlist entry. Discriminated by type.
+ * Allowlist invite input for an email address.
  */
-export type UserInviteInput =
-  | EmailInviteInput
-  | EmailDomainInviteInput
-  | WalletInviteInput
-  | PhoneInviteInput;
-
-/**
- * An allowlist entry for an app.
- */
-export interface AllowlistEntry {
-  id: string;
-
-  acceptedAt: number | null;
-
-  appId: string;
-
-  type: string;
+export interface EmailInviteInput {
+  type: 'email';
 
   value: string;
 }
 
 /**
- * Confirmation response for deleting an allowlist entry.
+ * Chain-specific configuration for embedded wallets.
  */
-export interface AllowlistDeletionResponse {
-  message: string;
+export interface EmbeddedWalletChainConfig {
+  /**
+   * Whether to create embedded wallets on login.
+   */
+  create_on_login: EmbeddedWalletCreateOnLogin;
+}
+
+/**
+ * Configuration for embedded wallets including the mode.
+ */
+export interface EmbeddedWalletConfigSchema extends EmbeddedWalletInputSchema {
+  /**
+   * The mode for embedded wallets.
+   */
+  mode: EmbeddedWalletMode;
+}
+
+/**
+ * Whether to create embedded wallets on login.
+ */
+export type EmbeddedWalletCreateOnLogin = 'users-without-wallets' | 'all-users' | 'off';
+
+/**
+ * Input configuration for embedded wallets.
+ */
+export interface EmbeddedWalletInputSchema {
+  /**
+   * Whether to create embedded wallets on login.
+   */
+  create_on_login: EmbeddedWalletCreateOnLogin;
+
+  /**
+   * Chain-specific configuration for embedded wallets.
+   */
+  ethereum: EmbeddedWalletChainConfig;
+
+  /**
+   * Chain-specific configuration for embedded wallets.
+   */
+  solana: EmbeddedWalletChainConfig;
+
+  user_owned_recovery_options: Array<UserOwnedRecoveryOption>;
+
+  require_user_owned_recovery_on_create?: boolean;
+
+  require_user_password_on_create?: boolean;
+}
+
+/**
+ * The mode for embedded wallets.
+ */
+export type EmbeddedWalletMode = 'legacy-embedded-wallets-only' | 'user-controlled-server-wallets-only';
+
+/**
+ * Configuration for funding and on-ramp options.
+ */
+export interface FundingConfigResponseSchema {
+  cross_chain_bridging_enabled: boolean;
+
+  default_recommended_amount: string;
+
+  /**
+   * A crypto currency identified by a CAIP-2 chain ID and optional asset.
+   */
+  default_recommended_currency: Currency;
+
+  methods: Array<FundingMethodEnum>;
+
+  options: Array<FundingOption>;
+
+  prompt_funding_on_wallet_creation: boolean;
+}
+
+/**
+ * A funding method for on-ramp.
+ */
+export type FundingMethodEnum = 'moonpay' | 'coinbase-onramp' | 'external';
+
+/**
+ * A funding option with method and provider.
+ */
+export interface FundingOption {
+  method: string;
+
+  provider: string;
+}
+
+/**
+ * Currency for gas spend values.
+ */
+export type GasSpendCurrency = 'usd';
+
+/**
+ * Query parameters for getting gas spend for a set of wallets.
+ */
+export interface GasSpendRequestBody {
+  /**
+   * Unix timestamp in milliseconds, exclusive.
+   */
+  end_timestamp: number;
+
+  /**
+   * Unix timestamp in milliseconds, inclusive.
+   */
+  start_timestamp: number;
+
+  /**
+   * List of wallet IDs to query gas spend for. Maximum 100.
+   */
+  wallet_ids: Array<string>;
+}
+
+/**
+ * Aggregated Privy gas credits charged for a set of wallets over a time range.
+ */
+export interface GasSpendResponseBody {
+  /**
+   * Currency for gas spend values.
+   */
+  currency: GasSpendCurrency;
+
+  /**
+   * Total Privy credits charged as a decimal string.
+   */
+  value: string;
+}
+
+/**
+ * Gas sponsorship configuration for an app.
+ */
+export interface GasSponsorshipConfiguration {
+  configured_networks: Array<Caip2>;
+
+  require_app_secret: boolean;
+
+  sponsorship_enabled: boolean;
+}
+
+/**
+ * Input for configuring gas sponsorship settings for an app.
+ */
+export interface GasSponsorshipConfigurationInput {
+  configured_networks?: Array<Caip2>;
+
+  require_app_secret?: boolean;
+
+  sponsorship_enabled?: boolean;
+}
+
+/**
+ * Allowlist invite input for a phone number.
+ */
+export interface PhoneInviteInput {
+  type: 'phone';
+
+  value: string;
+}
+
+/**
+ * Configuration for Telegram authentication.
+ */
+export interface TelegramAuthConfigSchema {
+  bot_id: string;
+
+  bot_name: string;
+
+  link_enabled: boolean;
+
+  seamless_auth_enabled: boolean;
 }
 
 /**
@@ -449,65 +488,26 @@ export interface TestAccountsResponse {
 }
 
 /**
- * Query parameters for getting gas spend for a set of wallets.
+ * Input for adding or removing an allowlist entry. Discriminated by type.
  */
-export interface GasSpendRequestBody {
-  /**
-   * Unix timestamp in milliseconds, exclusive.
-   */
-  end_timestamp: number;
-
-  /**
-   * Unix timestamp in milliseconds, inclusive.
-   */
-  start_timestamp: number;
-
-  /**
-   * List of wallet IDs to query gas spend for. Maximum 100.
-   */
-  wallet_ids: Array<string>;
-}
+export type UserInviteInput =
+  | EmailInviteInput
+  | EmailDomainInviteInput
+  | WalletInviteInput
+  | PhoneInviteInput;
 
 /**
- * Currency for gas spend values.
+ * A user-owned recovery option for embedded wallets.
  */
-export type GasSpendCurrency = 'usd';
+export type UserOwnedRecoveryOption = 'user-passcode' | 'google-drive' | 'icloud';
 
 /**
- * Aggregated Privy gas credits charged for a set of wallets over a time range.
+ * Allowlist invite input for a wallet address.
  */
-export interface GasSpendResponseBody {
-  /**
-   * Currency for gas spend values.
-   */
-  currency: GasSpendCurrency;
+export interface WalletInviteInput {
+  type: 'wallet';
 
-  /**
-   * Total Privy credits charged as a decimal string.
-   */
   value: string;
-}
-
-/**
- * Input for configuring gas sponsorship settings for an app.
- */
-export interface GasSponsorshipConfigurationInput {
-  configured_networks?: Array<Caip2>;
-
-  require_app_secret?: boolean;
-
-  sponsorship_enabled?: boolean;
-}
-
-/**
- * Gas sponsorship configuration for an app.
- */
-export interface GasSponsorshipConfiguration {
-  configured_networks: Array<Caip2>;
-
-  require_app_secret: boolean;
-
-  sponsorship_enabled: boolean;
 }
 
 export interface AppGetGasSpendParams {
@@ -522,35 +522,35 @@ Apps.Allowlist = Allowlist;
 
 export declare namespace Apps {
   export {
+    type AllowlistDeletionResponse as AllowlistDeletionResponse,
+    type AllowlistEntry as AllowlistEntry,
+    type AppResponse as AppResponse,
     type Caip2 as Caip2,
-    type CurrencyAsset as CurrencyAsset,
     type Currency as Currency,
-    type EmbeddedWalletCreateOnLogin as EmbeddedWalletCreateOnLogin,
+    type CurrencyAsset as CurrencyAsset,
+    type EmailDomain as EmailDomain,
+    type EmailDomainInviteInput as EmailDomainInviteInput,
+    type EmailInviteInput as EmailInviteInput,
     type EmbeddedWalletChainConfig as EmbeddedWalletChainConfig,
-    type UserOwnedRecoveryOption as UserOwnedRecoveryOption,
+    type EmbeddedWalletConfigSchema as EmbeddedWalletConfigSchema,
+    type EmbeddedWalletCreateOnLogin as EmbeddedWalletCreateOnLogin,
     type EmbeddedWalletInputSchema as EmbeddedWalletInputSchema,
     type EmbeddedWalletMode as EmbeddedWalletMode,
-    type EmbeddedWalletConfigSchema as EmbeddedWalletConfigSchema,
-    type TelegramAuthConfigSchema as TelegramAuthConfigSchema,
+    type FundingConfigResponseSchema as FundingConfigResponseSchema,
     type FundingMethodEnum as FundingMethodEnum,
     type FundingOption as FundingOption,
-    type FundingConfigResponseSchema as FundingConfigResponseSchema,
-    type AppResponse as AppResponse,
-    type EmailDomain as EmailDomain,
-    type EmailInviteInput as EmailInviteInput,
-    type WalletInviteInput as WalletInviteInput,
+    type GasSpendCurrency as GasSpendCurrency,
+    type GasSpendRequestBody as GasSpendRequestBody,
+    type GasSpendResponseBody as GasSpendResponseBody,
+    type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
+    type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
     type PhoneInviteInput as PhoneInviteInput,
-    type EmailDomainInviteInput as EmailDomainInviteInput,
-    type UserInviteInput as UserInviteInput,
-    type AllowlistEntry as AllowlistEntry,
-    type AllowlistDeletionResponse as AllowlistDeletionResponse,
+    type TelegramAuthConfigSchema as TelegramAuthConfigSchema,
     type TestAccount as TestAccount,
     type TestAccountsResponse as TestAccountsResponse,
-    type GasSpendRequestBody as GasSpendRequestBody,
-    type GasSpendCurrency as GasSpendCurrency,
-    type GasSpendResponseBody as GasSpendResponseBody,
-    type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
-    type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
+    type UserInviteInput as UserInviteInput,
+    type UserOwnedRecoveryOption as UserOwnedRecoveryOption,
+    type WalletInviteInput as WalletInviteInput,
     type AppGetGasSpendParams as AppGetGasSpendParams,
   };
 

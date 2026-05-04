@@ -296,11 +296,6 @@ export class Policies extends APIResource {
 }
 
 /**
- * The action to take when a policy rule matches.
- */
-export type PolicyAction = 'ALLOW' | 'DENY';
-
-/**
  * A parameter in a Solidity ABI function or event definition.
  */
 export interface AbiParameter {
@@ -337,9 +332,194 @@ export namespace AbiSchema {
 }
 
 /**
+ * Condition on the original wallet action API request body fields.
+ */
+export interface ActionRequestBodyCondition {
+  field: string;
+
+  field_source: 'action_request_body';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
+}
+
+/**
+ * Condition referencing an aggregation value. The field must start with
+ * "aggregation." followed by the aggregation ID.
+ */
+export interface AggregationCondition {
+  field: string;
+
+  field_source: 'reference';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
+}
+
+/**
  * Operator to use for policy conditions.
  */
 export type ConditionOperator = 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+
+/**
+ * A condition set for grouping related condition values.
+ */
+export interface ConditionSet {
+  /**
+   * Unique ID of the created condition set. This will be the primary identifier when
+   * using the condition set in the future.
+   */
+  id: string;
+
+  /**
+   * Unix timestamp of when the condition set was created in milliseconds.
+   */
+  created_at: number;
+
+  /**
+   * Name of the condition set.
+   */
+  name: string;
+
+  /**
+   * A unique identifier for a key quorum.
+   */
+  owner_id: SharedAPI.KeyQuorumID;
+}
+
+/**
+ * Headers required to authorize modifications to condition sets.
+ */
+export interface ConditionSetAuthorizationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
+/**
+ * A single item in a condition set.
+ */
+export interface ConditionSetItem {
+  /**
+   * Unique ID of the created condition set item.
+   */
+  id: string;
+
+  /**
+   * Unique ID of the condition set this item belongs to.
+   */
+  condition_set_id: string;
+
+  /**
+   * Unix timestamp of when the condition set item was created in milliseconds.
+   */
+  created_at: number;
+
+  /**
+   * The value stored in this condition set item.
+   */
+  value: string;
+}
+
+/**
+ * Unique IDs of the condition set and the condition set item within the condition
+ * set to take actions on.
+ */
+export interface ConditionSetItemRequestParams {
+  condition_set_id: string;
+
+  condition_set_item_id: string;
+}
+
+/**
+ * A single value to add to a condition set.
+ */
+export interface ConditionSetItemValueInput {
+  value: string;
+}
+
+/**
+ * Array of condition set items.
+ */
+export type ConditionSetItems = Array<ConditionSetItem>;
+
+/**
+ * Array of values to add to the condition set. Maximum 100 items per request.
+ */
+export type ConditionSetItemsRequestBody = Array<ConditionSetItemValueInput>;
+
+/**
+ * Paginated list of condition set items.
+ */
+export interface ConditionSetItemsResponse {
+  /**
+   * List of condition set items.
+   */
+  items: Array<ConditionSetItem>;
+
+  /**
+   * Cursor for pagination. Null if there are no more items.
+   */
+  next_cursor: string | null;
+}
+
+/**
+ * Request body for creating a condition set.
+ */
+export interface ConditionSetRequestBody {
+  /**
+   * Name to assign to condition set.
+   */
+  name: string;
+
+  /**
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
+   */
+  owner?: SharedAPI.OwnerInput | null;
+
+  /**
+   * The key quorum ID to set as the owner of the resource. If you provide this, do
+   * not specify an owner.
+   */
+  owner_id?: SharedAPI.OwnerIDInput | null;
+}
+
+/**
+ * Unique ID of the condition set to take actions on.
+ */
+export interface ConditionSetRequestParams {
+  condition_set_id: string;
+}
 
 /**
  * Value to compare against in a policy condition. Can be a single string or an
@@ -348,25 +528,12 @@ export type ConditionOperator = 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_
 export type ConditionValue = string | Array<string>;
 
 /**
- * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
- * supported for command names.
+ * Allowed contract addresses for eth_sign7702Authorization requests.
  */
-export type SuiTransactionCommandOperator = 'eq' | 'in';
+export interface Ethereum7702AuthorizationCondition {
+  field: 'contract';
 
-/**
- * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
- * and 'amount' are supported.
- */
-export type SuiTransferObjectsCommandField = 'recipient' | 'amount';
-
-/**
- * The verbatim Ethereum transaction object in an eth_signTransaction or
- * eth_sendTransaction request.
- */
-export interface EthereumTransactionCondition {
-  field: 'to' | 'value' | 'chain_id';
-
-  field_source: 'ethereum_transaction';
+  field_source: 'ethereum_7702_authorization';
 
   /**
    * Operator to use for policy conditions.
@@ -394,6 +561,27 @@ export interface EthereumCalldataCondition {
   field: string;
 
   field_source: 'ethereum_calldata';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
+}
+
+/**
+ * The verbatim Ethereum transaction object in an eth_signTransaction or
+ * eth_sendTransaction request.
+ */
+export interface EthereumTransactionCondition {
+  field: 'to' | 'value' | 'chain_id';
+
+  field_source: 'ethereum_transaction';
 
   /**
    * Operator to use for policy conditions.
@@ -462,23 +650,167 @@ export namespace EthereumTypedDataMessageCondition {
 }
 
 /**
- * Allowed contract addresses for eth_sign7702Authorization requests.
+ * A policy for controlling wallet operations.
  */
-export interface Ethereum7702AuthorizationCondition {
-  field: 'contract';
-
-  field_source: 'ethereum_7702_authorization';
+export interface Policy {
+  /**
+   * Unique ID of the created policy. This will be the primary identifier when using
+   * the policy in the future.
+   */
+  id: string;
 
   /**
-   * Operator to use for policy conditions.
+   * The wallet chain types.
    */
-  operator: ConditionOperator;
+  chain_type: WalletsAPI.WalletChainType;
 
   /**
-   * Value to compare against in a policy condition. Can be a single string or an
-   * array of strings.
+   * Unix timestamp of when the policy was created in milliseconds.
    */
-  value: ConditionValue;
+  created_at: number;
+
+  /**
+   * Name to assign to policy.
+   */
+  name: string;
+
+  /**
+   * The key quorum ID of the owner of the policy.
+   */
+  owner_id: string | null;
+
+  rules: Array<PolicyRuleResponse>;
+
+  /**
+   * Version of the policy. Currently, 1.0 is the only version.
+   */
+  version: '1.0';
+}
+
+/**
+ * The action to take when a policy rule matches.
+ */
+export type PolicyAction = 'ALLOW' | 'DENY';
+
+/**
+ * Headers required to authorize modifications to policies.
+ */
+export interface PolicyAuthorizationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
+
+  /**
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
+/**
+ * A condition that must be true for the rule action to be applied.
+ */
+export type PolicyCondition =
+  | EthereumTransactionCondition
+  | EthereumCalldataCondition
+  | EthereumTypedDataDomainCondition
+  | EthereumTypedDataMessageCondition
+  | Ethereum7702AuthorizationCondition
+  | SolanaProgramInstructionCondition
+  | SolanaSystemProgramInstructionCondition
+  | SolanaTokenProgramInstructionCondition
+  | SystemCondition
+  | TronTransactionCondition
+  | TronCalldataCondition
+  | SuiTransactionCommandCondition
+  | SuiTransferObjectsCommandCondition
+  | ActionRequestBodyCondition
+  | AggregationCondition;
+
+/**
+ * Method the rule applies to.
+ */
+export type PolicyMethod =
+  | 'eth_sendTransaction'
+  | 'eth_signTransaction'
+  | 'eth_signUserOperation'
+  | 'eth_signTypedData_v4'
+  | 'eth_sign7702Authorization'
+  | 'personal_sign'
+  | 'wallet_sendCalls'
+  | 'signTransaction'
+  | 'signAndSendTransaction'
+  | 'signMessage'
+  | 'exportPrivateKey'
+  | 'exportSeedPhrase'
+  | 'signTransactionBytes'
+  | 'earn_deposit'
+  | 'earn_withdraw'
+  | 'transfer'
+  | '*';
+
+/**
+ * Unique ID of the policy to take actions on.
+ */
+export interface PolicyRequestBody {
+  policy_id: string;
+}
+
+/**
+ * The rules that apply to each method the policy covers.
+ */
+export interface PolicyRuleRequestBody {
+  /**
+   * The action to take when a policy rule matches.
+   */
+  action: PolicyAction;
+
+  conditions: Array<PolicyCondition>;
+
+  /**
+   * Method the rule applies to.
+   */
+  method: PolicyMethod;
+
+  name: string;
+}
+
+/**
+ * Unique IDs of the policy and the rule within the policy to take actions on.
+ */
+export interface PolicyRuleRequestParams {
+  policy_id: string;
+
+  rule_id: string;
+}
+
+/**
+ * A rule that defines the conditions and action to take if the conditions are
+ * true.
+ */
+export interface PolicyRuleResponse {
+  id: string;
+
+  /**
+   * The action to take when a policy rule matches.
+   */
+  action: PolicyAction;
+
+  conditions: Array<PolicyCondition>;
+
+  /**
+   * Method the rule applies to.
+   */
+  method: PolicyMethod;
+
+  name: string;
 }
 
 /**
@@ -568,12 +900,96 @@ export interface SolanaTokenProgramInstructionCondition {
 }
 
 /**
+ * SUI transaction command attributes, enables allowlisting specific command types.
+ * Allowed commands: 'TransferObjects', 'SplitCoins', 'MergeCoins'. Only 'eq' and
+ * 'in' operators are supported.
+ */
+export interface SuiTransactionCommandCondition {
+  field: 'commandName';
+
+  field_source: 'sui_transaction_command';
+
+  /**
+   * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
+   * supported for command names.
+   */
+  operator: SuiTransactionCommandOperator;
+
+  /**
+   * Command name(s) to match. Must be one of: 'TransferObjects', 'SplitCoins',
+   * 'MergeCoins'
+   */
+  value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
+}
+
+/**
+ * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
+ * supported for command names.
+ */
+export type SuiTransactionCommandOperator = 'eq' | 'in';
+
+/**
+ * SUI TransferObjects command attributes, including recipient and amount fields.
+ */
+export interface SuiTransferObjectsCommandCondition {
+  /**
+   * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
+   * and 'amount' are supported.
+   */
+  field: SuiTransferObjectsCommandField;
+
+  field_source: 'sui_transfer_objects_command';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
+}
+
+/**
+ * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
+ * and 'amount' are supported.
+ */
+export type SuiTransferObjectsCommandField = 'recipient' | 'amount';
+
+/**
  * System attributes, including current unix timestamp (in seconds).
  */
 export interface SystemCondition {
   field: 'current_unix_timestamp';
 
   field_source: 'system';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
+}
+
+/**
+ * Decoded calldata from a TRON TriggerSmartContract interaction.
+ */
+export interface TronCalldataCondition {
+  /**
+   * A Solidity ABI definition for decoding smart contract calldata.
+   */
+  abi: AbiSchema;
+
+  field: string;
+
+  field_source: 'tron_trigger_smart_contract_data';
 
   /**
    * Operator to use for policy conditions.
@@ -618,343 +1034,6 @@ export interface TronTransactionCondition {
 }
 
 /**
- * Decoded calldata from a TRON TriggerSmartContract interaction.
- */
-export interface TronCalldataCondition {
-  /**
-   * A Solidity ABI definition for decoding smart contract calldata.
-   */
-  abi: AbiSchema;
-
-  field: string;
-
-  field_source: 'tron_trigger_smart_contract_data';
-
-  /**
-   * Operator to use for policy conditions.
-   */
-  operator: ConditionOperator;
-
-  /**
-   * Value to compare against in a policy condition. Can be a single string or an
-   * array of strings.
-   */
-  value: ConditionValue;
-}
-
-/**
- * SUI transaction command attributes, enables allowlisting specific command types.
- * Allowed commands: 'TransferObjects', 'SplitCoins', 'MergeCoins'. Only 'eq' and
- * 'in' operators are supported.
- */
-export interface SuiTransactionCommandCondition {
-  field: 'commandName';
-
-  field_source: 'sui_transaction_command';
-
-  /**
-   * Operator to use for SUI transaction command conditions. Only 'eq' and 'in' are
-   * supported for command names.
-   */
-  operator: SuiTransactionCommandOperator;
-
-  /**
-   * Command name(s) to match. Must be one of: 'TransferObjects', 'SplitCoins',
-   * 'MergeCoins'
-   */
-  value: WalletsAPI.SuiCommandName | Array<WalletsAPI.SuiCommandName>;
-}
-
-/**
- * SUI TransferObjects command attributes, including recipient and amount fields.
- */
-export interface SuiTransferObjectsCommandCondition {
-  /**
-   * Supported fields for SUI TransferObjects command conditions. Only 'recipient'
-   * and 'amount' are supported.
-   */
-  field: SuiTransferObjectsCommandField;
-
-  field_source: 'sui_transfer_objects_command';
-
-  /**
-   * Operator to use for policy conditions.
-   */
-  operator: ConditionOperator;
-
-  /**
-   * Value to compare against in a policy condition. Can be a single string or an
-   * array of strings.
-   */
-  value: ConditionValue;
-}
-
-/**
- * Condition on the original wallet action API request body fields.
- */
-export interface ActionRequestBodyCondition {
-  field: string;
-
-  field_source: 'action_request_body';
-
-  /**
-   * Operator to use for policy conditions.
-   */
-  operator: ConditionOperator;
-
-  /**
-   * Value to compare against in a policy condition. Can be a single string or an
-   * array of strings.
-   */
-  value: ConditionValue;
-}
-
-/**
- * Condition referencing an aggregation value. The field must start with
- * "aggregation." followed by the aggregation ID.
- */
-export interface AggregationCondition {
-  field: string;
-
-  field_source: 'reference';
-
-  /**
-   * Operator to use for policy conditions.
-   */
-  operator: ConditionOperator;
-
-  /**
-   * Value to compare against in a policy condition. Can be a single string or an
-   * array of strings.
-   */
-  value: ConditionValue;
-}
-
-/**
- * A condition that must be true for the rule action to be applied.
- */
-export type PolicyCondition =
-  | EthereumTransactionCondition
-  | EthereumCalldataCondition
-  | EthereumTypedDataDomainCondition
-  | EthereumTypedDataMessageCondition
-  | Ethereum7702AuthorizationCondition
-  | SolanaProgramInstructionCondition
-  | SolanaSystemProgramInstructionCondition
-  | SolanaTokenProgramInstructionCondition
-  | SystemCondition
-  | TronTransactionCondition
-  | TronCalldataCondition
-  | SuiTransactionCommandCondition
-  | SuiTransferObjectsCommandCondition
-  | ActionRequestBodyCondition
-  | AggregationCondition;
-
-/**
- * Method the rule applies to.
- */
-export type PolicyMethod =
-  | 'eth_sendTransaction'
-  | 'eth_signTransaction'
-  | 'eth_signUserOperation'
-  | 'eth_signTypedData_v4'
-  | 'eth_sign7702Authorization'
-  | 'personal_sign'
-  | 'wallet_sendCalls'
-  | 'signTransaction'
-  | 'signAndSendTransaction'
-  | 'signMessage'
-  | 'exportPrivateKey'
-  | 'exportSeedPhrase'
-  | 'signTransactionBytes'
-  | 'earn_deposit'
-  | 'earn_withdraw'
-  | 'transfer'
-  | '*';
-
-/**
- * The rules that apply to each method the policy covers.
- */
-export interface PolicyRuleRequestBody {
-  /**
-   * The action to take when a policy rule matches.
-   */
-  action: PolicyAction;
-
-  conditions: Array<PolicyCondition>;
-
-  /**
-   * Method the rule applies to.
-   */
-  method: PolicyMethod;
-
-  name: string;
-}
-
-/**
- * A rule that defines the conditions and action to take if the conditions are
- * true.
- */
-export interface PolicyRuleResponse {
-  id: string;
-
-  /**
-   * The action to take when a policy rule matches.
-   */
-  action: PolicyAction;
-
-  conditions: Array<PolicyCondition>;
-
-  /**
-   * Method the rule applies to.
-   */
-  method: PolicyMethod;
-
-  name: string;
-}
-
-/**
- * A policy for controlling wallet operations.
- */
-export interface Policy {
-  /**
-   * Unique ID of the created policy. This will be the primary identifier when using
-   * the policy in the future.
-   */
-  id: string;
-
-  /**
-   * The wallet chain types.
-   */
-  chain_type: WalletsAPI.WalletChainType;
-
-  /**
-   * Unix timestamp of when the policy was created in milliseconds.
-   */
-  created_at: number;
-
-  /**
-   * Name to assign to policy.
-   */
-  name: string;
-
-  /**
-   * The key quorum ID of the owner of the policy.
-   */
-  owner_id: string | null;
-
-  rules: Array<PolicyRuleResponse>;
-
-  /**
-   * Version of the policy. Currently, 1.0 is the only version.
-   */
-  version: '1.0';
-}
-
-/**
- * Unique ID of the policy to take actions on.
- */
-export interface PolicyRequestBody {
-  policy_id: string;
-}
-
-/**
- * Unique IDs of the policy and the rule within the policy to take actions on.
- */
-export interface PolicyRuleRequestParams {
-  policy_id: string;
-
-  rule_id: string;
-}
-
-/**
- * Headers required to authorize modifications to policies.
- */
-export interface PolicyAuthorizationHeaders {
-  /**
-   * ID of your Privy app.
-   */
-  'privy-app-id': string;
-
-  /**
-   * Request authorization signature. If multiple signatures are required, they
-   * should be comma separated.
-   */
-  'privy-authorization-signature'?: string;
-
-  /**
-   * Request expiry. Value is a Unix timestamp in milliseconds representing the
-   * deadline by which the request must be processed.
-   */
-  'privy-request-expiry'?: string;
-}
-
-/**
- * Unique ID of the condition set to take actions on.
- */
-export interface ConditionSetRequestParams {
-  condition_set_id: string;
-}
-
-/**
- * Unique IDs of the condition set and the condition set item within the condition
- * set to take actions on.
- */
-export interface ConditionSetItemRequestParams {
-  condition_set_id: string;
-
-  condition_set_item_id: string;
-}
-
-/**
- * Request body for creating a condition set.
- */
-export interface ConditionSetRequestBody {
-  /**
-   * Name to assign to condition set.
-   */
-  name: string;
-
-  /**
-   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
-   * null to remove the current owner.
-   */
-  owner?: SharedAPI.OwnerInput | null;
-
-  /**
-   * The key quorum ID to set as the owner of the resource. If you provide this, do
-   * not specify an owner.
-   */
-  owner_id?: SharedAPI.OwnerIDInput | null;
-}
-
-/**
- * A condition set for grouping related condition values.
- */
-export interface ConditionSet {
-  /**
-   * Unique ID of the created condition set. This will be the primary identifier when
-   * using the condition set in the future.
-   */
-  id: string;
-
-  /**
-   * Unix timestamp of when the condition set was created in milliseconds.
-   */
-  created_at: number;
-
-  /**
-   * Name of the condition set.
-   */
-  name: string;
-
-  /**
-   * A unique identifier for a key quorum.
-   */
-  owner_id: SharedAPI.KeyQuorumID;
-}
-
-/**
  * Request body for updating a condition set.
  */
 export interface UpdateConditionSetRequestBody {
@@ -974,85 +1053,6 @@ export interface UpdateConditionSetRequestBody {
    * not specify an owner.
    */
   owner_id?: SharedAPI.OwnerIDInput | null;
-}
-
-/**
- * A single value to add to a condition set.
- */
-export interface ConditionSetItemValueInput {
-  value: string;
-}
-
-/**
- * Array of values to add to the condition set. Maximum 100 items per request.
- */
-export type ConditionSetItemsRequestBody = Array<ConditionSetItemValueInput>;
-
-/**
- * A single item in a condition set.
- */
-export interface ConditionSetItem {
-  /**
-   * Unique ID of the created condition set item.
-   */
-  id: string;
-
-  /**
-   * Unique ID of the condition set this item belongs to.
-   */
-  condition_set_id: string;
-
-  /**
-   * Unix timestamp of when the condition set item was created in milliseconds.
-   */
-  created_at: number;
-
-  /**
-   * The value stored in this condition set item.
-   */
-  value: string;
-}
-
-/**
- * Array of condition set items.
- */
-export type ConditionSetItems = Array<ConditionSetItem>;
-
-/**
- * Paginated list of condition set items.
- */
-export interface ConditionSetItemsResponse {
-  /**
-   * List of condition set items.
-   */
-  items: Array<ConditionSetItem>;
-
-  /**
-   * Cursor for pagination. Null if there are no more items.
-   */
-  next_cursor: string | null;
-}
-
-/**
- * Headers required to authorize modifications to condition sets.
- */
-export interface ConditionSetAuthorizationHeaders {
-  /**
-   * ID of your Privy app.
-   */
-  'privy-app-id': string;
-
-  /**
-   * Request authorization signature. If multiple signatures are required, they
-   * should be comma separated.
-   */
-  'privy-authorization-signature'?: string;
-
-  /**
-   * Request expiry. Value is a Unix timestamp in milliseconds representing the
-   * deadline by which the request must be processed.
-   */
-  'privy-request-expiry'?: string;
 }
 
 export interface PolicyCreateParams {
@@ -1263,47 +1263,47 @@ export interface PolicyGetRuleParams {
 
 export declare namespace Policies {
   export {
-    type PolicyAction as PolicyAction,
     type AbiParameter as AbiParameter,
     type AbiSchema as AbiSchema,
+    type ActionRequestBodyCondition as ActionRequestBodyCondition,
+    type AggregationCondition as AggregationCondition,
     type ConditionOperator as ConditionOperator,
+    type ConditionSet as ConditionSet,
+    type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
+    type ConditionSetItem as ConditionSetItem,
+    type ConditionSetItemRequestParams as ConditionSetItemRequestParams,
+    type ConditionSetItemValueInput as ConditionSetItemValueInput,
+    type ConditionSetItems as ConditionSetItems,
+    type ConditionSetItemsRequestBody as ConditionSetItemsRequestBody,
+    type ConditionSetItemsResponse as ConditionSetItemsResponse,
+    type ConditionSetRequestBody as ConditionSetRequestBody,
+    type ConditionSetRequestParams as ConditionSetRequestParams,
     type ConditionValue as ConditionValue,
-    type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
-    type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
-    type EthereumTransactionCondition as EthereumTransactionCondition,
+    type Ethereum7702AuthorizationCondition as Ethereum7702AuthorizationCondition,
     type EthereumCalldataCondition as EthereumCalldataCondition,
+    type EthereumTransactionCondition as EthereumTransactionCondition,
     type EthereumTypedDataDomainCondition as EthereumTypedDataDomainCondition,
     type EthereumTypedDataMessageCondition as EthereumTypedDataMessageCondition,
-    type Ethereum7702AuthorizationCondition as Ethereum7702AuthorizationCondition,
+    type Policy as Policy,
+    type PolicyAction as PolicyAction,
+    type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
+    type PolicyCondition as PolicyCondition,
+    type PolicyMethod as PolicyMethod,
+    type PolicyRequestBody as PolicyRequestBody,
+    type PolicyRuleRequestBody as PolicyRuleRequestBody,
+    type PolicyRuleRequestParams as PolicyRuleRequestParams,
+    type PolicyRuleResponse as PolicyRuleResponse,
     type SolanaProgramInstructionCondition as SolanaProgramInstructionCondition,
     type SolanaSystemProgramInstructionCondition as SolanaSystemProgramInstructionCondition,
     type SolanaTokenProgramInstructionCondition as SolanaTokenProgramInstructionCondition,
-    type SystemCondition as SystemCondition,
-    type TronTransactionCondition as TronTransactionCondition,
-    type TronCalldataCondition as TronCalldataCondition,
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
+    type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
-    type ActionRequestBodyCondition as ActionRequestBodyCondition,
-    type AggregationCondition as AggregationCondition,
-    type PolicyCondition as PolicyCondition,
-    type PolicyMethod as PolicyMethod,
-    type PolicyRuleRequestBody as PolicyRuleRequestBody,
-    type PolicyRuleResponse as PolicyRuleResponse,
-    type Policy as Policy,
-    type PolicyRequestBody as PolicyRequestBody,
-    type PolicyRuleRequestParams as PolicyRuleRequestParams,
-    type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
-    type ConditionSetRequestParams as ConditionSetRequestParams,
-    type ConditionSetItemRequestParams as ConditionSetItemRequestParams,
-    type ConditionSetRequestBody as ConditionSetRequestBody,
-    type ConditionSet as ConditionSet,
+    type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
+    type SystemCondition as SystemCondition,
+    type TronCalldataCondition as TronCalldataCondition,
+    type TronTransactionCondition as TronTransactionCondition,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
-    type ConditionSetItemValueInput as ConditionSetItemValueInput,
-    type ConditionSetItemsRequestBody as ConditionSetItemsRequestBody,
-    type ConditionSetItem as ConditionSetItem,
-    type ConditionSetItems as ConditionSetItems,
-    type ConditionSetItemsResponse as ConditionSetItemsResponse,
-    type ConditionSetAuthorizationHeaders as ConditionSetAuthorizationHeaders,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,
     type PolicyDeleteParams as PolicyDeleteParams,

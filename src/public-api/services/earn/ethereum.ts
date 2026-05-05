@@ -8,7 +8,7 @@ import {
 import { prepareRequest } from '../../../lib/authorization';
 import { PrivyClient } from '../../PrivyClient';
 import { PrivyEarnEthereumIncentiveService } from './ethereum-incentive';
-import { AuthorizationConfig, IdempotencyConfig, Prettify } from '../types';
+import { Prettify, WithAuthorization, WithIdempotency } from '../types';
 
 export class PrivyEarnEthereumService extends Ethereum {
   private incentiveService: PrivyEarnEthereumIncentiveService;
@@ -68,11 +68,7 @@ export class PrivyEarnEthereumService extends Ethereum {
 // prettier-ignore
 export namespace PrivyEarnEthereumService {
   /** The input type for the {@link PrivyEarnEthereumService.deposit} method. */
-  export type DepositInput = Prettify<
-    Omit<EthereumDepositParams, 'privy-authorization-signature'> & AuthorizationConfig & IdempotencyConfig
-  >;
+  export type DepositInput = Prettify<WithIdempotency<WithAuthorization<EthereumDepositParams>>>;
   /** The input type for the {@link PrivyEarnEthereumService.withdraw} method. */
-  export type WithdrawInput = Prettify<
-    Omit<EthereumWithdrawParams, 'privy-authorization-signature'> & AuthorizationConfig & IdempotencyConfig
-  >;
+  export type WithdrawInput = Prettify<WithIdempotency<WithAuthorization<EthereumWithdrawParams>>>;
 }

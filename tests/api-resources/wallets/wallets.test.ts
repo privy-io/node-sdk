@@ -292,6 +292,8 @@ describe('resource wallets', () => {
       amount_type: 'exact_input',
       slippage_bps: 100,
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-idempotency-key': 'privy-idempotency-key',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 

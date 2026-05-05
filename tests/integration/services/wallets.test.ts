@@ -372,6 +372,7 @@ describe('PrivyWalletsService', () => {
         .deposit(wallet.id, {
           vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
           amount: '1.0',
+          idempotency_key: crypto.randomUUID(),
           ...(wallet.authorizationContext && {
             authorization_context: wallet.authorizationContext,
           }),
@@ -398,6 +399,7 @@ describe('PrivyWalletsService', () => {
         .withdraw(wallet.id, {
           vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
           amount: '1.0',
+          idempotency_key: crypto.randomUUID(),
           ...(wallet.authorizationContext && {
             authorization_context: wallet.authorizationContext,
           }),
@@ -424,6 +426,7 @@ describe('PrivyWalletsService', () => {
         .incentive()
         .claim(wallet.id, {
           chain: 'base',
+          idempotency_key: crypto.randomUUID(),
           ...(wallet.authorizationContext && {
             authorization_context: wallet.authorizationContext,
           }),

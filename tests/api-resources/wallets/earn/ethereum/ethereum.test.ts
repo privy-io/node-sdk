@@ -30,6 +30,8 @@ describe('resource ethereum', () => {
       amount: '1.5',
       raw_amount: '321669910225',
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-idempotency-key': 'privy-idempotency-key',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 
@@ -54,6 +56,8 @@ describe('resource ethereum', () => {
       amount: '1.5',
       raw_amount: '321669910225',
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-idempotency-key': 'privy-idempotency-key',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 });

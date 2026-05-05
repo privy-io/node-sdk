@@ -28,7 +28,12 @@ export class Incentive extends APIResource {
     params: IncentiveClaimParams,
     options?: RequestOptions,
   ): APIPromise<WalletActionsAPI.EarnIncentiveClaimActionResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
     return this._client.post(path`/v1/wallets/${walletID}/earn/ethereum/incentive/claim`, {
       body,
       ...options,
@@ -37,6 +42,8 @@ export class Incentive extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -57,6 +64,18 @@ export interface IncentiveClaimParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Idempotency keys ensure API requests are executed only once within
+   * a 24-hour window.
+   */
+  'privy-idempotency-key'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export declare namespace Incentive {

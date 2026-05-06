@@ -289,6 +289,30 @@ describe('PrivyEthereumService', () => {
           expect(response.hash).toMatch(/^0x[0-9a-fA-F]+$/);
         });
       });
+
+      // Skipped to not waste funds. Logic is shared with sending transactions so safe to not frequently test.
+      describe.skip('batched call sending', () => {
+        const calls: PrivyEthereumService.SendCallsInput['params']['calls'] = [
+          {
+            to: '0x429c8e85D3A18F9F0a64a7A851777e24D591485C', // Some ethereum address
+            value: '0x1', // 1 wei
+          },
+        ];
+
+        it('should be able to send batched calls', async () => {
+          const response = await privyClient
+            .wallets()
+            .ethereum()
+            .sendCalls(wallet.id, {
+              caip2: 'eip155:11155111',
+              params: { calls },
+              ...(wallet.authorizationContext && { authorization_context: wallet.authorizationContext }),
+            });
+
+          expect(response.transaction_id).toBeDefined();
+          expect(response.caip2).toBe('eip155:11155111');
+        });
+      });
     });
   });
 });

@@ -405,7 +405,15 @@ import {
   Shared,
   SuccessResponse,
 } from './resources/shared';
-import { SwapQuoteRequestBody, SwapQuoteResponse, SwapRequestBody, Swaps } from './resources/swaps';
+import {
+  SwapDestination,
+  SwapQuoteDestination,
+  SwapQuoteRequestBody,
+  SwapQuoteResponse,
+  SwapRequestBody,
+  SwapSource,
+  Swaps,
+} from './resources/swaps';
 import {
   Transaction,
   TransactionList,
@@ -531,6 +539,8 @@ import {
   EvmTransactionWalletActionStep,
   EvmUserOperationWalletActionStep,
   EvmWalletActionStepStatus,
+  ExternalTransactionWalletActionStep,
+  ExternalTransactionWalletActionStepStatus,
   FailureReason,
   SvmTransactionWalletActionStep,
   SvmWalletActionStepStatus,
@@ -2578,6 +2588,8 @@ export declare namespace PrivyAPI {
     type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
     type EthereumEarnProvider as EthereumEarnProvider,
     type EthereumEarnVaultDetailsResponse as EthereumEarnVaultDetailsResponse,
+    type ExternalTransactionWalletActionStep as ExternalTransactionWalletActionStep,
+    type ExternalTransactionWalletActionStepStatus as ExternalTransactionWalletActionStepStatus,
     type FailureReason as FailureReason,
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
@@ -2626,8 +2638,11 @@ export declare namespace PrivyAPI {
 
   export {
     Swaps as Swaps,
+    type SwapDestination as SwapDestination,
+    type SwapQuoteDestination as SwapQuoteDestination,
     type SwapQuoteRequestBody as SwapQuoteRequestBody,
     type SwapQuoteResponse as SwapQuoteResponse,
     type SwapRequestBody as SwapRequestBody,
+    type SwapSource as SwapSource,
   };
 }

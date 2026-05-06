@@ -1086,7 +1086,8 @@ export declare namespace IntentRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param: A hex-encoded string prefixed with '0x'.
+     * Body param: A hex-encoded string prefixed with '0x', capped at 100002 characters
+     * (50,000 bytes).
      */
     experimental_data_suffix?: WalletsAPI.Hex;
 
@@ -1304,7 +1305,8 @@ export declare namespace IntentRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param: A hex-encoded string prefixed with '0x'.
+     * Body param: A hex-encoded string prefixed with '0x', capped at 100002 characters
+     * (50,000 bytes).
      */
     experimental_data_suffix?: WalletsAPI.Hex;
 

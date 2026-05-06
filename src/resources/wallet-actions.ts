@@ -508,6 +508,35 @@ export interface EthereumEarnVaultDetailsResponse {
 }
 
 /**
+ * A wallet action step representing a cross-chain/cross-asset fill by an external
+ * provider.
+ */
+export interface ExternalTransactionWalletActionStep {
+  /**
+   * Status of an external transaction step in a wallet action.
+   */
+  status: ExternalTransactionWalletActionStepStatus;
+
+  type: 'external_transaction';
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+}
+
+/**
+ * Status of an external transaction step in a wallet action.
+ */
+export type ExternalTransactionWalletActionStepStatus =
+  | 'preparing'
+  | 'queued'
+  | 'pending'
+  | 'confirmed'
+  | 'rejected'
+  | 'failed';
+
+/**
  * A description of why a wallet action (or a step within a wallet action) failed.
  */
 export interface FailureReason {
@@ -732,12 +761,17 @@ export type WalletActionStatus = 'pending' | 'succeeded' | 'rejected' | 'failed'
 export type WalletActionStep =
   | EvmTransactionWalletActionStep
   | EvmUserOperationWalletActionStep
-  | SvmTransactionWalletActionStep;
+  | SvmTransactionWalletActionStep
+  | ExternalTransactionWalletActionStep;
 
 /**
  * Type of a wallet action step.
  */
-export type WalletActionStepType = 'evm_transaction' | 'evm_user_operation' | 'svm_transaction';
+export type WalletActionStepType =
+  | 'evm_transaction'
+  | 'evm_user_operation'
+  | 'svm_transaction'
+  | 'external_transaction';
 
 /**
  * Type of wallet action
@@ -766,6 +800,8 @@ export declare namespace WalletActions {
     type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
     type EthereumEarnProvider as EthereumEarnProvider,
     type EthereumEarnVaultDetailsResponse as EthereumEarnVaultDetailsResponse,
+    type ExternalTransactionWalletActionStep as ExternalTransactionWalletActionStep,
+    type ExternalTransactionWalletActionStepStatus as ExternalTransactionWalletActionStepStatus,
     type FailureReason as FailureReason,
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type SvmWalletActionStepStatus as SvmWalletActionStepStatus,

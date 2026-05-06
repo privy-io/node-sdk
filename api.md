@@ -937,6 +937,8 @@ Types:
 - <code><a href="./src/resources/wallet-actions.ts">EthereumEarnPositionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EthereumEarnProvider</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EthereumEarnVaultDetailsResponse</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">ExternalTransactionWalletActionStep</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">ExternalTransactionWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">FailureReason</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">SvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">SvmWalletActionStepStatus</a></code>
@@ -988,6 +990,9 @@ Types:
 
 Types:
 
+- <code><a href="./src/resources/swaps.ts">SwapDestination</a></code>
+- <code><a href="./src/resources/swaps.ts">SwapQuoteDestination</a></code>
 - <code><a href="./src/resources/swaps.ts">SwapQuoteRequestBody</a></code>
 - <code><a href="./src/resources/swaps.ts">SwapQuoteResponse</a></code>
 - <code><a href="./src/resources/swaps.ts">SwapRequestBody</a></code>
+- <code><a href="./src/resources/swaps.ts">SwapSource</a></code>

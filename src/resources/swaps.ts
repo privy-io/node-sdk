@@ -6,28 +6,55 @@ import * as WalletsAPI from './wallets/wallets';
 export class Swaps extends APIResource {}
 
 /**
+ * The output side of a swap execution request.
+ */
+export interface SwapDestination {
+  /**
+   * Token contract address to buy, or "native" for the chain's native token.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier for the destination. Must match source chain —
+   * cross-chain swaps are not yet supported. Defaults to source chain if omitted.
+   */
+  caip2?: string;
+}
+
+/**
+ * The output side of a swap quote request.
+ */
+export interface SwapQuoteDestination {
+  /**
+   * Token contract address to buy, or "native" for the chain's native token.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier for the destination. Must match source chain —
+   * cross-chain swaps are not yet supported. Defaults to source chain if omitted.
+   */
+  caip2?: string;
+}
+
+/**
  * Input for requesting a token swap quote.
  */
 export interface SwapQuoteRequestBody {
   /**
-   * Amount in base units (e.g., wei for ETH).
+   * Amount in base units (e.g., wei for ETH). Must be a non-negative integer string.
    */
-  amount: string;
+  base_amount: string;
 
   /**
-   * Chain identifier (e.g., "eip155:1" for Ethereum mainnet).
+   * The output side of a swap quote request.
    */
-  caip2: string;
+  destination: SwapQuoteDestination;
 
   /**
-   * Token address to sell, or "native" for the chain's native token.
+   * The input side of a swap request, including token and chain.
    */
-  input_token: string;
-
-  /**
-   * Token address to buy, or "native" for the chain's native token.
-   */
-  output_token: string;
+  source: SwapSource;
 
   /**
    * Whether the amount refers to the input token or output token.
@@ -86,24 +113,19 @@ export interface SwapQuoteResponse {
  */
 export interface SwapRequestBody {
   /**
-   * Amount in base units (e.g., wei for ETH).
+   * Amount in base units (e.g., wei for ETH). Must be a non-negative integer string.
    */
-  amount: string;
+  base_amount: string;
 
   /**
-   * Chain identifier (e.g., "eip155:1" for Ethereum mainnet).
+   * The output side of a swap execution request.
    */
-  caip2: string;
+  destination: SwapDestination;
 
   /**
-   * Token address to sell, or "native" for the chain's native token.
+   * The input side of a swap request, including token and chain.
    */
-  input_token: string;
-
-  /**
-   * Token address to buy, or "native" for the chain's native token.
-   */
-  output_token: string;
+  source: SwapSource;
 
   /**
    * Whether the amount refers to the input token or output token.
@@ -111,21 +133,33 @@ export interface SwapRequestBody {
   amount_type?: WalletsAPI.AmountType;
 
   /**
-   * Address to receive the output tokens. Defaults to the wallet address if not
-   * specified.
-   */
-  recipient?: string;
-
-  /**
    * Maximum slippage tolerance in basis points (e.g., 50 for 0.5%).
    */
   slippage_bps?: number;
 }
 
+/**
+ * The input side of a swap request, including token and chain.
+ */
+export interface SwapSource {
+  /**
+   * Token contract address to sell, or "native" for the chain's native token.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier (e.g., "eip155:1").
+   */
+  caip2: string;
+}
+
 export declare namespace Swaps {
   export {
+    type SwapDestination as SwapDestination,
+    type SwapQuoteDestination as SwapQuoteDestination,
     type SwapQuoteRequestBody as SwapQuoteRequestBody,
     type SwapQuoteResponse as SwapQuoteResponse,
     type SwapRequestBody as SwapRequestBody,
+    type SwapSource as SwapSource,
   };
 }

@@ -665,7 +665,8 @@ export interface EthereumSecp256k1SignRpcInput {
  */
 export interface EthereumSecp256k1SignRpcInputParams {
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   hash: Hex;
 }
@@ -689,7 +690,8 @@ export interface EthereumSecp256k1SignRpcResponseData {
   encoding: 'hex';
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   signature: Hex;
 }
@@ -701,7 +703,8 @@ export interface EthereumSendCallsCall {
   to: string;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   data?: Hex;
 
@@ -734,7 +737,8 @@ export interface EthereumSendCallsRpcInput {
   chain_type?: 'ethereum';
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   experimental_data_suffix?: Hex;
 
@@ -795,7 +799,8 @@ export interface EthereumSendTransactionRpcInput {
   chain_type?: 'ethereum';
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   experimental_data_suffix?: Hex;
 
@@ -873,12 +878,14 @@ export interface EthereumSign7702Authorization {
   nonce: Quantity;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   r: Hex;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   s: Hex;
 
@@ -1334,7 +1341,8 @@ export interface HpkeImportConfig {
 }
 
 /**
- * A hex-encoded string prefixed with '0x'.
+ * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+ * bytes).
  */
 export type Hex = string;
 
@@ -1526,7 +1534,8 @@ export interface RawSignBytesParams {
  */
 export interface RawSignHashParams {
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   hash: Hex;
 }
@@ -1566,7 +1575,8 @@ export interface RawSignResponseData {
   encoding: 'hex';
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   signature: Hex;
 }
@@ -2441,7 +2451,8 @@ export interface TempoAaAuthorization {
   nonce: Quantity;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   signature: Hex;
 }
@@ -2453,7 +2464,8 @@ export interface TempoCall {
   to: string;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   data?: Hex;
 
@@ -2469,12 +2481,14 @@ export interface TempoCall {
  */
 export interface TempoFeePayerSignature {
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   r: Hex;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   s: Hex;
 
@@ -2692,7 +2706,8 @@ export interface UnsignedStandardEthereumTransaction {
   chain_id?: Quantity;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   data?: Hex;
 
@@ -2822,56 +2837,66 @@ export namespace UnsignedTempoTransaction {
  */
 export interface UserOperationInput {
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   call_data: Hex;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   call_gas_limit: Hex;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   max_fee_per_gas: Hex;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   max_priority_fee_per_gas: Hex;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   nonce: Hex;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   pre_verification_gas: Hex;
 
   sender: string;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   verification_gas_limit: Hex;
 
   paymaster?: string;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   paymaster_data?: Hex;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   paymaster_post_op_gas_limit?: Hex;
 
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
    */
   paymaster_verification_gas_limit?: Hex;
 }
@@ -3738,7 +3763,8 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param: A hex-encoded string prefixed with '0x'.
+     * Body param: A hex-encoded string prefixed with '0x', capped at 100002 characters
+     * (50,000 bytes).
      */
     experimental_data_suffix?: Hex;
 
@@ -4028,7 +4054,8 @@ export declare namespace WalletRpcParams {
     chain_type?: 'ethereum';
 
     /**
-     * Body param: A hex-encoded string prefixed with '0x'.
+     * Body param: A hex-encoded string prefixed with '0x', capped at 100002 characters
+     * (50,000 bytes).
      */
     experimental_data_suffix?: Hex;
 

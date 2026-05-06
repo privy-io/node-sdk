@@ -128,7 +128,10 @@ export class Wallets extends APIResource {
    *   'wallet_id',
    *   {
    *     params: {
-   *       hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e',
+   *       bytes:
+   *         '0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633',
+   *       encoding: 'hex',
+   *       hash_function: 'sha256',
    *     },
    *   },
    * );
@@ -235,13 +238,13 @@ export class Wallets extends APIResource {
    * const transferActionResponse =
    *   await client.wallets._transfer('wallet_id', {
    *     destination: {
+   *       address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
    *       asset: 'usdc',
    *       chain: 'base',
-   *       address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
    *     },
    *     source: {
-   *       asset: 'usdc',
    *       amount: '10.5',
+   *       asset: 'usdc',
    *       chain: 'base',
    *     },
    *     amount_type: 'exact_input',
@@ -254,7 +257,12 @@ export class Wallets extends APIResource {
     params: WalletTransferParams,
     options?: RequestOptions,
   ): APIPromise<WalletActionsAPI.TransferActionResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-idempotency-key': privyIdempotencyKey,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
     return this._client.post(path`/v1/wallets/${walletID}/transfer`, {
       body,
       ...options,
@@ -263,6 +271,8 @@ export class Wallets extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -305,13 +315,14 @@ export class Wallets extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.wallets.authenticateWithJwt({
-   *   encryption_type: 'HPKE',
-   *   recipient_public_key:
-   *     'DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1',
-   *   user_jwt:
-   *     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
-   * });
+   * const walletAuthenticateWithJwtResponse =
+   *   await client.wallets.authenticateWithJwt({
+   *     encryption_type: 'HPKE',
+   *     recipient_public_key:
+   *       'DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1',
+   *     user_jwt:
+   *       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
+   *   });
    * ```
    */
   authenticateWithJwt(
@@ -366,82 +377,9 @@ export class Wallets extends APIResource {
 export type WalletsCursor = Cursor<Wallet>;
 
 /**
- * The wallet chain types that support curve-based signing.
+ * Additional signers for the wallet.
  */
-export type CurveSigningChainType =
-  | 'cosmos'
-  | 'stellar'
-  | 'sui'
-  | 'aptos'
-  | 'movement'
-  | 'tron'
-  | 'bitcoin-segwit'
-  | 'bitcoin-taproot'
-  | 'near'
-  | 'ton'
-  | 'starknet';
-
-/**
- * The wallet chain types that are not first class chains.
- */
-export type ExtendedChainType =
-  | 'cosmos'
-  | 'stellar'
-  | 'sui'
-  | 'aptos'
-  | 'movement'
-  | 'tron'
-  | 'bitcoin-segwit'
-  | 'bitcoin-taproot'
-  | 'near'
-  | 'ton'
-  | 'starknet'
-  | 'spark';
-
-/**
- * The wallet chain types that offer first class support.
- */
-export type FirstClassChainType = 'ethereum' | 'solana';
-
-/**
- * The wallet chain types.
- */
-export type WalletChainType =
-  | 'ethereum'
-  | 'solana'
-  | 'cosmos'
-  | 'stellar'
-  | 'sui'
-  | 'aptos'
-  | 'movement'
-  | 'tron'
-  | 'bitcoin-segwit'
-  | 'bitcoin-taproot'
-  | 'near'
-  | 'ton'
-  | 'starknet'
-  | 'spark';
-
-/**
- * The role of an authorization key, controlling what actions it can authorize on a
- * wallet.
- */
-export type AuthorizationKeyRole = 'root' | 'manager' | 'delegated-actions' | null;
-
-/**
- * The entropy type of the wallet.
- */
-export type WalletEntropyType = 'hd' | 'private-key';
-
-/**
- * The derivation strategy used for Solana wallets.
- */
-export type SolanaWalletDerivationStrategy = 'ENTROPY_TO_SEED' | 'ENTROPY_TO_MNEMONIC_TO_SEED';
-
-/**
- * An optional list of up to one policy ID to enforce on the wallet.
- */
-export type PolicyInput = Array<string>;
+export type AdditionalSignerInput = Array<AdditionalSignerItemInput>;
 
 /**
  * A single additional signer for a wallet, with an optional policy override.
@@ -459,54 +397,103 @@ export interface AdditionalSignerItemInput {
 }
 
 /**
- * Additional signers for the wallet.
- */
-export type AdditionalSignerInput = Array<AdditionalSignerItemInput>;
-
-/**
- * A single additional signer on a wallet, with an optional policy override.
- */
-export interface WalletAdditionalSignerItem {
-  /**
-   * A unique identifier for a key quorum.
-   */
-  signer_id: SharedAPI.KeyQuorumID;
-
-  /**
-   * An optional list of up to one policy ID to enforce on the wallet.
-   */
-  override_policy_ids?: PolicyInput;
-}
-
-/**
- * Additional signers for the wallet.
- */
-export type WalletAdditionalSigner = Array<WalletAdditionalSignerItem>;
-
-/**
  * A blockchain wallet address (Ethereum or Solana).
  */
 export type Address = string;
 
 /**
- * Information about the custodian managing this wallet.
+ * Whether the amount refers to the input token or output token.
  */
-export interface WalletCustodian {
-  /**
-   * The custodian responsible for the wallet.
-   */
-  provider: string;
+export type AmountType = 'exact_input' | 'exact_output';
+
+/**
+ * Dashboard response for a wallet authorization key (includes role, which is an
+ * internal-only concept).
+ */
+export interface AuthorizationKeyDashboardResponse {
+  id: string;
+
+  created_at: number;
+
+  display_name: string | null;
+
+  public_key: string;
 
   /**
-   * The resource ID of the beneficiary of the custodial wallet.
+   * The role of an authorization key, controlling what actions it can authorize on a
+   * wallet.
    */
-  provider_user_id: string;
+  role: AuthorizationKeyRole | null;
 }
 
 /**
- * The provider of the custodial wallet.
+ * Public-facing response for a wallet authorization key.
  */
-export type CustodialWalletProvider = 'bridge';
+export interface AuthorizationKeyResponse {
+  id: string;
+
+  created_at: number;
+
+  display_name: string | null;
+
+  public_key: string;
+}
+
+/**
+ * The role of an authorization key, controlling what actions it can authorize on a
+ * wallet.
+ */
+export type AuthorizationKeyRole = 'root' | 'manager' | 'delegated-actions' | null;
+
+/**
+ * The wallet chain types that support curve-based signing.
+ */
+export type CurveSigningChainType =
+  | 'cosmos'
+  | 'stellar'
+  | 'sui'
+  | 'aptos'
+  | 'movement'
+  | 'tron'
+  | 'bitcoin-segwit'
+  | 'bitcoin-taproot'
+  | 'pearl'
+  | 'near'
+  | 'ton'
+  | 'starknet';
+
+/**
+ * The cryptographic curve type used by the wallet.
+ */
+export type CurveType = 'secp256k1' | 'ed25519' | 'starknet';
+
+/**
+ * Information about a custodial wallet.
+ */
+export interface CustodialWallet {
+  id: string;
+
+  address: string;
+
+  /**
+   * The chain type of the custodial wallet.
+   */
+  chain_type: CustodialWalletChainType;
+
+  /**
+   * Information about the custodian managing this wallet.
+   */
+  custody: WalletCustodian;
+
+  owner_id: string | null;
+
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: WalletAdditionalSigner;
+
+  policy_ids?: Array<string>;
+}
 
 /**
  * The chain type of the custodial wallet.
@@ -551,212 +538,590 @@ export interface CustodialWalletCreateInput {
 }
 
 /**
- * Information about a custodial wallet.
+ * The provider of the custodial wallet.
  */
-export interface CustodialWallet {
-  id: string;
+export type CustodialWalletProvider = 'bridge';
 
-  address: string;
+/**
+ * Source for a transfer identified by a token contract address (EVM) or mint
+ * address (Solana). Use this variant for tokens that are not first-class assets.
+ */
+export interface CustomTokenTransferSource {
+  /**
+   * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
+   * USDC, "0.01" for 0.01 ETH). Not in the smallest on-chain unit (wei, lamports,
+   * etc.).
+   */
+  amount: string;
 
   /**
-   * The chain type of the custodial wallet.
+   * The token contract address (EVM) or mint address (Solana) of the asset to
+   * transfer.
    */
-  chain_type: CustodialWalletChainType;
+  asset_address: string;
 
   /**
-   * Information about the custodian managing this wallet.
+   * The blockchain network on which to perform the transfer. Supported chains
+   * include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and their
+   * respective testnets.
    */
-  custody: WalletCustodian;
-
-  owner_id: string | null;
-
-  /**
-   * Additional signers for the wallet.
-   */
-  additional_signers?: WalletAdditionalSigner;
-
-  policy_ids?: Array<string>;
+  chain: string;
 }
 
 /**
- * The encryption type of the wallet to import. Currently only supports `HPKE`.
+ * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
  */
-export type HpkeEncryption = 'HPKE';
-
-/**
- * The recipient public key for HPKE encryption, in PEM or DER (base64-encoded)
- * format.
- */
-export type RecipientPublicKey = string;
-
-/**
- * The export type. 'display' is for showing the key to the user in the UI,
- * 'client' is for exporting to the client application.
- */
-export type ExportType = 'display' | 'client';
-
-/**
- * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
- */
-export interface PrivateKeyExportInput {
-  /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
-   */
-  encryption_type: HpkeEncryption;
+export interface EthereumPersonalSignRpcInput {
+  method: 'personal_sign';
 
   /**
-   * The recipient public key for HPKE encryption, in PEM or DER (base64-encoded)
-   * format.
+   * Parameters for the EVM `personal_sign` RPC.
    */
-  recipient_public_key: RecipientPublicKey;
+  params: EthereumPersonalSignRpcInputParams;
 
-  export_seed_phrase?: boolean;
+  address?: string;
 
-  /**
-   * The export type. 'display' is for showing the key to the user in the UI,
-   * 'client' is for exporting to the client application.
-   */
-  export_type?: ExportType;
+  chain_type?: 'ethereum';
+
+  wallet_id?: string;
 }
 
 /**
- * Response containing HPKE-encrypted wallet data (private key or seed phrase).
+ * Parameters for the EVM `personal_sign` RPC.
  */
-export interface PrivateKeyExportResponse {
-  ciphertext: string;
+export interface EthereumPersonalSignRpcInputParams {
+  encoding: 'utf-8' | 'hex';
 
-  encapsulated_key: string;
-
-  /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
-   */
-  encryption_type: HpkeEncryption;
+  message: string;
 }
 
 /**
- * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
+ * Response to the EVM `personal_sign` RPC.
  */
-export interface SeedPhraseExportInput {
+export interface EthereumPersonalSignRpcResponse {
   /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   * Data returned by the EVM `personal_sign` RPC.
    */
-  encryption_type: HpkeEncryption;
+  data: EthereumPersonalSignRpcResponseData;
 
-  /**
-   * The recipient public key for HPKE encryption, in PEM or DER (base64-encoded)
-   * format.
-   */
-  recipient_public_key: RecipientPublicKey;
-
-  export_seed_phrase?: boolean;
-
-  /**
-   * The export type. 'display' is for showing the key to the user in the UI,
-   * 'client' is for exporting to the client application.
-   */
-  export_type?: ExportType;
+  method: 'personal_sign';
 }
 
 /**
- * Response containing HPKE-encrypted wallet data (private key or seed phrase).
+ * Data returned by the EVM `personal_sign` RPC.
  */
-export interface SeedPhraseExportResponse {
-  ciphertext: string;
+export interface EthereumPersonalSignRpcResponseData {
+  encoding: 'hex';
 
-  encapsulated_key: string;
-
-  /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
-   */
-  encryption_type: HpkeEncryption;
+  signature: string;
 }
 
 /**
- * Whether the amount refers to the input token or output token.
+ * Request body for Ethereum wallet RPC operations, discriminated by method.
  */
-export type AmountType = 'exact_input' | 'exact_output';
+export type EthereumRpcInput =
+  | EthereumSignTransactionRpcInput
+  | EthereumSendTransactionRpcInput
+  | EthereumPersonalSignRpcInput
+  | EthereumSignTypedDataRpcInput
+  | EthereumSecp256k1SignRpcInput
+  | EthereumSign7702AuthorizationRpcInput
+  | EthereumSignUserOperationRpcInput
+  | EthereumSendCallsRpcInput;
 
 /**
- * The chain type of the wallet to import. Currently supports `ethereum` and
- * `solana`.
+ * Response body for Ethereum wallet RPC operations, discriminated by method.
  */
-export type WalletImportSupportedChains = 'ethereum' | 'solana';
+export type EthereumRpcResponse =
+  | EthereumPersonalSignRpcResponse
+  | EthereumSignTypedDataRpcResponse
+  | EthereumSignTransactionRpcResponse
+  | EthereumSendTransactionRpcResponse
+  | EthereumSignUserOperationRpcResponse
+  | EthereumSign7702AuthorizationRpcResponse
+  | EthereumSecp256k1SignRpcResponse
+  | EthereumSendCallsRpcResponse;
 
 /**
- * The entropy type of the wallet to import. Supports `private-key` for raw private
- * keys and `hd` for HD wallet seed phrases.
+ * Signs a raw hash on the secp256k1 curve.
  */
-export type WalletImportSupportedEntropyTypes = 'private-key' | 'hd';
-
-/**
- * Response from initializing a wallet import, containing the encryption public
- * key.
- */
-export interface WalletImportInitResponse {
-  encryption_public_key: string;
+export interface EthereumSecp256k1SignRpcInput {
+  method: 'secp256k1_sign';
 
   /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   * Parameters for the EVM `secp256k1_sign` RPC.
    */
-  encryption_type: HpkeEncryption;
+  params: EthereumSecp256k1SignRpcInputParams;
 
-  import_id?: string;
+  address?: string;
+
+  chain_type?: 'ethereum';
+
+  wallet_id?: string;
 }
 
 /**
- * The AEAD algorithm used for HPKE encryption.
+ * Parameters for the EVM `secp256k1_sign` RPC.
  */
-export type HpkeAeadAlgorithm = 'CHACHA20_POLY1305' | 'AES_GCM256';
-
-/**
- * Optional HPKE configuration for wallet import decryption. These parameters allow
- * importing wallets encrypted by external providers that use different HPKE
- * configurations.
- */
-export interface HpkeImportConfig {
+export interface EthereumSecp256k1SignRpcInputParams {
   /**
-   * Additional Authenticated Data (AAD) used during encryption. Should be
-   * base64-encoded bytes.
+   * A hex-encoded string prefixed with '0x'.
    */
-  aad?: string;
-
-  /**
-   * The AEAD algorithm used for HPKE encryption.
-   */
-  aead_algorithm?: HpkeAeadAlgorithm;
-
-  /**
-   * Application-specific context information (INFO) used during HPKE encryption.
-   * Should be base64-encoded bytes.
-   */
-  info?: string;
+  hash: Hex;
 }
 
 /**
- * The cryptographic curve type used by the wallet.
+ * Response to the EVM `secp256k1_sign` RPC.
  */
-export type CurveType = 'secp256k1' | 'ed25519' | 'starknet';
+export interface EthereumSecp256k1SignRpcResponse {
+  /**
+   * Data returned by the EVM `secp256k1_sign` RPC.
+   */
+  data: EthereumSecp256k1SignRpcResponseData;
+
+  method: 'secp256k1_sign';
+}
 
 /**
- * A BIP-32 hierarchical deterministic wallet derivation path.
+ * Data returned by the EVM `secp256k1_sign` RPC.
  */
-export type HDPath = string;
+export interface EthereumSecp256k1SignRpcResponseData {
+  encoding: 'hex';
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  signature: Hex;
+}
 
 /**
- * The signing algorithm used by the wallet.
+ * A single call within a batched wallet_sendCalls request.
  */
-export type SigningAlgorithm = 'ECDSA' | 'EdDSA' | 'Schnorr';
+export interface EthereumSendCallsCall {
+  to: string;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  data?: Hex;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  value?: Quantity;
+}
 
 /**
- * A hex-encoded string prefixed with '0x'.
+ * Executes the `wallet_sendCalls` RPC (EIP-5792) to batch multiple calls into a
+ * single atomic transaction.
  */
-export type Hex = string;
+export interface EthereumSendCallsRpcInput {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
+
+  method: 'wallet_sendCalls';
+
+  /**
+   * Parameters for the `wallet_sendCalls` RPC.
+   */
+  params: EthereumSendCallsRpcInputParams;
+
+  address?: string;
+
+  chain_type?: 'ethereum';
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  experimental_data_suffix?: Hex;
+
+  sponsor?: boolean;
+
+  wallet_id?: string;
+}
 
 /**
- * A quantity value that can be either a hex string starting with '0x' or a
- * non-negative integer.
+ * Parameters for the `wallet_sendCalls` RPC.
  */
-export type Quantity = Hex | number;
+export interface EthereumSendCallsRpcInputParams {
+  calls: Array<EthereumSendCallsCall>;
+}
+
+/**
+ * Response to the `wallet_sendCalls` RPC.
+ */
+export interface EthereumSendCallsRpcResponse {
+  /**
+   * Data returned by the `wallet_sendCalls` RPC.
+   */
+  data: EthereumSendCallsRpcResponseData;
+
+  method: 'wallet_sendCalls';
+}
+
+/**
+ * Data returned by the `wallet_sendCalls` RPC.
+ */
+export interface EthereumSendCallsRpcResponseData {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
+
+  transaction_id: string;
+}
+
+/**
+ * Executes the EVM `eth_sendTransaction` RPC to sign and broadcast a transaction.
+ */
+export interface EthereumSendTransactionRpcInput {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
+
+  method: 'eth_sendTransaction';
+
+  /**
+   * Parameters for the EVM `eth_sendTransaction` RPC.
+   */
+  params: EthereumSendTransactionRpcInputParams;
+
+  address?: string;
+
+  chain_type?: 'ethereum';
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  experimental_data_suffix?: Hex;
+
+  reference_id?: string;
+
+  sponsor?: boolean;
+
+  wallet_id?: string;
+}
+
+/**
+ * Parameters for the EVM `eth_sendTransaction` RPC.
+ */
+export interface EthereumSendTransactionRpcInputParams {
+  /**
+   * An unsigned Ethereum transaction object. Supports standard EVM transaction types
+   * (0, 1, 2, 4) and Tempo transactions (type 118).
+   */
+  transaction: UnsignedEthereumTransaction;
+}
+
+/**
+ * Response to the EVM `eth_sendTransaction` RPC.
+ */
+export interface EthereumSendTransactionRpcResponse {
+  /**
+   * Data returned by the EVM `eth_sendTransaction` RPC.
+   */
+  data: EthereumSendTransactionRpcResponseData;
+
+  method: 'eth_sendTransaction';
+}
+
+/**
+ * Data returned by the EVM `eth_sendTransaction` RPC.
+ */
+export interface EthereumSendTransactionRpcResponseData {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
+
+  hash: string;
+
+  reference_id?: string | null;
+
+  transaction_id?: string;
+
+  /**
+   * An unsigned Ethereum transaction object. Supports standard EVM transaction types
+   * (0, 1, 2, 4) and Tempo transactions (type 118).
+   */
+  transaction_request?: UnsignedEthereumTransaction;
+
+  user_operation_hash?: string;
+}
+
+/**
+ * A signed EIP-7702 authorization that delegates code execution to a contract
+ * address.
+ */
+export interface EthereumSign7702Authorization {
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id: Quantity;
+
+  contract: string;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce: Quantity;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  r: Hex;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  s: Hex;
+
+  y_parity: number;
+}
+
+/**
+ * Signs an EIP-7702 authorization.
+ */
+export interface EthereumSign7702AuthorizationRpcInput {
+  method: 'eth_sign7702Authorization';
+
+  /**
+   * Parameters for the EVM `eth_sign7702Authorization` RPC.
+   */
+  params: EthereumSign7702AuthorizationRpcInputParams;
+
+  address?: string;
+
+  chain_type?: 'ethereum';
+
+  wallet_id?: string;
+}
+
+/**
+ * Parameters for the EVM `eth_sign7702Authorization` RPC.
+ */
+export interface EthereumSign7702AuthorizationRpcInputParams {
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id: Quantity;
+
+  contract: string;
+
+  executor?: 'self';
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  nonce?: Quantity;
+}
+
+/**
+ * Response to the EVM `eth_sign7702Authorization` RPC.
+ */
+export interface EthereumSign7702AuthorizationRpcResponse {
+  /**
+   * Data returned by the EVM `eth_sign7702Authorization` RPC.
+   */
+  data: EthereumSign7702AuthorizationRpcResponseData;
+
+  method: 'eth_sign7702Authorization';
+}
+
+/**
+ * Data returned by the EVM `eth_sign7702Authorization` RPC.
+ */
+export interface EthereumSign7702AuthorizationRpcResponseData {
+  /**
+   * A signed EIP-7702 authorization that delegates code execution to a contract
+   * address.
+   */
+  authorization: EthereumSign7702Authorization;
+}
+
+/**
+ * Executes the EVM `eth_signTransaction` RPC to sign a transaction.
+ */
+export interface EthereumSignTransactionRpcInput {
+  method: 'eth_signTransaction';
+
+  /**
+   * Parameters for the EVM `eth_signTransaction` RPC.
+   */
+  params: EthereumSignTransactionRpcInputParams;
+
+  address?: string;
+
+  chain_type?: 'ethereum';
+
+  wallet_id?: string;
+}
+
+/**
+ * Parameters for the EVM `eth_signTransaction` RPC.
+ */
+export interface EthereumSignTransactionRpcInputParams {
+  /**
+   * An unsigned Ethereum transaction object. Supports standard EVM transaction types
+   * (0, 1, 2, 4) and Tempo transactions (type 118).
+   */
+  transaction: UnsignedEthereumTransaction;
+}
+
+/**
+ * Response to the EVM `eth_signTransaction` RPC.
+ */
+export interface EthereumSignTransactionRpcResponse {
+  /**
+   * Data returned by the EVM `eth_signTransaction` RPC.
+   */
+  data: EthereumSignTransactionRpcResponseData;
+
+  method: 'eth_signTransaction';
+}
+
+/**
+ * Data returned by the EVM `eth_signTransaction` RPC.
+ */
+export interface EthereumSignTransactionRpcResponseData {
+  encoding: 'rlp';
+
+  signed_transaction: string;
+}
+
+/**
+ * Executes the EVM `eth_signTypedData_v4` RPC (EIP-712) to sign a typed data
+ * object.
+ */
+export interface EthereumSignTypedDataRpcInput {
+  method: 'eth_signTypedData_v4';
+
+  /**
+   * Parameters for the EVM `eth_signTypedData_v4` RPC.
+   */
+  params: EthereumSignTypedDataRpcInputParams;
+
+  address?: string;
+
+  chain_type?: 'ethereum';
+
+  wallet_id?: string;
+}
+
+/**
+ * Parameters for the EVM `eth_signTypedData_v4` RPC.
+ */
+export interface EthereumSignTypedDataRpcInputParams {
+  /**
+   * EIP-712 typed data object.
+   */
+  typed_data: EthereumTypedDataInput;
+}
+
+/**
+ * Response to the EVM `eth_signTypedData_v4` RPC.
+ */
+export interface EthereumSignTypedDataRpcResponse {
+  /**
+   * Data returned by the EVM `eth_signTypedData_v4` RPC.
+   */
+  data: EthereumSignTypedDataRpcResponseData;
+
+  method: 'eth_signTypedData_v4';
+}
+
+/**
+ * Data returned by the EVM `eth_signTypedData_v4` RPC.
+ */
+export interface EthereumSignTypedDataRpcResponseData {
+  encoding: 'hex';
+
+  signature: string;
+}
+
+/**
+ * Executes an RPC method to hash and sign a UserOperation.
+ */
+export interface EthereumSignUserOperationRpcInput {
+  method: 'eth_signUserOperation';
+
+  /**
+   * Parameters for the EVM `eth_signUserOperation` RPC.
+   */
+  params: EthereumSignUserOperationRpcInputParams;
+
+  address?: string;
+
+  chain_type?: 'ethereum';
+
+  wallet_id?: string;
+}
+
+/**
+ * Parameters for the EVM `eth_signUserOperation` RPC.
+ */
+export interface EthereumSignUserOperationRpcInputParams {
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  chain_id: Quantity;
+
+  contract: string;
+
+  /**
+   * An ERC-4337 user operation.
+   */
+  user_operation: UserOperationInput;
+}
+
+/**
+ * Response to the EVM `eth_signUserOperation` RPC.
+ */
+export interface EthereumSignUserOperationRpcResponse {
+  /**
+   * Data returned by the EVM `eth_signUserOperation` RPC.
+   */
+  data: EthereumSignUserOperationRpcResponseData;
+
+  method: 'eth_signUserOperation';
+}
+
+/**
+ * Data returned by the EVM `eth_signUserOperation` RPC.
+ */
+export interface EthereumSignUserOperationRpcResponseData {
+  encoding: 'hex';
+
+  signature: string;
+}
+
+/**
+ * EIP-712 typed data object.
+ */
+export interface EthereumTypedDataInput {
+  /**
+   * The domain parameters for EIP-712 typed data signing.
+   */
+  domain: TypedDataDomainInputParams;
+
+  message: { [key: string]: unknown };
+
+  primary_type: string;
+
+  /**
+   * The type definitions for EIP-712 typed data signing.
+   */
+  types: TypedDataTypesInputParams;
+}
 
 /**
  * Exports the private key of the wallet.
@@ -811,14 +1176,320 @@ export interface ExportSeedPhraseRpcResponse {
 }
 
 /**
- * Parameters for signing a pre-computed hash with the `raw_sign` RPC.
+ * The export type. 'display' is for showing the key to the user in the UI,
+ * 'client' is for exporting to the client application.
  */
-export interface RawSignHashParams {
+export type ExportType = 'display' | 'client';
+
+/**
+ * The wallet chain types that are not first class chains.
+ */
+export type ExtendedChainType =
+  | 'cosmos'
+  | 'stellar'
+  | 'sui'
+  | 'aptos'
+  | 'movement'
+  | 'tron'
+  | 'bitcoin-segwit'
+  | 'bitcoin-taproot'
+  | 'pearl'
+  | 'near'
+  | 'ton'
+  | 'starknet'
+  | 'spark';
+
+/**
+ * The wallet chain types that offer first class support.
+ */
+export type FirstClassChainType = 'ethereum' | 'solana';
+
+/**
+ * Request body for looking up a wallet by its blockchain address.
+ */
+export interface GetByWalletAddressRequestBody {
   /**
-   * A hex-encoded string prefixed with '0x'.
+   * A blockchain wallet address (Ethereum or Solana).
    */
-  hash: Hex;
+  address: Address;
 }
+
+/**
+ * The input for HD wallets.
+ */
+export interface HDInitInput {
+  /**
+   * The address of the wallet to import.
+   */
+  address: string;
+
+  /**
+   * The chain type of the wallet to import. Currently supports `ethereum` and
+   * `solana`.
+   */
+  chain_type: WalletImportSupportedChains;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  /**
+   * The entropy type of the wallet to import.
+   */
+  entropy_type: 'hd';
+
+  /**
+   * The index of the wallet to import.
+   */
+  index: number;
+}
+
+/**
+ * A BIP-32 hierarchical deterministic wallet derivation path.
+ */
+export type HDPath = string;
+
+/**
+ * The submission input for importing an HD wallet.
+ */
+export interface HDSubmitInput {
+  /**
+   * The address of the wallet to import.
+   */
+  address: string;
+
+  /**
+   * The chain type of the wallet to import. Currently supports `ethereum` and
+   * `solana`.
+   */
+  chain_type: WalletImportSupportedChains;
+
+  /**
+   * The encrypted entropy of the wallet to import.
+   */
+  ciphertext: string;
+
+  /**
+   * The base64-encoded encapsulated key that was generated during encryption, for
+   * use during decryption inside the TEE.
+   */
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  /**
+   * The entropy type of the wallet to import.
+   */
+  entropy_type: 'hd';
+
+  /**
+   * The index of the wallet to import.
+   */
+  index: number;
+
+  /**
+   * Optional HPKE configuration for wallet import decryption. These parameters allow
+   * importing wallets encrypted by external providers that use different HPKE
+   * configurations.
+   */
+  hpke_config?: HpkeImportConfig;
+}
+
+/**
+ * The AEAD algorithm used for HPKE encryption.
+ */
+export type HpkeAeadAlgorithm = 'CHACHA20_POLY1305' | 'AES_GCM256';
+
+/**
+ * The encryption type of the wallet to import. Currently only supports `HPKE`.
+ */
+export type HpkeEncryption = 'HPKE';
+
+/**
+ * Optional HPKE configuration for wallet import decryption. These parameters allow
+ * importing wallets encrypted by external providers that use different HPKE
+ * configurations.
+ */
+export interface HpkeImportConfig {
+  /**
+   * Additional Authenticated Data (AAD) used during encryption. Should be
+   * base64-encoded bytes.
+   */
+  aad?: string;
+
+  /**
+   * The AEAD algorithm used for HPKE encryption.
+   */
+  aead_algorithm?: HpkeAeadAlgorithm;
+
+  /**
+   * Application-specific context information (INFO) used during HPKE encryption.
+   * Should be base64-encoded bytes.
+   */
+  info?: string;
+}
+
+/**
+ * A hex-encoded string prefixed with '0x'.
+ */
+export type Hex = string;
+
+/**
+ * Source for a transfer identified by a named asset (e.g. "usdc", "eth"). Use this
+ * variant for first-class assets maintained by Privy.
+ */
+export interface NamedTokenTransferSource {
+  /**
+   * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
+   * USDC, "0.01" for 0.01 ETH). Not in the smallest on-chain unit (wei, lamports,
+   * etc.).
+   */
+  amount: string;
+
+  /**
+   * The asset to transfer. Supported: 'usdc', 'usdb', 'usdt' (stablecoins), 'eth'
+   * (native Ethereum), 'sol' (native Solana).
+   */
+  asset: string;
+
+  /**
+   * The blockchain network on which to perform the transfer. Supported chains
+   * include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and their
+   * respective testnets.
+   */
+  chain: string;
+}
+
+/**
+ * A Spark token output with its previous transaction data.
+ */
+export interface OutputWithPreviousTransactionData {
+  previous_transaction_hash: string;
+
+  previous_transaction_vout: number;
+
+  /**
+   * A Spark token output.
+   */
+  output?: TokenOutput;
+}
+
+/**
+ * An optional list of up to one policy ID to enforce on the wallet.
+ */
+export type PolicyInput = Array<string>;
+
+/**
+ * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
+ */
+export interface PrivateKeyExportInput {
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  /**
+   * The recipient public key for HPKE encryption, in PEM or DER (base64-encoded)
+   * format.
+   */
+  recipient_public_key: RecipientPublicKey;
+
+  export_seed_phrase?: boolean;
+
+  /**
+   * The export type. 'display' is for showing the key to the user in the UI,
+   * 'client' is for exporting to the client application.
+   */
+  export_type?: ExportType;
+}
+
+/**
+ * Response containing HPKE-encrypted wallet data (private key or seed phrase).
+ */
+export interface PrivateKeyExportResponse {
+  ciphertext: string;
+
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+}
+
+/**
+ * The input for private key wallets.
+ */
+export interface PrivateKeyInitInput {
+  /**
+   * The address of the wallet to import.
+   */
+  address: string;
+
+  /**
+   * The chain type of the wallet to import. Currently supports `ethereum` and
+   * `solana`.
+   */
+  chain_type: WalletImportSupportedChains;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  entropy_type: 'private-key';
+}
+
+/**
+ * The submission input for importing a private key wallet.
+ */
+export interface PrivateKeySubmitInput {
+  /**
+   * The address of the wallet to import.
+   */
+  address: string;
+
+  /**
+   * The chain type of the wallet to import. Currently supports `ethereum` and
+   * `solana`.
+   */
+  chain_type: WalletImportSupportedChains;
+
+  /**
+   * The encrypted entropy of the wallet to import.
+   */
+  ciphertext: string;
+
+  /**
+   * The base64-encoded encapsulated key that was generated during encryption, for
+   * use during decryption inside the TEE.
+   */
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  entropy_type: 'private-key';
+
+  /**
+   * Optional HPKE configuration for wallet import decryption. These parameters allow
+   * importing wallets encrypted by external providers that use different HPKE
+   * configurations.
+   */
+  hpke_config?: HpkeImportConfig;
+}
+
+/**
+ * A quantity value that can be either a hex string starting with '0x' or a
+ * non-negative integer.
+ */
+export type Quantity = Hex | number;
 
 /**
  * Encoding scheme for bytes in the `raw_sign` RPC.
@@ -851,9 +1522,14 @@ export interface RawSignBytesParams {
 }
 
 /**
- * Parameters for the `raw_sign` RPC.
+ * Parameters for signing a pre-computed hash with the `raw_sign` RPC.
  */
-export type RawSignInputParams = RawSignHashParams | RawSignBytesParams;
+export interface RawSignHashParams {
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  hash: Hex;
+}
 
 /**
  * Provide either `hash` (to sign a pre-computed hash) OR `bytes`, `encoding`, and
@@ -864,6 +1540,23 @@ export interface RawSignInput {
    * Parameters for the `raw_sign` RPC.
    */
   params: RawSignInputParams;
+}
+
+/**
+ * Parameters for the `raw_sign` RPC.
+ */
+export type RawSignInputParams = RawSignHashParams | RawSignBytesParams;
+
+/**
+ * Response to the `raw_sign` RPC.
+ */
+export interface RawSignResponse {
+  /**
+   * Data returned by the `raw_sign` RPC.
+   */
+  data: RawSignResponseData;
+
+  method: 'raw_sign';
 }
 
 /**
@@ -879,22 +1572,860 @@ export interface RawSignResponseData {
 }
 
 /**
- * Response to the `raw_sign` RPC.
+ * The recipient public key for HPKE encryption, in PEM or DER (base64-encoded)
+ * format.
  */
-export interface RawSignResponse {
-  /**
-   * Data returned by the `raw_sign` RPC.
-   */
-  data: RawSignResponseData;
+export type RecipientPublicKey = string;
 
-  method: 'raw_sign';
+/**
+ * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
+ */
+export interface SeedPhraseExportInput {
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  /**
+   * The recipient public key for HPKE encryption, in PEM or DER (base64-encoded)
+   * format.
+   */
+  recipient_public_key: RecipientPublicKey;
+
+  export_seed_phrase?: boolean;
+
+  /**
+   * The export type. 'display' is for showing the key to the user in the UI,
+   * 'client' is for exporting to the client application.
+   */
+  export_type?: ExportType;
 }
 
 /**
- * A signed EIP-7702 authorization that delegates code execution to a contract
- * address.
+ * Response containing HPKE-encrypted wallet data (private key or seed phrase).
  */
-export interface EthereumSign7702Authorization {
+export interface SeedPhraseExportResponse {
+  ciphertext: string;
+
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+}
+
+/**
+ * The signing algorithm used by the wallet.
+ */
+export type SigningAlgorithm = 'ECDSA' | 'EdDSA' | 'Schnorr';
+
+/**
+ * Request body for Solana wallet RPC operations, discriminated by method.
+ */
+export type SolanaRpcInput =
+  | SolanaSignTransactionRpcInput
+  | SolanaSignAndSendTransactionRpcInput
+  | SolanaSignMessageRpcInput;
+
+/**
+ * Response body for Solana wallet RPC operations, discriminated by method.
+ */
+export type SolanaRpcResponse =
+  | SolanaSignMessageRpcResponse
+  | SolanaSignTransactionRpcResponse
+  | SolanaSignAndSendTransactionRpcResponse;
+
+/**
+ * Executes the SVM `signAndSendTransaction` RPC to sign and broadcast a
+ * transaction.
+ */
+export interface SolanaSignAndSendTransactionRpcInput {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
+
+  method: 'signAndSendTransaction';
+
+  /**
+   * Parameters for the SVM `signAndSendTransaction` RPC.
+   */
+  params: SolanaSignAndSendTransactionRpcInputParams;
+
+  address?: string;
+
+  chain_type?: 'solana';
+
+  reference_id?: string;
+
+  sponsor?: boolean;
+
+  wallet_id?: string;
+}
+
+/**
+ * Parameters for the SVM `signAndSendTransaction` RPC.
+ */
+export interface SolanaSignAndSendTransactionRpcInputParams {
+  encoding: 'base64';
+
+  transaction: string;
+}
+
+/**
+ * Response to the SVM `signAndSendTransaction` RPC.
+ */
+export interface SolanaSignAndSendTransactionRpcResponse {
+  /**
+   * Data returned by the SVM `signAndSendTransaction` RPC.
+   */
+  data: SolanaSignAndSendTransactionRpcResponseData;
+
+  method: 'signAndSendTransaction';
+}
+
+/**
+ * Data returned by the SVM `signAndSendTransaction` RPC.
+ */
+export interface SolanaSignAndSendTransactionRpcResponseData {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
+
+  hash: string;
+
+  reference_id?: string | null;
+
+  transaction_id?: string;
+}
+
+/**
+ * Executes the SVM `signMessage` RPC to sign a message.
+ */
+export interface SolanaSignMessageRpcInput {
+  method: 'signMessage';
+
+  /**
+   * Parameters for the SVM `signMessage` RPC.
+   */
+  params: SolanaSignMessageRpcInputParams;
+
+  address?: string;
+
+  chain_type?: 'solana';
+
+  wallet_id?: string;
+}
+
+/**
+ * Parameters for the SVM `signMessage` RPC.
+ */
+export interface SolanaSignMessageRpcInputParams {
+  encoding: 'base64';
+
+  message: string;
+}
+
+/**
+ * Response to the SVM `signMessage` RPC.
+ */
+export interface SolanaSignMessageRpcResponse {
+  /**
+   * Data returned by the SVM `signMessage` RPC.
+   */
+  data: SolanaSignMessageRpcResponseData;
+
+  method: 'signMessage';
+}
+
+/**
+ * Data returned by the SVM `signMessage` RPC.
+ */
+export interface SolanaSignMessageRpcResponseData {
+  encoding: 'base64';
+
+  signature: string;
+}
+
+/**
+ * Executes the SVM `signTransaction` RPC to sign a transaction.
+ */
+export interface SolanaSignTransactionRpcInput {
+  method: 'signTransaction';
+
+  /**
+   * Parameters for the SVM `signTransaction` RPC.
+   */
+  params: SolanaSignTransactionRpcInputParams;
+
+  address?: string;
+
+  chain_type?: 'solana';
+
+  wallet_id?: string;
+}
+
+/**
+ * Parameters for the SVM `signTransaction` RPC.
+ */
+export interface SolanaSignTransactionRpcInputParams {
+  encoding: 'base64';
+
+  transaction: string;
+}
+
+/**
+ * Response to the SVM `signTransaction` RPC.
+ */
+export interface SolanaSignTransactionRpcResponse {
+  /**
+   * Data returned by the SVM `signTransaction` RPC.
+   */
+  data: SolanaSignTransactionRpcResponseData;
+
+  method: 'signTransaction';
+}
+
+/**
+ * Data returned by the SVM `signTransaction` RPC.
+ */
+export interface SolanaSignTransactionRpcResponseData {
+  encoding: 'base64';
+
+  signed_transaction: string;
+}
+
+/**
+ * The derivation strategy used for Solana wallets.
+ */
+export type SolanaWalletDerivationStrategy = 'ENTROPY_TO_SEED' | 'ENTROPY_TO_MNEMONIC_TO_SEED';
+
+/**
+ * The balance of a Spark wallet.
+ */
+export interface SparkBalance {
+  balance: string;
+
+  token_balances: { [key: string]: SparkTokenBalance };
+}
+
+/**
+ * Claims a static deposit into the Spark wallet.
+ */
+export interface SparkClaimStaticDepositRpcInput {
+  method: 'claimStaticDeposit';
+
+  /**
+   * Parameters for the Spark `claimStaticDeposit` RPC.
+   */
+  params: SparkClaimStaticDepositRpcInputParams;
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Parameters for the Spark `claimStaticDeposit` RPC.
+ */
+export interface SparkClaimStaticDepositRpcInputParams {
+  credit_amount_sats: number;
+
+  signature: string;
+
+  transaction_id: string;
+
+  output_index?: number;
+}
+
+/**
+ * Response to the Spark `claimStaticDeposit` RPC.
+ */
+export interface SparkClaimStaticDepositRpcResponse {
+  method: 'claimStaticDeposit';
+
+  /**
+   * Data returned by the Spark `claimStaticDeposit` RPC.
+   */
+  data?: SparkClaimStaticDepositRpcResponseData;
+}
+
+/**
+ * Data returned by the Spark `claimStaticDeposit` RPC.
+ */
+export interface SparkClaimStaticDepositRpcResponseData {
+  transfer_id: string;
+}
+
+/**
+ * Creates a Lightning invoice for the Spark wallet.
+ */
+export interface SparkCreateLightningInvoiceRpcInput {
+  method: 'createLightningInvoice';
+
+  /**
+   * Parameters for the Spark `createLightningInvoice` RPC.
+   */
+  params: SparkCreateLightningInvoiceRpcInputParams;
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Parameters for the Spark `createLightningInvoice` RPC.
+ */
+export interface SparkCreateLightningInvoiceRpcInputParams {
+  amount_sats: number;
+
+  description_hash?: string;
+
+  expiry_seconds?: number;
+
+  include_spark_address?: boolean;
+
+  memo?: string;
+
+  receiver_identity_pubkey?: string;
+}
+
+/**
+ * Response to the Spark `createLightningInvoice` RPC.
+ */
+export interface SparkCreateLightningInvoiceRpcResponse {
+  method: 'createLightningInvoice';
+
+  /**
+   * A Spark Lightning receive request.
+   */
+  data?: SparkLightningReceiveRequest;
+}
+
+/**
+ * Gets the balance of the Spark wallet.
+ */
+export interface SparkGetBalanceRpcInput {
+  method: 'getBalance';
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Response to the Spark `getBalance` RPC.
+ */
+export interface SparkGetBalanceRpcResponse {
+  method: 'getBalance';
+
+  /**
+   * The balance of a Spark wallet.
+   */
+  data?: SparkBalance;
+}
+
+/**
+ * Gets a quote for claiming a static deposit.
+ */
+export interface SparkGetClaimStaticDepositQuoteRpcInput {
+  method: 'getClaimStaticDepositQuote';
+
+  /**
+   * Parameters for the Spark `getClaimStaticDepositQuote` RPC.
+   */
+  params: SparkGetClaimStaticDepositQuoteRpcInputParams;
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Parameters for the Spark `getClaimStaticDepositQuote` RPC.
+ */
+export interface SparkGetClaimStaticDepositQuoteRpcInputParams {
+  transaction_id: string;
+
+  output_index?: number;
+}
+
+/**
+ * Response to the Spark `getClaimStaticDepositQuote` RPC.
+ */
+export interface SparkGetClaimStaticDepositQuoteRpcResponse {
+  method: 'getClaimStaticDepositQuote';
+
+  /**
+   * Data returned by the Spark `getClaimStaticDepositQuote` RPC.
+   */
+  data?: SparkGetClaimStaticDepositQuoteRpcResponseData;
+}
+
+/**
+ * Data returned by the Spark `getClaimStaticDepositQuote` RPC.
+ */
+export interface SparkGetClaimStaticDepositQuoteRpcResponseData {
+  credit_amount_sats: number;
+
+  network: string;
+
+  output_index: number;
+
+  signature: string;
+
+  transaction_id: string;
+}
+
+/**
+ * Gets a static deposit address for the Spark wallet.
+ */
+export interface SparkGetStaticDepositAddressRpcInput {
+  method: 'getStaticDepositAddress';
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Response to the Spark `getStaticDepositAddress` RPC.
+ */
+export interface SparkGetStaticDepositAddressRpcResponse {
+  method: 'getStaticDepositAddress';
+
+  /**
+   * Data returned by the Spark `getStaticDepositAddress` RPC.
+   */
+  data?: SparkGetStaticDepositAddressRpcResponseData;
+}
+
+/**
+ * Data returned by the Spark `getStaticDepositAddress` RPC.
+ */
+export interface SparkGetStaticDepositAddressRpcResponseData {
+  address: string;
+}
+
+/**
+ * The fee for a Spark Lightning payment.
+ */
+export interface SparkLightningFee {
+  original_unit: string;
+
+  original_value: number;
+}
+
+/**
+ * A Spark Lightning receive request.
+ */
+export interface SparkLightningReceiveRequest {
+  id: string;
+
+  created_at: string;
+
+  network: string;
+
+  status: string;
+
+  typename: string;
+
+  updated_at: string;
+
+  invoice?: unknown;
+
+  payment_preimage?: string;
+
+  receiver_identity_public_key?: string;
+
+  transfer?: unknown;
+}
+
+/**
+ * A Spark Lightning send request.
+ */
+export interface SparkLightningSendRequest {
+  id: string;
+
+  created_at: string;
+
+  encoded_invoice: string;
+
+  /**
+   * The fee for a Spark Lightning payment.
+   */
+  fee: SparkLightningFee;
+
+  idempotency_key: string;
+
+  network: string;
+
+  status: string;
+
+  typename: string;
+
+  updated_at: string;
+
+  payment_preimage?: string;
+
+  transfer?: unknown;
+}
+
+/**
+ * The Spark network.
+ */
+export type SparkNetwork = 'MAINNET' | 'REGTEST';
+
+/**
+ * Strategy for selecting outputs in a Spark token transfer.
+ */
+export type SparkOutputSelectionStrategy = 'SMALL_FIRST' | 'LARGE_FIRST';
+
+/**
+ * Pays a Lightning invoice from the Spark wallet.
+ */
+export interface SparkPayLightningInvoiceRpcInput {
+  method: 'payLightningInvoice';
+
+  /**
+   * Parameters for the Spark `payLightningInvoice` RPC.
+   */
+  params: SparkPayLightningInvoiceRpcInputParams;
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Parameters for the Spark `payLightningInvoice` RPC.
+ */
+export interface SparkPayLightningInvoiceRpcInputParams {
+  invoice: string;
+
+  max_fee_sats: number;
+
+  amount_sats_to_send?: number;
+
+  prefer_spark?: boolean;
+}
+
+/**
+ * Response to the Spark `payLightningInvoice` RPC.
+ */
+export interface SparkPayLightningInvoiceRpcResponse {
+  method: 'payLightningInvoice';
+
+  /**
+   * A Spark transfer.
+   */
+  data?: SparkTransfer | SparkLightningSendRequest;
+}
+
+/**
+ * Request body for Spark wallet RPC operations, discriminated by method.
+ */
+export type SparkRpcInput =
+  | SparkTransferRpcInput
+  | SparkGetBalanceRpcInput
+  | SparkTransferTokensRpcInput
+  | SparkGetStaticDepositAddressRpcInput
+  | SparkGetClaimStaticDepositQuoteRpcInput
+  | SparkClaimStaticDepositRpcInput
+  | SparkCreateLightningInvoiceRpcInput
+  | SparkPayLightningInvoiceRpcInput
+  | SparkSignMessageWithIdentityKeyRpcInput;
+
+/**
+ * Response body for Spark wallet RPC operations, discriminated by method.
+ */
+export type SparkRpcResponse =
+  | SparkTransferRpcResponse
+  | SparkGetBalanceRpcResponse
+  | SparkTransferTokensRpcResponse
+  | SparkGetStaticDepositAddressRpcResponse
+  | SparkGetClaimStaticDepositQuoteRpcResponse
+  | SparkClaimStaticDepositRpcResponse
+  | SparkCreateLightningInvoiceRpcResponse
+  | SparkPayLightningInvoiceRpcResponse
+  | SparkSignMessageWithIdentityKeyRpcResponse;
+
+/**
+ * Signs a message with the Spark identity key.
+ */
+export interface SparkSignMessageWithIdentityKeyRpcInput {
+  method: 'signMessageWithIdentityKey';
+
+  /**
+   * Parameters for the Spark `signMessageWithIdentityKey` RPC.
+   */
+  params: SparkSignMessageWithIdentityKeyRpcInputParams;
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Parameters for the Spark `signMessageWithIdentityKey` RPC.
+ */
+export interface SparkSignMessageWithIdentityKeyRpcInputParams {
+  message: string;
+
+  compact?: boolean;
+}
+
+/**
+ * Response to the Spark `signMessageWithIdentityKey` RPC.
+ */
+export interface SparkSignMessageWithIdentityKeyRpcResponse {
+  method: 'signMessageWithIdentityKey';
+
+  /**
+   * Data returned by the Spark `signMessageWithIdentityKey` RPC.
+   */
+  data?: SparkSignMessageWithIdentityKeyRpcResponseData;
+}
+
+/**
+ * Data returned by the Spark `signMessageWithIdentityKey` RPC.
+ */
+export interface SparkSignMessageWithIdentityKeyRpcResponseData {
+  signature: string;
+}
+
+/**
+ * A Spark signing keyshare.
+ */
+export interface SparkSigningKeyshare {
+  owner_identifiers: Array<string>;
+
+  public_key: string;
+
+  public_shares: { [key: string]: string };
+
+  threshold: number;
+
+  updated_time: string;
+}
+
+/**
+ * Balance of a Spark token.
+ */
+export interface SparkTokenBalance {
+  balance: string;
+
+  /**
+   * Metadata for a Spark user token.
+   */
+  token_metadata: SparkUserTokenMetadata;
+}
+
+/**
+ * A Spark transfer.
+ */
+export interface SparkTransfer {
+  id: string;
+
+  leaves: Array<SparkTransferLeaf>;
+
+  receiver_identity_public_key: string;
+
+  sender_identity_public_key: string;
+
+  status: string;
+
+  total_value: number;
+
+  transfer_direction: string;
+
+  type: string;
+
+  created_time?: string;
+
+  expiry_time?: string;
+
+  updated_time?: string;
+}
+
+/**
+ * A Spark transfer leaf.
+ */
+export interface SparkTransferLeaf {
+  intermediate_refund_tx: string;
+
+  secret_cipher: string;
+
+  signature: string;
+
+  /**
+   * A Spark wallet leaf node.
+   */
+  leaf?: SparkWalletLeaf;
+}
+
+/**
+ * Transfers satoshis to a Spark address.
+ */
+export interface SparkTransferRpcInput {
+  method: 'transfer';
+
+  /**
+   * Parameters for the Spark `transfer` RPC.
+   */
+  params: SparkTransferRpcInputParams;
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Parameters for the Spark `transfer` RPC.
+ */
+export interface SparkTransferRpcInputParams {
+  amount_sats: number;
+
+  receiver_spark_address: string;
+}
+
+/**
+ * Response to the Spark `transfer` RPC.
+ */
+export interface SparkTransferRpcResponse {
+  method: 'transfer';
+
+  /**
+   * A Spark transfer.
+   */
+  data?: SparkTransfer;
+}
+
+/**
+ * Transfers tokens to a Spark address.
+ */
+export interface SparkTransferTokensRpcInput {
+  method: 'transferTokens';
+
+  /**
+   * Parameters for the Spark `transferTokens` RPC.
+   */
+  params: SparkTransferTokensRpcInputParams;
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Parameters for the Spark `transferTokens` RPC.
+ */
+export interface SparkTransferTokensRpcInputParams {
+  receiver_spark_address: string;
+
+  token_amount: number;
+
+  token_identifier: string;
+
+  /**
+   * Strategy for selecting outputs in a Spark token transfer.
+   */
+  output_selection_strategy?: SparkOutputSelectionStrategy;
+
+  selected_outputs?: Array<OutputWithPreviousTransactionData>;
+}
+
+/**
+ * Response to the Spark `transferTokens` RPC.
+ */
+export interface SparkTransferTokensRpcResponse {
+  method: 'transferTokens';
+
+  /**
+   * Data returned by the Spark `transferTokens` RPC.
+   */
+  data?: SparkTransferTokensRpcResponseData;
+}
+
+/**
+ * Data returned by the Spark `transferTokens` RPC.
+ */
+export interface SparkTransferTokensRpcResponseData {
+  id: string;
+}
+
+/**
+ * Metadata for a Spark user token.
+ */
+export interface SparkUserTokenMetadata {
+  decimals: number;
+
+  max_supply: string;
+
+  raw_token_identifier: string;
+
+  token_name: string;
+
+  token_public_key: string;
+
+  token_ticker: string;
+}
+
+/**
+ * A Spark wallet leaf node.
+ */
+export interface SparkWalletLeaf {
+  id: string;
+
+  /**
+   * The Spark network.
+   */
+  network: SparkNetwork;
+
+  node_tx: string;
+
+  owner_identity_public_key: string;
+
+  refund_tx: string;
+
+  status: string;
+
+  tree_id: string;
+
+  value: number;
+
+  verifying_public_key: string;
+
+  vout: number;
+
+  parent_node_id?: string;
+
+  /**
+   * A Spark signing keyshare.
+   */
+  signing_keyshare?: SparkSigningKeyshare;
+}
+
+/**
+ * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
+ */
+export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
+
+/**
+ * An AA authorization for Tempo transactions with P256/WebAuthn signatures.
+ */
+export interface TempoAaAuthorization {
   /**
    * A quantity value that can be either a hex string starting with '0x' or a
    * non-negative integer.
@@ -912,6 +2443,34 @@ export interface EthereumSign7702Authorization {
   /**
    * A hex-encoded string prefixed with '0x'.
    */
+  signature: Hex;
+}
+
+/**
+ * A single call within a Tempo batched transaction.
+ */
+export interface TempoCall {
+  to: string;
+
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
+  data?: Hex;
+
+  /**
+   * A quantity value that can be either a hex string starting with '0x' or a
+   * non-negative integer.
+   */
+  value?: Quantity;
+}
+
+/**
+ * A fee payer signature for sponsored Tempo transactions (secp256k1 only).
+ */
+export interface TempoFeePayerSignature {
+  /**
+   * A hex-encoded string prefixed with '0x'.
+   */
   r: Hex;
 
   /**
@@ -919,8 +2478,205 @@ export interface EthereumSign7702Authorization {
    */
   s: Hex;
 
-  y_parity: number;
+  y_parity: 0 | 1;
 }
+
+/**
+ * A Spark token output.
+ */
+export interface TokenOutput {
+  owner_public_key: string;
+
+  token_amount: string;
+
+  id?: string;
+
+  revocation_commitment?: string;
+
+  token_identifier?: string;
+
+  token_public_key?: string;
+
+  withdraw_bond_sats?: number;
+
+  withdraw_relative_block_locktime?: number;
+}
+
+/**
+ * The destination address for a token transfer. Optionally specify a different
+ * asset or chain for cross-asset or cross-chain transfers.
+ */
+export interface TokenTransferDestination {
+  /**
+   * Recipient address (hex for EVM, base58 for Solana)
+   */
+  address: string;
+
+  /**
+   * The destination asset. Required for cross-asset transfers (e.g., source 'usdt'
+   * to destination 'usdc').
+   */
+  asset?: string;
+
+  /**
+   * The destination blockchain network. Required for cross-chain transfers (e.g.,
+   * source 'base' to destination 'arbitrum').
+   */
+  chain?: string;
+}
+
+/**
+ * The source asset, amount, and chain for a token transfer. Specify either `asset`
+ * (named) or `asset_address` (custom), not both.
+ */
+export type TokenTransferSource = NamedTokenTransferSource | CustomTokenTransferSource;
+
+/**
+ * Details of a wallet transaction, varying by transaction type.
+ */
+export type TransactionDetail = TransferSentTransactionDetail | TransferReceivedTransactionDetail;
+
+/**
+ * Token contract address (EVM: 0x-prefixed hex) or mint address (Solana: base58),
+ * used to filter wallet transactions.
+ */
+export type TransactionTokenAddressInput = string;
+
+/**
+ * Details for a received transfer transaction.
+ */
+export interface TransferReceivedTransactionDetail {
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+
+  chain:
+    | 'ethereum'
+    | 'arbitrum'
+    | 'base'
+    | 'tempo'
+    | 'linea'
+    | 'optimism'
+    | 'polygon'
+    | 'solana'
+    | 'zksync_era'
+    | 'sepolia'
+    | 'arbitrum_sepolia'
+    | 'base_sepolia'
+    | 'linea_testnet'
+    | 'optimism_sepolia'
+    | 'polygon_amoy'
+    | 'solana_devnet'
+    | 'solana_testnet';
+
+  display_values: { [key: string]: string };
+
+  raw_value: string;
+
+  raw_value_decimals: number;
+
+  recipient: string;
+
+  recipient_privy_user_id: string | null;
+
+  sender: string;
+
+  sender_privy_user_id: string | null;
+
+  type: 'transfer_received';
+}
+
+/**
+ * Request body for initiating a sponsored token transfer from an embedded wallet.
+ */
+export interface TransferRequestBody {
+  /**
+   * The destination address for a token transfer. Optionally specify a different
+   * asset or chain for cross-asset or cross-chain transfers.
+   */
+  destination: TokenTransferDestination;
+
+  /**
+   * The source asset, amount, and chain for a token transfer. Specify either `asset`
+   * (named) or `asset_address` (custom), not both.
+   */
+  source: TokenTransferSource;
+
+  /**
+   * Whether the amount refers to the input token or output token.
+   */
+  amount_type?: AmountType;
+
+  /**
+   * Maximum allowed slippage in basis points (1 bps = 0.01%).
+   */
+  slippage_bps?: number;
+}
+
+/**
+ * Details for a sent transfer transaction.
+ */
+export interface TransferSentTransactionDetail {
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+
+  chain:
+    | 'ethereum'
+    | 'arbitrum'
+    | 'base'
+    | 'tempo'
+    | 'linea'
+    | 'optimism'
+    | 'polygon'
+    | 'solana'
+    | 'zksync_era'
+    | 'sepolia'
+    | 'arbitrum_sepolia'
+    | 'base_sepolia'
+    | 'linea_testnet'
+    | 'optimism_sepolia'
+    | 'polygon_amoy'
+    | 'solana_devnet'
+    | 'solana_testnet';
+
+  display_values: { [key: string]: string };
+
+  raw_value: string;
+
+  raw_value_decimals: number;
+
+  recipient: string;
+
+  recipient_privy_user_id: string | null;
+
+  sender: string;
+
+  sender_privy_user_id: string | null;
+
+  type: 'transfer_sent';
+}
+
+/**
+ * The domain parameters for EIP-712 typed data signing.
+ */
+export type TypedDataDomainInputParams = { [key: string]: unknown };
+
+/**
+ * A single field definition in an EIP-712 typed data type.
+ */
+export interface TypedDataTypeFieldInput {
+  name: string;
+
+  type: string;
+}
+
+/**
+ * The type definitions for EIP-712 typed data signing.
+ */
+export type TypedDataTypesInputParams = { [key: string]: Array<TypedDataTypeFieldInput> };
+
+/**
+ * An unsigned Ethereum transaction object. Supports standard EVM transaction types
+ * (0, 1, 2, 4) and Tempo transactions (type 118).
+ */
+export type UnsignedEthereumTransaction = UnsignedStandardEthereumTransaction | UnsignedTempoTransaction;
 
 /**
  * An unsigned standard Ethereum transaction object. Supports EVM transaction types
@@ -981,65 +2737,6 @@ export interface UnsignedStandardEthereumTransaction {
    * non-negative integer.
    */
   value?: Quantity;
-}
-
-/**
- * A single call within a Tempo batched transaction.
- */
-export interface TempoCall {
-  to: string;
-
-  /**
-   * A hex-encoded string prefixed with '0x'.
-   */
-  data?: Hex;
-
-  /**
-   * A quantity value that can be either a hex string starting with '0x' or a
-   * non-negative integer.
-   */
-  value?: Quantity;
-}
-
-/**
- * A fee payer signature for sponsored Tempo transactions (secp256k1 only).
- */
-export interface TempoFeePayerSignature {
-  /**
-   * A hex-encoded string prefixed with '0x'.
-   */
-  r: Hex;
-
-  /**
-   * A hex-encoded string prefixed with '0x'.
-   */
-  s: Hex;
-
-  y_parity: 0 | 1;
-}
-
-/**
- * An AA authorization for Tempo transactions with P256/WebAuthn signatures.
- */
-export interface TempoAaAuthorization {
-  /**
-   * A quantity value that can be either a hex string starting with '0x' or a
-   * non-negative integer.
-   */
-  chain_id: Quantity;
-
-  contract: string;
-
-  /**
-   * A quantity value that can be either a hex string starting with '0x' or a
-   * non-negative integer.
-   */
-  nonce: Quantity;
-
-  /**
-   * A hex-encoded string prefixed with '0x'.
-   */
-  signature: Hex;
 }
 
 /**
@@ -1121,12 +2818,6 @@ export namespace UnsignedTempoTransaction {
 }
 
 /**
- * An unsigned Ethereum transaction object. Supports standard EVM transaction types
- * (0, 1, 2, 4) and Tempo transactions (type 118).
- */
-export type UnsignedEthereumTransaction = UnsignedStandardEthereumTransaction | UnsignedTempoTransaction;
-
-/**
  * An ERC-4337 user operation.
  */
 export interface UserOperationInput {
@@ -1184,1375 +2875,6 @@ export interface UserOperationInput {
    */
   paymaster_verification_gas_limit?: Hex;
 }
-
-/**
- * The domain parameters for EIP-712 typed data signing.
- */
-export type TypedDataDomainInputParams = { [key: string]: unknown };
-
-/**
- * A single field definition in an EIP-712 typed data type.
- */
-export interface TypedDataTypeFieldInput {
-  name: string;
-
-  type: string;
-}
-
-/**
- * The type definitions for EIP-712 typed data signing.
- */
-export type TypedDataTypesInputParams = { [key: string]: Array<TypedDataTypeFieldInput> };
-
-/**
- * Parameters for the EVM `personal_sign` RPC.
- */
-export interface EthereumPersonalSignRpcInputParams {
-  encoding: 'utf-8' | 'hex';
-
-  message: string;
-}
-
-/**
- * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
- */
-export interface EthereumPersonalSignRpcInput {
-  method: 'personal_sign';
-
-  /**
-   * Parameters for the EVM `personal_sign` RPC.
-   */
-  params: EthereumPersonalSignRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-
-  wallet_id?: string;
-}
-
-/**
- * Parameters for the EVM `eth_signTransaction` RPC.
- */
-export interface EthereumSignTransactionRpcInputParams {
-  /**
-   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
-   * 0, 1, 2, and 4.
-   */
-  transaction: UnsignedStandardEthereumTransaction;
-}
-
-/**
- * Executes the EVM `eth_signTransaction` RPC to sign a transaction.
- */
-export interface EthereumSignTransactionRpcInput {
-  method: 'eth_signTransaction';
-
-  /**
-   * Parameters for the EVM `eth_signTransaction` RPC.
-   */
-  params: EthereumSignTransactionRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-
-  wallet_id?: string;
-}
-
-/**
- * Parameters for the EVM `eth_sendTransaction` RPC.
- */
-export interface EthereumSendTransactionRpcInputParams {
-  /**
-   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
-   * 0, 1, 2, and 4.
-   */
-  transaction: UnsignedStandardEthereumTransaction;
-}
-
-/**
- * Executes the EVM `eth_sendTransaction` RPC to sign and broadcast a transaction.
- */
-export interface EthereumSendTransactionRpcInput {
-  /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
-   */
-  caip2: AppsAPI.Caip2;
-
-  method: 'eth_sendTransaction';
-
-  /**
-   * Parameters for the EVM `eth_sendTransaction` RPC.
-   */
-  params: EthereumSendTransactionRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-
-  /**
-   * A hex-encoded string prefixed with '0x'.
-   */
-  experimental_data_suffix?: Hex;
-
-  reference_id?: string;
-
-  sponsor?: boolean;
-
-  wallet_id?: string;
-}
-
-/**
- * EIP-712 typed data object.
- */
-export interface EthereumTypedDataInput {
-  /**
-   * The domain parameters for EIP-712 typed data signing.
-   */
-  domain: TypedDataDomainInputParams;
-
-  message: { [key: string]: unknown };
-
-  primary_type: string;
-
-  /**
-   * The type definitions for EIP-712 typed data signing.
-   */
-  types: TypedDataTypesInputParams;
-}
-
-/**
- * Parameters for the EVM `eth_signTypedData_v4` RPC.
- */
-export interface EthereumSignTypedDataRpcInputParams {
-  /**
-   * EIP-712 typed data object.
-   */
-  typed_data: EthereumTypedDataInput;
-}
-
-/**
- * Executes the EVM `eth_signTypedData_v4` RPC (EIP-712) to sign a typed data
- * object.
- */
-export interface EthereumSignTypedDataRpcInput {
-  method: 'eth_signTypedData_v4';
-
-  /**
-   * Parameters for the EVM `eth_signTypedData_v4` RPC.
-   */
-  params: EthereumSignTypedDataRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-
-  wallet_id?: string;
-}
-
-/**
- * Parameters for the EVM `secp256k1_sign` RPC.
- */
-export interface EthereumSecp256k1SignRpcInputParams {
-  /**
-   * A hex-encoded string prefixed with '0x'.
-   */
-  hash: Hex;
-}
-
-/**
- * Signs a raw hash on the secp256k1 curve.
- */
-export interface EthereumSecp256k1SignRpcInput {
-  method: 'secp256k1_sign';
-
-  /**
-   * Parameters for the EVM `secp256k1_sign` RPC.
-   */
-  params: EthereumSecp256k1SignRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-
-  wallet_id?: string;
-}
-
-/**
- * Parameters for the EVM `eth_sign7702Authorization` RPC.
- */
-export interface EthereumSign7702AuthorizationRpcInputParams {
-  /**
-   * A quantity value that can be either a hex string starting with '0x' or a
-   * non-negative integer.
-   */
-  chain_id: Quantity;
-
-  contract: string;
-
-  executor?: 'self';
-
-  /**
-   * A quantity value that can be either a hex string starting with '0x' or a
-   * non-negative integer.
-   */
-  nonce?: Quantity;
-}
-
-/**
- * Signs an EIP-7702 authorization.
- */
-export interface EthereumSign7702AuthorizationRpcInput {
-  method: 'eth_sign7702Authorization';
-
-  /**
-   * Parameters for the EVM `eth_sign7702Authorization` RPC.
-   */
-  params: EthereumSign7702AuthorizationRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-
-  wallet_id?: string;
-}
-
-/**
- * Parameters for the EVM `eth_signUserOperation` RPC.
- */
-export interface EthereumSignUserOperationRpcInputParams {
-  /**
-   * A quantity value that can be either a hex string starting with '0x' or a
-   * non-negative integer.
-   */
-  chain_id: Quantity;
-
-  contract: string;
-
-  /**
-   * An ERC-4337 user operation.
-   */
-  user_operation: UserOperationInput;
-}
-
-/**
- * Executes an RPC method to hash and sign a UserOperation.
- */
-export interface EthereumSignUserOperationRpcInput {
-  method: 'eth_signUserOperation';
-
-  /**
-   * Parameters for the EVM `eth_signUserOperation` RPC.
-   */
-  params: EthereumSignUserOperationRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-
-  wallet_id?: string;
-}
-
-/**
- * A single call within a batched wallet_sendCalls request.
- */
-export interface EthereumSendCallsCall {
-  to: string;
-
-  /**
-   * A hex-encoded string prefixed with '0x'.
-   */
-  data?: Hex;
-
-  /**
-   * A quantity value that can be either a hex string starting with '0x' or a
-   * non-negative integer.
-   */
-  value?: Quantity;
-}
-
-/**
- * Parameters for the `wallet_sendCalls` RPC.
- */
-export interface EthereumSendCallsRpcInputParams {
-  calls: Array<EthereumSendCallsCall>;
-}
-
-/**
- * Executes the `wallet_sendCalls` RPC (EIP-5792) to batch multiple calls into a
- * single atomic transaction.
- */
-export interface EthereumSendCallsRpcInput {
-  /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
-   */
-  caip2: AppsAPI.Caip2;
-
-  method: 'wallet_sendCalls';
-
-  /**
-   * Parameters for the `wallet_sendCalls` RPC.
-   */
-  params: EthereumSendCallsRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'ethereum';
-
-  /**
-   * A hex-encoded string prefixed with '0x'.
-   */
-  experimental_data_suffix?: Hex;
-
-  sponsor?: boolean;
-
-  wallet_id?: string;
-}
-
-/**
- * Request body for Ethereum wallet RPC operations, discriminated by method.
- */
-export type EthereumRpcInput =
-  | EthereumSignTransactionRpcInput
-  | EthereumSendTransactionRpcInput
-  | EthereumPersonalSignRpcInput
-  | EthereumSignTypedDataRpcInput
-  | EthereumSecp256k1SignRpcInput
-  | EthereumSign7702AuthorizationRpcInput
-  | EthereumSignUserOperationRpcInput
-  | EthereumSendCallsRpcInput;
-
-/**
- * Data returned by the EVM `personal_sign` RPC.
- */
-export interface EthereumPersonalSignRpcResponseData {
-  encoding: 'hex';
-
-  signature: string;
-}
-
-/**
- * Response to the EVM `personal_sign` RPC.
- */
-export interface EthereumPersonalSignRpcResponse {
-  /**
-   * Data returned by the EVM `personal_sign` RPC.
-   */
-  data: EthereumPersonalSignRpcResponseData;
-
-  method: 'personal_sign';
-}
-
-/**
- * Data returned by the EVM `eth_signTransaction` RPC.
- */
-export interface EthereumSignTransactionRpcResponseData {
-  encoding: 'rlp';
-
-  signed_transaction: string;
-}
-
-/**
- * Response to the EVM `eth_signTransaction` RPC.
- */
-export interface EthereumSignTransactionRpcResponse {
-  /**
-   * Data returned by the EVM `eth_signTransaction` RPC.
-   */
-  data: EthereumSignTransactionRpcResponseData;
-
-  method: 'eth_signTransaction';
-}
-
-/**
- * Data returned by the EVM `eth_sendTransaction` RPC.
- */
-export interface EthereumSendTransactionRpcResponseData {
-  /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
-   */
-  caip2: AppsAPI.Caip2;
-
-  hash: string;
-
-  reference_id?: string | null;
-
-  transaction_id?: string;
-
-  /**
-   * An unsigned standard Ethereum transaction object. Supports EVM transaction types
-   * 0, 1, 2, and 4.
-   */
-  transaction_request?: UnsignedStandardEthereumTransaction;
-
-  user_operation_hash?: string;
-}
-
-/**
- * Response to the EVM `eth_sendTransaction` RPC.
- */
-export interface EthereumSendTransactionRpcResponse {
-  /**
-   * Data returned by the EVM `eth_sendTransaction` RPC.
-   */
-  data: EthereumSendTransactionRpcResponseData;
-
-  method: 'eth_sendTransaction';
-}
-
-/**
- * Data returned by the EVM `eth_signTypedData_v4` RPC.
- */
-export interface EthereumSignTypedDataRpcResponseData {
-  encoding: 'hex';
-
-  signature: string;
-}
-
-/**
- * Response to the EVM `eth_signTypedData_v4` RPC.
- */
-export interface EthereumSignTypedDataRpcResponse {
-  /**
-   * Data returned by the EVM `eth_signTypedData_v4` RPC.
-   */
-  data: EthereumSignTypedDataRpcResponseData;
-
-  method: 'eth_signTypedData_v4';
-}
-
-/**
- * Data returned by the EVM `secp256k1_sign` RPC.
- */
-export interface EthereumSecp256k1SignRpcResponseData {
-  encoding: 'hex';
-
-  /**
-   * A hex-encoded string prefixed with '0x'.
-   */
-  signature: Hex;
-}
-
-/**
- * Response to the EVM `secp256k1_sign` RPC.
- */
-export interface EthereumSecp256k1SignRpcResponse {
-  /**
-   * Data returned by the EVM `secp256k1_sign` RPC.
-   */
-  data: EthereumSecp256k1SignRpcResponseData;
-
-  method: 'secp256k1_sign';
-}
-
-/**
- * Data returned by the EVM `eth_sign7702Authorization` RPC.
- */
-export interface EthereumSign7702AuthorizationRpcResponseData {
-  /**
-   * A signed EIP-7702 authorization that delegates code execution to a contract
-   * address.
-   */
-  authorization: EthereumSign7702Authorization;
-}
-
-/**
- * Response to the EVM `eth_sign7702Authorization` RPC.
- */
-export interface EthereumSign7702AuthorizationRpcResponse {
-  /**
-   * Data returned by the EVM `eth_sign7702Authorization` RPC.
-   */
-  data: EthereumSign7702AuthorizationRpcResponseData;
-
-  method: 'eth_sign7702Authorization';
-}
-
-/**
- * Data returned by the EVM `eth_signUserOperation` RPC.
- */
-export interface EthereumSignUserOperationRpcResponseData {
-  encoding: 'hex';
-
-  signature: string;
-}
-
-/**
- * Response to the EVM `eth_signUserOperation` RPC.
- */
-export interface EthereumSignUserOperationRpcResponse {
-  /**
-   * Data returned by the EVM `eth_signUserOperation` RPC.
-   */
-  data: EthereumSignUserOperationRpcResponseData;
-
-  method: 'eth_signUserOperation';
-}
-
-/**
- * Data returned by the `wallet_sendCalls` RPC.
- */
-export interface EthereumSendCallsRpcResponseData {
-  /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
-   */
-  caip2: AppsAPI.Caip2;
-
-  transaction_id: string;
-}
-
-/**
- * Response to the `wallet_sendCalls` RPC.
- */
-export interface EthereumSendCallsRpcResponse {
-  /**
-   * Data returned by the `wallet_sendCalls` RPC.
-   */
-  data: EthereumSendCallsRpcResponseData;
-
-  method: 'wallet_sendCalls';
-}
-
-/**
- * Response body for Ethereum wallet RPC operations, discriminated by method.
- */
-export type EthereumRpcResponse =
-  | EthereumPersonalSignRpcResponse
-  | EthereumSignTypedDataRpcResponse
-  | EthereumSignTransactionRpcResponse
-  | EthereumSendTransactionRpcResponse
-  | EthereumSignUserOperationRpcResponse
-  | EthereumSign7702AuthorizationRpcResponse
-  | EthereumSecp256k1SignRpcResponse
-  | EthereumSendCallsRpcResponse;
-
-/**
- * Parameters for the SVM `signTransaction` RPC.
- */
-export interface SolanaSignTransactionRpcInputParams {
-  encoding: 'base64';
-
-  transaction: string;
-}
-
-/**
- * Executes the SVM `signTransaction` RPC to sign a transaction.
- */
-export interface SolanaSignTransactionRpcInput {
-  method: 'signTransaction';
-
-  /**
-   * Parameters for the SVM `signTransaction` RPC.
-   */
-  params: SolanaSignTransactionRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'solana';
-
-  wallet_id?: string;
-}
-
-/**
- * Parameters for the SVM `signAndSendTransaction` RPC.
- */
-export interface SolanaSignAndSendTransactionRpcInputParams {
-  encoding: 'base64';
-
-  transaction: string;
-}
-
-/**
- * Executes the SVM `signAndSendTransaction` RPC to sign and broadcast a
- * transaction.
- */
-export interface SolanaSignAndSendTransactionRpcInput {
-  /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
-   */
-  caip2: AppsAPI.Caip2;
-
-  method: 'signAndSendTransaction';
-
-  /**
-   * Parameters for the SVM `signAndSendTransaction` RPC.
-   */
-  params: SolanaSignAndSendTransactionRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'solana';
-
-  reference_id?: string;
-
-  sponsor?: boolean;
-
-  wallet_id?: string;
-}
-
-/**
- * Parameters for the SVM `signMessage` RPC.
- */
-export interface SolanaSignMessageRpcInputParams {
-  encoding: 'base64';
-
-  message: string;
-}
-
-/**
- * Executes the SVM `signMessage` RPC to sign a message.
- */
-export interface SolanaSignMessageRpcInput {
-  method: 'signMessage';
-
-  /**
-   * Parameters for the SVM `signMessage` RPC.
-   */
-  params: SolanaSignMessageRpcInputParams;
-
-  address?: string;
-
-  chain_type?: 'solana';
-
-  wallet_id?: string;
-}
-
-/**
- * Request body for Solana wallet RPC operations, discriminated by method.
- */
-export type SolanaRpcInput =
-  | SolanaSignTransactionRpcInput
-  | SolanaSignAndSendTransactionRpcInput
-  | SolanaSignMessageRpcInput;
-
-/**
- * Data returned by the SVM `signTransaction` RPC.
- */
-export interface SolanaSignTransactionRpcResponseData {
-  encoding: 'base64';
-
-  signed_transaction: string;
-}
-
-/**
- * Response to the SVM `signTransaction` RPC.
- */
-export interface SolanaSignTransactionRpcResponse {
-  /**
-   * Data returned by the SVM `signTransaction` RPC.
-   */
-  data: SolanaSignTransactionRpcResponseData;
-
-  method: 'signTransaction';
-}
-
-/**
- * Data returned by the SVM `signAndSendTransaction` RPC.
- */
-export interface SolanaSignAndSendTransactionRpcResponseData {
-  /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
-   */
-  caip2: AppsAPI.Caip2;
-
-  hash: string;
-
-  reference_id?: string | null;
-
-  transaction_id?: string;
-}
-
-/**
- * Response to the SVM `signAndSendTransaction` RPC.
- */
-export interface SolanaSignAndSendTransactionRpcResponse {
-  /**
-   * Data returned by the SVM `signAndSendTransaction` RPC.
-   */
-  data: SolanaSignAndSendTransactionRpcResponseData;
-
-  method: 'signAndSendTransaction';
-}
-
-/**
- * Data returned by the SVM `signMessage` RPC.
- */
-export interface SolanaSignMessageRpcResponseData {
-  encoding: 'base64';
-
-  signature: string;
-}
-
-/**
- * Response to the SVM `signMessage` RPC.
- */
-export interface SolanaSignMessageRpcResponse {
-  /**
-   * Data returned by the SVM `signMessage` RPC.
-   */
-  data: SolanaSignMessageRpcResponseData;
-
-  method: 'signMessage';
-}
-
-/**
- * Response body for Solana wallet RPC operations, discriminated by method.
- */
-export type SolanaRpcResponse =
-  | SolanaSignMessageRpcResponse
-  | SolanaSignTransactionRpcResponse
-  | SolanaSignAndSendTransactionRpcResponse;
-
-/**
- * The Spark network.
- */
-export type SparkNetwork = 'MAINNET' | 'REGTEST';
-
-/**
- * A Spark signing keyshare.
- */
-export interface SparkSigningKeyshare {
-  owner_identifiers: Array<string>;
-
-  public_key: string;
-
-  public_shares: { [key: string]: string };
-
-  threshold: number;
-
-  updated_time: string;
-}
-
-/**
- * A Spark wallet leaf node.
- */
-export interface SparkWalletLeaf {
-  id: string;
-
-  /**
-   * The Spark network.
-   */
-  network: SparkNetwork;
-
-  node_tx: string;
-
-  owner_identity_public_key: string;
-
-  refund_tx: string;
-
-  status: string;
-
-  tree_id: string;
-
-  value: number;
-
-  verifying_public_key: string;
-
-  vout: number;
-
-  parent_node_id?: string;
-
-  /**
-   * A Spark signing keyshare.
-   */
-  signing_keyshare?: SparkSigningKeyshare;
-}
-
-/**
- * A Spark transfer leaf.
- */
-export interface SparkTransferLeaf {
-  intermediate_refund_tx: string;
-
-  secret_cipher: string;
-
-  signature: string;
-
-  /**
-   * A Spark wallet leaf node.
-   */
-  leaf?: SparkWalletLeaf;
-}
-
-/**
- * A Spark transfer.
- */
-export interface SparkTransfer {
-  id: string;
-
-  leaves: Array<SparkTransferLeaf>;
-
-  receiver_identity_public_key: string;
-
-  sender_identity_public_key: string;
-
-  status: string;
-
-  total_value: number;
-
-  transfer_direction: string;
-
-  type: string;
-
-  created_time?: string;
-
-  expiry_time?: string;
-
-  updated_time?: string;
-}
-
-/**
- * Metadata for a Spark user token.
- */
-export interface SparkUserTokenMetadata {
-  decimals: number;
-
-  max_supply: string;
-
-  raw_token_identifier: string;
-
-  token_name: string;
-
-  token_public_key: string;
-
-  token_ticker: string;
-}
-
-/**
- * Balance of a Spark token.
- */
-export interface SparkTokenBalance {
-  balance: string;
-
-  /**
-   * Metadata for a Spark user token.
-   */
-  token_metadata: SparkUserTokenMetadata;
-}
-
-/**
- * The balance of a Spark wallet.
- */
-export interface SparkBalance {
-  balance: string;
-
-  token_balances: { [key: string]: SparkTokenBalance };
-}
-
-/**
- * A Spark token output.
- */
-export interface TokenOutput {
-  owner_public_key: string;
-
-  token_amount: string;
-
-  id?: string;
-
-  revocation_commitment?: string;
-
-  token_identifier?: string;
-
-  token_public_key?: string;
-
-  withdraw_bond_sats?: number;
-
-  withdraw_relative_block_locktime?: number;
-}
-
-/**
- * A Spark token output with its previous transaction data.
- */
-export interface OutputWithPreviousTransactionData {
-  previous_transaction_hash: string;
-
-  previous_transaction_vout: number;
-
-  /**
-   * A Spark token output.
-   */
-  output?: TokenOutput;
-}
-
-/**
- * The fee for a Spark Lightning payment.
- */
-export interface SparkLightningFee {
-  original_unit: string;
-
-  original_value: number;
-}
-
-/**
- * A Spark Lightning receive request.
- */
-export interface SparkLightningReceiveRequest {
-  id: string;
-
-  created_at: string;
-
-  network: string;
-
-  status: string;
-
-  typename: string;
-
-  updated_at: string;
-
-  invoice?: unknown;
-
-  payment_preimage?: string;
-
-  receiver_identity_public_key?: string;
-
-  transfer?: unknown;
-}
-
-/**
- * A Spark Lightning send request.
- */
-export interface SparkLightningSendRequest {
-  id: string;
-
-  created_at: string;
-
-  encoded_invoice: string;
-
-  /**
-   * The fee for a Spark Lightning payment.
-   */
-  fee: SparkLightningFee;
-
-  idempotency_key: string;
-
-  network: string;
-
-  status: string;
-
-  typename: string;
-
-  updated_at: string;
-
-  payment_preimage?: string;
-
-  transfer?: unknown;
-}
-
-/**
- * Parameters for the Spark `transfer` RPC.
- */
-export interface SparkTransferRpcInputParams {
-  amount_sats: number;
-
-  receiver_spark_address: string;
-}
-
-/**
- * Transfers satoshis to a Spark address.
- */
-export interface SparkTransferRpcInput {
-  method: 'transfer';
-
-  /**
-   * Parameters for the Spark `transfer` RPC.
-   */
-  params: SparkTransferRpcInputParams;
-
-  /**
-   * The Spark network.
-   */
-  network?: SparkNetwork;
-}
-
-/**
- * Gets the balance of the Spark wallet.
- */
-export interface SparkGetBalanceRpcInput {
-  method: 'getBalance';
-
-  /**
-   * The Spark network.
-   */
-  network?: SparkNetwork;
-}
-
-/**
- * Strategy for selecting outputs in a Spark token transfer.
- */
-export type SparkOutputSelectionStrategy = 'SMALL_FIRST' | 'LARGE_FIRST';
-
-/**
- * Parameters for the Spark `transferTokens` RPC.
- */
-export interface SparkTransferTokensRpcInputParams {
-  receiver_spark_address: string;
-
-  token_amount: number;
-
-  token_identifier: string;
-
-  /**
-   * Strategy for selecting outputs in a Spark token transfer.
-   */
-  output_selection_strategy?: SparkOutputSelectionStrategy;
-
-  selected_outputs?: Array<OutputWithPreviousTransactionData>;
-}
-
-/**
- * Transfers tokens to a Spark address.
- */
-export interface SparkTransferTokensRpcInput {
-  method: 'transferTokens';
-
-  /**
-   * Parameters for the Spark `transferTokens` RPC.
-   */
-  params: SparkTransferTokensRpcInputParams;
-
-  /**
-   * The Spark network.
-   */
-  network?: SparkNetwork;
-}
-
-/**
- * Gets a static deposit address for the Spark wallet.
- */
-export interface SparkGetStaticDepositAddressRpcInput {
-  method: 'getStaticDepositAddress';
-
-  /**
-   * The Spark network.
-   */
-  network?: SparkNetwork;
-}
-
-/**
- * Parameters for the Spark `getClaimStaticDepositQuote` RPC.
- */
-export interface SparkGetClaimStaticDepositQuoteRpcInputParams {
-  transaction_id: string;
-
-  output_index?: number;
-}
-
-/**
- * Gets a quote for claiming a static deposit.
- */
-export interface SparkGetClaimStaticDepositQuoteRpcInput {
-  method: 'getClaimStaticDepositQuote';
-
-  /**
-   * Parameters for the Spark `getClaimStaticDepositQuote` RPC.
-   */
-  params: SparkGetClaimStaticDepositQuoteRpcInputParams;
-
-  /**
-   * The Spark network.
-   */
-  network?: SparkNetwork;
-}
-
-/**
- * Parameters for the Spark `claimStaticDeposit` RPC.
- */
-export interface SparkClaimStaticDepositRpcInputParams {
-  credit_amount_sats: number;
-
-  signature: string;
-
-  transaction_id: string;
-
-  output_index?: number;
-}
-
-/**
- * Claims a static deposit into the Spark wallet.
- */
-export interface SparkClaimStaticDepositRpcInput {
-  method: 'claimStaticDeposit';
-
-  /**
-   * Parameters for the Spark `claimStaticDeposit` RPC.
-   */
-  params: SparkClaimStaticDepositRpcInputParams;
-
-  /**
-   * The Spark network.
-   */
-  network?: SparkNetwork;
-}
-
-/**
- * Parameters for the Spark `createLightningInvoice` RPC.
- */
-export interface SparkCreateLightningInvoiceRpcInputParams {
-  amount_sats: number;
-
-  description_hash?: string;
-
-  expiry_seconds?: number;
-
-  include_spark_address?: boolean;
-
-  memo?: string;
-
-  receiver_identity_pubkey?: string;
-}
-
-/**
- * Creates a Lightning invoice for the Spark wallet.
- */
-export interface SparkCreateLightningInvoiceRpcInput {
-  method: 'createLightningInvoice';
-
-  /**
-   * Parameters for the Spark `createLightningInvoice` RPC.
-   */
-  params: SparkCreateLightningInvoiceRpcInputParams;
-
-  /**
-   * The Spark network.
-   */
-  network?: SparkNetwork;
-}
-
-/**
- * Parameters for the Spark `payLightningInvoice` RPC.
- */
-export interface SparkPayLightningInvoiceRpcInputParams {
-  invoice: string;
-
-  max_fee_sats: number;
-
-  amount_sats_to_send?: number;
-
-  prefer_spark?: boolean;
-}
-
-/**
- * Pays a Lightning invoice from the Spark wallet.
- */
-export interface SparkPayLightningInvoiceRpcInput {
-  method: 'payLightningInvoice';
-
-  /**
-   * Parameters for the Spark `payLightningInvoice` RPC.
-   */
-  params: SparkPayLightningInvoiceRpcInputParams;
-
-  /**
-   * The Spark network.
-   */
-  network?: SparkNetwork;
-}
-
-/**
- * Parameters for the Spark `signMessageWithIdentityKey` RPC.
- */
-export interface SparkSignMessageWithIdentityKeyRpcInputParams {
-  message: string;
-
-  compact?: boolean;
-}
-
-/**
- * Signs a message with the Spark identity key.
- */
-export interface SparkSignMessageWithIdentityKeyRpcInput {
-  method: 'signMessageWithIdentityKey';
-
-  /**
-   * Parameters for the Spark `signMessageWithIdentityKey` RPC.
-   */
-  params: SparkSignMessageWithIdentityKeyRpcInputParams;
-
-  /**
-   * The Spark network.
-   */
-  network?: SparkNetwork;
-}
-
-/**
- * Request body for Spark wallet RPC operations, discriminated by method.
- */
-export type SparkRpcInput =
-  | SparkTransferRpcInput
-  | SparkGetBalanceRpcInput
-  | SparkTransferTokensRpcInput
-  | SparkGetStaticDepositAddressRpcInput
-  | SparkGetClaimStaticDepositQuoteRpcInput
-  | SparkClaimStaticDepositRpcInput
-  | SparkCreateLightningInvoiceRpcInput
-  | SparkPayLightningInvoiceRpcInput
-  | SparkSignMessageWithIdentityKeyRpcInput;
-
-/**
- * Response to the Spark `transfer` RPC.
- */
-export interface SparkTransferRpcResponse {
-  method: 'transfer';
-
-  /**
-   * A Spark transfer.
-   */
-  data?: SparkTransfer;
-}
-
-/**
- * Response to the Spark `getBalance` RPC.
- */
-export interface SparkGetBalanceRpcResponse {
-  method: 'getBalance';
-
-  /**
-   * The balance of a Spark wallet.
-   */
-  data?: SparkBalance;
-}
-
-/**
- * Data returned by the Spark `transferTokens` RPC.
- */
-export interface SparkTransferTokensRpcResponseData {
-  id: string;
-}
-
-/**
- * Response to the Spark `transferTokens` RPC.
- */
-export interface SparkTransferTokensRpcResponse {
-  method: 'transferTokens';
-
-  /**
-   * Data returned by the Spark `transferTokens` RPC.
-   */
-  data?: SparkTransferTokensRpcResponseData;
-}
-
-/**
- * Data returned by the Spark `getStaticDepositAddress` RPC.
- */
-export interface SparkGetStaticDepositAddressRpcResponseData {
-  address: string;
-}
-
-/**
- * Response to the Spark `getStaticDepositAddress` RPC.
- */
-export interface SparkGetStaticDepositAddressRpcResponse {
-  method: 'getStaticDepositAddress';
-
-  /**
-   * Data returned by the Spark `getStaticDepositAddress` RPC.
-   */
-  data?: SparkGetStaticDepositAddressRpcResponseData;
-}
-
-/**
- * Data returned by the Spark `getClaimStaticDepositQuote` RPC.
- */
-export interface SparkGetClaimStaticDepositQuoteRpcResponseData {
-  credit_amount_sats: number;
-
-  network: string;
-
-  output_index: number;
-
-  signature: string;
-
-  transaction_id: string;
-}
-
-/**
- * Response to the Spark `getClaimStaticDepositQuote` RPC.
- */
-export interface SparkGetClaimStaticDepositQuoteRpcResponse {
-  method: 'getClaimStaticDepositQuote';
-
-  /**
-   * Data returned by the Spark `getClaimStaticDepositQuote` RPC.
-   */
-  data?: SparkGetClaimStaticDepositQuoteRpcResponseData;
-}
-
-/**
- * Data returned by the Spark `claimStaticDeposit` RPC.
- */
-export interface SparkClaimStaticDepositRpcResponseData {
-  transfer_id: string;
-}
-
-/**
- * Response to the Spark `claimStaticDeposit` RPC.
- */
-export interface SparkClaimStaticDepositRpcResponse {
-  method: 'claimStaticDeposit';
-
-  /**
-   * Data returned by the Spark `claimStaticDeposit` RPC.
-   */
-  data?: SparkClaimStaticDepositRpcResponseData;
-}
-
-/**
- * Response to the Spark `createLightningInvoice` RPC.
- */
-export interface SparkCreateLightningInvoiceRpcResponse {
-  method: 'createLightningInvoice';
-
-  /**
-   * A Spark Lightning receive request.
-   */
-  data?: SparkLightningReceiveRequest;
-}
-
-/**
- * Response to the Spark `payLightningInvoice` RPC.
- */
-export interface SparkPayLightningInvoiceRpcResponse {
-  method: 'payLightningInvoice';
-
-  /**
-   * A Spark transfer.
-   */
-  data?: SparkTransfer | SparkLightningSendRequest;
-}
-
-/**
- * Data returned by the Spark `signMessageWithIdentityKey` RPC.
- */
-export interface SparkSignMessageWithIdentityKeyRpcResponseData {
-  signature: string;
-}
-
-/**
- * Response to the Spark `signMessageWithIdentityKey` RPC.
- */
-export interface SparkSignMessageWithIdentityKeyRpcResponse {
-  method: 'signMessageWithIdentityKey';
-
-  /**
-   * Data returned by the Spark `signMessageWithIdentityKey` RPC.
-   */
-  data?: SparkSignMessageWithIdentityKeyRpcResponseData;
-}
-
-/**
- * Response body for Spark wallet RPC operations, discriminated by method.
- */
-export type SparkRpcResponse =
-  | SparkTransferRpcResponse
-  | SparkGetBalanceRpcResponse
-  | SparkTransferTokensRpcResponse
-  | SparkGetStaticDepositAddressRpcResponse
-  | SparkGetClaimStaticDepositQuoteRpcResponse
-  | SparkClaimStaticDepositRpcResponse
-  | SparkCreateLightningInvoiceRpcResponse
-  | SparkPayLightningInvoiceRpcResponse
-  | SparkSignMessageWithIdentityKeyRpcResponse;
 
 /**
  * A wallet managed by Privy's wallet infrastructure.
@@ -2635,91 +2957,157 @@ export interface Wallet {
 }
 
 /**
- * Request body for looking up a wallet by its blockchain address.
+ * Additional signers for the wallet.
  */
-export interface GetByWalletAddressRequestBody {
+export type WalletAdditionalSigner = Array<WalletAdditionalSignerItem>;
+
+/**
+ * A single additional signer on a wallet, with an optional policy override.
+ */
+export interface WalletAdditionalSignerItem {
   /**
-   * A blockchain wallet address (Ethereum or Solana).
+   * A unique identifier for a key quorum.
    */
-  address: Address;
+  signer_id: SharedAPI.KeyQuorumID;
+
+  /**
+   * An optional list of up to one policy ID to enforce on the wallet.
+   */
+  override_policy_ids?: PolicyInput;
 }
 
 /**
- * Request body for updating a wallet.
+ * Input for registering or updating an application public signing key for
+ * API-based wallet actions.
  */
-export interface WalletUpdateRequestBody {
-  /**
-   * Additional signers for the wallet.
-   */
-  additional_signers?: AdditionalSignerInput;
+export interface WalletAPIRegisterAuthorizationKeyInput {
+  public_key: string;
 
-  /**
-   * A human-readable label for the wallet. Set to null to clear.
-   */
-  display_name?: string | null;
-
-  /**
-   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
-   * null to remove the current owner.
-   */
-  owner?: SharedAPI.OwnerInput | null;
-
-  /**
-   * The key quorum ID to set as the owner of the resource. If you provide this, do
-   * not specify an owner.
-   */
-  owner_id?: SharedAPI.OwnerIDInput | null;
-
-  /**
-   * New policy IDs to enforce on the wallet. Currently, only one policy is supported
-   * per wallet.
-   */
-  policy_ids?: Array<string>;
-}
-
-/**
- * Input for a single wallet in a batch creation request.
- */
-export interface WalletBatchItemInput {
-  /**
-   * The wallet chain types.
-   */
-  chain_type: WalletChainType;
-
-  /**
-   * Additional signers for the wallet.
-   */
-  additional_signers?: AdditionalSignerInput;
-
-  /**
-   * A human-readable label for the wallet.
-   */
   display_name?: string;
 
   /**
-   * A customer-provided identifier for mapping to external systems. URL-safe
-   * characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
-   * after creation.
+   * The role of an authorization key, controlling what actions it can authorize on a
+   * wallet.
    */
-  external_id?: string;
+  role?: AuthorizationKeyRole | null;
+}
+
+/**
+ * Input for revoking an application authorization key.
+ */
+export interface WalletAPIRevokeAuthorizationKeyInput {
+  id: string;
+}
+
+/**
+ * A named asset supported across all chains.
+ */
+export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+
+/**
+ * Request body for wallet authentication with HPKE-encrypted response.
+ */
+export interface WalletAuthenticateRequestBody {
+  /**
+   * The encryption type for the authentication response. Currently only supports
+   * HPKE.
+   */
+  encryption_type: 'HPKE';
 
   /**
-   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
-   * null to remove the current owner.
+   * The public key of your ECDH keypair, in base64-encoded, SPKI-format, whose
+   * private key will be able to decrypt the session key.
    */
-  owner?: SharedAPI.OwnerInput | null;
+  recipient_public_key: string;
 
   /**
-   * The key quorum ID to set as the owner of the resource. If you provide this, do
-   * not specify an owner.
+   * The user's JWT, to be used to authenticate the user.
    */
-  owner_id?: SharedAPI.OwnerIDInput | null;
+  user_jwt: string;
+}
+
+/**
+ * The response from authenticating a wallet, containing an authorization key and
+ * wallet data.
+ */
+export type WalletAuthenticateWithJwtResponse =
+  | WalletAuthenticateWithJwtResponse.WithEncryption
+  | WalletAuthenticateWithJwtResponse.WithoutEncryption;
+
+export namespace WalletAuthenticateWithJwtResponse {
+  export interface WithEncryption {
+    /**
+     * The encrypted authorization key data.
+     */
+    encrypted_authorization_key: WithEncryption.EncryptedAuthorizationKey;
+
+    /**
+     * The expiration time of the authorization key in milliseconds since the epoch.
+     */
+    expires_at: number;
+
+    wallets: Array<WalletsAPI.Wallet>;
+  }
+
+  export namespace WithEncryption {
+    /**
+     * The encrypted authorization key data.
+     */
+    export interface EncryptedAuthorizationKey {
+      /**
+       * The encrypted authorization key corresponding to the user's current
+       * authentication session.
+       */
+      ciphertext: string;
+
+      /**
+       * Base64-encoded ephemeral public key used in the HPKE encryption process.
+       * Required for decryption.
+       */
+      encapsulated_key: string;
+
+      /**
+       * The encryption type used. Currently only supports HPKE.
+       */
+      encryption_type: 'HPKE';
+    }
+  }
+
+  export interface WithoutEncryption {
+    /**
+     * The raw authorization key data.
+     */
+    authorization_key: string;
+
+    /**
+     * The expiration time of the authorization key in milliseconds since the epoch.
+     */
+    expires_at: number;
+
+    wallets: Array<WalletsAPI.Wallet>;
+  }
+}
+
+/**
+ * Headers required to authorize wallet operations.
+ */
+export interface WalletAuthorizationHeaders {
+  /**
+   * ID of your Privy app.
+   */
+  'privy-app-id': string;
 
   /**
-   * List of policy IDs for policies that should be enforced on the wallet.
-   * Currently, only one policy is supported per wallet.
+   * Request authorization signature. If multiple signatures are required, they
+   * should be comma separated.
    */
-  policy_ids?: Array<string>;
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 /**
@@ -2730,6 +3118,16 @@ export interface WalletBatchCreateInput {
    * Array of wallet creation requests. Minimum 1, maximum 100.
    */
   wallets: Array<WalletBatchItemInput>;
+}
+
+/**
+ * Response for a batch wallet creation request.
+ */
+export interface WalletBatchCreateResponse {
+  /**
+   * Array of results for each wallet creation request, in the same order as input.
+   */
+  results: Array<WalletBatchCreateResult>;
 }
 
 /**
@@ -2782,13 +3180,180 @@ export namespace WalletBatchCreateResult {
 }
 
 /**
- * Response for a batch wallet creation request.
+ * Input for a single wallet in a batch creation request.
  */
-export interface WalletBatchCreateResponse {
+export interface WalletBatchItemInput {
   /**
-   * Array of results for each wallet creation request, in the same order as input.
+   * The wallet chain types.
    */
-  results: Array<WalletBatchCreateResult>;
+  chain_type: WalletChainType;
+
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: AdditionalSignerInput;
+
+  /**
+   * A human-readable label for the wallet.
+   */
+  display_name?: string;
+
+  /**
+   * A customer-provided identifier for mapping to external systems. URL-safe
+   * characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
+   * after creation.
+   */
+  external_id?: string;
+
+  /**
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
+   */
+  owner?: SharedAPI.OwnerInput | null;
+
+  /**
+   * The key quorum ID to set as the owner of the resource. If you provide this, do
+   * not specify an owner.
+   */
+  owner_id?: SharedAPI.OwnerIDInput | null;
+
+  /**
+   * List of policy IDs for policies that should be enforced on the wallet.
+   * Currently, only one policy is supported per wallet.
+   */
+  policy_ids?: Array<string>;
+}
+
+/**
+ * The wallet chain types.
+ */
+export type WalletChainType =
+  | 'ethereum'
+  | 'solana'
+  | 'cosmos'
+  | 'stellar'
+  | 'sui'
+  | 'aptos'
+  | 'movement'
+  | 'tron'
+  | 'bitcoin-segwit'
+  | 'bitcoin-taproot'
+  | 'pearl'
+  | 'near'
+  | 'ton'
+  | 'starknet'
+  | 'spark';
+
+/**
+ * The response from creating wallets with an associated recovery user.
+ */
+export interface WalletCreateWalletsWithRecoveryResponse {
+  /**
+   * The ID of the created user.
+   */
+  recovery_user_id: string;
+
+  /**
+   * The wallets that were created.
+   */
+  wallets: Array<Wallet>;
+}
+
+/**
+ * Information about the custodian managing this wallet.
+ */
+export interface WalletCustodian {
+  /**
+   * The custodian responsible for the wallet.
+   */
+  provider: string;
+
+  /**
+   * The resource ID of the beneficiary of the custodial wallet.
+   */
+  provider_user_id: string;
+}
+
+/**
+ * The entropy type of the wallet.
+ */
+export type WalletEntropyType = 'hd' | 'private-key';
+
+/**
+ * A named asset on Ethereum-compatible chains.
+ */
+export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb';
+
+/**
+ * Request body for exporting a wallet private key.
+ */
+export interface WalletExportRequestBody {
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  /**
+   * The base64-encoded encryption public key to encrypt the wallet private key with.
+   */
+  recipient_public_key: string;
+
+  export_seed_phrase?: boolean;
+}
+
+/**
+ * Response body containing the encrypted wallet private key.
+ */
+export interface WalletExportResponseBody {
+  /**
+   * The encrypted private key.
+   */
+  ciphertext: string;
+
+  /**
+   * The base64-encoded encapsulated key that was generated during encryption, for
+   * use during decryption.
+   */
+  encapsulated_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+}
+
+/**
+ * Response from initializing a wallet import, containing the encryption public
+ * key.
+ */
+export interface WalletImportInitResponse {
+  encryption_public_key: string;
+
+  /**
+   * The encryption type of the wallet to import. Currently only supports `HPKE`.
+   */
+  encryption_type: HpkeEncryption;
+
+  import_id?: string;
+}
+
+/**
+ * The chain type of the wallet to import. Currently supports `ethereum` and
+ * `solana`.
+ */
+export type WalletImportSupportedChains = 'ethereum' | 'solana';
+
+/**
+ * The entropy type of the wallet to import. Supports `private-key` for raw private
+ * keys and `hd` for HD wallet seed phrases.
+ */
+export type WalletImportSupportedEntropyTypes = 'private-key' | 'hd';
+
+/**
+ * The response body from revoking a wallet delegation.
+ */
+export interface WalletRevokeResponse {
+  message: string;
 }
 
 /**
@@ -2846,475 +3411,41 @@ export type WalletRpcResponse =
   | ExportSeedPhraseRpcResponse;
 
 /**
- * Request body for wallet authentication with HPKE-encrypted response.
- */
-export interface WalletAuthenticateRequestBody {
-  /**
-   * The encryption type for the authentication response. Currently only supports
-   * HPKE.
-   */
-  encryption_type: 'HPKE';
-
-  /**
-   * The public key of your ECDH keypair, in base64-encoded, SPKI-format, whose
-   * private key will be able to decrypt the session key.
-   */
-  recipient_public_key: string;
-
-  /**
-   * The user's JWT, to be used to authenticate the user.
-   */
-  user_jwt: string;
-}
-
-/**
- * The input for private key wallets.
- */
-export interface PrivateKeyInitInput {
-  /**
-   * The address of the wallet to import.
-   */
-  address: string;
-
-  /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
-   */
-  chain_type: WalletImportSupportedChains;
-
-  /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
-   */
-  encryption_type: HpkeEncryption;
-
-  entropy_type: 'private-key';
-}
-
-/**
- * The input for HD wallets.
- */
-export interface HDInitInput {
-  /**
-   * The address of the wallet to import.
-   */
-  address: string;
-
-  /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
-   */
-  chain_type: WalletImportSupportedChains;
-
-  /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
-   */
-  encryption_type: HpkeEncryption;
-
-  /**
-   * The entropy type of the wallet to import.
-   */
-  entropy_type: 'hd';
-
-  /**
-   * The index of the wallet to import.
-   */
-  index: number;
-}
-
-/**
- * The submission input for importing a private key wallet.
- */
-export interface PrivateKeySubmitInput {
-  /**
-   * The address of the wallet to import.
-   */
-  address: string;
-
-  /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
-   */
-  chain_type: WalletImportSupportedChains;
-
-  /**
-   * The encrypted entropy of the wallet to import.
-   */
-  ciphertext: string;
-
-  /**
-   * The base64-encoded encapsulated key that was generated during encryption, for
-   * use during decryption inside the TEE.
-   */
-  encapsulated_key: string;
-
-  /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
-   */
-  encryption_type: HpkeEncryption;
-
-  entropy_type: 'private-key';
-
-  /**
-   * Optional HPKE configuration for wallet import decryption. These parameters allow
-   * importing wallets encrypted by external providers that use different HPKE
-   * configurations.
-   */
-  hpke_config?: HpkeImportConfig;
-}
-
-/**
- * The submission input for importing an HD wallet.
- */
-export interface HDSubmitInput {
-  /**
-   * The address of the wallet to import.
-   */
-  address: string;
-
-  /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
-   */
-  chain_type: WalletImportSupportedChains;
-
-  /**
-   * The encrypted entropy of the wallet to import.
-   */
-  ciphertext: string;
-
-  /**
-   * The base64-encoded encapsulated key that was generated during encryption, for
-   * use during decryption inside the TEE.
-   */
-  encapsulated_key: string;
-
-  /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
-   */
-  encryption_type: HpkeEncryption;
-
-  /**
-   * The entropy type of the wallet to import.
-   */
-  entropy_type: 'hd';
-
-  /**
-   * The index of the wallet to import.
-   */
-  index: number;
-
-  /**
-   * Optional HPKE configuration for wallet import decryption. These parameters allow
-   * importing wallets encrypted by external providers that use different HPKE
-   * configurations.
-   */
-  hpke_config?: HpkeImportConfig;
-}
-
-/**
- * Request body for exporting a wallet private key.
- */
-export interface WalletExportRequestBody {
-  /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
-   */
-  encryption_type: HpkeEncryption;
-
-  /**
-   * The base64-encoded encryption public key to encrypt the wallet private key with.
-   */
-  recipient_public_key: string;
-
-  export_seed_phrase?: boolean;
-}
-
-/**
- * The response body from revoking a wallet delegation.
- */
-export interface WalletRevokeResponse {
-  message: string;
-}
-
-/**
- * Response body containing the encrypted wallet private key.
- */
-export interface WalletExportResponseBody {
-  /**
-   * The encrypted private key.
-   */
-  ciphertext: string;
-
-  /**
-   * The base64-encoded encapsulated key that was generated during encryption, for
-   * use during decryption.
-   */
-  encapsulated_key: string;
-
-  /**
-   * The encryption type of the wallet to import. Currently only supports `HPKE`.
-   */
-  encryption_type: HpkeEncryption;
-}
-
-/**
- * The source asset, amount, and chain for a token transfer.
- */
-export interface TokenTransferSource {
-  /**
-   * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
-   * USDC, "0.01" for 0.01 ETH). Not in the smallest on-chain unit (wei, lamports,
-   * etc.).
-   */
-  amount: string;
-
-  /**
-   * The asset to transfer. Supported: 'usdc', 'usdb', 'usdt' (stablecoins), 'eth'
-   * (native Ethereum), 'sol' (native Solana).
-   */
-  asset: string;
-
-  /**
-   * The blockchain network on which to perform the transfer. Supported chains
-   * include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and their
-   * respective testnets.
-   */
-  chain: string;
-}
-
-/**
- * The destination address for a token transfer. Optionally specify a different
- * asset or chain for cross-asset or cross-chain transfers.
- */
-export interface TokenTransferDestination {
-  /**
-   * Recipient address (hex for EVM, base58 for Solana)
-   */
-  address: string;
-
-  /**
-   * The destination asset. Required for cross-asset transfers (e.g., source 'usdt'
-   * to destination 'usdc').
-   */
-  asset?: string;
-
-  /**
-   * The destination blockchain network. Required for cross-chain transfers (e.g.,
-   * source 'base' to destination 'arbitrum').
-   */
-  chain?: string;
-}
-
-/**
- * Request body for initiating a sponsored token transfer from an embedded wallet.
- */
-export interface TransferRequestBody {
-  /**
-   * The destination address for a token transfer. Optionally specify a different
-   * asset or chain for cross-asset or cross-chain transfers.
-   */
-  destination: TokenTransferDestination;
-
-  /**
-   * The source asset, amount, and chain for a token transfer.
-   */
-  source: TokenTransferSource;
-
-  /**
-   * Whether the amount refers to the input token or output token.
-   */
-  amount_type?: AmountType;
-
-  /**
-   * Maximum allowed slippage in basis points (1 bps = 0.01%).
-   */
-  slippage_bps?: number;
-}
-
-/**
- * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
- */
-export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
-
-/**
- * A named asset on Ethereum-compatible chains.
- */
-export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb';
-
-/**
  * A named asset on Solana.
  */
 export type WalletSolanaAsset = 'sol' | 'usdc' | 'eurc' | 'usdb';
 
 /**
- * A named asset supported across all chains.
+ * Request body for updating a wallet.
  */
-export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
-
-/**
- * Details for a sent transfer transaction.
- */
-export interface TransferSentTransactionDetail {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
-
-  chain:
-    | 'ethereum'
-    | 'arbitrum'
-    | 'base'
-    | 'tempo'
-    | 'linea'
-    | 'optimism'
-    | 'polygon'
-    | 'solana'
-    | 'zksync_era'
-    | 'sepolia'
-    | 'arbitrum_sepolia'
-    | 'base_sepolia'
-    | 'linea_testnet'
-    | 'optimism_sepolia'
-    | 'polygon_amoy'
-    | 'solana_devnet'
-    | 'solana_testnet';
-
-  display_values: { [key: string]: string };
-
-  raw_value: string;
-
-  raw_value_decimals: number;
-
-  recipient: string;
-
-  recipient_privy_user_id: string | null;
-
-  sender: string;
-
-  sender_privy_user_id: string | null;
-
-  type: 'transfer_sent';
-}
-
-/**
- * Details for a received transfer transaction.
- */
-export interface TransferReceivedTransactionDetail {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
-
-  chain:
-    | 'ethereum'
-    | 'arbitrum'
-    | 'base'
-    | 'tempo'
-    | 'linea'
-    | 'optimism'
-    | 'polygon'
-    | 'solana'
-    | 'zksync_era'
-    | 'sepolia'
-    | 'arbitrum_sepolia'
-    | 'base_sepolia'
-    | 'linea_testnet'
-    | 'optimism_sepolia'
-    | 'polygon_amoy'
-    | 'solana_devnet'
-    | 'solana_testnet';
-
-  display_values: { [key: string]: string };
-
-  raw_value: string;
-
-  raw_value_decimals: number;
-
-  recipient: string;
-
-  recipient_privy_user_id: string | null;
-
-  sender: string;
-
-  sender_privy_user_id: string | null;
-
-  type: 'transfer_received';
-}
-
-/**
- * Details of a wallet transaction, varying by transaction type.
- */
-export type TransactionDetail = TransferSentTransactionDetail | TransferReceivedTransactionDetail;
-
-/**
- * Input for registering or updating an application public signing key for
- * API-based wallet actions.
- */
-export interface WalletAPIRegisterAuthorizationKeyInput {
-  public_key: string;
-
-  display_name?: string;
+export interface WalletUpdateRequestBody {
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: AdditionalSignerInput;
 
   /**
-   * The role of an authorization key, controlling what actions it can authorize on a
-   * wallet.
+   * A human-readable label for the wallet. Set to null to clear.
    */
-  role?: AuthorizationKeyRole | null;
-}
-
-/**
- * Input for revoking an application authorization key.
- */
-export interface WalletAPIRevokeAuthorizationKeyInput {
-  id: string;
-}
-
-/**
- * Dashboard response for a wallet authorization key (includes role, which is an
- * internal-only concept).
- */
-export interface AuthorizationKeyDashboardResponse {
-  id: string;
-
-  created_at: number;
-
-  display_name: string | null;
-
-  public_key: string;
+  display_name?: string | null;
 
   /**
-   * The role of an authorization key, controlling what actions it can authorize on a
-   * wallet.
+   * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+   * null to remove the current owner.
    */
-  role: AuthorizationKeyRole | null;
-}
-
-/**
- * Public-facing response for a wallet authorization key.
- */
-export interface AuthorizationKeyResponse {
-  id: string;
-
-  created_at: number;
-
-  display_name: string | null;
-
-  public_key: string;
-}
-
-/**
- * Headers required to authorize wallet operations.
- */
-export interface WalletAuthorizationHeaders {
-  /**
-   * ID of your Privy app.
-   */
-  'privy-app-id': string;
+  owner?: SharedAPI.OwnerInput | null;
 
   /**
-   * Request authorization signature. If multiple signatures are required, they
-   * should be comma separated.
+   * The key quorum ID to set as the owner of the resource. If you provide this, do
+   * not specify an owner.
    */
-  'privy-authorization-signature'?: string;
+  owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
-   * Request expiry. Value is a Unix timestamp in milliseconds representing the
-   * deadline by which the request must be processed.
+   * New policy IDs to enforce on the wallet. Currently, only one policy is supported
+   * per wallet.
    */
-  'privy-request-expiry'?: string;
+  policy_ids?: Array<string>;
 }
 
 export interface WalletInitImportResponse {
@@ -3327,76 +3458,6 @@ export interface WalletInitImportResponse {
    * The encryption type of the wallet to import. Currently only supports `HPKE`.
    */
   encryption_type: HpkeEncryption;
-}
-
-export type WalletAuthenticateWithJwtResponse =
-  | WalletAuthenticateWithJwtResponse.WithEncryption
-  | WalletAuthenticateWithJwtResponse.WithoutEncryption;
-
-export namespace WalletAuthenticateWithJwtResponse {
-  export interface WithEncryption {
-    /**
-     * The encrypted authorization key data.
-     */
-    encrypted_authorization_key: WithEncryption.EncryptedAuthorizationKey;
-
-    /**
-     * The expiration time of the authorization key in seconds since the epoch.
-     */
-    expires_at: number;
-
-    wallets: Array<WalletsAPI.Wallet>;
-  }
-
-  export namespace WithEncryption {
-    /**
-     * The encrypted authorization key data.
-     */
-    export interface EncryptedAuthorizationKey {
-      /**
-       * The encrypted authorization key corresponding to the user's current
-       * authentication session.
-       */
-      ciphertext: string;
-
-      /**
-       * Base64-encoded ephemeral public key used in the HPKE encryption process.
-       * Required for decryption.
-       */
-      encapsulated_key: string;
-
-      /**
-       * The encryption type used. Currently only supports HPKE.
-       */
-      encryption_type: 'HPKE';
-    }
-  }
-
-  export interface WithoutEncryption {
-    /**
-     * The raw authorization key data.
-     */
-    authorization_key: string;
-
-    /**
-     * The expiration time of the authorization key in seconds since the epoch.
-     */
-    expires_at: number;
-
-    wallets: Array<WalletsAPI.Wallet>;
-  }
-}
-
-export interface WalletCreateWalletsWithRecoveryResponse {
-  /**
-   * The ID of the created user.
-   */
-  recovery_user_id: string;
-
-  /**
-   * The wallets that were created.
-   */
-  wallets: Array<Wallet>;
 }
 
 export interface WalletCreateParams {
@@ -4577,7 +4638,8 @@ export interface WalletTransferParams {
   destination: TokenTransferDestination;
 
   /**
-   * Body param: The source asset, amount, and chain for a token transfer.
+   * Body param: The source asset, amount, and chain for a token transfer. Specify
+   * either `asset` (named) or `asset_address` (custom), not both.
    */
   source: TokenTransferSource;
 
@@ -4596,6 +4658,18 @@ export interface WalletTransferParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Idempotency keys ensure API requests are executed only once within
+   * a 24-hour window.
+   */
+  'privy-idempotency-key'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export interface WalletUpdateParams {
@@ -4717,196 +4791,199 @@ Wallets.Balance = Balance;
 
 export declare namespace Wallets {
   export {
-    type CurveSigningChainType as CurveSigningChainType,
-    type ExtendedChainType as ExtendedChainType,
-    type FirstClassChainType as FirstClassChainType,
-    type WalletChainType as WalletChainType,
-    type AuthorizationKeyRole as AuthorizationKeyRole,
-    type WalletEntropyType as WalletEntropyType,
-    type SolanaWalletDerivationStrategy as SolanaWalletDerivationStrategy,
-    type PolicyInput as PolicyInput,
-    type AdditionalSignerItemInput as AdditionalSignerItemInput,
     type AdditionalSignerInput as AdditionalSignerInput,
-    type WalletAdditionalSignerItem as WalletAdditionalSignerItem,
-    type WalletAdditionalSigner as WalletAdditionalSigner,
+    type AdditionalSignerItemInput as AdditionalSignerItemInput,
     type Address as Address,
-    type WalletCustodian as WalletCustodian,
-    type CustodialWalletProvider as CustodialWalletProvider,
+    type AmountType as AmountType,
+    type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
+    type AuthorizationKeyResponse as AuthorizationKeyResponse,
+    type AuthorizationKeyRole as AuthorizationKeyRole,
+    type CurveSigningChainType as CurveSigningChainType,
+    type CurveType as CurveType,
+    type CustodialWallet as CustodialWallet,
     type CustodialWalletChainType as CustodialWalletChainType,
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
-    type CustodialWallet as CustodialWallet,
-    type HpkeEncryption as HpkeEncryption,
-    type RecipientPublicKey as RecipientPublicKey,
-    type ExportType as ExportType,
-    type PrivateKeyExportInput as PrivateKeyExportInput,
-    type PrivateKeyExportResponse as PrivateKeyExportResponse,
-    type SeedPhraseExportInput as SeedPhraseExportInput,
-    type SeedPhraseExportResponse as SeedPhraseExportResponse,
-    type AmountType as AmountType,
-    type WalletImportSupportedChains as WalletImportSupportedChains,
-    type WalletImportSupportedEntropyTypes as WalletImportSupportedEntropyTypes,
-    type WalletImportInitResponse as WalletImportInitResponse,
-    type HpkeAeadAlgorithm as HpkeAeadAlgorithm,
-    type HpkeImportConfig as HpkeImportConfig,
-    type CurveType as CurveType,
-    type HDPath as HDPath,
-    type SigningAlgorithm as SigningAlgorithm,
-    type Hex as Hex,
-    type Quantity as Quantity,
+    type CustodialWalletProvider as CustodialWalletProvider,
+    type CustomTokenTransferSource as CustomTokenTransferSource,
+    type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
+    type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
+    type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
+    type EthereumPersonalSignRpcResponseData as EthereumPersonalSignRpcResponseData,
+    type EthereumRpcInput as EthereumRpcInput,
+    type EthereumRpcResponse as EthereumRpcResponse,
+    type EthereumSecp256k1SignRpcInput as EthereumSecp256k1SignRpcInput,
+    type EthereumSecp256k1SignRpcInputParams as EthereumSecp256k1SignRpcInputParams,
+    type EthereumSecp256k1SignRpcResponse as EthereumSecp256k1SignRpcResponse,
+    type EthereumSecp256k1SignRpcResponseData as EthereumSecp256k1SignRpcResponseData,
+    type EthereumSendCallsCall as EthereumSendCallsCall,
+    type EthereumSendCallsRpcInput as EthereumSendCallsRpcInput,
+    type EthereumSendCallsRpcInputParams as EthereumSendCallsRpcInputParams,
+    type EthereumSendCallsRpcResponse as EthereumSendCallsRpcResponse,
+    type EthereumSendCallsRpcResponseData as EthereumSendCallsRpcResponseData,
+    type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,
+    type EthereumSendTransactionRpcInputParams as EthereumSendTransactionRpcInputParams,
+    type EthereumSendTransactionRpcResponse as EthereumSendTransactionRpcResponse,
+    type EthereumSendTransactionRpcResponseData as EthereumSendTransactionRpcResponseData,
+    type EthereumSign7702Authorization as EthereumSign7702Authorization,
+    type EthereumSign7702AuthorizationRpcInput as EthereumSign7702AuthorizationRpcInput,
+    type EthereumSign7702AuthorizationRpcInputParams as EthereumSign7702AuthorizationRpcInputParams,
+    type EthereumSign7702AuthorizationRpcResponse as EthereumSign7702AuthorizationRpcResponse,
+    type EthereumSign7702AuthorizationRpcResponseData as EthereumSign7702AuthorizationRpcResponseData,
+    type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
+    type EthereumSignTransactionRpcInputParams as EthereumSignTransactionRpcInputParams,
+    type EthereumSignTransactionRpcResponse as EthereumSignTransactionRpcResponse,
+    type EthereumSignTransactionRpcResponseData as EthereumSignTransactionRpcResponseData,
+    type EthereumSignTypedDataRpcInput as EthereumSignTypedDataRpcInput,
+    type EthereumSignTypedDataRpcInputParams as EthereumSignTypedDataRpcInputParams,
+    type EthereumSignTypedDataRpcResponse as EthereumSignTypedDataRpcResponse,
+    type EthereumSignTypedDataRpcResponseData as EthereumSignTypedDataRpcResponseData,
+    type EthereumSignUserOperationRpcInput as EthereumSignUserOperationRpcInput,
+    type EthereumSignUserOperationRpcInputParams as EthereumSignUserOperationRpcInputParams,
+    type EthereumSignUserOperationRpcResponse as EthereumSignUserOperationRpcResponse,
+    type EthereumSignUserOperationRpcResponseData as EthereumSignUserOperationRpcResponseData,
+    type EthereumTypedDataInput as EthereumTypedDataInput,
     type ExportPrivateKeyRpcInput as ExportPrivateKeyRpcInput,
     type ExportPrivateKeyRpcResponse as ExportPrivateKeyRpcResponse,
     type ExportSeedPhraseRpcInput as ExportSeedPhraseRpcInput,
     type ExportSeedPhraseRpcResponse as ExportSeedPhraseRpcResponse,
-    type RawSignHashParams as RawSignHashParams,
+    type ExportType as ExportType,
+    type ExtendedChainType as ExtendedChainType,
+    type FirstClassChainType as FirstClassChainType,
+    type GetByWalletAddressRequestBody as GetByWalletAddressRequestBody,
+    type HDInitInput as HDInitInput,
+    type HDPath as HDPath,
+    type HDSubmitInput as HDSubmitInput,
+    type HpkeAeadAlgorithm as HpkeAeadAlgorithm,
+    type HpkeEncryption as HpkeEncryption,
+    type HpkeImportConfig as HpkeImportConfig,
+    type Hex as Hex,
+    type NamedTokenTransferSource as NamedTokenTransferSource,
+    type OutputWithPreviousTransactionData as OutputWithPreviousTransactionData,
+    type PolicyInput as PolicyInput,
+    type PrivateKeyExportInput as PrivateKeyExportInput,
+    type PrivateKeyExportResponse as PrivateKeyExportResponse,
+    type PrivateKeyInitInput as PrivateKeyInitInput,
+    type PrivateKeySubmitInput as PrivateKeySubmitInput,
+    type Quantity as Quantity,
     type RawSignBytesEncoding as RawSignBytesEncoding,
     type RawSignBytesHashFunction as RawSignBytesHashFunction,
     type RawSignBytesParams as RawSignBytesParams,
-    type RawSignInputParams as RawSignInputParams,
+    type RawSignHashParams as RawSignHashParams,
     type RawSignInput as RawSignInput,
-    type RawSignResponseData as RawSignResponseData,
+    type RawSignInputParams as RawSignInputParams,
     type RawSignResponse as RawSignResponse,
-    type EthereumSign7702Authorization as EthereumSign7702Authorization,
-    type UnsignedStandardEthereumTransaction as UnsignedStandardEthereumTransaction,
-    type TempoCall as TempoCall,
-    type TempoFeePayerSignature as TempoFeePayerSignature,
-    type TempoAaAuthorization as TempoAaAuthorization,
-    type UnsignedTempoTransaction as UnsignedTempoTransaction,
-    type UnsignedEthereumTransaction as UnsignedEthereumTransaction,
-    type UserOperationInput as UserOperationInput,
-    type TypedDataDomainInputParams as TypedDataDomainInputParams,
-    type TypedDataTypeFieldInput as TypedDataTypeFieldInput,
-    type TypedDataTypesInputParams as TypedDataTypesInputParams,
-    type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
-    type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
-    type EthereumSignTransactionRpcInputParams as EthereumSignTransactionRpcInputParams,
-    type EthereumSignTransactionRpcInput as EthereumSignTransactionRpcInput,
-    type EthereumSendTransactionRpcInputParams as EthereumSendTransactionRpcInputParams,
-    type EthereumSendTransactionRpcInput as EthereumSendTransactionRpcInput,
-    type EthereumTypedDataInput as EthereumTypedDataInput,
-    type EthereumSignTypedDataRpcInputParams as EthereumSignTypedDataRpcInputParams,
-    type EthereumSignTypedDataRpcInput as EthereumSignTypedDataRpcInput,
-    type EthereumSecp256k1SignRpcInputParams as EthereumSecp256k1SignRpcInputParams,
-    type EthereumSecp256k1SignRpcInput as EthereumSecp256k1SignRpcInput,
-    type EthereumSign7702AuthorizationRpcInputParams as EthereumSign7702AuthorizationRpcInputParams,
-    type EthereumSign7702AuthorizationRpcInput as EthereumSign7702AuthorizationRpcInput,
-    type EthereumSignUserOperationRpcInputParams as EthereumSignUserOperationRpcInputParams,
-    type EthereumSignUserOperationRpcInput as EthereumSignUserOperationRpcInput,
-    type EthereumSendCallsCall as EthereumSendCallsCall,
-    type EthereumSendCallsRpcInputParams as EthereumSendCallsRpcInputParams,
-    type EthereumSendCallsRpcInput as EthereumSendCallsRpcInput,
-    type EthereumRpcInput as EthereumRpcInput,
-    type EthereumPersonalSignRpcResponseData as EthereumPersonalSignRpcResponseData,
-    type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
-    type EthereumSignTransactionRpcResponseData as EthereumSignTransactionRpcResponseData,
-    type EthereumSignTransactionRpcResponse as EthereumSignTransactionRpcResponse,
-    type EthereumSendTransactionRpcResponseData as EthereumSendTransactionRpcResponseData,
-    type EthereumSendTransactionRpcResponse as EthereumSendTransactionRpcResponse,
-    type EthereumSignTypedDataRpcResponseData as EthereumSignTypedDataRpcResponseData,
-    type EthereumSignTypedDataRpcResponse as EthereumSignTypedDataRpcResponse,
-    type EthereumSecp256k1SignRpcResponseData as EthereumSecp256k1SignRpcResponseData,
-    type EthereumSecp256k1SignRpcResponse as EthereumSecp256k1SignRpcResponse,
-    type EthereumSign7702AuthorizationRpcResponseData as EthereumSign7702AuthorizationRpcResponseData,
-    type EthereumSign7702AuthorizationRpcResponse as EthereumSign7702AuthorizationRpcResponse,
-    type EthereumSignUserOperationRpcResponseData as EthereumSignUserOperationRpcResponseData,
-    type EthereumSignUserOperationRpcResponse as EthereumSignUserOperationRpcResponse,
-    type EthereumSendCallsRpcResponseData as EthereumSendCallsRpcResponseData,
-    type EthereumSendCallsRpcResponse as EthereumSendCallsRpcResponse,
-    type EthereumRpcResponse as EthereumRpcResponse,
-    type SolanaSignTransactionRpcInputParams as SolanaSignTransactionRpcInputParams,
-    type SolanaSignTransactionRpcInput as SolanaSignTransactionRpcInput,
-    type SolanaSignAndSendTransactionRpcInputParams as SolanaSignAndSendTransactionRpcInputParams,
-    type SolanaSignAndSendTransactionRpcInput as SolanaSignAndSendTransactionRpcInput,
-    type SolanaSignMessageRpcInputParams as SolanaSignMessageRpcInputParams,
-    type SolanaSignMessageRpcInput as SolanaSignMessageRpcInput,
+    type RawSignResponseData as RawSignResponseData,
+    type RecipientPublicKey as RecipientPublicKey,
+    type SeedPhraseExportInput as SeedPhraseExportInput,
+    type SeedPhraseExportResponse as SeedPhraseExportResponse,
+    type SigningAlgorithm as SigningAlgorithm,
     type SolanaRpcInput as SolanaRpcInput,
-    type SolanaSignTransactionRpcResponseData as SolanaSignTransactionRpcResponseData,
-    type SolanaSignTransactionRpcResponse as SolanaSignTransactionRpcResponse,
-    type SolanaSignAndSendTransactionRpcResponseData as SolanaSignAndSendTransactionRpcResponseData,
-    type SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
-    type SolanaSignMessageRpcResponseData as SolanaSignMessageRpcResponseData,
-    type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
     type SolanaRpcResponse as SolanaRpcResponse,
-    type SparkNetwork as SparkNetwork,
-    type SparkSigningKeyshare as SparkSigningKeyshare,
-    type SparkWalletLeaf as SparkWalletLeaf,
-    type SparkTransferLeaf as SparkTransferLeaf,
-    type SparkTransfer as SparkTransfer,
-    type SparkUserTokenMetadata as SparkUserTokenMetadata,
-    type SparkTokenBalance as SparkTokenBalance,
+    type SolanaSignAndSendTransactionRpcInput as SolanaSignAndSendTransactionRpcInput,
+    type SolanaSignAndSendTransactionRpcInputParams as SolanaSignAndSendTransactionRpcInputParams,
+    type SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
+    type SolanaSignAndSendTransactionRpcResponseData as SolanaSignAndSendTransactionRpcResponseData,
+    type SolanaSignMessageRpcInput as SolanaSignMessageRpcInput,
+    type SolanaSignMessageRpcInputParams as SolanaSignMessageRpcInputParams,
+    type SolanaSignMessageRpcResponse as SolanaSignMessageRpcResponse,
+    type SolanaSignMessageRpcResponseData as SolanaSignMessageRpcResponseData,
+    type SolanaSignTransactionRpcInput as SolanaSignTransactionRpcInput,
+    type SolanaSignTransactionRpcInputParams as SolanaSignTransactionRpcInputParams,
+    type SolanaSignTransactionRpcResponse as SolanaSignTransactionRpcResponse,
+    type SolanaSignTransactionRpcResponseData as SolanaSignTransactionRpcResponseData,
+    type SolanaWalletDerivationStrategy as SolanaWalletDerivationStrategy,
     type SparkBalance as SparkBalance,
-    type TokenOutput as TokenOutput,
-    type OutputWithPreviousTransactionData as OutputWithPreviousTransactionData,
+    type SparkClaimStaticDepositRpcInput as SparkClaimStaticDepositRpcInput,
+    type SparkClaimStaticDepositRpcInputParams as SparkClaimStaticDepositRpcInputParams,
+    type SparkClaimStaticDepositRpcResponse as SparkClaimStaticDepositRpcResponse,
+    type SparkClaimStaticDepositRpcResponseData as SparkClaimStaticDepositRpcResponseData,
+    type SparkCreateLightningInvoiceRpcInput as SparkCreateLightningInvoiceRpcInput,
+    type SparkCreateLightningInvoiceRpcInputParams as SparkCreateLightningInvoiceRpcInputParams,
+    type SparkCreateLightningInvoiceRpcResponse as SparkCreateLightningInvoiceRpcResponse,
+    type SparkGetBalanceRpcInput as SparkGetBalanceRpcInput,
+    type SparkGetBalanceRpcResponse as SparkGetBalanceRpcResponse,
+    type SparkGetClaimStaticDepositQuoteRpcInput as SparkGetClaimStaticDepositQuoteRpcInput,
+    type SparkGetClaimStaticDepositQuoteRpcInputParams as SparkGetClaimStaticDepositQuoteRpcInputParams,
+    type SparkGetClaimStaticDepositQuoteRpcResponse as SparkGetClaimStaticDepositQuoteRpcResponse,
+    type SparkGetClaimStaticDepositQuoteRpcResponseData as SparkGetClaimStaticDepositQuoteRpcResponseData,
+    type SparkGetStaticDepositAddressRpcInput as SparkGetStaticDepositAddressRpcInput,
+    type SparkGetStaticDepositAddressRpcResponse as SparkGetStaticDepositAddressRpcResponse,
+    type SparkGetStaticDepositAddressRpcResponseData as SparkGetStaticDepositAddressRpcResponseData,
     type SparkLightningFee as SparkLightningFee,
     type SparkLightningReceiveRequest as SparkLightningReceiveRequest,
     type SparkLightningSendRequest as SparkLightningSendRequest,
-    type SparkTransferRpcInputParams as SparkTransferRpcInputParams,
-    type SparkTransferRpcInput as SparkTransferRpcInput,
-    type SparkGetBalanceRpcInput as SparkGetBalanceRpcInput,
+    type SparkNetwork as SparkNetwork,
     type SparkOutputSelectionStrategy as SparkOutputSelectionStrategy,
-    type SparkTransferTokensRpcInputParams as SparkTransferTokensRpcInputParams,
-    type SparkTransferTokensRpcInput as SparkTransferTokensRpcInput,
-    type SparkGetStaticDepositAddressRpcInput as SparkGetStaticDepositAddressRpcInput,
-    type SparkGetClaimStaticDepositQuoteRpcInputParams as SparkGetClaimStaticDepositQuoteRpcInputParams,
-    type SparkGetClaimStaticDepositQuoteRpcInput as SparkGetClaimStaticDepositQuoteRpcInput,
-    type SparkClaimStaticDepositRpcInputParams as SparkClaimStaticDepositRpcInputParams,
-    type SparkClaimStaticDepositRpcInput as SparkClaimStaticDepositRpcInput,
-    type SparkCreateLightningInvoiceRpcInputParams as SparkCreateLightningInvoiceRpcInputParams,
-    type SparkCreateLightningInvoiceRpcInput as SparkCreateLightningInvoiceRpcInput,
-    type SparkPayLightningInvoiceRpcInputParams as SparkPayLightningInvoiceRpcInputParams,
     type SparkPayLightningInvoiceRpcInput as SparkPayLightningInvoiceRpcInput,
-    type SparkSignMessageWithIdentityKeyRpcInputParams as SparkSignMessageWithIdentityKeyRpcInputParams,
-    type SparkSignMessageWithIdentityKeyRpcInput as SparkSignMessageWithIdentityKeyRpcInput,
-    type SparkRpcInput as SparkRpcInput,
-    type SparkTransferRpcResponse as SparkTransferRpcResponse,
-    type SparkGetBalanceRpcResponse as SparkGetBalanceRpcResponse,
-    type SparkTransferTokensRpcResponseData as SparkTransferTokensRpcResponseData,
-    type SparkTransferTokensRpcResponse as SparkTransferTokensRpcResponse,
-    type SparkGetStaticDepositAddressRpcResponseData as SparkGetStaticDepositAddressRpcResponseData,
-    type SparkGetStaticDepositAddressRpcResponse as SparkGetStaticDepositAddressRpcResponse,
-    type SparkGetClaimStaticDepositQuoteRpcResponseData as SparkGetClaimStaticDepositQuoteRpcResponseData,
-    type SparkGetClaimStaticDepositQuoteRpcResponse as SparkGetClaimStaticDepositQuoteRpcResponse,
-    type SparkClaimStaticDepositRpcResponseData as SparkClaimStaticDepositRpcResponseData,
-    type SparkClaimStaticDepositRpcResponse as SparkClaimStaticDepositRpcResponse,
-    type SparkCreateLightningInvoiceRpcResponse as SparkCreateLightningInvoiceRpcResponse,
+    type SparkPayLightningInvoiceRpcInputParams as SparkPayLightningInvoiceRpcInputParams,
     type SparkPayLightningInvoiceRpcResponse as SparkPayLightningInvoiceRpcResponse,
-    type SparkSignMessageWithIdentityKeyRpcResponseData as SparkSignMessageWithIdentityKeyRpcResponseData,
-    type SparkSignMessageWithIdentityKeyRpcResponse as SparkSignMessageWithIdentityKeyRpcResponse,
+    type SparkRpcInput as SparkRpcInput,
     type SparkRpcResponse as SparkRpcResponse,
-    type Wallet as Wallet,
-    type GetByWalletAddressRequestBody as GetByWalletAddressRequestBody,
-    type WalletUpdateRequestBody as WalletUpdateRequestBody,
-    type WalletBatchItemInput as WalletBatchItemInput,
-    type WalletBatchCreateInput as WalletBatchCreateInput,
-    type WalletBatchCreateResult as WalletBatchCreateResult,
-    type WalletBatchCreateResponse as WalletBatchCreateResponse,
-    type WalletRpcRequestBody as WalletRpcRequestBody,
-    type WalletRpcResponse as WalletRpcResponse,
-    type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
-    type PrivateKeyInitInput as PrivateKeyInitInput,
-    type HDInitInput as HDInitInput,
-    type PrivateKeySubmitInput as PrivateKeySubmitInput,
-    type HDSubmitInput as HDSubmitInput,
-    type WalletExportRequestBody as WalletExportRequestBody,
-    type WalletRevokeResponse as WalletRevokeResponse,
-    type WalletExportResponseBody as WalletExportResponseBody,
-    type TokenTransferSource as TokenTransferSource,
-    type TokenTransferDestination as TokenTransferDestination,
-    type TransferRequestBody as TransferRequestBody,
+    type SparkSignMessageWithIdentityKeyRpcInput as SparkSignMessageWithIdentityKeyRpcInput,
+    type SparkSignMessageWithIdentityKeyRpcInputParams as SparkSignMessageWithIdentityKeyRpcInputParams,
+    type SparkSignMessageWithIdentityKeyRpcResponse as SparkSignMessageWithIdentityKeyRpcResponse,
+    type SparkSignMessageWithIdentityKeyRpcResponseData as SparkSignMessageWithIdentityKeyRpcResponseData,
+    type SparkSigningKeyshare as SparkSigningKeyshare,
+    type SparkTokenBalance as SparkTokenBalance,
+    type SparkTransfer as SparkTransfer,
+    type SparkTransferLeaf as SparkTransferLeaf,
+    type SparkTransferRpcInput as SparkTransferRpcInput,
+    type SparkTransferRpcInputParams as SparkTransferRpcInputParams,
+    type SparkTransferRpcResponse as SparkTransferRpcResponse,
+    type SparkTransferTokensRpcInput as SparkTransferTokensRpcInput,
+    type SparkTransferTokensRpcInputParams as SparkTransferTokensRpcInputParams,
+    type SparkTransferTokensRpcResponse as SparkTransferTokensRpcResponse,
+    type SparkTransferTokensRpcResponseData as SparkTransferTokensRpcResponseData,
+    type SparkUserTokenMetadata as SparkUserTokenMetadata,
+    type SparkWalletLeaf as SparkWalletLeaf,
     type SuiCommandName as SuiCommandName,
-    type WalletEthereumAsset as WalletEthereumAsset,
-    type WalletSolanaAsset as WalletSolanaAsset,
-    type WalletAsset as WalletAsset,
-    type TransferSentTransactionDetail as TransferSentTransactionDetail,
-    type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
+    type TempoAaAuthorization as TempoAaAuthorization,
+    type TempoCall as TempoCall,
+    type TempoFeePayerSignature as TempoFeePayerSignature,
+    type TokenOutput as TokenOutput,
+    type TokenTransferDestination as TokenTransferDestination,
+    type TokenTransferSource as TokenTransferSource,
     type TransactionDetail as TransactionDetail,
+    type TransactionTokenAddressInput as TransactionTokenAddressInput,
+    type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
+    type TransferRequestBody as TransferRequestBody,
+    type TransferSentTransactionDetail as TransferSentTransactionDetail,
+    type TypedDataDomainInputParams as TypedDataDomainInputParams,
+    type TypedDataTypeFieldInput as TypedDataTypeFieldInput,
+    type TypedDataTypesInputParams as TypedDataTypesInputParams,
+    type UnsignedEthereumTransaction as UnsignedEthereumTransaction,
+    type UnsignedStandardEthereumTransaction as UnsignedStandardEthereumTransaction,
+    type UnsignedTempoTransaction as UnsignedTempoTransaction,
+    type UserOperationInput as UserOperationInput,
+    type Wallet as Wallet,
+    type WalletAdditionalSigner as WalletAdditionalSigner,
+    type WalletAdditionalSignerItem as WalletAdditionalSignerItem,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
-    type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
-    type AuthorizationKeyResponse as AuthorizationKeyResponse,
-    type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
-    type WalletInitImportResponse as WalletInitImportResponse,
+    type WalletAsset as WalletAsset,
+    type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
+    type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
+    type WalletBatchCreateInput as WalletBatchCreateInput,
+    type WalletBatchCreateResponse as WalletBatchCreateResponse,
+    type WalletBatchCreateResult as WalletBatchCreateResult,
+    type WalletBatchItemInput as WalletBatchItemInput,
+    type WalletChainType as WalletChainType,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
+    type WalletCustodian as WalletCustodian,
+    type WalletEntropyType as WalletEntropyType,
+    type WalletEthereumAsset as WalletEthereumAsset,
+    type WalletExportRequestBody as WalletExportRequestBody,
+    type WalletExportResponseBody as WalletExportResponseBody,
+    type WalletImportInitResponse as WalletImportInitResponse,
+    type WalletImportSupportedChains as WalletImportSupportedChains,
+    type WalletImportSupportedEntropyTypes as WalletImportSupportedEntropyTypes,
+    type WalletRevokeResponse as WalletRevokeResponse,
+    type WalletRpcRequestBody as WalletRpcRequestBody,
+    type WalletRpcResponse as WalletRpcResponse,
+    type WalletSolanaAsset as WalletSolanaAsset,
+    type WalletUpdateRequestBody as WalletUpdateRequestBody,
+    type WalletInitImportResponse as WalletInitImportResponse,
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
     type WalletListParams as WalletListParams,

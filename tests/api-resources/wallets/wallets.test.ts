@@ -125,7 +125,12 @@ describe('resource wallets', () => {
   // Mock server tests are disabled
   test.skip('_rawSign: only required params', async () => {
     const responsePromise = client.wallets._rawSign('wallet_id', {
-      params: { hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e' },
+      params: {
+        bytes:
+          '0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633',
+        encoding: 'hex',
+        hash_function: 'sha256',
+      },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -139,7 +144,12 @@ describe('resource wallets', () => {
   // Mock server tests are disabled
   test.skip('_rawSign: required and optional params', async () => {
     const response = await client.wallets._rawSign('wallet_id', {
-      params: { hash: '0x0775aeed9c9ce6e0fbc4db25c5e4e6368029651c905c286f813126a09025a21e' },
+      params: {
+        bytes:
+          '0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633',
+        encoding: 'hex',
+        hash_function: 'sha256',
+      },
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
       'privy-request-expiry': 'privy-request-expiry',
@@ -282,6 +292,8 @@ describe('resource wallets', () => {
       amount_type: 'exact_input',
       slippage_bps: 100,
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-idempotency-key': 'privy-idempotency-key',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 

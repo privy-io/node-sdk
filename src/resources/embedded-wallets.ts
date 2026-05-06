@@ -7,6 +7,226 @@ import * as WalletsAPI from './wallets/wallets';
 export class EmbeddedWallets extends APIResource {}
 
 /**
+ * The Alchemy paymaster context for a smart wallet network configuration.
+ */
+export interface AlchemyPaymasterContext {
+  policy_id: string;
+}
+
+/**
+ * The fields describing embedded wallet creation, used for user import and
+ * embedded wallet generation.
+ */
+export interface EmbeddedWalletCreationInput {
+  /**
+   * Wallets to create.
+   */
+  wallets?: Array<WalletCreationInput>;
+}
+
+/**
+ * The client type for iCloud recovery operations.
+ */
+export type ICloudClientType = 'web' | 'expo-ios';
+
+/**
+ * The response from authenticating with OAuth for recovery.
+ */
+export interface OAuthAuthenticateRecoveryResponse {
+  access_token: string;
+}
+
+/**
+ * The input for the iCloud Expo OAuth callback.
+ */
+export interface OAuthCallbackICloudExpoInput {
+  ckWebAuthToken: string;
+}
+
+/**
+ * The input for initiating an iCloud OAuth recovery flow.
+ */
+export interface OAuthInitICloudRecoveryInput {
+  /**
+   * The client type for iCloud recovery operations.
+   */
+  client_type: ICloudClientType;
+}
+
+/**
+ * The input for initiating an OAuth recovery flow.
+ */
+export interface OAuthInitRecoveryInput {
+  redirect_to: string;
+
+  token?: string;
+
+  code_challenge?: string;
+
+  state_code?: string;
+}
+
+/**
+ * The input for getting the iCloud recovery configuration.
+ */
+export interface RecoveryConfigurationICloudInput {
+  /**
+   * The client type for iCloud recovery operations.
+   */
+  client_type: ICloudClientType;
+}
+
+/**
+ * The response containing the iCloud recovery configuration.
+ */
+export interface RecoveryConfigurationICloudResponse {
+  api_token: string;
+
+  container_identifier: string;
+
+  environment: string;
+}
+
+/**
+ * The input for getting the recovery key material.
+ */
+export interface RecoveryKeyMaterialInput {
+  chain_type?: string;
+}
+
+/**
+ * The response containing the recovery key material.
+ */
+export interface RecoveryKeyMaterialResponse {
+  file_id: string;
+
+  icloud_record_name: string;
+
+  recovery_code: string;
+
+  recovery_key: string;
+
+  recovery_key_derivation_salt: string;
+
+  /**
+   * The type of recovery mechanism used for wallet recovery.
+   */
+  recovery_type: RecoveryType;
+}
+
+/**
+ * The type of recovery mechanism used for wallet recovery.
+ */
+export type RecoveryType =
+  | 'user_passcode_derived_recovery_key'
+  | 'privy_passcode_derived_recovery_key'
+  | 'privy_generated_recovery_key'
+  | 'google_drive_recovery_secret'
+  | 'icloud_recovery_secret';
+
+/**
+ * The configuration object for smart wallets.
+ */
+export type SmartWalletConfiguration = SmartWalletConfigurationDisabled | SmartWalletConfigurationEnabled;
+
+/**
+ * A disabled smart wallet configuration.
+ */
+export interface SmartWalletConfigurationDisabled {
+  enabled: false;
+}
+
+/**
+ * An enabled smart wallet configuration.
+ */
+export interface SmartWalletConfigurationEnabled {
+  configured_networks: Array<SmartWalletNetworkConfiguration>;
+
+  enabled: true;
+
+  /**
+   * The supported smart wallet providers.
+   */
+  smart_wallet_type: SmartWalletType;
+
+  smart_wallet_version?: string;
+}
+
+/**
+ * The input configuration object for smart wallets.
+ */
+export type SmartWalletConfigurationInput =
+  | SmartWalletConfigurationDisabled
+  | SmartWalletConfigurationInputEnabled;
+
+/**
+ * An enabled smart wallet configuration input.
+ */
+export interface SmartWalletConfigurationInputEnabled {
+  configured_networks: Array<SmartWalletNetworkConfigurationInput>;
+
+  enabled: true;
+
+  /**
+   * The supported smart wallet providers.
+   */
+  smart_wallet_type: SmartWalletType;
+
+  smart_wallet_version?: string | null;
+}
+
+/**
+ * Network configuration for a smart wallet.
+ */
+export interface SmartWalletNetworkConfiguration {
+  bundler_url: string;
+
+  chain_id: string;
+
+  chain_name?: string;
+
+  /**
+   * The Alchemy paymaster context for a smart wallet network configuration.
+   */
+  paymaster_context?: AlchemyPaymasterContext;
+
+  paymaster_url?: string;
+
+  rpc_url?: string;
+}
+
+/**
+ * Input for network configuration for a smart wallet.
+ */
+export interface SmartWalletNetworkConfigurationInput {
+  chain_id: string;
+
+  bundler_url?: string;
+
+  chain_name?: string;
+
+  /**
+   * The Alchemy paymaster context for a smart wallet network configuration.
+   */
+  paymaster_context?: AlchemyPaymasterContext;
+
+  paymaster_url?: string;
+
+  rpc_url?: string;
+}
+
+/**
+ * The supported smart wallet providers.
+ */
+export type SmartWalletType =
+  | 'safe'
+  | 'kernel'
+  | 'light_account'
+  | 'biconomy'
+  | 'coinbase_smart_wallet'
+  | 'thirdweb';
+
+/**
  * An additional signer configuration for a wallet.
  */
 export interface WalletCreationAdditionalSignerItem {
@@ -51,249 +271,29 @@ export interface WalletCreationInput {
   policy_ids?: Array<string>;
 }
 
-/**
- * The fields describing embedded wallet creation, used for user import and
- * embedded wallet generation.
- */
-export interface EmbeddedWalletCreationInput {
-  /**
-   * Wallets to create.
-   */
-  wallets?: Array<WalletCreationInput>;
-}
-
-/**
- * The supported smart wallet providers.
- */
-export type SmartWalletType =
-  | 'safe'
-  | 'kernel'
-  | 'light_account'
-  | 'biconomy'
-  | 'coinbase_smart_wallet'
-  | 'thirdweb';
-
-/**
- * The Alchemy paymaster context for a smart wallet network configuration.
- */
-export interface AlchemyPaymasterContext {
-  policy_id: string;
-}
-
-/**
- * Network configuration for a smart wallet.
- */
-export interface SmartWalletNetworkConfiguration {
-  bundler_url: string;
-
-  chain_id: string;
-
-  chain_name?: string;
-
-  /**
-   * The Alchemy paymaster context for a smart wallet network configuration.
-   */
-  paymaster_context?: AlchemyPaymasterContext;
-
-  paymaster_url?: string;
-
-  rpc_url?: string;
-}
-
-/**
- * Input for network configuration for a smart wallet.
- */
-export interface SmartWalletNetworkConfigurationInput {
-  chain_id: string;
-
-  bundler_url?: string;
-
-  chain_name?: string;
-
-  /**
-   * The Alchemy paymaster context for a smart wallet network configuration.
-   */
-  paymaster_context?: AlchemyPaymasterContext;
-
-  paymaster_url?: string;
-
-  rpc_url?: string;
-}
-
-/**
- * A disabled smart wallet configuration.
- */
-export interface SmartWalletConfigurationDisabled {
-  enabled: false;
-}
-
-/**
- * An enabled smart wallet configuration.
- */
-export interface SmartWalletConfigurationEnabled {
-  configured_networks: Array<SmartWalletNetworkConfiguration>;
-
-  enabled: true;
-
-  /**
-   * The supported smart wallet providers.
-   */
-  smart_wallet_type: SmartWalletType;
-
-  smart_wallet_version?: string;
-}
-
-/**
- * An enabled smart wallet configuration input.
- */
-export interface SmartWalletConfigurationInputEnabled {
-  configured_networks: Array<SmartWalletNetworkConfigurationInput>;
-
-  enabled: true;
-
-  /**
-   * The supported smart wallet providers.
-   */
-  smart_wallet_type: SmartWalletType;
-
-  smart_wallet_version?: string | null;
-}
-
-/**
- * The configuration object for smart wallets.
- */
-export type SmartWalletConfiguration = SmartWalletConfigurationDisabled | SmartWalletConfigurationEnabled;
-
-/**
- * The input configuration object for smart wallets.
- */
-export type SmartWalletConfigurationInput =
-  | SmartWalletConfigurationDisabled
-  | SmartWalletConfigurationInputEnabled;
-
-/**
- * The type of recovery mechanism used for wallet recovery.
- */
-export type RecoveryType =
-  | 'user_passcode_derived_recovery_key'
-  | 'privy_passcode_derived_recovery_key'
-  | 'privy_generated_recovery_key'
-  | 'google_drive_recovery_secret'
-  | 'icloud_recovery_secret';
-
-/**
- * The client type for iCloud recovery operations.
- */
-export type ICloudClientType = 'web' | 'expo-ios';
-
-/**
- * The input for getting the recovery key material.
- */
-export interface RecoveryKeyMaterialInput {
-  chain_type?: string;
-}
-
-/**
- * The response containing the recovery key material.
- */
-export interface RecoveryKeyMaterialResponse {
-  file_id: string;
-
-  icloud_record_name: string;
-
-  recovery_code: string;
-
-  recovery_key: string;
-
-  recovery_key_derivation_salt: string;
-
-  /**
-   * The type of recovery mechanism used for wallet recovery.
-   */
-  recovery_type: RecoveryType;
-}
-
-/**
- * The input for initiating an OAuth recovery flow.
- */
-export interface OAuthInitRecoveryInput {
-  redirect_to: string;
-
-  token?: string;
-
-  code_challenge?: string;
-
-  state_code?: string;
-}
-
-/**
- * The response from authenticating with OAuth for recovery.
- */
-export interface OAuthAuthenticateRecoveryResponse {
-  access_token: string;
-}
-
-/**
- * The input for initiating an iCloud OAuth recovery flow.
- */
-export interface OAuthInitICloudRecoveryInput {
-  /**
-   * The client type for iCloud recovery operations.
-   */
-  client_type: ICloudClientType;
-}
-
-/**
- * The input for the iCloud Expo OAuth callback.
- */
-export interface OAuthCallbackICloudExpoInput {
-  ckWebAuthToken: string;
-}
-
-/**
- * The input for getting the iCloud recovery configuration.
- */
-export interface RecoveryConfigurationICloudInput {
-  /**
-   * The client type for iCloud recovery operations.
-   */
-  client_type: ICloudClientType;
-}
-
-/**
- * The response containing the iCloud recovery configuration.
- */
-export interface RecoveryConfigurationICloudResponse {
-  api_token: string;
-
-  container_identifier: string;
-
-  environment: string;
-}
-
 export declare namespace EmbeddedWallets {
   export {
-    type WalletCreationAdditionalSignerItem as WalletCreationAdditionalSignerItem,
-    type WalletCreationInput as WalletCreationInput,
-    type EmbeddedWalletCreationInput as EmbeddedWalletCreationInput,
-    type SmartWalletType as SmartWalletType,
     type AlchemyPaymasterContext as AlchemyPaymasterContext,
-    type SmartWalletNetworkConfiguration as SmartWalletNetworkConfiguration,
-    type SmartWalletNetworkConfigurationInput as SmartWalletNetworkConfigurationInput,
-    type SmartWalletConfigurationDisabled as SmartWalletConfigurationDisabled,
-    type SmartWalletConfigurationEnabled as SmartWalletConfigurationEnabled,
-    type SmartWalletConfigurationInputEnabled as SmartWalletConfigurationInputEnabled,
-    type SmartWalletConfiguration as SmartWalletConfiguration,
-    type SmartWalletConfigurationInput as SmartWalletConfigurationInput,
-    type RecoveryType as RecoveryType,
+    type EmbeddedWalletCreationInput as EmbeddedWalletCreationInput,
     type ICloudClientType as ICloudClientType,
-    type RecoveryKeyMaterialInput as RecoveryKeyMaterialInput,
-    type RecoveryKeyMaterialResponse as RecoveryKeyMaterialResponse,
-    type OAuthInitRecoveryInput as OAuthInitRecoveryInput,
     type OAuthAuthenticateRecoveryResponse as OAuthAuthenticateRecoveryResponse,
-    type OAuthInitICloudRecoveryInput as OAuthInitICloudRecoveryInput,
     type OAuthCallbackICloudExpoInput as OAuthCallbackICloudExpoInput,
+    type OAuthInitICloudRecoveryInput as OAuthInitICloudRecoveryInput,
+    type OAuthInitRecoveryInput as OAuthInitRecoveryInput,
     type RecoveryConfigurationICloudInput as RecoveryConfigurationICloudInput,
     type RecoveryConfigurationICloudResponse as RecoveryConfigurationICloudResponse,
+    type RecoveryKeyMaterialInput as RecoveryKeyMaterialInput,
+    type RecoveryKeyMaterialResponse as RecoveryKeyMaterialResponse,
+    type RecoveryType as RecoveryType,
+    type SmartWalletConfiguration as SmartWalletConfiguration,
+    type SmartWalletConfigurationDisabled as SmartWalletConfigurationDisabled,
+    type SmartWalletConfigurationEnabled as SmartWalletConfigurationEnabled,
+    type SmartWalletConfigurationInput as SmartWalletConfigurationInput,
+    type SmartWalletConfigurationInputEnabled as SmartWalletConfigurationInputEnabled,
+    type SmartWalletNetworkConfiguration as SmartWalletNetworkConfiguration,
+    type SmartWalletNetworkConfigurationInput as SmartWalletNetworkConfigurationInput,
+    type SmartWalletType as SmartWalletType,
+    type WalletCreationAdditionalSignerItem as WalletCreationAdditionalSignerItem,
+    type WalletCreationInput as WalletCreationInput,
   };
 }

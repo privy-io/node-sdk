@@ -327,497 +327,53 @@ export class Users extends APIResource {
 export type UsersCursor = Cursor<User>;
 
 /**
+ * The authenticated user.
+ */
+export interface AuthenticatedUser {
+  token: string | null;
+
+  privy_access_token: string | null;
+
+  refresh_token: string | null;
+
+  /**
+   * Instructs the client on how to handle tokens received
+   */
+  session_update_action: 'set' | 'ignore' | 'clear';
+
+  /**
+   * A Privy user object.
+   */
+  user: User;
+
+  identity_token?: string;
+
+  is_new_user?: boolean;
+
+  /**
+   * OAuth tokens associated with the user.
+   */
+  oauth_tokens?: OAuthTokens;
+}
+
+/**
+ * An embedded wallet associated with a cross-app account.
+ */
+export interface CrossAppEmbeddedWallet {
+  address: string;
+}
+
+/**
+ * A smart wallet associated with a cross-app account.
+ */
+export interface CrossAppSmartWallet {
+  address: string;
+}
+
+/**
  * Custom metadata associated with the user.
  */
 export type CustomMetadata = { [key: string]: string | number | boolean };
-
-/**
- * The payload for importing a wallet account.
- */
-export interface LinkedAccountWalletInput {
-  address: string;
-
-  chain_type: 'ethereum' | 'solana';
-
-  type: 'wallet';
-}
-
-/**
- * The payload for importing an email account.
- */
-export interface LinkedAccountEmailInput {
-  address: string;
-
-  type: 'email';
-}
-
-/**
- * The payload for importing a phone account.
- */
-export interface LinkedAccountPhoneInput {
-  number: string;
-
-  type: 'phone';
-}
-
-/**
- * The payload for importing a Google account.
- */
-export interface LinkedAccountGoogleInput {
-  email: string;
-
-  name: string;
-
-  subject: string;
-
-  type: 'google_oauth';
-}
-
-/**
- * The payload for importing a Twitter account.
- */
-export interface LinkedAccountTwitterInput {
-  name: string;
-
-  subject: string;
-
-  type: 'twitter_oauth';
-
-  username: string;
-
-  profile_picture_url?: string;
-}
-
-/**
- * The payload for importing a Discord account.
- */
-export interface LinkedAccountDiscordInput {
-  subject: string;
-
-  type: 'discord_oauth';
-
-  username: string;
-
-  email?: string;
-}
-
-/**
- * The payload for importing a Github account.
- */
-export interface LinkedAccountGitHubInput {
-  subject: string;
-
-  type: 'github_oauth';
-
-  username: string;
-
-  email?: string;
-
-  name?: string;
-}
-
-/**
- * The payload for importing a Spotify account.
- */
-export interface LinkedAccountSpotifyInput {
-  subject: string;
-
-  type: 'spotify_oauth';
-
-  email?: string;
-
-  name?: string;
-}
-
-/**
- * The payload for importing an Instagram account.
- */
-export interface LinkedAccountInstagramInput {
-  subject: string;
-
-  type: 'instagram_oauth';
-
-  username: string;
-}
-
-/**
- * The payload for importing a Tiktok account.
- */
-export interface LinkedAccountTiktokInput {
-  name: string | null;
-
-  subject: string;
-
-  type: 'tiktok_oauth';
-
-  username: string;
-}
-
-/**
- * The payload for importing a LINE account.
- */
-export interface LinkedAccountLineInput {
-  subject: string;
-
-  type: 'line_oauth';
-
-  email?: string;
-
-  name?: string;
-
-  profile_picture_url?: string;
-}
-
-/**
- * The payload for importing a Twitch account.
- */
-export interface LinkedAccountTwitchInput {
-  subject: string;
-
-  type: 'twitch_oauth';
-
-  username?: string;
-}
-
-/**
- * The payload for importing an Apple account.
- */
-export interface LinkedAccountAppleInput {
-  subject: string;
-
-  type: 'apple_oauth';
-
-  email?: string;
-}
-
-/**
- * The payload for importing a LinkedIn account.
- */
-export interface LinkedAccountLinkedInInput {
-  subject: string;
-
-  type: 'linkedin_oauth';
-
-  email?: string;
-
-  name?: string;
-
-  vanityName?: string;
-}
-
-/**
- * The payload for importing a Farcaster account.
- */
-export interface LinkedAccountFarcasterInput {
-  fid: number;
-
-  owner_address: string;
-
-  type: 'farcaster';
-
-  bio?: string;
-
-  display_name?: string;
-
-  homepage_url?: string;
-
-  profile_picture_url?: string;
-
-  username?: string;
-}
-
-/**
- * The payload for importing a Telegram account.
- */
-export interface LinkedAccountTelegramInput {
-  telegram_user_id: string;
-
-  type: 'telegram';
-
-  first_name?: string;
-
-  last_name?: string;
-
-  photo_url?: string;
-
-  username?: string;
-}
-
-/**
- * The payload for importing a Custom JWT account.
- */
-export interface LinkedAccountCustomJwtInput {
-  custom_user_id: string;
-
-  type: 'custom_auth';
-}
-
-/**
- * The payload for importing a passkey account.
- */
-export interface LinkedAccountPasskeyInput {
-  credential_device_type: 'singleDevice' | 'multiDevice';
-
-  credential_id: string;
-
-  credential_public_key: string;
-
-  credential_username: string;
-
-  type: 'passkey';
-}
-
-/**
- * The input for adding a linked account to a user.
- */
-export type LinkedAccountInput =
-  | LinkedAccountWalletInput
-  | LinkedAccountEmailInput
-  | LinkedAccountPhoneInput
-  | LinkedAccountGoogleInput
-  | LinkedAccountTwitterInput
-  | LinkedAccountDiscordInput
-  | LinkedAccountGitHubInput
-  | LinkedAccountSpotifyInput
-  | LinkedAccountInstagramInput
-  | LinkedAccountTiktokInput
-  | LinkedAccountLineInput
-  | LinkedAccountTwitchInput
-  | LinkedAccountAppleInput
-  | LinkedAccountLinkedInInput
-  | LinkedAccountFarcasterInput
-  | LinkedAccountTelegramInput
-  | LinkedAccountCustomJwtInput
-  | LinkedAccountPasskeyInput;
-
-/**
- * The payload for batch creating users.
- */
-export interface UserBatchCreateInput {
-  users: Array<UserBatchCreateInput.User>;
-}
-
-export namespace UserBatchCreateInput {
-  export interface User {
-    linked_accounts: Array<UsersAPI.LinkedAccountInput>;
-
-    create_embedded_wallet?: boolean;
-
-    create_ethereum_smart_wallet?: boolean;
-
-    create_ethereum_wallet?: boolean;
-
-    create_n_embedded_wallets?: number;
-
-    create_n_ethereum_wallets?: number;
-
-    create_solana_wallet?: boolean;
-
-    /**
-     * Custom metadata associated with the user.
-     */
-    custom_metadata?: UsersAPI.CustomMetadata;
-
-    /**
-     * Wallets to create.
-     */
-    wallets?: Array<EmbeddedWalletsAPI.WalletCreationInput>;
-  }
-}
-
-/**
- * An email account linked to the user.
- */
-export interface LinkedAccountEmail {
-  address: string;
-
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  type: 'email';
-
-  verified_at: number;
-}
-
-/**
- * A phone number account linked to the user.
- */
-export interface LinkedAccountPhone {
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  phoneNumber: string;
-
-  type: 'phone';
-
-  verified_at: number;
-
-  number?: string;
-}
-
-/**
- * Base schema for wallet accounts linked to the user.
- */
-export interface LinkedAccountBaseWallet {
-  address: string;
-
-  chain_type: 'solana' | 'ethereum';
-
-  type: 'wallet' | 'smart_wallet';
-}
-
-/**
- * An Ethereum wallet account linked to the user.
- */
-export interface LinkedAccountEthereum {
-  address: string;
-
-  chain_type: 'ethereum';
-
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  type: 'wallet';
-
-  verified_at: number;
-
-  wallet_client: 'unknown';
-
-  chain_id?: string;
-
-  connector_type?: string;
-
-  wallet_client_type?: string;
-}
-
-/**
- * A smart wallet account linked to the user.
- */
-export interface LinkedAccountSmartWallet {
-  address: string;
-
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  /**
-   * The supported smart wallet providers.
-   */
-  smart_wallet_type: EmbeddedWalletsAPI.SmartWalletType;
-
-  type: 'smart_wallet';
-
-  verified_at: number;
-
-  smart_wallet_version?: string;
-}
-
-/**
- * A Solana wallet account linked to the user.
- */
-export interface LinkedAccountSolana {
-  address: string;
-
-  chain_type: 'solana';
-
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  type: 'wallet';
-
-  verified_at: number;
-
-  wallet_client: 'unknown';
-
-  connector_type?: string;
-
-  wallet_client_type?: string;
-}
-
-/**
- * A Farcaster account linked to the user.
- */
-export interface LinkedAccountFarcaster {
-  fid: number;
-
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  owner_address: string;
-
-  type: 'farcaster';
-
-  verified_at: number;
-
-  bio?: string;
-
-  display_name?: string;
-
-  homepage_url?: string;
-
-  profile_picture?: string;
-
-  profile_picture_url?: string;
-
-  signer_public_key?: string;
-
-  username?: string;
-}
-
-/**
- * A passkey account linked to the user.
- */
-export interface LinkedAccountPasskey {
-  credential_id: string;
-
-  enrolled_in_mfa: boolean;
-
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  type: 'passkey';
-
-  verified_at: number;
-
-  authenticator_name?: string;
-
-  created_with_browser?: string;
-
-  created_with_device?: string;
-
-  created_with_os?: string;
-
-  public_key?: string;
-}
-
-/**
- * A Telegram account linked to the user.
- */
-export interface LinkedAccountTelegram {
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  telegram_user_id: string;
-
-  type: 'telegram';
-
-  verified_at: number;
-
-  first_name?: string | null;
-
-  last_name?: string | null;
-
-  photo_url?: string | null;
-
-  username?: string | null;
-}
 
 /**
  * The method used to recover an embedded wallet account.
@@ -831,81 +387,90 @@ export type EmbeddedWalletRecoveryMethod =
   | 'privy-v2';
 
 /**
- * An Ethereum embedded wallet account linked to the user.
+ * A linked account for the user.
  */
-export interface LinkedAccountEthereumEmbeddedWallet {
-  id: string | null;
+export type LinkedAccount =
+  | LinkedAccountEmail
+  | LinkedAccountPhone
+  | LinkedAccountEthereum
+  | LinkedAccountSolana
+  | LinkedAccountSmartWallet
+  | LinkedAccountEthereumEmbeddedWallet
+  | LinkedAccountSolanaEmbeddedWallet
+  | LinkedAccountBitcoinSegwitEmbeddedWallet
+  | LinkedAccountBitcoinTaprootEmbeddedWallet
+  | LinkedAccountCurveSigningEmbeddedWallet
+  | LinkedAccountGoogleOAuth
+  | LinkedAccountTwitterOAuth
+  | LinkedAccountDiscordOAuth
+  | LinkedAccountGitHubOAuth
+  | LinkedAccountSpotifyOAuth
+  | LinkedAccountInstagramOAuth
+  | LinkedAccountTiktokOAuth
+  | LinkedAccountLineOAuth
+  | LinkedAccountTwitchOAuth
+  | LinkedAccountLinkedInOAuth
+  | LinkedAccountAppleOAuth
+  | LinkedAccountCustomOAuth
+  | LinkedAccountCustomJwt
+  | LinkedAccountFarcaster
+  | LinkedAccountPasskey
+  | LinkedAccountTelegram
+  | LinkedAccountCrossApp
+  | LinkedAccountAuthorizationKey;
 
-  address: string;
+/**
+ * The payload for importing an Apple account.
+ */
+export interface LinkedAccountAppleInput {
+  subject: string;
 
-  chain_id: string;
+  type: 'apple_oauth';
 
-  chain_type: 'ethereum';
-
-  connector_type: 'embedded';
-
-  delegated: boolean;
-
-  first_verified_at: number | null;
-
-  imported: boolean;
-
-  latest_verified_at: number | null;
-
-  /**
-   * The method used to recover an embedded wallet account.
-   */
-  recovery_method: EmbeddedWalletRecoveryMethod;
-
-  type: 'wallet';
-
-  verified_at: number;
-
-  wallet_client: 'privy';
-
-  wallet_client_type: 'privy';
-
-  wallet_index: number;
+  email?: string;
 }
 
 /**
- * A Solana embedded wallet account linked to the user.
+ * An Apple OAuth account linked to the user.
  */
-export interface LinkedAccountSolanaEmbeddedWallet {
-  id: string | null;
-
-  address: string;
-
-  chain_id: string;
-
-  chain_type: 'solana';
-
-  connector_type: 'embedded';
-
-  delegated: boolean;
+export interface LinkedAccountAppleOAuth {
+  email: string | null;
 
   first_verified_at: number | null;
 
-  imported: boolean;
+  latest_verified_at: number | null;
+
+  subject: string;
+
+  type: 'apple_oauth';
+
+  verified_at: number;
+}
+
+/**
+ * An authorization key linked to the user.
+ */
+export interface LinkedAccountAuthorizationKey {
+  first_verified_at: number | null;
 
   latest_verified_at: number | null;
 
   public_key: string;
 
-  /**
-   * The method used to recover an embedded wallet account.
-   */
-  recovery_method: EmbeddedWalletRecoveryMethod;
-
-  type: 'wallet';
+  type: 'authorization_key';
 
   verified_at: number;
+}
 
-  wallet_client: 'privy';
+/**
+ * Base schema for wallet accounts linked to the user.
+ */
+export interface LinkedAccountBaseWallet {
+  address: string;
 
-  wallet_client_type: 'privy';
+  chain_type: 'solana' | 'ethereum';
 
-  wallet_index: number;
+  type: 'wallet' | 'smart_wallet';
 }
 
 /**
@@ -989,6 +554,27 @@ export interface LinkedAccountBitcoinTaprootEmbeddedWallet {
 }
 
 /**
+ * A cross-app account linked to the user.
+ */
+export interface LinkedAccountCrossApp {
+  embedded_wallets: Array<CrossAppEmbeddedWallet>;
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  provider_app_id: string;
+
+  smart_wallets: Array<CrossAppSmartWallet>;
+
+  subject: string;
+
+  type: 'cross_app';
+
+  verified_at: number;
+}
+
+/**
  * A curve signing embedded wallet account linked to the user.
  */
 export interface LinkedAccountCurveSigningEmbeddedWallet {
@@ -1029,6 +615,113 @@ export interface LinkedAccountCurveSigningEmbeddedWallet {
   wallet_client_type: 'privy';
 
   wallet_index: number;
+}
+
+/**
+ * The payload for importing a Custom JWT account.
+ */
+export interface LinkedAccountCustomJwtInput {
+  custom_user_id: string;
+
+  type: 'custom_auth';
+}
+
+/**
+ * A custom JWT account linked to the user.
+ */
+export interface LinkedAccountCustomJwt {
+  custom_user_id: string;
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  type: 'custom_auth';
+
+  verified_at: number;
+}
+
+/**
+ * A custom OAuth account linked to the user.
+ */
+export interface LinkedAccountCustomOAuth {
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  subject: string;
+
+  /**
+   * The ID of a custom OAuth provider, set up for this app. Must start with
+   * "custom:".
+   */
+  type: ClientAuthAPI.CustomOAuthProviderID;
+
+  verified_at: number;
+
+  email?: string;
+
+  name?: string;
+
+  profile_picture_url?: string;
+
+  username?: string;
+}
+
+/**
+ * The payload for importing a Discord account.
+ */
+export interface LinkedAccountDiscordInput {
+  subject: string;
+
+  type: 'discord_oauth';
+
+  username: string;
+
+  email?: string;
+}
+
+/**
+ * A Discord OAuth account linked to the user.
+ */
+export interface LinkedAccountDiscordOAuth {
+  email: string | null;
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  subject: string;
+
+  type: 'discord_oauth';
+
+  username: string | null;
+
+  verified_at: number;
+}
+
+/**
+ * An email account linked to the user.
+ */
+export interface LinkedAccountEmail {
+  address: string;
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  type: 'email';
+
+  verified_at: number;
+}
+
+/**
+ * The payload for importing an email account.
+ */
+export interface LinkedAccountEmailInput {
+  address: string;
+
+  type: 'email';
 }
 
 export type LinkedAccountEmbeddedWallet =
@@ -1101,62 +794,133 @@ export namespace LinkedAccountEmbeddedWalletWithID {
 }
 
 /**
- * A Google OAuth account linked to the user.
+ * An Ethereum wallet account linked to the user.
  */
-export interface LinkedAccountGoogleOAuth {
-  email: string;
+export interface LinkedAccountEthereum {
+  address: string;
+
+  chain_type: 'ethereum';
 
   first_verified_at: number | null;
 
   latest_verified_at: number | null;
 
-  name: string | null;
-
-  subject: string;
-
-  type: 'google_oauth';
+  type: 'wallet';
 
   verified_at: number;
+
+  wallet_client: 'unknown';
+
+  chain_id?: string;
+
+  connector_type?: string;
+
+  wallet_client_type?: string;
 }
 
 /**
- * A Twitter OAuth account linked to the user.
+ * An Ethereum embedded wallet account linked to the user.
  */
-export interface LinkedAccountTwitterOAuth {
+export interface LinkedAccountEthereumEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  chain_type: 'ethereum';
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
   first_verified_at: number | null;
+
+  imported: boolean;
 
   latest_verified_at: number | null;
 
-  name: string | null;
+  /**
+   * The method used to recover an embedded wallet account.
+   */
+  recovery_method: EmbeddedWalletRecoveryMethod;
 
-  profile_picture_url: string | null;
-
-  subject: string;
-
-  type: 'twitter_oauth';
-
-  username: string | null;
+  type: 'wallet';
 
   verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
 }
 
 /**
- * A Discord OAuth account linked to the user.
+ * A Farcaster account linked to the user.
  */
-export interface LinkedAccountDiscordOAuth {
-  email: string | null;
+export interface LinkedAccountFarcaster {
+  fid: number;
 
   first_verified_at: number | null;
 
   latest_verified_at: number | null;
 
-  subject: string;
+  owner_address: string;
 
-  type: 'discord_oauth';
-
-  username: string | null;
+  type: 'farcaster';
 
   verified_at: number;
+
+  bio?: string;
+
+  display_name?: string;
+
+  homepage_url?: string;
+
+  profile_picture?: string;
+
+  profile_picture_url?: string;
+
+  signer_public_key?: string;
+
+  username?: string;
+}
+
+/**
+ * The payload for importing a Farcaster account.
+ */
+export interface LinkedAccountFarcasterInput {
+  fid: number;
+
+  owner_address: string;
+
+  type: 'farcaster';
+
+  bio?: string;
+
+  display_name?: string;
+
+  homepage_url?: string;
+
+  profile_picture_url?: string;
+
+  username?: string;
+}
+
+/**
+ * The payload for importing a Github account.
+ */
+export interface LinkedAccountGitHubInput {
+  subject: string;
+
+  type: 'github_oauth';
+
+  username: string;
+
+  email?: string;
+
+  name?: string;
 }
 
 /**
@@ -1181,31 +945,23 @@ export interface LinkedAccountGitHubOAuth {
 }
 
 /**
- * A LinkedIn OAuth account linked to the user.
+ * The payload for importing a Google account.
  */
-export interface LinkedAccountLinkedInOAuth {
-  email: string | null;
+export interface LinkedAccountGoogleInput {
+  email: string;
 
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
+  name: string;
 
   subject: string;
 
-  type: 'linkedin_oauth';
-
-  verified_at: number;
-
-  name?: string;
-
-  vanity_name?: string;
+  type: 'google_oauth';
 }
 
 /**
- * A Spotify OAuth account linked to the user.
+ * A Google OAuth account linked to the user.
  */
-export interface LinkedAccountSpotifyOAuth {
-  email: string | null;
+export interface LinkedAccountGoogleOAuth {
+  email: string;
 
   first_verified_at: number | null;
 
@@ -1215,9 +971,43 @@ export interface LinkedAccountSpotifyOAuth {
 
   subject: string;
 
-  type: 'spotify_oauth';
+  type: 'google_oauth';
 
   verified_at: number;
+}
+
+/**
+ * The input for adding a linked account to a user.
+ */
+export type LinkedAccountInput =
+  | LinkedAccountWalletInput
+  | LinkedAccountEmailInput
+  | LinkedAccountPhoneInput
+  | LinkedAccountGoogleInput
+  | LinkedAccountTwitterInput
+  | LinkedAccountDiscordInput
+  | LinkedAccountGitHubInput
+  | LinkedAccountSpotifyInput
+  | LinkedAccountInstagramInput
+  | LinkedAccountTiktokInput
+  | LinkedAccountLineInput
+  | LinkedAccountTwitchInput
+  | LinkedAccountAppleInput
+  | LinkedAccountLinkedInInput
+  | LinkedAccountFarcasterInput
+  | LinkedAccountTelegramInput
+  | LinkedAccountCustomJwtInput
+  | LinkedAccountPasskeyInput;
+
+/**
+ * The payload for importing an Instagram account.
+ */
+export interface LinkedAccountInstagramInput {
+  subject: string;
+
+  type: 'instagram_oauth';
+
+  username: string;
 }
 
 /**
@@ -1238,22 +1028,18 @@ export interface LinkedAccountInstagramOAuth {
 }
 
 /**
- * A TikTok OAuth account linked to the user.
+ * The payload for importing a LINE account.
  */
-export interface LinkedAccountTiktokOAuth {
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  name: string | null;
-
+export interface LinkedAccountLineInput {
   subject: string;
 
-  type: 'tiktok_oauth';
+  type: 'line_oauth';
 
-  username: string | null;
+  email?: string;
 
-  verified_at: number;
+  name?: string;
+
+  profile_picture_url?: string;
 }
 
 /**
@@ -1278,6 +1064,310 @@ export interface LinkedAccountLineOAuth {
 }
 
 /**
+ * The payload for importing a LinkedIn account.
+ */
+export interface LinkedAccountLinkedInInput {
+  subject: string;
+
+  type: 'linkedin_oauth';
+
+  email?: string;
+
+  name?: string;
+
+  vanityName?: string;
+}
+
+/**
+ * A LinkedIn OAuth account linked to the user.
+ */
+export interface LinkedAccountLinkedInOAuth {
+  email: string | null;
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  subject: string;
+
+  type: 'linkedin_oauth';
+
+  verified_at: number;
+
+  name?: string;
+
+  vanity_name?: string;
+}
+
+/**
+ * A passkey account linked to the user.
+ */
+export interface LinkedAccountPasskey {
+  credential_id: string;
+
+  enrolled_in_mfa: boolean;
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  type: 'passkey';
+
+  verified_at: number;
+
+  authenticator_name?: string;
+
+  created_with_browser?: string;
+
+  created_with_device?: string;
+
+  created_with_os?: string;
+
+  public_key?: string;
+}
+
+/**
+ * The payload for importing a passkey account.
+ */
+export interface LinkedAccountPasskeyInput {
+  credential_device_type: 'singleDevice' | 'multiDevice';
+
+  credential_id: string;
+
+  credential_public_key: string;
+
+  credential_username: string;
+
+  type: 'passkey';
+}
+
+/**
+ * A phone number account linked to the user.
+ */
+export interface LinkedAccountPhone {
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  phoneNumber: string;
+
+  type: 'phone';
+
+  verified_at: number;
+
+  number?: string;
+}
+
+/**
+ * The payload for importing a phone account.
+ */
+export interface LinkedAccountPhoneInput {
+  number: string;
+
+  type: 'phone';
+}
+
+/**
+ * A smart wallet account linked to the user.
+ */
+export interface LinkedAccountSmartWallet {
+  address: string;
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  /**
+   * The supported smart wallet providers.
+   */
+  smart_wallet_type: EmbeddedWalletsAPI.SmartWalletType;
+
+  type: 'smart_wallet';
+
+  verified_at: number;
+
+  smart_wallet_version?: string;
+}
+
+/**
+ * A Solana wallet account linked to the user.
+ */
+export interface LinkedAccountSolana {
+  address: string;
+
+  chain_type: 'solana';
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'unknown';
+
+  connector_type?: string;
+
+  wallet_client_type?: string;
+}
+
+/**
+ * A Solana embedded wallet account linked to the user.
+ */
+export interface LinkedAccountSolanaEmbeddedWallet {
+  id: string | null;
+
+  address: string;
+
+  chain_id: string;
+
+  chain_type: 'solana';
+
+  connector_type: 'embedded';
+
+  delegated: boolean;
+
+  first_verified_at: number | null;
+
+  imported: boolean;
+
+  latest_verified_at: number | null;
+
+  public_key: string;
+
+  /**
+   * The method used to recover an embedded wallet account.
+   */
+  recovery_method: EmbeddedWalletRecoveryMethod;
+
+  type: 'wallet';
+
+  verified_at: number;
+
+  wallet_client: 'privy';
+
+  wallet_client_type: 'privy';
+
+  wallet_index: number;
+}
+
+/**
+ * The payload for importing a Spotify account.
+ */
+export interface LinkedAccountSpotifyInput {
+  subject: string;
+
+  type: 'spotify_oauth';
+
+  email?: string;
+
+  name?: string;
+}
+
+/**
+ * A Spotify OAuth account linked to the user.
+ */
+export interface LinkedAccountSpotifyOAuth {
+  email: string | null;
+
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  name: string | null;
+
+  subject: string;
+
+  type: 'spotify_oauth';
+
+  verified_at: number;
+}
+
+/**
+ * A Telegram account linked to the user.
+ */
+export interface LinkedAccountTelegram {
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  telegram_user_id: string;
+
+  type: 'telegram';
+
+  verified_at: number;
+
+  first_name?: string | null;
+
+  last_name?: string | null;
+
+  photo_url?: string | null;
+
+  username?: string | null;
+}
+
+/**
+ * The payload for importing a Telegram account.
+ */
+export interface LinkedAccountTelegramInput {
+  telegram_user_id: string;
+
+  type: 'telegram';
+
+  first_name?: string;
+
+  last_name?: string;
+
+  photo_url?: string;
+
+  username?: string;
+}
+
+/**
+ * The payload for importing a Tiktok account.
+ */
+export interface LinkedAccountTiktokInput {
+  name: string | null;
+
+  subject: string;
+
+  type: 'tiktok_oauth';
+
+  username: string;
+}
+
+/**
+ * A TikTok OAuth account linked to the user.
+ */
+export interface LinkedAccountTiktokOAuth {
+  first_verified_at: number | null;
+
+  latest_verified_at: number | null;
+
+  name: string | null;
+
+  subject: string;
+
+  type: 'tiktok_oauth';
+
+  username: string | null;
+
+  verified_at: number;
+}
+
+/**
+ * The payload for importing a Twitch account.
+ */
+export interface LinkedAccountTwitchInput {
+  subject: string;
+
+  type: 'twitch_oauth';
+
+  username?: string;
+}
+
+/**
  * A Twitch OAuth account linked to the user.
  */
 export interface LinkedAccountTwitchOAuth {
@@ -1295,146 +1385,40 @@ export interface LinkedAccountTwitchOAuth {
 }
 
 /**
- * An Apple OAuth account linked to the user.
+ * The payload for importing a Twitter account.
  */
-export interface LinkedAccountAppleOAuth {
-  email: string | null;
-
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
+export interface LinkedAccountTwitterInput {
+  name: string;
 
   subject: string;
 
-  type: 'apple_oauth';
+  type: 'twitter_oauth';
 
-  verified_at: number;
-}
-
-/**
- * A custom OAuth account linked to the user.
- */
-export interface LinkedAccountCustomOAuth {
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  subject: string;
-
-  /**
-   * The ID of a custom OAuth provider, set up for this app. Must start with
-   * "custom:".
-   */
-  type: ClientAuthAPI.CustomOAuthProviderID;
-
-  verified_at: number;
-
-  email?: string;
-
-  name?: string;
+  username: string;
 
   profile_picture_url?: string;
-
-  username?: string;
 }
 
 /**
- * A custom JWT account linked to the user.
+ * A Twitter OAuth account linked to the user.
  */
-export interface LinkedAccountCustomJwt {
-  custom_user_id: string;
-
+export interface LinkedAccountTwitterOAuth {
   first_verified_at: number | null;
 
   latest_verified_at: number | null;
 
-  type: 'custom_auth';
+  name: string | null;
 
-  verified_at: number;
-}
-
-/**
- * An embedded wallet associated with a cross-app account.
- */
-export interface CrossAppEmbeddedWallet {
-  address: string;
-}
-
-/**
- * A smart wallet associated with a cross-app account.
- */
-export interface CrossAppSmartWallet {
-  address: string;
-}
-
-/**
- * A cross-app account linked to the user.
- */
-export interface LinkedAccountCrossApp {
-  embedded_wallets: Array<CrossAppEmbeddedWallet>;
-
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  provider_app_id: string;
-
-  smart_wallets: Array<CrossAppSmartWallet>;
+  profile_picture_url: string | null;
 
   subject: string;
 
-  type: 'cross_app';
+  type: 'twitter_oauth';
+
+  username: string | null;
 
   verified_at: number;
 }
-
-/**
- * An authorization key linked to the user.
- */
-export interface LinkedAccountAuthorizationKey {
-  first_verified_at: number | null;
-
-  latest_verified_at: number | null;
-
-  public_key: string;
-
-  type: 'authorization_key';
-
-  verified_at: number;
-}
-
-/**
- * A linked account for the user.
- */
-export type LinkedAccount =
-  | LinkedAccountEmail
-  | LinkedAccountPhone
-  | LinkedAccountEthereum
-  | LinkedAccountSolana
-  | LinkedAccountSmartWallet
-  | LinkedAccountEthereumEmbeddedWallet
-  | LinkedAccountSolanaEmbeddedWallet
-  | LinkedAccountBitcoinSegwitEmbeddedWallet
-  | LinkedAccountBitcoinTaprootEmbeddedWallet
-  | LinkedAccountCurveSigningEmbeddedWallet
-  | LinkedAccountGoogleOAuth
-  | LinkedAccountTwitterOAuth
-  | LinkedAccountDiscordOAuth
-  | LinkedAccountGitHubOAuth
-  | LinkedAccountSpotifyOAuth
-  | LinkedAccountInstagramOAuth
-  | LinkedAccountTiktokOAuth
-  | LinkedAccountLineOAuth
-  | LinkedAccountTwitchOAuth
-  | LinkedAccountLinkedInOAuth
-  | LinkedAccountAppleOAuth
-  | LinkedAccountCustomOAuth
-  | LinkedAccountCustomJwt
-  | LinkedAccountFarcaster
-  | LinkedAccountPasskey
-  | LinkedAccountTelegram
-  | LinkedAccountCrossApp
-  | LinkedAccountAuthorizationKey;
 
 /**
  * The possible types of linked accounts.
@@ -1464,6 +1448,58 @@ export type LinkedAccountType =
   | ClientAuthAPI.CustomOAuthProviderID;
 
 /**
+ * The payload for importing a wallet account.
+ */
+export interface LinkedAccountWalletInput {
+  address: string;
+
+  chain_type: 'ethereum' | 'solana';
+
+  type: 'wallet';
+}
+
+/**
+ * A multi-factor authentication method linked to the user.
+ */
+export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod;
+
+/**
+ * OAuth tokens associated with the user.
+ */
+export interface OAuthTokens {
+  access_token: string;
+
+  provider: string;
+
+  access_token_expires_in_seconds?: number;
+
+  refresh_token?: string;
+
+  refresh_token_expires_in_seconds?: number;
+
+  scopes?: Array<string>;
+}
+
+/**
+ * A Passkey MFA method.
+ */
+export interface PasskeyMfaMethod {
+  type: 'passkey';
+
+  verified_at: number;
+}
+
+/**
+ * The payload for partially updating custom metadata on a user.
+ */
+export interface PatchUsersCustomMetadata {
+  /**
+   * Custom metadata associated with the user.
+   */
+  custom_metadata: CustomMetadata;
+}
+
+/**
  * A SMS MFA method.
  */
 export interface SMSMfaMethod {
@@ -1480,20 +1516,6 @@ export interface TotpMfaMethod {
 
   verified_at: number;
 }
-
-/**
- * A Passkey MFA method.
- */
-export interface PasskeyMfaMethod {
-  type: 'passkey';
-
-  verified_at: number;
-}
-
-/**
- * A multi-factor authentication method linked to the user.
- */
-export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod;
 
 /**
  * A Privy user object.
@@ -1527,20 +1549,38 @@ export interface User {
 }
 
 /**
- * OAuth tokens associated with the user.
+ * The payload for batch creating users.
  */
-export interface OAuthTokens {
-  access_token: string;
+export interface UserBatchCreateInput {
+  users: Array<UserBatchCreateInput.User>;
+}
 
-  provider: string;
+export namespace UserBatchCreateInput {
+  export interface User {
+    linked_accounts: Array<UsersAPI.LinkedAccountInput>;
 
-  access_token_expires_in_seconds?: number;
+    create_embedded_wallet?: boolean;
 
-  refresh_token?: string;
+    create_ethereum_smart_wallet?: boolean;
 
-  refresh_token_expires_in_seconds?: number;
+    create_ethereum_wallet?: boolean;
 
-  scopes?: Array<string>;
+    create_n_embedded_wallets?: number;
+
+    create_n_ethereum_wallets?: number;
+
+    create_solana_wallet?: boolean;
+
+    /**
+     * Custom metadata associated with the user.
+     */
+    custom_metadata?: UsersAPI.CustomMetadata;
+
+    /**
+     * Wallets to create.
+     */
+    wallets?: Array<EmbeddedWalletsAPI.WalletCreationInput>;
+  }
 }
 
 /**
@@ -1553,36 +1593,6 @@ export interface UserWithIdentityToken {
    * A Privy user object.
    */
   user: User;
-}
-
-/**
- * The authenticated user.
- */
-export interface AuthenticatedUser {
-  token: string | null;
-
-  privy_access_token: string | null;
-
-  refresh_token: string | null;
-
-  /**
-   * Instructs the client on how to handle tokens received
-   */
-  session_update_action: 'set' | 'ignore' | 'clear';
-
-  /**
-   * A Privy user object.
-   */
-  user: User;
-
-  identity_token?: string;
-
-  is_new_user?: boolean;
-
-  /**
-   * OAuth tokens associated with the user.
-   */
-  oauth_tokens?: OAuthTokens;
 }
 
 export interface UserCreateParams {
@@ -1731,71 +1741,72 @@ export interface UserUnlinkLinkedAccountParams {
 
 export declare namespace Users {
   export {
-    type CustomMetadata as CustomMetadata,
-    type LinkedAccountWalletInput as LinkedAccountWalletInput,
-    type LinkedAccountEmailInput as LinkedAccountEmailInput,
-    type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
-    type LinkedAccountGoogleInput as LinkedAccountGoogleInput,
-    type LinkedAccountTwitterInput as LinkedAccountTwitterInput,
-    type LinkedAccountDiscordInput as LinkedAccountDiscordInput,
-    type LinkedAccountGitHubInput as LinkedAccountGitHubInput,
-    type LinkedAccountSpotifyInput as LinkedAccountSpotifyInput,
-    type LinkedAccountInstagramInput as LinkedAccountInstagramInput,
-    type LinkedAccountTiktokInput as LinkedAccountTiktokInput,
-    type LinkedAccountLineInput as LinkedAccountLineInput,
-    type LinkedAccountTwitchInput as LinkedAccountTwitchInput,
-    type LinkedAccountAppleInput as LinkedAccountAppleInput,
-    type LinkedAccountLinkedInInput as LinkedAccountLinkedInInput,
-    type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
-    type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
-    type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
-    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
-    type LinkedAccountInput as LinkedAccountInput,
-    type UserBatchCreateInput as UserBatchCreateInput,
-    type LinkedAccountEmail as LinkedAccountEmail,
-    type LinkedAccountPhone as LinkedAccountPhone,
-    type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
-    type LinkedAccountEthereum as LinkedAccountEthereum,
-    type LinkedAccountSmartWallet as LinkedAccountSmartWallet,
-    type LinkedAccountSolana as LinkedAccountSolana,
-    type LinkedAccountFarcaster as LinkedAccountFarcaster,
-    type LinkedAccountPasskey as LinkedAccountPasskey,
-    type LinkedAccountTelegram as LinkedAccountTelegram,
-    type EmbeddedWalletRecoveryMethod as EmbeddedWalletRecoveryMethod,
-    type LinkedAccountEthereumEmbeddedWallet as LinkedAccountEthereumEmbeddedWallet,
-    type LinkedAccountSolanaEmbeddedWallet as LinkedAccountSolanaEmbeddedWallet,
-    type LinkedAccountBitcoinSegwitEmbeddedWallet as LinkedAccountBitcoinSegwitEmbeddedWallet,
-    type LinkedAccountBitcoinTaprootEmbeddedWallet as LinkedAccountBitcoinTaprootEmbeddedWallet,
-    type LinkedAccountCurveSigningEmbeddedWallet as LinkedAccountCurveSigningEmbeddedWallet,
-    type LinkedAccountEmbeddedWallet as LinkedAccountEmbeddedWallet,
-    type LinkedAccountEmbeddedWalletWithID as LinkedAccountEmbeddedWalletWithID,
-    type LinkedAccountGoogleOAuth as LinkedAccountGoogleOAuth,
-    type LinkedAccountTwitterOAuth as LinkedAccountTwitterOAuth,
-    type LinkedAccountDiscordOAuth as LinkedAccountDiscordOAuth,
-    type LinkedAccountGitHubOAuth as LinkedAccountGitHubOAuth,
-    type LinkedAccountLinkedInOAuth as LinkedAccountLinkedInOAuth,
-    type LinkedAccountSpotifyOAuth as LinkedAccountSpotifyOAuth,
-    type LinkedAccountInstagramOAuth as LinkedAccountInstagramOAuth,
-    type LinkedAccountTiktokOAuth as LinkedAccountTiktokOAuth,
-    type LinkedAccountLineOAuth as LinkedAccountLineOAuth,
-    type LinkedAccountTwitchOAuth as LinkedAccountTwitchOAuth,
-    type LinkedAccountAppleOAuth as LinkedAccountAppleOAuth,
-    type LinkedAccountCustomOAuth as LinkedAccountCustomOAuth,
-    type LinkedAccountCustomJwt as LinkedAccountCustomJwt,
+    type AuthenticatedUser as AuthenticatedUser,
     type CrossAppEmbeddedWallet as CrossAppEmbeddedWallet,
     type CrossAppSmartWallet as CrossAppSmartWallet,
-    type LinkedAccountCrossApp as LinkedAccountCrossApp,
-    type LinkedAccountAuthorizationKey as LinkedAccountAuthorizationKey,
+    type CustomMetadata as CustomMetadata,
+    type EmbeddedWalletRecoveryMethod as EmbeddedWalletRecoveryMethod,
     type LinkedAccount as LinkedAccount,
+    type LinkedAccountAppleInput as LinkedAccountAppleInput,
+    type LinkedAccountAppleOAuth as LinkedAccountAppleOAuth,
+    type LinkedAccountAuthorizationKey as LinkedAccountAuthorizationKey,
+    type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
+    type LinkedAccountBitcoinSegwitEmbeddedWallet as LinkedAccountBitcoinSegwitEmbeddedWallet,
+    type LinkedAccountBitcoinTaprootEmbeddedWallet as LinkedAccountBitcoinTaprootEmbeddedWallet,
+    type LinkedAccountCrossApp as LinkedAccountCrossApp,
+    type LinkedAccountCurveSigningEmbeddedWallet as LinkedAccountCurveSigningEmbeddedWallet,
+    type LinkedAccountCustomJwtInput as LinkedAccountCustomJwtInput,
+    type LinkedAccountCustomJwt as LinkedAccountCustomJwt,
+    type LinkedAccountCustomOAuth as LinkedAccountCustomOAuth,
+    type LinkedAccountDiscordInput as LinkedAccountDiscordInput,
+    type LinkedAccountDiscordOAuth as LinkedAccountDiscordOAuth,
+    type LinkedAccountEmail as LinkedAccountEmail,
+    type LinkedAccountEmailInput as LinkedAccountEmailInput,
+    type LinkedAccountEmbeddedWallet as LinkedAccountEmbeddedWallet,
+    type LinkedAccountEmbeddedWalletWithID as LinkedAccountEmbeddedWalletWithID,
+    type LinkedAccountEthereum as LinkedAccountEthereum,
+    type LinkedAccountEthereumEmbeddedWallet as LinkedAccountEthereumEmbeddedWallet,
+    type LinkedAccountFarcaster as LinkedAccountFarcaster,
+    type LinkedAccountFarcasterInput as LinkedAccountFarcasterInput,
+    type LinkedAccountGitHubInput as LinkedAccountGitHubInput,
+    type LinkedAccountGitHubOAuth as LinkedAccountGitHubOAuth,
+    type LinkedAccountGoogleInput as LinkedAccountGoogleInput,
+    type LinkedAccountGoogleOAuth as LinkedAccountGoogleOAuth,
+    type LinkedAccountInput as LinkedAccountInput,
+    type LinkedAccountInstagramInput as LinkedAccountInstagramInput,
+    type LinkedAccountInstagramOAuth as LinkedAccountInstagramOAuth,
+    type LinkedAccountLineInput as LinkedAccountLineInput,
+    type LinkedAccountLineOAuth as LinkedAccountLineOAuth,
+    type LinkedAccountLinkedInInput as LinkedAccountLinkedInInput,
+    type LinkedAccountLinkedInOAuth as LinkedAccountLinkedInOAuth,
+    type LinkedAccountPasskey as LinkedAccountPasskey,
+    type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
+    type LinkedAccountPhone as LinkedAccountPhone,
+    type LinkedAccountPhoneInput as LinkedAccountPhoneInput,
+    type LinkedAccountSmartWallet as LinkedAccountSmartWallet,
+    type LinkedAccountSolana as LinkedAccountSolana,
+    type LinkedAccountSolanaEmbeddedWallet as LinkedAccountSolanaEmbeddedWallet,
+    type LinkedAccountSpotifyInput as LinkedAccountSpotifyInput,
+    type LinkedAccountSpotifyOAuth as LinkedAccountSpotifyOAuth,
+    type LinkedAccountTelegram as LinkedAccountTelegram,
+    type LinkedAccountTelegramInput as LinkedAccountTelegramInput,
+    type LinkedAccountTiktokInput as LinkedAccountTiktokInput,
+    type LinkedAccountTiktokOAuth as LinkedAccountTiktokOAuth,
+    type LinkedAccountTwitchInput as LinkedAccountTwitchInput,
+    type LinkedAccountTwitchOAuth as LinkedAccountTwitchOAuth,
+    type LinkedAccountTwitterInput as LinkedAccountTwitterInput,
+    type LinkedAccountTwitterOAuth as LinkedAccountTwitterOAuth,
     type LinkedAccountType as LinkedAccountType,
+    type LinkedAccountWalletInput as LinkedAccountWalletInput,
+    type LinkedMfaMethod as LinkedMfaMethod,
+    type OAuthTokens as OAuthTokens,
+    type PasskeyMfaMethod as PasskeyMfaMethod,
+    type PatchUsersCustomMetadata as PatchUsersCustomMetadata,
     type SMSMfaMethod as SMSMfaMethod,
     type TotpMfaMethod as TotpMfaMethod,
-    type PasskeyMfaMethod as PasskeyMfaMethod,
-    type LinkedMfaMethod as LinkedMfaMethod,
     type User as User,
-    type OAuthTokens as OAuthTokens,
+    type UserBatchCreateInput as UserBatchCreateInput,
     type UserWithIdentityToken as UserWithIdentityToken,
-    type AuthenticatedUser as AuthenticatedUser,
     type UsersCursor as UsersCursor,
     type UserCreateParams as UserCreateParams,
     type UserListParams as UserListParams,

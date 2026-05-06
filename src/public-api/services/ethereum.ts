@@ -1,6 +1,7 @@
 import {
   EthereumPersonalSignRpcInputParams,
   EthereumPersonalSignRpcResponseData,
+  EthereumSendCallsRpcResponseData,
   EthereumSecp256k1SignRpcResponseData,
   EthereumSendTransactionRpcResponseData,
   EthereumSign7702AuthorizationRpcResponseData,
@@ -121,6 +122,19 @@ export class PrivyEthereumService {
 
     return response.data;
   }
+
+  public async sendCalls(
+    walletId: string,
+    input: PrivyEthereumService.SendCallsInput,
+  ): Promise<EthereumSendCallsRpcResponseData> {
+    const response = await this.privyWalletsService.rpc(walletId, {
+      ...input,
+      method: 'wallet_sendCalls',
+      chain_type: 'ethereum',
+    });
+
+    return response.data;
+  }
 }
 
 // prettier-ignore
@@ -148,4 +162,6 @@ export namespace PrivyEthereumService {
   export type SignUserOperationInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSignUserOperationRpcInput>;
   /** The input type for the {@link PrivyEthereumService.sendTransaction} method. */
   export type SendTransactionInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSendTransactionRpcInput>;
+  /** The input type for the {@link PrivyEthereumService.sendCalls} method. */
+  export type SendCallsInput = PrivyWalletsRpcInput<WalletRpcParams.EthereumSendCallsRpcInput>;
 }

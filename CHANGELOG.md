@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.17.0 (2026-05-06)
+
+Full Changelog: [v0.16.0...v0.17.0](https://github.com/privy-io/node-sdk/compare/v0.16.0...v0.17.0)
+
+### Features
+
+* add disableRequestExpiry option ([#149](https://github.com/privy-io/node-sdk/issues/149)) ([0a3e98f](https://github.com/privy-io/node-sdk/commit/0a3e98f0c94a3c3404086357c092778deb7e322e))
+* add idempotency headers for earn methods ([#151](https://github.com/privy-io/node-sdk/issues/151)) ([bd5a044](https://github.com/privy-io/node-sdk/commit/bd5a044aea578dafefa2407c925e93fd15fd709c))
+* add wallet send calls to ethereum GIT_VALID_PII_OVERRIDE ([#152](https://github.com/privy-io/node-sdk/issues/152)) ([85ac22d](https://github.com/privy-io/node-sdk/commit/85ac22d4be73fb91dfd0f0c083970f0e7ec68baa))
+* **api:** api update ([e546820](https://github.com/privy-io/node-sdk/commit/e546820f5341b394a1c6022a0db5699dbdb621ed))
+* **api:** api update ([3d4b64f](https://github.com/privy-io/node-sdk/commit/3d4b64fa489d4385108ecab7af2ef68511424864))
+* **api:** api update ([2df3ee2](https://github.com/privy-io/node-sdk/commit/2df3ee208ad5b7dc298c24ec00fab066ccb32aab))
+* **api:** api update ([0870722](https://github.com/privy-io/node-sdk/commit/08707220a39b47402ff531c72cb1c276662af9ae))
+* **api:** api update ([f8f0d6a](https://github.com/privy-io/node-sdk/commit/f8f0d6ae777520a2e7f1c6a558e8c054b71c5427))
+* **api:** api update ([bdebf38](https://github.com/privy-io/node-sdk/commit/bdebf380593c970b8d6b052e527c91ac0c15ac03))
+* **api:** api update ([d2ed9ad](https://github.com/privy-io/node-sdk/commit/d2ed9adf7e1d7a42f42c6065d3880cbe91f3ee71))
+* **api:** api update ([3d300b0](https://github.com/privy-io/node-sdk/commit/3d300b08c41b0d7417f66963c1be294c66d9c9ad))
+* **api:** api update ([92cc209](https://github.com/privy-io/node-sdk/commit/92cc209c6ad3565731ba698535bfb91186026bca))
+* **api:** api update ([f9cfefd](https://github.com/privy-io/node-sdk/commit/f9cfefd3eee4714ada726ef6d79c20317ddbf85d))
+* **api:** api update ([e1a89b3](https://github.com/privy-io/node-sdk/commit/e1a89b31f15476c14430ab58f8dbf1ebca46b6bc))
+* **api:** updates ([7215104](https://github.com/privy-io/node-sdk/commit/72151049bef4f146b8d475e4bf32c480a8b7cc93))
+* support setting headers via env ([968ab50](https://github.com/privy-io/node-sdk/commit/968ab50a3ba33805075a38cd829e5c67457cf453))
+* **webhooks:** add verify() with svix signature check and typed deserialization ([#150](https://github.com/privy-io/node-sdk/issues/150)) ([baf3076](https://github.com/privy-io/node-sdk/commit/baf30767642494d030e4a45a6730a94c18e57865))
+
+
+### Chores
+
+* bump dev dependencies for Dependabot alerts ([#146](https://github.com/privy-io/node-sdk/issues/146)) ([0220088](https://github.com/privy-io/node-sdk/commit/0220088b8b77d7ea0325a1d1f262f7076b6ca8a3))
+* **format:** run eslint and prettier separately ([36ff102](https://github.com/privy-io/node-sdk/commit/36ff102f80af02ecc9ad8c132ca3d85f35f3296e))
+* **internal:** codegen related update ([e3fb9d0](https://github.com/privy-io/node-sdk/commit/e3fb9d0559f5a90b9a0d85a61b137276e4aa38e2))
+* **internal:** more robust bootstrap script ([84fee5d](https://github.com/privy-io/node-sdk/commit/84fee5d62182c7ce03967c776be38b3a50ed9212))
+
 ## 0.16.0 (2026-04-21)
 
 Full Changelog: [v0.15.0...v0.16.0](https://github.com/privy-io/node-sdk/compare/v0.15.0...v0.16.0)

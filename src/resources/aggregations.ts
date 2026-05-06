@@ -7,58 +7,6 @@ import * as SharedAPI from './shared';
 export class Aggregations extends APIResource {}
 
 /**
- * The RPC method this aggregation applies to.
- */
-export type AggregationMethod = 'eth_signTransaction' | 'eth_signUserOperation';
-
-/**
- * The metric configuration for an aggregation, defining what field/field_source to
- * measure and the aggregation function to apply.
- */
-export interface AggregationMetric {
-  field: string;
-
-  field_source: string;
-
-  /**
-   * The aggregation function to apply.
-   */
-  function: 'sum';
-
-  /**
-   * A Solidity ABI definition for decoding smart contract calldata.
-   */
-  abi?: PoliciesAPI.AbiSchema;
-}
-
-/**
- * The time window configuration for an aggregation.
- */
-export interface AggregationWindow {
-  /**
-   * Duration of the rolling window in seconds (1-72 hours).
-   */
-  seconds: number;
-
-  type: 'rolling';
-}
-
-/**
- * A grouping configuration for an aggregation. Maximum of 2 group_by fields
- * allowed.
- */
-export interface AggregationGroupBy {
-  field: string;
-
-  field_source: string;
-
-  /**
-   * A Solidity ABI definition for decoding smart contract calldata.
-   */
-  abi?: PoliciesAPI.AbiSchema;
-}
-
-/**
  * An aggregation that measures and tracks metrics over a period of time.
  */
 export interface Aggregation {
@@ -110,6 +58,21 @@ export interface Aggregation {
 }
 
 /**
+ * A grouping configuration for an aggregation. Maximum of 2 group_by fields
+ * allowed.
+ */
+export interface AggregationGroupBy {
+  field: string;
+
+  field_source: string;
+
+  /**
+   * A Solidity ABI definition for decoding smart contract calldata.
+   */
+  abi?: PoliciesAPI.AbiSchema;
+}
+
+/**
  * Input for creating an aggregation.
  */
 export interface AggregationInput {
@@ -157,13 +120,50 @@ export interface AggregationInput {
   owner_id?: SharedAPI.OwnerIDInput | null;
 }
 
+/**
+ * The RPC method this aggregation applies to.
+ */
+export type AggregationMethod = 'eth_signTransaction' | 'eth_signUserOperation';
+
+/**
+ * The metric configuration for an aggregation, defining what field/field_source to
+ * measure and the aggregation function to apply.
+ */
+export interface AggregationMetric {
+  field: string;
+
+  field_source: string;
+
+  /**
+   * The aggregation function to apply.
+   */
+  function: 'sum';
+
+  /**
+   * A Solidity ABI definition for decoding smart contract calldata.
+   */
+  abi?: PoliciesAPI.AbiSchema;
+}
+
+/**
+ * The time window configuration for an aggregation.
+ */
+export interface AggregationWindow {
+  /**
+   * Duration of the rolling window in seconds (1-72 hours).
+   */
+  seconds: number;
+
+  type: 'rolling';
+}
+
 export declare namespace Aggregations {
   export {
+    type Aggregation as Aggregation,
+    type AggregationGroupBy as AggregationGroupBy,
+    type AggregationInput as AggregationInput,
     type AggregationMethod as AggregationMethod,
     type AggregationMetric as AggregationMetric,
     type AggregationWindow as AggregationWindow,
-    type AggregationGroupBy as AggregationGroupBy,
-    type Aggregation as Aggregation,
-    type AggregationInput as AggregationInput,
   };
 }

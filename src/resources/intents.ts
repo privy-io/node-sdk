@@ -299,128 +299,117 @@ export class Intents extends APIResource {
 export type IntentResponsesCursor = Cursor<IntentResponse>;
 
 /**
- * Type of intent.
+ * Common fields for intent action execution results.
  */
-export type IntentType = 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'TRANSFER' | 'WALLET';
-
-/**
- * Current status of an intent.
- */
-export type IntentStatus = 'pending' | 'executed' | 'failed' | 'expired' | 'rejected' | 'dismissed';
-
-/**
- * Request details for an RPC intent.
- */
-export interface RpcIntentRequestDetails {
+export interface BaseActionResult {
   /**
-   * Request body for wallet RPC operations, discriminated by method.
+   * Unix timestamp when the action was executed
    */
-  body: WalletsAPI.WalletRpcRequestBody;
+  executed_at: number;
 
-  method: 'POST';
-
-  url: string;
-}
-
-/**
- * Request details for a transfer intent.
- */
-export interface TransferIntentRequestDetails {
   /**
-   * Request body for initiating a sponsored token transfer from an embedded wallet.
+   * HTTP status code from the action execution
    */
-  body: WalletsAPI.TransferRequestBody;
+  status_code: number;
 
-  method: 'POST';
-
-  url: string;
-}
-
-/**
- * Request details for a policy intent.
- */
-export interface PolicyIntentRequestDetails {
-  body: PolicyIntentRequestDetails.Body;
-
-  method: 'PATCH';
-
-  url: string;
-}
-
-export namespace PolicyIntentRequestDetails {
-  export interface Body {
-    /**
-     * Name to assign to policy.
-     */
-    name?: string;
-
-    /**
-     * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
-     * null to remove the current owner.
-     */
-    owner?: SharedAPI.OwnerInput | null;
-
-    /**
-     * The key quorum ID to set as the owner of the resource. If you provide this, do
-     * not specify an owner.
-     */
-    owner_id?: SharedAPI.OwnerIDInput | null;
-
-    rules?: Array<PoliciesAPI.PolicyRuleRequestBody>;
-  }
-}
-
-/**
- * Request details for creating a rule via intent.
- */
-export interface RuleIntentCreateRequestDetails {
   /**
-   * The rules that apply to each method the policy covers.
+   * Display name of the key quorum that authorized execution
    */
-  body: PoliciesAPI.PolicyRuleRequestBody;
+  authorized_by_display_name?: string;
 
-  method: 'POST';
-
-  url: string;
-}
-
-/**
- * Request details for updating a rule via intent.
- */
-export interface RuleIntentUpdateRequestDetails {
   /**
-   * The rules that apply to each method the policy covers.
+   * ID of the key quorum that authorized execution
    */
-  body: PoliciesAPI.PolicyRuleRequestBody;
-
-  method: 'PATCH';
-
-  url: string;
+  authorized_by_id?: string;
 }
 
 /**
- * Request details for deleting a rule via intent.
+ * Common fields shared by all intent response types.
  */
-export interface RuleIntentDeleteRequestDetails {
-  method: 'DELETE';
+export interface BaseIntentResponse {
+  /**
+   * Detailed authorization information including key quorum members, thresholds, and
+   * signature status
+   */
+  authorization_details: Array<IntentAuthorization>;
 
-  url: string;
+  /**
+   * Unix timestamp when the intent was created
+   */
+  created_at: number;
 
-  body?: RuleIntentDeleteRequestDetails.Body;
-}
+  /**
+   * Display name of the user who created the intent
+   */
+  created_by_display_name: string;
 
-export namespace RuleIntentDeleteRequestDetails {
-  export interface Body {}
+  /**
+   * Whether this intent has a custom expiry time set by the client. If false, the
+   * intent expires after a default duration.
+   */
+  custom_expiry: boolean;
+
+  /**
+   * Unix timestamp when the intent expires
+   */
+  expires_at: number;
+
+  /**
+   * Unique ID for the intent
+   */
+  intent_id: string;
+
+  /**
+   * ID of the resource being modified (wallet_id, policy_id, etc)
+   */
+  resource_id: string;
+
+  /**
+   * Current status of an intent.
+   */
+  status: IntentStatus;
+
+  /**
+   * ID of the user who created the intent. If undefined, the intent was created
+   * using the app secret
+   */
+  created_by_id?: string;
+
+  /**
+   * Human-readable reason for dismissal, present when status is 'dismissed'
+   */
+  dismissal_reason?: string;
+
+  /**
+   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
+   */
+  dismissed_at?: number;
+
+  /**
+   * Unix timestamp when the intent was rejected, present when status is 'rejected'
+   */
+  rejected_at?: number;
 }
 
 /**
- * The original rule request. Method is POST (create), PATCH (update), or DELETE
- * (delete)
+ * Authorization quorum for an intent
  */
-export type RuleIntentRequestDetails =
-  | RuleIntentCreateRequestDetails
-  | RuleIntentUpdateRequestDetails
-  | RuleIntentDeleteRequestDetails;
+export interface IntentAuthorization {
+  /**
+   * Members in this authorization quorum
+   */
+  members: Array<IntentAuthorizationMember>;
+
+  /**
+   * Number of signatures required to satisfy this quorum
+   */
+  threshold: number;
+
+  /**
+   * Display name of the key quorum
+   */
+  display_name?: string;
+}
 
 /**
  * A leaf member (user or key) of a nested key quorum in an intent authorization.
@@ -528,116 +517,188 @@ export namespace IntentAuthorizationMember {
 }
 
 /**
- * Authorization quorum for an intent
+ * Headers required to create an intent.
  */
-export interface IntentAuthorization {
+export interface IntentCreationHeaders {
   /**
-   * Members in this authorization quorum
+   * ID of your Privy app.
    */
-  members: Array<IntentAuthorizationMember>;
+  'privy-app-id': string;
 
   /**
-   * Number of signatures required to satisfy this quorum
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
    */
-  threshold: number;
-
-  /**
-   * Display name of the key quorum
-   */
-  display_name?: string;
+  'privy-request-expiry'?: string;
 }
 
 /**
- * Common fields shared by all intent response types.
+ * Response for an intent object
  */
-export interface BaseIntentResponse {
-  /**
-   * Detailed authorization information including key quorum members, thresholds, and
-   * signature status
-   */
-  authorization_details: Array<IntentAuthorization>;
+export type IntentResponse =
+  | RpcIntentResponse
+  | TransferIntentResponse
+  | WalletIntentResponse
+  | PolicyIntentResponse
+  | RuleIntentResponse
+  | KeyQuorumIntentResponse;
+
+/**
+ * Current status of an intent.
+ */
+export type IntentStatus = 'pending' | 'executed' | 'failed' | 'expired' | 'rejected' | 'dismissed';
+
+/**
+ * Type of intent.
+ */
+export type IntentType = 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'TRANSFER' | 'WALLET';
+
+/**
+ * Response for a key quorum intent
+ */
+export interface KeyQuorumIntentResponse extends BaseIntentResponse {
+  intent_type: 'KEY_QUORUM';
 
   /**
-   * Unix timestamp when the intent was created
+   * The original key quorum update request that would be sent to the key quorum
+   * endpoint
    */
-  created_at: number;
+  request_details: KeyQuorumIntentResponse.RequestDetails;
 
   /**
-   * Display name of the user who created the intent
+   * Result of key quorum update execution (only present if status is 'executed' or
+   * 'failed')
    */
-  created_by_display_name: string;
+  action_result?: BaseActionResult;
 
   /**
-   * Whether this intent has a custom expiry time set by the client. If false, the
-   * intent expires after a default duration.
+   * A key quorum for authorizing wallet operations.
    */
-  custom_expiry: boolean;
+  current_resource_data?: KeyQuorumsAPI.KeyQuorum;
+}
 
+export namespace KeyQuorumIntentResponse {
   /**
-   * Unix timestamp when the intent expires
+   * The original key quorum update request that would be sent to the key quorum
+   * endpoint
    */
-  expires_at: number;
+  export interface RequestDetails {
+    /**
+     * Request input for updating an existing key quorum.
+     */
+    body: KeyQuorumsAPI.KeyQuorumUpdateRequestBody;
 
-  /**
-   * Unique ID for the intent
-   */
-  intent_id: string;
+    method: 'PATCH';
 
-  /**
-   * ID of the resource being modified (wallet_id, policy_id, etc)
-   */
-  resource_id: string;
-
-  /**
-   * Current status of an intent.
-   */
-  status: IntentStatus;
-
-  /**
-   * ID of the user who created the intent. If undefined, the intent was created
-   * using the app secret
-   */
-  created_by_id?: string;
-
-  /**
-   * Human-readable reason for dismissal, present when status is 'dismissed'
-   */
-  dismissal_reason?: string;
-
-  /**
-   * Unix timestamp when the intent was dismissed, present when status is 'dismissed'
-   */
-  dismissed_at?: number;
-
-  /**
-   * Unix timestamp when the intent was rejected, present when status is 'rejected'
-   */
-  rejected_at?: number;
+    url: string;
+  }
 }
 
 /**
- * Common fields for intent action execution results.
+ * Request details for a policy intent.
  */
-export interface BaseActionResult {
-  /**
-   * Unix timestamp when the action was executed
-   */
-  executed_at: number;
+export interface PolicyIntentRequestDetails {
+  body: PolicyIntentRequestDetails.Body;
+
+  method: 'PATCH';
+
+  url: string;
+}
+
+export namespace PolicyIntentRequestDetails {
+  export interface Body {
+    /**
+     * Name to assign to policy.
+     */
+    name?: string;
+
+    /**
+     * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+     * null to remove the current owner.
+     */
+    owner?: SharedAPI.OwnerInput | null;
+
+    /**
+     * The key quorum ID to set as the owner of the resource. If you provide this, do
+     * not specify an owner.
+     */
+    owner_id?: SharedAPI.OwnerIDInput | null;
+
+    rules?: Array<PoliciesAPI.PolicyRuleRequestBody>;
+  }
+}
+
+/**
+ * Response for a policy intent
+ */
+export interface PolicyIntentResponse extends BaseIntentResponse {
+  intent_type: 'POLICY';
 
   /**
-   * HTTP status code from the action execution
+   * The original policy update request that would be sent to the policy endpoint
    */
-  status_code: number;
+  request_details: PolicyIntentResponse.RequestDetails;
 
   /**
-   * Display name of the key quorum that authorized execution
+   * Result of policy update execution (only present if status is 'executed' or
+   * 'failed')
    */
-  authorized_by_display_name?: string;
+  action_result?: BaseActionResult;
 
   /**
-   * ID of the key quorum that authorized execution
+   * A policy for controlling wallet operations.
    */
-  authorized_by_id?: string;
+  current_resource_data?: PoliciesAPI.Policy;
+}
+
+export namespace PolicyIntentResponse {
+  /**
+   * The original policy update request that would be sent to the policy endpoint
+   */
+  export interface RequestDetails {
+    body: RequestDetails.Body;
+
+    method: 'PATCH';
+
+    url: string;
+  }
+
+  export namespace RequestDetails {
+    export interface Body {
+      /**
+       * Name to assign to policy.
+       */
+      name?: string;
+
+      /**
+       * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+       * null to remove the current owner.
+       */
+      owner?: SharedAPI.OwnerInput | null;
+
+      /**
+       * The key quorum ID to set as the owner of the resource. If you provide this, do
+       * not specify an owner.
+       */
+      owner_id?: SharedAPI.OwnerIDInput | null;
+
+      rules?: Array<PoliciesAPI.PolicyRuleRequestBody>;
+    }
+  }
+}
+
+/**
+ * Request details for an RPC intent.
+ */
+export interface RpcIntentRequestDetails {
+  /**
+   * Request body for wallet RPC operations, discriminated by method.
+   */
+  body: WalletsAPI.WalletRpcRequestBody;
+
+  method: 'POST';
+
+  url: string;
 }
 
 /**
@@ -676,6 +737,101 @@ export namespace RpcIntentResponse {
 
     url: string;
   }
+}
+
+/**
+ * Request details for creating a rule via intent.
+ */
+export interface RuleIntentCreateRequestDetails {
+  /**
+   * The rules that apply to each method the policy covers.
+   */
+  body: PoliciesAPI.PolicyRuleRequestBody;
+
+  method: 'POST';
+
+  url: string;
+}
+
+/**
+ * Request details for deleting a rule via intent.
+ */
+export interface RuleIntentDeleteRequestDetails {
+  method: 'DELETE';
+
+  url: string;
+
+  body?: RuleIntentDeleteRequestDetails.Body;
+}
+
+export namespace RuleIntentDeleteRequestDetails {
+  export interface Body {}
+}
+
+/**
+ * The original rule request. Method is POST (create), PATCH (update), or DELETE
+ * (delete)
+ */
+export type RuleIntentRequestDetails =
+  | RuleIntentCreateRequestDetails
+  | RuleIntentUpdateRequestDetails
+  | RuleIntentDeleteRequestDetails;
+
+/**
+ * Response for a rule intent
+ */
+export interface RuleIntentResponse extends BaseIntentResponse {
+  intent_type: 'RULE';
+
+  /**
+   * The original rule request. Method is POST (create), PATCH (update), or DELETE
+   * (delete)
+   */
+  request_details: RuleIntentRequestDetails;
+
+  /**
+   * Result of rule execution (only present if status is 'executed' or 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A rule that defines the conditions and action to take if the conditions are
+   * true.
+   */
+  current_resource_data?: PoliciesAPI.PolicyRuleResponse;
+
+  /**
+   * A policy for controlling wallet operations.
+   */
+  policy?: PoliciesAPI.Policy;
+}
+
+/**
+ * Request details for updating a rule via intent.
+ */
+export interface RuleIntentUpdateRequestDetails {
+  /**
+   * The rules that apply to each method the policy covers.
+   */
+  body: PoliciesAPI.PolicyRuleRequestBody;
+
+  method: 'PATCH';
+
+  url: string;
+}
+
+/**
+ * Request details for a transfer intent.
+ */
+export interface TransferIntentRequestDetails {
+  /**
+   * Request body for initiating a sponsored token transfer from an embedded wallet.
+   */
+  body: WalletsAPI.TransferRequestBody;
+
+  method: 'POST';
+
+  url: string;
 }
 
 /**
@@ -783,162 +939,6 @@ export namespace WalletIntentResponse {
       policy_ids?: WalletsAPI.PolicyInput;
     }
   }
-}
-
-/**
- * Response for a policy intent
- */
-export interface PolicyIntentResponse extends BaseIntentResponse {
-  intent_type: 'POLICY';
-
-  /**
-   * The original policy update request that would be sent to the policy endpoint
-   */
-  request_details: PolicyIntentResponse.RequestDetails;
-
-  /**
-   * Result of policy update execution (only present if status is 'executed' or
-   * 'failed')
-   */
-  action_result?: BaseActionResult;
-
-  /**
-   * A policy for controlling wallet operations.
-   */
-  current_resource_data?: PoliciesAPI.Policy;
-}
-
-export namespace PolicyIntentResponse {
-  /**
-   * The original policy update request that would be sent to the policy endpoint
-   */
-  export interface RequestDetails {
-    body: RequestDetails.Body;
-
-    method: 'PATCH';
-
-    url: string;
-  }
-
-  export namespace RequestDetails {
-    export interface Body {
-      /**
-       * Name to assign to policy.
-       */
-      name?: string;
-
-      /**
-       * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
-       * null to remove the current owner.
-       */
-      owner?: SharedAPI.OwnerInput | null;
-
-      /**
-       * The key quorum ID to set as the owner of the resource. If you provide this, do
-       * not specify an owner.
-       */
-      owner_id?: SharedAPI.OwnerIDInput | null;
-
-      rules?: Array<PoliciesAPI.PolicyRuleRequestBody>;
-    }
-  }
-}
-
-/**
- * Response for a key quorum intent
- */
-export interface KeyQuorumIntentResponse extends BaseIntentResponse {
-  intent_type: 'KEY_QUORUM';
-
-  /**
-   * The original key quorum update request that would be sent to the key quorum
-   * endpoint
-   */
-  request_details: KeyQuorumIntentResponse.RequestDetails;
-
-  /**
-   * Result of key quorum update execution (only present if status is 'executed' or
-   * 'failed')
-   */
-  action_result?: BaseActionResult;
-
-  /**
-   * A key quorum for authorizing wallet operations.
-   */
-  current_resource_data?: KeyQuorumsAPI.KeyQuorum;
-}
-
-export namespace KeyQuorumIntentResponse {
-  /**
-   * The original key quorum update request that would be sent to the key quorum
-   * endpoint
-   */
-  export interface RequestDetails {
-    /**
-     * Request input for updating an existing key quorum.
-     */
-    body: KeyQuorumsAPI.KeyQuorumUpdateRequestBody;
-
-    method: 'PATCH';
-
-    url: string;
-  }
-}
-
-/**
- * Response for a rule intent
- */
-export interface RuleIntentResponse extends BaseIntentResponse {
-  intent_type: 'RULE';
-
-  /**
-   * The original rule request. Method is POST (create), PATCH (update), or DELETE
-   * (delete)
-   */
-  request_details: RuleIntentRequestDetails;
-
-  /**
-   * Result of rule execution (only present if status is 'executed' or 'failed')
-   */
-  action_result?: BaseActionResult;
-
-  /**
-   * A rule that defines the conditions and action to take if the conditions are
-   * true.
-   */
-  current_resource_data?: PoliciesAPI.PolicyRuleResponse;
-
-  /**
-   * A policy for controlling wallet operations.
-   */
-  policy?: PoliciesAPI.Policy;
-}
-
-/**
- * Response for an intent object
- */
-export type IntentResponse =
-  | RpcIntentResponse
-  | TransferIntentResponse
-  | WalletIntentResponse
-  | PolicyIntentResponse
-  | RuleIntentResponse
-  | KeyQuorumIntentResponse;
-
-/**
- * Headers required to create an intent.
- */
-export interface IntentCreationHeaders {
-  /**
-   * ID of your Privy app.
-   */
-  'privy-app-id': string;
-
-  /**
-   * Request expiry. Value is a Unix timestamp in milliseconds representing the
-   * deadline by which the request must be processed.
-   */
-  'privy-request-expiry'?: string;
 }
 
 export interface IntentListParams extends CursorParams {
@@ -1696,7 +1696,8 @@ export interface IntentTransferParams {
   destination: WalletsAPI.TokenTransferDestination;
 
   /**
-   * Body param: The source asset, amount, and chain for a token transfer.
+   * Body param: The source asset, amount, and chain for a token transfer. Specify
+   * either `asset` (named) or `asset_address` (custom), not both.
    */
   source: WalletsAPI.TokenTransferSource;
 
@@ -1855,28 +1856,28 @@ export interface IntentUpdateWalletParams {
 
 export declare namespace Intents {
   export {
-    type IntentType as IntentType,
-    type IntentStatus as IntentStatus,
-    type RpcIntentRequestDetails as RpcIntentRequestDetails,
-    type TransferIntentRequestDetails as TransferIntentRequestDetails,
-    type PolicyIntentRequestDetails as PolicyIntentRequestDetails,
-    type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
-    type RuleIntentUpdateRequestDetails as RuleIntentUpdateRequestDetails,
-    type RuleIntentDeleteRequestDetails as RuleIntentDeleteRequestDetails,
-    type RuleIntentRequestDetails as RuleIntentRequestDetails,
+    type BaseActionResult as BaseActionResult,
+    type BaseIntentResponse as BaseIntentResponse,
+    type IntentAuthorization as IntentAuthorization,
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
-    type IntentAuthorization as IntentAuthorization,
-    type BaseIntentResponse as BaseIntentResponse,
-    type BaseActionResult as BaseActionResult,
+    type IntentCreationHeaders as IntentCreationHeaders,
+    type IntentResponse as IntentResponse,
+    type IntentStatus as IntentStatus,
+    type IntentType as IntentType,
+    type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
+    type PolicyIntentRequestDetails as PolicyIntentRequestDetails,
+    type PolicyIntentResponse as PolicyIntentResponse,
+    type RpcIntentRequestDetails as RpcIntentRequestDetails,
     type RpcIntentResponse as RpcIntentResponse,
+    type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
+    type RuleIntentDeleteRequestDetails as RuleIntentDeleteRequestDetails,
+    type RuleIntentRequestDetails as RuleIntentRequestDetails,
+    type RuleIntentResponse as RuleIntentResponse,
+    type RuleIntentUpdateRequestDetails as RuleIntentUpdateRequestDetails,
+    type TransferIntentRequestDetails as TransferIntentRequestDetails,
     type TransferIntentResponse as TransferIntentResponse,
     type WalletIntentResponse as WalletIntentResponse,
-    type PolicyIntentResponse as PolicyIntentResponse,
-    type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
-    type RuleIntentResponse as RuleIntentResponse,
-    type IntentResponse as IntentResponse,
-    type IntentCreationHeaders as IntentCreationHeaders,
     type IntentResponsesCursor as IntentResponsesCursor,
     type IntentListParams as IntentListParams,
     type IntentCreatePolicyRuleParams as IntentCreatePolicyRuleParams,

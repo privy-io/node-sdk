@@ -65,23 +65,20 @@ describe('intents request expiry', () => {
     expect(expiry).toBeLessThanOrEqual(after + tenMinutes);
   });
 
-  it('uses per-call request_expiry when provided', async () => {
-    const fiveMinutes = 5 * 60 * 1000;
+  it('uses per-call request_expiry verbatim when provided (timestamp semantics)', async () => {
+    const perCallTimestamp = Date.now() + 5 * 60 * 1000;
     const { client, captured } = makeClient({
       defaultIntentRequestExpiryMs: 60 * 60 * 1000, // should be ignored
     });
-    const before = Date.now();
 
     await client.intents().rpc('wallet-id', {
-      request_expiry: fiveMinutes,
+      request_expiry: perCallTimestamp,
       method: 'personal_sign',
       params: { encoding: 'utf-8', message: 'hello' },
     });
 
-    const after = Date.now();
     const expiry = expiryHeaderMs(captured.request);
-    expect(expiry).toBeGreaterThanOrEqual(before + fiveMinutes);
-    expect(expiry).toBeLessThanOrEqual(after + fiveMinutes);
+    expect(expiry).toBe(perCallTimestamp);
   });
 
   it('omits the header when disableRequestExpiry is true', async () => {

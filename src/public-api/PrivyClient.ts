@@ -13,25 +13,48 @@ import { VERSION } from '../version';
 import { createPrivyAppJWKS } from '../lib/auth';
 type InternalClientOptions = Omit<ClientOptions, 'appID' | 'appSecret' | 'baseUrl'>;
 
+export interface PrivyRequestExpiryOptions {
+  /**
+   * Default request expiry duration (ms from now) for non-intents endpoints.
+   * Defaults to 15 minutes.
+   */
+  defaultMs?: number;
+  /**
+   * Default request expiry duration (ms from now) for intents-endpoint calls.
+   * Defaults to 72 hours.
+   */
+  defaultIntentMs?: number;
+  /**
+   * When true, the `privy-request-expiry` header is never sent on any call
+   * unless explicitly provided per-request. Defaults to false.
+   */
+  disabled?: boolean;
+}
+
 export interface PrivyClientOptions extends InternalClientOptions {
   appId: string;
   appSecret: string;
   apiUrl?: string;
   authorizationKeyCacheMaxCapacity?: number;
-  /** Default request expiry duration in milliseconds from now. Defaults to 15 minutes. */
-  defaultRequestExpiryMs?: number;
   /**
-   * Default request expiry duration in milliseconds from now for intents-endpoint
-   * calls only. Defaults to 72 hours. Independent of `defaultRequestExpiryMs`,
-   * which applies to non-intents endpoints.
+   * Default request expiry duration in milliseconds from now. Defaults to 15 minutes.
+   * @deprecated Use `requestExpiry.defaultMs` instead.
    */
-  defaultIntentRequestExpiryMs?: number;
+  defaultRequestExpiryMs?: number;
   /**
    * Set to `true` to disable automatically setting the `privy-request-expiry` header
    * on requests. When disabled, no expiry header will be sent unless explicitly
    * provided per-request. Defaults to `false`.
+   * @deprecated Use `requestExpiry.disabled` instead.
    */
   disableRequestExpiry?: boolean;
+  /**
+   * Recommended way to configure request-expiry behaviour. Groups the general
+   * default, the intents-specific default, and the disable toggle into a single
+   * object. When both this and a deprecated top-level alias are provided, the
+   * nested field wins per-field.
+   */
+  requestExpiry?: PrivyRequestExpiryOptions;
   jwtVerificationKey?: string;
   webhookSigningSecret?: string;
 }
@@ -68,9 +91,9 @@ export class PrivyClient {
     appSecret,
     apiUrl,
     authorizationKeyCacheMaxCapacity = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
-    defaultRequestExpiryMs = DEFAULT_REQUEST_EXPIRY_MS,
-    defaultIntentRequestExpiryMs = DEFAULT_INTENT_REQUEST_EXPIRY_MS,
-    disableRequestExpiry = false,
+    defaultRequestExpiryMs,
+    disableRequestExpiry,
+    requestExpiry,
     defaultHeaders,
     jwtVerificationKey,
     webhookSigningSecret,
@@ -94,9 +117,10 @@ export class PrivyClient {
       verificationKeyOverride: jwtVerificationKey,
     });
 
-    this._disableRequestExpiry = disableRequestExpiry;
-    this._defaultRequestExpiryMs = defaultRequestExpiryMs;
-    this._defaultIntentRequestExpiryMs = defaultIntentRequestExpiryMs;
+    this._disableRequestExpiry = requestExpiry?.disabled ?? disableRequestExpiry ?? false;
+    this._defaultRequestExpiryMs =
+      requestExpiry?.defaultMs ?? defaultRequestExpiryMs ?? DEFAULT_REQUEST_EXPIRY_MS;
+    this._defaultIntentRequestExpiryMs = requestExpiry?.defaultIntentMs ?? DEFAULT_INTENT_REQUEST_EXPIRY_MS;
     this.jwtExchangeService = new JwtExchangeService(
       this.privyApiClient.wallets,
       authorizationKeyCacheMaxCapacity,

@@ -1,12 +1,8 @@
-import { PrivyClient } from '@privy-io/node';
+import { PrivyClient, type PrivyClientOptions } from '@privy-io/node';
 
 const SEVENTY_TWO_HOURS_MS = 72 * 60 * 60 * 1000;
 
-function makeClient(overrides: {
-  disableRequestExpiry?: boolean;
-  defaultRequestExpiryMs?: number;
-  defaultIntentRequestExpiryMs?: number;
-}): {
+function makeClient(overrides: Partial<PrivyClientOptions>): {
   client: PrivyClient;
   captured: { request: Request | null };
 } {
@@ -49,9 +45,9 @@ describe('intents request expiry', () => {
     expect(expiry).toBeLessThanOrEqual(after + SEVENTY_TWO_HOURS_MS);
   });
 
-  it('uses defaultIntentRequestExpiryMs when set', async () => {
+  it('uses requestExpiry.defaultIntentMs when set', async () => {
     const tenMinutes = 10 * 60 * 1000;
-    const { client, captured } = makeClient({ defaultIntentRequestExpiryMs: tenMinutes });
+    const { client, captured } = makeClient({ requestExpiry: { defaultIntentMs: tenMinutes } });
     const before = Date.now();
 
     await client.intents().rpc('wallet-id', {
@@ -68,7 +64,7 @@ describe('intents request expiry', () => {
   it('uses per-call request_expiry verbatim when provided (timestamp semantics)', async () => {
     const perCallTimestamp = Date.now() + 5 * 60 * 1000;
     const { client, captured } = makeClient({
-      defaultIntentRequestExpiryMs: 60 * 60 * 1000, // should be ignored
+      requestExpiry: { defaultIntentMs: 60 * 60 * 1000 }, // should be ignored
     });
 
     await client.intents().rpc('wallet-id', {
@@ -81,8 +77,8 @@ describe('intents request expiry', () => {
     expect(expiry).toBe(perCallTimestamp);
   });
 
-  it('omits the header when disableRequestExpiry is true', async () => {
-    const { client, captured } = makeClient({ disableRequestExpiry: true });
+  it('omits the header when requestExpiry.disabled is true', async () => {
+    const { client, captured } = makeClient({ requestExpiry: { disabled: true } });
 
     await client.intents().rpc('wallet-id', {
       method: 'personal_sign',
@@ -92,8 +88,8 @@ describe('intents request expiry', () => {
     expect(captured.request?.headers.get('privy-request-expiry')).toBeNull();
   });
 
-  it('does not mix with defaultRequestExpiryMs', async () => {
-    const { client, captured } = makeClient({ defaultRequestExpiryMs: 15 * 60 * 1000 });
+  it('does not mix with requestExpiry.defaultMs', async () => {
+    const { client, captured } = makeClient({ requestExpiry: { defaultMs: 15 * 60 * 1000 } });
     const before = Date.now();
 
     await client.intents().rpc('wallet-id', {
@@ -105,5 +101,36 @@ describe('intents request expiry', () => {
     const expiry = expiryHeaderMs(captured.request);
     expect(expiry).toBeGreaterThanOrEqual(before + SEVENTY_TWO_HOURS_MS);
     expect(expiry).toBeLessThanOrEqual(after + SEVENTY_TWO_HOURS_MS);
+  });
+
+  it('deprecated `disableRequestExpiry` still suppresses intents header', async () => {
+    const { client, captured } = makeClient({ disableRequestExpiry: true });
+
+    await client.intents().rpc('wallet-id', {
+      method: 'personal_sign',
+      params: { encoding: 'utf-8', message: 'hello' },
+    });
+
+    expect(captured.request?.headers.get('privy-request-expiry')).toBeNull();
+  });
+
+  it('nested `requestExpiry.defaultIntentMs` wins over deprecated alias if both provided', async () => {
+    const tenMinutes = 10 * 60 * 1000;
+    const fiveMinutes = 5 * 60 * 1000;
+    const { client, captured } = makeClient({
+      requestExpiry: { defaultIntentMs: tenMinutes },
+      defaultRequestExpiryMs: fiveMinutes,
+    });
+    const before = Date.now();
+
+    await client.intents().rpc('wallet-id', {
+      method: 'personal_sign',
+      params: { encoding: 'utf-8', message: 'hello' },
+    });
+
+    const after = Date.now();
+    const expiry = expiryHeaderMs(captured.request);
+    expect(expiry).toBeGreaterThanOrEqual(before + tenMinutes);
+    expect(expiry).toBeLessThanOrEqual(after + tenMinutes);
   });
 });

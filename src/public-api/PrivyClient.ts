@@ -13,23 +13,33 @@ import { VERSION } from '../version';
 import { createPrivyAppJWKS } from '../lib/auth';
 type InternalClientOptions = Omit<ClientOptions, 'appID' | 'appSecret' | 'baseUrl'>;
 
-export interface PrivyRequestExpiryOptions {
-  /**
-   * Default request expiry duration (ms from now) for non-intents endpoints.
-   * Defaults to 15 minutes.
-   */
-  defaultMs?: number;
-  /**
-   * Default request expiry duration (ms from now) for intents-endpoint calls.
-   * Defaults to 72 hours.
-   */
-  defaultIntentMs?: number;
-  /**
-   * When true, the `privy-request-expiry` header is never sent on any call
-   * unless explicitly provided per-request. Defaults to false.
-   */
-  disabled?: boolean;
-}
+export type PrivyRequestExpiryOptions =
+  | {
+      /**
+       * When true, the `privy-request-expiry` header is never sent on any call
+       * unless explicitly provided per-request.
+       */
+      disabled: true;
+      defaultMs?: never;
+      defaultIntentMs?: never;
+    }
+  | {
+      /**
+       * Explicit `false` to opt out of disabling; omitting `disabled` is
+       * equivalent and more idiomatic.
+       */
+      disabled?: false;
+      /**
+       * Default request expiry duration (ms from now) for non-intents endpoints.
+       * Defaults to 15 minutes.
+       */
+      defaultMs?: number;
+      /**
+       * Default request expiry duration (ms from now) for intents-endpoint calls.
+       * Defaults to 72 hours.
+       */
+      defaultIntentMs?: number;
+    };
 
 export interface PrivyClientOptions extends InternalClientOptions {
   appId: string;

@@ -80,11 +80,15 @@ export interface TransactionGetParams {
   chain: 'ethereum' | 'arbitrum' | 'base' | 'tempo' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'sepolia';
 
   /**
-   * Token contract address (EVM: 0x-prefixed hex) or mint address (Solana: base58),
-   * used to filter wallet transactions.
+   * Exactly one of `token` or `asset` is required. Cannot be used together with
+   * `asset`.
    */
   token?: WalletsAPI.TransactionTokenAddressInput | Array<WalletsAPI.TransactionTokenAddressInput>;
 
+  /**
+   * Exactly one of `asset` or `token` is required. Cannot be used together with
+   * `token`.
+   */
   asset?:
     | 'usdc'
     | 'usdc.e'

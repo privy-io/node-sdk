@@ -21,6 +21,12 @@ export interface PrivyClientOptions extends InternalClientOptions {
   /** Default request expiry duration in milliseconds from now. Defaults to 15 minutes. */
   defaultRequestExpiryMs?: number;
   /**
+   * Default request expiry duration in milliseconds from now for intents-endpoint
+   * calls only. Defaults to 72 hours. Independent of `defaultRequestExpiryMs`,
+   * which applies to non-intents endpoints.
+   */
+  defaultIntentRequestExpiryMs?: number;
+  /**
    * Set to `true` to disable automatically setting the `privy-request-expiry` header
    * on requests. When disabled, no expiry header will be sent unless explicitly
    * provided per-request. Defaults to `false`.
@@ -33,6 +39,8 @@ export interface PrivyClientOptions extends InternalClientOptions {
 const DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY = 1000;
 // 15 minutes
 const DEFAULT_REQUEST_EXPIRY_MS = 15 * 60 * 1000;
+// 72 hours
+const DEFAULT_INTENT_REQUEST_EXPIRY_MS = 72 * 60 * 60 * 1000;
 
 export class PrivyClient {
   private privyApiClient: PrivyAPI;
@@ -47,6 +55,7 @@ export class PrivyClient {
   private utilsService: PrivyUtils;
   private jwtExchangeService: JwtExchangeService;
   private _defaultRequestExpiryMs: number;
+  private _defaultIntentRequestExpiryMs: number;
   private _disableRequestExpiry: boolean;
 
   /** @internal */
@@ -60,6 +69,7 @@ export class PrivyClient {
     apiUrl,
     authorizationKeyCacheMaxCapacity = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
     defaultRequestExpiryMs = DEFAULT_REQUEST_EXPIRY_MS,
+    defaultIntentRequestExpiryMs = DEFAULT_INTENT_REQUEST_EXPIRY_MS,
     disableRequestExpiry = false,
     defaultHeaders,
     jwtVerificationKey,
@@ -86,6 +96,7 @@ export class PrivyClient {
 
     this._disableRequestExpiry = disableRequestExpiry;
     this._defaultRequestExpiryMs = defaultRequestExpiryMs;
+    this._defaultIntentRequestExpiryMs = defaultIntentRequestExpiryMs;
     this.jwtExchangeService = new JwtExchangeService(
       this.privyApiClient.wallets,
       authorizationKeyCacheMaxCapacity,
@@ -150,5 +161,20 @@ export class PrivyClient {
       return undefined;
     }
     return Date.now() + (expiryMsFromNow ?? this._defaultRequestExpiryMs);
+  }
+
+  /**
+   * Returns a request expiry timestamp (Unix ms) for intents-endpoint calls,
+   * or `undefined` if request expiry is disabled on this client.
+   *
+   * If `expiryMsFromNow` is provided, uses that duration. Otherwise falls back to
+   * the `defaultIntentRequestExpiryMs` configured on the client (defaults to 72
+   * hours). Returns `undefined` when `disableRequestExpiry` is `true`.
+   */
+  public getIntentRequestExpiry(expiryMsFromNow?: number): number | undefined {
+    if (this._disableRequestExpiry) {
+      return undefined;
+    }
+    return Date.now() + (expiryMsFromNow ?? this._defaultIntentRequestExpiryMs);
   }
 }

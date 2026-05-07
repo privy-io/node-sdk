@@ -18,7 +18,7 @@ const config: JestConfigWithTsJest = {
     '<rootDir>/deno_tests/',
     '<rootDir>/packages/',
   ],
-  setupFilesAfterEnv: ['dotenv/config'],
+  setupFilesAfterEnv: ['dotenv/config', '<rootDir>/tests/jest.setup.ts'],
   testPathIgnorePatterns: ['scripts'],
 };
 

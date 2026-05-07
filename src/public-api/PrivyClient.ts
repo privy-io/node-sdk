@@ -170,6 +170,8 @@ export class PrivyClient {
    * If `expiryMsFromNow` is provided, uses that duration. Otherwise falls back to
    * the `defaultIntentRequestExpiryMs` configured on the client (defaults to 72
    * hours). Returns `undefined` when `disableRequestExpiry` is `true`.
+   *
+   * @internal
    */
   public getIntentRequestExpiry(expiryMsFromNow?: number): number | undefined {
     if (this._disableRequestExpiry) {

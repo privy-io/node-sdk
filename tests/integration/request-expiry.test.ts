@@ -1,6 +1,6 @@
-import { PrivyClient } from '@privy-io/node';
+import { PrivyClient, type PrivyClientOptions } from '@privy-io/node';
 
-function makeClient(overrides: { disableRequestExpiry?: boolean; defaultRequestExpiryMs?: number }): {
+function makeClient(overrides: Partial<PrivyClientOptions>): {
   client: PrivyClient;
   captured: { request: Request | null };
 } {
@@ -56,5 +56,25 @@ describe('request expiry opt-out', () => {
     });
 
     expect(captured.request?.headers.get('privy-request-expiry')).toBeNull();
+  });
+
+  it('reads defaultMs from the nested requestExpiry option', async () => {
+    const tenMinutes = 10 * 60 * 1000;
+    const { client, captured } = makeClient({
+      requestExpiry: { defaultMs: tenMinutes },
+    });
+    const before = Date.now();
+
+    await client.wallets().rpc('wallet-id', {
+      method: 'personal_sign',
+      params: { encoding: 'utf-8', message: 'hello' },
+    });
+
+    const after = Date.now();
+    const header = captured.request?.headers.get('privy-request-expiry');
+    expect(header).toMatch(/^\d+$/);
+    const expiry = Number(header);
+    expect(expiry).toBeGreaterThanOrEqual(before + tenMinutes);
+    expect(expiry).toBeLessThanOrEqual(after + tenMinutes);
   });
 });

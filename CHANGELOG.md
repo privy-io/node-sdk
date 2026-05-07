@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.18.0 (2026-05-07)
+
+Full Changelog: [v0.17.0...v0.18.0](https://github.com/privy-io/node-sdk/compare/v0.17.0...v0.18.0)
+
+### Features
+
+* **api:** api update ([f9e589c](https://github.com/privy-io/node-sdk/commit/f9e589c618c370da362da1bd91f75c2b2370edce))
+* **api:** api update ([79ef0c3](https://github.com/privy-io/node-sdk/commit/79ef0c3d44080d29cf0675a7ba39171c2e029b02))
+* intents-endpoint expiry default ([#155](https://github.com/privy-io/node-sdk/issues/155)) ([2f75123](https://github.com/privy-io/node-sdk/commit/2f751230ac3bb721c73ce3bd2f83467fa754418b))
+
 ## 0.17.0 (2026-05-06)
 
 Full Changelog: [v0.16.0...v0.17.0](https://github.com/privy-io/node-sdk/compare/v0.16.0...v0.17.0)

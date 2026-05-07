@@ -224,7 +224,8 @@ export type SmartWalletType =
   | 'light_account'
   | 'biconomy'
   | 'coinbase_smart_wallet'
-  | 'thirdweb';
+  | 'thirdweb'
+  | 'nexus';
 
 /**
  * An additional signer configuration for a wallet.

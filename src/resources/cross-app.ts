@@ -28,6 +28,12 @@ export interface CrossAppConnection {
  */
 export interface CrossAppConnectionsResponse {
   connections: Array<CrossAppConnection>;
+
+  /**
+   * Indicates that this response contains only publicly accessible data, not a
+   * privileged resource
+   */
+  data_classification: 'public';
 }
 
 export declare namespace CrossApp {

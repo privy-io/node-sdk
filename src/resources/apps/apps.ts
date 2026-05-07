@@ -111,6 +111,12 @@ export interface AppResponse {
 
   custom_oauth_providers: Array<AppResponse.CustomOAuthProvider>;
 
+  /**
+   * Indicates that this response contains only publicly accessible data, not a
+   * privileged resource
+   */
+  data_classification: 'public';
+
   disable_plus_emails: boolean;
 
   discord_oauth: boolean;

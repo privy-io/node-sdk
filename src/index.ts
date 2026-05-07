@@ -1,4 +1,8 @@
-export { PrivyClient, type PrivyClientOptions } from './public-api/PrivyClient';
+export {
+  PrivyClient,
+  type PrivyClientOptions,
+  type PrivyRequestExpiryOptions,
+} from './public-api/PrivyClient';
 export { type PrivyWalletsService } from './public-api/services/wallets';
 export { type PrivyEthereumService } from './public-api/services/ethereum';
 export { type PrivySolanaService } from './public-api/services/solana';

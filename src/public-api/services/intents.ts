@@ -30,7 +30,7 @@ export class PrivyIntentsService extends Intents {
     walletId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.RpcInput,
   ): APIPromise<RpcIntentResponse> {
-    const expiry = requestExpiry ?? this.privyClient.getRequestExpiry();
+    const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
     return super.rpc(walletId, {
       ...params,
       ...(expiry != null && { 'privy-request-expiry': String(expiry) }),
@@ -41,7 +41,7 @@ export class PrivyIntentsService extends Intents {
     policyId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.CreatePolicyRuleInput,
   ): APIPromise<RuleIntentResponse> {
-    const expiry = requestExpiry ?? this.privyClient.getRequestExpiry();
+    const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
     return super.createPolicyRule(policyId, {
       ...params,
       ...(expiry != null && { 'privy-request-expiry': String(expiry) }),
@@ -52,7 +52,7 @@ export class PrivyIntentsService extends Intents {
     ruleId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.DeletePolicyRuleInput,
   ): APIPromise<RuleIntentResponse> {
-    const expiry = requestExpiry ?? this.privyClient.getRequestExpiry();
+    const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
     return super.deletePolicyRule(ruleId, {
       ...params,
       ...(expiry != null && { 'privy-request-expiry': String(expiry) }),
@@ -63,7 +63,7 @@ export class PrivyIntentsService extends Intents {
     policyId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.UpdatePolicyInput,
   ): APIPromise<PolicyIntentResponse> {
-    const expiry = requestExpiry ?? this.privyClient.getRequestExpiry();
+    const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
     return super.updatePolicy(policyId, {
       ...params,
       ...(expiry != null && { 'privy-request-expiry': String(expiry) }),
@@ -74,7 +74,7 @@ export class PrivyIntentsService extends Intents {
     ruleId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.UpdatePolicyRuleInput,
   ): APIPromise<RuleIntentResponse> {
-    const expiry = requestExpiry ?? this.privyClient.getRequestExpiry();
+    const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
     return super.updatePolicyRule(ruleId, {
       ...params,
       ...(expiry != null && { 'privy-request-expiry': String(expiry) }),
@@ -85,7 +85,7 @@ export class PrivyIntentsService extends Intents {
     walletId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.UpdateWalletInput,
   ): APIPromise<WalletIntentResponse> {
-    const expiry = requestExpiry ?? this.privyClient.getRequestExpiry();
+    const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
     return super.updateWallet(walletId, {
       ...params,
       ...(expiry != null && { 'privy-request-expiry': String(expiry) }),
@@ -96,7 +96,7 @@ export class PrivyIntentsService extends Intents {
     keyQuorumId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.UpdateKeyQuorumInput,
   ): APIPromise<KeyQuorumIntentResponse> {
-    const expiry = requestExpiry ?? this.privyClient.getRequestExpiry();
+    const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
     return super.updateKeyQuorum(keyQuorumId, {
       ...params,
       ...(expiry != null && { 'privy-request-expiry': String(expiry) }),

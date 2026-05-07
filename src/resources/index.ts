@@ -419,7 +419,15 @@ export {
   type P256PublicKey,
   type SuccessResponse,
 } from './shared';
-export { Swaps, type SwapQuoteRequestBody, type SwapQuoteResponse, type SwapRequestBody } from './swaps';
+export {
+  Swaps,
+  type SwapDestination,
+  type SwapQuoteDestination,
+  type SwapQuoteRequestBody,
+  type SwapQuoteResponse,
+  type SwapRequestBody,
+  type SwapSource,
+} from './swaps';
 export {
   Transactions,
   type Transaction,
@@ -546,6 +554,8 @@ export {
   type EthereumEarnPositionResponse,
   type EthereumEarnProvider,
   type EthereumEarnVaultDetailsResponse,
+  type ExternalTransactionWalletActionStep,
+  type ExternalTransactionWalletActionStepStatus,
   type FailureReason,
   type SvmTransactionWalletActionStep,
   type SvmWalletActionStepStatus,

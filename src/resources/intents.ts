@@ -584,7 +584,8 @@ export namespace KeyQuorumIntentResponse {
    */
   export interface RequestDetails {
     /**
-     * Request input for updating an existing key quorum.
+     * Request input for updating an existing key quorum. At least one field must be
+     * provided.
      */
     body: KeyQuorumsAPI.KeyQuorumUpdateRequestBody;
 
@@ -1388,6 +1389,11 @@ export declare namespace IntentRpcParams {
      * Body param
      */
     chain_type?: 'solana';
+
+    /**
+     * Body param
+     */
+    optimistic_broadcast?: boolean;
 
     /**
      * Body param

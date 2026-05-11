@@ -182,6 +182,8 @@ export interface AppResponse {
 
   telegram_auth: boolean;
 
+  telegram_oauth: boolean;
+
   terms_and_conditions_url: string | null;
 
   theme: string;
@@ -388,16 +390,21 @@ export interface FundingOption {
 export type GasSpendCurrency = 'usd';
 
 /**
- * Query parameters for getting gas spend for a set of wallets.
+ * Query parameters for getting gas spend for a set of wallets. The time range from
+ * `start_timestamp` to `end_timestamp` must not exceed 30 days.
  */
 export interface GasSpendRequestBody {
   /**
-   * Unix timestamp in milliseconds, exclusive.
+   * Unix timestamp in milliseconds, exclusive. Must be greater than or equal to
+   * `start_timestamp`, and the range from `start_timestamp` to `end_timestamp` must
+   * not exceed 30 days.
    */
   end_timestamp: number;
 
   /**
-   * Unix timestamp in milliseconds, inclusive.
+   * Unix timestamp in milliseconds, inclusive. Must be less than or equal to
+   * `end_timestamp`, and the range from `start_timestamp` to `end_timestamp` must
+   * not exceed 30 days.
    */
   start_timestamp: number;
 

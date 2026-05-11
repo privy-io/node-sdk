@@ -484,7 +484,8 @@ export interface ConditionSetItemsResponse {
 }
 
 /**
- * Request body for creating a condition set.
+ * Request body for creating a condition set. Exactly one of `owner` or `owner_id`
+ * is required.
  */
 export interface ConditionSetRequestBody {
   /**
@@ -1023,7 +1024,8 @@ export interface TronTransactionCondition {
 }
 
 /**
- * Request body for updating a condition set.
+ * Request body for updating a condition set. At least one field must be provided.
+ * `owner` and `owner_id` are mutually exclusive.
  */
 export interface UpdateConditionSetRequestBody {
   /**

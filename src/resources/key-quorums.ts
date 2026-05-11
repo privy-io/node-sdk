@@ -169,7 +169,8 @@ export interface KeyQuorumAuthorizationHeaders {
 }
 
 /**
- * Request input for creating a key quorum.
+ * Request input for creating a key quorum. At least one of `user_ids`,
+ * `public_keys`, or `key_quorum_ids` is required.
  */
 export interface KeyQuorumCreateRequestBody {
   /**
@@ -182,25 +183,29 @@ export interface KeyQuorumCreateRequestBody {
 
   /**
    * List of key quorum IDs that should be members of this key quorum. Key quorums
-   * can only be nested 1 level deep.
+   * can only be nested 1 level deep. At least one of `user_ids`, `public_keys`, or
+   * `key_quorum_ids` is required.
    */
   key_quorum_ids?: Array<string>;
 
   /**
    * List of P-256 public keys of the keys that should be authorized to sign on the
-   * key quorum, in base64-encoded DER format.
+   * key quorum, in base64-encoded DER format. At least one of `user_ids`,
+   * `public_keys`, or `key_quorum_ids` is required.
    */
   public_keys?: Array<string>;
 
   /**
    * List of user IDs of the users that should be authorized to sign on the key
-   * quorum.
+   * quorum. At least one of `user_ids`, `public_keys`, or `key_quorum_ids` is
+   * required.
    */
   user_ids?: Array<string>;
 }
 
 /**
- * Request input for updating an existing key quorum.
+ * Request input for updating an existing key quorum. At least one field must be
+ * provided.
  */
 export interface KeyQuorumUpdateRequestBody {
   /**
@@ -241,19 +246,22 @@ export interface KeyQuorumCreateParams {
 
   /**
    * List of key quorum IDs that should be members of this key quorum. Key quorums
-   * can only be nested 1 level deep.
+   * can only be nested 1 level deep. At least one of `user_ids`, `public_keys`, or
+   * `key_quorum_ids` is required.
    */
   key_quorum_ids?: Array<string>;
 
   /**
    * List of P-256 public keys of the keys that should be authorized to sign on the
-   * key quorum, in base64-encoded DER format.
+   * key quorum, in base64-encoded DER format. At least one of `user_ids`,
+   * `public_keys`, or `key_quorum_ids` is required.
    */
   public_keys?: Array<string>;
 
   /**
    * List of user IDs of the users that should be authorized to sign on the key
-   * quorum.
+   * quorum. At least one of `user_ids`, `public_keys`, or `key_quorum_ids` is
+   * required.
    */
   user_ids?: Array<string>;
 }

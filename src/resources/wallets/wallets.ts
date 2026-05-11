@@ -1664,6 +1664,8 @@ export interface SolanaSignAndSendTransactionRpcInput {
 
   chain_type?: 'solana';
 
+  optimistic_broadcast?: boolean;
+
   reference_id?: string;
 
   sponsor?: boolean;
@@ -1704,6 +1706,8 @@ export interface SolanaSignAndSendTransactionRpcResponseData {
   hash: string;
 
   reference_id?: string | null;
+
+  signed_transaction?: string;
 
   transaction_id?: string;
 }
@@ -3438,7 +3442,8 @@ export type WalletRpcResponse =
 export type WalletSolanaAsset = 'sol' | 'usdc' | 'eurc' | 'usdb';
 
 /**
- * Request body for updating a wallet.
+ * Request body for updating a wallet. `owner` and `owner_id` are mutually
+ * exclusive.
  */
 export interface WalletUpdateRequestBody {
   /**
@@ -4155,6 +4160,11 @@ export declare namespace WalletRpcParams {
      * Body param
      */
     chain_type?: 'solana';
+
+    /**
+     * Body param
+     */
+    optimistic_broadcast?: boolean;
 
     /**
      * Body param

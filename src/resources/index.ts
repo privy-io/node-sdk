@@ -792,6 +792,7 @@ export {
   type IntentCreatedWebhookPayload,
   type IntentExecutedWebhookPayload,
   type IntentFailedWebhookPayload,
+  type IntentRejectedWebhookPayload,
   type KrakenEmbedQuoteCancelledWebhookPayload,
   type KrakenEmbedQuoteExecutedWebhookPayload,
   type KrakenEmbedQuoteExecutionFailedWebhookPayload,

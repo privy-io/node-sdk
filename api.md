@@ -551,6 +551,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">IntentCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentRejectedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteCancelledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>

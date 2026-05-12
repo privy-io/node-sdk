@@ -487,6 +487,56 @@ export interface IntentFailedWebhookPayload {
 }
 
 /**
+ * Payload for the intent.rejected webhook event.
+ */
+export interface IntentRejectedWebhookPayload {
+  /**
+   * Unix timestamp when the intent was created.
+   */
+  created_at: number;
+
+  /**
+   * Unix timestamp when the intent expires.
+   */
+  expires_at: number;
+
+  /**
+   * The unique ID of the intent.
+   */
+  intent_id: string;
+
+  /**
+   * Type of intent.
+   */
+  intent_type: IntentsAPI.IntentType;
+
+  /**
+   * Unix timestamp when the intent was rejected.
+   */
+  rejected_at: number;
+
+  /**
+   * The current status of the intent.
+   */
+  status: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'intent.rejected';
+
+  /**
+   * Display name of the user who created the intent.
+   */
+  created_by_display_name?: string;
+
+  /**
+   * The ID of the user who created the intent.
+   */
+  created_by_id?: string;
+}
+
+/**
  * Payload for the kraken_embed.quote.cancelled webhook event.
  */
 export interface KrakenEmbedQuoteCancelledWebhookPayload {
@@ -2646,6 +2696,7 @@ export type WebhookPayload =
   | UserOperationCompletedWebhookPayload
   | IntentCreatedWebhookPayload
   | IntentAuthorizedWebhookPayload
+  | IntentRejectedWebhookPayload
   | IntentExecutedWebhookPayload
   | IntentFailedWebhookPayload
   | WalletActionSwapCreatedWebhookPayload
@@ -2751,6 +2802,7 @@ export type UnsafeUnwrapWebhookEvent =
   | IntentCreatedWebhookPayload
   | IntentExecutedWebhookPayload
   | IntentFailedWebhookPayload
+  | IntentRejectedWebhookPayload
   | MfaDisabledWebhookPayload
   | MfaEnabledWebhookPayload
   | TransactionBroadcastedWebhookPayload
@@ -2813,6 +2865,7 @@ export declare namespace Webhooks {
     type IntentCreatedWebhookPayload as IntentCreatedWebhookPayload,
     type IntentExecutedWebhookPayload as IntentExecutedWebhookPayload,
     type IntentFailedWebhookPayload as IntentFailedWebhookPayload,
+    type IntentRejectedWebhookPayload as IntentRejectedWebhookPayload,
     type KrakenEmbedQuoteCancelledWebhookPayload as KrakenEmbedQuoteCancelledWebhookPayload,
     type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
     type KrakenEmbedQuoteExecutionFailedWebhookPayload as KrakenEmbedQuoteExecutionFailedWebhookPayload,

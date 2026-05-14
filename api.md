@@ -979,13 +979,48 @@ Types:
 
 Types:
 
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCancelCustomOrderInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCancelCustomOrderPath</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCancelCustomOrderResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCancelCustomOrderResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCreateCustomOrderInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCreateCustomOrderResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCreateCustomOrderResult</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCurrentDayPnl</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrder</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderAction</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderAmount</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderOccurrence</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderOccurrenceExecutedAction</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderOccurrenceTrigger</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderQuoteAsset</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderStatus</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderTrigger</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetAssetListQueryParamsSchema</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderHistoryQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderHistoryResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderHistoryResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderResult</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioDetailsQueryParamsSchema</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryQueryParams</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryResponse</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioTransactionsQueryParamsSchema</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetQuoteQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedListCustomOrdersQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedListCustomOrdersResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedListCustomOrdersResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartAddressMetadata</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartAddressVerificationURLInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartIdentityInfo</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartIdentityMetadata</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartIdentityVerificationURLInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartLivenessVerificationURLInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationDebug</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationURLInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationURLResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationURLResult</a></code>
 
 # Swaps
 

@@ -301,6 +301,7 @@ export {
   type IntentAuthorization,
   type IntentAuthorizationKeyQuorumMember,
   type IntentAuthorizationMember,
+  type IntentAuthorizeInput,
   type IntentCreationHeaders,
   type IntentResponse,
   type IntentStatus,

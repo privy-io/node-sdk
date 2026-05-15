@@ -514,6 +514,22 @@ export namespace IntentAuthorizationMember {
 }
 
 /**
+ * Request body for authorizing an intent.
+ */
+export interface IntentAuthorizeInput {
+  /**
+   * Signature authorizing the intent.
+   */
+  signature: string;
+
+  /**
+   * Unix timestamp (in milliseconds) when the signature was created. Used to verify
+   * the signature was created when the signing key was valid.
+   */
+  timestamp: number;
+}
+
+/**
  * Headers required to create an intent.
  */
 export interface IntentCreationHeaders {
@@ -543,7 +559,14 @@ export type IntentResponse =
 /**
  * Current status of an intent.
  */
-export type IntentStatus = 'pending' | 'executed' | 'failed' | 'expired' | 'rejected' | 'dismissed';
+export type IntentStatus =
+  | 'pending'
+  | 'processing'
+  | 'executed'
+  | 'failed'
+  | 'expired'
+  | 'rejected'
+  | 'dismissed';
 
 /**
  * Type of intent.
@@ -1866,6 +1889,7 @@ export declare namespace Intents {
     type IntentAuthorization as IntentAuthorization,
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
+    type IntentAuthorizeInput as IntentAuthorizeInput,
     type IntentCreationHeaders as IntentCreationHeaders,
     type IntentResponse as IntentResponse,
     type IntentStatus as IntentStatus,

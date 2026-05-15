@@ -450,6 +450,7 @@ Types:
 - <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizeInput</a></code>
 - <code><a href="./src/resources/intents.ts">IntentCreationHeaders</a></code>
 - <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">IntentStatus</a></code>

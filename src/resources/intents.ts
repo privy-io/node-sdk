@@ -1738,6 +1738,11 @@ export interface IntentTransferParams {
   amount_type?: WalletsAPI.AmountType;
 
   /**
+   * Body param: Total fees assessed on a transfer, in BPS
+   */
+  fee_configuration?: WalletsAPI.FeeConfiguration;
+
+  /**
    * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%).
    */
   slippage_bps?: number;

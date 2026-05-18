@@ -16,6 +16,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustomTokenTransferSource</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">DeveloperFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
@@ -59,6 +60,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">ExportSeedPhraseRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExportType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">FeeConfiguration</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">FeeLineItem</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">GetByWalletAddressRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HDInitInput</a></code>
@@ -75,6 +78,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeyExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeyInitInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeySubmitInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">PrivyFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Quantity</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesEncoding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesHashFunction</a></code>
@@ -85,6 +89,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RecipientPublicKey</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RelayerFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SigningAlgorithm</a></code>
@@ -154,8 +159,11 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">TokenOutput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferDestination</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferSource</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TotalFeeConfigurationBps</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionTokenAddressInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferQuoteRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferQuoteResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferReceivedTransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferSentTransactionDetail</a></code>

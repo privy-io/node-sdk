@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as WalletsAPI from './wallets/wallets';
 
 export class WalletActions extends APIResource {}
 
@@ -709,6 +710,11 @@ export interface TransferActionResponse {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
+
+  /**
+   * Fees paid for the transfer.
+   */
+  fees?: Array<WalletsAPI.FeeLineItem>;
 
   /**
    * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output

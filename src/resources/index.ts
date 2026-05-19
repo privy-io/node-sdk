@@ -449,6 +449,8 @@ export {
   type SuiTransferObjectsCommandCondition,
   type SuiTransferObjectsCommandField,
   type SystemCondition,
+  type TempoTransactionCondition,
+  type TempoTransactionConditionField,
   type TronCalldataCondition,
   type TronTransactionCondition,
   type UpdateConditionSetRequestBody,

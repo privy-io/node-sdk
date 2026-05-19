@@ -724,6 +724,7 @@ export type PolicyCondition =
   | EthereumTypedDataDomainCondition
   | EthereumTypedDataMessageCondition
   | Ethereum7702AuthorizationCondition
+  | TempoTransactionCondition
   | SolanaProgramInstructionCondition
   | SolanaSystemProgramInstructionCondition
   | SolanaTokenProgramInstructionCondition
@@ -976,6 +977,42 @@ export interface SystemCondition {
    */
   value: ConditionValue;
 }
+
+/**
+ * A Tempo (type 118) transaction-level field. Evaluated once per transaction (not
+ * per call).
+ */
+export interface TempoTransactionCondition {
+  /**
+   * Tempo (type 118) transaction-level fields that can be referenced in a policy
+   * condition.
+   */
+  field: TempoTransactionConditionField;
+
+  field_source: 'tempo_transaction';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
+}
+
+/**
+ * Tempo (type 118) transaction-level fields that can be referenced in a policy
+ * condition.
+ */
+export type TempoTransactionConditionField =
+  | 'fee_token'
+  | 'fee_payer_signature'
+  | 'nonce_key'
+  | 'valid_before'
+  | 'valid_after';
 
 /**
  * Decoded calldata from a TRON TriggerSmartContract interaction.
@@ -1301,6 +1338,8 @@ export declare namespace Policies {
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
     type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
     type SystemCondition as SystemCondition,
+    type TempoTransactionCondition as TempoTransactionCondition,
+    type TempoTransactionConditionField as TempoTransactionConditionField,
     type TronCalldataCondition as TronCalldataCondition,
     type TronTransactionCondition as TronTransactionCondition,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,

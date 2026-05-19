@@ -391,6 +391,8 @@ Types:
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
 - <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
 - <code><a href="./src/resources/policies.ts">SystemCondition</a></code>
+- <code><a href="./src/resources/policies.ts">TempoTransactionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">TempoTransactionConditionField</a></code>
 - <code><a href="./src/resources/policies.ts">TronCalldataCondition</a></code>
 - <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
 - <code><a href="./src/resources/policies.ts">UpdateConditionSetRequestBody</a></code>

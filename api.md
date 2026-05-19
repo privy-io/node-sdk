@@ -1005,6 +1005,10 @@ Types:
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderQuoteAsset</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderStatus</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderTrigger</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnAmount</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnAprEstimate</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnAsset</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnUserAllocation</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetAssetListQueryParamsSchema</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderHistoryQueryParams</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderHistoryResponse</a></code>
@@ -1012,6 +1016,14 @@ Types:
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderQueryParams</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderResponse</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnAssetsKrakenResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnAssetsQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnAssetsResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnAssetsResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnSummaryKrakenResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnSummaryQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnSummaryResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnSummaryResult</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioDetailsQueryParamsSchema</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryQueryParams</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryResponse</a></code>
@@ -1030,6 +1042,10 @@ Types:
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationURLInput</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationURLResponse</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationURLResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedToggleAutoEarnKrakenResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedToggleAutoEarnQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedToggleAutoEarnResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedUpcomingReward</a></code>
 
 # Swaps
 

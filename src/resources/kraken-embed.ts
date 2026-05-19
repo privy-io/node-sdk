@@ -253,6 +253,80 @@ export interface KrakenEmbedCustomOrderTrigger {
 }
 
 /**
+ * An earn amount with native and converted values.
+ */
+export interface KrakenEmbedEarnAmount {
+  converted: string;
+
+  native: string;
+}
+
+/**
+ * Low and high estimate of the yield of an earn asset.
+ */
+export interface KrakenEmbedEarnAprEstimate {
+  high: string;
+
+  low: string;
+}
+
+/**
+ * A single asset that can yield rewards.
+ */
+export interface KrakenEmbedEarnAsset {
+  /**
+   * Low and high estimate of the yield of an earn asset.
+   */
+  apr_estimate: KrakenEmbedEarnAsset.AprEstimate;
+
+  /**
+   * User allocation for an earn asset.
+   */
+  user_allocation?: KrakenEmbedEarnAsset.UserAllocation;
+}
+
+export namespace KrakenEmbedEarnAsset {
+  /**
+   * Low and high estimate of the yield of an earn asset.
+   */
+  export interface AprEstimate extends KrakenEmbedAPI.KrakenEmbedEarnAprEstimate {}
+
+  /**
+   * User allocation for an earn asset.
+   */
+  export interface UserAllocation extends KrakenEmbedAPI.KrakenEmbedEarnUserAllocation {}
+}
+
+/**
+ * User allocation for an earn asset.
+ */
+export interface KrakenEmbedEarnUserAllocation {
+  /**
+   * An earn amount with native and converted values.
+   */
+  total_allocated: KrakenEmbedEarnUserAllocation.TotalAllocated;
+
+  /**
+   * An earn amount with native and converted values.
+   */
+  total_rewarded: KrakenEmbedEarnUserAllocation.TotalRewarded;
+
+  upcoming_reward_date?: string | null;
+}
+
+export namespace KrakenEmbedEarnUserAllocation {
+  /**
+   * An earn amount with native and converted values.
+   */
+  export interface TotalAllocated extends KrakenEmbedAPI.KrakenEmbedEarnAmount {}
+
+  /**
+   * An earn amount with native and converted values.
+   */
+  export interface TotalRewarded extends KrakenEmbedAPI.KrakenEmbedEarnAmount {}
+}
+
+/**
  * Query parameters for listing and filtering available assets.
  */
 export interface KrakenEmbedGetAssetListQueryParamsSchema {
@@ -376,6 +450,117 @@ export interface KrakenEmbedGetCustomOrderResult {
    * Full custom order object.
    */
   order: KrakenEmbedCustomOrder;
+}
+
+/**
+ * Kraken API response envelope for earn assets.
+ */
+export interface KrakenEmbedGetEarnAssetsKrakenResponse {
+  /**
+   * Result payload for earn assets response.
+   */
+  result: KrakenEmbedGetEarnAssetsKrakenResponse.Result;
+
+  error?: Array<unknown>;
+
+  errors?: Array<unknown>;
+}
+
+export namespace KrakenEmbedGetEarnAssetsKrakenResponse {
+  /**
+   * Result payload for earn assets response.
+   */
+  export interface Result extends KrakenEmbedAPI.KrakenEmbedGetEarnAssetsResult {}
+}
+
+/**
+ * Query parameters for listing earn assets.
+ */
+export interface KrakenEmbedGetEarnAssetsQueryParams {
+  assets?: Array<string>;
+
+  currency?: string;
+
+  user?: string;
+}
+
+/**
+ * List of earn assets with APR estimates and optional user allocations.
+ */
+export interface KrakenEmbedGetEarnAssetsResponse {
+  /**
+   * Kraken API response envelope for earn assets.
+   */
+  data: KrakenEmbedGetEarnAssetsKrakenResponse;
+}
+
+/**
+ * Result payload for earn assets response.
+ */
+export interface KrakenEmbedGetEarnAssetsResult {
+  assets: { [key: string]: KrakenEmbedEarnAsset };
+}
+
+/**
+ * Kraken API response envelope for earn summary.
+ */
+export interface KrakenEmbedGetEarnSummaryKrakenResponse {
+  /**
+   * Result payload for earn summary response.
+   */
+  result: KrakenEmbedGetEarnSummaryKrakenResponse.Result;
+
+  error?: Array<unknown>;
+
+  errors?: Array<unknown>;
+}
+
+export namespace KrakenEmbedGetEarnSummaryKrakenResponse {
+  /**
+   * Result payload for earn summary response.
+   */
+  export interface Result extends KrakenEmbedAPI.KrakenEmbedGetEarnSummaryResult {}
+}
+
+/**
+ * Query parameters for getting an earn summary.
+ */
+export interface KrakenEmbedGetEarnSummaryQueryParams {
+  currency: string;
+}
+
+/**
+ * Earn summary for a user including Auto-Earn status, total rewards, and upcoming
+ * payouts.
+ */
+export interface KrakenEmbedGetEarnSummaryResponse {
+  /**
+   * Kraken API response envelope for earn summary.
+   */
+  data: KrakenEmbedGetEarnSummaryKrakenResponse;
+}
+
+/**
+ * Result payload for earn summary response.
+ */
+export interface KrakenEmbedGetEarnSummaryResult {
+  auto_earn_eligible: boolean;
+
+  auto_earn_enabled: boolean;
+
+  num_earning_assets: number;
+
+  payout_period: string;
+
+  total_allocated_converted: string;
+
+  total_rewarded_converted_current_rate: string;
+
+  total_rewarded_converted_true_rates: string;
+
+  upcoming_rewards: Array<KrakenEmbedUpcomingReward>;
+
+  auto_earn_last_changed?: string | null;
 }
 
 /**
@@ -1540,6 +1725,60 @@ export interface KrakenEmbedStartVerificationURLResult {
   verification_id: string;
 }
 
+/**
+ * Kraken API response envelope for toggle auto-earn. Result is null on success.
+ */
+export interface KrakenEmbedToggleAutoEarnKrakenResponse {
+  error?: Array<unknown>;
+
+  errors?: Array<unknown>;
+
+  result?: null;
+}
+
+/**
+ * Query parameters for toggling Auto-Earn.
+ */
+export interface KrakenEmbedToggleAutoEarnQueryParams {
+  want_enabled: boolean;
+}
+
+/**
+ * Response from toggling Auto-Earn. The response body is empty on success.
+ */
+export interface KrakenEmbedToggleAutoEarnResponse {
+  /**
+   * Kraken API response envelope for toggle auto-earn. Result is null on success.
+   */
+  data: KrakenEmbedToggleAutoEarnKrakenResponse;
+}
+
+/**
+ * An upcoming earn reward for a specific asset.
+ */
+export interface KrakenEmbedUpcomingReward {
+  /**
+   * An earn amount with native and converted values.
+   */
+  accumulated_amount: KrakenEmbedEarnAmount;
+
+  asset: string;
+
+  date: string;
+
+  /**
+   * An earn amount with native and converted values.
+   */
+  estimated_pending_amount: KrakenEmbedUpcomingReward.EstimatedPendingAmount;
+}
+
+export namespace KrakenEmbedUpcomingReward {
+  /**
+   * An earn amount with native and converted values.
+   */
+  export interface EstimatedPendingAmount extends KrakenEmbedAPI.KrakenEmbedEarnAmount {}
+}
+
 export declare namespace KrakenEmbed {
   export {
     type KrakenEmbedCancelCustomOrderInput as KrakenEmbedCancelCustomOrderInput,
@@ -1559,6 +1798,10 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedCustomOrderQuoteAsset as KrakenEmbedCustomOrderQuoteAsset,
     type KrakenEmbedCustomOrderStatus as KrakenEmbedCustomOrderStatus,
     type KrakenEmbedCustomOrderTrigger as KrakenEmbedCustomOrderTrigger,
+    type KrakenEmbedEarnAmount as KrakenEmbedEarnAmount,
+    type KrakenEmbedEarnAprEstimate as KrakenEmbedEarnAprEstimate,
+    type KrakenEmbedEarnAsset as KrakenEmbedEarnAsset,
+    type KrakenEmbedEarnUserAllocation as KrakenEmbedEarnUserAllocation,
     type KrakenEmbedGetAssetListQueryParamsSchema as KrakenEmbedGetAssetListQueryParamsSchema,
     type KrakenEmbedGetCustomOrderHistoryQueryParams as KrakenEmbedGetCustomOrderHistoryQueryParams,
     type KrakenEmbedGetCustomOrderHistoryResponse as KrakenEmbedGetCustomOrderHistoryResponse,
@@ -1566,6 +1809,14 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedGetCustomOrderQueryParams as KrakenEmbedGetCustomOrderQueryParams,
     type KrakenEmbedGetCustomOrderResponse as KrakenEmbedGetCustomOrderResponse,
     type KrakenEmbedGetCustomOrderResult as KrakenEmbedGetCustomOrderResult,
+    type KrakenEmbedGetEarnAssetsKrakenResponse as KrakenEmbedGetEarnAssetsKrakenResponse,
+    type KrakenEmbedGetEarnAssetsQueryParams as KrakenEmbedGetEarnAssetsQueryParams,
+    type KrakenEmbedGetEarnAssetsResponse as KrakenEmbedGetEarnAssetsResponse,
+    type KrakenEmbedGetEarnAssetsResult as KrakenEmbedGetEarnAssetsResult,
+    type KrakenEmbedGetEarnSummaryKrakenResponse as KrakenEmbedGetEarnSummaryKrakenResponse,
+    type KrakenEmbedGetEarnSummaryQueryParams as KrakenEmbedGetEarnSummaryQueryParams,
+    type KrakenEmbedGetEarnSummaryResponse as KrakenEmbedGetEarnSummaryResponse,
+    type KrakenEmbedGetEarnSummaryResult as KrakenEmbedGetEarnSummaryResult,
     type KrakenEmbedGetPortfolioDetailsQueryParamsSchema as KrakenEmbedGetPortfolioDetailsQueryParamsSchema,
     type KrakenEmbedGetPortfolioSummaryQueryParams as KrakenEmbedGetPortfolioSummaryQueryParams,
     type KrakenEmbedGetPortfolioSummaryResponse as KrakenEmbedGetPortfolioSummaryResponse,
@@ -1584,5 +1835,9 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedStartVerificationURLInput as KrakenEmbedStartVerificationURLInput,
     type KrakenEmbedStartVerificationURLResponse as KrakenEmbedStartVerificationURLResponse,
     type KrakenEmbedStartVerificationURLResult as KrakenEmbedStartVerificationURLResult,
+    type KrakenEmbedToggleAutoEarnKrakenResponse as KrakenEmbedToggleAutoEarnKrakenResponse,
+    type KrakenEmbedToggleAutoEarnQueryParams as KrakenEmbedToggleAutoEarnQueryParams,
+    type KrakenEmbedToggleAutoEarnResponse as KrakenEmbedToggleAutoEarnResponse,
+    type KrakenEmbedUpcomingReward as KrakenEmbedUpcomingReward,
   };
 }

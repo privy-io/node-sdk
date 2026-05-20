@@ -735,6 +735,7 @@ export type PolicyMethod =
   | 'eth_signTransaction'
   | 'eth_signUserOperation'
   | 'eth_signTypedData_v4'
+  | 'personal_sign'
   | 'eth_sign7702Authorization'
   | 'wallet_sendCalls'
   | 'signTransaction'

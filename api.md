@@ -16,6 +16,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustomTokenTransferSource</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">DeveloperFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
@@ -59,6 +60,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">ExportSeedPhraseRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExportType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">ExtendedChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">FeeConfiguration</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">FeeLineItem</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">GetByWalletAddressRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HDInitInput</a></code>
@@ -75,6 +78,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeyExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeyInitInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeySubmitInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">PrivyFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Quantity</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesEncoding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesHashFunction</a></code>
@@ -85,6 +89,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RecipientPublicKey</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RelayerFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SigningAlgorithm</a></code>
@@ -154,8 +159,11 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">TokenOutput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferDestination</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferSource</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TotalFeeConfigurationBps</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionTokenAddressInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferQuoteRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferQuoteResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferReceivedTransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferSentTransactionDetail</a></code>
@@ -450,6 +458,7 @@ Types:
 - <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizeInput</a></code>
 - <code><a href="./src/resources/intents.ts">IntentCreationHeaders</a></code>
 - <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
@@ -551,6 +560,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">IntentCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">IntentRejectedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteCancelledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>
@@ -978,13 +988,64 @@ Types:
 
 Types:
 
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCancelCustomOrderInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCancelCustomOrderPath</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCancelCustomOrderResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCancelCustomOrderResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCreateCustomOrderInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCreateCustomOrderResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCreateCustomOrderResult</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCurrentDayPnl</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrder</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderAction</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderAmount</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderOccurrence</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderOccurrenceExecutedAction</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderOccurrenceTrigger</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderQuoteAsset</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderStatus</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedCustomOrderTrigger</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnAmount</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnAprEstimate</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnAsset</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnUserAllocation</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetAssetListQueryParamsSchema</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderHistoryQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderHistoryResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderHistoryResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnAssetsKrakenResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnAssetsQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnAssetsResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnAssetsResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnSummaryKrakenResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnSummaryQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnSummaryResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetEarnSummaryResult</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioDetailsQueryParamsSchema</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryQueryParams</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryResponse</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioTransactionsQueryParamsSchema</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetQuoteQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedListCustomOrdersQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedListCustomOrdersResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedListCustomOrdersResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartAddressMetadata</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartAddressVerificationURLInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartIdentityInfo</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartIdentityMetadata</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartIdentityVerificationURLInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartLivenessVerificationURLInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationDebug</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationURLInput</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationURLResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartVerificationURLResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedToggleAutoEarnKrakenResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedToggleAutoEarnQueryParams</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedToggleAutoEarnResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedUpcomingReward</a></code>
 
 # Swaps
 

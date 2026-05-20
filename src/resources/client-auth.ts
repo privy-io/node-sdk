@@ -378,7 +378,8 @@ export type ExternalOAuthProviderID =
   | 'linkedin'
   | 'apple'
   | 'line'
-  | 'twitch';
+  | 'twitch'
+  | 'telegram';
 
 /**
  * Input for authenticating with Farcaster.

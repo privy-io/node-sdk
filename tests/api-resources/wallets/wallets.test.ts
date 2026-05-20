@@ -290,6 +290,7 @@ describe('resource wallets', () => {
         chain: 'base',
       },
       amount_type: 'exact_input',
+      fee_configuration: { type: 'total_fee_bps', value: 50 },
       slippage_bps: 100,
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',

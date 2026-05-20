@@ -550,7 +550,7 @@ export interface CustomTokenTransferSource {
   /**
    * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
    * USDC, "0.01" for 0.01 ETH). Not in the smallest on-chain unit (wei, lamports,
-   * etc.).
+   * etc.). Maximum 100 characters.
    */
   amount: string;
 
@@ -566,6 +566,20 @@ export interface CustomTokenTransferSource {
    * respective testnets.
    */
   chain: string;
+}
+
+/**
+ * Estimated fee paid to the developer.
+ */
+export interface DeveloperFee {
+  /**
+   * Amount in USD (in decimals).
+   */
+  amount: string;
+
+  type: 'developer';
+
+  recipient?: string;
 }
 
 /**
@@ -1207,6 +1221,26 @@ export type ExtendedChainType =
   | 'spark';
 
 /**
+ * Total fees assessed on a transfer, in BPS
+ */
+export interface FeeConfiguration {
+  /**
+   * Discriminator: total fee specified in BPS.
+   */
+  type: 'total_fee_bps';
+
+  /**
+   * Total fee in basis points (1 bps = 0.01%).
+   */
+  value: number;
+}
+
+/**
+ * An individual fee assessed on a transfer.
+ */
+export type FeeLineItem = RelayerFee | PrivyFee | DeveloperFee;
+
+/**
  * The wallet chain types that offer first class support.
  */
 export type FirstClassChainType = 'ethereum' | 'solana';
@@ -1354,7 +1388,7 @@ export interface NamedTokenTransferSource {
   /**
    * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
    * USDC, "0.01" for 0.01 ETH). Not in the smallest on-chain unit (wei, lamports,
-   * etc.).
+   * etc.). Maximum 100 characters.
    */
   amount: string;
 
@@ -1494,6 +1528,20 @@ export interface PrivateKeySubmitInput {
 }
 
 /**
+ * Estimated fee paid to Privy.
+ */
+export interface PrivyFee {
+  /**
+   * Amount in USD (in decimals).
+   */
+  amount: string;
+
+  type: 'privy';
+
+  recipient?: string;
+}
+
+/**
  * A quantity value that can be either a hex string starting with '0x' or a
  * non-negative integer.
  */
@@ -1588,6 +1636,20 @@ export interface RawSignResponseData {
 export type RecipientPublicKey = string;
 
 /**
+ * Estimated fee paid to the relayer.
+ */
+export interface RelayerFee {
+  /**
+   * Amount in USD (in decimals).
+   */
+  amount: string;
+
+  type: 'relayer';
+
+  recipient?: string;
+}
+
+/**
  * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
  */
 export interface SeedPhraseExportInput {
@@ -1667,6 +1729,8 @@ export interface SolanaSignAndSendTransactionRpcInput {
 
   chain_type?: 'solana';
 
+  optimistic_broadcast?: boolean;
+
   reference_id?: string;
 
   sponsor?: boolean;
@@ -1707,6 +1771,8 @@ export interface SolanaSignAndSendTransactionRpcResponseData {
   hash: string;
 
   reference_id?: string | null;
+
+  signed_transaction?: string;
 
   transaction_id?: string;
 }
@@ -2546,6 +2612,21 @@ export interface TokenTransferDestination {
 export type TokenTransferSource = NamedTokenTransferSource | CustomTokenTransferSource;
 
 /**
+ * Total fees assessed on a transfer, in BPS
+ */
+export interface TotalFeeConfigurationBps {
+  /**
+   * Discriminator: total fee specified in BPS.
+   */
+  type: 'total_fee_bps';
+
+  /**
+   * Total fee in basis points (1 bps = 0.01%).
+   */
+  value: number;
+}
+
+/**
  * Details of a wallet transaction, varying by transaction type.
  */
 export type TransactionDetail = TransferSentTransactionDetail | TransferReceivedTransactionDetail;
@@ -2555,6 +2636,76 @@ export type TransactionDetail = TransferSentTransactionDetail | TransferReceived
  * used to filter wallet transactions.
  */
 export type TransactionTokenAddressInput = string;
+
+/**
+ * Request body for requesting a quote for a cross-asset or cross-chain (DADC)
+ * transfer.
+ */
+export interface TransferQuoteRequestBody {
+  /**
+   * The destination address for a token transfer. Optionally specify a different
+   * asset or chain for cross-asset or cross-chain transfers.
+   */
+  destination: TokenTransferDestination;
+
+  /**
+   * The source asset, amount, and chain for a token transfer. Specify either `asset`
+   * (named) or `asset_address` (custom), not both.
+   */
+  source: TokenTransferSource;
+
+  /**
+   * Whether the amount refers to the input token or output token.
+   */
+  amount_type?: AmountType;
+
+  /**
+   * Total fees assessed on a transfer, in BPS
+   */
+  fee_configuration?: FeeConfiguration;
+
+  /**
+   * Maximum allowed slippage in basis points (1 bps = 0.01%).
+   */
+  slippage_bps?: number;
+}
+
+/**
+ * Response containing a quote for a cross-asset or cross-chain (DADC) transfer.
+ */
+export interface TransferQuoteResponse {
+  /**
+   * The destination address for a token transfer. Optionally specify a different
+   * asset or chain for cross-asset or cross-chain transfers.
+   */
+  destination: TokenTransferDestination;
+
+  /**
+   * Estimated fees in USD
+   */
+  estimated_fees: Array<FeeLineItem>;
+
+  /**
+   * Estimated output amount in decimals
+   */
+  estimated_output_amount: string;
+
+  /**
+   * Quote expiry as unix timestamp (seconds)
+   */
+  expires_at: number;
+
+  /**
+   * The source asset, amount, and chain for a token transfer. Specify either `asset`
+   * (named) or `asset_address` (custom), not both.
+   */
+  source: TokenTransferSource;
+
+  /**
+   * Whether the amount refers to the input token or output token.
+   */
+  amount_type?: AmountType;
+}
 
 /**
  * Details for a received transfer transaction.
@@ -2618,6 +2769,11 @@ export interface TransferRequestBody {
    * Whether the amount refers to the input token or output token.
    */
   amount_type?: AmountType;
+
+  /**
+   * Total fees assessed on a transfer, in BPS
+   */
+  fee_configuration?: FeeConfiguration;
 
   /**
    * Maximum allowed slippage in basis points (1 bps = 0.01%).
@@ -3441,7 +3597,8 @@ export type WalletRpcResponse =
 export type WalletSolanaAsset = 'sol' | 'usdc' | 'eurc' | 'usdb';
 
 /**
- * Request body for updating a wallet.
+ * Request body for updating a wallet. `owner` and `owner_id` are mutually
+ * exclusive.
  */
 export interface WalletUpdateRequestBody {
   /**
@@ -4162,6 +4319,11 @@ export declare namespace WalletRpcParams {
     /**
      * Body param
      */
+    optimistic_broadcast?: boolean;
+
+    /**
+     * Body param
+     */
     reference_id?: string;
 
     /**
@@ -4676,6 +4838,11 @@ export interface WalletTransferParams {
   amount_type?: AmountType;
 
   /**
+   * Body param: Total fees assessed on a transfer, in BPS
+   */
+  fee_configuration?: FeeConfiguration;
+
+  /**
    * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%).
    */
   slippage_bps?: number;
@@ -4832,6 +4999,7 @@ export declare namespace Wallets {
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWalletProvider as CustodialWalletProvider,
     type CustomTokenTransferSource as CustomTokenTransferSource,
+    type DeveloperFee as DeveloperFee,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
@@ -4875,6 +5043,8 @@ export declare namespace Wallets {
     type ExportSeedPhraseRpcResponse as ExportSeedPhraseRpcResponse,
     type ExportType as ExportType,
     type ExtendedChainType as ExtendedChainType,
+    type FeeConfiguration as FeeConfiguration,
+    type FeeLineItem as FeeLineItem,
     type FirstClassChainType as FirstClassChainType,
     type GetByWalletAddressRequestBody as GetByWalletAddressRequestBody,
     type HDInitInput as HDInitInput,
@@ -4891,6 +5061,7 @@ export declare namespace Wallets {
     type PrivateKeyExportResponse as PrivateKeyExportResponse,
     type PrivateKeyInitInput as PrivateKeyInitInput,
     type PrivateKeySubmitInput as PrivateKeySubmitInput,
+    type PrivyFee as PrivyFee,
     type Quantity as Quantity,
     type RawSignBytesEncoding as RawSignBytesEncoding,
     type RawSignBytesHashFunction as RawSignBytesHashFunction,
@@ -4901,6 +5072,7 @@ export declare namespace Wallets {
     type RawSignResponse as RawSignResponse,
     type RawSignResponseData as RawSignResponseData,
     type RecipientPublicKey as RecipientPublicKey,
+    type RelayerFee as RelayerFee,
     type SeedPhraseExportInput as SeedPhraseExportInput,
     type SeedPhraseExportResponse as SeedPhraseExportResponse,
     type SigningAlgorithm as SigningAlgorithm,
@@ -4970,8 +5142,11 @@ export declare namespace Wallets {
     type TokenOutput as TokenOutput,
     type TokenTransferDestination as TokenTransferDestination,
     type TokenTransferSource as TokenTransferSource,
+    type TotalFeeConfigurationBps as TotalFeeConfigurationBps,
     type TransactionDetail as TransactionDetail,
     type TransactionTokenAddressInput as TransactionTokenAddressInput,
+    type TransferQuoteRequestBody as TransferQuoteRequestBody,
+    type TransferQuoteResponse as TransferQuoteResponse,
     type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
     type TransferRequestBody as TransferRequestBody,
     type TransferSentTransactionDetail as TransferSentTransactionDetail,

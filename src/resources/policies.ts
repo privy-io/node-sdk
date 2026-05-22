@@ -493,7 +493,8 @@ export interface ConditionSetItemsResponse {
 }
 
 /**
- * Request body for creating a condition set.
+ * Request body for creating a condition set. Exactly one of `owner` or `owner_id`
+ * is required.
  */
 export interface ConditionSetRequestBody {
   /**
@@ -723,6 +724,7 @@ export type PolicyCondition =
   | EthereumTypedDataDomainCondition
   | EthereumTypedDataMessageCondition
   | Ethereum7702AuthorizationCondition
+  | TempoTransactionCondition
   | SolanaProgramInstructionCondition
   | SolanaSystemProgramInstructionCondition
   | SolanaTokenProgramInstructionCondition
@@ -742,6 +744,7 @@ export type PolicyMethod =
   | 'eth_signTransaction'
   | 'eth_signUserOperation'
   | 'eth_signTypedData_v4'
+  | 'personal_sign'
   | 'eth_sign7702Authorization'
   | 'wallet_sendCalls'
   | 'signTransaction'
@@ -977,6 +980,42 @@ export interface SystemCondition {
 }
 
 /**
+ * A Tempo (type 118) transaction-level field. Evaluated once per transaction (not
+ * per call).
+ */
+export interface TempoTransactionCondition {
+  /**
+   * Tempo (type 118) transaction-level fields that can be referenced in a policy
+   * condition.
+   */
+  field: TempoTransactionConditionField;
+
+  field_source: 'tempo_transaction';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
+}
+
+/**
+ * Tempo (type 118) transaction-level fields that can be referenced in a policy
+ * condition.
+ */
+export type TempoTransactionConditionField =
+  | 'fee_token'
+  | 'fee_payer_signature'
+  | 'nonce_key'
+  | 'valid_before'
+  | 'valid_after';
+
+/**
  * Decoded calldata from a TRON TriggerSmartContract interaction.
  */
 export interface TronCalldataCondition {
@@ -1032,7 +1071,8 @@ export interface TronTransactionCondition {
 }
 
 /**
- * Request body for updating a condition set.
+ * Request body for updating a condition set. At least one field must be provided.
+ * `owner` and `owner_id` are mutually exclusive.
  */
 export interface UpdateConditionSetRequestBody {
   /**
@@ -1299,6 +1339,8 @@ export declare namespace Policies {
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
     type SuiTransferObjectsCommandField as SuiTransferObjectsCommandField,
     type SystemCondition as SystemCondition,
+    type TempoTransactionCondition as TempoTransactionCondition,
+    type TempoTransactionConditionField as TempoTransactionConditionField,
     type TronCalldataCondition as TronCalldataCondition,
     type TronTransactionCondition as TronTransactionCondition,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,

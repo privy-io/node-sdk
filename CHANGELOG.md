@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.19.0 (2026-05-20)
+
+Full Changelog: [v0.18.0...v0.19.0](https://github.com/privy-io/node-sdk/compare/v0.18.0...v0.19.0)
+
+### Features
+
+* **api:** api update ([8b87e4b](https://github.com/privy-io/node-sdk/commit/8b87e4baefe142e1eb5fea31495046fba51bb7b6))
+* **api:** api update ([4aa076b](https://github.com/privy-io/node-sdk/commit/4aa076bb5b0f85cc4c6553216b8bc27978fdac93))
+* **api:** api update ([a6940aa](https://github.com/privy-io/node-sdk/commit/a6940aa58645ad15ef76865cf431c468e7271631))
+* **api:** api update ([3631c2b](https://github.com/privy-io/node-sdk/commit/3631c2bb9d7b7fbde2797285c491a2fffee6536d))
+* **api:** api update ([00c5899](https://github.com/privy-io/node-sdk/commit/00c58992f158b70d66d4388c16f5ec2f7d5e1c17))
+* **api:** api update ([fdbffe3](https://github.com/privy-io/node-sdk/commit/fdbffe3347f561414bd7dd5d6aa5dd44957767bf))
+* **api:** api update ([3ca95ee](https://github.com/privy-io/node-sdk/commit/3ca95ee1e0ecaeca2052ca97b7f0d600a62e24b3))
+* **api:** api update ([a6f5298](https://github.com/privy-io/node-sdk/commit/a6f52982f0c07c1b7b8f866a4569d4e891aa18c2))
+
+
+### Chores
+
+* **internal:** codegen related update ([f2025fb](https://github.com/privy-io/node-sdk/commit/f2025fb597fb7267e815d002b0634237d4eb8871))
+* redact api-key headers in debug logs ([fa5c58e](https://github.com/privy-io/node-sdk/commit/fa5c58e89ff431721cd74dd44b0a9494e7e64831))
+
 ## 0.18.0 (2026-05-07)
 
 Full Changelog: [v0.17.0...v0.18.0](https://github.com/privy-io/node-sdk/compare/v0.17.0...v0.18.0)

@@ -45,7 +45,7 @@
     "@x402/evm": "^2.3.0",
     "@x402/fetch": "^2.3.0",
     "@x402/svm": "^2.3.0",
-    "viem": "^2.24.1"
+    "viem": ">=2.44.2 <2.50.0"
   },
   "peerDependenciesMeta": {
     "@solana/kit": {
@@ -95,7 +95,7 @@
     "tweetnacl": "^1.0.3",
     "typescript": "5.8.3",
     "typescript-eslint": "8.31.1",
-    "viem": "^2.34.0"
+    "viem": "2.44.2"
   },
   "overrides": {
     "minimatch": "^9.0.5"

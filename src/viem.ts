@@ -5,10 +5,7 @@ import type {
   TransactionSerialized,
   TransactionSerializable,
 } from 'viem';
-import type {
-  z_TransactionRequestTempo as TransactionRequestTempo,
-  z_TransactionSerializableTempo as TransactionSerializableTempo,
-} from 'viem/tempo';
+import { Transaction as ViemTempoTransaction } from 'viem/tempo';
 import {
   type LocalAccount,
   type SignMessageParameters,
@@ -22,29 +19,33 @@ import type { PrivyClient } from './public-api/PrivyClient';
 import type { EthereumSignTransactionRpcInputParams } from './resources';
 
 type StandardViemTransaction = ViemSignTransactionParameters['transaction'];
-type TempoTransaction = (TransactionRequestTempo | TransactionSerializableTempo) & {
-  chainId?: TransactionSerializableTempo['chainId'];
-  feePayer?: TransactionRequestTempo['feePayer'];
-  feePayerSignature?: TransactionSerializableTempo['feePayerSignature'];
+type TempoTransactionRequest = ViemTempoTransaction.TransactionRequestTempo;
+type TempoTransactionSerializable = ViemTempoTransaction.TransactionSerializableTempo;
+type TempoTransaction = (TempoTransactionRequest | TempoTransactionSerializable) & {
+  chainId?: TempoTransactionSerializable['chainId'];
+  feePayer?: TempoTransactionRequest['feePayer'];
+  feePayerSignature?: TempoTransactionSerializable['feePayerSignature'];
   from?: Hex;
-  keyAuthorization?: TransactionRequestTempo['keyAuthorization'];
-  signature?: TransactionSerializableTempo['signature'];
+  keyAuthorization?: TempoTransactionRequest['keyAuthorization'];
+  signature?: TempoTransactionSerializable['signature'];
 };
 type SupportedViemTransaction = StandardViemTransaction | TempoTransaction;
 type SupportedViemTransactionType = SupportedViemTransaction['type'];
 type SupportedSerializeTransactionFn = SerializeTransactionFn<
-  TransactionSerializable | TransactionSerializableTempo
+  TransactionSerializable | TempoTransactionSerializable
 >;
 
+type PrivySignTransaction = LocalAccount['signTransaction'] &
+  (<
+    serializer extends SupportedSerializeTransactionFn = SupportedSerializeTransactionFn,
+    transaction extends SupportedViemTransaction = Parameters<serializer>[0] & SupportedViemTransaction,
+  >(
+    transaction: transaction,
+    options?: { serializer?: serializer | undefined },
+  ) => Promise<TransactionSerialized | `0x76${string}`>);
+
 export type PrivyViemAccount = Omit<LocalAccount, 'signTransaction'> & {
-  signTransaction: LocalAccount['signTransaction'] &
-    (<
-      serializer extends SupportedSerializeTransactionFn = SupportedSerializeTransactionFn,
-      transaction extends SupportedViemTransaction = Parameters<serializer>[0] & SupportedViemTransaction,
-    >(
-      transaction: transaction,
-      options?: { serializer?: serializer | undefined },
-    ) => Promise<TransactionSerialized | `0x76${string}`>);
+  signTransaction: PrivySignTransaction;
 };
 
 export interface CreateViemAccountInput {
@@ -189,31 +190,26 @@ const isDefined = <T>(input: T | undefined | null): input is T => {
   return typeof input !== 'undefined' && input !== null;
 };
 
-const TEMPO_FIELDS = [
-  'calls',
-  'feePayer',
-  'feeToken',
-  'keyAuthorization',
-  'nonceKey',
-  'signature',
-  'validBefore',
-  'validAfter',
-] as const;
+type TempoAccountFingerprint = { keyType?: string; source?: string };
 
-/** Mirrors viem `src/tempo/Transaction.ts` getType() field fingerprint. */
-export function isTempoTransaction(
-  tx: SupportedViemTransaction,
-  account?: { keyType?: string; source?: string },
-): boolean {
-  if (account?.keyType && account.keyType !== 'secp256k1') return true;
-  if (account?.source === 'accessKey') return true;
-  return TEMPO_FIELDS.some((field) => typeof (tx as Record<string, unknown>)[field] !== 'undefined');
+/** Delegates Tempo transaction detection to viem's Tempo transaction helpers. */
+export function isTempoTransaction(tx: SupportedViemTransaction, account?: TempoAccountFingerprint): boolean {
+  const embeddedAccount = (tx as SupportedViemTransaction & { account?: TempoAccountFingerprint }).account;
+  const effectiveAccount = account ?? embeddedAccount;
+
+  // viem@2.45 detects non-secp256k1 Tempo accounts via `keyType`, but not access-key
+  // accounts via `source`. Keep this narrow SDK-specific extension until viem covers it.
+  if (effectiveAccount?.source === 'accessKey') return true;
+
+  return ViemTempoTransaction.isTempo({
+    ...(tx as Record<string, unknown>),
+    ...(effectiveAccount ? { account: effectiveAccount } : {}),
+  });
 }
 
 /** Returns the input with `type` promoted to 'tempo' when its fingerprint matches. */
 export function normalizeTempoType<T extends SupportedViemTransaction>(tx: T): T {
-  const account = (tx as T & { account?: { keyType?: string; source?: string } }).account;
-  if (tx.type !== 'tempo' && isTempoTransaction(tx, account)) {
+  if (tx.type !== 'tempo' && isTempoTransaction(tx)) {
     return { ...tx, type: 'tempo' as const };
   }
 

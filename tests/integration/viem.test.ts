@@ -1,13 +1,6 @@
 import { PrivyClient } from '@privy-io/node';
 import { createViemAccount } from '@privy-io/node/viem';
-import type {
-  AuthorizationRequest,
-  Hex,
-  LocalAccount,
-  SignableMessage,
-  TypedData,
-  TypedDataDefinition,
-} from 'viem';
+import type { AuthorizationRequest, Hex, SignableMessage, TypedData, TypedDataDefinition } from 'viem';
 import type { SignTransactionParameters } from 'viem/accounts';
 import {
   keccak256,
@@ -27,6 +20,9 @@ import {
 } from './test-setup';
 
 describe('viem utils', () => {
+  const tempoFeeToken = '0x20c0000000000000000000000000000000000000' as const;
+  const tempoModeratoChainId = 42431;
+
   let resources: TestWalletResources;
   let wallets: TestWallet[];
   let privyClient: PrivyClient;
@@ -41,7 +37,7 @@ describe('viem utils', () => {
     describe.each(WALLET_CASES)('$ownership', ({ index }) => {
       let wallet: TestWallet;
       let address: Hex;
-      let account: LocalAccount;
+      let account: ReturnType<typeof createViemAccount>;
 
       beforeEach(() => {
         wallet = wallets[index]!;
@@ -135,6 +131,36 @@ describe('viem utils', () => {
           },
         });
         expect(verified).toBe(true);
+      });
+      it('should be able to sign a Tempo transaction', async () => {
+        const { Transaction } = require('viem/tempo') as typeof import('viem/tempo');
+
+        const signedTx = await account.signTransaction({
+          type: 'tempo',
+          chainId: tempoModeratoChainId,
+          calls: [{ to: '0x742D35Cc6634C0532925A3b844BC9e7095F49e22', data: '0x', value: 0n }],
+          feeToken: tempoFeeToken,
+          gas: 21000n,
+          maxFeePerGas: 1n,
+          maxPriorityFeePerGas: 1n,
+          nonce: 0,
+          nonceKey: 0n,
+          validBefore: 2_000_000_000,
+        });
+
+        expect(signedTx).toMatch(/^0x76[0-9a-fA-F]+$/);
+
+        const parsedTx = Transaction.deserialize(signedTx as `0x76${string}`);
+        expect(parsedTx.type).toBe('tempo');
+        expect(parsedTx.chainId).toBe(tempoModeratoChainId);
+        expect(parsedTx.calls).toHaveLength(1);
+        expect(parsedTx.calls[0]?.to?.toLowerCase()).toBe('0x742d35cc6634c0532925a3b844bc9e7095f49e22');
+        const parsedFeeToken =
+          typeof parsedTx.feeToken === 'bigint' ?
+            `0x20c0${parsedTx.feeToken.toString(16).padStart(36, '0')}`
+          : parsedTx.feeToken?.toLowerCase();
+        expect(parsedFeeToken).toBe(tempoFeeToken);
+        expect(parsedTx.signature).toBeDefined();
       });
     });
   });

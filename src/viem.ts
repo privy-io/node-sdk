@@ -23,11 +23,8 @@ type TempoTransactionRequest = ViemTempoTransaction.TransactionRequestTempo;
 type TempoTransactionSerializable = ViemTempoTransaction.TransactionSerializableTempo;
 type TempoTransaction = (TempoTransactionRequest | TempoTransactionSerializable) & {
   chainId?: TempoTransactionSerializable['chainId'];
-  feePayer?: TempoTransactionRequest['feePayer'];
   feePayerSignature?: TempoTransactionSerializable['feePayerSignature'];
   from?: Hex;
-  keyAuthorization?: TempoTransactionRequest['keyAuthorization'];
-  signature?: TempoTransactionSerializable['signature'];
 };
 type SupportedViemTransaction = StandardViemTransaction | TempoTransaction;
 type SupportedViemTransactionType = SupportedViemTransaction['type'];
@@ -110,12 +107,11 @@ export function createViemAccount(
       return signature as Hex;
     },
     signTransaction: async (transaction) => {
-      const normalizedTransaction = normalizeTempoType(transaction as SupportedViemTransaction);
       const { signed_transaction: signedTransaction } = await client
         .wallets()
         .ethereum()
         .signTransaction(walletId, {
-          params: { transaction: formatViemTransaction(normalizedTransaction) },
+          params: { transaction: formatViemTransaction(transaction as SupportedViemTransaction) },
           ...(authorizationContext ? { authorization_context: authorizationContext } : {}),
         });
 
@@ -166,7 +162,7 @@ export const formatViemTransactionType = (type: SupportedViemTransactionType) =>
   } else if (type === 'tempo') {
     return 118 as const;
   } else {
-    throw new PrivyAPIError(`Transaction type '${String(type)}' is not supported.`);
+    throw new PrivyAPIError('EIP4844 and EIP7702 transaction types are not yet supported.');
   }
 };
 
@@ -207,15 +203,6 @@ export function isTempoTransaction(tx: SupportedViemTransaction, account?: Tempo
   });
 }
 
-/** Returns the input with `type` promoted to 'tempo' when its fingerprint matches. */
-export function normalizeTempoType<T extends SupportedViemTransaction>(tx: T): T {
-  if (tx.type !== 'tempo' && isTempoTransaction(tx)) {
-    return { ...tx, type: 'tempo' as const };
-  }
-
-  return tx;
-}
-
 /**
  * Formats a `message` input to viem's `signMessage` function to the format needed for our wallet API.
  *
@@ -247,7 +234,7 @@ const formatViemPersonalSignMessage = (message: SignMessageParameters['message']
 export const formatViemTransaction = (
   tx: SupportedViemTransaction,
 ): EthereumSignTransactionRpcInputParams['transaction'] => {
-  if (tx.type === 'tempo') {
+  if (tx.type === 'tempo' || isTempoTransaction(tx)) {
     const tempoTx = tx as TempoTransaction;
     const calls = (
       tempoTx.calls?.length ?
@@ -281,9 +268,6 @@ export const formatViemTransaction = (
         { valid_before: formatViemQuantityLike(tempoTx.validBefore) }
       : {}),
       ...(isDefined(tempoTx.feeToken) ? { fee_token: formatTempoFeeToken(tempoTx.feeToken) } : {}),
-      ...(isDefined(tempoTx.feePayer) ?
-        { fee_payer: formatTempoPayloadValue(formatTempoFeePayer(tempoTx.feePayer)) }
-      : {}),
       ...(isDefined(tempoTx.from) ? { from: tempoTx.from } : {}),
       ...(isDefined(tempoTx.gas) ? { gas_limit: formatViemQuantityLike(tempoTx.gas) } : {}),
       ...(isDefined(tempoTx.maxFeePerGas) ?
@@ -305,10 +289,6 @@ export const formatViemTransaction = (
           fee_payer_signature: formatTempoSignature(tempoTx.feePayerSignature),
         }
       : {}),
-      ...(isDefined(tempoTx.keyAuthorization) ?
-        { key_authorization: formatTempoPayloadValue(tempoTx.keyAuthorization) }
-      : {}),
-      ...(isDefined(tempoTx.signature) ? { signature: formatTempoPayloadValue(tempoTx.signature) } : {}),
     };
 
     return formattedTransaction as EthereumSignTransactionRpcInputParams['transaction'];
@@ -339,15 +319,6 @@ const formatTempoFeeToken = (feeToken: Hex | bigint): Hex => {
   if (typeof feeToken === 'string') return feeToken;
 
   return `0x20c0${feeToken.toString(16).padStart(36, '0')}` as Hex;
-};
-
-const formatTempoFeePayer = (feePayer: TempoTransaction['feePayer']): unknown => {
-  if (feePayer && typeof feePayer === 'object' && 'address' in feePayer) return feePayer.address;
-  return feePayer;
-};
-
-const formatTempoPayloadValue = (value: unknown): unknown => {
-  return replaceBigInts(value, formatViemQuantity);
 };
 
 const formatTempoSignature = (signature: Signature): { r: Hex; s: Hex; y_parity: 0 | 1 } => {

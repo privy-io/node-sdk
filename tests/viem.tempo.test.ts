@@ -5,7 +5,6 @@ import {
   formatViemTransaction,
   formatViemTransactionType,
   isTempoTransaction,
-  normalizeTempoType,
 } from '../src/viem';
 
 const ADDRESS = '0x0000000000000000000000000000000000000001' as const;
@@ -60,7 +59,7 @@ describe('viem Tempo support', () => {
 
     it('reports the unsupported transaction type', () => {
       expect(() => formatViemTransactionType('eip4844')).toThrow(
-        "Transaction type 'eip4844' is not supported.",
+        'EIP4844 and EIP7702 transaction types are not yet supported.',
       );
     });
   });
@@ -76,7 +75,6 @@ describe('viem Tempo support', () => {
           validAfter: 0,
           validBefore: 123,
           feeToken: FEE_TOKEN,
-          feePayer: true,
           from: ADDRESS,
           gas: 21_000n,
           maxFeePerGas: 2n,
@@ -96,21 +94,6 @@ describe('viem Tempo support', () => {
             s: `0x${'22'.repeat(32)}` as Hex,
             yParity: 1,
           },
-          keyAuthorization: {
-            address: ADDRESS,
-            chainId: 1n,
-            type: 'secp256k1',
-            signature: {
-              r: `0x${'33'.repeat(32)}`,
-              s: `0x${'44'.repeat(32)}`,
-              yParity: 0,
-            },
-          },
-          signature: {
-            r: `0x${'55'.repeat(32)}`,
-            s: `0x${'66'.repeat(32)}`,
-            yParity: 0,
-          },
         } as never),
       ).toEqual({
         type: 118,
@@ -120,7 +103,6 @@ describe('viem Tempo support', () => {
         valid_after: 0,
         valid_before: 123,
         fee_token: FEE_TOKEN,
-        fee_payer: true,
         from: ADDRESS,
         gas_limit: '0x5208',
         max_fee_per_gas: '0x2',
@@ -140,21 +122,21 @@ describe('viem Tempo support', () => {
           s: `0x${'22'.repeat(32)}`,
           y_parity: 1,
         },
-        key_authorization: {
-          address: ADDRESS,
-          chainId: '0x1',
-          type: 'secp256k1',
-          signature: {
-            r: `0x${'33'.repeat(32)}`,
-            s: `0x${'44'.repeat(32)}`,
-            yParity: 0,
-          },
-        },
-        signature: {
-          r: `0x${'55'.repeat(32)}`,
-          s: `0x${'66'.repeat(32)}`,
-          yParity: 0,
-        },
+      });
+    });
+
+    it('formats implicit Tempo transactions based on viem Tempo detection', () => {
+      expect(
+        formatViemTransaction({
+          chainId: TEMPO_CHAIN_ID,
+          calls: [{ to: RECIPIENT, data: '0x' }],
+          feeToken: FEE_TOKEN,
+        } as never),
+      ).toEqual({
+        type: 118,
+        chain_id: TEMPO_CHAIN_ID,
+        calls: [{ to: RECIPIENT, data: '0x' }],
+        fee_token: FEE_TOKEN,
       });
     });
 
@@ -215,45 +197,19 @@ describe('viem Tempo support', () => {
       ).toBe(false);
     });
 
-    it('promotes implicit Tempo transactions and leaves explicit standard types alone', () => {
+    it('formats explicit standard types through the standard transaction path', () => {
       expect(
-        normalizeTempoType({
-          calls: [{ to: RECIPIENT }],
-          feeToken: FEE_TOKEN,
-        } as never),
-      ).toEqual({
-        type: 'tempo',
-        calls: [{ to: RECIPIENT }],
-        feeToken: FEE_TOKEN,
-      });
-
-      const eip1559 = { type: 'eip1559' as const, to: RECIPIENT, data: '0x' as const };
-      expect(normalizeTempoType(eip1559 as never)).toBe(eip1559);
-
-      expect(
-        normalizeTempoType({
+        formatViemTransaction({
           type: 'eip1559',
-          calls: [{ to: RECIPIENT }],
-          feeToken: FEE_TOKEN,
-        } as never),
-      ).toEqual({
-        type: 'tempo',
-        calls: [{ to: RECIPIENT }],
-        feeToken: FEE_TOKEN,
-      });
-
-      expect(
-        normalizeTempoType({
-          type: 'eip1559',
+          chainId: 1,
           to: RECIPIENT,
           data: '0x',
-          account: { source: 'accessKey' },
-        } as never),
+        }),
       ).toEqual({
-        type: 'tempo',
+        type: 2,
         to: RECIPIENT,
+        chain_id: 1,
         data: '0x',
-        account: { source: 'accessKey' },
       });
     });
   });

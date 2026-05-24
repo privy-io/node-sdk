@@ -241,6 +241,20 @@ describe('viem Tempo support', () => {
         calls: [{ to: RECIPIENT }],
         feeToken: FEE_TOKEN,
       });
+
+      expect(
+        normalizeTempoType({
+          type: 'eip1559',
+          to: RECIPIENT,
+          data: '0x',
+          account: { source: 'accessKey' },
+        } as never),
+      ).toEqual({
+        type: 'tempo',
+        to: RECIPIENT,
+        data: '0x',
+        account: { source: 'accessKey' },
+      });
     });
   });
 
@@ -264,6 +278,28 @@ describe('viem Tempo support', () => {
             chain_id: TEMPO_CHAIN_ID,
             calls: [{ to: RECIPIENT, data: '0x' }],
             fee_token: FEE_TOKEN,
+          },
+        },
+      });
+    });
+
+    it('promotes access-key prepared requests before calling eth_signTransaction', async () => {
+      const { client, signTransaction } = createMockClient();
+      const account = createViemAccount(client, { walletId: 'wallet-id', address: ADDRESS });
+
+      await account.signTransaction({
+        chainId: TEMPO_CHAIN_ID,
+        to: RECIPIENT,
+        data: '0x',
+        account: { source: 'accessKey' },
+      } as never);
+
+      expect(signTransaction).toHaveBeenCalledWith('wallet-id', {
+        params: {
+          transaction: {
+            type: 118,
+            chain_id: TEMPO_CHAIN_ID,
+            calls: [{ to: RECIPIENT, data: '0x' }],
           },
         },
       });

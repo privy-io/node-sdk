@@ -212,7 +212,8 @@ export function isTempoTransaction(
 
 /** Returns the input with `type` promoted to 'tempo' when its fingerprint matches. */
 export function normalizeTempoType<T extends SupportedViemTransaction>(tx: T): T {
-  if (tx.type !== 'tempo' && isTempoTransaction(tx)) {
+  const account = (tx as T & { account?: { keyType?: string; source?: string } }).account;
+  if (tx.type !== 'tempo' && isTempoTransaction(tx, account)) {
     return { ...tx, type: 'tempo' as const };
   }
 

@@ -8,11 +8,11 @@ import {
 import type { Account as ViemTempoAccount } from 'viem/tempo';
 import { toHex } from 'viem/utils';
 import { PrivyAPIError } from './core/error';
+import { isTempoChainId } from './internal/chains';
 import { formatTempoTransaction, isTempoTransaction, type TempoTransaction } from './internal/viem-tempo';
 import { formatViemQuantity } from './internal/utils/viem';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
-import { isTempoChainId } from './public-api/services/tempo-transactions';
 import type { EthereumSignTransactionRpcInputParams } from './resources';
 
 // Runtime formatting accepts normal viem transactions plus viem/tempo transactions.

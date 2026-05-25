@@ -16,8 +16,11 @@ import {
   WalletIntentResponse,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
-import { defaultTempoTransactionTypeForRpcParams, isTempoTransactionRpcParams } from './tempo-transactions';
 import { Prettify, WithExpiry } from './types';
+import {
+  defaultTempoTransactionTypeForRpcParams,
+  isTempoTransactionRpcParams,
+} from './utils/tempo-transactions';
 
 export class PrivyIntentsService extends Intents {
   private privyClient: PrivyClient;

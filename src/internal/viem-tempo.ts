@@ -4,11 +4,12 @@ import { PrivyAPIError } from '../core/error';
 import type { EthereumSignTransactionRpcInputParams } from '../resources';
 import { formatViemQuantityLike } from './utils/viem';
 
-export type TempoTransactionRequest = ViemTempoTransaction.TransactionRequestTempo;
-export type TempoTransactionSerializable = ViemTempoTransaction.TransactionSerializableTempo;
-export type TempoTransaction = (TempoTransactionRequest | TempoTransactionSerializable) & {
-  chainId?: TempoTransactionSerializable['chainId'];
-  feePayerSignature?: TempoTransactionSerializable['feePayerSignature'];
+export type TempoTransaction = (
+  | ViemTempoTransaction.TransactionRequestTempo
+  | ViemTempoTransaction.TransactionSerializableTempo
+) & {
+  chainId?: ViemTempoTransaction.TransactionSerializableTempo['chainId'];
+  feePayerSignature?: ViemTempoTransaction.TransactionSerializableTempo['feePayerSignature'];
   from?: Hex;
 };
 

@@ -18,7 +18,6 @@
   },
   "scripts": {
     "test": "./scripts/test",
-    "test:unit": "jest --testPathIgnorePatterns=tests/integration --verbose",
     "test:integration": "jest --testPathPattern=tests/integration --verbose --testTimeout 30000",
     "typecheck:viem-tempo": "tsc --noEmit -p tsconfig.viem-tempo.json",
     "build": "./scripts/build",

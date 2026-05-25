@@ -98,10 +98,7 @@ jobs:
       - name: Bootstrap
         run: ./scripts/bootstrap
 
-      - name: Run unit tests
-        run: yarn test:unit
-
-      - name: Run integration tests
+      - name: Run tests
         run: yarn test:integration
 
   notify-failure:

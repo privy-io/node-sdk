@@ -7,11 +7,28 @@ type RpcParams = {
   params?: unknown;
 };
 
+type TransactionRpcParams = RpcParams & {
+  method: 'eth_signTransaction' | 'eth_sendTransaction';
+  params: {
+    transaction: Record<string, unknown>;
+  };
+};
+
+declare const tempoTransactionRpcParamsBrand: unique symbol;
+
+export type TempoTransactionRpcParams = TransactionRpcParams & {
+  readonly [tempoTransactionRpcParamsBrand]: true;
+};
+
 function evmChainIdFromCaip2(caip2: string | undefined): number | undefined {
   const match = caip2?.match(/^eip155:(\d+)$/);
   if (!match) return undefined;
 
   return Number(match[1]);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 export function isTempoChainId(chainId: number | string | undefined): boolean {
@@ -23,19 +40,25 @@ export function isTempoChainId(chainId: number | string | undefined): boolean {
   return evmChainId !== undefined && TEMPO_CHAIN_IDS.has(evmChainId);
 }
 
-export function defaultTempoTransactionTypeForRpcParams<Params extends RpcParams>(input: Params): Params {
+export function isTempoTransactionRpcParams(input: RpcParams): input is TempoTransactionRpcParams {
   if (input.method !== 'eth_signTransaction' && input.method !== 'eth_sendTransaction') {
-    return input;
+    return false;
   }
 
-  const params = input.params as { transaction?: Record<string, unknown> } | undefined;
-  const transaction = params?.transaction;
-  if (!transaction || transaction['type'] !== undefined) {
-    return input;
-  }
+  if (!isRecord(input.params)) return false;
+
+  const transaction = input.params['transaction'];
+  if (!isRecord(transaction)) return false;
 
   const chainId = transaction['chain_id'] ?? input.caip2;
-  if (!isTempoChainId(chainId as number | string | undefined)) {
+  return isTempoChainId(chainId as number | string | undefined);
+}
+
+export function defaultTempoTransactionTypeForRpcParams<Params extends TempoTransactionRpcParams>(
+  input: Params,
+): Params {
+  const transaction = input.params.transaction;
+  if (transaction['type'] !== undefined) {
     return input;
   }
 
@@ -43,13 +66,13 @@ export function defaultTempoTransactionTypeForRpcParams<Params extends RpcParams
     return {
       ...input,
       params: {
-        ...params,
+        ...input.params,
         transaction: {
           ...transaction,
           type: TEMPO_TRANSACTION_TYPE,
         },
       },
-    };
+    } as Params;
   }
 
   const {
@@ -73,12 +96,12 @@ export function defaultTempoTransactionTypeForRpcParams<Params extends RpcParams
   return {
     ...input,
     params: {
-      ...params,
+      ...input.params,
       transaction: {
         ...tempoTransaction,
         type: TEMPO_TRANSACTION_TYPE,
         calls: [call],
       },
     },
-  };
+  } as Params;
 }

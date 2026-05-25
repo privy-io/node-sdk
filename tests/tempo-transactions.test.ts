@@ -1,6 +1,7 @@
 import { PrivyClient, type PrivyClientOptions } from '@privy-io/node';
 import {
   defaultTempoTransactionTypeForRpcParams,
+  isTempoTransactionRpcParams,
   TEMPO_TRANSACTION_TYPE,
 } from '@privy-io/node/public-api/services/tempo-transactions';
 import { createViemAccount, formatViemTransactionType } from '@privy-io/node/viem';
@@ -50,9 +51,17 @@ async function getRequestBody(captured: { request: Request | null }): Promise<Ca
   return (await captured.request!.clone().json()) as CapturedRpcBody;
 }
 
+function defaultTempoTransactionType(input: Parameters<typeof isTempoTransactionRpcParams>[0]) {
+  if (!isTempoTransactionRpcParams(input)) {
+    throw new Error('Expected Tempo transaction RPC params');
+  }
+
+  return defaultTempoTransactionTypeForRpcParams(input);
+}
+
 describe('Tempo transaction defaulting', () => {
   it('defaults plain transactions on Tempo chains to type 118 calls', () => {
-    const result = defaultTempoTransactionTypeForRpcParams({
+    const result = defaultTempoTransactionType({
       method: 'eth_sendTransaction',
       caip2: 'eip155:4217',
       params: {
@@ -75,7 +84,7 @@ describe('Tempo transaction defaulting', () => {
   });
 
   it('adds type 118 when calls are present without a type on Tempo chains', () => {
-    const result = defaultTempoTransactionTypeForRpcParams({
+    const result = defaultTempoTransactionType({
       method: 'eth_signTransaction',
       params: {
         transaction: {
@@ -97,8 +106,11 @@ describe('Tempo transaction defaulting', () => {
       method: 'eth_signTransaction' as const,
       params: { transaction: { chain_id: 1, to: ADDRESS, value: '0x1' } },
     };
+    const result =
+      isTempoTransactionRpcParams(input) ? defaultTempoTransactionTypeForRpcParams(input) : input;
 
-    expect(defaultTempoTransactionTypeForRpcParams(input)).toBe(input);
+    expect(isTempoTransactionRpcParams(input)).toBe(false);
+    expect(result).toBe(input);
   });
 
   it('prefers transaction chain ID over caip2 when determining Tempo defaulting', () => {
@@ -107,8 +119,11 @@ describe('Tempo transaction defaulting', () => {
       caip2: 'eip155:4217',
       params: { transaction: { chain_id: 1, to: ADDRESS, value: '0x1' } },
     };
+    const result =
+      isTempoTransactionRpcParams(input) ? defaultTempoTransactionTypeForRpcParams(input) : input;
 
-    expect(defaultTempoTransactionTypeForRpcParams(input)).toBe(input);
+    expect(isTempoTransactionRpcParams(input)).toBe(false);
+    expect(result).toBe(input);
   });
 
   it('does not override an explicit standard transaction type on Tempo chains', () => {
@@ -117,7 +132,7 @@ describe('Tempo transaction defaulting', () => {
       params: { transaction: { chain_id: 4217, type: 2 as const, to: ADDRESS, value: '0x1' } },
     };
 
-    expect(defaultTempoTransactionTypeForRpcParams(input)).toBe(input);
+    expect(defaultTempoTransactionType(input)).toBe(input);
   });
 
   it('does not synthesize calls when standard-only fields would be dropped', () => {
@@ -126,7 +141,7 @@ describe('Tempo transaction defaulting', () => {
       params: { transaction: { chain_id: 4217, to: ADDRESS, gas_price: '0x1' } },
     };
 
-    expect(defaultTempoTransactionTypeForRpcParams(input)).toBe(input);
+    expect(defaultTempoTransactionType(input)).toBe(input);
   });
 
   it('normalizes Wallet RPC bodies before sending requests', async () => {

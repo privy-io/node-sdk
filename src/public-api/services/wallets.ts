@@ -24,7 +24,7 @@ import { PrivyClient } from '../PrivyClient';
 import { PrivyEarnService } from './earn';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
-import { defaultTempoTransactionTypeForRpcParams } from './tempo-transactions';
+import { defaultTempoTransactionTypeForRpcParams, isTempoTransactionRpcParams } from './tempo-transactions';
 import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
 
 export class PrivyWalletsService extends Wallets {
@@ -76,7 +76,8 @@ export class PrivyWalletsService extends Wallets {
       ...params
     }: PrivyWalletsService.RpcInput,
   ): Promise<WalletRpcResponse> {
-    const rpcParams = defaultTempoTransactionTypeForRpcParams(params);
+    const rpcParams =
+      isTempoTransactionRpcParams(params) ? defaultTempoTransactionTypeForRpcParams(params) : params;
     const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
       idempotencyKey,

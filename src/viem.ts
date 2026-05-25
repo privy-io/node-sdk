@@ -15,6 +15,7 @@ import type { EthereumSignTransactionRpcInputParams } from './resources';
 
 // Runtime formatting accepts normal viem transactions plus viem/tempo transactions.
 type StandardViemTransaction = ViemSignTransactionParameters['transaction'];
+type StandardViemTransactionType = StandardViemTransaction['type'];
 type SupportedViemTransaction = StandardViemTransaction | TempoTransaction;
 type SupportedViemTransactionType = SupportedViemTransaction['type'];
 
@@ -133,7 +134,10 @@ export function createViemAccount(
  * @param type viem transaction type
  * @returns 0 | 1 | 2 | 118
  */
-export const formatViemTransactionType = (type: SupportedViemTransactionType) => {
+export function formatViemTransactionType(type: 'tempo'): 118;
+export function formatViemTransactionType(type: StandardViemTransactionType): 0 | 1 | 2;
+export function formatViemTransactionType(type: SupportedViemTransactionType): 0 | 1 | 2 | 118;
+export function formatViemTransactionType(type: SupportedViemTransactionType) {
   if (type === 'legacy') {
     return 0 as const;
   } else if (type === 'eip2930') {
@@ -146,7 +150,7 @@ export const formatViemTransactionType = (type: SupportedViemTransactionType) =>
   } else {
     throw new PrivyAPIError('EIP4844 and EIP7702 transaction types are not yet supported.');
   }
-};
+}
 
 /**
  * Formats viem quantities, which are represented as `bigint | undefined` to our internal
@@ -194,13 +198,10 @@ export const formatViemTransaction = (
     return formatTempoTransaction(tx);
   }
 
-  const standardTx = tx as StandardViemTransaction;
-  const type = formatViemTransactionType(standardTx.type);
-  if (type === 118)
-    throw new PrivyAPIError('Tempo transactions must be formatted by the Tempo transaction path.');
+  const standardTx: StandardViemTransaction = tx;
 
   return {
-    type,
+    type: formatViemTransactionType(standardTx.type),
     ...(standardTx.to ? { to: standardTx.to } : {}),
     ...(standardTx.nonce ? { nonce: standardTx.nonce } : {}),
     ...(standardTx.chainId ? { chain_id: standardTx.chainId } : {}),

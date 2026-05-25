@@ -28,6 +28,7 @@ type TempoTransaction = (TempoTransactionRequest | TempoTransactionSerializable)
 };
 type SupportedViemTransaction = StandardViemTransaction | TempoTransaction;
 type SupportedViemTransactionType = SupportedViemTransaction['type'];
+type PrivyTempoTransaction = Extract<EthereumSignTransactionRpcInputParams['transaction'], { type: 118 }>;
 type SupportedSerializeTransactionFn = SerializeTransactionFn<
   TransactionSerializable | TempoTransactionSerializable
 >;
@@ -234,7 +235,7 @@ const formatViemPersonalSignMessage = (message: SignMessageParameters['message']
 export const formatViemTransaction = (
   tx: SupportedViemTransaction,
 ): EthereumSignTransactionRpcInputParams['transaction'] => {
-  if (tx.type === 'tempo' || isTempoTransaction(tx)) {
+  if (isTempoTransaction(tx)) {
     const tempoTx = tx as TempoTransaction;
     const calls = (
       tempoTx.calls?.length ?
@@ -255,43 +256,35 @@ export const formatViemTransaction = (
       };
     });
 
-    const formattedTransaction = {
+    const formattedTransaction: PrivyTempoTransaction = {
       type: 118,
       calls,
-      ...(isDefined(tempoTx.chainId) ? { chain_id: tempoTx.chainId } : {}),
-      ...(isDefined(tempoTx.nonce) ? { nonce: tempoTx.nonce } : {}),
-      ...(isDefined(tempoTx.nonceKey) && tempoTx.nonceKey !== 'random' ?
-        { nonce_key: formatViemQuantityLike(tempoTx.nonceKey) }
-      : {}),
-      ...(isDefined(tempoTx.validAfter) ? { valid_after: formatViemQuantityLike(tempoTx.validAfter) } : {}),
-      ...(isDefined(tempoTx.validBefore) ?
-        { valid_before: formatViemQuantityLike(tempoTx.validBefore) }
-      : {}),
-      ...(isDefined(tempoTx.feeToken) ? { fee_token: formatTempoFeeToken(tempoTx.feeToken) } : {}),
-      ...(isDefined(tempoTx.from) ? { from: tempoTx.from } : {}),
-      ...(isDefined(tempoTx.gas) ? { gas_limit: formatViemQuantityLike(tempoTx.gas) } : {}),
-      ...(isDefined(tempoTx.maxFeePerGas) ?
-        { max_fee_per_gas: formatViemQuantityLike(tempoTx.maxFeePerGas) }
-      : {}),
-      ...(isDefined(tempoTx.maxPriorityFeePerGas) ?
-        { max_priority_fee_per_gas: formatViemQuantityLike(tempoTx.maxPriorityFeePerGas) }
-      : {}),
-      ...(tempoTx.accessList ?
-        {
-          access_list: tempoTx.accessList.map((entry) => ({
-            address: entry.address,
-            storage_keys: [...entry.storageKeys],
-          })),
-        }
-      : {}),
-      ...(tempoTx.feePayerSignature ?
-        {
-          fee_payer_signature: formatTempoSignature(tempoTx.feePayerSignature),
-        }
-      : {}),
     };
 
-    return formattedTransaction as EthereumSignTransactionRpcInputParams['transaction'];
+    if (isDefined(tempoTx.chainId)) formattedTransaction.chain_id = tempoTx.chainId;
+    if (isDefined(tempoTx.nonce)) formattedTransaction.nonce = tempoTx.nonce;
+    if (isDefined(tempoTx.nonceKey) && tempoTx.nonceKey !== 'random')
+      formattedTransaction.nonce_key = formatViemQuantityLike(tempoTx.nonceKey);
+    if (isDefined(tempoTx.validAfter))
+      formattedTransaction.valid_after = formatViemQuantityLike(tempoTx.validAfter);
+    if (isDefined(tempoTx.validBefore))
+      formattedTransaction.valid_before = formatViemQuantityLike(tempoTx.validBefore);
+    if (isDefined(tempoTx.feeToken)) formattedTransaction.fee_token = formatTempoFeeToken(tempoTx.feeToken);
+    if (isDefined(tempoTx.from)) formattedTransaction.from = tempoTx.from;
+    if (isDefined(tempoTx.gas)) formattedTransaction.gas_limit = formatViemQuantityLike(tempoTx.gas);
+    if (isDefined(tempoTx.maxFeePerGas))
+      formattedTransaction.max_fee_per_gas = formatViemQuantityLike(tempoTx.maxFeePerGas);
+    if (isDefined(tempoTx.maxPriorityFeePerGas))
+      formattedTransaction.max_priority_fee_per_gas = formatViemQuantityLike(tempoTx.maxPriorityFeePerGas);
+    if (tempoTx.accessList)
+      formattedTransaction.access_list = tempoTx.accessList.map((entry) => ({
+        address: entry.address,
+        storage_keys: [...entry.storageKeys],
+      }));
+    if (tempoTx.feePayerSignature)
+      formattedTransaction.fee_payer_signature = formatTempoSignature(tempoTx.feePayerSignature);
+
+    return formattedTransaction;
   }
 
   const standardTx = tx as StandardViemTransaction;

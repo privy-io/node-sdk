@@ -24,10 +24,6 @@ const formatViemQuantityLike = (input: bigint | number): Hex | number => {
   return input;
 };
 
-const isDefined = <T>(input: T | undefined | null): input is T => {
-  return typeof input !== 'undefined' && input !== null;
-};
-
 /** Delegates Tempo transaction detection to viem's Tempo transaction helpers. */
 export function isTempoTransaction(tx: object, account?: TempoAccountFingerprint): tx is TempoTransaction {
   const embeddedAccount = (tx as { account?: TempoAccountFingerprint }).account;
@@ -58,8 +54,8 @@ export function formatTempoTransaction(tempoTx: TempoTransaction): PrivyTempoTra
 
     return {
       to: call.to,
-      ...(isDefined(call.data) ? { data: call.data } : {}),
-      ...(isDefined(call.value) ? { value: formatViemQuantityLike(call.value) } : {}),
+      ...(typeof call.data !== 'undefined' ? { data: call.data } : {}),
+      ...(typeof call.value !== 'undefined' ? { value: formatViemQuantityLike(call.value) } : {}),
     };
   });
 
@@ -68,20 +64,22 @@ export function formatTempoTransaction(tempoTx: TempoTransaction): PrivyTempoTra
     calls,
   };
 
-  if (isDefined(tempoTx.chainId)) formattedTransaction.chain_id = tempoTx.chainId;
-  if (isDefined(tempoTx.nonce)) formattedTransaction.nonce = tempoTx.nonce;
-  if (isDefined(tempoTx.nonceKey) && tempoTx.nonceKey !== 'random')
+  if (typeof tempoTx.chainId !== 'undefined') formattedTransaction.chain_id = tempoTx.chainId;
+  if (typeof tempoTx.nonce !== 'undefined') formattedTransaction.nonce = tempoTx.nonce;
+  if (typeof tempoTx.nonceKey !== 'undefined' && tempoTx.nonceKey !== 'random')
     formattedTransaction.nonce_key = formatViemQuantityLike(tempoTx.nonceKey);
-  if (isDefined(tempoTx.validAfter))
+  if (typeof tempoTx.validAfter !== 'undefined')
     formattedTransaction.valid_after = formatViemQuantityLike(tempoTx.validAfter);
-  if (isDefined(tempoTx.validBefore))
+  if (typeof tempoTx.validBefore !== 'undefined')
     formattedTransaction.valid_before = formatViemQuantityLike(tempoTx.validBefore);
-  if (isDefined(tempoTx.feeToken)) formattedTransaction.fee_token = formatTempoFeeToken(tempoTx.feeToken);
-  if (isDefined(tempoTx.from)) formattedTransaction.from = tempoTx.from;
-  if (isDefined(tempoTx.gas)) formattedTransaction.gas_limit = formatViemQuantityLike(tempoTx.gas);
-  if (isDefined(tempoTx.maxFeePerGas))
+  if (typeof tempoTx.feeToken !== 'undefined')
+    formattedTransaction.fee_token = formatTempoFeeToken(tempoTx.feeToken);
+  if (typeof tempoTx.from !== 'undefined') formattedTransaction.from = tempoTx.from;
+  if (typeof tempoTx.gas !== 'undefined')
+    formattedTransaction.gas_limit = formatViemQuantityLike(tempoTx.gas);
+  if (typeof tempoTx.maxFeePerGas !== 'undefined')
     formattedTransaction.max_fee_per_gas = formatViemQuantityLike(tempoTx.maxFeePerGas);
-  if (isDefined(tempoTx.maxPriorityFeePerGas))
+  if (typeof tempoTx.maxPriorityFeePerGas !== 'undefined')
     formattedTransaction.max_priority_fee_per_gas = formatViemQuantityLike(tempoTx.maxPriorityFeePerGas);
   if (tempoTx.accessList)
     formattedTransaction.access_list = tempoTx.accessList.map((entry) => ({

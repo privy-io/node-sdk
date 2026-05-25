@@ -9,6 +9,7 @@ import type { Account as ViemTempoAccount } from 'viem/tempo';
 import { toHex } from 'viem/utils';
 import { PrivyAPIError } from './core/error';
 import { formatTempoTransaction, isTempoTransaction, type TempoTransaction } from './internal/viem-tempo';
+import { formatViemQuantity } from './internal/utils/viem';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
 import type { EthereumSignTransactionRpcInputParams } from './resources';
@@ -151,17 +152,6 @@ export function formatViemTransactionType(type: SupportedViemTransactionType) {
     throw new PrivyAPIError('EIP4844 and EIP7702 transaction types are not yet supported.');
   }
 }
-
-/**
- * Formats viem quantities, which are represented as `bigint | undefined` to our internal
- * `Quantity` type. This is done by converting bigints into a hexstring.
- *
- * @param input {bigint | undefined} bigint quantity to format
- * @returns input as hex string
- */
-const formatViemQuantity = (input: bigint): Hex => {
-  return `0x${input.toString(16)}` as Hex;
-};
 
 /**
  * Formats a `message` input to viem's `signMessage` function to the format needed for our wallet API.

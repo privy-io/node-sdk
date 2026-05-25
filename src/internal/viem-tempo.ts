@@ -2,6 +2,7 @@ import type { Hex, Signature } from 'viem';
 import { Transaction as ViemTempoTransaction } from 'viem/tempo';
 import { PrivyAPIError } from '../core/error';
 import type { EthereumSignTransactionRpcInputParams } from '../resources';
+import { formatViemQuantityLike } from './utils/viem';
 
 export type TempoTransactionRequest = ViemTempoTransaction.TransactionRequestTempo;
 export type TempoTransactionSerializable = ViemTempoTransaction.TransactionSerializableTempo;
@@ -14,15 +15,6 @@ export type TempoTransaction = (TempoTransactionRequest | TempoTransactionSerial
 type PrivyTempoTransaction = Extract<EthereumSignTransactionRpcInputParams['transaction'], { type: 118 }>;
 
 type TempoAccountFingerprint = { keyType?: string; source?: string };
-
-const formatViemQuantity = (input: bigint): Hex => {
-  return `0x${input.toString(16)}` as Hex;
-};
-
-const formatViemQuantityLike = (input: bigint | number): Hex | number => {
-  if (typeof input === 'bigint') return formatViemQuantity(input);
-  return input;
-};
 
 /** Delegates Tempo transaction detection to viem's Tempo transaction helpers. */
 export function isTempoTransaction(tx: object, account?: TempoAccountFingerprint): tx is TempoTransaction {

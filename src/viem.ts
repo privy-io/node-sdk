@@ -1,11 +1,4 @@
-import type {
-  Hex,
-  SerializeTransactionFn,
-  Signature,
-  TransactionSerialized,
-  TransactionSerializable,
-} from 'viem';
-import { Transaction as ViemTempoTransaction } from 'viem/tempo';
+import type { Hex, SerializeTransactionFn, TransactionSerialized, TransactionSerializable } from 'viem';
 import {
   type LocalAccount,
   type SignMessageParameters,
@@ -14,21 +7,19 @@ import {
 } from 'viem/accounts';
 import { toHex } from 'viem/utils';
 import { PrivyAPIError } from './core/error';
+import {
+  formatTempoTransaction,
+  isTempoTransaction,
+  type TempoTransaction,
+  type TempoTransactionSerializable,
+} from './internal/viem-tempo';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
 import type { EthereumSignTransactionRpcInputParams } from './resources';
 
 type StandardViemTransaction = ViemSignTransactionParameters['transaction'];
-type TempoTransactionRequest = ViemTempoTransaction.TransactionRequestTempo;
-type TempoTransactionSerializable = ViemTempoTransaction.TransactionSerializableTempo;
-type TempoTransaction = (TempoTransactionRequest | TempoTransactionSerializable) & {
-  chainId?: TempoTransactionSerializable['chainId'];
-  feePayerSignature?: TempoTransactionSerializable['feePayerSignature'];
-  from?: Hex;
-};
 type SupportedViemTransaction = StandardViemTransaction | TempoTransaction;
 type SupportedViemTransactionType = SupportedViemTransaction['type'];
-type PrivyTempoTransaction = Extract<EthereumSignTransactionRpcInputParams['transaction'], { type: 118 }>;
 type SupportedSerializeTransactionFn = SerializeTransactionFn<
   TransactionSerializable | TempoTransactionSerializable
 >;
@@ -178,32 +169,6 @@ const formatViemQuantity = (input: bigint): Hex => {
   return `0x${input.toString(16)}` as Hex;
 };
 
-const formatViemQuantityLike = (input: bigint | number): Hex | number => {
-  if (typeof input === 'bigint') return formatViemQuantity(input);
-  return input;
-};
-
-const isDefined = <T>(input: T | undefined | null): input is T => {
-  return typeof input !== 'undefined' && input !== null;
-};
-
-type TempoAccountFingerprint = { keyType?: string; source?: string };
-
-/** Delegates Tempo transaction detection to viem's Tempo transaction helpers. */
-export function isTempoTransaction(tx: SupportedViemTransaction, account?: TempoAccountFingerprint): boolean {
-  const embeddedAccount = (tx as SupportedViemTransaction & { account?: TempoAccountFingerprint }).account;
-  const effectiveAccount = account ?? embeddedAccount;
-
-  // viem@2.45 detects non-secp256k1 Tempo accounts via `keyType`, but not access-key
-  // accounts via `source`. Keep this narrow SDK-specific extension until viem covers it.
-  if (effectiveAccount?.source === 'accessKey') return true;
-
-  return ViemTempoTransaction.isTempo({
-    ...(tx as Record<string, unknown>),
-    ...(effectiveAccount ? { account: effectiveAccount } : {}),
-  });
-}
-
 /**
  * Formats a `message` input to viem's `signMessage` function to the format needed for our wallet API.
  *
@@ -236,55 +201,7 @@ export const formatViemTransaction = (
   tx: SupportedViemTransaction,
 ): EthereumSignTransactionRpcInputParams['transaction'] => {
   if (isTempoTransaction(tx)) {
-    const tempoTx = tx as TempoTransaction;
-    const calls = (
-      tempoTx.calls?.length ?
-        tempoTx.calls
-      : [
-          {
-            to: tempoTx.to,
-            data: tempoTx.data,
-            value: tempoTx.value,
-          },
-        ]).map((call) => {
-      if (!call.to) throw new PrivyAPIError('Tempo transaction calls require a `to` address.');
-
-      return {
-        to: call.to,
-        ...(isDefined(call.data) ? { data: call.data } : {}),
-        ...(isDefined(call.value) ? { value: formatViemQuantityLike(call.value) } : {}),
-      };
-    });
-
-    const formattedTransaction: PrivyTempoTransaction = {
-      type: 118,
-      calls,
-    };
-
-    if (isDefined(tempoTx.chainId)) formattedTransaction.chain_id = tempoTx.chainId;
-    if (isDefined(tempoTx.nonce)) formattedTransaction.nonce = tempoTx.nonce;
-    if (isDefined(tempoTx.nonceKey) && tempoTx.nonceKey !== 'random')
-      formattedTransaction.nonce_key = formatViemQuantityLike(tempoTx.nonceKey);
-    if (isDefined(tempoTx.validAfter))
-      formattedTransaction.valid_after = formatViemQuantityLike(tempoTx.validAfter);
-    if (isDefined(tempoTx.validBefore))
-      formattedTransaction.valid_before = formatViemQuantityLike(tempoTx.validBefore);
-    if (isDefined(tempoTx.feeToken)) formattedTransaction.fee_token = formatTempoFeeToken(tempoTx.feeToken);
-    if (isDefined(tempoTx.from)) formattedTransaction.from = tempoTx.from;
-    if (isDefined(tempoTx.gas)) formattedTransaction.gas_limit = formatViemQuantityLike(tempoTx.gas);
-    if (isDefined(tempoTx.maxFeePerGas))
-      formattedTransaction.max_fee_per_gas = formatViemQuantityLike(tempoTx.maxFeePerGas);
-    if (isDefined(tempoTx.maxPriorityFeePerGas))
-      formattedTransaction.max_priority_fee_per_gas = formatViemQuantityLike(tempoTx.maxPriorityFeePerGas);
-    if (tempoTx.accessList)
-      formattedTransaction.access_list = tempoTx.accessList.map((entry) => ({
-        address: entry.address,
-        storage_keys: [...entry.storageKeys],
-      }));
-    if (tempoTx.feePayerSignature)
-      formattedTransaction.fee_payer_signature = formatTempoSignature(tempoTx.feePayerSignature);
-
-    return formattedTransaction;
+    return formatTempoTransaction(tx);
   }
 
   const standardTx = tx as StandardViemTransaction;
@@ -305,29 +222,6 @@ export const formatViemTransaction = (
     ...(standardTx.maxPriorityFeePerGas ?
       { max_priority_fee_per_gas: formatViemQuantity(standardTx.maxPriorityFeePerGas) }
     : {}),
-  };
-};
-
-const formatTempoFeeToken = (feeToken: Hex | bigint): Hex => {
-  if (typeof feeToken === 'string') return feeToken;
-
-  return `0x20c0${feeToken.toString(16).padStart(36, '0')}` as Hex;
-};
-
-const formatTempoSignature = (signature: Signature): { r: Hex; s: Hex; y_parity: 0 | 1 } => {
-  const yParity =
-    typeof signature.yParity !== 'undefined' ? signature.yParity
-    : typeof signature.v !== 'undefined' ? Number(signature.v) - 27
-    : undefined;
-
-  if (yParity !== 0 && yParity !== 1) {
-    throw new PrivyAPIError('Tempo signatures require a valid yParity value.');
-  }
-
-  return {
-    r: signature.r,
-    s: signature.s,
-    y_parity: yParity as 0 | 1,
   };
 };
 

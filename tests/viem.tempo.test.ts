@@ -1,11 +1,7 @@
 import type { Hex } from 'viem';
 import type { PrivyClient } from '../src/public-api/PrivyClient';
-import {
-  createViemAccount,
-  formatViemTransaction,
-  formatViemTransactionType,
-  isTempoTransaction,
-} from '../src/viem';
+import { isTempoTransaction } from '../src/internal/viem-tempo';
+import { createViemAccount, formatViemTransaction, formatViemTransactionType } from '../src/viem';
 
 const ADDRESS = '0x0000000000000000000000000000000000000001' as const;
 const RECIPIENT = '0x0000000000000000000000000000000000000002' as const;

@@ -1,38 +1,28 @@
-import type { Hex, SerializeTransactionFn, TransactionSerialized, TransactionSerializable } from 'viem';
+import type { Hex } from 'viem';
 import {
   type LocalAccount,
   type SignMessageParameters,
   type SignTransactionParameters as ViemSignTransactionParameters,
   toAccount,
 } from 'viem/accounts';
+import type { Account as ViemTempoAccount } from 'viem/tempo';
 import { toHex } from 'viem/utils';
 import { PrivyAPIError } from './core/error';
-import {
-  formatTempoTransaction,
-  isTempoTransaction,
-  type TempoTransaction,
-  type TempoTransactionSerializable,
-} from './internal/viem-tempo';
+import { formatTempoTransaction, isTempoTransaction, type TempoTransaction } from './internal/viem-tempo';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
 import type { EthereumSignTransactionRpcInputParams } from './resources';
 
+// Runtime formatting accepts normal viem transactions plus viem/tempo transactions.
 type StandardViemTransaction = ViemSignTransactionParameters['transaction'];
 type SupportedViemTransaction = StandardViemTransaction | TempoTransaction;
 type SupportedViemTransactionType = SupportedViemTransaction['type'];
-type SupportedSerializeTransactionFn = SerializeTransactionFn<
-  TransactionSerializable | TempoTransactionSerializable
->;
 
+// Keep LocalAccount compatibility and add viem's Tempo-capable signTransaction signature.
 type PrivySignTransaction = LocalAccount['signTransaction'] &
-  (<
-    serializer extends SupportedSerializeTransactionFn = SupportedSerializeTransactionFn,
-    transaction extends SupportedViemTransaction = Parameters<serializer>[0] & SupportedViemTransaction,
-  >(
-    transaction: transaction,
-    options?: { serializer?: serializer | undefined },
-  ) => Promise<TransactionSerialized | `0x76${string}`>);
+  ViemTempoAccount.Account_base['signTransaction'];
 
+// Privy accounts are viem LocalAccounts with a wider signer for Tempo wallet clients.
 export type PrivyViemAccount = Omit<LocalAccount, 'signTransaction'> & {
   signTransaction: PrivySignTransaction;
 };

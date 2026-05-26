@@ -28,7 +28,7 @@ import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './type
 import {
   defaultTempoTransactionTypeForRpcParams,
   isTempoTransactionRpcParams,
-} from './utils/tempo-transactions';
+} from './utils/tempo';
 
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;

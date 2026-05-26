@@ -3,7 +3,7 @@ import {
   defaultTempoTransactionTypeForRpcParams,
   isTempoTransactionRpcParams,
   TEMPO_TRANSACTION_TYPE,
-} from '@privy-io/node/public-api/services/utils/tempo-transactions';
+} from '@privy-io/node/public-api/services/utils/tempo';
 import { createViemAccount, formatViemTransactionType } from '@privy-io/node/viem';
 import type { Hex } from 'viem';
 

@@ -20,7 +20,7 @@ import { Prettify, WithExpiry } from './types';
 import {
   defaultTempoTransactionTypeForRpcParams,
   isTempoTransactionRpcParams,
-} from './utils/tempo-transactions';
+} from './utils/tempo';
 
 export class PrivyIntentsService extends Intents {
   private privyClient: PrivyClient;

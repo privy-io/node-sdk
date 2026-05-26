@@ -1,8 +1,8 @@
 import { createWalletClient, http } from 'viem';
 import { tempo } from 'viem/chains';
 import { tempoActions } from 'viem/tempo';
-import type { PrivyClient } from '../src/public-api/PrivyClient';
-import { createViemAccount } from '../src/viem';
+import type { PrivyClient } from '../../src/public-api/PrivyClient';
+import { createViemAccount } from '../../src/viem';
 
 declare const privy: PrivyClient;
 

@@ -19,7 +19,7 @@
   "scripts": {
     "test": "./scripts/test",
     "test:integration": "jest --testPathPattern=tests/integration --verbose --testTimeout 30000",
-    "typecheck:viem-tempo": "tsc --noEmit -p tsconfig.viem-tempo.json",
+    "typecheck:viem-tempo": "tsc --noEmit -p typechecking/viem-tempo/tsconfig.json",
     "build": "./scripts/build",
     "prepublishOnly": "echo 'to publish, run yarn build && (cd dist; yarn publish)' && exit 1",
     "format": "./scripts/format",

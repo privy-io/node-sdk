@@ -112,41 +112,6 @@ export interface BridgeEurFiatVirtualAccountDepositInstructions {
 }
 
 /**
- * The response for getting a native onramp provider customer.
- */
-export interface BridgeFiatCustomerResponse {
-  has_accepted_terms: boolean;
-
-  provider: 'bridge';
-
-  /**
-   * Status of the KYC verification process.
-   */
-  status:
-    | 'not_found'
-    | 'active'
-    | 'awaiting_questionnaire'
-    | 'awaiting_ubo'
-    | 'incomplete'
-    | 'not_started'
-    | 'offboarded'
-    | 'paused'
-    | 'rejected'
-    | 'under_review';
-
-  kyc_url?: string;
-
-  rejection_reasons?: Array<BridgeFiatRejectionReason>;
-}
-
-/**
- * A rejection reason for a customer KYC verification.
- */
-export interface BridgeFiatRejectionReason {
-  reason: string;
-}
-
-/**
  * The deposit instructions for a virtual account.
  */
 export type BridgeFiatVirtualAccountDepositInstructions =
@@ -237,34 +202,6 @@ export interface BridgeMxnFiatVirtualAccountDepositInstructions {
 export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
 
 /**
- * The response for getting a native onramp provider customer.
- */
-export interface BridgeSandboxFiatCustomerResponse {
-  has_accepted_terms: boolean;
-
-  provider: 'bridge-sandbox';
-
-  /**
-   * Status of the KYC verification process.
-   */
-  status:
-    | 'not_found'
-    | 'active'
-    | 'awaiting_questionnaire'
-    | 'awaiting_ubo'
-    | 'incomplete'
-    | 'not_started'
-    | 'offboarded'
-    | 'paused'
-    | 'rejected'
-    | 'under_review';
-
-  kyc_url?: string;
-
-  rejection_reasons?: Array<BridgeFiatRejectionReason>;
-}
-
-/**
  * The request input for creating virtual account.
  */
 export interface BridgeSandboxFiatVirtualAccountRequest {
@@ -313,31 +250,6 @@ export interface BridgeUsdFiatVirtualAccountDepositInstructions {
 
   payment_rails: Array<'ach_push' | 'wire'>;
 }
-
-/**
- * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
- * Ethereum mainnet, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
- */
-export type Caip2ChainID = string;
-
-/**
- * The request input for creating (or updating) a native onramp provider customer.
- */
-export interface CreateOrUpdateFiatCustomerRequestInput {
-  has_accepted_terms: boolean;
-
-  /**
-   * Valid set of onramp providers
-   */
-  provider: OnrampProvider;
-
-  kyc_redirect_url?: string;
-}
-
-/**
- * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
- */
-export type CryptoCurrencyCode = string;
 
 /**
  * The request body for authenticating with a custom JWT.
@@ -689,114 +601,6 @@ export interface FarcasterV2InitResponseBody {
 }
 
 /**
- * A positive decimal amount as a string (e.g. "100", "50.25", "0.001").
- */
-export type FiatAmount = string;
-
-/**
- * ISO 4217 fiat currency code. Three uppercase ASCII letters.
- */
-export type FiatCurrencyCode = string;
-
-/**
- * The response for getting a native onramp provider customer.
- */
-export type FiatCustomerResponse = BridgeFiatCustomerResponse | BridgeSandboxFiatCustomerResponse;
-
-/**
- * Destination cryptocurrency details for a fiat onramp quote request.
- */
-export interface FiatOnrampDestination {
-  address: string;
-
-  /**
-   * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
-   */
-  asset: CryptoCurrencyCode;
-
-  /**
-   * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
-   * Ethereum mainnet, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
-   */
-  chain: Caip2ChainID;
-}
-
-/**
- * Whether to use the sandbox or production environment for fiat onramp.
- */
-export type FiatOnrampEnvironment = 'sandbox' | 'production';
-
-/**
- * The fiat onramp provider to use.
- */
-export type FiatOnrampProvider =
-  | 'meld'
-  | 'meld-sandbox'
-  | 'moonpay'
-  | 'moonpay-sandbox'
-  | 'coinbase'
-  | 'coinbase-sandbox';
-
-/**
- * An error from a specific fiat onramp provider when fetching quotes.
- */
-export interface FiatOnrampProviderError {
-  error: string;
-
-  /**
-   * The fiat onramp provider to use.
-   */
-  provider: FiatOnrampProvider;
-}
-
-/**
- * A single fiat onramp quote from a provider.
- */
-export interface FiatOnrampQuote {
-  payment_method: string;
-
-  /**
-   * The fiat onramp provider to use.
-   */
-  provider: FiatOnrampProvider;
-
-  destination_currency_code?: string | null;
-
-  source_amount?: number | null;
-
-  source_currency_code?: string | null;
-
-  sub_provider?: string | null;
-}
-
-/**
- * Source currency details for a fiat onramp quote request.
- */
-export interface FiatOnrampSource {
-  /**
-   * A positive decimal amount as a string (e.g. "100", "50.25", "0.001").
-   */
-  amount: FiatAmount;
-
-  /**
-   * ISO 4217 fiat currency code. Three uppercase ASCII letters.
-   */
-  asset: FiatCurrencyCode;
-}
-
-/**
- * Normalized fiat onramp transaction status.
- */
-export type FiatOnrampTransactionStatus =
-  | 'pending'
-  | 'processing'
-  | 'completed'
-  | 'failed'
-  | 'cancelled'
-  | 'refunded'
-  | 'unknown';
-
-/**
  * The request input for creating virtual account.
  */
 export type FiatVirtualAccountRequest =
@@ -809,110 +613,6 @@ export type FiatVirtualAccountRequest =
 export type FiatVirtualAccountResponse =
   | BridgeFiatVirtualAccountResponse
   | BridgeSandboxFiatVirtualAccountResponse;
-
-/**
- * The request input for getting a native onramp provider customer.
- */
-export interface GetFiatCustomerRequestInput {
-  /**
-   * Valid set of onramp providers
-   */
-  provider: OnrampProvider;
-
-  kyc_redirect_url?: string;
-}
-
-/**
- * The request input for getting fiat onramp quotes.
- */
-export interface GetFiatOnrampQuotesInput {
-  /**
-   * Destination cryptocurrency details for a fiat onramp quote request.
-   */
-  destination: FiatOnrampDestination;
-
-  /**
-   * Whether to use the sandbox or production environment for fiat onramp.
-   */
-  environment: FiatOnrampEnvironment;
-
-  /**
-   * Source currency details for a fiat onramp quote request.
-   */
-  source: FiatOnrampSource;
-}
-
-/**
- * The response containing fiat onramp quotes.
- */
-export interface GetFiatOnrampQuotesResponse {
-  quotes: Array<FiatOnrampQuote>;
-
-  provider_errors?: Array<FiatOnrampProviderError>;
-}
-
-/**
- * The request input for checking a fiat onramp session status.
- */
-export interface GetFiatOnrampTransactionStatusInput {
-  /**
-   * The fiat onramp provider to use.
-   */
-  provider: FiatOnrampProvider;
-
-  session_id: string;
-}
-
-/**
- * The response containing the fiat onramp session status.
- */
-export interface GetFiatOnrampTransactionStatusResponse {
-  raw_status: string;
-
-  session_id: string;
-
-  /**
-   * Normalized fiat onramp transaction status.
-   */
-  status: FiatOnrampTransactionStatus;
-
-  transaction_id?: string;
-}
-
-/**
- * The request input for getting a fiat onramp provider session URL.
- */
-export interface GetFiatOnrampURLInput {
-  /**
-   * Destination cryptocurrency details for a fiat onramp quote request.
-   */
-  destination: FiatOnrampDestination;
-
-  payment_method: string;
-
-  /**
-   * The fiat onramp provider to use.
-   */
-  provider: FiatOnrampProvider;
-
-  /**
-   * Source currency details for a fiat onramp quote request.
-   */
-  source: FiatOnrampSource;
-
-  redirect_url?: string;
-
-  sub_provider?: string;
-}
-
-/**
- * The response containing a fiat onramp provider session URL.
- */
-export interface GetFiatOnrampURLResponse {
-  session_id: string;
-
-  url: string;
-}
 
 /**
  * The request body for authenticating a guest.
@@ -2093,8 +1793,6 @@ export declare namespace ClientAuth {
     type BridgeBrlFiatVirtualAccountDepositInstructions as BridgeBrlFiatVirtualAccountDepositInstructions,
     type BridgeDestinationAsset as BridgeDestinationAsset,
     type BridgeEurFiatVirtualAccountDepositInstructions as BridgeEurFiatVirtualAccountDepositInstructions,
-    type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
-    type BridgeFiatRejectionReason as BridgeFiatRejectionReason,
     type BridgeFiatVirtualAccountDepositInstructions as BridgeFiatVirtualAccountDepositInstructions,
     type BridgeFiatVirtualAccountDestination as BridgeFiatVirtualAccountDestination,
     type BridgeFiatVirtualAccountRequest as BridgeFiatVirtualAccountRequest,
@@ -2103,14 +1801,10 @@ export declare namespace ClientAuth {
     type BridgeGbpFiatVirtualAccountDepositInstructions as BridgeGbpFiatVirtualAccountDepositInstructions,
     type BridgeMxnFiatVirtualAccountDepositInstructions as BridgeMxnFiatVirtualAccountDepositInstructions,
     type BridgeOnrampProvider as BridgeOnrampProvider,
-    type BridgeSandboxFiatCustomerResponse as BridgeSandboxFiatCustomerResponse,
     type BridgeSandboxFiatVirtualAccountRequest as BridgeSandboxFiatVirtualAccountRequest,
     type BridgeSandboxFiatVirtualAccountResponse as BridgeSandboxFiatVirtualAccountResponse,
     type BridgeSourceAsset as BridgeSourceAsset,
     type BridgeUsdFiatVirtualAccountDepositInstructions as BridgeUsdFiatVirtualAccountDepositInstructions,
-    type Caip2ChainID as Caip2ChainID,
-    type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,
-    type CryptoCurrencyCode as CryptoCurrencyCode,
     type CustomJwtAuthenticateRequestBody as CustomJwtAuthenticateRequestBody,
     type CustomJwtLinkRequestBody as CustomJwtLinkRequestBody,
     type CustomOAuthProviderID as CustomOAuthProviderID,
@@ -2142,25 +1836,8 @@ export declare namespace ClientAuth {
     type FarcasterV2InitRequestBody as FarcasterV2InitRequestBody,
     type FarcasterV2InitResponse as FarcasterV2InitResponse,
     type FarcasterV2InitResponseBody as FarcasterV2InitResponseBody,
-    type FiatAmount as FiatAmount,
-    type FiatCurrencyCode as FiatCurrencyCode,
-    type FiatCustomerResponse as FiatCustomerResponse,
-    type FiatOnrampDestination as FiatOnrampDestination,
-    type FiatOnrampEnvironment as FiatOnrampEnvironment,
-    type FiatOnrampProvider as FiatOnrampProvider,
-    type FiatOnrampProviderError as FiatOnrampProviderError,
-    type FiatOnrampQuote as FiatOnrampQuote,
-    type FiatOnrampSource as FiatOnrampSource,
-    type FiatOnrampTransactionStatus as FiatOnrampTransactionStatus,
     type FiatVirtualAccountRequest as FiatVirtualAccountRequest,
     type FiatVirtualAccountResponse as FiatVirtualAccountResponse,
-    type GetFiatCustomerRequestInput as GetFiatCustomerRequestInput,
-    type GetFiatOnrampQuotesInput as GetFiatOnrampQuotesInput,
-    type GetFiatOnrampQuotesResponse as GetFiatOnrampQuotesResponse,
-    type GetFiatOnrampTransactionStatusInput as GetFiatOnrampTransactionStatusInput,
-    type GetFiatOnrampTransactionStatusResponse as GetFiatOnrampTransactionStatusResponse,
-    type GetFiatOnrampURLInput as GetFiatOnrampURLInput,
-    type GetFiatOnrampURLResponse as GetFiatOnrampURLResponse,
     type GuestAuthenticateRequestBody as GuestAuthenticateRequestBody,
     type LinkJwtInput as LinkJwtInput,
     type MfaPasskeyEnrollmentRequestBody as MfaPasskeyEnrollmentRequestBody,

@@ -17,10 +17,7 @@ import {
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
 import { Prettify, WithExpiry } from './types';
-import {
-  defaultTempoTransactionTypeForRpcParams,
-  isTempoTransactionRpcParams,
-} from './utils/tempo';
+import { defaultTempoTransactionTypeForRpcParams, isTempoTransactionRpcParams } from './utils/tempo';
 
 export class PrivyIntentsService extends Intents {
   private privyClient: PrivyClient;

@@ -139,13 +139,15 @@ export function createViemAccount(
  * @returns 0 | 1 | 2 | 118 | undefined
  */
 export function formatViemTransactionType(type: 'tempo', chainId?: StandardViemTransaction['chainId']): 118;
+export function formatViemTransactionType(type: StandardViemTransactionType): 0 | 1 | 2;
 export function formatViemTransactionType(
   type: StandardViemTransactionType,
-  chainId?: StandardViemTransaction['chainId'],
+  chainId: StandardViemTransaction['chainId'],
 ): 0 | 1 | 2 | undefined;
+export function formatViemTransactionType(type: SupportedViemTransactionType): 0 | 1 | 2 | 118;
 export function formatViemTransactionType(
   type: SupportedViemTransactionType,
-  chainId?: StandardViemTransaction['chainId'],
+  chainId: StandardViemTransaction['chainId'],
 ): 0 | 1 | 2 | 118 | undefined;
 export function formatViemTransactionType(
   type: SupportedViemTransactionType,

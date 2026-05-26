@@ -25,10 +25,7 @@ import { PrivyEarnService } from './earn';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
 import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
-import {
-  defaultTempoTransactionTypeForRpcParams,
-  isTempoTransactionRpcParams,
-} from './utils/tempo';
+import { defaultTempoTransactionTypeForRpcParams, isTempoTransactionRpcParams } from './utils/tempo';
 
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;

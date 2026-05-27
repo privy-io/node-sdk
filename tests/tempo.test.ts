@@ -2,6 +2,7 @@ import { PrivyClient, type PrivyClientOptions } from '@privy-io/node';
 import {
   defaultTempoTransactionTypeForRpcParams,
   isTempoTransactionRpcParams,
+  shouldDefaultTempoTransactionType,
   TEMPO_TRANSACTION_TYPE,
 } from '@privy-io/node/public-api/services/utils/tempo';
 import { createViemAccount, formatViemTransactionType } from '@privy-io/node/viem';
@@ -56,13 +57,17 @@ function defaultTempoTransactionType(input: Parameters<typeof isTempoTransaction
     throw new Error('Expected Tempo transaction RPC params');
   }
 
+  if (!shouldDefaultTempoTransactionType(input)) {
+    return input;
+  }
+
   return defaultTempoTransactionTypeForRpcParams(input);
 }
 
 describe('Tempo transaction defaulting', () => {
   it('leaves plain transactions on Tempo chains unchanged', () => {
     const input = {
-      method: 'eth_sendTransaction',
+      method: 'eth_sendTransaction' as const,
       caip2: 'eip155:4217',
       params: {
         transaction: {
@@ -75,11 +80,13 @@ describe('Tempo transaction defaulting', () => {
       },
     };
 
+    if (!isTempoTransactionRpcParams(input)) throw new Error('Expected Tempo transaction RPC params');
+    expect(shouldDefaultTempoTransactionType(input)).toBe(false);
     expect(defaultTempoTransactionType(input)).toBe(input);
   });
 
   it('defaults Tempo-specific transactions on Tempo chains to type 118 calls', () => {
-    const result = defaultTempoTransactionType({
+    const input = {
       method: 'eth_sendTransaction',
       params: {
         transaction: {
@@ -92,7 +99,12 @@ describe('Tempo transaction defaulting', () => {
           max_fee_per_gas: '0x2',
         },
       },
-    });
+    };
+
+    if (!isTempoTransactionRpcParams(input)) throw new Error('Expected Tempo transaction RPC params');
+    expect(shouldDefaultTempoTransactionType(input)).toBe(true);
+
+    const result = defaultTempoTransactionType(input);
 
     expect(result.params.transaction).toEqual({
       type: TEMPO_TRANSACTION_TYPE,
@@ -105,7 +117,7 @@ describe('Tempo transaction defaulting', () => {
   });
 
   it('adds type 118 when calls are present without a type on Tempo chains', () => {
-    const result = defaultTempoTransactionType({
+    const input = {
       method: 'eth_signTransaction',
       params: {
         transaction: {
@@ -113,7 +125,12 @@ describe('Tempo transaction defaulting', () => {
           calls: [{ to: ADDRESS, value: '0x1' }],
         },
       },
-    });
+    };
+
+    if (!isTempoTransactionRpcParams(input)) throw new Error('Expected Tempo transaction RPC params');
+    expect(shouldDefaultTempoTransactionType(input)).toBe(true);
+
+    const result = defaultTempoTransactionType(input);
 
     expect(result.params.transaction).toEqual({
       type: TEMPO_TRANSACTION_TYPE,
@@ -153,6 +170,8 @@ describe('Tempo transaction defaulting', () => {
       params: { transaction: { chain_id: 4217, type: 2 as const, to: ADDRESS, value: '0x1' } },
     };
 
+    if (!isTempoTransactionRpcParams(input)) throw new Error('Expected Tempo transaction RPC params');
+    expect(shouldDefaultTempoTransactionType(input)).toBe(false);
     expect(defaultTempoTransactionType(input)).toBe(input);
   });
 
@@ -162,6 +181,8 @@ describe('Tempo transaction defaulting', () => {
       params: { transaction: { chain_id: 4217, to: ADDRESS, gas_price: '0x1' } },
     };
 
+    if (!isTempoTransactionRpcParams(input)) throw new Error('Expected Tempo transaction RPC params');
+    expect(shouldDefaultTempoTransactionType(input)).toBe(false);
     expect(defaultTempoTransactionType(input)).toBe(input);
   });
 

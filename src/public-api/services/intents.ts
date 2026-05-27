@@ -18,7 +18,11 @@ import {
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
 import { Prettify, WithExpiry } from './types';
-import { defaultTempoTransactionTypeForRpcParams, isTempoTransactionRpcParams } from './utils/tempo';
+import {
+  defaultTempoTransactionTypeForRpcParams,
+  isTempoTransactionRpcParams,
+  shouldDefaultTempoTransactionType,
+} from './utils/tempo';
 
 export class PrivyIntentsService extends Intents {
   private privyClient: PrivyClient;
@@ -33,8 +37,11 @@ export class PrivyIntentsService extends Intents {
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.RpcInput,
   ): APIPromise<RpcIntentResponse> {
     const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
-    const rpcParams =
-      isTempoTransactionRpcParams(params) ? defaultTempoTransactionTypeForRpcParams(params) : params;
+    let rpcParams = params;
+    if (isTempoTransactionRpcParams(params) && shouldDefaultTempoTransactionType(params)) {
+      rpcParams = defaultTempoTransactionTypeForRpcParams(params);
+    }
+
     return super.rpc(walletId, {
       ...rpcParams,
       ...(expiry != null && { 'privy-request-expiry': String(expiry) }),

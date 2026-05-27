@@ -49,7 +49,7 @@ export function defaultTempoTransactionTypeForRpcParams<Params extends TempoTran
   input: Params,
 ): Params {
   const transaction = input.params.transaction;
-  if (transaction['type'] !== undefined) {
+  if (!shouldDefaultTempoTransactionType(input)) {
     return input;
   }
 
@@ -66,21 +66,7 @@ export function defaultTempoTransactionTypeForRpcParams<Params extends TempoTran
     } as Params;
   }
 
-  if (!hasTempoTransactionFields(transaction)) {
-    return input;
-  }
-
-  const {
-    to,
-    data,
-    value,
-    gas_price: gasPrice,
-    authorization_list: authorizationList,
-    ...tempoTransaction
-  } = transaction;
-  if (to === undefined || gasPrice !== undefined || authorizationList !== undefined) {
-    return input;
-  }
+  const { to, data, value, ...tempoTransaction } = transaction;
 
   const call = {
     to,
@@ -99,6 +85,24 @@ export function defaultTempoTransactionTypeForRpcParams<Params extends TempoTran
       },
     },
   } as Params;
+}
+
+export function shouldDefaultTempoTransactionType(input: TempoTransactionRpcParams): boolean {
+  const transaction = input.params.transaction;
+
+  return (
+    transaction['type'] === undefined &&
+    (Array.isArray(transaction['calls']) || canSynthesizeTempoCalls(transaction))
+  );
+}
+
+function canSynthesizeTempoCalls(transaction: Record<string, unknown>): boolean {
+  return (
+    hasTempoTransactionFields(transaction) &&
+    transaction['to'] !== undefined &&
+    transaction['gas_price'] === undefined &&
+    transaction['authorization_list'] === undefined
+  );
 }
 
 function hasTempoTransactionFields(transaction: Record<string, unknown>): boolean {

@@ -565,6 +565,9 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">IntentExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedCustomOrderCancelledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedCustomOrderExecutedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedCustomOrderExecutionFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteCancelledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>
@@ -965,6 +968,8 @@ Types:
 - <code><a href="./src/resources/wallet-actions.ts">EvmUserOperationWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EvmWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnAsset</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EarnClaimedRewardsQuery</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EarnClaimedRewardsResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnDepositActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnDepositRequestBody</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveClaimActionResponse</a></code>

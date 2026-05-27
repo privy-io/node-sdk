@@ -107,6 +107,27 @@ export interface EarnAsset {
 }
 
 /**
+ * Query parameters for fetching claimed incentive rewards.
+ */
+export interface EarnClaimedRewardsQuery {
+  /**
+   * Chain name to fetch claimed rewards for (e.g. "base", "ethereum").
+   */
+  chain: string;
+}
+
+/**
+ * All incentive rewards claimed by a wallet, aggregated by token.
+ */
+export interface EarnClaimedRewardsResponse {
+  /**
+   * Rewards claimed through Privy, aggregated by token across all successful
+   * incentive claims.
+   */
+  claimed_rewards: Array<EarnIncetiveClaimRewardEntry>;
+}
+
+/**
  * Response for an earn deposit action.
  */
 export interface EarnDepositActionResponse {
@@ -795,6 +816,8 @@ export declare namespace WalletActions {
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
     type EvmWalletActionStepStatus as EvmWalletActionStepStatus,
     type EarnAsset as EarnAsset,
+    type EarnClaimedRewardsQuery as EarnClaimedRewardsQuery,
+    type EarnClaimedRewardsResponse as EarnClaimedRewardsResponse,
     type EarnDepositActionResponse as EarnDepositActionResponse,
     type EarnDepositRequestBody as EarnDepositRequestBody,
     type EarnIncentiveClaimActionResponse as EarnIncentiveClaimActionResponse,

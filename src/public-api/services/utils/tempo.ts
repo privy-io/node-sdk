@@ -3,6 +3,15 @@ import { isObj } from '../../../internal/utils/values';
 
 export const TEMPO_TRANSACTION_TYPE = 118 as const;
 
+const TEMPO_TRANSACTION_FIELDS = [
+  'aa_authorization_list',
+  'fee_payer_signature',
+  'fee_token',
+  'nonce_key',
+  'valid_after',
+  'valid_before',
+] as const;
+
 type RpcParams = {
   caip2?: string;
   method: string;
@@ -57,6 +66,10 @@ export function defaultTempoTransactionTypeForRpcParams<Params extends TempoTran
     } as Params;
   }
 
+  if (!hasTempoTransactionFields(transaction)) {
+    return input;
+  }
+
   const {
     to,
     data,
@@ -86,4 +99,8 @@ export function defaultTempoTransactionTypeForRpcParams<Params extends TempoTran
       },
     },
   } as Params;
+}
+
+function hasTempoTransactionFields(transaction: Record<string, unknown>): boolean {
+  return TEMPO_TRANSACTION_FIELDS.some((field) => transaction[field] !== undefined);
 }

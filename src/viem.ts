@@ -8,7 +8,6 @@ import {
 import type { Account as ViemTempoAccount } from 'viem/tempo';
 import { toHex } from 'viem/utils';
 import { PrivyAPIError } from './core/error';
-import { isTempoChainId } from './internal/chains';
 import { formatTempoTransaction, isTempoTransaction, type TempoTransaction } from './internal/viem-tempo';
 import { formatViemQuantity } from './internal/utils/viem';
 import type { AuthorizationContext } from './lib/authorization';
@@ -131,37 +130,23 @@ export function createViemAccount(
  * - 'legacy' -> 0
  * - 'eip2930' -> 1
  * - 'eip1559' -> 2. This is the default EVM transaction type.
- * - undefined -> 2, unless the transaction is on a Tempo chain.
+ * - undefined -> 2. This is the default EVM transaction type.
  * - 'tempo' -> 118
  * - Other transaction types, including EIP-4844 and EIP-7702, are not supported yet.
  * @param type viem transaction type
- * @param chainId viem transaction chain ID
- * @returns 0 | 1 | 2 | 118 | undefined
+ * @returns 0 | 1 | 2 | 118
  */
-export function formatViemTransactionType(type: 'tempo', chainId?: StandardViemTransaction['chainId']): 118;
+export function formatViemTransactionType(type: 'tempo'): 118;
 export function formatViemTransactionType(type: StandardViemTransactionType): 0 | 1 | 2;
-export function formatViemTransactionType(
-  type: StandardViemTransactionType,
-  chainId: StandardViemTransaction['chainId'],
-): 0 | 1 | 2 | undefined;
 export function formatViemTransactionType(type: SupportedViemTransactionType): 0 | 1 | 2 | 118;
-export function formatViemTransactionType(
-  type: SupportedViemTransactionType,
-  chainId: StandardViemTransaction['chainId'],
-): 0 | 1 | 2 | 118 | undefined;
-export function formatViemTransactionType(
-  type: SupportedViemTransactionType,
-  chainId?: StandardViemTransaction['chainId'],
-) {
+export function formatViemTransactionType(type: SupportedViemTransactionType) {
   if (type === 'legacy') {
     return 0 as const;
   } else if (type === 'eip2930') {
     return 1 as const;
-  } else if (type === 'eip1559') {
+  } else if (type === 'eip1559' || typeof type === 'undefined') {
     // Type 2 (EIP-1559) is the default transaction type
     return 2 as const;
-  } else if (typeof type === 'undefined') {
-    return isTempoChainId(chainId) ? undefined : (2 as const);
   } else if (type === 'tempo') {
     return 118 as const;
   } else {
@@ -205,10 +190,8 @@ export const formatViemTransaction = (
   }
 
   const standardTx: StandardViemTransaction = tx;
-  const type = formatViemTransactionType(standardTx.type, standardTx.chainId);
-
   return {
-    ...(typeof type !== 'undefined' ? { type } : {}),
+    type: formatViemTransactionType(standardTx.type),
     ...(standardTx.to ? { to: standardTx.to } : {}),
     ...(standardTx.nonce ? { nonce: standardTx.nonce } : {}),
     ...(standardTx.chainId ? { chain_id: standardTx.chainId } : {}),

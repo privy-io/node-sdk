@@ -60,8 +60,8 @@ function defaultTempoTransactionType(input: Parameters<typeof isTempoTransaction
 }
 
 describe('Tempo transaction defaulting', () => {
-  it('defaults plain transactions on Tempo chains to type 118 calls', () => {
-    const result = defaultTempoTransactionType({
+  it('leaves plain transactions on Tempo chains unchanged', () => {
+    const input = {
       method: 'eth_sendTransaction',
       caip2: 'eip155:4217',
       params: {
@@ -73,11 +73,32 @@ describe('Tempo transaction defaulting', () => {
           max_fee_per_gas: '0x2',
         },
       },
+    };
+
+    expect(defaultTempoTransactionType(input)).toBe(input);
+  });
+
+  it('defaults Tempo-specific transactions on Tempo chains to type 118 calls', () => {
+    const result = defaultTempoTransactionType({
+      method: 'eth_sendTransaction',
+      params: {
+        transaction: {
+          chain_id: 4217,
+          to: ADDRESS,
+          data: '0x1234',
+          value: '0x1',
+          nonce_key: '0x2',
+          gas_limit: '0x5208',
+          max_fee_per_gas: '0x2',
+        },
+      },
     });
 
     expect(result.params.transaction).toEqual({
       type: TEMPO_TRANSACTION_TYPE,
+      chain_id: 4217,
       calls: [{ to: ADDRESS, data: '0x1234', value: '0x1' }],
+      nonce_key: '0x2',
       gas_limit: '0x5208',
       max_fee_per_gas: '0x2',
     });
@@ -144,7 +165,7 @@ describe('Tempo transaction defaulting', () => {
     expect(defaultTempoTransactionType(input)).toBe(input);
   });
 
-  it('normalizes Wallet RPC bodies before sending requests', async () => {
+  it('leaves plain Wallet RPC bodies unchanged before sending requests', async () => {
     const { client, captured } = makeClient({
       method: 'eth_sendTransaction',
       data: { caip2: 'eip155:4217', hash: '0x1234' },
@@ -165,8 +186,42 @@ describe('Tempo transaction defaulting', () => {
       caip2: 'eip155:4217',
       params: {
         transaction: {
+          to: ADDRESS,
+          data: '0x1234',
+          value: '0x1',
+        },
+      },
+    });
+    expect(body.params.transaction).not.toHaveProperty('type');
+    expect(body.params.transaction).not.toHaveProperty('calls');
+  });
+
+  it('normalizes Tempo-shaped Wallet RPC bodies before sending requests', async () => {
+    const { client, captured } = makeClient({
+      method: 'eth_sendTransaction',
+      data: { caip2: 'eip155:4217', hash: '0x1234' },
+    });
+
+    await client
+      .wallets()
+      .ethereum()
+      .sendTransaction('wallet-id', {
+        caip2: 'eip155:4217',
+        params: {
+          transaction: { to: ADDRESS, data: '0x1234', value: '0x1', nonce_key: '0x2' },
+        },
+      });
+
+    const body = await getRequestBody(captured);
+    expect(body).toMatchObject({
+      method: 'eth_sendTransaction',
+      chain_type: 'ethereum',
+      caip2: 'eip155:4217',
+      params: {
+        transaction: {
           type: TEMPO_TRANSACTION_TYPE,
           calls: [{ to: ADDRESS, data: '0x1234', value: '0x1' }],
+          nonce_key: '0x2',
         },
       },
     });
@@ -183,6 +238,7 @@ describe('Tempo transaction defaulting', () => {
           chain_id: 4217,
           to: ADDRESS,
           value: '0x1',
+          valid_before: '0x3',
         },
       },
     });
@@ -195,20 +251,17 @@ describe('Tempo transaction defaulting', () => {
           type: TEMPO_TRANSACTION_TYPE,
           chain_id: 4217,
           calls: [{ to: ADDRESS, value: '0x1' }],
+          valid_before: '0x3',
         },
       },
     });
   });
 
-  it('leaves omitted viem transaction type unset on Tempo chains', () => {
-    expect(formatViemTransactionType(undefined, 4217)).toBeUndefined();
+  it('defaults omitted viem transaction type to EIP-1559', () => {
+    expect(formatViemTransactionType(undefined)).toBe(2);
   });
 
-  it('defaults omitted viem transaction type to EIP-1559 outside Tempo chains', () => {
-    expect(formatViemTransactionType(undefined, 1)).toBe(2);
-  });
-
-  it('leaves viem transaction type defaultable on Tempo chains', async () => {
+  it('keeps plain viem transactions on Tempo chains as EIP-1559', async () => {
     const { client, captured } = makeClient();
     const account = createViemAccount(client, {
       walletId: 'wallet-id',
@@ -224,9 +277,11 @@ describe('Tempo transaction defaulting', () => {
 
     const body = await getRequestBody(captured);
     expect(body.params.transaction).toEqual({
-      type: TEMPO_TRANSACTION_TYPE,
+      type: 2,
       chain_id: 4217,
-      calls: [{ to: ADDRESS, data: '0x', value: '0x1' }],
+      to: ADDRESS,
+      data: '0x',
+      value: '0x1',
     });
   });
 

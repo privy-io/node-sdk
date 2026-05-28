@@ -77,16 +77,18 @@ export type Caip2ChainID = string;
 /**
  * Input for creating a Link auth intent to initiate Stripe onramp authentication.
  */
-export interface CreateLinkAuthIntentInput {}
+export interface CreateLinkAuthIntentInput {
+  email?: string;
+}
 
 /**
  * The created Link auth intent.
  */
 export interface CreateLinkAuthIntentResponse {
   /**
-   * The Link auth intent ID used to initiate authentication.
+   * Auth intent created. Pass id to authenticate().
    */
-  id: string;
+  data: LinkAuthIntentCreated | LinkAuthIntentNoAccount;
 }
 
 /**
@@ -107,8 +109,6 @@ export interface CreateOrUpdateFiatCustomerRequestInput {
  * Input for creating a Stripe onramp session.
  */
 export interface CreateStripeOnrampSessionInput {
-  auth_intent_id: string;
-
   /**
    * Whether to use the sandbox or production environment for fiat onramp.
    */
@@ -135,6 +135,22 @@ export interface CreateStripeOnrampSessionResponse {
  * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
  */
 export type CryptoCurrencyCode = string;
+
+/**
+ * Input for exchanging a Link auth intent for OAuth tokens.
+ */
+export interface ExchangeStripeTokensInput {
+  auth_intent_id: string;
+
+  crypto_customer_id: string;
+}
+
+/**
+ * Confirmation that tokens were exchanged and stored.
+ */
+export interface ExchangeStripeTokensResponse {
+  crypto_customer_id: string;
+}
 
 /**
  * A positive decimal amount as a string (e.g. "100", "50.25", "0.001").
@@ -371,21 +387,32 @@ export interface GetFiatOnrampURLInput {
 export type GetFiatOnrampURLResponse = FiatOnrampURLSessionResponse | FiatOnrampStripeSDKSessionResponse;
 
 /**
- * Query params for retrieving a Stripe crypto customer.
+ * Stripe onramp session status and customer verification info.
  */
-export interface GetStripeCryptoCustomerInput {
-  id: string;
-
-  auth_intent_id: string;
+export interface GetStripeCryptoCustomerResponse {
+  /**
+   * Active onramp session with customer verifications.
+   */
+  data: StripeCryptoCustomerActive | StripeCryptoCustomerExpired | StripeCryptoCustomerNone;
 }
 
 /**
- * A Stripe CryptoCustomer with verification status.
+ * Auth intent created. Pass id to authenticate().
  */
-export interface GetStripeCryptoCustomerResponse {
+export interface LinkAuthIntentCreated {
+  /**
+   * The Link auth intent ID.
+   */
   id: string;
 
-  verifications?: Array<StripeVerification>;
+  status: 'created';
+}
+
+/**
+ * No Link account for this email. Call registerLinkUser() then retry.
+ */
+export interface LinkAuthIntentNoAccount {
+  status: 'no_account';
 }
 
 /**
@@ -428,13 +455,6 @@ export interface OnrampSessionParams {
 }
 
 /**
- * Input for refreshing an onramp session quote.
- */
-export interface RefreshStripeQuoteInput {
-  auth_intent_id: string;
-}
-
-/**
  * Refreshed quote with new expiry.
  */
 export interface RefreshStripeQuoteResponse {
@@ -456,10 +476,30 @@ export interface StripeConsumerWallet {
 }
 
 /**
- * Input for confirming an onramp session checkout.
+ * Active onramp session with customer verifications.
  */
-export interface StripeOnrampCheckoutInput {
-  auth_intent_id: string;
+export interface StripeCryptoCustomerActive {
+  crypto_customer_id: string;
+
+  status: 'active';
+
+  verifications: Array<StripeVerification>;
+}
+
+/**
+ * Expired onramp session. Token refresh failed, re-authentication required.
+ */
+export interface StripeCryptoCustomerExpired {
+  crypto_customer_id: string;
+
+  status: 'expired';
+}
+
+/**
+ * No onramp session. User must authenticate via Link.
+ */
+export interface StripeCryptoCustomerNone {
+  status: 'none';
 }
 
 /**
@@ -473,6 +513,11 @@ export interface StripeOnrampCheckoutResponse {
    */
   transaction_details?: StripeTransactionDetails;
 }
+
+/**
+ * The state of the user's Stripe onramp session.
+ */
+export type StripeOnrampSessionStatus = 'active' | 'expired' | 'none';
 
 /**
  * A saved payment token.
@@ -518,6 +563,8 @@ export declare namespace Onramps {
     type CreateStripeOnrampSessionInput as CreateStripeOnrampSessionInput,
     type CreateStripeOnrampSessionResponse as CreateStripeOnrampSessionResponse,
     type CryptoCurrencyCode as CryptoCurrencyCode,
+    type ExchangeStripeTokensInput as ExchangeStripeTokensInput,
+    type ExchangeStripeTokensResponse as ExchangeStripeTokensResponse,
     type FiatAmount as FiatAmount,
     type FiatCurrencyCode as FiatCurrencyCode,
     type FiatCustomerResponse as FiatCustomerResponse,
@@ -537,16 +584,19 @@ export declare namespace Onramps {
     type GetFiatOnrampTransactionStatusResponse as GetFiatOnrampTransactionStatusResponse,
     type GetFiatOnrampURLInput as GetFiatOnrampURLInput,
     type GetFiatOnrampURLResponse as GetFiatOnrampURLResponse,
-    type GetStripeCryptoCustomerInput as GetStripeCryptoCustomerInput,
     type GetStripeCryptoCustomerResponse as GetStripeCryptoCustomerResponse,
+    type LinkAuthIntentCreated as LinkAuthIntentCreated,
+    type LinkAuthIntentNoAccount as LinkAuthIntentNoAccount,
     type ListStripeConsumerWalletsResponse as ListStripeConsumerWalletsResponse,
     type ListStripePaymentTokensResponse as ListStripePaymentTokensResponse,
     type OnrampSessionParams as OnrampSessionParams,
-    type RefreshStripeQuoteInput as RefreshStripeQuoteInput,
     type RefreshStripeQuoteResponse as RefreshStripeQuoteResponse,
     type StripeConsumerWallet as StripeConsumerWallet,
-    type StripeOnrampCheckoutInput as StripeOnrampCheckoutInput,
+    type StripeCryptoCustomerActive as StripeCryptoCustomerActive,
+    type StripeCryptoCustomerExpired as StripeCryptoCustomerExpired,
+    type StripeCryptoCustomerNone as StripeCryptoCustomerNone,
     type StripeOnrampCheckoutResponse as StripeOnrampCheckoutResponse,
+    type StripeOnrampSessionStatus as StripeOnrampSessionStatus,
     type StripePaymentToken as StripePaymentToken,
     type StripeQuote as StripeQuote,
     type StripeTransactionDetails as StripeTransactionDetails,

@@ -107,27 +107,6 @@ export interface EarnAsset {
 }
 
 /**
- * Query parameters for fetching claimed incentive rewards.
- */
-export interface EarnClaimedRewardsQuery {
-  /**
-   * Chain name to fetch claimed rewards for (e.g. "base", "ethereum").
-   */
-  chain: string;
-}
-
-/**
- * All incentive rewards claimed by a wallet, aggregated by token.
- */
-export interface EarnClaimedRewardsResponse {
-  /**
-   * Rewards claimed through Privy, aggregated by token across all successful
-   * incentive claims.
-   */
-  claimed_rewards: Array<EarnIncetiveClaimRewardEntry>;
-}
-
-/**
  * Response for an earn deposit action.
  */
 export interface EarnDepositActionResponse {
@@ -292,6 +271,57 @@ export interface EarnIncentiveClaimRequestBody {
    * with their respective testnets.
    */
   chain: string;
+}
+
+/**
+ * A reward token with claimed and unclaimed amounts.
+ */
+export interface EarnIncentiveRewardEntry {
+  /**
+   * Total amount already claimed, in smallest unit.
+   */
+  amount_claimed: string;
+
+  /**
+   * Amount available to claim on-chain but not yet claimed, in smallest unit.
+   */
+  amount_unclaimed: string;
+
+  /**
+   * Address of the reward token.
+   */
+  token_address: string;
+
+  /**
+   * Symbol of the reward token (e.g. "MORPHO").
+   */
+  token_symbol: string;
+
+  /**
+   * Number of decimals for the reward token.
+   */
+  token_decimals?: number;
+}
+
+/**
+ * Query parameters for fetching incentive rewards.
+ */
+export interface EarnIncentiveRewardsQuery {
+  /**
+   * Chain name to fetch rewards for (e.g. "base", "ethereum").
+   */
+  chain: string;
+}
+
+/**
+ * All incentive rewards for a wallet, with claimed and unclaimed amounts per
+ * token.
+ */
+export interface EarnIncentiveRewardsResponse {
+  /**
+   * Reward tokens with their claimed and unclaimed amounts.
+   */
+  rewards: Array<EarnIncentiveRewardEntry>;
 }
 
 /**
@@ -821,12 +851,13 @@ export declare namespace WalletActions {
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
     type EvmWalletActionStepStatus as EvmWalletActionStepStatus,
     type EarnAsset as EarnAsset,
-    type EarnClaimedRewardsQuery as EarnClaimedRewardsQuery,
-    type EarnClaimedRewardsResponse as EarnClaimedRewardsResponse,
     type EarnDepositActionResponse as EarnDepositActionResponse,
     type EarnDepositRequestBody as EarnDepositRequestBody,
     type EarnIncentiveClaimActionResponse as EarnIncentiveClaimActionResponse,
     type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
+    type EarnIncentiveRewardEntry as EarnIncentiveRewardEntry,
+    type EarnIncentiveRewardsQuery as EarnIncentiveRewardsQuery,
+    type EarnIncentiveRewardsResponse as EarnIncentiveRewardsResponse,
     type EarnIncetiveClaimRewardEntry as EarnIncetiveClaimRewardEntry,
     type EarnWithdrawActionResponse as EarnWithdrawActionResponse,
     type EarnWithdrawRequestBody as EarnWithdrawRequestBody,

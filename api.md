@@ -978,12 +978,13 @@ Types:
 - <code><a href="./src/resources/wallet-actions.ts">EvmUserOperationWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EvmWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnAsset</a></code>
-- <code><a href="./src/resources/wallet-actions.ts">EarnClaimedRewardsQuery</a></code>
-- <code><a href="./src/resources/wallet-actions.ts">EarnClaimedRewardsResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnDepositActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnDepositRequestBody</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveClaimActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveClaimRequestBody</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveRewardEntry</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveRewardsQuery</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveRewardsResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnIncetiveClaimRewardEntry</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnWithdrawActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnWithdrawRequestBody</a></code>

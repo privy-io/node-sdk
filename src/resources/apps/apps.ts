@@ -433,28 +433,6 @@ export interface GasSpendResponseBody {
 }
 
 /**
- * Gas sponsorship configuration for an app.
- */
-export interface GasSponsorshipConfiguration {
-  configured_networks: Array<Caip2>;
-
-  require_app_secret: boolean;
-
-  sponsorship_enabled: boolean;
-}
-
-/**
- * Input for configuring gas sponsorship settings for an app.
- */
-export interface GasSponsorshipConfigurationInput {
-  configured_networks?: Array<Caip2>;
-
-  require_app_secret?: boolean;
-
-  sponsorship_enabled?: boolean;
-}
-
-/**
  * Allowlist invite input for a phone number.
  */
 export interface PhoneInviteInput {
@@ -555,8 +533,6 @@ export declare namespace Apps {
     type GasSpendCurrency as GasSpendCurrency,
     type GasSpendRequestBody as GasSpendRequestBody,
     type GasSpendResponseBody as GasSpendResponseBody,
-    type GasSponsorshipConfiguration as GasSponsorshipConfiguration,
-    type GasSponsorshipConfigurationInput as GasSponsorshipConfigurationInput,
     type PhoneInviteInput as PhoneInviteInput,
     type TelegramAuthConfigSchema as TelegramAuthConfigSchema,
     type TestAccount as TestAccount,

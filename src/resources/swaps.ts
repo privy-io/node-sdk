@@ -15,10 +15,16 @@ export interface SwapDestination {
   asset_address: string;
 
   /**
-   * CAIP-2 chain identifier for the destination. Must match source chain —
-   * cross-chain swaps are not yet supported. Defaults to source chain if omitted.
+   * CAIP-2 chain identifier for the destination. Defaults to source chain if
+   * omitted. Specify a different chain for cross-chain swaps.
    */
   caip2?: string;
+
+  /**
+   * Address to receive the output tokens. Defaults to the swapping wallet address.
+   * Required when swapping between different chain types (e.g. EVM to Solana).
+   */
+  destination_address?: string;
 }
 
 /**
@@ -31,10 +37,18 @@ export interface SwapQuoteDestination {
   asset_address: string;
 
   /**
-   * CAIP-2 chain identifier for the destination. Must match source chain —
-   * cross-chain swaps are not yet supported. Defaults to source chain if omitted.
+   * CAIP-2 chain identifier for the destination. Defaults to source chain if
+   * omitted. Will result in a cross-chain swap if source and destination chains
+   * differ.
    */
   caip2?: string;
+
+  /**
+   * Address to receive the output tokens. Defaults to the swapping wallet address.
+   * Required when swapping between chains with different address types (e.g. EVM to
+   * Solana).
+   */
+  destination_address?: string;
 }
 
 /**
@@ -60,6 +74,11 @@ export interface SwapQuoteRequestBody {
    * Whether the amount refers to the input token or output token.
    */
   amount_type?: WalletsAPI.AmountType;
+
+  /**
+   * Total fees assessed on a transfer, in BPS
+   */
+  fee_configuration?: WalletsAPI.FeeConfiguration;
 
   /**
    * Maximum slippage tolerance in basis points (e.g., 50 for 0.5%). If omitted,
@@ -106,6 +125,21 @@ export interface SwapQuoteResponse {
    * Token address being bought.
    */
   output_token: string;
+
+  /**
+   * Destination chain CAIP-2 identifier for cross-chain swaps.
+   */
+  destination_caip2?: string;
+
+  /**
+   * Estimated fees in USD.
+   */
+  estimated_fees?: Array<WalletsAPI.FeeLineItem>;
+
+  /**
+   * Quote expiry as Unix timestamp (seconds). Present for cross-chain quotes.
+   */
+  expires_at?: number;
 }
 
 /**
@@ -131,6 +165,11 @@ export interface SwapRequestBody {
    * Whether the amount refers to the input token or output token.
    */
   amount_type?: WalletsAPI.AmountType;
+
+  /**
+   * Total fees assessed on a transfer, in BPS
+   */
+  fee_configuration?: WalletsAPI.FeeConfiguration;
 
   /**
    * Maximum slippage tolerance in basis points (e.g., 50 for 0.5%).

@@ -129,7 +129,8 @@ export function createViemAccount(
  * Formats a viem transaction type to the JSON-RPC transaction type:
  * - 'legacy' -> 0
  * - 'eip2930' -> 1
- * - 'eip1559' or undefined -> 2. This is the default EVM transaction type.
+ * - 'eip1559' -> 2. This is the default EVM transaction type.
+ * - undefined -> 2. This is the default EVM transaction type.
  * - 'tempo' -> 118
  * - Other transaction types, including EIP-4844 and EIP-7702, are not supported yet.
  * @param type viem transaction type
@@ -143,7 +144,7 @@ export function formatViemTransactionType(type: SupportedViemTransactionType) {
     return 0 as const;
   } else if (type === 'eip2930') {
     return 1 as const;
-  } else if (type == 'eip1559' || typeof type === 'undefined') {
+  } else if (type === 'eip1559' || typeof type === 'undefined') {
     // Type 2 (EIP-1559) is the default transaction type
     return 2 as const;
   } else if (type === 'tempo') {
@@ -189,7 +190,6 @@ export const formatViemTransaction = (
   }
 
   const standardTx: StandardViemTransaction = tx;
-
   return {
     type: formatViemTransactionType(standardTx.type),
     ...(standardTx.to ? { to: standardTx.to } : {}),

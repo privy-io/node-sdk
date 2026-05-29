@@ -1,6 +1,6 @@
 {
   "name": "@privy-io/node",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "description": "The official TypeScript library for the Privy API",
   "author": "Privy API <support@privy.io>",
   "types": "dist/index.d.ts",
@@ -19,6 +19,7 @@
   "scripts": {
     "test": "./scripts/test",
     "test:integration": "jest --testPathPattern=tests/integration --verbose --testTimeout 30000",
+    "typecheck:viem-tempo": "tsc --noEmit -p typechecking/viem-tempo/tsconfig.json",
     "build": "./scripts/build",
     "prepublishOnly": "echo 'to publish, run yarn build && (cd dist; yarn publish)' && exit 1",
     "format": "./scripts/format",
@@ -43,7 +44,7 @@
     "@x402/evm": "^2.3.0",
     "@x402/fetch": "^2.3.0",
     "@x402/svm": "^2.3.0",
-    "viem": "^2.24.1"
+    "viem": "^2.44.2"
   },
   "peerDependenciesMeta": {
     "@solana/kit": {
@@ -93,7 +94,7 @@
     "tweetnacl": "^1.0.3",
     "typescript": "5.8.3",
     "typescript-eslint": "8.31.1",
-    "viem": "^2.34.0"
+    "viem": "2.45.3"
   },
   "overrides": {
     "minimatch": "^9.0.5"

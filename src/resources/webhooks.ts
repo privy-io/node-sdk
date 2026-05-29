@@ -537,6 +537,93 @@ export interface IntentRejectedWebhookPayload {
 }
 
 /**
+ * Payload for the kraken_embed.custom_order.cancelled webhook event.
+ */
+export interface KrakenEmbedCustomOrderCancelledWebhookPayload {
+  /**
+   * ISO 8601 timestamp of when the custom order was cancelled.
+   */
+  cancelled_at: string;
+
+  /**
+   * The ID of the cancelled custom order.
+   */
+  custom_order_id: string;
+
+  /**
+   * A human-readable description of why the custom order was cancelled. Intended for
+   * display and logging purposes only.
+   */
+  reason: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'kraken_embed.custom_order.cancelled';
+
+  /**
+   * The ID of the user.
+   */
+  user_id: string;
+}
+
+/**
+ * Payload for the kraken_embed.custom_order.executed webhook event.
+ */
+export interface KrakenEmbedCustomOrderExecutedWebhookPayload {
+  /**
+   * The ID of the executed custom order.
+   */
+  custom_order_id: string;
+
+  /**
+   * ISO 8601 timestamp of when the custom order was executed.
+   */
+  executed_at: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'kraken_embed.custom_order.executed';
+
+  /**
+   * The ID of the user.
+   */
+  user_id: string;
+}
+
+/**
+ * Payload for the kraken_embed.custom_order.execution_failed webhook event.
+ */
+export interface KrakenEmbedCustomOrderExecutionFailedWebhookPayload {
+  /**
+   * The ID of the custom order that failed to execute.
+   */
+  custom_order_id: string;
+
+  /**
+   * ISO 8601 timestamp of when the custom order execution failed.
+   */
+  failed_at: string;
+
+  /**
+   * A human-readable description of why the custom order execution failed. Intended
+   * for display and logging purposes only.
+   */
+  reason: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'kraken_embed.custom_order.execution_failed';
+
+  /**
+   * The ID of the user.
+   */
+  user_id: string;
+}
+
+/**
  * Payload for the kraken_embed.quote.cancelled webhook event.
  */
 export interface KrakenEmbedQuoteCancelledWebhookPayload {
@@ -2866,6 +2953,9 @@ export declare namespace Webhooks {
     type IntentExecutedWebhookPayload as IntentExecutedWebhookPayload,
     type IntentFailedWebhookPayload as IntentFailedWebhookPayload,
     type IntentRejectedWebhookPayload as IntentRejectedWebhookPayload,
+    type KrakenEmbedCustomOrderCancelledWebhookPayload as KrakenEmbedCustomOrderCancelledWebhookPayload,
+    type KrakenEmbedCustomOrderExecutedWebhookPayload as KrakenEmbedCustomOrderExecutedWebhookPayload,
+    type KrakenEmbedCustomOrderExecutionFailedWebhookPayload as KrakenEmbedCustomOrderExecutionFailedWebhookPayload,
     type KrakenEmbedQuoteCancelledWebhookPayload as KrakenEmbedQuoteCancelledWebhookPayload,
     type KrakenEmbedQuoteExecutedWebhookPayload as KrakenEmbedQuoteExecutedWebhookPayload,
     type KrakenEmbedQuoteExecutionFailedWebhookPayload as KrakenEmbedQuoteExecutionFailedWebhookPayload,

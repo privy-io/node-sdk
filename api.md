@@ -255,6 +255,13 @@ Methods:
 
 - <code title="get /v1/wallets/{wallet_id}/balance">client.wallets.balance.<a href="./src/resources/wallets/balance.ts">get</a>(walletID, { ...params }) -> BalanceGetResponse</code>
 
+## Swap
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/swap">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">execute</a>(walletID, { ...params }) -> SwapActionResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/swap/quote">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">quote</a>(walletID, { ...params }) -> SwapQuoteResponse</code>
+
 # Users
 
 Types:
@@ -470,11 +477,13 @@ Types:
 - <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">RuleDeleteIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentCreateRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentDeleteRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentUpdateRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RuleMutateIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">TransferIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">TransferIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
@@ -482,14 +491,14 @@ Types:
 Methods:
 
 - <code title="get /v1/intents">client.intents.<a href="./src/resources/intents.ts">list</a>({ ...params }) -> IntentResponsesCursor</code>
-- <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleIntentResponse</code>
-- <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicyRule</a>(ruleID, { ...params }) -> RuleIntentResponse</code>
+- <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleMutateIntentResponse</code>
+- <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicyRule</a>(ruleID, { ...params }) -> RuleDeleteIntentResponse</code>
 - <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/resources/intents.ts">get</a>(intentID) -> IntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/resources/intents.ts">rpc</a>(walletID, { ...params }) -> RpcIntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/transfer">client.intents.<a href="./src/resources/intents.ts">transfer</a>(walletID, { ...params }) -> TransferIntentResponse</code>
 - <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/resources/intents.ts">updateKeyQuorum</a>(keyQuorumID, { ...params }) -> KeyQuorumIntentResponse</code>
 - <code title="patch /v1/intents/policies/{policy_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicy</a>(policyID, { ...params }) -> PolicyIntentResponse</code>
-- <code title="patch /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicyRule</a>(ruleID, { ...params }) -> RuleIntentResponse</code>
+- <code title="patch /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicyRule</a>(ruleID, { ...params }) -> RuleMutateIntentResponse</code>
 - <code title="patch /v1/intents/wallets/{wallet_id}">client.intents.<a href="./src/resources/intents.ts">updateWallet</a>(walletID, { ...params }) -> WalletIntentResponse</code>
 
 # Apps
@@ -516,8 +525,6 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">GasSpendCurrency</a></code>
 - <code><a href="./src/resources/apps/apps.ts">GasSpendRequestBody</a></code>
 - <code><a href="./src/resources/apps/apps.ts">GasSpendResponseBody</a></code>
-- <code><a href="./src/resources/apps/apps.ts">GasSponsorshipConfiguration</a></code>
-- <code><a href="./src/resources/apps/apps.ts">GasSponsorshipConfigurationInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">PhoneInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TelegramAuthConfigSchema</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>
@@ -563,6 +570,9 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">IntentExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedCustomOrderCancelledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedCustomOrderExecutedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">KrakenEmbedCustomOrderExecutionFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteCancelledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedQuoteExecutionFailedWebhookPayload</a></code>
@@ -706,8 +716,6 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">BridgeBrlFiatVirtualAccountDepositInstructions</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeDestinationAsset</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeEurFiatVirtualAccountDepositInstructions</a></code>
-- <code><a href="./src/resources/client-auth.ts">BridgeFiatCustomerResponse</a></code>
-- <code><a href="./src/resources/client-auth.ts">BridgeFiatRejectionReason</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountDepositInstructions</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountDestination</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeFiatVirtualAccountRequest</a></code>
@@ -716,14 +724,10 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">BridgeGbpFiatVirtualAccountDepositInstructions</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeMxnFiatVirtualAccountDepositInstructions</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeOnrampProvider</a></code>
-- <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatCustomerResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatVirtualAccountRequest</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeSandboxFiatVirtualAccountResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeSourceAsset</a></code>
 - <code><a href="./src/resources/client-auth.ts">BridgeUsdFiatVirtualAccountDepositInstructions</a></code>
-- <code><a href="./src/resources/client-auth.ts">Caip2ChainID</a></code>
-- <code><a href="./src/resources/client-auth.ts">CreateOrUpdateFiatCustomerRequestInput</a></code>
-- <code><a href="./src/resources/client-auth.ts">CryptoCurrencyCode</a></code>
 - <code><a href="./src/resources/client-auth.ts">CustomJwtAuthenticateRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">CustomJwtLinkRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">CustomOAuthProviderID</a></code>
@@ -755,25 +759,8 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">FarcasterV2InitRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">FarcasterV2InitResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">FarcasterV2InitResponseBody</a></code>
-- <code><a href="./src/resources/client-auth.ts">FiatAmount</a></code>
-- <code><a href="./src/resources/client-auth.ts">FiatCurrencyCode</a></code>
-- <code><a href="./src/resources/client-auth.ts">FiatCustomerResponse</a></code>
-- <code><a href="./src/resources/client-auth.ts">FiatOnrampDestination</a></code>
-- <code><a href="./src/resources/client-auth.ts">FiatOnrampEnvironment</a></code>
-- <code><a href="./src/resources/client-auth.ts">FiatOnrampProvider</a></code>
-- <code><a href="./src/resources/client-auth.ts">FiatOnrampProviderError</a></code>
-- <code><a href="./src/resources/client-auth.ts">FiatOnrampQuote</a></code>
-- <code><a href="./src/resources/client-auth.ts">FiatOnrampSource</a></code>
-- <code><a href="./src/resources/client-auth.ts">FiatOnrampTransactionStatus</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatVirtualAccountRequest</a></code>
 - <code><a href="./src/resources/client-auth.ts">FiatVirtualAccountResponse</a></code>
-- <code><a href="./src/resources/client-auth.ts">GetFiatCustomerRequestInput</a></code>
-- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampQuotesInput</a></code>
-- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampQuotesResponse</a></code>
-- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampTransactionStatusInput</a></code>
-- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampTransactionStatusResponse</a></code>
-- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampURLInput</a></code>
-- <code><a href="./src/resources/client-auth.ts">GetFiatOnrampURLResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">GuestAuthenticateRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">LinkJwtInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaPasskeyEnrollmentRequestBody</a></code>
@@ -872,6 +859,59 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">TransferTelegramInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">UnlinkPasskeyInput</a></code>
 
+# Onramps
+
+Types:
+
+- <code><a href="./src/resources/onramps.ts">BridgeFiatCustomerResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">BridgeFiatRejectionReason</a></code>
+- <code><a href="./src/resources/onramps.ts">BridgeSandboxFiatCustomerResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">Caip2ChainID</a></code>
+- <code><a href="./src/resources/onramps.ts">CreateLinkAuthIntentInput</a></code>
+- <code><a href="./src/resources/onramps.ts">CreateLinkAuthIntentResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">CreateOrUpdateFiatCustomerRequestInput</a></code>
+- <code><a href="./src/resources/onramps.ts">CreateStripeOnrampSessionInput</a></code>
+- <code><a href="./src/resources/onramps.ts">CreateStripeOnrampSessionResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">CryptoCurrencyCode</a></code>
+- <code><a href="./src/resources/onramps.ts">ExchangeStripeTokensInput</a></code>
+- <code><a href="./src/resources/onramps.ts">ExchangeStripeTokensResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatAmount</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatCurrencyCode</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatCustomerResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatOnrampDestination</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatOnrampEnvironment</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatOnrampProvider</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatOnrampProviderError</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatOnrampQuote</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatOnrampSource</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatOnrampStripeSDKSessionResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatOnrampTransactionStatus</a></code>
+- <code><a href="./src/resources/onramps.ts">FiatOnrampURLSessionResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">GetFiatCustomerRequestInput</a></code>
+- <code><a href="./src/resources/onramps.ts">GetFiatOnrampQuotesInput</a></code>
+- <code><a href="./src/resources/onramps.ts">GetFiatOnrampQuotesResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">GetFiatOnrampTransactionStatusInput</a></code>
+- <code><a href="./src/resources/onramps.ts">GetFiatOnrampTransactionStatusResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">GetFiatOnrampURLInput</a></code>
+- <code><a href="./src/resources/onramps.ts">GetFiatOnrampURLResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">GetStripeCryptoCustomerResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">LinkAuthIntentCreated</a></code>
+- <code><a href="./src/resources/onramps.ts">LinkAuthIntentNoAccount</a></code>
+- <code><a href="./src/resources/onramps.ts">ListStripeConsumerWalletsResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">ListStripePaymentTokensResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">OnrampSessionParams</a></code>
+- <code><a href="./src/resources/onramps.ts">RefreshStripeQuoteResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeConsumerWallet</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerActive</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerExpired</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerNone</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeOnrampCheckoutResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeOnrampSessionStatus</a></code>
+- <code><a href="./src/resources/onramps.ts">StripePaymentToken</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeQuote</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeTransactionDetails</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeVerification</a></code>
+
 # Funding
 
 Types:
@@ -942,6 +982,9 @@ Types:
 - <code><a href="./src/resources/wallet-actions.ts">EarnDepositRequestBody</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveClaimActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveClaimRequestBody</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveRewardEntry</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveRewardsQuery</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">EarnIncentiveRewardsResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnIncetiveClaimRewardEntry</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnWithdrawActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EarnWithdrawRequestBody</a></code>

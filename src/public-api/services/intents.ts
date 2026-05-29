@@ -11,12 +11,18 @@ import {
   IntentUpdateWalletParams,
   KeyQuorumIntentResponse,
   PolicyIntentResponse,
+  RuleDeleteIntentResponse,
   RpcIntentResponse,
   RuleIntentResponse,
   WalletIntentResponse,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
 import { Prettify, WithExpiry } from './types';
+import {
+  defaultTempoTransactionTypeForRpcParams,
+  isTempoTransactionRpcParams,
+  shouldDefaultTempoTransactionType,
+} from './utils/tempo';
 
 export class PrivyIntentsService extends Intents {
   private privyClient: PrivyClient;
@@ -31,8 +37,13 @@ export class PrivyIntentsService extends Intents {
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.RpcInput,
   ): APIPromise<RpcIntentResponse> {
     const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
+    let rpcParams = params;
+    if (isTempoTransactionRpcParams(params) && shouldDefaultTempoTransactionType(params)) {
+      rpcParams = defaultTempoTransactionTypeForRpcParams(params);
+    }
+
     return super.rpc(walletId, {
-      ...params,
+      ...rpcParams,
       ...(expiry != null && { 'privy-request-expiry': String(expiry) }),
     } as IntentRpcParams);
   }
@@ -51,7 +62,7 @@ export class PrivyIntentsService extends Intents {
   public override deletePolicyRule(
     ruleId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.DeletePolicyRuleInput,
-  ): APIPromise<RuleIntentResponse> {
+  ): APIPromise<RuleDeleteIntentResponse> {
     const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
     return super.deletePolicyRule(ruleId, {
       ...params,

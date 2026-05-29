@@ -16,6 +16,9 @@ echo "==> Building"
 echo "==> Checking types"
 ./node_modules/typescript/bin/tsc
 
+echo "==> Checking viem Tempo wallet client types"
+./node_modules/typescript/bin/tsc --noEmit -p typechecking/viem-tempo/tsconfig.json
+
 echo "==> Running Are The Types Wrong?"
 ./node_modules/.bin/attw --pack dist -f json >.attw.json || true
 node scripts/utils/attw-report.cjs

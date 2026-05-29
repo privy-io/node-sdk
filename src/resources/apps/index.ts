@@ -28,8 +28,6 @@ export {
   type GasSpendCurrency,
   type GasSpendRequestBody,
   type GasSpendResponseBody,
-  type GasSponsorshipConfiguration,
-  type GasSponsorshipConfigurationInput,
   type PhoneInviteInput,
   type TelegramAuthConfigSchema,
   type TestAccount,

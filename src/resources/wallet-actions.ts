@@ -665,6 +665,11 @@ export interface SwapActionResponse {
   wallet_id: string;
 
   /**
+   * Destination chain CAIP-2 identifier. Present for cross-chain swaps.
+   */
+  destination_caip2?: string;
+
+  /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;

@@ -2,6 +2,7 @@
 
 export { Balance, type BalanceGetResponse, type BalanceGetParams } from './balance';
 export { Earn } from './earn/index';
+export { Swap, type SwapExecuteParams, type SwapQuoteParams } from './swap';
 export { Transactions, type TransactionGetResponse, type TransactionGetParams } from './transactions';
 export {
   Wallets,

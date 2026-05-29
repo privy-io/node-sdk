@@ -255,6 +255,13 @@ Methods:
 
 - <code title="get /v1/wallets/{wallet_id}/balance">client.wallets.balance.<a href="./src/resources/wallets/balance.ts">get</a>(walletID, { ...params }) -> BalanceGetResponse</code>
 
+## Swap
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/swap">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">execute</a>(walletID, { ...params }) -> SwapActionResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/swap/quote">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">quote</a>(walletID, { ...params }) -> SwapQuoteResponse</code>
+
 # Users
 
 Types:
@@ -518,8 +525,6 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">GasSpendCurrency</a></code>
 - <code><a href="./src/resources/apps/apps.ts">GasSpendRequestBody</a></code>
 - <code><a href="./src/resources/apps/apps.ts">GasSpendResponseBody</a></code>
-- <code><a href="./src/resources/apps/apps.ts">GasSponsorshipConfiguration</a></code>
-- <code><a href="./src/resources/apps/apps.ts">GasSponsorshipConfigurationInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">PhoneInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TelegramAuthConfigSchema</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>

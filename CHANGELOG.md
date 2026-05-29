@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.20.0 (2026-05-29)
+
+Full Changelog: [v0.19.0...v0.20.0](https://github.com/privy-io/node-sdk/compare/v0.19.0...v0.20.0)
+
+### Features
+
+* **api:** api update ([21e48b1](https://github.com/privy-io/node-sdk/commit/21e48b1b9e245a073baed9c04d0bb9819857a203))
+* **api:** api update ([62a9129](https://github.com/privy-io/node-sdk/commit/62a9129bf2312b464a006a2376edaffa8e3d0910))
+* **api:** api update ([b966050](https://github.com/privy-io/node-sdk/commit/b96605047c034ffd25106c8e1d3e88e6b5bc8269))
+* **api:** api update ([3517e47](https://github.com/privy-io/node-sdk/commit/3517e47f9be398021ced85194db58d2e82f3d4ec))
+* **api:** api update ([6756fc1](https://github.com/privy-io/node-sdk/commit/6756fc14ad8208ea44c228abd2cd0d70bfdbe0cc))
+
+
+### Bug Fixes
+
+* add Tempo support to createViemAccount ([#161](https://github.com/privy-io/node-sdk/issues/161)) ([3e15725](https://github.com/privy-io/node-sdk/commit/3e15725a0400d9eb4420e417fa0c74aa233b7b95))
+* correct import in swap test to fix typecheck ([#164](https://github.com/privy-io/node-sdk/issues/164)) ([0a77b0b](https://github.com/privy-io/node-sdk/commit/0a77b0b224444c149c92b8e4663dbf3dbdc1d351))
+* default Tempo-shaped transactions in Node SDK ([#162](https://github.com/privy-io/node-sdk/issues/162)) ([166199a](https://github.com/privy-io/node-sdk/commit/166199a9d6e38215904a40ed576ae0f1652ddc3b))
+
 ## 0.19.0 (2026-05-20)
 
 Full Changelog: [v0.18.0...v0.19.0](https://github.com/privy-io/node-sdk/compare/v0.18.0...v0.19.0)

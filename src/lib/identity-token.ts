@@ -37,13 +37,27 @@ export function parseUserFromIdentityTokenPayload(payload: JWTPayload): User {
 
   return {
     id: payload.sub as string,
-    created_at: parseInt(payload['cr'] as string),
+    created_at: parseCreatedAtClaim(payload),
     is_guest: payload['guest'] === 't',
     linked_accounts: parseLinkedAccountsClaim(payload),
     ...(customMetadata ? { custom_metadata: customMetadata } : {}),
     has_accepted_terms: false,
     mfa_methods: [],
   };
+}
+
+function parseCreatedAtClaim(payload: JWTPayload): number {
+  const createdAtClaim = payload['cr'];
+  if (typeof createdAtClaim !== 'string' || !/^\d+$/.test(createdAtClaim)) {
+    throw new InvalidIdentityTokenError('Unable to parse identity token');
+  }
+
+  const createdAt = Number(createdAtClaim);
+  if (!Number.isSafeInteger(createdAt)) {
+    throw new InvalidIdentityTokenError('Unable to parse identity token');
+  }
+
+  return createdAt;
 }
 
 function parseLinkedAccountsClaim(payload: JWTPayload): LinkedAccount[] {

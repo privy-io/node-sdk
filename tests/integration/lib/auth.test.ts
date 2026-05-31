@@ -129,6 +129,7 @@ describe('auth library', () => {
         .setIssuedAt()
         .setAudience(TEST_APP.id)
         .setSubject(userId)
+        .setClaim('cr', String(randomInt(10e10)))
         .setExpirationTime('1h')
         .sign(keypair.privateKey);
 
@@ -165,6 +166,26 @@ describe('auth library', () => {
         has_accepted_terms: false,
         mfa_methods: [],
       } satisfies User);
+    });
+
+    it('should reject malformed created_at claims', async () => {
+      const identityToken = await new jose.SignJWT({ linked_accounts: JSON.stringify([]) })
+        .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
+        .setIssuer('privy.io')
+        .setIssuedAt()
+        .setAudience(TEST_APP.id)
+        .setSubject(`user:${randomUUID()}`)
+        .setClaim('cr', '123abc')
+        .setExpirationTime('1h')
+        .sign(keypair.privateKey);
+
+      await expect(
+        verifyIdentityToken({
+          app_id: TEST_APP.id,
+          verification_key: appJwks,
+          identity_token: identityToken,
+        }),
+      ).rejects.toThrow('Unable to parse identity token');
     });
   });
 });

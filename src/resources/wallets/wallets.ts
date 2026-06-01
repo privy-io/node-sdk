@@ -337,6 +337,29 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Creates multiple wallets in a single request. Each wallet creation is
+   * independent; failures for one wallet do not affect others. Maximum batch size is
+   * 100 wallets.
+   *
+   * @example
+   * ```ts
+   * const walletBatchCreateResponse =
+   *   await client.wallets.createBatch({
+   *     wallets: [
+   *       { chain_type: 'ethereum' },
+   *       { chain_type: 'solana' },
+   *     ],
+   *   });
+   * ```
+   */
+  createBatch(
+    body: WalletCreateBatchParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletBatchCreateResponse> {
+    return this._client.post('/v1/wallets/batch', { body, ...options });
+  }
+
+  /**
    * Create one or more wallets associated with a recovery user, so the user can
    * later regain wallet access via the linked accounts. Deprecated; prefer the
    * standard wallet creation flow combined with a separate recovery setup.
@@ -4930,6 +4953,13 @@ export interface WalletAuthenticateWithJwtParams {
   user_jwt: string;
 }
 
+export interface WalletCreateBatchParams {
+  /**
+   * Array of wallet creation requests. Minimum 1, maximum 100.
+   */
+  wallets: Array<WalletBatchItemInput>;
+}
+
 export interface WalletCreateWalletsWithRecoveryParams {
   primary_signer: WalletCreateWalletsWithRecoveryParams.PrimarySigner;
 
@@ -5201,6 +5231,7 @@ export declare namespace Wallets {
     type WalletTransferParams as WalletTransferParams,
     type WalletUpdateParams as WalletUpdateParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
+    type WalletCreateBatchParams as WalletCreateBatchParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };

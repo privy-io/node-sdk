@@ -217,6 +217,7 @@ export {
   type WalletTransferParams,
   type WalletUpdateParams,
   type WalletAuthenticateWithJwtParams,
+  type WalletCreateBatchParams,
   type WalletCreateWalletsWithRecoveryParams,
   type WalletGetWalletByAddressParams,
   type WalletsCursor,

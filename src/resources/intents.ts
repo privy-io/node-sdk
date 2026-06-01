@@ -39,7 +39,7 @@ export class Intents extends APIResource {
    *
    * @example
    * ```ts
-   * const ruleIntentResponse =
+   * const ruleMutateIntentResponse =
    *   await client.intents.createPolicyRule('policy_id', {
    *     action: 'ALLOW',
    *     conditions: [
@@ -59,7 +59,7 @@ export class Intents extends APIResource {
     policyID: string,
     params: IntentCreatePolicyRuleParams,
     options?: RequestOptions,
-  ): APIPromise<RuleIntentResponse> {
+  ): APIPromise<RuleMutateIntentResponse> {
     const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
     return this._client.post(path`/v1/intents/policies/${policyID}/rules`, {
       body,
@@ -77,7 +77,7 @@ export class Intents extends APIResource {
    *
    * @example
    * ```ts
-   * const ruleIntentResponse =
+   * const ruleDeleteIntentResponse =
    *   await client.intents.deletePolicyRule('rule_id', {
    *     policy_id: 'policy_id',
    *   });
@@ -87,7 +87,7 @@ export class Intents extends APIResource {
     ruleID: string,
     params: IntentDeletePolicyRuleParams,
     options?: RequestOptions,
-  ): APIPromise<RuleIntentResponse> {
+  ): APIPromise<RuleDeleteIntentResponse> {
     const { policy_id, 'privy-request-expiry': privyRequestExpiry } = params;
     return this._client.delete(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, {
       ...options,
@@ -236,7 +236,7 @@ export class Intents extends APIResource {
    *
    * @example
    * ```ts
-   * const ruleIntentResponse =
+   * const ruleMutateIntentResponse =
    *   await client.intents.updatePolicyRule('rule_id', {
    *     policy_id: 'policy_id',
    *     action: 'ALLOW',
@@ -257,7 +257,7 @@ export class Intents extends APIResource {
     ruleID: string,
     params: IntentUpdatePolicyRuleParams,
     options?: RequestOptions,
-  ): APIPromise<RuleIntentResponse> {
+  ): APIPromise<RuleMutateIntentResponse> {
     const { policy_id, 'privy-request-expiry': privyRequestExpiry, ...body } = params;
     return this._client.patch(path`/v1/intents/policies/${policy_id}/rules/${ruleID}`, {
       body,
@@ -764,6 +764,34 @@ export namespace RpcIntentResponse {
 }
 
 /**
+ * Response for a delete rule intent
+ */
+export interface RuleDeleteIntentResponse extends BaseIntentResponse {
+  intent_type: 'RULE';
+
+  /**
+   * Request details for deleting a rule via intent.
+   */
+  request_details: RuleIntentDeleteRequestDetails;
+
+  /**
+   * Result of rule execution (only present if status is 'executed' or 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A rule that defines the conditions and action to take if the conditions are
+   * true.
+   */
+  current_resource_data?: PoliciesAPI.PolicyRuleResponse;
+
+  /**
+   * A policy for controlling wallet operations.
+   */
+  policy?: PoliciesAPI.Policy;
+}
+
+/**
  * Request details for creating a rule via intent.
  */
 export interface RuleIntentCreateRequestDetails {
@@ -842,6 +870,35 @@ export interface RuleIntentUpdateRequestDetails {
   method: 'PATCH';
 
   url: string;
+}
+
+/**
+ * Response for a create or update rule intent
+ */
+export interface RuleMutateIntentResponse extends BaseIntentResponse {
+  intent_type: 'RULE';
+
+  /**
+   * The original rule request. Method is POST (create), PATCH (update), or DELETE
+   * (delete)
+   */
+  request_details: RuleIntentRequestDetails;
+
+  /**
+   * Result of rule execution (only present if status is 'executed' or 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A rule that defines the conditions and action to take if the conditions are
+   * true.
+   */
+  current_resource_data?: PoliciesAPI.PolicyRuleResponse;
+
+  /**
+   * A policy for controlling wallet operations.
+   */
+  policy?: PoliciesAPI.Policy;
 }
 
 /**
@@ -1907,11 +1964,13 @@ export declare namespace Intents {
     type PolicyIntentResponse as PolicyIntentResponse,
     type RpcIntentRequestDetails as RpcIntentRequestDetails,
     type RpcIntentResponse as RpcIntentResponse,
+    type RuleDeleteIntentResponse as RuleDeleteIntentResponse,
     type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
     type RuleIntentDeleteRequestDetails as RuleIntentDeleteRequestDetails,
     type RuleIntentRequestDetails as RuleIntentRequestDetails,
     type RuleIntentResponse as RuleIntentResponse,
     type RuleIntentUpdateRequestDetails as RuleIntentUpdateRequestDetails,
+    type RuleMutateIntentResponse as RuleMutateIntentResponse,
     type TransferIntentRequestDetails as TransferIntentRequestDetails,
     type TransferIntentResponse as TransferIntentResponse,
     type WalletIntentResponse as WalletIntentResponse,

@@ -11,6 +11,7 @@ import {
   IntentUpdateWalletParams,
   KeyQuorumIntentResponse,
   PolicyIntentResponse,
+  RuleDeleteIntentResponse,
   RpcIntentResponse,
   RuleIntentResponse,
   WalletIntentResponse,
@@ -51,7 +52,7 @@ export class PrivyIntentsService extends Intents {
   public override deletePolicyRule(
     ruleId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.DeletePolicyRuleInput,
-  ): APIPromise<RuleIntentResponse> {
+  ): APIPromise<RuleDeleteIntentResponse> {
     const expiry = requestExpiry ?? this.privyClient.getIntentRequestExpiry();
     return super.deletePolicyRule(ruleId, {
       ...params,

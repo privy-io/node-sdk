@@ -2,14 +2,32 @@ import type { Hex } from 'viem';
 import {
   type LocalAccount,
   type SignMessageParameters,
-  type SignTransactionParameters,
+  type SignTransactionParameters as ViemSignTransactionParameters,
   toAccount,
 } from 'viem/accounts';
+import type { Account as ViemTempoAccount } from 'viem/tempo';
 import { toHex } from 'viem/utils';
 import { PrivyAPIError } from './core/error';
+import { formatTempoTransaction, isTempoTransaction, type TempoTransaction } from './internal/viem-tempo';
+import { formatViemQuantity } from './internal/utils/viem';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
 import type { EthereumSignTransactionRpcInputParams } from './resources';
+
+// Runtime formatting accepts normal viem transactions plus viem/tempo transactions.
+type StandardViemTransaction = ViemSignTransactionParameters['transaction'];
+type StandardViemTransactionType = StandardViemTransaction['type'];
+type SupportedViemTransaction = StandardViemTransaction | TempoTransaction;
+type SupportedViemTransactionType = SupportedViemTransaction['type'];
+
+// Keep LocalAccount compatibility and add viem's Tempo-capable signTransaction signature.
+type PrivySignTransaction = LocalAccount['signTransaction'] &
+  ViemTempoAccount.Account_base['signTransaction'];
+
+// Privy accounts are viem LocalAccounts with a wider signer for Tempo wallet clients.
+export type PrivyViemAccount = Omit<LocalAccount, 'signTransaction'> & {
+  signTransaction: PrivySignTransaction;
+};
 
 export interface CreateViemAccountInput {
   /** ID for the wallet. */
@@ -31,7 +49,7 @@ export interface CreateViemAccountInput {
 export function createViemAccount(
   client: PrivyClient,
   { walletId, address, authorizationContext }: CreateViemAccountInput,
-): LocalAccount {
+): PrivyViemAccount {
   return toAccount({
     address: address as Hex,
     sign: async ({ hash }) => {
@@ -77,7 +95,7 @@ export function createViemAccount(
         .wallets()
         .ethereum()
         .signTransaction(walletId, {
-          params: { transaction: formatViemTransaction(transaction) },
+          params: { transaction: formatViemTransaction(transaction as SupportedViemTransaction) },
           ...(authorizationContext ? { authorization_context: authorizationContext } : {}),
         });
 
@@ -104,7 +122,7 @@ export function createViemAccount(
         s: authorization.s as Hex,
       };
     },
-  });
+  }) as PrivyViemAccount;
 }
 
 /**
@@ -112,12 +130,15 @@ export function createViemAccount(
  * - 'legacy' -> 0
  * - 'eip2930' -> 1
  * - 'eip1559' or undefined -> 2. This is the default EVM transaction type.
- * - 'eip4844' -> 3 in theory, but will throw an error as we do not support this yet.
- * - 'eip7702' -> 4 in theory, but will throw an error as we do not support this yet
+ * - 'tempo' -> 118
+ * - Other transaction types, including EIP-4844 and EIP-7702, are not supported yet.
  * @param type viem transaction type
- * @returns 0 | 1 | 2
+ * @returns 0 | 1 | 2 | 118
  */
-const formatViemTransactionType = (type: SignTransactionParameters['transaction']['type']) => {
+export function formatViemTransactionType(type: 'tempo'): 118;
+export function formatViemTransactionType(type: StandardViemTransactionType): 0 | 1 | 2;
+export function formatViemTransactionType(type: SupportedViemTransactionType): 0 | 1 | 2 | 118;
+export function formatViemTransactionType(type: SupportedViemTransactionType) {
   if (type === 'legacy') {
     return 0 as const;
   } else if (type === 'eip2930') {
@@ -125,22 +146,12 @@ const formatViemTransactionType = (type: SignTransactionParameters['transaction'
   } else if (type == 'eip1559' || typeof type === 'undefined') {
     // Type 2 (EIP-1559) is the default transaction type
     return 2 as const;
+  } else if (type === 'tempo') {
+    return 118 as const;
   } else {
-    // We do not yet support EIP4844 (type 3) and EIP7702 (type 4) transaction types
     throw new PrivyAPIError('EIP4844 and EIP7702 transaction types are not yet supported.');
   }
-};
-
-/**
- * Formats viem quantities, which are represented as `bigint | undefined` to our internal
- * `Quantity` type. This is done by converting bigints into a hexstring.
- *
- * @param input {bigint | undefined} bigint quantity to format
- * @returns input as hex string
- */
-const formatViemQuantity = (input: bigint): Hex => {
-  return `0x${input.toString(16)}` as Hex;
-};
+}
 
 /**
  * Formats a `message` input to viem's `signMessage` function to the format needed for our wallet API.
@@ -170,21 +181,27 @@ const formatViemPersonalSignMessage = (message: SignMessageParameters['message']
  * @param tx input to viem's `sendTransaction` function
  * @returns transaction {EthereumSignTransactionInputType} as our own type
  */
-const formatViemTransaction = (
-  tx: SignTransactionParameters['transaction'],
+export const formatViemTransaction = (
+  tx: SupportedViemTransaction,
 ): EthereumSignTransactionRpcInputParams['transaction'] => {
+  if (isTempoTransaction(tx)) {
+    return formatTempoTransaction(tx);
+  }
+
+  const standardTx: StandardViemTransaction = tx;
+
   return {
-    type: formatViemTransactionType(tx.type),
-    ...(tx.to ? { to: tx.to } : {}),
-    ...(tx.nonce ? { nonce: tx.nonce } : {}),
-    ...(tx.chainId ? { chain_id: tx.chainId } : {}),
-    ...(tx.data ? { data: tx.data } : {}),
-    ...(tx.value ? { value: formatViemQuantity(tx.value) } : {}),
-    ...(tx.gas ? { gas_limit: formatViemQuantity(tx.gas) } : {}),
-    ...(tx.gasPrice ? { gas_price: formatViemQuantity(tx.gasPrice) } : {}),
-    ...(tx.maxFeePerGas ? { max_fee_per_gas: formatViemQuantity(tx.maxFeePerGas) } : {}),
-    ...(tx.maxPriorityFeePerGas ?
-      { max_priority_fee_per_gas: formatViemQuantity(tx.maxPriorityFeePerGas) }
+    type: formatViemTransactionType(standardTx.type),
+    ...(standardTx.to ? { to: standardTx.to } : {}),
+    ...(standardTx.nonce ? { nonce: standardTx.nonce } : {}),
+    ...(standardTx.chainId ? { chain_id: standardTx.chainId } : {}),
+    ...(standardTx.data ? { data: standardTx.data } : {}),
+    ...(standardTx.value ? { value: formatViemQuantity(standardTx.value) } : {}),
+    ...(standardTx.gas ? { gas_limit: formatViemQuantity(standardTx.gas) } : {}),
+    ...(standardTx.gasPrice ? { gas_price: formatViemQuantity(standardTx.gasPrice) } : {}),
+    ...(standardTx.maxFeePerGas ? { max_fee_per_gas: formatViemQuantity(standardTx.maxFeePerGas) } : {}),
+    ...(standardTx.maxPriorityFeePerGas ?
+      { max_priority_fee_per_gas: formatViemQuantity(standardTx.maxPriorityFeePerGas) }
     : {}),
   };
 };

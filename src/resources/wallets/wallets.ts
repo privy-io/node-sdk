@@ -8,6 +8,8 @@ import * as WalletActionsAPI from '../wallet-actions';
 import * as AppsAPI from '../apps/apps';
 import * as BalanceAPI from './balance';
 import { Balance, BalanceGetParams, BalanceGetResponse } from './balance';
+import * as SwapAPI from './swap';
+import { Swap, SwapExecuteParams, SwapQuoteParams } from './swap';
 import * as TransactionsAPI from './transactions';
 import { TransactionGetParams, TransactionGetResponse, Transactions } from './transactions';
 import * as EarnAPI from './earn/earn';
@@ -22,6 +24,7 @@ export class Wallets extends APIResource {
   _earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
+  swap: SwapAPI.Swap = new SwapAPI.Swap(this._client);
 
   /**
    * Creates a new wallet on the requested chain and for the requested owner.
@@ -311,7 +314,8 @@ export class Wallets extends APIResource {
   }
 
   /**
-   * Obtain a session key to enable wallet access.
+   * Exchange a user JWT for a session key authorized to act on the user's wallets.
+   * Returns the encrypted authorization key and the list of wallets it can access.
    *
    * @example
    * ```ts
@@ -333,7 +337,9 @@ export class Wallets extends APIResource {
   }
 
   /**
-   * Create wallets with an associated recovery user.
+   * Create one or more wallets associated with a recovery user, so the user can
+   * later regain wallet access via the linked accounts. Deprecated; prefer the
+   * standard wallet creation flow combined with a separate recovery setup.
    *
    * @deprecated
    */
@@ -4982,6 +4988,7 @@ export interface WalletGetWalletByAddressParams {
 Wallets.Earn = Earn;
 Wallets.Transactions = Transactions;
 Wallets.Balance = Balance;
+Wallets.Swap = Swap;
 
 export declare namespace Wallets {
   export {
@@ -5213,5 +5220,11 @@ export declare namespace Wallets {
     Balance as Balance,
     type BalanceGetResponse as BalanceGetResponse,
     type BalanceGetParams as BalanceGetParams,
+  };
+
+  export {
+    Swap as Swap,
+    type SwapExecuteParams as SwapExecuteParams,
+    type SwapQuoteParams as SwapQuoteParams,
   };
 }

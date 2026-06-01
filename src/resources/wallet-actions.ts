@@ -274,6 +274,57 @@ export interface EarnIncentiveClaimRequestBody {
 }
 
 /**
+ * A reward token with claimed and unclaimed amounts.
+ */
+export interface EarnIncentiveRewardEntry {
+  /**
+   * Total amount already claimed, in smallest unit.
+   */
+  amount_claimed: string;
+
+  /**
+   * Amount available to claim on-chain but not yet claimed, in smallest unit.
+   */
+  amount_unclaimed: string;
+
+  /**
+   * Address of the reward token.
+   */
+  token_address: string;
+
+  /**
+   * Symbol of the reward token (e.g. "MORPHO").
+   */
+  token_symbol: string;
+
+  /**
+   * Number of decimals for the reward token.
+   */
+  token_decimals?: number;
+}
+
+/**
+ * Query parameters for fetching incentive rewards.
+ */
+export interface EarnIncentiveRewardsQuery {
+  /**
+   * Chain name to fetch rewards for (e.g. "base", "ethereum").
+   */
+  chain: string;
+}
+
+/**
+ * All incentive rewards for a wallet, with claimed and unclaimed amounts per
+ * token.
+ */
+export interface EarnIncentiveRewardsResponse {
+  /**
+   * Reward tokens with their claimed and unclaimed amounts.
+   */
+  rewards: Array<EarnIncentiveRewardEntry>;
+}
+
+/**
  * A specific reward token and amount associated with an earn incentive claim.
  */
 export interface EarnIncetiveClaimRewardEntry {
@@ -644,6 +695,11 @@ export interface SwapActionResponse {
   wallet_id: string;
 
   /**
+   * Destination chain CAIP-2 identifier. Present for cross-chain swaps.
+   */
+  destination_caip2?: string;
+
+  /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
@@ -799,6 +855,9 @@ export declare namespace WalletActions {
     type EarnDepositRequestBody as EarnDepositRequestBody,
     type EarnIncentiveClaimActionResponse as EarnIncentiveClaimActionResponse,
     type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
+    type EarnIncentiveRewardEntry as EarnIncentiveRewardEntry,
+    type EarnIncentiveRewardsQuery as EarnIncentiveRewardsQuery,
+    type EarnIncentiveRewardsResponse as EarnIncentiveRewardsResponse,
     type EarnIncetiveClaimRewardEntry as EarnIncetiveClaimRewardEntry,
     type EarnWithdrawActionResponse as EarnWithdrawActionResponse,
     type EarnWithdrawRequestBody as EarnWithdrawRequestBody,

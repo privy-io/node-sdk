@@ -166,5 +166,29 @@ describe('auth library', () => {
         mfa_methods: [],
       } satisfies User);
     });
+
+    it('should reject identity tokens with invalid created_at values', async () => {
+      const userId = `user:${randomUUID()}`;
+
+      const identityToken = await new jose.SignJWT({
+        cr: '123abc',
+        linked_accounts: JSON.stringify([]),
+      })
+        .setProtectedHeader({ alg: 'ES256', typ: 'JWT' })
+        .setIssuer('privy.io')
+        .setIssuedAt()
+        .setAudience(TEST_APP.id)
+        .setSubject(userId)
+        .setExpirationTime('1h')
+        .sign(keypair.privateKey);
+
+      await expect(
+        verifyIdentityToken({
+          app_id: TEST_APP.id,
+          verification_key: appJwks,
+          identity_token: identityToken,
+        }),
+      ).rejects.toThrow('Unable to parse identity token');
+    });
   });
 });

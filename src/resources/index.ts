@@ -378,6 +378,7 @@ export {
   type KrakenEmbedToggleAutoEarnResponse,
   type KrakenEmbedUpcomingReward,
 } from './kraken-embed';
+export { OAuth, type DeviceAuthorizationResponse } from './oauth';
 export {
   Onramps,
   type BridgeFiatCustomerResponse,

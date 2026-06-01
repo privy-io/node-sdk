@@ -970,6 +970,12 @@ Types:
 - <code><a href="./src/resources/shared.ts">P256PublicKey</a></code>
 - <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
 
+# OAuth
+
+Types:
+
+- <code><a href="./src/resources/oauth.ts">DeviceAuthorizationResponse</a></code>
+
 # WalletActions
 
 Types:

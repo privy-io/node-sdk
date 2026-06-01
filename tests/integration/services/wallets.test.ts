@@ -454,8 +454,12 @@ describe('PrivyWalletsService', () => {
           expect(result.wallet.id).toBeDefined();
         }
       }
-      expect((response.results[0] as { success: true; wallet: { chain_type: string } }).wallet.chain_type).toBe('ethereum');
-      expect((response.results[1] as { success: true; wallet: { chain_type: string } }).wallet.chain_type).toBe('solana');
+      expect(
+        (response.results[0] as { success: true; wallet: { chain_type: string } }).wallet.chain_type,
+      ).toBe('ethereum');
+      expect(
+        (response.results[1] as { success: true; wallet: { chain_type: string } }).wallet.chain_type,
+      ).toBe('solana');
     });
   });
 });

@@ -366,6 +366,7 @@ import {
   KrakenEmbedToggleAutoEarnResponse,
   KrakenEmbedUpcomingReward,
 } from './resources/kraken-embed';
+import { DeviceAuthorizationResponse, OAuth } from './resources/oauth';
 import {
   BridgeFiatCustomerResponse,
   BridgeFiatRejectionReason,
@@ -1813,6 +1814,7 @@ export class PrivyAPI {
   organizations: API.Organizations = new API.Organizations(this);
   crossApp: API.CrossApp = new API.CrossApp(this);
   shared: API.Shared = new API.Shared(this);
+  oAuth: API.OAuth = new API.OAuth(this);
   walletActions: API.WalletActions = new API.WalletActions(this);
   yield: API.Yield = new API.Yield(this);
   krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
@@ -1837,6 +1839,7 @@ PrivyAPI.Funding = Funding;
 PrivyAPI.Organizations = Organizations;
 PrivyAPI.CrossApp = CrossApp;
 PrivyAPI.Shared = Shared;
+PrivyAPI.OAuth = OAuth;
 PrivyAPI.WalletActions = WalletActions;
 PrivyAPI.Yield = Yield;
 PrivyAPI.KrakenEmbed = KrakenEmbed;
@@ -2713,6 +2716,8 @@ export declare namespace PrivyAPI {
     type P256PublicKey as P256PublicKey,
     type SuccessResponse as SuccessResponse,
   };
+
+  export { OAuth as OAuth, type DeviceAuthorizationResponse as DeviceAuthorizationResponse };
 
   export {
     WalletActions as WalletActions,

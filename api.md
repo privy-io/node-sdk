@@ -216,6 +216,7 @@ Methods:
 - <code title="post /v1/wallets/{wallet_id}/transfer">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_transfer</a>(walletID, { ...params }) -> TransferActionResponse</code>
 - <code title="patch /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_update</a>(walletID, { ...params }) -> Wallet</code>
 - <code title="post /v1/wallets/authenticate">client.wallets.<a href="./src/resources/wallets/wallets.ts">authenticateWithJwt</a>({ ...params }) -> WalletAuthenticateWithJwtResponse</code>
+- <code title="post /v1/wallets/batch">client.wallets.<a href="./src/resources/wallets/wallets.ts">createBatch</a>({ ...params }) -> WalletBatchCreateResponse</code>
 - <code title="post /v1/wallets_with_recovery">client.wallets.<a href="./src/resources/wallets/wallets.ts">createWalletsWithRecovery</a>({ ...params }) -> WalletCreateWalletsWithRecoveryResponse</code>
 - <code title="get /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">get</a>(walletID) -> Wallet</code>
 - <code title="post /v1/wallets/address">client.wallets.<a href="./src/resources/wallets/wallets.ts">getWalletByAddress</a>({ ...params }) -> Wallet</code>
@@ -731,6 +732,9 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">CustomJwtAuthenticateRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">CustomJwtLinkRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">CustomOAuthProviderID</a></code>
+- <code><a href="./src/resources/client-auth.ts">DeviceVerifyAction</a></code>
+- <code><a href="./src/resources/client-auth.ts">DeviceVerifyRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">DeviceVerifyResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">ExternalOAuthProviderID</a></code>
 - <code><a href="./src/resources/client-auth.ts">FarcasterAuthenticateInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">FarcasterAuthenticateRequestBody</a></code>
@@ -783,6 +787,13 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">OAuthLinkRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthLinkResponseBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthProviderID</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTokenAuthorizationCodeRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTokenDeviceCodePendingError</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTokenDeviceCodeRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTokenGrantType</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTokenRefreshTokenRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTokenRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTokenSuccessResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthTransferRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthTransferUserInfo</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthTransferUserInfoMeta</a></code>

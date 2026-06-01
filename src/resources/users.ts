@@ -724,6 +724,9 @@ export interface LinkedAccountEmailInput {
   type: 'email';
 }
 
+/**
+ * A linked embedded wallet account across all supported chain types.
+ */
 export type LinkedAccountEmbeddedWallet =
   | LinkedAccountEthereumEmbeddedWallet
   | LinkedAccountSolanaEmbeddedWallet

@@ -435,4 +435,27 @@ describe('PrivyWalletsService', () => {
       expect(response).toBeDefined();
     });
   });
+
+  describe('batchCreate', () => {
+    it('should create multiple wallets in a single batch call', async () => {
+      const response = await privyClient.wallets().batchCreate({
+        wallets: [
+          { chain_type: 'ethereum' },
+          { chain_type: 'solana' },
+          { chain_type: 'ethereum', display_name: 'batch-test-wallet' },
+        ],
+      });
+
+      expect(response.results).toHaveLength(3);
+      for (const result of response.results) {
+        expect(result.success).toBe(true);
+        if (result.success) {
+          expect(result.wallet).toBeDefined();
+          expect(result.wallet.id).toBeDefined();
+        }
+      }
+      expect((response.results[0] as { success: true; wallet: { chain_type: string } }).wallet.chain_type).toBe('ethereum');
+      expect((response.results[1] as { success: true; wallet: { chain_type: string } }).wallet.chain_type).toBe('solana');
+    });
+  });
 });

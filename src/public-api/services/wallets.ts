@@ -6,6 +6,8 @@ import { setupHPKERecipient, setupHPKESender } from '../../lib/cryptography';
 import { entropyToBytes } from '../../lib/wallet-entropy';
 import {
   Wallet,
+  WalletBatchCreateInput,
+  WalletBatchCreateResponse,
   WalletCreateParams,
   WalletExportParams,
   WalletRawSignParams,
@@ -24,7 +26,7 @@ import { PrivyClient } from '../PrivyClient';
 import { PrivyEarnService } from './earn';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
-import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
+import { IdempotencyConfig, Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
 import {
   defaultTempoTransactionTypeForRpcParams,
   isTempoTransactionRpcParams,
@@ -64,6 +66,18 @@ export class PrivyWalletsService extends Wallets {
     return super.create({
       ...params,
       ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
+    });
+  }
+
+  public batchCreate({
+    idempotency_key: idempotencyKey,
+    ...body
+  }: PrivyWalletsService.BatchCreateInput): APIPromise<WalletBatchCreateResponse> {
+    return this._client.post('/v1/wallets/batch', {
+      body,
+      headers: {
+        ...(idempotencyKey != null ? { 'privy-idempotency-key': idempotencyKey } : undefined),
+      },
     });
   }
 
@@ -261,6 +275,8 @@ export class PrivyWalletsService extends Wallets {
 export namespace PrivyWalletsService {
   /** The input type for the {@link PrivyWalletsService.create} method. */
   export type CreateInput = Prettify<WithIdempotency<WalletCreateParams>>;
+  /** The input type for the {@link PrivyWalletsService.batchCreate} method. */
+  export type BatchCreateInput = Prettify<WalletBatchCreateInput & IdempotencyConfig>;
   /** The input type for the {@link PrivyWalletsService.rpc} method. */
   export type RpcInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<WalletRpcParams>>>>;
   /** The input type for the {@link PrivyWalletsService.rawSign} method. */

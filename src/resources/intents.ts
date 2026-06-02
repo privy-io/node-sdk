@@ -13,6 +13,9 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Operations related to authorization intents for wallet actions
+ */
 export class Intents extends APIResource {
   /**
    * List intents for an app. Returns a paginated list of intents with their current

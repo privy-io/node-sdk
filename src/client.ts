@@ -1809,6 +1809,9 @@ export class PrivyAPI {
    * Operations related to key quorums
    */
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
+  /**
+   * Operations related to authorization intents for wallet actions
+   */
   intents: API.Intents = new API.Intents(this);
   /**
    * Operations related to app settings and allowlist management

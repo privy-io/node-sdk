@@ -63,6 +63,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">FeeConfiguration</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">FeeLineItem</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">Gas</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">GetByWalletAddressRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HDInitInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HDPath</a></code>
@@ -870,6 +871,25 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">TransferTelegramInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">UnlinkPasskeyInput</a></code>
 
+# Shared
+
+Types:
+
+- <code><a href="./src/resources/shared.ts">BitcoinAddress</a></code>
+- <code><a href="./src/resources/shared.ts">CurrencyAmount</a></code>
+- <code><a href="./src/resources/shared.ts">EvmAddress</a></code>
+- <code><a href="./src/resources/shared.ts">EvmChecksumAddress</a></code>
+- <code><a href="./src/resources/shared.ts">HyperliquidTokenAddress</a></code>
+- <code><a href="./src/resources/shared.ts">KeyQuorumID</a></code>
+- <code><a href="./src/resources/shared.ts">OwnerIDInput</a></code>
+- <code><a href="./src/resources/shared.ts">OwnerInput</a></code>
+- <code><a href="./src/resources/shared.ts">OwnerInputPublicKey</a></code>
+- <code><a href="./src/resources/shared.ts">OwnerInputUser</a></code>
+- <code><a href="./src/resources/shared.ts">P256PublicKey</a></code>
+- <code><a href="./src/resources/shared.ts">SolanaAddress</a></code>
+- <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
+- <code><a href="./src/resources/shared.ts">TronAddress</a></code>
+
 # Onramps
 
 Types:
@@ -910,7 +930,9 @@ Types:
 - <code><a href="./src/resources/onramps.ts">LinkAuthIntentNoAccount</a></code>
 - <code><a href="./src/resources/onramps.ts">ListStripeConsumerWalletsResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">ListStripePaymentTokensResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">OnrampSessionFees</a></code>
 - <code><a href="./src/resources/onramps.ts">OnrampSessionParams</a></code>
+- <code><a href="./src/resources/onramps.ts">OnrampSessionTransactionDetails</a></code>
 - <code><a href="./src/resources/onramps.ts">RefreshStripeQuoteResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeConsumerWallet</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerActive</a></code>
@@ -968,24 +990,14 @@ Types:
 - <code><a href="./src/resources/cross-app.ts">CrossAppConnection</a></code>
 - <code><a href="./src/resources/cross-app.ts">CrossAppConnectionsResponse</a></code>
 
-# Shared
-
-Types:
-
-- <code><a href="./src/resources/shared.ts">CurrencyAmount</a></code>
-- <code><a href="./src/resources/shared.ts">KeyQuorumID</a></code>
-- <code><a href="./src/resources/shared.ts">OwnerIDInput</a></code>
-- <code><a href="./src/resources/shared.ts">OwnerInput</a></code>
-- <code><a href="./src/resources/shared.ts">OwnerInputPublicKey</a></code>
-- <code><a href="./src/resources/shared.ts">OwnerInputUser</a></code>
-- <code><a href="./src/resources/shared.ts">P256PublicKey</a></code>
-- <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
-
 # OAuth
 
 Types:
 
 - <code><a href="./src/resources/oauth.ts">DeviceAuthorizationResponse</a></code>
+- <code><a href="./src/resources/oauth.ts">OAuthGrant</a></code>
+- <code><a href="./src/resources/oauth.ts">OAuthGrantListResponse</a></code>
+- <code><a href="./src/resources/oauth.ts">OAuthGrantRevokeResponse</a></code>
 
 # WalletActions
 

@@ -1272,6 +1272,27 @@ export type FeeLineItem = RelayerFee | PrivyFee | DeveloperFee;
 export type FirstClassChainType = 'ethereum' | 'solana';
 
 /**
+ * Gas cost for a blockchain action. Includes both raw base-unit amount and a
+ * human-readable decimal string, plus the gas token symbol.
+ */
+export interface Gas {
+  /**
+   * Gas cost in the gas token as a human-readable decimal string (e.g. "0.0001").
+   */
+  amount: string;
+
+  /**
+   * Gas cost in the gas token's base units (e.g. wei).
+   */
+  base_amount: string;
+
+  /**
+   * Gas token symbol (e.g. "ETH", "USDC").
+   */
+  gas_asset: string;
+}
+
+/**
  * Request body for looking up a wallet by its blockchain address.
  */
 export interface GetByWalletAddressRequestBody {
@@ -2614,7 +2635,7 @@ export interface TokenOutput {
  */
 export interface TokenTransferDestination {
   /**
-   * Recipient address (hex for EVM, base58 for Solana)
+   * Recipient address (hex for EVM, base58 for Solana, base58check for Tron)
    */
   address: string;
 
@@ -2731,6 +2752,12 @@ export interface TransferQuoteResponse {
    * Whether the amount refers to the input token or output token.
    */
   amount_type?: AmountType;
+
+  /**
+   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
+   * human-readable decimal string, plus the gas token symbol.
+   */
+  estimated_gas?: Gas;
 }
 
 /**
@@ -5080,6 +5107,7 @@ export declare namespace Wallets {
     type FeeConfiguration as FeeConfiguration,
     type FeeLineItem as FeeLineItem,
     type FirstClassChainType as FirstClassChainType,
+    type Gas as Gas,
     type GetByWalletAddressRequestBody as GetByWalletAddressRequestBody,
     type HDInitInput as HDInitInput,
     type HDPath as HDPath,

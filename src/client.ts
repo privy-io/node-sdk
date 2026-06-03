@@ -376,7 +376,13 @@ import {
   KrakenEmbedToggleAutoEarnResponse,
   KrakenEmbedUpcomingReward,
 } from './resources/kraken-embed';
-import { DeviceAuthorizationResponse, OAuth } from './resources/oauth';
+import {
+  DeviceAuthorizationResponse,
+  OAuth,
+  OAuthGrant,
+  OAuthGrantListResponse,
+  OAuthGrantRevokeResponse,
+} from './resources/oauth';
 import {
   BridgeFiatCustomerResponse,
   BridgeFiatRejectionReason,
@@ -414,7 +420,9 @@ import {
   LinkAuthIntentNoAccount,
   ListStripeConsumerWalletsResponse,
   ListStripePaymentTokensResponse,
+  OnrampSessionFees,
   OnrampSessionParams,
+  OnrampSessionTransactionDetails,
   Onramps,
   RefreshStripeQuoteResponse,
   StripeConsumerWallet,
@@ -490,7 +498,11 @@ import {
   UpdateConditionSetRequestBody,
 } from './resources/policies';
 import {
+  BitcoinAddress,
   CurrencyAmount,
+  EvmAddress,
+  EvmChecksumAddress,
+  HyperliquidTokenAddress,
   KeyQuorumID,
   OwnerIDInput,
   OwnerInput,
@@ -498,7 +510,9 @@ import {
   OwnerInputUser,
   P256PublicKey,
   Shared,
+  SolanaAddress,
   SuccessResponse,
+  TronAddress,
 } from './resources/shared';
 import {
   SwapDestination,
@@ -844,6 +858,7 @@ import {
   FeeConfiguration,
   FeeLineItem,
   FirstClassChainType,
+  Gas,
   GetByWalletAddressRequestBody,
   HDInitInput,
   HDPath,
@@ -1823,11 +1838,11 @@ export class PrivyAPI {
   embeddedWallets: API.EmbeddedWallets = new API.EmbeddedWallets(this);
   analytics: API.Analytics = new API.Analytics(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
+  shared: API.Shared = new API.Shared(this);
   onramps: API.Onramps = new API.Onramps(this);
   funding: API.Funding = new API.Funding(this);
   organizations: API.Organizations = new API.Organizations(this);
   crossApp: API.CrossApp = new API.CrossApp(this);
-  shared: API.Shared = new API.Shared(this);
   oAuth: API.OAuth = new API.OAuth(this);
   walletActions: API.WalletActions = new API.WalletActions(this);
   yield: API.Yield = new API.Yield(this);
@@ -1848,11 +1863,11 @@ PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.EmbeddedWallets = EmbeddedWallets;
 PrivyAPI.Analytics = Analytics;
 PrivyAPI.ClientAuth = ClientAuth;
+PrivyAPI.Shared = Shared;
 PrivyAPI.Onramps = Onramps;
 PrivyAPI.Funding = Funding;
 PrivyAPI.Organizations = Organizations;
 PrivyAPI.CrossApp = CrossApp;
-PrivyAPI.Shared = Shared;
 PrivyAPI.OAuth = OAuth;
 PrivyAPI.WalletActions = WalletActions;
 PrivyAPI.Yield = Yield;
@@ -1928,6 +1943,7 @@ export declare namespace PrivyAPI {
     type FeeConfiguration as FeeConfiguration,
     type FeeLineItem as FeeLineItem,
     type FirstClassChainType as FirstClassChainType,
+    type Gas as Gas,
     type GetByWalletAddressRequestBody as GetByWalletAddressRequestBody,
     type HDInitInput as HDInitInput,
     type HDPath as HDPath,
@@ -2637,6 +2653,24 @@ export declare namespace PrivyAPI {
   };
 
   export {
+    Shared as Shared,
+    type BitcoinAddress as BitcoinAddress,
+    type CurrencyAmount as CurrencyAmount,
+    type EvmAddress as EvmAddress,
+    type EvmChecksumAddress as EvmChecksumAddress,
+    type HyperliquidTokenAddress as HyperliquidTokenAddress,
+    type KeyQuorumID as KeyQuorumID,
+    type OwnerIDInput as OwnerIDInput,
+    type OwnerInput as OwnerInput,
+    type OwnerInputPublicKey as OwnerInputPublicKey,
+    type OwnerInputUser as OwnerInputUser,
+    type P256PublicKey as P256PublicKey,
+    type SolanaAddress as SolanaAddress,
+    type SuccessResponse as SuccessResponse,
+    type TronAddress as TronAddress,
+  };
+
+  export {
     Onramps as Onramps,
     type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
     type BridgeFiatRejectionReason as BridgeFiatRejectionReason,
@@ -2674,7 +2708,9 @@ export declare namespace PrivyAPI {
     type LinkAuthIntentNoAccount as LinkAuthIntentNoAccount,
     type ListStripeConsumerWalletsResponse as ListStripeConsumerWalletsResponse,
     type ListStripePaymentTokensResponse as ListStripePaymentTokensResponse,
+    type OnrampSessionFees as OnrampSessionFees,
     type OnrampSessionParams as OnrampSessionParams,
+    type OnrampSessionTransactionDetails as OnrampSessionTransactionDetails,
     type RefreshStripeQuoteResponse as RefreshStripeQuoteResponse,
     type StripeConsumerWallet as StripeConsumerWallet,
     type StripeCryptoCustomerActive as StripeCryptoCustomerActive,
@@ -2731,18 +2767,12 @@ export declare namespace PrivyAPI {
   };
 
   export {
-    Shared as Shared,
-    type CurrencyAmount as CurrencyAmount,
-    type KeyQuorumID as KeyQuorumID,
-    type OwnerIDInput as OwnerIDInput,
-    type OwnerInput as OwnerInput,
-    type OwnerInputPublicKey as OwnerInputPublicKey,
-    type OwnerInputUser as OwnerInputUser,
-    type P256PublicKey as P256PublicKey,
-    type SuccessResponse as SuccessResponse,
+    OAuth as OAuth,
+    type DeviceAuthorizationResponse as DeviceAuthorizationResponse,
+    type OAuthGrant as OAuthGrant,
+    type OAuthGrantListResponse as OAuthGrantListResponse,
+    type OAuthGrantRevokeResponse as OAuthGrantRevokeResponse,
   };
-
-  export { OAuth as OAuth, type DeviceAuthorizationResponse as DeviceAuthorizationResponse };
 
   export {
     WalletActions as WalletActions,

@@ -700,9 +700,31 @@ export interface SwapActionResponse {
   destination_caip2?: string;
 
   /**
+   * Estimated fee breakdown from the provider quote.
+   */
+  estimated_fees?: Array<WalletsAPI.FeeLineItem>;
+
+  /**
+   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
+   * human-readable decimal string, plus the gas token symbol.
+   */
+  estimated_gas?: WalletsAPI.Gas;
+
+  /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
+
+  /**
+   * Actual fees paid for the swap. Populated after on-chain confirmation.
+   */
+  fees?: Array<WalletsAPI.FeeLineItem>;
+
+  /**
+   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
+   * human-readable decimal string, plus the gas token symbol.
+   */
+  gas?: WalletsAPI.Gas;
 
   /**
    * The steps of the wallet action. Only returned if `?include=steps` is provided.
@@ -763,14 +785,31 @@ export interface TransferActionResponse {
   destination_chain?: string;
 
   /**
+   * Estimated fee breakdown from the provider quote.
+   */
+  estimated_fees?: Array<WalletsAPI.FeeLineItem>;
+
+  /**
+   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
+   * human-readable decimal string, plus the gas token symbol.
+   */
+  estimated_gas?: WalletsAPI.Gas;
+
+  /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
 
   /**
-   * Fees paid for the transfer.
+   * Actual fees paid for the transfer. Populated after on-chain confirmation.
    */
   fees?: Array<WalletsAPI.FeeLineItem>;
+
+  /**
+   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
+   * human-readable decimal string, plus the gas token symbol.
+   */
+  gas?: WalletsAPI.Gas;
 
   /**
    * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output

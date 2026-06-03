@@ -388,7 +388,13 @@ export {
   type KrakenEmbedToggleAutoEarnResponse,
   type KrakenEmbedUpcomingReward,
 } from './kraken-embed';
-export { OAuth, type DeviceAuthorizationResponse } from './oauth';
+export {
+  OAuth,
+  type DeviceAuthorizationResponse,
+  type OAuthGrant,
+  type OAuthGrantListResponse,
+  type OAuthGrantRevokeResponse,
+} from './oauth';
 export {
   Onramps,
   type BridgeFiatCustomerResponse,
@@ -427,7 +433,9 @@ export {
   type LinkAuthIntentNoAccount,
   type ListStripeConsumerWalletsResponse,
   type ListStripePaymentTokensResponse,
+  type OnrampSessionFees,
   type OnrampSessionParams,
+  type OnrampSessionTransactionDetails,
   type RefreshStripeQuoteResponse,
   type StripeConsumerWallet,
   type StripeCryptoCustomerActive,
@@ -503,14 +511,20 @@ export {
 } from './policies';
 export {
   Shared,
+  type BitcoinAddress,
   type CurrencyAmount,
+  type EvmAddress,
+  type EvmChecksumAddress,
+  type HyperliquidTokenAddress,
   type KeyQuorumID,
   type OwnerIDInput,
   type OwnerInput,
   type OwnerInputPublicKey,
   type OwnerInputUser,
   type P256PublicKey,
+  type SolanaAddress,
   type SuccessResponse,
+  type TronAddress,
 } from './shared';
 export {
   Swaps,
@@ -726,6 +740,7 @@ export {
   type FeeConfiguration,
   type FeeLineItem,
   type FirstClassChainType,
+  type Gas,
   type GetByWalletAddressRequestBody,
   type HDInitInput,
   type HDPath,

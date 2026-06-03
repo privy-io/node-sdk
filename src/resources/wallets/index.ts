@@ -67,6 +67,7 @@ export {
   type FeeConfiguration,
   type FeeLineItem,
   type FirstClassChainType,
+  type Gas,
   type GetByWalletAddressRequestBody,
   type HDInitInput,
   type HDPath,

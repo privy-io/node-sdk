@@ -41,6 +41,56 @@ export interface DeviceAuthorizationResponse {
   verification_uri_complete: string;
 }
 
+/**
+ * An active OAuth grant representing an authorized session.
+ */
+export interface OAuthGrant {
+  /**
+   * The grant identifier.
+   */
+  id: string;
+
+  /**
+   * When the grant was first created.
+   */
+  created_at: string;
+
+  /**
+   * The OAuth grant type that created this grant.
+   */
+  grant_type: 'device_code';
+
+  /**
+   * When the grant was last used (e.g. token refreshed).
+   */
+  last_used_at: string;
+}
+
+/**
+ * List of active OAuth grants for the authenticated user.
+ */
+export interface OAuthGrantListResponse {
+  /**
+   * Active grants.
+   */
+  data: Array<OAuthGrant>;
+}
+
+/**
+ * Response from revoking an OAuth grant.
+ */
+export interface OAuthGrantRevokeResponse {
+  /**
+   * Whether the revocation was processed.
+   */
+  success: true;
+}
+
 export declare namespace OAuth {
-  export { type DeviceAuthorizationResponse as DeviceAuthorizationResponse };
+  export {
+    type DeviceAuthorizationResponse as DeviceAuthorizationResponse,
+    type OAuthGrant as OAuthGrant,
+    type OAuthGrantListResponse as OAuthGrantListResponse,
+    type OAuthGrantRevokeResponse as OAuthGrantRevokeResponse,
+  };
 }

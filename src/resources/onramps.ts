@@ -446,9 +446,9 @@ export interface ListStripePaymentTokensResponse {
  * Fee breakdown for a Stripe onramp transaction.
  */
 export interface OnrampSessionFees {
-  network_fee_monetary: string | null;
+  network_fee_amount: string | null;
 
-  transaction_fee_monetary: string | null;
+  transaction_fee_amount: string | null;
 }
 
 /**

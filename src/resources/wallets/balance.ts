@@ -35,11 +35,12 @@ export interface BalanceGetResponse {
 
 export namespace BalanceGetResponse {
   export interface Balance {
-    asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+    asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
     chain:
       | 'ethereum'
       | 'arbitrum'
+      | 'avalanche'
       | 'base'
       | 'tempo'
       | 'linea'
@@ -49,6 +50,7 @@ export namespace BalanceGetResponse {
       | 'zksync_era'
       | 'sepolia'
       | 'arbitrum_sepolia'
+      | 'avalanche_fuji'
       | 'base_sepolia'
       | 'linea_testnet'
       | 'optimism_sepolia'
@@ -81,6 +83,7 @@ export interface BalanceGetParams {
     | 'usdc'
     | 'usdc.e'
     | 'eth'
+    | 'avax'
     | 'pol'
     | 'usdt'
     | 'eurc'
@@ -95,6 +98,7 @@ export interface BalanceGetParams {
   chain?:
     | 'ethereum'
     | 'arbitrum'
+    | 'avalanche'
     | 'base'
     | 'tempo'
     | 'linea'
@@ -104,6 +108,7 @@ export interface BalanceGetParams {
     | 'zksync_era'
     | 'sepolia'
     | 'arbitrum_sepolia'
+    | 'avalanche_fuji'
     | 'base_sepolia'
     | 'linea_testnet'
     | 'optimism_sepolia'
@@ -113,6 +118,7 @@ export interface BalanceGetParams {
     | Array<
         | 'ethereum'
         | 'arbitrum'
+        | 'avalanche'
         | 'base'
         | 'tempo'
         | 'linea'
@@ -122,6 +128,7 @@ export interface BalanceGetParams {
         | 'zksync_era'
         | 'sepolia'
         | 'arbitrum_sepolia'
+        | 'avalanche_fuji'
         | 'base_sepolia'
         | 'linea_testnet'
         | 'optimism_sepolia'

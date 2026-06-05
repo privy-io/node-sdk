@@ -2712,7 +2712,8 @@ export interface TransferQuoteRequestBody {
   fee_configuration?: FeeConfiguration;
 
   /**
-   * Maximum allowed slippage in basis points (1 bps = 0.01%).
+   * Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
+   * cross-chain or cross-asset transfers; omit to use the provider default.
    */
   slippage_bps?: number;
 }
@@ -2764,11 +2765,12 @@ export interface TransferQuoteResponse {
  * Details for a received transfer transaction.
  */
 export interface TransferReceivedTransactionDetail {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
   chain:
     | 'ethereum'
     | 'arbitrum'
+    | 'avalanche'
     | 'base'
     | 'tempo'
     | 'linea'
@@ -2778,6 +2780,7 @@ export interface TransferReceivedTransactionDetail {
     | 'zksync_era'
     | 'sepolia'
     | 'arbitrum_sepolia'
+    | 'avalanche_fuji'
     | 'base_sepolia'
     | 'linea_testnet'
     | 'optimism_sepolia'
@@ -2829,7 +2832,8 @@ export interface TransferRequestBody {
   fee_configuration?: FeeConfiguration;
 
   /**
-   * Maximum allowed slippage in basis points (1 bps = 0.01%).
+   * Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
+   * cross-chain or cross-asset transfers; omit to use the provider default.
    */
   slippage_bps?: number;
 }
@@ -2838,11 +2842,12 @@ export interface TransferRequestBody {
  * Details for a sent transfer transaction.
  */
 export interface TransferSentTransactionDetail {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
   chain:
     | 'ethereum'
     | 'arbitrum'
+    | 'avalanche'
     | 'base'
     | 'tempo'
     | 'linea'
@@ -2852,6 +2857,7 @@ export interface TransferSentTransactionDetail {
     | 'zksync_era'
     | 'sepolia'
     | 'arbitrum_sepolia'
+    | 'avalanche_fuji'
     | 'base_sepolia'
     | 'linea_testnet'
     | 'optimism_sepolia'
@@ -3236,7 +3242,7 @@ export interface WalletAPIRevokeAuthorizationKeyInput {
 /**
  * A named asset supported across all chains.
  */
-export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
 
 /**
  * Request body for wallet authentication with HPKE-encrypted response.
@@ -3516,7 +3522,7 @@ export type WalletEntropyType = 'hd' | 'private-key';
 /**
  * A named asset on Ethereum-compatible chains.
  */
-export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb';
+export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb';
 
 /**
  * Request body for exporting a wallet private key.
@@ -4896,7 +4902,9 @@ export interface WalletTransferParams {
   fee_configuration?: FeeConfiguration;
 
   /**
-   * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%).
+   * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%). Only
+   * applicable for cross-chain or cross-asset transfers; omit to use the provider
+   * default.
    */
   slippage_bps?: number;
 

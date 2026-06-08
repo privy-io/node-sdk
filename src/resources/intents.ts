@@ -13,6 +13,9 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Operations related to authorization intents for wallet actions
+ */
 export class Intents extends APIResource {
   /**
    * List intents for an app. Returns a paginated list of intents with their current
@@ -1800,7 +1803,9 @@ export interface IntentTransferParams {
   fee_configuration?: WalletsAPI.FeeConfiguration;
 
   /**
-   * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%).
+   * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%). Only
+   * applicable for cross-chain or cross-asset transfers; omit to use the provider
+   * default.
    */
   slippage_bps?: number;
 

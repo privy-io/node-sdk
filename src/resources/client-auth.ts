@@ -90,6 +90,9 @@ export interface BridgeBrlFiatVirtualAccountDepositInstructions {
   payment_rails: Array<'pix'>;
 }
 
+/**
+ * Supported destination stablecoin assets for fiat-to-crypto transfers.
+ */
 export type BridgeDestinationAsset = 'usdb' | 'usdc' | 'usdt' | 'dai' | 'pyusd' | 'eurc';
 
 /**
@@ -121,9 +124,15 @@ export type BridgeFiatVirtualAccountDepositInstructions =
   | BridgeBrlFiatVirtualAccountDepositInstructions
   | BridgeGbpFiatVirtualAccountDepositInstructions;
 
+/**
+ * The destination chain, asset, and address for a virtual account transfer.
+ */
 export interface BridgeFiatVirtualAccountDestination {
   address: string;
 
+  /**
+   * Supported destination stablecoin assets for fiat-to-crypto transfers.
+   */
   asset: BridgeDestinationAsset;
 
   chain: string;
@@ -133,10 +142,16 @@ export interface BridgeFiatVirtualAccountDestination {
  * The request input for creating virtual account.
  */
 export interface BridgeFiatVirtualAccountRequest {
+  /**
+   * The destination chain, asset, and address for a virtual account transfer.
+   */
   destination: BridgeFiatVirtualAccountDestination;
 
   provider: 'bridge';
 
+  /**
+   * The source fiat currency configuration for a virtual account.
+   */
   source: BridgeFiatVirtualAccountSource;
 }
 
@@ -149,6 +164,9 @@ export interface BridgeFiatVirtualAccountResponse {
    */
   deposit_instructions: BridgeFiatVirtualAccountDepositInstructions;
 
+  /**
+   * The destination chain, asset, and address for a virtual account transfer.
+   */
   destination: BridgeFiatVirtualAccountDestination;
 
   provider: 'bridge';
@@ -156,7 +174,13 @@ export interface BridgeFiatVirtualAccountResponse {
   status: string;
 }
 
+/**
+ * The source fiat currency configuration for a virtual account.
+ */
 export interface BridgeFiatVirtualAccountSource {
+  /**
+   * Supported source fiat currencies for virtual account deposits.
+   */
   asset: BridgeSourceAsset;
 }
 
@@ -205,10 +229,16 @@ export type BridgeOnrampProvider = 'bridge' | 'bridge-sandbox';
  * The request input for creating virtual account.
  */
 export interface BridgeSandboxFiatVirtualAccountRequest {
+  /**
+   * The destination chain, asset, and address for a virtual account transfer.
+   */
   destination: BridgeFiatVirtualAccountDestination;
 
   provider: 'bridge-sandbox';
 
+  /**
+   * The source fiat currency configuration for a virtual account.
+   */
   source: BridgeFiatVirtualAccountSource;
 }
 
@@ -221,6 +251,9 @@ export interface BridgeSandboxFiatVirtualAccountResponse {
    */
   deposit_instructions: BridgeFiatVirtualAccountDepositInstructions;
 
+  /**
+   * The destination chain, asset, and address for a virtual account transfer.
+   */
   destination: BridgeFiatVirtualAccountDestination;
 
   provider: 'bridge-sandbox';
@@ -228,6 +261,9 @@ export interface BridgeSandboxFiatVirtualAccountResponse {
   status: string;
 }
 
+/**
+ * Supported source fiat currencies for virtual account deposits.
+ */
 export type BridgeSourceAsset = 'usd' | 'eur' | 'mxn' | 'brl' | 'gbp';
 
 /**
@@ -275,6 +311,37 @@ export interface CustomJwtLinkRequestBody {
  * "custom:".
  */
 export type CustomOAuthProviderID = `custom:${string}`;
+
+/**
+ * The action to take on the device authorization request.
+ */
+export type DeviceVerifyAction = 'approve' | 'deny';
+
+/**
+ * Request body for approving or denying a device authorization request. The user
+ * must be authenticated and belong to the target app.
+ */
+export interface DeviceVerifyRequestBody {
+  /**
+   * The action to take on the device authorization request.
+   */
+  action: DeviceVerifyAction;
+
+  /**
+   * The user code displayed on the CLI device.
+   */
+  user_code: string;
+}
+
+/**
+ * Response indicating the device authorization action was processed.
+ */
+export interface DeviceVerifyResponse {
+  /**
+   * Whether the action was processed successfully.
+   */
+  success: boolean;
+}
 
 /**
  * The ID of an external OAuth provider.
@@ -822,6 +889,122 @@ export interface OAuthLinkResponseBody extends UsersAPI.User {
  * The ID of an OAuth provider.
  */
 export type OAuthProviderID = ExternalOAuthProviderID | PrivyOAuthProviderID;
+
+/**
+ * Request body for the authorization_code grant type.
+ */
+export interface OAuthTokenAuthorizationCodeRequestBody {
+  /**
+   * The authorization code received from the authorization endpoint.
+   */
+  code: string;
+
+  grant_type: 'authorization_code';
+
+  /**
+   * The client ID. Alternative to Basic auth header.
+   */
+  client_id?: string;
+
+  /**
+   * The client secret. Alternative to Basic auth header.
+   */
+  client_secret?: string;
+
+  /**
+   * The redirect URI used in the authorization request.
+   */
+  redirect_uri?: string;
+}
+
+/**
+ * Error response returned while the device authorization is still pending (RFC
+ * 8628 Section 3.5).
+ */
+export interface OAuthTokenDeviceCodePendingError {
+  /**
+   * The error code indicating why the token request failed.
+   */
+  error: 'authorization_pending' | 'slow_down' | 'access_denied' | 'expired_token';
+
+  /**
+   * Human-readable description of the error.
+   */
+  error_description?: string;
+
+  /**
+   * The minimum polling interval in seconds.
+   */
+  interval?: number;
+}
+
+/**
+ * Request body for the urn:ietf:params:oauth:grant-type:device_code grant type
+ * (RFC 8628). Used by CLI clients to poll for authorization.
+ */
+export interface OAuthTokenDeviceCodeRequestBody {
+  /**
+   * The device code received from the device authorization endpoint.
+   */
+  device_code: string;
+
+  grant_type: 'urn:ietf:params:oauth:grant-type:device_code';
+}
+
+/**
+ * The OAuth grant type for the token request.
+ */
+export type OAuthTokenGrantType =
+  | 'authorization_code'
+  | 'urn:ietf:params:oauth:grant-type:device_code'
+  | 'refresh_token';
+
+/**
+ * Request body for the refresh_token grant type. Rotates the refresh token and
+ * issues a new access token.
+ */
+export interface OAuthTokenRefreshTokenRequestBody {
+  grant_type: 'refresh_token';
+
+  /**
+   * The refresh token to exchange for a new access token.
+   */
+  refresh_token: string;
+}
+
+/**
+ * Request body for the OAuth token endpoint, discriminated by grant_type.
+ */
+export type OAuthTokenRequestBody =
+  | OAuthTokenAuthorizationCodeRequestBody
+  | OAuthTokenDeviceCodeRequestBody
+  | OAuthTokenRefreshTokenRequestBody;
+
+/**
+ * Successful token response per RFC 6749 Section 5.1.
+ */
+export interface OAuthTokenSuccessResponse {
+  /**
+   * The issued access token.
+   */
+  access_token: string;
+
+  /**
+   * The type of token issued.
+   */
+  token_type: 'Bearer';
+
+  /**
+   * The lifetime in seconds of the access token.
+   */
+  expires_in?: number;
+
+  /**
+   * A refresh token for obtaining new access tokens. Issued for device_code and
+   * refresh_token grants.
+   */
+  refresh_token?: string;
+}
 
 /**
  * The request body for transferring an OAuth account.
@@ -1808,6 +1991,9 @@ export declare namespace ClientAuth {
     type CustomJwtAuthenticateRequestBody as CustomJwtAuthenticateRequestBody,
     type CustomJwtLinkRequestBody as CustomJwtLinkRequestBody,
     type CustomOAuthProviderID as CustomOAuthProviderID,
+    type DeviceVerifyAction as DeviceVerifyAction,
+    type DeviceVerifyRequestBody as DeviceVerifyRequestBody,
+    type DeviceVerifyResponse as DeviceVerifyResponse,
     type ExternalOAuthProviderID as ExternalOAuthProviderID,
     type FarcasterAuthenticateInput as FarcasterAuthenticateInput,
     type FarcasterAuthenticateRequestBody as FarcasterAuthenticateRequestBody,
@@ -1860,6 +2046,13 @@ export declare namespace ClientAuth {
     type OAuthLinkRequestBody as OAuthLinkRequestBody,
     type OAuthLinkResponseBody as OAuthLinkResponseBody,
     type OAuthProviderID as OAuthProviderID,
+    type OAuthTokenAuthorizationCodeRequestBody as OAuthTokenAuthorizationCodeRequestBody,
+    type OAuthTokenDeviceCodePendingError as OAuthTokenDeviceCodePendingError,
+    type OAuthTokenDeviceCodeRequestBody as OAuthTokenDeviceCodeRequestBody,
+    type OAuthTokenGrantType as OAuthTokenGrantType,
+    type OAuthTokenRefreshTokenRequestBody as OAuthTokenRefreshTokenRequestBody,
+    type OAuthTokenRequestBody as OAuthTokenRequestBody,
+    type OAuthTokenSuccessResponse as OAuthTokenSuccessResponse,
     type OAuthTransferRequestBody as OAuthTransferRequestBody,
     type OAuthTransferUserInfo as OAuthTransferUserInfo,
     type OAuthTransferUserInfoMeta as OAuthTransferUserInfoMeta,

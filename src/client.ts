@@ -77,6 +77,9 @@ import {
   CustomJwtAuthenticateRequestBody,
   CustomJwtLinkRequestBody,
   CustomOAuthProviderID,
+  DeviceVerifyAction,
+  DeviceVerifyRequestBody,
+  DeviceVerifyResponse,
   ExternalOAuthProviderID,
   FarcasterAuthenticateInput,
   FarcasterAuthenticateRequestBody,
@@ -129,6 +132,13 @@ import {
   OAuthLinkRequestBody,
   OAuthLinkResponseBody,
   OAuthProviderID,
+  OAuthTokenAuthorizationCodeRequestBody,
+  OAuthTokenDeviceCodePendingError,
+  OAuthTokenDeviceCodeRequestBody,
+  OAuthTokenGrantType,
+  OAuthTokenRefreshTokenRequestBody,
+  OAuthTokenRequestBody,
+  OAuthTokenSuccessResponse,
   OAuthTransferRequestBody,
   OAuthTransferUserInfo,
   OAuthTransferUserInfoMeta,
@@ -366,7 +376,13 @@ import {
   KrakenEmbedToggleAutoEarnResponse,
   KrakenEmbedUpcomingReward,
 } from './resources/kraken-embed';
-import { DeviceAuthorizationResponse, OAuth } from './resources/oauth';
+import {
+  DeviceAuthorizationResponse,
+  OAuth,
+  OAuthGrant,
+  OAuthGrantListResponse,
+  OAuthGrantRevokeResponse,
+} from './resources/oauth';
 import {
   BridgeFiatCustomerResponse,
   BridgeFiatRejectionReason,
@@ -404,7 +420,9 @@ import {
   LinkAuthIntentNoAccount,
   ListStripeConsumerWalletsResponse,
   ListStripePaymentTokensResponse,
+  OnrampSessionFees,
   OnrampSessionParams,
+  OnrampSessionTransactionDetails,
   Onramps,
   RefreshStripeQuoteResponse,
   StripeConsumerWallet,
@@ -480,7 +498,11 @@ import {
   UpdateConditionSetRequestBody,
 } from './resources/policies';
 import {
+  BitcoinAddress,
   CurrencyAmount,
+  EvmAddress,
+  EvmChecksumAddress,
+  HyperliquidTokenAddress,
   KeyQuorumID,
   OwnerIDInput,
   OwnerInput,
@@ -488,7 +510,9 @@ import {
   OwnerInputUser,
   P256PublicKey,
   Shared,
+  SolanaAddress,
   SuccessResponse,
+  TronAddress,
 } from './resources/shared';
 import {
   SwapDestination,
@@ -834,6 +858,7 @@ import {
   FeeConfiguration,
   FeeLineItem,
   FirstClassChainType,
+  Gas,
   GetByWalletAddressRequestBody,
   HDInitInput,
   HDPath,
@@ -960,6 +985,7 @@ import {
   WalletBatchCreateResult,
   WalletBatchItemInput,
   WalletChainType,
+  WalletCreateBatchParams,
   WalletCreateParams,
   WalletCreateWalletsWithRecoveryParams,
   WalletCreateWalletsWithRecoveryResponse,
@@ -1808,6 +1834,9 @@ export class PrivyAPI {
    * Operations related to key quorums
    */
   keyQuorums: API.KeyQuorums = new API.KeyQuorums(this);
+  /**
+   * Operations related to authorization intents for wallet actions
+   */
   intents: API.Intents = new API.Intents(this);
   /**
    * Operations related to app settings and allowlist management
@@ -1819,11 +1848,11 @@ export class PrivyAPI {
   embeddedWallets: API.EmbeddedWallets = new API.EmbeddedWallets(this);
   analytics: API.Analytics = new API.Analytics(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
+  shared: API.Shared = new API.Shared(this);
   onramps: API.Onramps = new API.Onramps(this);
   funding: API.Funding = new API.Funding(this);
   organizations: API.Organizations = new API.Organizations(this);
   crossApp: API.CrossApp = new API.CrossApp(this);
-  shared: API.Shared = new API.Shared(this);
   oAuth: API.OAuth = new API.OAuth(this);
   walletActions: API.WalletActions = new API.WalletActions(this);
   yield: API.Yield = new API.Yield(this);
@@ -1844,11 +1873,11 @@ PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.EmbeddedWallets = EmbeddedWallets;
 PrivyAPI.Analytics = Analytics;
 PrivyAPI.ClientAuth = ClientAuth;
+PrivyAPI.Shared = Shared;
 PrivyAPI.Onramps = Onramps;
 PrivyAPI.Funding = Funding;
 PrivyAPI.Organizations = Organizations;
 PrivyAPI.CrossApp = CrossApp;
-PrivyAPI.Shared = Shared;
 PrivyAPI.OAuth = OAuth;
 PrivyAPI.WalletActions = WalletActions;
 PrivyAPI.Yield = Yield;
@@ -1924,6 +1953,7 @@ export declare namespace PrivyAPI {
     type FeeConfiguration as FeeConfiguration,
     type FeeLineItem as FeeLineItem,
     type FirstClassChainType as FirstClassChainType,
+    type Gas as Gas,
     type GetByWalletAddressRequestBody as GetByWalletAddressRequestBody,
     type HDInitInput as HDInitInput,
     type HDPath as HDPath,
@@ -2075,6 +2105,7 @@ export declare namespace PrivyAPI {
     type WalletTransferParams as WalletTransferParams,
     type WalletUpdateParams as WalletUpdateParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
+    type WalletCreateBatchParams as WalletCreateBatchParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };
@@ -2492,6 +2523,9 @@ export declare namespace PrivyAPI {
     type CustomJwtAuthenticateRequestBody as CustomJwtAuthenticateRequestBody,
     type CustomJwtLinkRequestBody as CustomJwtLinkRequestBody,
     type CustomOAuthProviderID as CustomOAuthProviderID,
+    type DeviceVerifyAction as DeviceVerifyAction,
+    type DeviceVerifyRequestBody as DeviceVerifyRequestBody,
+    type DeviceVerifyResponse as DeviceVerifyResponse,
     type ExternalOAuthProviderID as ExternalOAuthProviderID,
     type FarcasterAuthenticateInput as FarcasterAuthenticateInput,
     type FarcasterAuthenticateRequestBody as FarcasterAuthenticateRequestBody,
@@ -2544,6 +2578,13 @@ export declare namespace PrivyAPI {
     type OAuthLinkRequestBody as OAuthLinkRequestBody,
     type OAuthLinkResponseBody as OAuthLinkResponseBody,
     type OAuthProviderID as OAuthProviderID,
+    type OAuthTokenAuthorizationCodeRequestBody as OAuthTokenAuthorizationCodeRequestBody,
+    type OAuthTokenDeviceCodePendingError as OAuthTokenDeviceCodePendingError,
+    type OAuthTokenDeviceCodeRequestBody as OAuthTokenDeviceCodeRequestBody,
+    type OAuthTokenGrantType as OAuthTokenGrantType,
+    type OAuthTokenRefreshTokenRequestBody as OAuthTokenRefreshTokenRequestBody,
+    type OAuthTokenRequestBody as OAuthTokenRequestBody,
+    type OAuthTokenSuccessResponse as OAuthTokenSuccessResponse,
     type OAuthTransferRequestBody as OAuthTransferRequestBody,
     type OAuthTransferUserInfo as OAuthTransferUserInfo,
     type OAuthTransferUserInfoMeta as OAuthTransferUserInfoMeta,
@@ -2622,6 +2663,24 @@ export declare namespace PrivyAPI {
   };
 
   export {
+    Shared as Shared,
+    type BitcoinAddress as BitcoinAddress,
+    type CurrencyAmount as CurrencyAmount,
+    type EvmAddress as EvmAddress,
+    type EvmChecksumAddress as EvmChecksumAddress,
+    type HyperliquidTokenAddress as HyperliquidTokenAddress,
+    type KeyQuorumID as KeyQuorumID,
+    type OwnerIDInput as OwnerIDInput,
+    type OwnerInput as OwnerInput,
+    type OwnerInputPublicKey as OwnerInputPublicKey,
+    type OwnerInputUser as OwnerInputUser,
+    type P256PublicKey as P256PublicKey,
+    type SolanaAddress as SolanaAddress,
+    type SuccessResponse as SuccessResponse,
+    type TronAddress as TronAddress,
+  };
+
+  export {
     Onramps as Onramps,
     type BridgeFiatCustomerResponse as BridgeFiatCustomerResponse,
     type BridgeFiatRejectionReason as BridgeFiatRejectionReason,
@@ -2659,7 +2718,9 @@ export declare namespace PrivyAPI {
     type LinkAuthIntentNoAccount as LinkAuthIntentNoAccount,
     type ListStripeConsumerWalletsResponse as ListStripeConsumerWalletsResponse,
     type ListStripePaymentTokensResponse as ListStripePaymentTokensResponse,
+    type OnrampSessionFees as OnrampSessionFees,
     type OnrampSessionParams as OnrampSessionParams,
+    type OnrampSessionTransactionDetails as OnrampSessionTransactionDetails,
     type RefreshStripeQuoteResponse as RefreshStripeQuoteResponse,
     type StripeConsumerWallet as StripeConsumerWallet,
     type StripeCryptoCustomerActive as StripeCryptoCustomerActive,
@@ -2716,18 +2777,12 @@ export declare namespace PrivyAPI {
   };
 
   export {
-    Shared as Shared,
-    type CurrencyAmount as CurrencyAmount,
-    type KeyQuorumID as KeyQuorumID,
-    type OwnerIDInput as OwnerIDInput,
-    type OwnerInput as OwnerInput,
-    type OwnerInputPublicKey as OwnerInputPublicKey,
-    type OwnerInputUser as OwnerInputUser,
-    type P256PublicKey as P256PublicKey,
-    type SuccessResponse as SuccessResponse,
+    OAuth as OAuth,
+    type DeviceAuthorizationResponse as DeviceAuthorizationResponse,
+    type OAuthGrant as OAuthGrant,
+    type OAuthGrantListResponse as OAuthGrantListResponse,
+    type OAuthGrantRevokeResponse as OAuthGrantRevokeResponse,
   };
-
-  export { OAuth as OAuth, type DeviceAuthorizationResponse as DeviceAuthorizationResponse };
 
   export {
     WalletActions as WalletActions,

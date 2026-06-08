@@ -96,6 +96,7 @@ export interface TransactionGetParams {
     | 'usdc'
     | 'usdc.e'
     | 'eth'
+    | 'avax'
     | 'pol'
     | 'usdt'
     | 'eurc'

@@ -338,6 +338,46 @@ describe('resource wallets', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('createBatch: only required params', async () => {
+    const responsePromise = client.wallets.createBatch({
+      wallets: [{ chain_type: 'ethereum' }, { chain_type: 'solana' }],
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('createBatch: required and optional params', async () => {
+    const response = await client.wallets.createBatch({
+      wallets: [
+        {
+          chain_type: 'ethereum',
+          additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+          display_name: 'display_name',
+          external_id: 'external_id',
+          owner: { user_id: 'user_id' },
+          owner_id: 'string',
+          policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
+        },
+        {
+          chain_type: 'solana',
+          additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+          display_name: 'display_name',
+          external_id: 'external_id',
+          owner: { user_id: 'user_id' },
+          owner_id: 'string',
+          policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
+        },
+      ],
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('createWalletsWithRecovery: only required params', async () => {
     const responsePromise = client.wallets.createWalletsWithRecovery({
       primary_signer: { subject_id: 'cm7oxq1el000e11o8iwp7d0d0' },

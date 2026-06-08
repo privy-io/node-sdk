@@ -337,6 +337,29 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Creates multiple wallets in a single request. Each wallet creation is
+   * independent; failures for one wallet do not affect others. Maximum batch size is
+   * 100 wallets.
+   *
+   * @example
+   * ```ts
+   * const walletBatchCreateResponse =
+   *   await client.wallets.createBatch({
+   *     wallets: [
+   *       { chain_type: 'ethereum' },
+   *       { chain_type: 'solana' },
+   *     ],
+   *   });
+   * ```
+   */
+  createBatch(
+    body: WalletCreateBatchParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletBatchCreateResponse> {
+    return this._client.post('/v1/wallets/batch', { body, ...options });
+  }
+
+  /**
    * Create one or more wallets associated with a recovery user, so the user can
    * later regain wallet access via the linked accounts. Deprecated; prefer the
    * standard wallet creation flow combined with a separate recovery setup.
@@ -1250,6 +1273,27 @@ export type FeeLineItem = RelayerFee | PrivyFee | DeveloperFee;
  * The wallet chain types that offer first class support.
  */
 export type FirstClassChainType = 'ethereum' | 'solana';
+
+/**
+ * Gas cost for a blockchain action. Includes both raw base-unit amount and a
+ * human-readable decimal string, plus the gas token symbol.
+ */
+export interface Gas {
+  /**
+   * Gas cost in the gas token as a human-readable decimal string (e.g. "0.0001").
+   */
+  amount: string;
+
+  /**
+   * Gas cost in the gas token's base units (e.g. wei).
+   */
+  base_amount: string;
+
+  /**
+   * Gas token symbol (e.g. "ETH", "USDC").
+   */
+  gas_asset: string;
+}
 
 /**
  * Request body for looking up a wallet by its blockchain address.
@@ -2594,7 +2638,7 @@ export interface TokenOutput {
  */
 export interface TokenTransferDestination {
   /**
-   * Recipient address (hex for EVM, base58 for Solana)
+   * Recipient address (hex for EVM, base58 for Solana, base58check for Tron)
    */
   address: string;
 
@@ -2671,7 +2715,8 @@ export interface TransferQuoteRequestBody {
   fee_configuration?: FeeConfiguration;
 
   /**
-   * Maximum allowed slippage in basis points (1 bps = 0.01%).
+   * Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
+   * cross-chain or cross-asset transfers; omit to use the provider default.
    */
   slippage_bps?: number;
 }
@@ -2711,17 +2756,24 @@ export interface TransferQuoteResponse {
    * Whether the amount refers to the input token or output token.
    */
   amount_type?: AmountType;
+
+  /**
+   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
+   * human-readable decimal string, plus the gas token symbol.
+   */
+  estimated_gas?: Gas;
 }
 
 /**
  * Details for a received transfer transaction.
  */
 export interface TransferReceivedTransactionDetail {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
   chain:
     | 'ethereum'
     | 'arbitrum'
+    | 'avalanche'
     | 'base'
     | 'tempo'
     | 'linea'
@@ -2731,6 +2783,7 @@ export interface TransferReceivedTransactionDetail {
     | 'zksync_era'
     | 'sepolia'
     | 'arbitrum_sepolia'
+    | 'avalanche_fuji'
     | 'base_sepolia'
     | 'linea_testnet'
     | 'optimism_sepolia'
@@ -2782,7 +2835,8 @@ export interface TransferRequestBody {
   fee_configuration?: FeeConfiguration;
 
   /**
-   * Maximum allowed slippage in basis points (1 bps = 0.01%).
+   * Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
+   * cross-chain or cross-asset transfers; omit to use the provider default.
    */
   slippage_bps?: number;
 }
@@ -2791,11 +2845,12 @@ export interface TransferRequestBody {
  * Details for a sent transfer transaction.
  */
 export interface TransferSentTransactionDetail {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+  asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
   chain:
     | 'ethereum'
     | 'arbitrum'
+    | 'avalanche'
     | 'base'
     | 'tempo'
     | 'linea'
@@ -2805,6 +2860,7 @@ export interface TransferSentTransactionDetail {
     | 'zksync_era'
     | 'sepolia'
     | 'arbitrum_sepolia'
+    | 'avalanche_fuji'
     | 'base_sepolia'
     | 'linea_testnet'
     | 'optimism_sepolia'
@@ -3189,7 +3245,7 @@ export interface WalletAPIRevokeAuthorizationKeyInput {
 /**
  * A named asset supported across all chains.
  */
-export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
 
 /**
  * Request body for wallet authentication with HPKE-encrypted response.
@@ -3469,7 +3525,7 @@ export type WalletEntropyType = 'hd' | 'private-key';
 /**
  * A named asset on Ethereum-compatible chains.
  */
-export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'pol' | 'usdt' | 'eurc' | 'usdb';
+export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb';
 
 /**
  * Request body for exporting a wallet private key.
@@ -4849,7 +4905,9 @@ export interface WalletTransferParams {
   fee_configuration?: FeeConfiguration;
 
   /**
-   * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%).
+   * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%). Only
+   * applicable for cross-chain or cross-asset transfers; omit to use the provider
+   * default.
    */
   slippage_bps?: number;
 
@@ -4931,6 +4989,13 @@ export interface WalletAuthenticateWithJwtParams {
    * The user's JWT, to be used to authenticate the user.
    */
   user_jwt: string;
+}
+
+export interface WalletCreateBatchParams {
+  /**
+   * Array of wallet creation requests. Minimum 1, maximum 100.
+   */
+  wallets: Array<WalletBatchItemInput>;
 }
 
 export interface WalletCreateWalletsWithRecoveryParams {
@@ -5053,6 +5118,7 @@ export declare namespace Wallets {
     type FeeConfiguration as FeeConfiguration,
     type FeeLineItem as FeeLineItem,
     type FirstClassChainType as FirstClassChainType,
+    type Gas as Gas,
     type GetByWalletAddressRequestBody as GetByWalletAddressRequestBody,
     type HDInitInput as HDInitInput,
     type HDPath as HDPath,
@@ -5204,6 +5270,7 @@ export declare namespace Wallets {
     type WalletTransferParams as WalletTransferParams,
     type WalletUpdateParams as WalletUpdateParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
+    type WalletCreateBatchParams as WalletCreateBatchParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };

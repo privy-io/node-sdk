@@ -10,7 +10,7 @@ export class Analytics extends APIResource {}
 export interface AnalyticsEventInput {
   event_name: string;
 
-  client_id?: string;
+  client_id?: string | null;
 
   payload?: { [key: string]: unknown };
 }

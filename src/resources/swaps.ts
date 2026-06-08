@@ -102,7 +102,8 @@ export interface SwapQuoteResponse {
   est_output_amount: string;
 
   /**
-   * Estimated gas cost in base units of the native token.
+   * Estimated gas cost in base units of the native token. @deprecated For
+   * cross-chain swaps, use estimated_gas instead.
    */
   gas_estimate: string;
 
@@ -132,9 +133,15 @@ export interface SwapQuoteResponse {
   destination_caip2?: string;
 
   /**
-   * Estimated fees in USD.
+   * Estimated fees for the swap. Only present for cross-chain swaps.
    */
   estimated_fees?: Array<WalletsAPI.FeeLineItem>;
+
+  /**
+   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
+   * human-readable decimal string, plus the gas token symbol.
+   */
+  estimated_gas?: WalletsAPI.Gas;
 
   /**
    * Quote expiry as Unix timestamp (seconds). Present for cross-chain quotes.

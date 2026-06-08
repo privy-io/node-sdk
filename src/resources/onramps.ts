@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as OnrampsAPI from './onramps';
 import * as ClientAuthAPI from './client-auth';
 
 export class Onramps extends APIResource {}
@@ -129,6 +130,18 @@ export interface CreateStripeOnrampSessionResponse {
   id: string;
 
   session_id: string;
+
+  /**
+   * Transaction details returned from a Stripe onramp session.
+   */
+  transaction_details?: CreateStripeOnrampSessionResponse.TransactionDetails;
+}
+
+export namespace CreateStripeOnrampSessionResponse {
+  /**
+   * Transaction details returned from a Stripe onramp session.
+   */
+  export interface TransactionDetails extends OnrampsAPI.OnrampSessionTransactionDetails {}
 }
 
 /**
@@ -430,6 +443,15 @@ export interface ListStripePaymentTokensResponse {
 }
 
 /**
+ * Fee breakdown for a Stripe onramp transaction.
+ */
+export interface OnrampSessionFees {
+  network_fee_amount: string | null;
+
+  transaction_fee_amount: string | null;
+}
+
+/**
  * Parameters for creating a Stripe onramp session.
  */
 export interface OnrampSessionParams {
@@ -452,6 +474,33 @@ export interface OnrampSessionParams {
   source_currency: FiatCurrencyCode;
 
   wallet_address: string;
+}
+
+/**
+ * Transaction details returned from a Stripe onramp session.
+ */
+export interface OnrampSessionTransactionDetails {
+  destination_amount: string | null;
+
+  destination_currency: string | null;
+
+  destination_network: string | null;
+
+  /**
+   * Fee breakdown for a Stripe onramp transaction.
+   */
+  fees: OnrampSessionTransactionDetails.Fees;
+
+  source_amount: string | null;
+
+  source_currency: string | null;
+}
+
+export namespace OnrampSessionTransactionDetails {
+  /**
+   * Fee breakdown for a Stripe onramp transaction.
+   */
+  export interface Fees extends OnrampsAPI.OnrampSessionFees {}
 }
 
 /**
@@ -589,7 +638,9 @@ export declare namespace Onramps {
     type LinkAuthIntentNoAccount as LinkAuthIntentNoAccount,
     type ListStripeConsumerWalletsResponse as ListStripeConsumerWalletsResponse,
     type ListStripePaymentTokensResponse as ListStripePaymentTokensResponse,
+    type OnrampSessionFees as OnrampSessionFees,
     type OnrampSessionParams as OnrampSessionParams,
+    type OnrampSessionTransactionDetails as OnrampSessionTransactionDetails,
     type RefreshStripeQuoteResponse as RefreshStripeQuoteResponse,
     type StripeConsumerWallet as StripeConsumerWallet,
     type StripeCryptoCustomerActive as StripeCryptoCustomerActive,

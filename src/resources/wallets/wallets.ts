@@ -612,6 +612,33 @@ export interface DeveloperFee {
 }
 
 /**
+ * HPKE-encrypted authorization key with encapsulated key and ciphertext.
+ */
+export interface EncryptedAuthorizationKey {
+  ciphertext: string;
+
+  encapsulated_key: string;
+
+  encryption_type: 'HPKE';
+}
+
+/**
+ * Encrypted response from bound wallet authentication, with bindings.
+ */
+export interface EncryptedBoundAuthenticateResponse {
+  bindings: Array<UserSigningKeyBinding>;
+
+  /**
+   * HPKE-encrypted authorization key with encapsulated key and ciphertext.
+   */
+  encrypted_authorization_key: EncryptedAuthorizationKey;
+
+  expires_at: number;
+
+  wallets: Array<Wallet>;
+}
+
+/**
  * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
  */
 export interface EthereumPersonalSignRpcInput {
@@ -1431,6 +1458,15 @@ export interface HpkeImportConfig {
 export type Hex = string;
 
 /**
+ * A binding that scopes a user signing key to a specific intent.
+ */
+export interface IntentBinding {
+  intentId: string;
+
+  type: 'intent';
+}
+
+/**
  * Source for a transfer identified by a named asset (e.g. "usdc", "eth"). Use this
  * variant for first-class assets maintained by Privy.
  */
@@ -1596,6 +1632,19 @@ export interface PrivyFee {
  * non-negative integer.
  */
 export type Quantity = Hex | number;
+
+/**
+ * Unencrypted response from bound wallet authentication, with bindings.
+ */
+export interface RawBoundAuthenticateResponse {
+  authorization_key: string;
+
+  bindings: Array<UserSigningKeyBinding>;
+
+  expires_at: number;
+
+  wallets: Array<Wallet>;
+}
 
 /**
  * Encoding scheme for bytes in the `raw_sign` RPC.
@@ -2732,17 +2781,12 @@ export interface TransferQuoteResponse {
   destination: TokenTransferDestination;
 
   /**
-   * Estimated fees in USD
-   */
-  estimated_fees: Array<FeeLineItem>;
-
-  /**
    * Estimated output amount in decimals
    */
   estimated_output_amount: string;
 
   /**
-   * Quote expiry as unix timestamp (seconds)
+   * Quote expiry as Unix timestamp (seconds).
    */
   expires_at: number;
 
@@ -2756,6 +2800,11 @@ export interface TransferQuoteResponse {
    * Whether the amount refers to the input token or output token.
    */
   amount_type?: AmountType;
+
+  /**
+   * Estimated fees in USD for the transfer. Only present for cross-chain transfers.
+   */
+  estimated_fees?: Array<FeeLineItem>;
 
   /**
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
@@ -3120,6 +3169,15 @@ export interface UserOperationInput {
 }
 
 /**
+ * A binding that scopes a user signing key to a specific intent.
+ */
+export interface UserSigningKeyBinding {
+  intentId: string;
+
+  type: 'intent';
+}
+
+/**
  * A wallet managed by Privy's wallet infrastructure.
  */
 export interface Wallet {
@@ -3246,6 +3304,51 @@ export interface WalletAPIRevokeAuthorizationKeyInput {
  * A named asset supported across all chains.
  */
 export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+
+/**
+ * Request body for creating an encrypted, bound user signing key.
+ */
+export interface WalletAuthenticateBoundEncryptedRequestBody {
+  /**
+   * Bindings that scope the USK. The key can only authorize the bound values.
+   */
+  bindings: Array<UserSigningKeyBinding>;
+
+  encryption_type: 'HPKE';
+
+  recipient_public_key: string;
+
+  user_jwt: string;
+}
+
+/**
+ * Request body for creating a user signing key scoped to specific bindings. The
+ * returned USK can only authorize the bound values and cannot sign other RPC
+ * requests.
+ */
+export type WalletAuthenticateBoundRequestBody =
+  | WalletAuthenticateBoundEncryptedRequestBody
+  | WalletAuthenticateBoundUnencryptedRequestBody;
+
+/**
+ * Request body for creating an unencrypted, bound user signing key.
+ */
+export interface WalletAuthenticateBoundUnencryptedRequestBody {
+  /**
+   * Bindings that scope the USK. The key can only authorize the bound values.
+   */
+  bindings: Array<UserSigningKeyBinding>;
+
+  user_jwt: string;
+}
+
+/**
+ * The response from authenticating a wallet with intent bindings, containing an
+ * authorization key, wallet data, and the bindings the key is scoped to.
+ */
+export type WalletAuthenticateIntentsResponse =
+  | EncryptedBoundAuthenticateResponse
+  | RawBoundAuthenticateResponse;
 
 /**
  * Request body for wallet authentication with HPKE-encrypted response.
@@ -5072,6 +5175,8 @@ export declare namespace Wallets {
     type CustodialWalletProvider as CustodialWalletProvider,
     type CustomTokenTransferSource as CustomTokenTransferSource,
     type DeveloperFee as DeveloperFee,
+    type EncryptedAuthorizationKey as EncryptedAuthorizationKey,
+    type EncryptedBoundAuthenticateResponse as EncryptedBoundAuthenticateResponse,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
@@ -5127,6 +5232,7 @@ export declare namespace Wallets {
     type HpkeEncryption as HpkeEncryption,
     type HpkeImportConfig as HpkeImportConfig,
     type Hex as Hex,
+    type IntentBinding as IntentBinding,
     type NamedTokenTransferSource as NamedTokenTransferSource,
     type OutputWithPreviousTransactionData as OutputWithPreviousTransactionData,
     type PolicyInput as PolicyInput,
@@ -5136,6 +5242,7 @@ export declare namespace Wallets {
     type PrivateKeySubmitInput as PrivateKeySubmitInput,
     type PrivyFee as PrivyFee,
     type Quantity as Quantity,
+    type RawBoundAuthenticateResponse as RawBoundAuthenticateResponse,
     type RawSignBytesEncoding as RawSignBytesEncoding,
     type RawSignBytesHashFunction as RawSignBytesHashFunction,
     type RawSignBytesParams as RawSignBytesParams,
@@ -5230,12 +5337,17 @@ export declare namespace Wallets {
     type UnsignedStandardEthereumTransaction as UnsignedStandardEthereumTransaction,
     type UnsignedTempoTransaction as UnsignedTempoTransaction,
     type UserOperationInput as UserOperationInput,
+    type UserSigningKeyBinding as UserSigningKeyBinding,
     type Wallet as Wallet,
     type WalletAdditionalSigner as WalletAdditionalSigner,
     type WalletAdditionalSignerItem as WalletAdditionalSignerItem,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
     type WalletAsset as WalletAsset,
+    type WalletAuthenticateBoundEncryptedRequestBody as WalletAuthenticateBoundEncryptedRequestBody,
+    type WalletAuthenticateBoundRequestBody as WalletAuthenticateBoundRequestBody,
+    type WalletAuthenticateBoundUnencryptedRequestBody as WalletAuthenticateBoundUnencryptedRequestBody,
+    type WalletAuthenticateIntentsResponse as WalletAuthenticateIntentsResponse,
     type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletAuthorizationHeaders as WalletAuthorizationHeaders,

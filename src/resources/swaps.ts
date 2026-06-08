@@ -128,7 +128,8 @@ export interface SwapQuoteResponse {
   output_token: string;
 
   /**
-   * Destination chain CAIP-2 identifier for cross-chain swaps.
+   * Destination chain CAIP-2 identifier for cross-chain swaps. Only present for
+   * cross-chain swaps.
    */
   destination_caip2?: string;
 
@@ -144,7 +145,7 @@ export interface SwapQuoteResponse {
   estimated_gas?: WalletsAPI.Gas;
 
   /**
-   * Quote expiry as Unix timestamp (seconds). Present for cross-chain quotes.
+   * Quote expiry as Unix timestamp (seconds). Only present for cross-chain quotes.
    */
   expires_at?: number;
 }

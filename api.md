@@ -17,6 +17,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustomTokenTransferSource</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">DeveloperFee</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EncryptedAuthorizationKey</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EncryptedBoundAuthenticateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
@@ -72,6 +74,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeEncryption</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Hex</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">IntentBinding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">NamedTokenTransferSource</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">OutputWithPreviousTransactionData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PolicyInput</a></code>
@@ -81,6 +84,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeySubmitInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PrivyFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Quantity</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawBoundAuthenticateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesEncoding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesHashFunction</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesParams</a></code>
@@ -175,12 +179,17 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">UnsignedStandardEthereumTransaction</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">UnsignedTempoTransaction</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">UserOperationInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">UserSigningKeyBinding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAdditionalSigner</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAdditionalSignerItem</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAPIRegisterAuthorizationKeyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAPIRevokeAuthorizationKeyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAsset</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateBoundEncryptedRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateBoundRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateBoundUnencryptedRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateIntentsResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateWithJwtResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthorizationHeaders</a></code>

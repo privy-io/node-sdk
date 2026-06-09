@@ -391,7 +391,7 @@ export interface ConditionSet {
   /**
    * A unique identifier for a key quorum.
    */
-  owner_id: SharedAPI.KeyQuorumID;
+  owner_id: SharedAPI.KeyQuorumID | null;
 }
 
 /**
@@ -667,9 +667,9 @@ export interface Policy {
   name: string;
 
   /**
-   * The key quorum ID of the owner of the policy.
+   * A unique identifier for a key quorum.
    */
-  owner_id: string | null;
+  owner_id: SharedAPI.KeyQuorumID | null;
 
   rules: Array<PolicyRuleResponse>;
 

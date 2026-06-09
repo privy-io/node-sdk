@@ -70,6 +70,11 @@ export interface EvmUserOperationWalletActionStep {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
+
+  /**
+   * Amount charged in USD for gas sponsorship on this step.
+   */
+  gas_credits_charged_usd?: string;
 }
 
 /**
@@ -628,6 +633,11 @@ export interface SvmTransactionWalletActionStep {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
+
+  /**
+   * Amount charged in USD for gas sponsorship on this step.
+   */
+  gas_credits_charged_usd?: string;
 }
 
 /**
@@ -709,7 +719,7 @@ export interface SwapActionResponse {
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
    * human-readable decimal string, plus the gas token symbol.
    */
-  estimated_gas?: SwapActionResponse.EstimatedGas;
+  estimated_gas?: WalletsAPI.Gas | null;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -726,26 +736,12 @@ export interface SwapActionResponse {
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
    * human-readable decimal string, plus the gas token symbol.
    */
-  gas?: SwapActionResponse.Gas;
+  gas?: WalletsAPI.Gas | null;
 
   /**
    * The steps of the wallet action. Only returned if `?include=steps` is provided.
    */
   steps?: Array<WalletActionStep>;
-}
-
-export namespace SwapActionResponse {
-  /**
-   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
-   * human-readable decimal string, plus the gas token symbol.
-   */
-  export interface EstimatedGas extends WalletsAPI.Gas {}
-
-  /**
-   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
-   * human-readable decimal string, plus the gas token symbol.
-   */
-  export interface Gas extends WalletsAPI.Gas {}
 }
 
 /**
@@ -811,7 +807,7 @@ export interface TransferActionResponse {
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
    * human-readable decimal string, plus the gas token symbol.
    */
-  estimated_gas?: TransferActionResponse.EstimatedGas;
+  estimated_gas?: WalletsAPI.Gas | null;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -828,7 +824,7 @@ export interface TransferActionResponse {
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
    * human-readable decimal string, plus the gas token symbol.
    */
-  gas?: TransferActionResponse.Gas;
+  gas?: WalletsAPI.Gas | null;
 
   /**
    * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
@@ -858,20 +854,6 @@ export interface TransferActionResponse {
    * The steps of the wallet action. Only returned if `?include=steps` is provided.
    */
   steps?: Array<WalletActionStep>;
-}
-
-export namespace TransferActionResponse {
-  /**
-   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
-   * human-readable decimal string, plus the gas token symbol.
-   */
-  export interface EstimatedGas extends WalletsAPI.Gas {}
-
-  /**
-   * Gas cost for a blockchain action. Includes both raw base-unit amount and a
-   * human-readable decimal string, plus the gas token symbol.
-   */
-  export interface Gas extends WalletsAPI.Gas {}
 }
 
 /**

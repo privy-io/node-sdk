@@ -26,18 +26,11 @@ export interface KrakenEmbedCancelCustomOrderResponse {
   /**
    * Result payload for cancel custom order response.
    */
-  result: KrakenEmbedCancelCustomOrderResponse.Result;
+  result: KrakenEmbedCancelCustomOrderResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedCancelCustomOrderResponse {
-  /**
-   * Result payload for cancel custom order response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedCancelCustomOrderResult {}
 }
 
 /**
@@ -77,18 +70,11 @@ export interface KrakenEmbedCreateCustomOrderResponse {
   /**
    * Result payload for create custom order response.
    */
-  result: KrakenEmbedCreateCustomOrderResponse.Result;
+  result: KrakenEmbedCreateCustomOrderResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedCreateCustomOrderResponse {
-  /**
-   * Result payload for create custom order response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedCreateCustomOrderResult {}
 }
 
 /**
@@ -192,18 +178,11 @@ export interface KrakenEmbedCustomOrderOccurrence {
   /**
    * Executed action details for a custom order occurrence.
    */
-  executed_action?: KrakenEmbedCustomOrderOccurrence.ExecutedAction;
+  executed_action?: KrakenEmbedCustomOrderOccurrenceExecutedAction | null;
 
   failure_reason?: string;
 
   skip_reason?: string;
-}
-
-export namespace KrakenEmbedCustomOrderOccurrence {
-  /**
-   * Executed action details for a custom order occurrence.
-   */
-  export interface ExecutedAction extends KrakenEmbedAPI.KrakenEmbedCustomOrderOccurrenceExecutedAction {}
 }
 
 /**
@@ -277,24 +256,12 @@ export interface KrakenEmbedEarnAsset {
   /**
    * Low and high estimate of the yield of an earn asset.
    */
-  apr_estimate: KrakenEmbedEarnAsset.AprEstimate;
+  apr_estimate: KrakenEmbedEarnAprEstimate | null;
 
   /**
    * User allocation for an earn asset.
    */
-  user_allocation?: KrakenEmbedEarnAsset.UserAllocation;
-}
-
-export namespace KrakenEmbedEarnAsset {
-  /**
-   * Low and high estimate of the yield of an earn asset.
-   */
-  export interface AprEstimate extends KrakenEmbedAPI.KrakenEmbedEarnAprEstimate {}
-
-  /**
-   * User allocation for an earn asset.
-   */
-  export interface UserAllocation extends KrakenEmbedAPI.KrakenEmbedEarnUserAllocation {}
+  user_allocation?: KrakenEmbedEarnUserAllocation | null;
 }
 
 /**
@@ -304,26 +271,14 @@ export interface KrakenEmbedEarnUserAllocation {
   /**
    * An earn amount with native and converted values.
    */
-  total_allocated: KrakenEmbedEarnUserAllocation.TotalAllocated;
+  total_allocated: KrakenEmbedEarnAmount | null;
 
   /**
    * An earn amount with native and converted values.
    */
-  total_rewarded: KrakenEmbedEarnUserAllocation.TotalRewarded;
+  total_rewarded: KrakenEmbedEarnAmount | null;
 
   upcoming_reward_date?: string | null;
-}
-
-export namespace KrakenEmbedEarnUserAllocation {
-  /**
-   * An earn amount with native and converted values.
-   */
-  export interface TotalAllocated extends KrakenEmbedAPI.KrakenEmbedEarnAmount {}
-
-  /**
-   * An earn amount with native and converted values.
-   */
-  export interface TotalRewarded extends KrakenEmbedAPI.KrakenEmbedEarnAmount {}
 }
 
 /**
@@ -391,18 +346,11 @@ export interface KrakenEmbedGetCustomOrderHistoryResponse {
   /**
    * Result payload for custom order history response.
    */
-  result: KrakenEmbedGetCustomOrderHistoryResponse.Result;
+  result: KrakenEmbedGetCustomOrderHistoryResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedGetCustomOrderHistoryResponse {
-  /**
-   * Result payload for custom order history response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedGetCustomOrderHistoryResult {}
 }
 
 /**
@@ -428,18 +376,11 @@ export interface KrakenEmbedGetCustomOrderResponse {
   /**
    * Result payload for get custom order response.
    */
-  result: KrakenEmbedGetCustomOrderResponse.Result;
+  result: KrakenEmbedGetCustomOrderResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedGetCustomOrderResponse {
-  /**
-   * Result payload for get custom order response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedGetCustomOrderResult {}
 }
 
 /**
@@ -459,18 +400,11 @@ export interface KrakenEmbedGetEarnAssetsKrakenResponse {
   /**
    * Result payload for earn assets response.
    */
-  result: KrakenEmbedGetEarnAssetsKrakenResponse.Result;
+  result: KrakenEmbedGetEarnAssetsResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedGetEarnAssetsKrakenResponse {
-  /**
-   * Result payload for earn assets response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedGetEarnAssetsResult {}
 }
 
 /**
@@ -508,18 +442,11 @@ export interface KrakenEmbedGetEarnSummaryKrakenResponse {
   /**
    * Result payload for earn summary response.
    */
-  result: KrakenEmbedGetEarnSummaryKrakenResponse.Result;
+  result: KrakenEmbedGetEarnSummaryResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedGetEarnSummaryKrakenResponse {
-  /**
-   * Result payload for earn summary response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedGetEarnSummaryResult {}
 }
 
 /**
@@ -686,18 +613,11 @@ export interface KrakenEmbedListCustomOrdersResponse {
   /**
    * Result payload for list custom orders response.
    */
-  result: KrakenEmbedListCustomOrdersResponse.Result;
+  result: KrakenEmbedListCustomOrdersResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedListCustomOrdersResponse {
-  /**
-   * Result payload for list custom orders response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedListCustomOrdersResult {}
 }
 
 /**
@@ -1027,24 +947,12 @@ export interface KrakenEmbedStartAddressVerificationURLInput {
   /**
    * Debug options for start verification. Only works in non-production environments.
    */
-  debug?: KrakenEmbedStartAddressVerificationURLInput.Debug;
+  debug?: KrakenEmbedStartVerificationDebug | null;
 
   /**
    * Optional best-effort metadata hints for proof of address verification.
    */
-  metadata?: KrakenEmbedStartAddressVerificationURLInput.Metadata;
-}
-
-export namespace KrakenEmbedStartAddressVerificationURLInput {
-  /**
-   * Debug options for start verification. Only works in non-production environments.
-   */
-  export interface Debug extends KrakenEmbedAPI.KrakenEmbedStartVerificationDebug {}
-
-  /**
-   * Optional best-effort metadata hints for proof of address verification.
-   */
-  export interface Metadata extends KrakenEmbedAPI.KrakenEmbedStartAddressMetadata {}
+  metadata?: KrakenEmbedStartAddressMetadata | null;
 }
 
 /**
@@ -1087,7 +995,7 @@ export interface KrakenEmbedStartIdentityMetadata {
    * Identity information hints including full name and date of birth for proof of
    * identity verification.
    */
-  identity?: KrakenEmbedStartIdentityMetadata.Identity;
+  identity?: KrakenEmbedStartIdentityInfo | null;
 
   issuing_country?:
     | 'AD'
@@ -1620,14 +1528,6 @@ export interface KrakenEmbedStartIdentityMetadata {
     | null;
 }
 
-export namespace KrakenEmbedStartIdentityMetadata {
-  /**
-   * Identity information hints including full name and date of birth for proof of
-   * identity verification.
-   */
-  export interface Identity extends KrakenEmbedAPI.KrakenEmbedStartIdentityInfo {}
-}
-
 /**
  * Input payload for starting proof of identity verification via URLs.
  */
@@ -1641,24 +1541,12 @@ export interface KrakenEmbedStartIdentityVerificationURLInput {
   /**
    * Debug options for start verification. Only works in non-production environments.
    */
-  debug?: KrakenEmbedStartIdentityVerificationURLInput.Debug;
+  debug?: KrakenEmbedStartVerificationDebug | null;
 
   /**
    * Optional best-effort metadata hints for proof of identity verification.
    */
-  metadata?: KrakenEmbedStartIdentityVerificationURLInput.Metadata;
-}
-
-export namespace KrakenEmbedStartIdentityVerificationURLInput {
-  /**
-   * Debug options for start verification. Only works in non-production environments.
-   */
-  export interface Debug extends KrakenEmbedAPI.KrakenEmbedStartVerificationDebug {}
-
-  /**
-   * Optional best-effort metadata hints for proof of identity verification.
-   */
-  export interface Metadata extends KrakenEmbedAPI.KrakenEmbedStartIdentityMetadata {}
+  metadata?: KrakenEmbedStartIdentityMetadata | null;
 }
 
 /**
@@ -1676,14 +1564,7 @@ export interface KrakenEmbedStartLivenessVerificationURLInput {
   /**
    * Debug options for start verification. Only works in non-production environments.
    */
-  debug?: KrakenEmbedStartLivenessVerificationURLInput.Debug;
-}
-
-export namespace KrakenEmbedStartLivenessVerificationURLInput {
-  /**
-   * Debug options for start verification. Only works in non-production environments.
-   */
-  export interface Debug extends KrakenEmbedAPI.KrakenEmbedStartVerificationDebug {}
+  debug?: KrakenEmbedStartVerificationDebug | null;
 }
 
 /**
@@ -1708,14 +1589,7 @@ export interface KrakenEmbedStartVerificationURLResponse {
   /**
    * Result payload for start verification URL response.
    */
-  result: KrakenEmbedStartVerificationURLResponse.Result;
-}
-
-export namespace KrakenEmbedStartVerificationURLResponse {
-  /**
-   * Result payload for start verification URL response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedStartVerificationURLResult {}
+  result: KrakenEmbedStartVerificationURLResult | null;
 }
 
 /**
@@ -1769,14 +1643,7 @@ export interface KrakenEmbedUpcomingReward {
   /**
    * An earn amount with native and converted values.
    */
-  estimated_pending_amount: KrakenEmbedUpcomingReward.EstimatedPendingAmount;
-}
-
-export namespace KrakenEmbedUpcomingReward {
-  /**
-   * An earn amount with native and converted values.
-   */
-  export interface EstimatedPendingAmount extends KrakenEmbedAPI.KrakenEmbedEarnAmount {}
+  estimated_pending_amount: KrakenEmbedEarnAmount | null;
 }
 
 export declare namespace KrakenEmbed {

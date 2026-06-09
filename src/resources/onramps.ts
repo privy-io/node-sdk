@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as OnrampsAPI from './onramps';
 import * as ClientAuthAPI from './client-auth';
 
 export class Onramps extends APIResource {}
@@ -80,6 +79,11 @@ export type Caip2ChainID = string;
  */
 export interface CreateLinkAuthIntentInput {
   email?: string;
+
+  /**
+   * Whether to use the sandbox or production environment for fiat onramp.
+   */
+  environment?: FiatOnrampEnvironment;
 }
 
 /**
@@ -134,14 +138,7 @@ export interface CreateStripeOnrampSessionResponse {
   /**
    * Transaction details returned from a Stripe onramp session.
    */
-  transaction_details?: CreateStripeOnrampSessionResponse.TransactionDetails;
-}
-
-export namespace CreateStripeOnrampSessionResponse {
-  /**
-   * Transaction details returned from a Stripe onramp session.
-   */
-  export interface TransactionDetails extends OnrampsAPI.OnrampSessionTransactionDetails {}
+  transaction_details?: OnrampSessionTransactionDetails | null;
 }
 
 /**
@@ -156,6 +153,11 @@ export interface ExchangeStripeTokensInput {
   auth_intent_id: string;
 
   crypto_customer_id: string;
+
+  /**
+   * Whether to use the sandbox or production environment for fiat onramp.
+   */
+  environment?: FiatOnrampEnvironment;
 }
 
 /**
@@ -489,18 +491,11 @@ export interface OnrampSessionTransactionDetails {
   /**
    * Fee breakdown for a Stripe onramp transaction.
    */
-  fees: OnrampSessionTransactionDetails.Fees;
-
-  source_amount: string | null;
+  fees: OnrampSessionFees | null;
 
   source_currency: string | null;
-}
 
-export namespace OnrampSessionTransactionDetails {
-  /**
-   * Fee breakdown for a Stripe onramp transaction.
-   */
-  export interface Fees extends OnrampsAPI.OnrampSessionFees {}
+  source_total_amount: string | null;
 }
 
 /**

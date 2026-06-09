@@ -514,7 +514,10 @@ export interface CustodialWallet {
    */
   custody: WalletCustodian;
 
-  owner_id: string | null;
+  /**
+   * A unique identifier for a key quorum.
+   */
+  owner_id: SharedAPI.KeyQuorumID | null;
 
   /**
    * Additional signers for the wallet.

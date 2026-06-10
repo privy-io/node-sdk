@@ -445,15 +445,6 @@ export interface ListStripePaymentTokensResponse {
 }
 
 /**
- * Fee breakdown for a Stripe onramp transaction.
- */
-export interface OnrampSessionFees {
-  network_fee_amount: string | null;
-
-  transaction_fee_amount: string | null;
-}
-
-/**
  * Parameters for creating a Stripe onramp session.
  */
 export interface OnrampSessionParams {
@@ -488,24 +479,26 @@ export interface OnrampSessionTransactionDetails {
 
   destination_network: string | null;
 
-  /**
-   * Fee breakdown for a Stripe onramp transaction.
-   */
-  fees: OnrampSessionFees | null;
+  fee: string | null;
 
   source_currency: string | null;
 
   source_total_amount: string | null;
+
+  quote_expiration?: number | null;
 }
 
 /**
- * Refreshed quote with new expiry.
+ * Refreshed quote with amounts, fee, and expiry.
  */
 export interface RefreshStripeQuoteResponse {
-  /**
-   * A refreshed quote.
-   */
-  quote: StripeQuote;
+  destination_amount: string | null;
+
+  fee: string | null;
+
+  quote_expiration: number | null;
+
+  source_total_amount: string | null;
 }
 
 /**
@@ -524,6 +517,10 @@ export interface StripeConsumerWallet {
  */
 export interface StripeCryptoCustomerActive {
   crypto_customer_id: string;
+
+  kyc_tiers: Array<StripeKYCTier>;
+
+  provided_fields: Array<string>;
 
   status: 'active';
 
@@ -544,6 +541,15 @@ export interface StripeCryptoCustomerExpired {
  */
 export interface StripeCryptoCustomerNone {
   status: 'none';
+}
+
+/**
+ * A KYC tier with its verification status.
+ */
+export interface StripeKYCTier {
+  tier: string;
+
+  verification_status: string;
 }
 
 /**
@@ -570,13 +576,6 @@ export interface StripePaymentToken {
   id: string;
 
   type: string;
-}
-
-/**
- * A refreshed quote.
- */
-export interface StripeQuote {
-  expires_at: number;
 }
 
 /**
@@ -633,7 +632,6 @@ export declare namespace Onramps {
     type LinkAuthIntentNoAccount as LinkAuthIntentNoAccount,
     type ListStripeConsumerWalletsResponse as ListStripeConsumerWalletsResponse,
     type ListStripePaymentTokensResponse as ListStripePaymentTokensResponse,
-    type OnrampSessionFees as OnrampSessionFees,
     type OnrampSessionParams as OnrampSessionParams,
     type OnrampSessionTransactionDetails as OnrampSessionTransactionDetails,
     type RefreshStripeQuoteResponse as RefreshStripeQuoteResponse,
@@ -641,10 +639,10 @@ export declare namespace Onramps {
     type StripeCryptoCustomerActive as StripeCryptoCustomerActive,
     type StripeCryptoCustomerExpired as StripeCryptoCustomerExpired,
     type StripeCryptoCustomerNone as StripeCryptoCustomerNone,
+    type StripeKYCTier as StripeKYCTier,
     type StripeOnrampCheckoutResponse as StripeOnrampCheckoutResponse,
     type StripeOnrampSessionStatus as StripeOnrampSessionStatus,
     type StripePaymentToken as StripePaymentToken,
-    type StripeQuote as StripeQuote,
     type StripeTransactionDetails as StripeTransactionDetails,
     type StripeVerification as StripeVerification,
   };

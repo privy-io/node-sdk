@@ -1217,9 +1217,20 @@ export declare namespace IntentRpcParams {
     address?: string;
 
     /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2?: AppsAPI.Caip2;
+
+    /**
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param: Options controlling signature production for personal_sign and
+     * eth_signTypedData_v4.
+     */
+    signature_options?: WalletsAPI.SignatureOptions;
 
     /**
      * Body param
@@ -1250,9 +1261,20 @@ export declare namespace IntentRpcParams {
     address?: string;
 
     /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2?: AppsAPI.Caip2;
+
+    /**
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param: Options controlling signature production for personal_sign and
+     * eth_signTypedData_v4.
+     */
+    signature_options?: WalletsAPI.SignatureOptions;
 
     /**
      * Body param

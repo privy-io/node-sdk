@@ -306,6 +306,7 @@ import {
   WalletIntentResponse,
 } from './resources/intents';
 import {
+  AuthorizationKey,
   KeyQuorum,
   KeyQuorumAuthorizationHeaders,
   KeyQuorumCreateParams,
@@ -420,7 +421,6 @@ import {
   LinkAuthIntentNoAccount,
   ListStripeConsumerWalletsResponse,
   ListStripePaymentTokensResponse,
-  OnrampSessionFees,
   OnrampSessionParams,
   OnrampSessionTransactionDetails,
   Onramps,
@@ -429,10 +429,10 @@ import {
   StripeCryptoCustomerActive,
   StripeCryptoCustomerExpired,
   StripeCryptoCustomerNone,
+  StripeKYCTier,
   StripeOnrampCheckoutResponse,
   StripeOnrampSessionStatus,
   StripePaymentToken,
-  StripeQuote,
   StripeTransactionDetails,
   StripeVerification,
 } from './resources/onramps';
@@ -495,6 +495,7 @@ import {
   TempoTransactionConditionField,
   TronCalldataCondition,
   TronTransactionCondition,
+  TypedDataInput,
   UpdateConditionSetRequestBody,
 } from './resources/policies';
 import {
@@ -666,6 +667,7 @@ import {
   WalletActions,
 } from './resources/wallet-actions';
 import {
+  BlockInfo,
   BridgeCryptoDepositMetadata,
   BridgeCryptoTransferMetadata,
   BridgeFiatDepositMetadata,
@@ -762,12 +764,15 @@ import {
   EthereumYieldSweepType,
   EthereumYieldWithdrawInput,
   EvmCaip2ChainID,
+  VaultAsset,
   Yield,
   YieldAuthorizationHeaders,
 } from './resources/yield';
 import {
   AllowlistDeletionResponse,
   AllowlistEntry,
+  AppAllowlistConfig,
+  AppCustomOAuthProvider,
   AppGetGasSpendParams,
   AppResponse,
   Apps,
@@ -892,6 +897,8 @@ import {
   RelayerFee,
   SeedPhraseExportInput,
   SeedPhraseExportResponse,
+  SignatureOptions,
+  SignatureType,
   SigningAlgorithm,
   SolanaRpcInput,
   SolanaRpcResponse,
@@ -1996,6 +2003,8 @@ export declare namespace PrivyAPI {
     type RelayerFee as RelayerFee,
     type SeedPhraseExportInput as SeedPhraseExportInput,
     type SeedPhraseExportResponse as SeedPhraseExportResponse,
+    type SignatureOptions as SignatureOptions,
+    type SignatureType as SignatureType,
     type SigningAlgorithm as SigningAlgorithm,
     type SolanaRpcInput as SolanaRpcInput,
     type SolanaRpcResponse as SolanaRpcResponse,
@@ -2261,6 +2270,7 @@ export declare namespace PrivyAPI {
     type TempoTransactionConditionField as TempoTransactionConditionField,
     type TronCalldataCondition as TronCalldataCondition,
     type TronTransactionCondition as TronTransactionCondition,
+    type TypedDataInput as TypedDataInput,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,
@@ -2295,6 +2305,7 @@ export declare namespace PrivyAPI {
 
   export {
     KeyQuorums as KeyQuorums,
+    type AuthorizationKey as AuthorizationKey,
     type KeyQuorum as KeyQuorum,
     type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
     type KeyQuorumCreateRequestBody as KeyQuorumCreateRequestBody,
@@ -2347,6 +2358,8 @@ export declare namespace PrivyAPI {
     Apps as Apps,
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
     type AllowlistEntry as AllowlistEntry,
+    type AppAllowlistConfig as AppAllowlistConfig,
+    type AppCustomOAuthProvider as AppCustomOAuthProvider,
     type AppResponse as AppResponse,
     type Caip2 as Caip2,
     type Currency as Currency,
@@ -2377,6 +2390,7 @@ export declare namespace PrivyAPI {
 
   export {
     Webhooks as Webhooks,
+    type BlockInfo as BlockInfo,
     type BridgeCryptoDepositMetadata as BridgeCryptoDepositMetadata,
     type BridgeCryptoTransferMetadata as BridgeCryptoTransferMetadata,
     type BridgeFiatDepositMetadata as BridgeFiatDepositMetadata,
@@ -2736,7 +2750,6 @@ export declare namespace PrivyAPI {
     type LinkAuthIntentNoAccount as LinkAuthIntentNoAccount,
     type ListStripeConsumerWalletsResponse as ListStripeConsumerWalletsResponse,
     type ListStripePaymentTokensResponse as ListStripePaymentTokensResponse,
-    type OnrampSessionFees as OnrampSessionFees,
     type OnrampSessionParams as OnrampSessionParams,
     type OnrampSessionTransactionDetails as OnrampSessionTransactionDetails,
     type RefreshStripeQuoteResponse as RefreshStripeQuoteResponse,
@@ -2744,10 +2757,10 @@ export declare namespace PrivyAPI {
     type StripeCryptoCustomerActive as StripeCryptoCustomerActive,
     type StripeCryptoCustomerExpired as StripeCryptoCustomerExpired,
     type StripeCryptoCustomerNone as StripeCryptoCustomerNone,
+    type StripeKYCTier as StripeKYCTier,
     type StripeOnrampCheckoutResponse as StripeOnrampCheckoutResponse,
     type StripeOnrampSessionStatus as StripeOnrampSessionStatus,
     type StripePaymentToken as StripePaymentToken,
-    type StripeQuote as StripeQuote,
     type StripeTransactionDetails as StripeTransactionDetails,
     type StripeVerification as StripeVerification,
   };
@@ -2856,6 +2869,7 @@ export declare namespace PrivyAPI {
     type EthereumYieldSweepType as EthereumYieldSweepType,
     type EthereumYieldWithdrawInput as EthereumYieldWithdrawInput,
     type EvmCaip2ChainID as EvmCaip2ChainID,
+    type VaultAsset as VaultAsset,
     type YieldAuthorizationHeaders as YieldAuthorizationHeaders,
   };
 

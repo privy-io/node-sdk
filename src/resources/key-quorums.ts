@@ -122,12 +122,21 @@ export class KeyQuorums extends APIResource {
 }
 
 /**
+ * A public key authorized to sign on a key quorum.
+ */
+export interface AuthorizationKey {
+  display_name: string | null;
+
+  public_key: string;
+}
+
+/**
  * A key quorum for authorizing wallet operations.
  */
 export interface KeyQuorum {
   id: string;
 
-  authorization_keys: Array<KeyQuorum.AuthorizationKey>;
+  authorization_keys: Array<AuthorizationKey>;
 
   authorization_threshold: number | null;
 
@@ -139,14 +148,6 @@ export interface KeyQuorum {
    * List of nested key quorum IDs that are members of this key quorum.
    */
   key_quorum_ids?: Array<string>;
-}
-
-export namespace KeyQuorum {
-  export interface AuthorizationKey {
-    display_name: string | null;
-
-    public_key: string;
-  }
 }
 
 /**
@@ -328,6 +329,7 @@ export interface KeyQuorumUpdateParams {
 
 export declare namespace KeyQuorums {
   export {
+    type AuthorizationKey as AuthorizationKey,
     type KeyQuorum as KeyQuorum,
     type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
     type KeyQuorumCreateRequestBody as KeyQuorumCreateRequestBody,

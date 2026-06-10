@@ -10,6 +10,8 @@ export {
   Apps,
   type AllowlistDeletionResponse,
   type AllowlistEntry,
+  type AppAllowlistConfig,
+  type AppCustomOAuthProvider,
   type AppResponse,
   type Caip2,
   type Currency,

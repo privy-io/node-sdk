@@ -101,6 +101,8 @@ export {
   type RelayerFee,
   type SeedPhraseExportInput,
   type SeedPhraseExportResponse,
+  type SignatureOptions,
+  type SignatureType,
   type SigningAlgorithm,
   type SolanaRpcInput,
   type SolanaRpcResponse,

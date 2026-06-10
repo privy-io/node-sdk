@@ -630,24 +630,17 @@ export interface EthereumTypedDataMessageCondition {
    */
   operator: ConditionOperator;
 
-  typed_data: EthereumTypedDataMessageCondition.TypedData;
+  /**
+   * The typed data structure containing EIP-712 types and the primary type for typed
+   * data message policy conditions.
+   */
+  typed_data: TypedDataInput;
 
   /**
    * Value to compare against in a policy condition. Can be a single string or an
    * array of strings.
    */
   value: ConditionValue;
-}
-
-export namespace EthereumTypedDataMessageCondition {
-  export interface TypedData {
-    primary_type: string;
-
-    /**
-     * The type definitions for EIP-712 typed data signing.
-     */
-    types: WalletsAPI.TypedDataTypesInputParams;
-  }
 }
 
 /**
@@ -1071,6 +1064,19 @@ export interface TronTransactionCondition {
 }
 
 /**
+ * The typed data structure containing EIP-712 types and the primary type for typed
+ * data message policy conditions.
+ */
+export interface TypedDataInput {
+  primary_type: string;
+
+  /**
+   * The type definitions for EIP-712 typed data signing.
+   */
+  types: WalletsAPI.TypedDataTypesInputParams;
+}
+
+/**
  * Request body for updating a condition set. At least one field must be provided.
  * `owner` and `owner_id` are mutually exclusive.
  */
@@ -1343,6 +1349,7 @@ export declare namespace Policies {
     type TempoTransactionConditionField as TempoTransactionConditionField,
     type TronCalldataCondition as TronCalldataCondition,
     type TronTransactionCondition as TronTransactionCondition,
+    type TypedDataInput as TypedDataInput,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,

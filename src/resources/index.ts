@@ -37,6 +37,8 @@ export {
   Apps,
   type AllowlistDeletionResponse,
   type AllowlistEntry,
+  type AppAllowlistConfig,
+  type AppCustomOAuthProvider,
   type AppResponse,
   type Caip2,
   type Currency,
@@ -319,6 +321,7 @@ export {
 } from './intents';
 export {
   KeyQuorums,
+  type AuthorizationKey,
   type KeyQuorum,
   type KeyQuorumAuthorizationHeaders,
   type KeyQuorumCreateRequestBody,
@@ -433,7 +436,6 @@ export {
   type LinkAuthIntentNoAccount,
   type ListStripeConsumerWalletsResponse,
   type ListStripePaymentTokensResponse,
-  type OnrampSessionFees,
   type OnrampSessionParams,
   type OnrampSessionTransactionDetails,
   type RefreshStripeQuoteResponse,
@@ -441,10 +443,10 @@ export {
   type StripeCryptoCustomerActive,
   type StripeCryptoCustomerExpired,
   type StripeCryptoCustomerNone,
+  type StripeKYCTier,
   type StripeOnrampCheckoutResponse,
   type StripeOnrampSessionStatus,
   type StripePaymentToken,
-  type StripeQuote,
   type StripeTransactionDetails,
   type StripeVerification,
 } from './onramps';
@@ -500,6 +502,7 @@ export {
   type TempoTransactionConditionField,
   type TronCalldataCondition,
   type TronTransactionCondition,
+  type TypedDataInput,
   type UpdateConditionSetRequestBody,
   type PolicyCreateParams,
   type PolicyCreateRuleParams,
@@ -774,6 +777,8 @@ export {
   type RelayerFee,
   type SeedPhraseExportInput,
   type SeedPhraseExportResponse,
+  type SignatureOptions,
+  type SignatureType,
   type SigningAlgorithm,
   type SolanaRpcInput,
   type SolanaRpcResponse,
@@ -907,6 +912,7 @@ export {
 } from './wallets/wallets';
 export {
   Webhooks,
+  type BlockInfo,
   type BridgeCryptoDepositMetadata,
   type BridgeCryptoTransferMetadata,
   type BridgeFiatDepositMetadata,
@@ -1003,5 +1009,6 @@ export {
   type EthereumYieldSweepType,
   type EthereumYieldWithdrawInput,
   type EvmCaip2ChainID,
+  type VaultAsset,
   type YieldAuthorizationHeaders,
 } from './yield';

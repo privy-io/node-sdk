@@ -75,7 +75,10 @@ export interface EthereumVaultDetailsResponse {
  * A user's position in a DeFi vault.
  */
 export interface EthereumVaultPosition {
-  asset: EthereumVaultPosition.Asset;
+  /**
+   * The underlying token of a vault position.
+   */
+  asset: VaultAsset;
 
   /**
    * Current asset value in the vault (realtime from ERC4626), in smallest unit.
@@ -96,20 +99,6 @@ export interface EthereumVaultPosition {
    * Total amount withdrawn from the vault, in smallest unit.
    */
   total_withdrawn: string;
-}
-
-export namespace EthereumVaultPosition {
-  export interface Asset {
-    /**
-     * Token contract address.
-     */
-    address: string;
-
-    /**
-     * Token symbol (e.g., "USDC").
-     */
-    symbol: string;
-  }
 }
 
 /**
@@ -256,7 +245,10 @@ export interface EthereumYieldDepositInput {
  * A user's position in a yield vault.
  */
 export interface EthereumYieldPositionResponse {
-  asset: EthereumYieldPositionResponse.Asset;
+  /**
+   * The underlying token of a vault position.
+   */
+  asset: VaultAsset;
 
   /**
    * Current asset value in the vault (realtime from ERC4626), in smallest unit.
@@ -277,20 +269,6 @@ export interface EthereumYieldPositionResponse {
    * Total amount withdrawn from the vault, in smallest unit.
    */
   total_withdrawn: string;
-}
-
-export namespace EthereumYieldPositionResponse {
-  export interface Asset {
-    /**
-     * Token contract address.
-     */
-    address: string;
-
-    /**
-     * Token symbol (e.g., "USDC").
-     */
-    symbol: string;
-  }
 }
 
 /**
@@ -401,6 +379,21 @@ export interface EthereumYieldWithdrawInput {
 export type EvmCaip2ChainID = string;
 
 /**
+ * The underlying token of a vault position.
+ */
+export interface VaultAsset {
+  /**
+   * Token contract address.
+   */
+  address: string;
+
+  /**
+   * Token symbol (e.g., "USDC").
+   */
+  symbol: string;
+}
+
+/**
  * Headers required to authorize yield operations.
  */
 export interface YieldAuthorizationHeaders {
@@ -442,6 +435,7 @@ export declare namespace Yield {
     type EthereumYieldSweepType as EthereumYieldSweepType,
     type EthereumYieldWithdrawInput as EthereumYieldWithdrawInput,
     type EvmCaip2ChainID as EvmCaip2ChainID,
+    type VaultAsset as VaultAsset,
     type YieldAuthorizationHeaders as YieldAuthorizationHeaders,
   };
 }

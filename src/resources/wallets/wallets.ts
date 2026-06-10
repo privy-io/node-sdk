@@ -651,7 +651,18 @@ export interface EthereumPersonalSignRpcInput {
 
   address?: string;
 
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2?: AppsAPI.Caip2;
+
   chain_type?: 'ethereum';
+
+  /**
+   * Options controlling signature production for personal_sign and
+   * eth_signTypedData_v4.
+   */
+  signature_options?: SignatureOptions;
 
   wallet_id?: string;
 }
@@ -1088,7 +1099,18 @@ export interface EthereumSignTypedDataRpcInput {
 
   address?: string;
 
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2?: AppsAPI.Caip2;
+
   chain_type?: 'ethereum';
+
+  /**
+   * Options controlling signature production for personal_sign and
+   * eth_signTypedData_v4.
+   */
+  signature_options?: SignatureOptions;
 
   wallet_id?: string;
 }
@@ -1785,6 +1807,26 @@ export interface SeedPhraseExportResponse {
    */
   encryption_type: HpkeEncryption;
 }
+
+/**
+ * Options controlling signature production for personal_sign and
+ * eth_signTypedData_v4.
+ */
+export interface SignatureOptions {
+  /**
+   * The type of cryptographic signature to produce. Use "ecdsa" for standard ECDSA
+   * signatures, or "erc1271" for ERC-1271 compliant signatures for smart account
+   * wallets.
+   */
+  type: SignatureType;
+}
+
+/**
+ * The type of cryptographic signature to produce. Use "ecdsa" for standard ECDSA
+ * signatures, or "erc1271" for ERC-1271 compliant signatures for smart account
+ * wallets.
+ */
+export type SignatureType = 'ecdsa' | 'erc1271';
 
 /**
  * The signing algorithm used by the wallet.
@@ -4141,9 +4183,20 @@ export declare namespace WalletRpcParams {
     address?: string;
 
     /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2?: AppsAPI.Caip2;
+
+    /**
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param: Options controlling signature production for personal_sign and
+     * eth_signTypedData_v4.
+     */
+    signature_options?: SignatureOptions;
 
     /**
      * Body param
@@ -4186,9 +4239,20 @@ export declare namespace WalletRpcParams {
     address?: string;
 
     /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2?: AppsAPI.Caip2;
+
+    /**
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param: Options controlling signature production for personal_sign and
+     * eth_signTypedData_v4.
+     */
+    signature_options?: SignatureOptions;
 
     /**
      * Body param
@@ -5255,6 +5319,8 @@ export declare namespace Wallets {
     type RelayerFee as RelayerFee,
     type SeedPhraseExportInput as SeedPhraseExportInput,
     type SeedPhraseExportResponse as SeedPhraseExportResponse,
+    type SignatureOptions as SignatureOptions,
+    type SignatureType as SignatureType,
     type SigningAlgorithm as SigningAlgorithm,
     type SolanaRpcInput as SolanaRpcInput,
     type SolanaRpcResponse as SolanaRpcResponse,

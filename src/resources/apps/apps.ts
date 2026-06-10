@@ -81,6 +81,36 @@ export interface AllowlistEntry {
 }
 
 /**
+ * Configuration for the allowlist error page shown to users not on the allowlist.
+ */
+export interface AppAllowlistConfig {
+  cta_link: string | null;
+
+  cta_text: string | null;
+
+  error_detail: string | null;
+
+  error_title: string | null;
+}
+
+/**
+ * A custom OAuth provider configured for an app.
+ */
+export interface AppCustomOAuthProvider {
+  enabled: boolean;
+
+  /**
+   * The ID of a custom OAuth provider, set up for this app. Must start with
+   * "custom:".
+   */
+  provider: ClientAuthAPI.CustomOAuthProviderID;
+
+  provider_display_name: string;
+
+  provider_icon_url: string;
+}
+
+/**
  * The response for getting an app.
  */
 export interface AppResponse {
@@ -94,7 +124,10 @@ export interface AppResponse {
 
   allowed_native_app_url_schemes: Array<string>;
 
-  allowlist_config: AppResponse.AllowlistConfig;
+  /**
+   * Configuration for the allowlist error page shown to users not on the allowlist.
+   */
+  allowlist_config: AppAllowlistConfig;
 
   allowlist_enabled: boolean;
 
@@ -106,7 +139,7 @@ export interface AppResponse {
 
   custom_jwt_auth: boolean;
 
-  custom_oauth_providers: Array<AppResponse.CustomOAuthProvider>;
+  custom_oauth_providers: Array<AppCustomOAuthProvider>;
 
   /**
    * Indicates that this response contains only publicly accessible data, not a
@@ -215,32 +248,6 @@ export interface AppResponse {
    * Configuration for Telegram authentication.
    */
   telegram_auth_config?: TelegramAuthConfigSchema;
-}
-
-export namespace AppResponse {
-  export interface AllowlistConfig {
-    cta_link: string | null;
-
-    cta_text: string | null;
-
-    error_detail: string | null;
-
-    error_title: string | null;
-  }
-
-  export interface CustomOAuthProvider {
-    enabled: boolean;
-
-    /**
-     * The ID of a custom OAuth provider, set up for this app. Must start with
-     * "custom:".
-     */
-    provider: ClientAuthAPI.CustomOAuthProviderID;
-
-    provider_display_name: string;
-
-    provider_icon_url: string;
-  }
 }
 
 /**
@@ -512,6 +519,8 @@ export declare namespace Apps {
   export {
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
     type AllowlistEntry as AllowlistEntry,
+    type AppAllowlistConfig as AppAllowlistConfig,
+    type AppCustomOAuthProvider as AppCustomOAuthProvider,
     type AppResponse as AppResponse,
     type Caip2 as Caip2,
     type Currency as Currency,

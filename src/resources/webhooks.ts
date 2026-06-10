@@ -13,6 +13,21 @@ export class Webhooks extends APIResource {
 }
 
 /**
+ * Block metadata for a wallet transfer event.
+ */
+export interface BlockInfo {
+  /**
+   * The block number.
+   */
+  number: number;
+
+  /**
+   * The block timestamp.
+   */
+  timestamp: number;
+}
+
+/**
  * Bridge metadata for a crypto deposit via liquidation address.
  */
 export interface BridgeCryptoDepositMetadata {
@@ -148,7 +163,10 @@ export interface FundsDepositedWebhookPayload {
    */
   asset: WalletFundsAsset;
 
-  block: FundsDepositedWebhookPayload.Block;
+  /**
+   * Block metadata for a wallet transfer event.
+   */
+  block: BlockInfo;
 
   /**
    * The CAIP-2 chain identifier.
@@ -196,20 +214,6 @@ export interface FundsDepositedWebhookPayload {
   transaction_fee?: string;
 }
 
-export namespace FundsDepositedWebhookPayload {
-  export interface Block {
-    /**
-     * The block number.
-     */
-    number: number;
-
-    /**
-     * The block timestamp.
-     */
-    timestamp: number;
-  }
-}
-
 /**
  * Payload for the wallet.funds_withdrawn webhook event.
  */
@@ -224,7 +228,10 @@ export interface FundsWithdrawnWebhookPayload {
    */
   asset: WalletFundsAsset;
 
-  block: FundsWithdrawnWebhookPayload.Block;
+  /**
+   * Block metadata for a wallet transfer event.
+   */
+  block: BlockInfo;
 
   /**
    * The CAIP-2 chain identifier.
@@ -265,20 +272,6 @@ export interface FundsWithdrawnWebhookPayload {
    * The transaction fee paid, as a stringified bigint in the chain's native token.
    */
   transaction_fee?: string;
-}
-
-export namespace FundsWithdrawnWebhookPayload {
-  export interface Block {
-    /**
-     * The block number.
-     */
-    number: number;
-
-    /**
-     * The block timestamp.
-     */
-    timestamp: number;
-  }
 }
 
 /**
@@ -2938,6 +2931,7 @@ export type UnsafeUnwrapWebhookEvent =
 
 export declare namespace Webhooks {
   export {
+    type BlockInfo as BlockInfo,
     type BridgeCryptoDepositMetadata as BridgeCryptoDepositMetadata,
     type BridgeCryptoTransferMetadata as BridgeCryptoTransferMetadata,
     type BridgeFiatDepositMetadata as BridgeFiatDepositMetadata,

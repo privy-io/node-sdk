@@ -97,6 +97,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">RelayerFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SignatureOptions</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SignatureType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SigningAlgorithm</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaRpcResponse</a></code>
@@ -413,6 +415,7 @@ Types:
 - <code><a href="./src/resources/policies.ts">TempoTransactionConditionField</a></code>
 - <code><a href="./src/resources/policies.ts">TronCalldataCondition</a></code>
 - <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">TypedDataInput</a></code>
 - <code><a href="./src/resources/policies.ts">UpdateConditionSetRequestBody</a></code>
 
 Methods:
@@ -457,6 +460,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/key-quorums.ts">AuthorizationKey</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateRequestBody</a></code>
@@ -518,6 +522,8 @@ Types:
 
 - <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AllowlistEntry</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AppAllowlistConfig</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AppCustomOAuthProvider</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AppResponse</a></code>
 - <code><a href="./src/resources/apps/apps.ts">Caip2</a></code>
 - <code><a href="./src/resources/apps/apps.ts">Currency</a></code>
@@ -566,6 +572,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/webhooks.ts">BlockInfo</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeCryptoDepositMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeCryptoTransferMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeFiatDepositMetadata</a></code>
@@ -939,7 +946,6 @@ Types:
 - <code><a href="./src/resources/onramps.ts">LinkAuthIntentNoAccount</a></code>
 - <code><a href="./src/resources/onramps.ts">ListStripeConsumerWalletsResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">ListStripePaymentTokensResponse</a></code>
-- <code><a href="./src/resources/onramps.ts">OnrampSessionFees</a></code>
 - <code><a href="./src/resources/onramps.ts">OnrampSessionParams</a></code>
 - <code><a href="./src/resources/onramps.ts">OnrampSessionTransactionDetails</a></code>
 - <code><a href="./src/resources/onramps.ts">RefreshStripeQuoteResponse</a></code>
@@ -947,10 +953,10 @@ Types:
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerActive</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerExpired</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerNone</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeKYCTier</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeOnrampCheckoutResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeOnrampSessionStatus</a></code>
 - <code><a href="./src/resources/onramps.ts">StripePaymentToken</a></code>
-- <code><a href="./src/resources/onramps.ts">StripeQuote</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeTransactionDetails</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeVerification</a></code>
 
@@ -1065,6 +1071,7 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldSweepType</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldWithdrawInput</a></code>
 - <code><a href="./src/resources/yield.ts">EvmCaip2ChainID</a></code>
+- <code><a href="./src/resources/yield.ts">VaultAsset</a></code>
 - <code><a href="./src/resources/yield.ts">YieldAuthorizationHeaders</a></code>
 
 # KrakenEmbed

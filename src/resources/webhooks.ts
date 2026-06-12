@@ -1203,6 +1203,13 @@ export interface UserOperationCompletedWebhookPayload {
 }
 
 /**
+ * A reference to a user by their unique identifier.
+ */
+export interface UserReference {
+  id: string;
+}
+
+/**
  * Payload for the user.transferred_account webhook event.
  */
 export interface UserTransferredAccountWebhookPayload {
@@ -1213,7 +1220,10 @@ export interface UserTransferredAccountWebhookPayload {
 
   deletedUser: true;
 
-  fromUser: UserTransferredAccountWebhookPayload.FromUser;
+  /**
+   * A reference to a user by their unique identifier.
+   */
+  fromUser: UserReference;
 
   /**
    * A Privy user object.
@@ -1224,12 +1234,6 @@ export interface UserTransferredAccountWebhookPayload {
    * The type of webhook event.
    */
   type: 'user.transferred_account';
-}
-
-export namespace UserTransferredAccountWebhookPayload {
-  export interface FromUser {
-    id: string;
-  }
 }
 
 /**
@@ -2806,7 +2810,7 @@ export type WebhookPayload =
 export interface YieldClaimConfirmedWebhookPayload {
   caip2: string;
 
-  rewards: Array<YieldClaimConfirmedWebhookPayload.Reward>;
+  rewards: Array<YieldClaimReward>;
 
   transaction_id: string;
 
@@ -2818,14 +2822,15 @@ export interface YieldClaimConfirmedWebhookPayload {
   wallet_id: string;
 }
 
-export namespace YieldClaimConfirmedWebhookPayload {
-  export interface Reward {
-    amount: string;
+/**
+ * A single reward token claimed from a yield vault.
+ */
+export interface YieldClaimReward {
+  amount: string;
 
-    token_address: string;
+  token_address: string;
 
-    token_symbol: string;
-  }
+  token_symbol: string;
 }
 
 /**
@@ -2971,6 +2976,7 @@ export declare namespace Webhooks {
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
     type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
     type UserOperationCompletedWebhookPayload as UserOperationCompletedWebhookPayload,
+    type UserReference as UserReference,
     type UserTransferredAccountWebhookPayload as UserTransferredAccountWebhookPayload,
     type UserUnlinkedAccountWebhookPayload as UserUnlinkedAccountWebhookPayload,
     type UserUpdatedAccountWebhookPayload as UserUpdatedAccountWebhookPayload,
@@ -3004,6 +3010,7 @@ export declare namespace Webhooks {
     type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
     type WebhookPayload as WebhookPayload,
     type YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
+    type YieldClaimReward as YieldClaimReward,
     type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
     type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
     type UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent,

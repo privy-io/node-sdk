@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as IntentsAPI from './intents';
 import * as KeyQuorumsAPI from './key-quorums';
 import * as PoliciesAPI from './policies';
 import * as SharedAPI from './shared';
@@ -412,108 +411,83 @@ export interface IntentAuthorization {
 }
 
 /**
+ * A key member of an intent authorization quorum.
+ */
+export interface IntentAuthorizationKeyMember {
+  /**
+   * Public key of the key quorum member
+   */
+  public_key: string;
+
+  /**
+   * Unix timestamp when this member signed, or null if not yet signed.
+   */
+  signed_at: number | null;
+
+  type: 'key';
+}
+
+/**
+ * A nested key quorum member of an intent authorization quorum.
+ */
+export interface IntentAuthorizationKeyQuorum {
+  /**
+   * ID of the child key quorum member
+   */
+  key_quorum_id: string;
+
+  /**
+   * Members of this child quorum
+   */
+  members: Array<IntentAuthorizationKeyQuorumMember>;
+
+  /**
+   * Number of signatures required from this child quorum
+   */
+  threshold: number;
+
+  /**
+   * Whether this child key quorum has met its signature threshold
+   */
+  threshold_met: boolean;
+
+  type: 'key_quorum';
+
+  /**
+   * Display name for the child key quorum (if any)
+   */
+  display_name?: string;
+}
+
+/**
  * A leaf member (user or key) of a nested key quorum in an intent authorization.
  */
-export type IntentAuthorizationKeyQuorumMember =
-  | IntentAuthorizationKeyQuorumMember.UserMember
-  | IntentAuthorizationKeyQuorumMember.KeyMember;
-
-export namespace IntentAuthorizationKeyQuorumMember {
-  export interface UserMember {
-    /**
-     * Unix timestamp when this member signed, or null if not yet signed.
-     */
-    signed_at: number | null;
-
-    type: 'user';
-
-    /**
-     * User ID of the key quorum member
-     */
-    user_id: string;
-  }
-
-  export interface KeyMember {
-    /**
-     * Public key of the key quorum member
-     */
-    public_key: string;
-
-    /**
-     * Unix timestamp when this member signed, or null if not yet signed.
-     */
-    signed_at: number | null;
-
-    type: 'key';
-  }
-}
+export type IntentAuthorizationKeyQuorumMember = IntentAuthorizationUserMember | IntentAuthorizationKeyMember;
 
 /**
  * A member of an intent authorization quorum. Can be a user, key, or nested key
  * quorum.
  */
 export type IntentAuthorizationMember =
-  | IntentAuthorizationMember.UserMember
-  | IntentAuthorizationMember.KeyMember
-  | IntentAuthorizationMember.KeyQuorumMember;
+  | IntentAuthorizationUserMember
+  | IntentAuthorizationKeyMember
+  | IntentAuthorizationKeyQuorum;
 
-export namespace IntentAuthorizationMember {
-  export interface UserMember {
-    /**
-     * Unix timestamp when this member signed, or null if not yet signed.
-     */
-    signed_at: number | null;
+/**
+ * A user member of an intent authorization quorum.
+ */
+export interface IntentAuthorizationUserMember {
+  /**
+   * Unix timestamp when this member signed, or null if not yet signed.
+   */
+  signed_at: number | null;
 
-    type: 'user';
+  type: 'user';
 
-    /**
-     * User ID of the key quorum member
-     */
-    user_id: string;
-  }
-
-  export interface KeyMember {
-    /**
-     * Public key of the key quorum member
-     */
-    public_key: string;
-
-    /**
-     * Unix timestamp when this member signed, or null if not yet signed.
-     */
-    signed_at: number | null;
-
-    type: 'key';
-  }
-
-  export interface KeyQuorumMember {
-    /**
-     * ID of the child key quorum member
-     */
-    key_quorum_id: string;
-
-    /**
-     * Members of this child quorum
-     */
-    members: Array<IntentsAPI.IntentAuthorizationKeyQuorumMember>;
-
-    /**
-     * Number of signatures required from this child quorum
-     */
-    threshold: number;
-
-    /**
-     * Whether this child key quorum has met its signature threshold
-     */
-    threshold_met: boolean;
-
-    type: 'key_quorum';
-
-    /**
-     * Display name for the child key quorum (if any)
-     */
-    display_name?: string;
-  }
+  /**
+   * User ID of the key quorum member
+   */
+  user_id: string;
 }
 
 /**
@@ -806,6 +780,11 @@ export interface RuleIntentCreateRequestDetails {
 }
 
 /**
+ * Empty request body for a rule delete intent.
+ */
+export interface RuleIntentDeleteRequestBody {}
+
+/**
  * Request details for deleting a rule via intent.
  */
 export interface RuleIntentDeleteRequestDetails {
@@ -813,11 +792,10 @@ export interface RuleIntentDeleteRequestDetails {
 
   url: string;
 
-  body?: RuleIntentDeleteRequestDetails.Body;
-}
-
-export namespace RuleIntentDeleteRequestDetails {
-  export interface Body {}
+  /**
+   * Empty request body for a rule delete intent.
+   */
+  body?: RuleIntentDeleteRequestBody;
 }
 
 /**
@@ -1976,8 +1954,11 @@ export declare namespace Intents {
     type BaseActionResult as BaseActionResult,
     type BaseIntentResponse as BaseIntentResponse,
     type IntentAuthorization as IntentAuthorization,
+    type IntentAuthorizationKeyMember as IntentAuthorizationKeyMember,
+    type IntentAuthorizationKeyQuorum as IntentAuthorizationKeyQuorum,
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
+    type IntentAuthorizationUserMember as IntentAuthorizationUserMember,
     type IntentAuthorizeInput as IntentAuthorizeInput,
     type IntentCreationHeaders as IntentCreationHeaders,
     type IntentResponse as IntentResponse,
@@ -1990,6 +1971,7 @@ export declare namespace Intents {
     type RpcIntentResponse as RpcIntentResponse,
     type RuleDeleteIntentResponse as RuleDeleteIntentResponse,
     type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
+    type RuleIntentDeleteRequestBody as RuleIntentDeleteRequestBody,
     type RuleIntentDeleteRequestDetails as RuleIntentDeleteRequestDetails,
     type RuleIntentRequestDetails as RuleIntentRequestDetails,
     type RuleIntentResponse as RuleIntentResponse,

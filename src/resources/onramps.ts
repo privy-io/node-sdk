@@ -243,6 +243,8 @@ export interface FiatOnrampQuote {
 
   destination_currency_code?: string | null;
 
+  payment_method_category?: string;
+
   source_amount?: number | null;
 
   source_currency_code?: string | null;

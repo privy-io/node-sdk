@@ -188,6 +188,8 @@ export interface AppResponse {
 
   max_linked_wallets_per_user: number | null;
 
+  merge_accounts_by_email: boolean;
+
   mfa_methods: Array<'sms' | 'totp' | 'passkey'>;
 
   name: string;

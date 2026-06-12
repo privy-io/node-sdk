@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as KrakenEmbedAPI from './kraken-embed';
 
 export class KrakenEmbed extends APIResource {}
 
@@ -282,6 +281,17 @@ export interface KrakenEmbedEarnUserAllocation {
 }
 
 /**
+ * User's full name including first, optional middle, and last name.
+ */
+export interface KrakenEmbedFullName {
+  first_name: string;
+
+  last_name: string;
+
+  middle_name?: string | null;
+}
+
+/**
  * Query parameters for listing and filtering available assets.
  */
 export interface KrakenEmbedGetAssetListQueryParamsSchema {
@@ -511,43 +521,27 @@ export interface KrakenEmbedGetPortfolioSummaryQueryParams {
  * balance, and unrealized P&L.
  */
 export interface KrakenEmbedGetPortfolioSummaryResponse {
-  data: KrakenEmbedGetPortfolioSummaryResponse.Data;
+  /**
+   * Kraken API response envelope for portfolio summary, containing optional errors
+   * and the result payload.
+   */
+  data: KrakenEmbedGetPortfolioSummaryResult;
 }
 
-export namespace KrakenEmbedGetPortfolioSummaryResponse {
-  export interface Data {
-    result: Data.Result | null;
+/**
+ * Kraken API response envelope for portfolio summary, containing optional errors
+ * and the result payload.
+ */
+export interface KrakenEmbedGetPortfolioSummaryResult {
+  /**
+   * Portfolio summary payload containing balances, value, and profit/loss
+   * information.
+   */
+  result: KrakenEmbedPortfolioSummaryPayload | null;
 
-    error?: Array<string>;
+  error?: Array<string>;
 
-    errors?: Array<string>;
-  }
-
-  export namespace Data {
-    export interface Result {
-      available_balance: string;
-
-      currency: string;
-
-      open_orders: string;
-
-      portfolio_value: string;
-
-      timestamp: string;
-
-      withheld_value: string;
-
-      cost_basis?: string | null;
-
-      /**
-       * Current day profit and loss for a portfolio, calculated from the most recent
-       * available balance.
-       */
-      current_day_pnl?: KrakenEmbedAPI.KrakenEmbedCurrentDayPnl | null;
-
-      lots_upnl?: string | null;
-    }
-  }
+  errors?: Array<string>;
 }
 
 /**
@@ -566,7 +560,7 @@ export interface KrakenEmbedGetPortfolioTransactionsQueryParamsSchema {
 
   quote?: string;
 
-  ref_ids?: Array<KrakenEmbedGetPortfolioTransactionsQueryParamsSchema.RefID>;
+  ref_ids?: Array<KrakenEmbedPortfolioTransactionRefID>;
 
   sorting?: 'descending' | 'ascending';
 
@@ -575,14 +569,6 @@ export interface KrakenEmbedGetPortfolioTransactionsQueryParamsSchema {
   types?: Array<'simple_order' | 'simple_order_failed' | 'earn_reward'>;
 
   until_time?: string;
-}
-
-export namespace KrakenEmbedGetPortfolioTransactionsQueryParamsSchema {
-  export interface RefID {
-    ref_id: string;
-
-    type: 'simple_order_quote' | 'simple_order_quote_failed';
-  }
 }
 
 /**
@@ -628,10 +614,330 @@ export interface KrakenEmbedListCustomOrdersResult {
 }
 
 /**
+ * Portfolio summary payload containing balances, value, and profit/loss
+ * information.
+ */
+export interface KrakenEmbedPortfolioSummaryPayload {
+  available_balance: string;
+
+  currency: string;
+
+  open_orders: string;
+
+  portfolio_value: string;
+
+  timestamp: string;
+
+  withheld_value: string;
+
+  cost_basis?: string | null;
+
+  /**
+   * Current day profit and loss for a portfolio, calculated from the most recent
+   * available balance.
+   */
+  current_day_pnl?: KrakenEmbedCurrentDayPnl | null;
+
+  lots_upnl?: string | null;
+}
+
+/**
+ * A reference ID filter for portfolio transaction queries, identifying a
+ * transaction by type and reference identifier.
+ */
+export interface KrakenEmbedPortfolioTransactionRefID {
+  ref_id: string;
+
+  type: 'simple_order_quote' | 'simple_order_quote_failed';
+}
+
+/**
+ * User's residential address including street, city, postal code, and country.
+ */
+export interface KrakenEmbedResidence {
+  city: string;
+
+  country:
+    | 'AD'
+    | 'AE'
+    | 'AF'
+    | 'AG'
+    | 'AI'
+    | 'AL'
+    | 'AM'
+    | 'AO'
+    | 'AQ'
+    | 'AR'
+    | 'AS'
+    | 'AT'
+    | 'AU'
+    | 'AW'
+    | 'AX'
+    | 'AZ'
+    | 'BA'
+    | 'BB'
+    | 'BD'
+    | 'BE'
+    | 'BF'
+    | 'BG'
+    | 'BH'
+    | 'BI'
+    | 'BJ'
+    | 'BL'
+    | 'BM'
+    | 'BN'
+    | 'BO'
+    | 'BQ'
+    | 'BR'
+    | 'BS'
+    | 'BT'
+    | 'BV'
+    | 'BW'
+    | 'BY'
+    | 'BZ'
+    | 'CA'
+    | 'CC'
+    | 'CD'
+    | 'CF'
+    | 'CG'
+    | 'CH'
+    | 'CI'
+    | 'CK'
+    | 'CL'
+    | 'CM'
+    | 'CN'
+    | 'CO'
+    | 'CR'
+    | 'CU'
+    | 'CV'
+    | 'CW'
+    | 'CX'
+    | 'CY'
+    | 'CZ'
+    | 'DE'
+    | 'DJ'
+    | 'DK'
+    | 'DM'
+    | 'DO'
+    | 'DZ'
+    | 'EC'
+    | 'EE'
+    | 'EG'
+    | 'EH'
+    | 'ER'
+    | 'ES'
+    | 'ET'
+    | 'FI'
+    | 'FJ'
+    | 'FK'
+    | 'FM'
+    | 'FO'
+    | 'FR'
+    | 'GA'
+    | 'GB'
+    | 'GD'
+    | 'GE'
+    | 'GF'
+    | 'GG'
+    | 'GH'
+    | 'GI'
+    | 'GL'
+    | 'GM'
+    | 'GN'
+    | 'GP'
+    | 'GQ'
+    | 'GR'
+    | 'GS'
+    | 'GT'
+    | 'GU'
+    | 'GW'
+    | 'GY'
+    | 'HK'
+    | 'HM'
+    | 'HN'
+    | 'HR'
+    | 'HT'
+    | 'HU'
+    | 'ID'
+    | 'IE'
+    | 'IL'
+    | 'IM'
+    | 'IN'
+    | 'IO'
+    | 'IQ'
+    | 'IR'
+    | 'IS'
+    | 'IT'
+    | 'JE'
+    | 'JM'
+    | 'JO'
+    | 'JP'
+    | 'KE'
+    | 'KG'
+    | 'KH'
+    | 'KI'
+    | 'KM'
+    | 'KN'
+    | 'KP'
+    | 'KR'
+    | 'KW'
+    | 'KY'
+    | 'KZ'
+    | 'LA'
+    | 'LB'
+    | 'LC'
+    | 'LI'
+    | 'LK'
+    | 'LR'
+    | 'LS'
+    | 'LT'
+    | 'LU'
+    | 'LV'
+    | 'LY'
+    | 'MA'
+    | 'MC'
+    | 'MD'
+    | 'ME'
+    | 'MF'
+    | 'MG'
+    | 'MH'
+    | 'MK'
+    | 'ML'
+    | 'MM'
+    | 'MN'
+    | 'MO'
+    | 'MP'
+    | 'MQ'
+    | 'MR'
+    | 'MS'
+    | 'MT'
+    | 'MU'
+    | 'MV'
+    | 'MW'
+    | 'MX'
+    | 'MY'
+    | 'MZ'
+    | 'NA'
+    | 'NC'
+    | 'NE'
+    | 'NF'
+    | 'NG'
+    | 'NI'
+    | 'NL'
+    | 'NO'
+    | 'NP'
+    | 'NR'
+    | 'NU'
+    | 'NZ'
+    | 'OM'
+    | 'PA'
+    | 'PE'
+    | 'PF'
+    | 'PG'
+    | 'PH'
+    | 'PK'
+    | 'PL'
+    | 'PM'
+    | 'PN'
+    | 'PR'
+    | 'PS'
+    | 'PT'
+    | 'PW'
+    | 'PY'
+    | 'QA'
+    | 'RE'
+    | 'RO'
+    | 'RS'
+    | 'RU'
+    | 'RW'
+    | 'SA'
+    | 'SB'
+    | 'SC'
+    | 'SD'
+    | 'SE'
+    | 'SG'
+    | 'SH'
+    | 'SI'
+    | 'SJ'
+    | 'SK'
+    | 'SL'
+    | 'SM'
+    | 'SN'
+    | 'SO'
+    | 'SR'
+    | 'SS'
+    | 'ST'
+    | 'SV'
+    | 'SX'
+    | 'SY'
+    | 'SZ'
+    | 'TC'
+    | 'TD'
+    | 'TF'
+    | 'TG'
+    | 'TH'
+    | 'TJ'
+    | 'TK'
+    | 'TL'
+    | 'TM'
+    | 'TN'
+    | 'TO'
+    | 'TR'
+    | 'TT'
+    | 'TV'
+    | 'TW'
+    | 'TZ'
+    | 'UA'
+    | 'UG'
+    | 'UM'
+    | 'US'
+    | 'UY'
+    | 'UZ'
+    | 'VA'
+    | 'VC'
+    | 'VE'
+    | 'VG'
+    | 'VI'
+    | 'VN'
+    | 'VU'
+    | 'WF'
+    | 'WS'
+    | 'YE'
+    | 'YT'
+    | 'ZA'
+    | 'ZM'
+    | 'ZW'
+    | 'AC'
+    | 'AN'
+    | 'AP'
+    | 'CP'
+    | 'DG'
+    | 'EA'
+    | 'EU'
+    | 'IC'
+    | 'JX'
+    | 'TA'
+    | 'QO'
+    | 'XK'
+    | '0C';
+
+  line1: string;
+
+  postal_code: string;
+
+  line2?: string | null;
+
+  province?: string | null;
+}
+
+/**
  * Optional best-effort metadata hints for proof of address verification.
  */
 export interface KrakenEmbedStartAddressMetadata {
-  address?: KrakenEmbedStartAddressMetadata.Address | null;
+  /**
+   * User's residential address including street, city, postal code, and country.
+   */
+  address?: KrakenEmbedResidence | null;
 
   document_number?: string | null;
 
@@ -656,284 +962,6 @@ export interface KrakenEmbedStartAddressMetadata {
     | null;
 
   expiration_date?: string | null;
-}
-
-export namespace KrakenEmbedStartAddressMetadata {
-  export interface Address {
-    city: string;
-
-    country:
-      | 'AD'
-      | 'AE'
-      | 'AF'
-      | 'AG'
-      | 'AI'
-      | 'AL'
-      | 'AM'
-      | 'AO'
-      | 'AQ'
-      | 'AR'
-      | 'AS'
-      | 'AT'
-      | 'AU'
-      | 'AW'
-      | 'AX'
-      | 'AZ'
-      | 'BA'
-      | 'BB'
-      | 'BD'
-      | 'BE'
-      | 'BF'
-      | 'BG'
-      | 'BH'
-      | 'BI'
-      | 'BJ'
-      | 'BL'
-      | 'BM'
-      | 'BN'
-      | 'BO'
-      | 'BQ'
-      | 'BR'
-      | 'BS'
-      | 'BT'
-      | 'BV'
-      | 'BW'
-      | 'BY'
-      | 'BZ'
-      | 'CA'
-      | 'CC'
-      | 'CD'
-      | 'CF'
-      | 'CG'
-      | 'CH'
-      | 'CI'
-      | 'CK'
-      | 'CL'
-      | 'CM'
-      | 'CN'
-      | 'CO'
-      | 'CR'
-      | 'CU'
-      | 'CV'
-      | 'CW'
-      | 'CX'
-      | 'CY'
-      | 'CZ'
-      | 'DE'
-      | 'DJ'
-      | 'DK'
-      | 'DM'
-      | 'DO'
-      | 'DZ'
-      | 'EC'
-      | 'EE'
-      | 'EG'
-      | 'EH'
-      | 'ER'
-      | 'ES'
-      | 'ET'
-      | 'FI'
-      | 'FJ'
-      | 'FK'
-      | 'FM'
-      | 'FO'
-      | 'FR'
-      | 'GA'
-      | 'GB'
-      | 'GD'
-      | 'GE'
-      | 'GF'
-      | 'GG'
-      | 'GH'
-      | 'GI'
-      | 'GL'
-      | 'GM'
-      | 'GN'
-      | 'GP'
-      | 'GQ'
-      | 'GR'
-      | 'GS'
-      | 'GT'
-      | 'GU'
-      | 'GW'
-      | 'GY'
-      | 'HK'
-      | 'HM'
-      | 'HN'
-      | 'HR'
-      | 'HT'
-      | 'HU'
-      | 'ID'
-      | 'IE'
-      | 'IL'
-      | 'IM'
-      | 'IN'
-      | 'IO'
-      | 'IQ'
-      | 'IR'
-      | 'IS'
-      | 'IT'
-      | 'JE'
-      | 'JM'
-      | 'JO'
-      | 'JP'
-      | 'KE'
-      | 'KG'
-      | 'KH'
-      | 'KI'
-      | 'KM'
-      | 'KN'
-      | 'KP'
-      | 'KR'
-      | 'KW'
-      | 'KY'
-      | 'KZ'
-      | 'LA'
-      | 'LB'
-      | 'LC'
-      | 'LI'
-      | 'LK'
-      | 'LR'
-      | 'LS'
-      | 'LT'
-      | 'LU'
-      | 'LV'
-      | 'LY'
-      | 'MA'
-      | 'MC'
-      | 'MD'
-      | 'ME'
-      | 'MF'
-      | 'MG'
-      | 'MH'
-      | 'MK'
-      | 'ML'
-      | 'MM'
-      | 'MN'
-      | 'MO'
-      | 'MP'
-      | 'MQ'
-      | 'MR'
-      | 'MS'
-      | 'MT'
-      | 'MU'
-      | 'MV'
-      | 'MW'
-      | 'MX'
-      | 'MY'
-      | 'MZ'
-      | 'NA'
-      | 'NC'
-      | 'NE'
-      | 'NF'
-      | 'NG'
-      | 'NI'
-      | 'NL'
-      | 'NO'
-      | 'NP'
-      | 'NR'
-      | 'NU'
-      | 'NZ'
-      | 'OM'
-      | 'PA'
-      | 'PE'
-      | 'PF'
-      | 'PG'
-      | 'PH'
-      | 'PK'
-      | 'PL'
-      | 'PM'
-      | 'PN'
-      | 'PR'
-      | 'PS'
-      | 'PT'
-      | 'PW'
-      | 'PY'
-      | 'QA'
-      | 'RE'
-      | 'RO'
-      | 'RS'
-      | 'RU'
-      | 'RW'
-      | 'SA'
-      | 'SB'
-      | 'SC'
-      | 'SD'
-      | 'SE'
-      | 'SG'
-      | 'SH'
-      | 'SI'
-      | 'SJ'
-      | 'SK'
-      | 'SL'
-      | 'SM'
-      | 'SN'
-      | 'SO'
-      | 'SR'
-      | 'SS'
-      | 'ST'
-      | 'SV'
-      | 'SX'
-      | 'SY'
-      | 'SZ'
-      | 'TC'
-      | 'TD'
-      | 'TF'
-      | 'TG'
-      | 'TH'
-      | 'TJ'
-      | 'TK'
-      | 'TL'
-      | 'TM'
-      | 'TN'
-      | 'TO'
-      | 'TR'
-      | 'TT'
-      | 'TV'
-      | 'TW'
-      | 'TZ'
-      | 'UA'
-      | 'UG'
-      | 'UM'
-      | 'US'
-      | 'UY'
-      | 'UZ'
-      | 'VA'
-      | 'VC'
-      | 'VE'
-      | 'VG'
-      | 'VI'
-      | 'VN'
-      | 'VU'
-      | 'WF'
-      | 'WS'
-      | 'YE'
-      | 'YT'
-      | 'ZA'
-      | 'ZM'
-      | 'ZW'
-      | 'AC'
-      | 'AN'
-      | 'AP'
-      | 'CP'
-      | 'DG'
-      | 'EA'
-      | 'EU'
-      | 'IC'
-      | 'JX'
-      | 'TA'
-      | 'QO'
-      | 'XK'
-      | '0C';
-
-    line1: string;
-
-    postal_code: string;
-
-    line2?: string | null;
-
-    province?: string | null;
-  }
 }
 
 /**
@@ -962,17 +990,10 @@ export interface KrakenEmbedStartAddressVerificationURLInput {
 export interface KrakenEmbedStartIdentityInfo {
   date_of_birth?: string | null;
 
-  full_name?: KrakenEmbedStartIdentityInfo.FullName | null;
-}
-
-export namespace KrakenEmbedStartIdentityInfo {
-  export interface FullName {
-    first_name: string;
-
-    last_name: string;
-
-    middle_name?: string | null;
-  }
+  /**
+   * User's full name including first, optional middle, and last name.
+   */
+  full_name?: KrakenEmbedFullName | null;
 }
 
 /**
@@ -1669,6 +1690,7 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedEarnAprEstimate as KrakenEmbedEarnAprEstimate,
     type KrakenEmbedEarnAsset as KrakenEmbedEarnAsset,
     type KrakenEmbedEarnUserAllocation as KrakenEmbedEarnUserAllocation,
+    type KrakenEmbedFullName as KrakenEmbedFullName,
     type KrakenEmbedGetAssetListQueryParamsSchema as KrakenEmbedGetAssetListQueryParamsSchema,
     type KrakenEmbedGetCustomOrderHistoryQueryParams as KrakenEmbedGetCustomOrderHistoryQueryParams,
     type KrakenEmbedGetCustomOrderHistoryResponse as KrakenEmbedGetCustomOrderHistoryResponse,
@@ -1687,11 +1709,15 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedGetPortfolioDetailsQueryParamsSchema as KrakenEmbedGetPortfolioDetailsQueryParamsSchema,
     type KrakenEmbedGetPortfolioSummaryQueryParams as KrakenEmbedGetPortfolioSummaryQueryParams,
     type KrakenEmbedGetPortfolioSummaryResponse as KrakenEmbedGetPortfolioSummaryResponse,
+    type KrakenEmbedGetPortfolioSummaryResult as KrakenEmbedGetPortfolioSummaryResult,
     type KrakenEmbedGetPortfolioTransactionsQueryParamsSchema as KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
     type KrakenEmbedGetQuoteQueryParams as KrakenEmbedGetQuoteQueryParams,
     type KrakenEmbedListCustomOrdersQueryParams as KrakenEmbedListCustomOrdersQueryParams,
     type KrakenEmbedListCustomOrdersResponse as KrakenEmbedListCustomOrdersResponse,
     type KrakenEmbedListCustomOrdersResult as KrakenEmbedListCustomOrdersResult,
+    type KrakenEmbedPortfolioSummaryPayload as KrakenEmbedPortfolioSummaryPayload,
+    type KrakenEmbedPortfolioTransactionRefID as KrakenEmbedPortfolioTransactionRefID,
+    type KrakenEmbedResidence as KrakenEmbedResidence,
     type KrakenEmbedStartAddressMetadata as KrakenEmbedStartAddressMetadata,
     type KrakenEmbedStartAddressVerificationURLInput as KrakenEmbedStartAddressVerificationURLInput,
     type KrakenEmbedStartIdentityInfo as KrakenEmbedStartIdentityInfo,

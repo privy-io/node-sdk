@@ -57,6 +57,7 @@ describe('resource wallets', () => {
           chain_type: 'ethereum',
           cursor: 'x',
           external_id: 'external_id',
+          include_archived: true,
           limit: 100,
           user_id: 'user_id',
         },
@@ -311,6 +312,18 @@ describe('resource wallets', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('archive', async () => {
+    const responsePromise = client.wallets.archive('wallet_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('authenticateWithJwt: only required params', async () => {
     const responsePromise = client.wallets.authenticateWithJwt({
       encryption_type: 'HPKE',
@@ -428,6 +441,14 @@ describe('resource wallets', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('get: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.wallets.get('wallet_id', { include_archived: true }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(PrivyAPI.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('getWalletByAddress: only required params', async () => {
     const responsePromise = client.wallets.getWalletByAddress({
       address: '0xF1DBff66C993EE895C8cb176c30b07A559d76496',
@@ -445,6 +466,7 @@ describe('resource wallets', () => {
   test.skip('getWalletByAddress: required and optional params', async () => {
     const response = await client.wallets.getWalletByAddress({
       address: '0xF1DBff66C993EE895C8cb176c30b07A559d76496',
+      include_archived: true,
     });
   });
 });

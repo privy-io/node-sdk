@@ -235,6 +235,7 @@ export {
   type WalletAuthenticateWithJwtParams,
   type WalletCreateBatchParams,
   type WalletCreateWalletsWithRecoveryParams,
+  type WalletGetParams,
   type WalletGetWalletByAddressParams,
   type WalletsCursor,
 } from './wallets';

@@ -103,6 +103,11 @@ export interface TransactionGetParams {
 
   cursor?: string;
 
+  /**
+   * Include archived wallets in lookup. Defaults to false.
+   */
+  include_archived?: boolean;
+
   limit?: number | null;
 
   tx_hash?: string;

@@ -648,8 +648,18 @@ export interface KrakenEmbedPortfolioSummaryPayload {
 export interface KrakenEmbedPortfolioTransactionRefID {
   ref_id: string;
 
-  type: 'simple_order_quote' | 'simple_order_quote_failed';
+  /**
+   * The type of reference ID used to filter portfolio transactions by quote or
+   * failed quote references.
+   */
+  type: KrakenEmbedPortfolioTransactionRefIDType;
 }
+
+/**
+ * The type of reference ID used to filter portfolio transactions by quote or
+ * failed quote references.
+ */
+export type KrakenEmbedPortfolioTransactionRefIDType = 'simple_order_quote' | 'simple_order_quote_failed';
 
 /**
  * User's residential address including street, city, postal code, and country.
@@ -1717,6 +1727,7 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedListCustomOrdersResult as KrakenEmbedListCustomOrdersResult,
     type KrakenEmbedPortfolioSummaryPayload as KrakenEmbedPortfolioSummaryPayload,
     type KrakenEmbedPortfolioTransactionRefID as KrakenEmbedPortfolioTransactionRefID,
+    type KrakenEmbedPortfolioTransactionRefIDType as KrakenEmbedPortfolioTransactionRefIDType,
     type KrakenEmbedResidence as KrakenEmbedResidence,
     type KrakenEmbedStartAddressMetadata as KrakenEmbedStartAddressMetadata,
     type KrakenEmbedStartAddressVerificationURLInput as KrakenEmbedStartAddressVerificationURLInput,

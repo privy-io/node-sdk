@@ -317,6 +317,20 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Archives a wallet, preventing it from being used in any write or signing
+   * operations. Archived wallets are hidden from list endpoints by default. Returns
+   * 404 if the wallet does not exist or is already archived.
+   *
+   * @example
+   * ```ts
+   * const wallet = await client.wallets.archive('wallet_id');
+   * ```
+   */
+  archive(walletID: string, options?: RequestOptions): APIPromise<Wallet> {
+    return this._client.post(path`/v1/wallets/${walletID}/archive`, options);
+  }
+
+  /**
    * Exchange a user JWT for a session key authorized to act on the user's wallets.
    * Returns the encrypted authorization key and the list of wallets it can access.
    *
@@ -384,8 +398,12 @@ export class Wallets extends APIResource {
    * const wallet = await client.wallets.get('wallet_id');
    * ```
    */
-  get(walletID: string, options?: RequestOptions): APIPromise<Wallet> {
-    return this._client.get(path`/v1/wallets/${walletID}`, options);
+  get(
+    walletID: string,
+    query: WalletGetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Wallet> {
+    return this._client.get(path`/v1/wallets/${walletID}`, { query, ...options });
   }
 
   /**
@@ -1393,6 +1411,12 @@ export interface GetByWalletAddressRequestBody {
    * A blockchain wallet address (Ethereum or Solana).
    */
   address: Address;
+
+  /**
+   * Include archived wallets in lookup. Defaults to false (archived wallets return
+   * 404).
+   */
+  include_archived?: boolean;
 }
 
 /**
@@ -3323,6 +3347,12 @@ export interface Wallet {
   policy_ids: Array<string>;
 
   /**
+   * Unix timestamp of when the wallet was archived in milliseconds, or null if the
+   * wallet is active.
+   */
+  archived_at?: number | null;
+
+  /**
    * The number of keys that must sign for an action to be valid.
    */
   authorization_threshold?: number;
@@ -3910,6 +3940,11 @@ export interface WalletListParams extends CursorParams {
    * Filter wallets by external ID.
    */
   external_id?: string;
+
+  /**
+   * Include archived wallets in lookup. Defaults to false.
+   */
+  include_archived?: boolean;
 
   /**
    * Filter wallets by user ID. Cannot be used together with authorization_key.
@@ -5207,11 +5242,24 @@ export namespace WalletCreateWalletsWithRecoveryParams {
   }
 }
 
+export interface WalletGetParams {
+  /**
+   * Include archived wallets in lookup. Defaults to false.
+   */
+  include_archived?: boolean;
+}
+
 export interface WalletGetWalletByAddressParams {
   /**
    * A blockchain wallet address (Ethereum or Solana).
    */
   address: Address;
+
+  /**
+   * Include archived wallets in lookup. Defaults to false (archived wallets return
+   * 404).
+   */
+  include_archived?: boolean;
 }
 
 Wallets.Actions = Actions;
@@ -5451,6 +5499,7 @@ export declare namespace Wallets {
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateBatchParams as WalletCreateBatchParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
+    type WalletGetParams as WalletGetParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };
 

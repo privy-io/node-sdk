@@ -50,6 +50,7 @@ import {
   AggregationMetric,
   AggregationWindow,
   Aggregations,
+  RollingAggregationWindow,
 } from './resources/aggregations';
 import { Analytics, AnalyticsEventInput } from './resources/analytics';
 import {
@@ -271,8 +272,11 @@ import {
   BaseActionResult,
   BaseIntentResponse,
   IntentAuthorization,
+  IntentAuthorizationKeyMember,
+  IntentAuthorizationKeyQuorum,
   IntentAuthorizationKeyQuorumMember,
   IntentAuthorizationMember,
+  IntentAuthorizationUserMember,
   IntentAuthorizeInput,
   IntentCreatePolicyRuleParams,
   IntentCreationHeaders,
@@ -296,6 +300,7 @@ import {
   RpcIntentResponse,
   RuleDeleteIntentResponse,
   RuleIntentCreateRequestDetails,
+  RuleIntentDeleteRequestBody,
   RuleIntentDeleteRequestDetails,
   RuleIntentRequestDetails,
   RuleIntentResponse,
@@ -339,6 +344,7 @@ import {
   KrakenEmbedEarnAprEstimate,
   KrakenEmbedEarnAsset,
   KrakenEmbedEarnUserAllocation,
+  KrakenEmbedFullName,
   KrakenEmbedGetAssetListQueryParamsSchema,
   KrakenEmbedGetCustomOrderHistoryQueryParams,
   KrakenEmbedGetCustomOrderHistoryResponse,
@@ -357,11 +363,15 @@ import {
   KrakenEmbedGetPortfolioDetailsQueryParamsSchema,
   KrakenEmbedGetPortfolioSummaryQueryParams,
   KrakenEmbedGetPortfolioSummaryResponse,
+  KrakenEmbedGetPortfolioSummaryResult,
   KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
   KrakenEmbedGetQuoteQueryParams,
   KrakenEmbedListCustomOrdersQueryParams,
   KrakenEmbedListCustomOrdersResponse,
   KrakenEmbedListCustomOrdersResult,
+  KrakenEmbedPortfolioSummaryPayload,
+  KrakenEmbedPortfolioTransactionRefID,
+  KrakenEmbedResidence,
   KrakenEmbedStartAddressMetadata,
   KrakenEmbedStartAddressVerificationURLInput,
   KrakenEmbedStartIdentityInfo,
@@ -634,6 +644,8 @@ import {
   UsersCursor,
 } from './resources/users';
 import {
+  CustodianTransactionWalletActionStep,
+  CustodianTransactionWalletActionStepStatus,
   EarnAsset,
   EarnDepositActionResponse,
   EarnDepositRequestBody,
@@ -655,10 +667,13 @@ import {
   ExternalTransactionWalletActionStep,
   ExternalTransactionWalletActionStepStatus,
   FailureReason,
+  ListWalletActionsQuery,
+  ListWalletActionsResponse,
   SvmTransactionWalletActionStep,
   SvmWalletActionStepStatus,
   SwapActionResponse,
   TransferActionResponse,
+  WalletActionInclude,
   WalletActionResponse,
   WalletActionStatus,
   WalletActionStep,
@@ -708,6 +723,7 @@ import {
   UserCreatedWebhookPayload,
   UserLinkedAccountWebhookPayload,
   UserOperationCompletedWebhookPayload,
+  UserReference,
   UserTransferredAccountWebhookPayload,
   UserUnlinkedAccountWebhookPayload,
   UserUpdatedAccountWebhookPayload,
@@ -742,6 +758,7 @@ import {
   WebhookPayload,
   Webhooks,
   YieldClaimConfirmedWebhookPayload,
+  YieldClaimReward,
   YieldDepositConfirmedWebhookPayload,
   YieldWithdrawConfirmedWebhookPayload,
 } from './resources/webhooks';
@@ -802,6 +819,7 @@ import {
   WalletInviteInput,
 } from './resources/apps/apps';
 import {
+  AccessListEntry,
   AdditionalSignerInput,
   AdditionalSignerItemInput,
   Address,
@@ -819,6 +837,7 @@ import {
   DeveloperFee,
   EncryptedAuthorizationKey,
   EncryptedBoundAuthenticateResponse,
+  EncryptedWalletAuthenticateResponse,
   EthereumPersonalSignRpcInput,
   EthereumPersonalSignRpcInputParams,
   EthereumPersonalSignRpcResponse,
@@ -893,6 +912,7 @@ import {
   RawSignInputParams,
   RawSignResponse,
   RawSignResponseData,
+  RawWalletAuthenticateResponse,
   RecipientPublicKey,
   RelayerFee,
   SeedPhraseExportInput,
@@ -1869,8 +1889,8 @@ export class PrivyAPI {
   funding: API.Funding = new API.Funding(this);
   organizations: API.Organizations = new API.Organizations(this);
   crossApp: API.CrossApp = new API.CrossApp(this);
-  oAuth: API.OAuth = new API.OAuth(this);
   walletActions: API.WalletActions = new API.WalletActions(this);
+  oAuth: API.OAuth = new API.OAuth(this);
   yield: API.Yield = new API.Yield(this);
   krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
   swaps: API.Swaps = new API.Swaps(this);
@@ -1894,8 +1914,8 @@ PrivyAPI.Onramps = Onramps;
 PrivyAPI.Funding = Funding;
 PrivyAPI.Organizations = Organizations;
 PrivyAPI.CrossApp = CrossApp;
-PrivyAPI.OAuth = OAuth;
 PrivyAPI.WalletActions = WalletActions;
+PrivyAPI.OAuth = OAuth;
 PrivyAPI.Yield = Yield;
 PrivyAPI.KrakenEmbed = KrakenEmbed;
 PrivyAPI.Swaps = Swaps;
@@ -1908,6 +1928,7 @@ export declare namespace PrivyAPI {
 
   export {
     Wallets as Wallets,
+    type AccessListEntry as AccessListEntry,
     type AdditionalSignerInput as AdditionalSignerInput,
     type AdditionalSignerItemInput as AdditionalSignerItemInput,
     type Address as Address,
@@ -1925,6 +1946,7 @@ export declare namespace PrivyAPI {
     type DeveloperFee as DeveloperFee,
     type EncryptedAuthorizationKey as EncryptedAuthorizationKey,
     type EncryptedBoundAuthenticateResponse as EncryptedBoundAuthenticateResponse,
+    type EncryptedWalletAuthenticateResponse as EncryptedWalletAuthenticateResponse,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
@@ -1999,6 +2021,7 @@ export declare namespace PrivyAPI {
     type RawSignInputParams as RawSignInputParams,
     type RawSignResponse as RawSignResponse,
     type RawSignResponseData as RawSignResponseData,
+    type RawWalletAuthenticateResponse as RawWalletAuthenticateResponse,
     type RecipientPublicKey as RecipientPublicKey,
     type RelayerFee as RelayerFee,
     type SeedPhraseExportInput as SeedPhraseExportInput,
@@ -2320,8 +2343,11 @@ export declare namespace PrivyAPI {
     type BaseActionResult as BaseActionResult,
     type BaseIntentResponse as BaseIntentResponse,
     type IntentAuthorization as IntentAuthorization,
+    type IntentAuthorizationKeyMember as IntentAuthorizationKeyMember,
+    type IntentAuthorizationKeyQuorum as IntentAuthorizationKeyQuorum,
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
+    type IntentAuthorizationUserMember as IntentAuthorizationUserMember,
     type IntentAuthorizeInput as IntentAuthorizeInput,
     type IntentCreationHeaders as IntentCreationHeaders,
     type IntentResponse as IntentResponse,
@@ -2334,6 +2360,7 @@ export declare namespace PrivyAPI {
     type RpcIntentResponse as RpcIntentResponse,
     type RuleDeleteIntentResponse as RuleDeleteIntentResponse,
     type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
+    type RuleIntentDeleteRequestBody as RuleIntentDeleteRequestBody,
     type RuleIntentDeleteRequestDetails as RuleIntentDeleteRequestDetails,
     type RuleIntentRequestDetails as RuleIntentRequestDetails,
     type RuleIntentResponse as RuleIntentResponse,
@@ -2430,6 +2457,7 @@ export declare namespace PrivyAPI {
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
     type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
     type UserOperationCompletedWebhookPayload as UserOperationCompletedWebhookPayload,
+    type UserReference as UserReference,
     type UserTransferredAccountWebhookPayload as UserTransferredAccountWebhookPayload,
     type UserUnlinkedAccountWebhookPayload as UserUnlinkedAccountWebhookPayload,
     type UserUpdatedAccountWebhookPayload as UserUpdatedAccountWebhookPayload,
@@ -2463,6 +2491,7 @@ export declare namespace PrivyAPI {
     type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
     type WebhookPayload as WebhookPayload,
     type YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
+    type YieldClaimReward as YieldClaimReward,
     type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
     type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
     type UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent,
@@ -2500,6 +2529,7 @@ export declare namespace PrivyAPI {
     type AggregationMethod as AggregationMethod,
     type AggregationMetric as AggregationMetric,
     type AggregationWindow as AggregationWindow,
+    type RollingAggregationWindow as RollingAggregationWindow,
   };
 
   export {
@@ -2808,15 +2838,9 @@ export declare namespace PrivyAPI {
   };
 
   export {
-    OAuth as OAuth,
-    type DeviceAuthorizationResponse as DeviceAuthorizationResponse,
-    type OAuthGrant as OAuthGrant,
-    type OAuthGrantListResponse as OAuthGrantListResponse,
-    type OAuthGrantRevokeResponse as OAuthGrantRevokeResponse,
-  };
-
-  export {
     WalletActions as WalletActions,
+    type CustodianTransactionWalletActionStep as CustodianTransactionWalletActionStep,
+    type CustodianTransactionWalletActionStepStatus as CustodianTransactionWalletActionStepStatus,
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
     type EvmWalletActionStepStatus as EvmWalletActionStepStatus,
@@ -2838,15 +2862,26 @@ export declare namespace PrivyAPI {
     type ExternalTransactionWalletActionStep as ExternalTransactionWalletActionStep,
     type ExternalTransactionWalletActionStepStatus as ExternalTransactionWalletActionStepStatus,
     type FailureReason as FailureReason,
+    type ListWalletActionsQuery as ListWalletActionsQuery,
+    type ListWalletActionsResponse as ListWalletActionsResponse,
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
     type SwapActionResponse as SwapActionResponse,
     type TransferActionResponse as TransferActionResponse,
+    type WalletActionInclude as WalletActionInclude,
     type WalletActionResponse as WalletActionResponse,
     type WalletActionStatus as WalletActionStatus,
     type WalletActionStep as WalletActionStep,
     type WalletActionStepType as WalletActionStepType,
     type WalletActionType as WalletActionType,
+  };
+
+  export {
+    OAuth as OAuth,
+    type DeviceAuthorizationResponse as DeviceAuthorizationResponse,
+    type OAuthGrant as OAuthGrant,
+    type OAuthGrantListResponse as OAuthGrantListResponse,
+    type OAuthGrantRevokeResponse as OAuthGrantRevokeResponse,
   };
 
   export {
@@ -2896,6 +2931,7 @@ export declare namespace PrivyAPI {
     type KrakenEmbedEarnAprEstimate as KrakenEmbedEarnAprEstimate,
     type KrakenEmbedEarnAsset as KrakenEmbedEarnAsset,
     type KrakenEmbedEarnUserAllocation as KrakenEmbedEarnUserAllocation,
+    type KrakenEmbedFullName as KrakenEmbedFullName,
     type KrakenEmbedGetAssetListQueryParamsSchema as KrakenEmbedGetAssetListQueryParamsSchema,
     type KrakenEmbedGetCustomOrderHistoryQueryParams as KrakenEmbedGetCustomOrderHistoryQueryParams,
     type KrakenEmbedGetCustomOrderHistoryResponse as KrakenEmbedGetCustomOrderHistoryResponse,
@@ -2914,11 +2950,15 @@ export declare namespace PrivyAPI {
     type KrakenEmbedGetPortfolioDetailsQueryParamsSchema as KrakenEmbedGetPortfolioDetailsQueryParamsSchema,
     type KrakenEmbedGetPortfolioSummaryQueryParams as KrakenEmbedGetPortfolioSummaryQueryParams,
     type KrakenEmbedGetPortfolioSummaryResponse as KrakenEmbedGetPortfolioSummaryResponse,
+    type KrakenEmbedGetPortfolioSummaryResult as KrakenEmbedGetPortfolioSummaryResult,
     type KrakenEmbedGetPortfolioTransactionsQueryParamsSchema as KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
     type KrakenEmbedGetQuoteQueryParams as KrakenEmbedGetQuoteQueryParams,
     type KrakenEmbedListCustomOrdersQueryParams as KrakenEmbedListCustomOrdersQueryParams,
     type KrakenEmbedListCustomOrdersResponse as KrakenEmbedListCustomOrdersResponse,
     type KrakenEmbedListCustomOrdersResult as KrakenEmbedListCustomOrdersResult,
+    type KrakenEmbedPortfolioSummaryPayload as KrakenEmbedPortfolioSummaryPayload,
+    type KrakenEmbedPortfolioTransactionRefID as KrakenEmbedPortfolioTransactionRefID,
+    type KrakenEmbedResidence as KrakenEmbedResidence,
     type KrakenEmbedStartAddressMetadata as KrakenEmbedStartAddressMetadata,
     type KrakenEmbedStartAddressVerificationURLInput as KrakenEmbedStartAddressVerificationURLInput,
     type KrakenEmbedStartIdentityInfo as KrakenEmbedStartIdentityInfo,

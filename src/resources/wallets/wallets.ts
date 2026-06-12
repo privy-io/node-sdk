@@ -6,6 +6,8 @@ import * as SharedAPI from '../shared';
 import * as UsersAPI from '../users';
 import * as WalletActionsAPI from '../wallet-actions';
 import * as AppsAPI from '../apps/apps';
+import * as ActionsAPI from './actions';
+import { ActionGetParams, Actions } from './actions';
 import * as BalanceAPI from './balance';
 import { Balance, BalanceGetParams, BalanceGetResponse } from './balance';
 import * as SwapAPI from './swap';
@@ -21,6 +23,7 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Wallets extends APIResource {
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
   _earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
@@ -406,6 +409,15 @@ export class Wallets extends APIResource {
 export type WalletsCursor = Cursor<Wallet>;
 
 /**
+ * An entry in an EIP-2930 access list, specifying an address and its storage keys.
+ */
+export interface AccessListEntry {
+  address: string;
+
+  storage_keys: Array<Hex>;
+}
+
+/**
  * Additional signers for the wallet.
  */
 export type AdditionalSignerInput = Array<AdditionalSignerItemInput>;
@@ -618,10 +630,21 @@ export interface DeveloperFee {
  * HPKE-encrypted authorization key with encapsulated key and ciphertext.
  */
 export interface EncryptedAuthorizationKey {
+  /**
+   * The encrypted authorization key corresponding to the user's current
+   * authentication session.
+   */
   ciphertext: string;
 
+  /**
+   * Base64-encoded ephemeral public key used in the HPKE encryption process.
+   * Required for decryption.
+   */
   encapsulated_key: string;
 
+  /**
+   * The encryption type used. Currently only supports HPKE.
+   */
   encryption_type: 'HPKE';
 }
 
@@ -636,6 +659,24 @@ export interface EncryptedBoundAuthenticateResponse {
    */
   encrypted_authorization_key: EncryptedAuthorizationKey;
 
+  expires_at: number;
+
+  wallets: Array<Wallet>;
+}
+
+/**
+ * The response from authenticating a wallet with HPKE encryption, containing an
+ * encrypted authorization key and wallet data.
+ */
+export interface EncryptedWalletAuthenticateResponse {
+  /**
+   * HPKE-encrypted authorization key with encapsulated key and ciphertext.
+   */
+  encrypted_authorization_key: EncryptedAuthorizationKey;
+
+  /**
+   * The expiration time of the authorization key in milliseconds since the epoch.
+   */
   expires_at: number;
 
   wallets: Array<Wallet>;
@@ -1751,6 +1792,24 @@ export interface RawSignResponseData {
    * bytes).
    */
   signature: Hex;
+}
+
+/**
+ * The response from authenticating a wallet without encryption, containing a raw
+ * authorization key and wallet data.
+ */
+export interface RawWalletAuthenticateResponse {
+  /**
+   * The raw authorization key data.
+   */
+  authorization_key: string;
+
+  /**
+   * The expiration time of the authorization key in milliseconds since the epoch.
+   */
+  expires_at: number;
+
+  wallets: Array<Wallet>;
 }
 
 /**
@@ -3076,7 +3135,7 @@ export interface UnsignedTempoTransaction {
 
   aa_authorization_list?: Array<TempoAaAuthorization>;
 
-  access_list?: Array<UnsignedTempoTransaction.AccessList>;
+  access_list?: Array<AccessListEntry>;
 
   /**
    * A quantity value that can be either a hex string starting with '0x' or a
@@ -3134,14 +3193,6 @@ export interface UnsignedTempoTransaction {
    * non-negative integer.
    */
   valid_before?: Quantity;
-}
-
-export namespace UnsignedTempoTransaction {
-  export interface AccessList {
-    address: string;
-
-    storage_keys: Array<WalletsAPI.Hex>;
-  }
 }
 
 /**
@@ -3422,62 +3473,8 @@ export interface WalletAuthenticateRequestBody {
  * wallet data.
  */
 export type WalletAuthenticateWithJwtResponse =
-  | WalletAuthenticateWithJwtResponse.WithEncryption
-  | WalletAuthenticateWithJwtResponse.WithoutEncryption;
-
-export namespace WalletAuthenticateWithJwtResponse {
-  export interface WithEncryption {
-    /**
-     * The encrypted authorization key data.
-     */
-    encrypted_authorization_key: WithEncryption.EncryptedAuthorizationKey;
-
-    /**
-     * The expiration time of the authorization key in milliseconds since the epoch.
-     */
-    expires_at: number;
-
-    wallets: Array<WalletsAPI.Wallet>;
-  }
-
-  export namespace WithEncryption {
-    /**
-     * The encrypted authorization key data.
-     */
-    export interface EncryptedAuthorizationKey {
-      /**
-       * The encrypted authorization key corresponding to the user's current
-       * authentication session.
-       */
-      ciphertext: string;
-
-      /**
-       * Base64-encoded ephemeral public key used in the HPKE encryption process.
-       * Required for decryption.
-       */
-      encapsulated_key: string;
-
-      /**
-       * The encryption type used. Currently only supports HPKE.
-       */
-      encryption_type: 'HPKE';
-    }
-  }
-
-  export interface WithoutEncryption {
-    /**
-     * The raw authorization key data.
-     */
-    authorization_key: string;
-
-    /**
-     * The expiration time of the authorization key in milliseconds since the epoch.
-     */
-    expires_at: number;
-
-    wallets: Array<WalletsAPI.Wallet>;
-  }
-}
+  | EncryptedWalletAuthenticateResponse
+  | RawWalletAuthenticateResponse;
 
 /**
  * Headers required to authorize wallet operations.
@@ -5220,6 +5217,7 @@ export interface WalletGetWalletByAddressParams {
   address: Address;
 }
 
+Wallets.Actions = Actions;
 Wallets.Earn = Earn;
 Wallets.Transactions = Transactions;
 Wallets.Balance = Balance;
@@ -5227,6 +5225,7 @@ Wallets.Swap = Swap;
 
 export declare namespace Wallets {
   export {
+    type AccessListEntry as AccessListEntry,
     type AdditionalSignerInput as AdditionalSignerInput,
     type AdditionalSignerItemInput as AdditionalSignerItemInput,
     type Address as Address,
@@ -5244,6 +5243,7 @@ export declare namespace Wallets {
     type DeveloperFee as DeveloperFee,
     type EncryptedAuthorizationKey as EncryptedAuthorizationKey,
     type EncryptedBoundAuthenticateResponse as EncryptedBoundAuthenticateResponse,
+    type EncryptedWalletAuthenticateResponse as EncryptedWalletAuthenticateResponse,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
@@ -5318,6 +5318,7 @@ export declare namespace Wallets {
     type RawSignInputParams as RawSignInputParams,
     type RawSignResponse as RawSignResponse,
     type RawSignResponseData as RawSignResponseData,
+    type RawWalletAuthenticateResponse as RawWalletAuthenticateResponse,
     type RecipientPublicKey as RecipientPublicKey,
     type RelayerFee as RelayerFee,
     type SeedPhraseExportInput as SeedPhraseExportInput,
@@ -5455,6 +5456,8 @@ export declare namespace Wallets {
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };
+
+  export { Actions as Actions, type ActionGetParams as ActionGetParams };
 
   export { Earn as Earn };
 

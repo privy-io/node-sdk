@@ -1,11 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+export { Actions, type ActionGetParams } from './actions';
 export { Balance, type BalanceGetResponse, type BalanceGetParams } from './balance';
 export { Earn } from './earn/index';
 export { Swap, type SwapExecuteParams, type SwapQuoteParams } from './swap';
 export { Transactions, type TransactionGetResponse, type TransactionGetParams } from './transactions';
 export {
   Wallets,
+  type AccessListEntry,
   type AdditionalSignerInput,
   type AdditionalSignerItemInput,
   type Address,
@@ -23,6 +25,7 @@ export {
   type DeveloperFee,
   type EncryptedAuthorizationKey,
   type EncryptedBoundAuthenticateResponse,
+  type EncryptedWalletAuthenticateResponse,
   type EthereumPersonalSignRpcInput,
   type EthereumPersonalSignRpcInputParams,
   type EthereumPersonalSignRpcResponse,
@@ -97,6 +100,7 @@ export {
   type RawSignInputParams,
   type RawSignResponse,
   type RawSignResponseData,
+  type RawWalletAuthenticateResponse,
   type RecipientPublicKey,
   type RelayerFee,
   type SeedPhraseExportInput,

@@ -42,7 +42,7 @@ export interface Aggregation {
   owner_id: string | null;
 
   /**
-   * The time window configuration for an aggregation.
+   * A rolling time window defined by a duration in seconds.
    */
   window: AggregationWindow;
 
@@ -93,7 +93,7 @@ export interface AggregationInput {
   name: string;
 
   /**
-   * The time window configuration for an aggregation.
+   * A rolling time window defined by a duration in seconds.
    */
   window: AggregationWindow;
 
@@ -146,9 +146,21 @@ export interface AggregationMetric {
 }
 
 /**
- * The time window configuration for an aggregation.
+ * A rolling time window defined by a duration in seconds.
  */
 export interface AggregationWindow {
+  /**
+   * Duration of the rolling window in seconds (1-72 hours).
+   */
+  seconds: number;
+
+  type: 'rolling';
+}
+
+/**
+ * A rolling time window defined by a duration in seconds.
+ */
+export interface RollingAggregationWindow {
   /**
    * Duration of the rolling window in seconds (1-72 hours).
    */
@@ -165,5 +177,6 @@ export declare namespace Aggregations {
     type AggregationMethod as AggregationMethod,
     type AggregationMetric as AggregationMetric,
     type AggregationWindow as AggregationWindow,
+    type RollingAggregationWindow as RollingAggregationWindow,
   };
 }

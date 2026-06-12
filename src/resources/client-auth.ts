@@ -63,7 +63,7 @@ export interface AuthenticateSiwsInput {
 
   connectorType?: string | null;
 
-  message_type?: 'transaction' | 'plain';
+  message_type?: 'transaction' | 'plain' | 'offchain-message';
 
   /**
    * Whether to allow sign-up during authentication.
@@ -1670,7 +1670,7 @@ export interface SiwsAuthenticateRequestBody {
 
   connectorType?: string | null;
 
-  message_type?: 'transaction' | 'plain';
+  message_type?: 'transaction' | 'plain' | 'offchain-message';
 
   /**
    * Whether to allow sign-up during authentication.
@@ -1717,7 +1717,7 @@ export interface SiwsInput {
 
   connectorType?: string | null;
 
-  message_type?: 'transaction' | 'plain';
+  message_type?: 'transaction' | 'plain' | 'offchain-message';
 
   walletClientType?: string | null;
 }
@@ -1732,7 +1732,7 @@ export interface SiwsLinkRequestBody {
 
   connectorType?: string | null;
 
-  message_type?: 'transaction' | 'plain';
+  message_type?: 'transaction' | 'plain' | 'offchain-message';
 
   walletClientType?: string | null;
 }

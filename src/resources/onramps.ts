@@ -250,6 +250,8 @@ export interface FiatOnrampQuote {
   source_currency_code?: string | null;
 
   sub_provider?: string | null;
+
+  warning?: string | null;
 }
 
 /**
@@ -339,6 +341,10 @@ export interface GetFiatOnrampQuotesInput {
  * The response containing fiat onramp quotes.
  */
 export interface GetFiatOnrampQuotesResponse {
+  destination_currency_icon_url: string | null;
+
+  destination_network_icon_url: string | null;
+
   quotes: Array<FiatOnrampQuote>;
 
   provider_errors?: Array<FiatOnrampProviderError>;

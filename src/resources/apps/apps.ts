@@ -165,6 +165,8 @@ export interface AppResponse {
 
   enforce_wallet_uis: boolean;
 
+  external_wallets_for_signup_enabled: boolean;
+
   farcaster_auth: boolean;
 
   farcaster_link_wallets_enabled: boolean;

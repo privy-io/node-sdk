@@ -141,6 +141,11 @@ export interface BalanceGetParams {
       >;
 
   /**
+   * Include archived wallets in lookup. Defaults to false.
+   */
+  include_archived?: boolean;
+
+  /**
    * If set, balances are converted to the specified fiat currency. Not supported
    * when `token` is provided.
    */

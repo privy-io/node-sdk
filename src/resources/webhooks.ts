@@ -2643,6 +2643,36 @@ export interface WalletActionTransferSucceededWebhookPayload {
 }
 
 /**
+ * Payload for the wallet.archived webhook event.
+ */
+export interface WalletArchivedWebhookPayload {
+  /**
+   * Unix timestamp of when the wallet was archived.
+   */
+  archived_at: number;
+
+  /**
+   * The chain type of the archived wallet.
+   */
+  chain_type: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet.archived';
+
+  /**
+   * The address of the archived wallet.
+   */
+  wallet_address: string;
+
+  /**
+   * The ID of the archived wallet.
+   */
+  wallet_id: string;
+}
+
+/**
  * An asset involved in a wallet transfer.
  */
 export type WalletFundsAsset =
@@ -2772,6 +2802,7 @@ export type WebhookPayload =
   | SeedPhraseExportWebhookPayload
   | WalletRecoverySetupWebhookPayload
   | WalletRecoveredWebhookPayload
+  | WalletArchivedWebhookPayload
   | MfaEnabledWebhookPayload
   | MfaDisabledWebhookPayload
   | YieldDepositConfirmedWebhookPayload
@@ -2905,6 +2936,7 @@ export type UnsafeUnwrapWebhookEvent =
   | UserUpdatedAccountWebhookPayload
   | UserWalletCreatedWebhookPayload
   | UserOperationCompletedWebhookPayload
+  | WalletArchivedWebhookPayload
   | FundsDepositedWebhookPayload
   | FundsWithdrawnWebhookPayload
   | PrivateKeyExportWebhookPayload
@@ -3001,6 +3033,7 @@ export declare namespace Webhooks {
     type WalletActionTransferFailedWebhookPayload as WalletActionTransferFailedWebhookPayload,
     type WalletActionTransferRejectedWebhookPayload as WalletActionTransferRejectedWebhookPayload,
     type WalletActionTransferSucceededWebhookPayload as WalletActionTransferSucceededWebhookPayload,
+    type WalletArchivedWebhookPayload as WalletArchivedWebhookPayload,
     type WalletFundsAsset as WalletFundsAsset,
     type WalletFundsErc20Asset as WalletFundsErc20Asset,
     type WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset,

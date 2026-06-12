@@ -517,6 +517,11 @@ export interface EthereumEarnPositionQuery {
    * The vault ID to get position for.
    */
   vault_id: string;
+
+  /**
+   * Include archived wallets in lookup. Defaults to false.
+   */
+  include_archived?: boolean;
 }
 
 /**

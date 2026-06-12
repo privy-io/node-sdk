@@ -385,6 +385,7 @@ export {
   type KrakenEmbedListCustomOrdersResult,
   type KrakenEmbedPortfolioSummaryPayload,
   type KrakenEmbedPortfolioTransactionRefID,
+  type KrakenEmbedPortfolioTransactionRefIDType,
   type KrakenEmbedResidence,
   type KrakenEmbedStartAddressMetadata,
   type KrakenEmbedStartAddressVerificationURLInput,
@@ -925,6 +926,7 @@ export {
   type WalletAuthenticateWithJwtParams,
   type WalletCreateBatchParams,
   type WalletCreateWalletsWithRecoveryParams,
+  type WalletGetParams,
   type WalletGetWalletByAddressParams,
   type WalletsCursor,
 } from './wallets/wallets';
@@ -995,6 +997,7 @@ export {
   type WalletActionTransferFailedWebhookPayload,
   type WalletActionTransferRejectedWebhookPayload,
   type WalletActionTransferSucceededWebhookPayload,
+  type WalletArchivedWebhookPayload,
   type WalletFundsAsset,
   type WalletFundsErc20Asset,
   type WalletFundsNativeTokenAsset,

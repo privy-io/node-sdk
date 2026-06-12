@@ -31,6 +31,7 @@ describe('resource balance', () => {
           token: 'string',
           asset: 'usdc',
           chain: 'ethereum',
+          include_archived: true,
           include_currency: 'usd',
         },
         { path: '/_stainless_unknown_path' },

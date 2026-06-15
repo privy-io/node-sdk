@@ -375,7 +375,17 @@ export interface AggregationCondition {
 /**
  * Operator to use for policy conditions.
  */
-export type ConditionOperator = 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+export type ConditionOperator =
+  | 'eq'
+  | 'gt'
+  | 'gte'
+  | 'lt'
+  | 'lte'
+  | 'in'
+  | 'in_condition_set'
+  | 'contains'
+  | 'starts_with'
+  | 'ends_with';
 
 /**
  * A condition set for grouping related condition values.
@@ -644,6 +654,34 @@ export interface EthereumTypedDataMessageCondition {
 }
 
 /**
+ * Condition on the message being signed (e.g. in personal_sign).
+ */
+export interface MessageSigningCondition {
+  /**
+   * Supported fields for message signing conditions.
+   */
+  field: MessageSigningField;
+
+  field_source: 'message';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
+}
+
+/**
+ * Supported fields for message signing conditions.
+ */
+export type MessageSigningField = 'content' | 'byte_length';
+
+/**
  * A policy for controlling wallet operations.
  */
 export interface Policy {
@@ -727,7 +765,8 @@ export type PolicyCondition =
   | SuiTransactionCommandCondition
   | SuiTransferObjectsCommandCondition
   | ActionRequestBodyCondition
-  | AggregationCondition;
+  | AggregationCondition
+  | MessageSigningCondition;
 
 /**
  * Method the rule applies to.
@@ -745,6 +784,7 @@ export type PolicyMethod =
   | 'exportPrivateKey'
   | 'exportSeedPhrase'
   | 'signTransactionBytes'
+  | 'raw_sign'
   | 'earn_deposit'
   | 'earn_withdraw'
   | 'transfer'
@@ -1328,6 +1368,8 @@ export declare namespace Policies {
     type EthereumTransactionCondition as EthereumTransactionCondition,
     type EthereumTypedDataDomainCondition as EthereumTypedDataDomainCondition,
     type EthereumTypedDataMessageCondition as EthereumTypedDataMessageCondition,
+    type MessageSigningCondition as MessageSigningCondition,
+    type MessageSigningField as MessageSigningField,
     type Policy as Policy,
     type PolicyAction as PolicyAction,
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,

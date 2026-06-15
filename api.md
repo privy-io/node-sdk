@@ -177,6 +177,21 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">TransferReceivedTransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferSentTransactionDetail</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronContract</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronRawDataForSend</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronRawDataForSign</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSendTransactionRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSendTransactionRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSendTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSendTransactionRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSignTransactionRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSignTransactionRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSignTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSignTransactionRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronTransferContract</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronTriggerSmartContract</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TypedDataDomainInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TypedDataTypeFieldInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TypedDataTypesInputParams</a></code>
@@ -404,6 +419,8 @@ Types:
 - <code><a href="./src/resources/policies.ts">EthereumTransactionCondition</a></code>
 - <code><a href="./src/resources/policies.ts">EthereumTypedDataDomainCondition</a></code>
 - <code><a href="./src/resources/policies.ts">EthereumTypedDataMessageCondition</a></code>
+- <code><a href="./src/resources/policies.ts">MessageSigningCondition</a></code>
+- <code><a href="./src/resources/policies.ts">MessageSigningField</a></code>
 - <code><a href="./src/resources/policies.ts">Policy</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyAction</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyAuthorizationHeaders</a></code>
@@ -923,6 +940,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">SolanaAddress</a></code>
 - <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
 - <code><a href="./src/resources/shared.ts">TronAddress</a></code>
+- <code><a href="./src/resources/shared.ts">TronHexAddress</a></code>
 
 # Onramps
 

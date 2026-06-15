@@ -3060,6 +3060,208 @@ export interface TransferSentTransactionDetail {
 }
 
 /**
+ * A Tron contract, discriminated by type. Supported types: TransferContract,
+ * TriggerSmartContract.
+ */
+export type TronContract = TronTransferContract | TronTriggerSmartContract;
+
+/**
+ * Tron raw_data for tron_sendTransaction. Block reference fields are optional;
+ * Privy fetches fresh values if omitted.
+ */
+export interface TronRawDataForSend {
+  contract: Array<TronContract>;
+
+  call_value?: number;
+
+  data?: string;
+
+  expiration?: number;
+
+  fee_limit?: number;
+
+  ref_block_bytes?: string;
+
+  ref_block_hash?: string;
+
+  timestamp?: number;
+}
+
+/**
+ * Tron raw_data for tron_signTransaction. Block reference fields are required;
+ * caller is responsible for fetching them.
+ */
+export interface TronRawDataForSign {
+  contract: Array<TronContract>;
+
+  expiration: number;
+
+  ref_block_bytes: string;
+
+  ref_block_hash: string;
+
+  call_value?: number;
+
+  data?: string;
+
+  fee_limit?: number;
+
+  timestamp?: number;
+}
+
+/**
+ * Request body for Tron wallet RPC operations, discriminated by method.
+ */
+export type TronRpcInput = TronSignTransactionRpcInput | TronSendTransactionRpcInput;
+
+/**
+ * Response body for Tron wallet RPC operations, discriminated by method.
+ */
+export type TronRpcResponse = TronSignTransactionRpcResponse | TronSendTransactionRpcResponse;
+
+/**
+ * Executes the Tron `tron_sendTransaction` RPC to sign and broadcast a
+ * transaction.
+ */
+export interface TronSendTransactionRpcInput {
+  method: 'tron_sendTransaction';
+
+  /**
+   * Parameters for the Tron `tron_sendTransaction` RPC.
+   */
+  params: TronSendTransactionRpcInputParams;
+
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2?: AppsAPI.Caip2;
+}
+
+/**
+ * Parameters for the Tron `tron_sendTransaction` RPC.
+ */
+export interface TronSendTransactionRpcInputParams {
+  /**
+   * Tron raw_data for tron_sendTransaction. Block reference fields are optional;
+   * Privy fetches fresh values if omitted.
+   */
+  raw_data: TronRawDataForSend;
+}
+
+/**
+ * Response to the Tron `tron_sendTransaction` RPC.
+ */
+export interface TronSendTransactionRpcResponse {
+  /**
+   * Data returned by the Tron `tron_sendTransaction` RPC.
+   */
+  data: TronSendTransactionRpcResponseData;
+
+  method: 'tron_sendTransaction';
+}
+
+/**
+ * Data returned by the Tron `tron_sendTransaction` RPC.
+ */
+export interface TronSendTransactionRpcResponseData {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
+
+  transaction_id: string;
+}
+
+/**
+ * Executes the Tron `tron_signTransaction` RPC to sign a transaction. The caller
+ * is responsible for broadcasting.
+ */
+export interface TronSignTransactionRpcInput {
+  method: 'tron_signTransaction';
+
+  /**
+   * Parameters for the Tron `tron_signTransaction` RPC.
+   */
+  params: TronSignTransactionRpcInputParams;
+}
+
+/**
+ * Parameters for the Tron `tron_signTransaction` RPC.
+ */
+export interface TronSignTransactionRpcInputParams {
+  /**
+   * Tron raw_data for tron_signTransaction. Block reference fields are required;
+   * caller is responsible for fetching them.
+   */
+  raw_data: TronRawDataForSign;
+}
+
+/**
+ * Response to the Tron `tron_signTransaction` RPC.
+ */
+export interface TronSignTransactionRpcResponse {
+  /**
+   * Data returned by the Tron `tron_signTransaction` RPC.
+   */
+  data: TronSignTransactionRpcResponseData;
+
+  method: 'tron_signTransaction';
+}
+
+/**
+ * Data returned by the Tron `tron_signTransaction` RPC.
+ */
+export interface TronSignTransactionRpcResponseData {
+  encoding: 'hex';
+
+  signed_transaction: string;
+}
+
+/**
+ * Tron native TRX transfer contract.
+ */
+export interface TronTransferContract {
+  amount: number;
+
+  /**
+   * Tron address in hex format: 41-prefixed, 42 hex characters (21 bytes), no 0x
+   * prefix.
+   */
+  owner_address: SharedAPI.TronHexAddress;
+
+  /**
+   * Tron address in hex format: 41-prefixed, 42 hex characters (21 bytes), no 0x
+   * prefix.
+   */
+  to_address: SharedAPI.TronHexAddress;
+
+  type: 'TransferContract';
+}
+
+/**
+ * Tron smart contract call (TRC-20 transfers and general contract interactions).
+ */
+export interface TronTriggerSmartContract {
+  /**
+   * Tron address in hex format: 41-prefixed, 42 hex characters (21 bytes), no 0x
+   * prefix.
+   */
+  contract_address: SharedAPI.TronHexAddress;
+
+  /**
+   * Tron address in hex format: 41-prefixed, 42 hex characters (21 bytes), no 0x
+   * prefix.
+   */
+  owner_address: SharedAPI.TronHexAddress;
+
+  type: 'TriggerSmartContract';
+
+  call_token_value?: number;
+
+  token_id?: number;
+}
+
+/**
  * The domain parameters for EIP-712 typed data signing.
  */
 export type TypedDataDomainInputParams = { [key: string]: unknown };
@@ -3795,6 +3997,8 @@ export type WalletRpcRequestBody =
   | SparkCreateLightningInvoiceRpcInput
   | SparkPayLightningInvoiceRpcInput
   | SparkSignMessageWithIdentityKeyRpcInput
+  | TronSignTransactionRpcInput
+  | TronSendTransactionRpcInput
   | ExportPrivateKeyRpcInput
   | ExportSeedPhraseRpcInput;
 
@@ -3822,6 +4026,8 @@ export type WalletRpcResponse =
   | SparkCreateLightningInvoiceRpcResponse
   | SparkPayLightningInvoiceRpcResponse
   | SparkSignMessageWithIdentityKeyRpcResponse
+  | TronSignTransactionRpcResponse
+  | TronSendTransactionRpcResponse
   | ExportPrivateKeyRpcResponse
   | ExportSeedPhraseRpcResponse;
 
@@ -4083,6 +4289,8 @@ export type WalletRpcParams =
   | WalletRpcParams.SparkCreateLightningInvoiceRpcInput
   | WalletRpcParams.SparkPayLightningInvoiceRpcInput
   | WalletRpcParams.SparkSignMessageWithIdentityKeyRpcInput
+  | WalletRpcParams.TronSignTransactionRpcInput
+  | WalletRpcParams.TronSendTransactionRpcInput
   | WalletRpcParams.ExportPrivateKeyRpcInput
   | WalletRpcParams.ExportSeedPhraseRpcInput;
 
@@ -4966,6 +5174,71 @@ export declare namespace WalletRpcParams {
     'privy-request-expiry'?: string;
   }
 
+  export interface TronSignTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'tron_signTransaction';
+
+    /**
+     * Body param: Parameters for the Tron `tron_signTransaction` RPC.
+     */
+    params: TronSignTransactionRpcInputParams;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface TronSendTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'tron_sendTransaction';
+
+    /**
+     * Body param: Parameters for the Tron `tron_sendTransaction` RPC.
+     */
+    params: TronSendTransactionRpcInputParams;
+
+    /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2?: AppsAPI.Caip2;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
   export interface ExportPrivateKeyRpcInput {
     /**
      * Body param
@@ -5445,6 +5718,21 @@ export declare namespace Wallets {
     type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
     type TransferRequestBody as TransferRequestBody,
     type TransferSentTransactionDetail as TransferSentTransactionDetail,
+    type TronContract as TronContract,
+    type TronRawDataForSend as TronRawDataForSend,
+    type TronRawDataForSign as TronRawDataForSign,
+    type TronRpcInput as TronRpcInput,
+    type TronRpcResponse as TronRpcResponse,
+    type TronSendTransactionRpcInput as TronSendTransactionRpcInput,
+    type TronSendTransactionRpcInputParams as TronSendTransactionRpcInputParams,
+    type TronSendTransactionRpcResponse as TronSendTransactionRpcResponse,
+    type TronSendTransactionRpcResponseData as TronSendTransactionRpcResponseData,
+    type TronSignTransactionRpcInput as TronSignTransactionRpcInput,
+    type TronSignTransactionRpcInputParams as TronSignTransactionRpcInputParams,
+    type TronSignTransactionRpcResponse as TronSignTransactionRpcResponse,
+    type TronSignTransactionRpcResponseData as TronSignTransactionRpcResponseData,
+    type TronTransferContract as TronTransferContract,
+    type TronTriggerSmartContract as TronTriggerSmartContract,
     type TypedDataDomainInputParams as TypedDataDomainInputParams,
     type TypedDataTypeFieldInput as TypedDataTypeFieldInput,
     type TypedDataTypesInputParams as TypedDataTypesInputParams,

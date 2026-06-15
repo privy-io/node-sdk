@@ -1084,6 +1084,8 @@ export type IntentRpcParams =
   | IntentRpcParams.SparkCreateLightningInvoiceRpcInput
   | IntentRpcParams.SparkPayLightningInvoiceRpcInput
   | IntentRpcParams.SparkSignMessageWithIdentityKeyRpcInput
+  | IntentRpcParams.TronSignTransactionRpcInput
+  | IntentRpcParams.TronSendTransactionRpcInput
   | IntentRpcParams.ExportPrivateKeyRpcInput
   | IntentRpcParams.ExportSeedPhraseRpcInput;
 
@@ -1719,6 +1721,47 @@ export declare namespace IntentRpcParams {
      * Body param: The Spark network.
      */
     network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface TronSignTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'tron_signTransaction';
+
+    /**
+     * Body param: Parameters for the Tron `tron_signTransaction` RPC.
+     */
+    params: WalletsAPI.TronSignTransactionRpcInputParams;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface TronSendTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'tron_sendTransaction';
+
+    /**
+     * Body param: Parameters for the Tron `tron_sendTransaction` RPC.
+     */
+    params: WalletsAPI.TronSendTransactionRpcInputParams;
+
+    /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2?: AppsAPI.Caip2;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds

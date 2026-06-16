@@ -780,6 +780,13 @@ export interface SwapActionResponse {
   wallet_id: string;
 
   /**
+   * Recipient address on the destination chain. Present for cross-chain swaps. May
+   * differ from the source wallet address when swapping between chain types (e.g.
+   * EVM to Solana).
+   */
+  destination_address?: string;
+
+  /**
    * Destination chain CAIP-2 identifier. Present for cross-chain swaps.
    */
   destination_caip2?: string;

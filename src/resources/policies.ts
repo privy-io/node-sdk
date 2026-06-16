@@ -772,6 +772,7 @@ export type PolicyMethod =
   | 'wallet_sendCalls'
   | 'signTransaction'
   | 'signAndSendTransaction'
+  | 'signMessage'
   | 'exportPrivateKey'
   | 'exportSeedPhrase'
   | 'signTransactionBytes'

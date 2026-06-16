@@ -667,6 +667,11 @@ export interface ListWalletActionsQuery {
   cursor?: string;
 
   limit?: number | null;
+
+  /**
+   * Type of wallet action
+   */
+  type?: WalletActionType;
 }
 
 /**

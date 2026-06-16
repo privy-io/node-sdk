@@ -6,6 +6,9 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">AdditionalSignerInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AdditionalSignerItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Address</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AdvancedSwapPlatformFee</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AdvancedSwapRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AdvancedSwapResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AmountType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyDashboardResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyResponse</a></code>

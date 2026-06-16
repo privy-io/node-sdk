@@ -461,6 +461,139 @@ export interface AdditionalSignerItemInput {
 export type Address = string;
 
 /**
+ * Platform fee collected on a swap.
+ */
+export interface AdvancedSwapPlatformFee {
+  /**
+   * Token the fee was taken from (output token in v1).
+   */
+  token: string;
+
+  /**
+   * Fee amount in the smallest unit of the fee token.
+   */
+  amount: string;
+
+  /**
+   * Fee in basis points.
+   */
+  bps: number;
+}
+
+/**
+ * Request body for initiating a synchronous Solana token swap through an embedded
+ * wallet.
+ */
+export interface AdvancedSwapRequestBody {
+  /**
+   * Amount in the smallest unit of the input token (e.g. lamports for SOL).
+   */
+  amount: string;
+
+  /**
+   * Input token address (base58 mint address).
+   */
+  input_token: string;
+
+  /**
+   * Output token address (base58 mint address).
+   */
+  output_token: string;
+
+  /**
+   * CAIP-2 chain identifier. Defaults to Solana mainnet.
+   */
+  caip2?: string;
+
+  /**
+   * When true, skip transaction submission (quote + sign only). The signed
+   * transaction is still returned.
+   */
+  dry_run?: boolean;
+
+  /**
+   * Token account (base58) to receive the platform fee. Must exist on-chain for the
+   * output token.
+   */
+  fee_recipient?: string;
+
+  /**
+   * Platform fee in basis points, taken from the output token. Requires
+   * fee_recipient when > 0.
+   */
+  platform_fee_bps?: number;
+
+  /**
+   * Max slippage tolerance in basis points (0-10000), or "auto" for
+   * provider-determined. Defaults to "auto".
+   */
+  slippage_bps?: number | 'auto';
+}
+
+/**
+ * Response from the synchronous Solana swap endpoint.
+ */
+export interface AdvancedSwapResponse {
+  /**
+   * Input amount consumed (smallest unit).
+   */
+  in_amount: string;
+
+  /**
+   * Input token address (base58).
+   */
+  input_token: string;
+
+  /**
+   * Minimum output amount guaranteed by slippage tolerance (smallest unit).
+   */
+  min_out_amount: string;
+
+  /**
+   * Expected output amount before slippage (smallest unit).
+   */
+  out_amount: string;
+
+  /**
+   * Output token address (base58).
+   */
+  output_token: string;
+
+  /**
+   * Which aggregator fulfilled the swap (e.g. "dflow").
+   */
+  provider: string;
+
+  /**
+   * Fully signed transaction (base64). Callers can re-submit to any Solana RPC for
+   * redundancy.
+   */
+  signed_transaction: string;
+
+  /**
+   * Slippage applied in basis points. Reflects the resolved value if "auto" was
+   * requested.
+   */
+  slippage_bps: number;
+
+  /**
+   * "accepted" if the network has acknowledged the transaction, "rejected" if the
+   * network refused it, "skipped" if dry_run was set. Not an onchain confirmation.
+   */
+  submission_status: 'accepted' | 'rejected' | 'skipped';
+
+  /**
+   * Solana transaction signature (base58).
+   */
+  transaction_hash: string;
+
+  /**
+   * Platform fee collected on a swap.
+   */
+  platform_fee?: AdvancedSwapPlatformFee;
+}
+
+/**
  * Whether the amount refers to the input token or output token.
  */
 export type AmountType = 'exact_input' | 'exact_output';
@@ -3149,6 +3282,8 @@ export interface TronSendTransactionRpcInputParams {
    * Privy fetches fresh values if omitted.
    */
   raw_data: TronRawDataForSend;
+
+  reference_id?: string;
 }
 
 /**
@@ -3171,6 +3306,8 @@ export interface TronSendTransactionRpcResponseData {
    * A valid CAIP-2 chain ID (e.g. 'eip155:1').
    */
   caip2: AppsAPI.Caip2;
+
+  hash: string;
 
   transaction_id: string;
 }
@@ -5550,6 +5687,9 @@ export declare namespace Wallets {
     type AdditionalSignerInput as AdditionalSignerInput,
     type AdditionalSignerItemInput as AdditionalSignerItemInput,
     type Address as Address,
+    type AdvancedSwapPlatformFee as AdvancedSwapPlatformFee,
+    type AdvancedSwapRequestBody as AdvancedSwapRequestBody,
+    type AdvancedSwapResponse as AdvancedSwapResponse,
     type AmountType as AmountType,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
     type AuthorizationKeyResponse as AuthorizationKeyResponse,

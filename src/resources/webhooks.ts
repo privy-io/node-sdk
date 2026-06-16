@@ -1316,6 +1316,11 @@ export interface WalletActionEarnDepositCreatedWebhookPayload {
   caip2: string;
 
   /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
    * Base-unit amount of asset deposited (e.g. "1500000").
    */
   raw_amount: string;
@@ -1387,6 +1392,16 @@ export interface WalletActionEarnDepositFailedWebhookPayload {
    * CAIP-2 chain identifier.
    */
   caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action failed.
+   */
+  failed_at: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -1473,6 +1488,11 @@ export interface WalletActionEarnDepositRejectedWebhookPayload {
   caip2: string;
 
   /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason: WalletActionsAPI.FailureReason;
@@ -1481,6 +1501,11 @@ export interface WalletActionEarnDepositRejectedWebhookPayload {
    * Base-unit amount of asset deposited (e.g. "1500000").
    */
   raw_amount: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was rejected.
+   */
+  rejected_at: string;
 
   /**
    * The status of the wallet action.
@@ -1554,6 +1579,16 @@ export interface WalletActionEarnDepositSucceededWebhookPayload {
    * CAIP-2 chain identifier.
    */
   caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action completed successfully.
+   */
+  completed_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
 
   /**
    * Base-unit amount of asset deposited (e.g. "1500000").
@@ -1634,6 +1669,11 @@ export interface WalletActionEarnIncentiveClaimCreatedWebhookPayload {
   chain: string;
 
   /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
    * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
    */
   rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
@@ -1672,6 +1712,16 @@ export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
    * EVM chain name (e.g. "base", "ethereum").
    */
   chain: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action failed.
+   */
+  failed_at: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -1725,9 +1775,19 @@ export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
   chain: string;
 
   /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason: WalletActionsAPI.FailureReason;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was rejected.
+   */
+  rejected_at: string;
 
   /**
    * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
@@ -1773,6 +1833,16 @@ export interface WalletActionEarnIncentiveClaimSucceededWebhookPayload {
    * EVM chain name (e.g. "base", "ethereum").
    */
   chain: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action completed successfully.
+   */
+  completed_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
 
   /**
    * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
@@ -1823,6 +1893,11 @@ export interface WalletActionEarnWithdrawCreatedWebhookPayload {
    * CAIP-2 chain identifier.
    */
   caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
 
   /**
    * Base-unit amount of asset withdrawn (e.g. "1500000").
@@ -1896,6 +1971,16 @@ export interface WalletActionEarnWithdrawFailedWebhookPayload {
    * CAIP-2 chain identifier.
    */
   caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action failed.
+   */
+  failed_at: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -1982,6 +2067,11 @@ export interface WalletActionEarnWithdrawRejectedWebhookPayload {
   caip2: string;
 
   /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason: WalletActionsAPI.FailureReason;
@@ -1990,6 +2080,11 @@ export interface WalletActionEarnWithdrawRejectedWebhookPayload {
    * Base-unit amount of asset withdrawn (e.g. "1500000").
    */
   raw_amount: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was rejected.
+   */
+  rejected_at: string;
 
   /**
    * The status of the wallet action.
@@ -2063,6 +2158,16 @@ export interface WalletActionEarnWithdrawSucceededWebhookPayload {
    * CAIP-2 chain identifier.
    */
   caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action completed successfully.
+   */
+  completed_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
 
   /**
    * Base-unit amount of asset withdrawn (e.g. "1500000").
@@ -2143,7 +2248,12 @@ export interface WalletActionSwapCreatedWebhookPayload {
   caip2: string;
 
   /**
-   * Amount of input token in base units. Populated after on-chain confirmation.
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * Amount of input token in base units. Populated after onchain confirmation.
    */
   input_amount: string | null;
 
@@ -2193,12 +2303,22 @@ export interface WalletActionSwapFailedWebhookPayload {
   caip2: string;
 
   /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action failed.
+   */
+  failed_at: string;
+
+  /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason: WalletActionsAPI.FailureReason;
 
   /**
-   * Amount of input token in base units. Populated after on-chain confirmation.
+   * Amount of input token in base units. Populated after onchain confirmation.
    */
   input_amount: string | null;
 
@@ -2254,12 +2374,17 @@ export interface WalletActionSwapRejectedWebhookPayload {
   caip2: string;
 
   /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason: WalletActionsAPI.FailureReason;
 
   /**
-   * Amount of input token in base units. Populated after on-chain confirmation.
+   * Amount of input token in base units. Populated after onchain confirmation.
    */
   input_amount: string | null;
 
@@ -2272,6 +2397,11 @@ export interface WalletActionSwapRejectedWebhookPayload {
    * Token address being bought.
    */
   output_token: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was rejected.
+   */
+  rejected_at: string;
 
   /**
    * The status of the wallet action.
@@ -2314,7 +2444,17 @@ export interface WalletActionSwapSucceededWebhookPayload {
   caip2: string;
 
   /**
-   * Amount of input token in base units. Populated after on-chain confirmation.
+   * ISO 8601 timestamp of when the wallet action completed successfully.
+   */
+  completed_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * Amount of input token in base units. Populated after onchain confirmation.
    */
   input_amount: string | null;
 
@@ -2324,7 +2464,7 @@ export interface WalletActionSwapSucceededWebhookPayload {
   input_token: string;
 
   /**
-   * Amount of output token received, in base units. Populated after on-chain
+   * Amount of output token received, in base units. Populated after onchain
    * confirmation.
    */
   output_amount: string | null;
@@ -2368,6 +2508,11 @@ export interface WalletActionTransferCreatedWebhookPayload {
    * Type of wallet action
    */
   action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
 
   /**
    * Recipient address.
@@ -2419,7 +2564,7 @@ export interface WalletActionTransferCreatedWebhookPayload {
 
   /**
    * Number of decimals for the transferred token. Present when the transfer was
-   * initiated with `asset_address` and the decimals were resolved on-chain.
+   * initiated with `asset_address` and the decimals were resolved onchain.
    */
   source_asset_decimals?: number;
 }
@@ -2434,9 +2579,19 @@ export interface WalletActionTransferFailedWebhookPayload {
   action_type: WalletActionsAPI.WalletActionType;
 
   /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
    * Recipient address.
    */
   destination_address: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action failed.
+   */
+  failed_at: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -2494,7 +2649,7 @@ export interface WalletActionTransferFailedWebhookPayload {
 
   /**
    * Number of decimals for the transferred token. Present when the transfer was
-   * initiated with `asset_address` and the decimals were resolved on-chain.
+   * initiated with `asset_address` and the decimals were resolved onchain.
    */
   source_asset_decimals?: number;
 }
@@ -2509,6 +2664,11 @@ export interface WalletActionTransferRejectedWebhookPayload {
   action_type: WalletActionsAPI.WalletActionType;
 
   /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
    * Recipient address.
    */
   destination_address: string;
@@ -2517,6 +2677,11 @@ export interface WalletActionTransferRejectedWebhookPayload {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason: WalletActionsAPI.FailureReason;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was rejected.
+   */
+  rejected_at: string;
 
   /**
    * Chain name (e.g. "base", "ethereum").
@@ -2568,7 +2733,7 @@ export interface WalletActionTransferRejectedWebhookPayload {
 
   /**
    * Number of decimals for the transferred token. Present when the transfer was
-   * initiated with `asset_address` and the decimals were resolved on-chain.
+   * initiated with `asset_address` and the decimals were resolved onchain.
    */
   source_asset_decimals?: number;
 }
@@ -2581,6 +2746,16 @@ export interface WalletActionTransferSucceededWebhookPayload {
    * Type of wallet action
    */
   action_type: WalletActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action completed successfully.
+   */
+  completed_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
 
   /**
    * Recipient address.
@@ -2637,7 +2812,7 @@ export interface WalletActionTransferSucceededWebhookPayload {
 
   /**
    * Number of decimals for the transferred token. Present when the transfer was
-   * initiated with `asset_address` and the decimals were resolved on-chain.
+   * initiated with `asset_address` and the decimals were resolved onchain.
    */
   source_asset_decimals?: number;
 }

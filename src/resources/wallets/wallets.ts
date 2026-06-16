@@ -3310,6 +3310,8 @@ export interface TronSendTransactionRpcResponseData {
   hash: string;
 
   transaction_id: string;
+
+  reference_id?: string;
 }
 
 /**

@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.22.0 (2026-06-17)
+
+Full Changelog: [v0.21.0...v0.22.0](https://github.com/privy-io/node-sdk/compare/v0.21.0...v0.22.0)
+
+### Features
+
+* **api:** api update ([33e4744](https://github.com/privy-io/node-sdk/commit/33e4744db2fc42f130848ecf0abbc5b2b78c3a26))
+* **api:** api update ([9235626](https://github.com/privy-io/node-sdk/commit/92356267b5ed07867116ffae33116003bbc75d82))
+* **api:** api update ([ce99a6d](https://github.com/privy-io/node-sdk/commit/ce99a6d5aced3ed3f05b04f1cbd1cf85d1a4fd31))
+* **api:** api update ([e319aa7](https://github.com/privy-io/node-sdk/commit/e319aa7ddd071a84618de3b582014f4cea067d98))
+* **api:** api update ([06eed01](https://github.com/privy-io/node-sdk/commit/06eed01682f51cec488339c67654f42f23f2957f))
+* **api:** api update ([23045da](https://github.com/privy-io/node-sdk/commit/23045da934b1d059cbc2c259fc091897e274c601))
+* **api:** api update ([fc3d16e](https://github.com/privy-io/node-sdk/commit/fc3d16eb164b441ec641e9b93c0fee0c01244843))
+* **api:** api update ([8441816](https://github.com/privy-io/node-sdk/commit/8441816dbe2c1ec8914b2b36de374b5f5978bf45))
+* **api:** api update ([cbf028d](https://github.com/privy-io/node-sdk/commit/cbf028d46c549bb9d9e063a3919b412ce3ad4030))
+
+
+### Bug Fixes
+
+* bump svix to ^1.92.2 to resolve uuid CVE (dependabot/11) 🪿✨ ([#173](https://github.com/privy-io/node-sdk/issues/173)) ([c8bec78](https://github.com/privy-io/node-sdk/commit/c8bec78362d790c0a390895cb4c8e978e0b4fedb))
+* **client:** send content-type header for requests with an omitted optional body ([bcd8bba](https://github.com/privy-io/node-sdk/commit/bcd8bbaa9eabd51398b00df775c4c91ca9836c71))
+* **tests:** use named import from client subpath in actions test ([#175](https://github.com/privy-io/node-sdk/issues/175)) ([4ec09bf](https://github.com/privy-io/node-sdk/commit/4ec09bf3bf1128dc82bb3d8402d7423ed92674b1))
+
 ## 0.21.0 (2026-06-05)
 
 Full Changelog: [v0.20.0...v0.21.0](https://github.com/privy-io/node-sdk/compare/v0.20.0...v0.21.0)

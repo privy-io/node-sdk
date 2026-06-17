@@ -1563,8 +1563,8 @@ export interface HDInitInput {
   address: string;
 
   /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
+   * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+   * `stellar`, `tron`, `sui`, and `aptos`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -1599,8 +1599,8 @@ export interface HDSubmitInput {
   address: string;
 
   /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
+   * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+   * `stellar`, `tron`, `sui`, and `aptos`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -1781,8 +1781,8 @@ export interface PrivateKeyInitInput {
   address: string;
 
   /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
+   * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+   * `stellar`, `tron`, `sui`, and `aptos`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -1804,8 +1804,8 @@ export interface PrivateKeySubmitInput {
   address: string;
 
   /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
+   * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+   * `stellar`, `tron`, `sui`, and `aptos`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -4118,10 +4118,10 @@ export interface WalletImportInitResponse {
 }
 
 /**
- * The chain type of the wallet to import. Currently supports `ethereum` and
- * `solana`.
+ * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+ * `stellar`, `tron`, `sui`, and `aptos`.
  */
-export type WalletImportSupportedChains = 'ethereum' | 'solana';
+export type WalletImportSupportedChains = 'ethereum' | 'solana' | 'stellar' | 'tron' | 'sui' | 'aptos';
 
 /**
  * The entropy type of the wallet to import. Supports `private-key` for raw private
@@ -4364,8 +4364,8 @@ export declare namespace WalletInitImportParams {
     address: string;
 
     /**
-     * The chain type of the wallet to import. Currently supports `ethereum` and
-     * `solana`.
+     * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+     * `stellar`, `tron`, `sui`, and `aptos`.
      */
     chain_type: WalletImportSupportedChains;
 
@@ -4392,8 +4392,8 @@ export declare namespace WalletInitImportParams {
     address: string;
 
     /**
-     * The chain type of the wallet to import. Currently supports `ethereum` and
-     * `solana`.
+     * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+     * `stellar`, `tron`, `sui`, and `aptos`.
      */
     chain_type: WalletImportSupportedChains;
 

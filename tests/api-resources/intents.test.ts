@@ -199,6 +199,7 @@ describe('resource intents', () => {
         asset: 'usdc',
         chain: 'base',
       },
+      amount: '10.5',
       amount_type: 'exact_input',
       fee_configuration: { type: 'total_fee_bps', value: 50 },
       slippage_bps: 0,

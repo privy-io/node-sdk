@@ -290,6 +290,7 @@ describe('resource wallets', () => {
         asset: 'usdc',
         chain: 'base',
       },
+      amount: 'amount',
       amount_type: 'exact_input',
       fee_configuration: { type: 'total_fee_bps', value: 50 },
       slippage_bps: 100,

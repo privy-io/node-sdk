@@ -44,4 +44,32 @@ describe('createX402Client', () => {
       }),
     ).toThrow('Invalid wallet address');
   });
+
+  it('forwards chainId and sponsor to createViemAccount for EVM address', () => {
+    const { createViemAccount: mockCreateViemAccount } = jest.requireMock('../src/viem');
+    createX402Client(mockClient, {
+      walletId: 'test-wallet',
+      address: '0x1234567890123456789012345678901234567890',
+      chainId: 8453,
+      sponsor: true,
+    });
+
+    expect(mockCreateViemAccount).toHaveBeenCalledWith(
+      mockClient,
+      expect.objectContaining({ chainId: 8453, sponsor: true }),
+    );
+  });
+
+  it('does not forward chainId and sponsor when not provided', () => {
+    const { createViemAccount: mockCreateViemAccount } = jest.requireMock('../src/viem');
+    createX402Client(mockClient, {
+      walletId: 'test-wallet',
+      address: '0x1234567890123456789012345678901234567890',
+    });
+
+    expect(mockCreateViemAccount).toHaveBeenCalledWith(
+      mockClient,
+      expect.not.objectContaining({ chainId: expect.anything(), sponsor: expect.anything() }),
+    );
+  });
 });

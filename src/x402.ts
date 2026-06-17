@@ -16,6 +16,10 @@ export interface CreateX402ClientInput {
   address: string;
   /** Authorization context for the wallet. */
   authorizationContext?: AuthorizationContext;
+  /** Chain ID for the wallet's network (e.g. 8453 for Base). Required when sponsor is true. */
+  chainId?: number;
+  /** When true, uses ERC-1271 signatures for x402 payments. Set this for EIP-7702 gas-sponsored wallets. Requires chainId. */
+  sponsor?: boolean;
 }
 
 /**
@@ -61,7 +65,7 @@ export interface CreateX402ClientInput {
  */
 export function createX402Client(
   client: PrivyClient,
-  { walletId, address, authorizationContext }: CreateX402ClientInput,
+  { walletId, address, authorizationContext, chainId, sponsor }: CreateX402ClientInput,
 ): x402Client {
   const x402client = new x402Client();
 
@@ -70,6 +74,8 @@ export function createX402Client(
       walletId,
       address: address as Hex,
       ...(authorizationContext ? { authorizationContext } : {}),
+      ...(chainId !== undefined ? { chainId } : {}),
+      ...(sponsor !== undefined ? { sponsor } : {}),
     });
     registerExactEvmScheme(x402client, { signer: evmSigner });
   } else if (isSolanaAddress(address)) {

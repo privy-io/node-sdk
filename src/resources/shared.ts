@@ -96,6 +96,12 @@ export interface SuccessResponse {
  */
 export type TronAddress = string;
 
+/**
+ * Tron address in hex format: 41-prefixed, 42 hex characters (21 bytes), no 0x
+ * prefix.
+ */
+export type TronHexAddress = string;
+
 export declare namespace Shared {
   export {
     type BitcoinAddress as BitcoinAddress,
@@ -112,5 +118,6 @@ export declare namespace Shared {
     type SolanaAddress as SolanaAddress,
     type SuccessResponse as SuccessResponse,
     type TronAddress as TronAddress,
+    type TronHexAddress as TronHexAddress,
   };
 }

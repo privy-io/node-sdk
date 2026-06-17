@@ -6,6 +6,41 @@ import * as WalletsAPI from './wallets/wallets';
 export class WalletActions extends APIResource {}
 
 /**
+ * A wallet action step representing a transaction executed by a custodian (e.g.
+ * Bridge).
+ */
+export interface CustodianTransactionWalletActionStep {
+  /**
+   * Identifier of the custodian executing this transaction (e.g. "bridge").
+   */
+  custodian: string;
+
+  /**
+   * Status of a custodian transaction step in a wallet action.
+   */
+  status: CustodianTransactionWalletActionStepStatus;
+
+  type: 'custodian_transaction';
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+}
+
+/**
+ * Status of a custodian transaction step in a wallet action.
+ */
+export type CustodianTransactionWalletActionStepStatus =
+  | 'preparing'
+  | 'queued'
+  | 'custodian_reviewing'
+  | 'pending'
+  | 'confirmed'
+  | 'rejected'
+  | 'failed';
+
+/**
  * A wallet action step consisting of an EVM transaction.
  */
 export interface EvmTransactionWalletActionStep {
@@ -31,6 +66,12 @@ export interface EvmTransactionWalletActionStep {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
+
+  /**
+   * Whether this step has reached on-chain finality. Absent until finality is
+   * confirmed.
+   */
+  finalized?: boolean;
 }
 
 /**
@@ -70,6 +111,17 @@ export interface EvmUserOperationWalletActionStep {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
+
+  /**
+   * Whether this step has reached on-chain finality. Absent until finality is
+   * confirmed.
+   */
+  finalized?: boolean;
+
+  /**
+   * Amount charged in USD for gas sponsorship on this step.
+   */
+  gas_credits_charged_usd?: string;
 }
 
 /**
@@ -465,6 +517,11 @@ export interface EthereumEarnPositionQuery {
    * The vault ID to get position for.
    */
   vault_id: string;
+
+  /**
+   * Include archived wallets in lookup. Defaults to false.
+   */
+  include_archived?: boolean;
 }
 
 /**
@@ -604,6 +661,29 @@ export interface FailureReason {
 }
 
 /**
+ * Query parameters for listing wallet actions.
+ */
+export interface ListWalletActionsQuery {
+  cursor?: string;
+
+  limit?: number | null;
+
+  /**
+   * Type of wallet action
+   */
+  type?: WalletActionType;
+}
+
+/**
+ * Paginated list of wallet actions.
+ */
+export interface ListWalletActionsResponse {
+  data: Array<WalletActionResponse>;
+
+  next_cursor: string | null;
+}
+
+/**
  * A wallet action step consisting of an SVM (Solana) transaction.
  */
 export interface SvmTransactionWalletActionStep {
@@ -628,6 +708,17 @@ export interface SvmTransactionWalletActionStep {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
+
+  /**
+   * Whether this step has reached on-chain finality. Absent until finality is
+   * confirmed.
+   */
+  finalized?: boolean;
+
+  /**
+   * Amount charged in USD for gas sponsorship on this step.
+   */
+  gas_credits_charged_usd?: string;
 }
 
 /**
@@ -638,7 +729,6 @@ export type SvmWalletActionStepStatus =
   | 'queued'
   | 'pending'
   | 'confirmed'
-  | 'finalized'
   | 'rejected'
   | 'reverted'
   | 'failed';
@@ -695,20 +785,28 @@ export interface SwapActionResponse {
   wallet_id: string;
 
   /**
+   * Recipient address on the destination chain. Present for cross-chain swaps. May
+   * differ from the source wallet address when swapping between chain types (e.g.
+   * EVM to Solana).
+   */
+  destination_address?: string;
+
+  /**
    * Destination chain CAIP-2 identifier. Present for cross-chain swaps.
    */
   destination_caip2?: string;
 
   /**
-   * Estimated fee breakdown from the provider quote.
+   * Estimated fee breakdown from the provider quote. Only present for cross-chain
+   * swaps. Populated after on-chain confirmation.
    */
-  estimated_fees?: Array<WalletsAPI.FeeLineItem>;
+  estimated_fees?: Array<WalletsAPI.FeeLineItem> | null;
 
   /**
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
    * human-readable decimal string, plus the gas token symbol.
    */
-  estimated_gas?: WalletsAPI.Gas;
+  estimated_gas?: WalletsAPI.Gas | null;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -716,15 +814,16 @@ export interface SwapActionResponse {
   failure_reason?: FailureReason;
 
   /**
-   * Actual fees paid for the swap. Populated after on-chain confirmation.
+   * Actual fees paid for the swap. Populated after on-chain confirmation. Only
+   * present for cross-chain swaps.
    */
-  fees?: Array<WalletsAPI.FeeLineItem>;
+  fees?: Array<WalletsAPI.FeeLineItem> | null;
 
   /**
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
    * human-readable decimal string, plus the gas token symbol.
    */
-  gas?: WalletsAPI.Gas;
+  gas?: WalletsAPI.Gas | null;
 
   /**
    * The steps of the wallet action. Only returned if `?include=steps` is provided.
@@ -752,6 +851,13 @@ export interface TransferActionResponse {
   destination_address: string;
 
   /**
+   * Amount received on the destination chain. Set at creation for same-chain
+   * transfers. Null until fill confirmation for cross-chain or cross-asset
+   * transfers.
+   */
+  destination_amount: string | null;
+
+  /**
    * Chain name (e.g. "base", "ethereum").
    */
   source_chain: string;
@@ -769,12 +875,6 @@ export interface TransferActionResponse {
   wallet_id: string;
 
   /**
-   * Amount received on the destination chain. Populated immediately for exact_output
-   * transfers, or after fill confirmation for exact_input transfers.
-   */
-  destination_amount?: string;
-
-  /**
    * Destination asset for cross-asset transfers. Omitted for same-asset transfers.
    */
   destination_asset?: string;
@@ -785,15 +885,16 @@ export interface TransferActionResponse {
   destination_chain?: string;
 
   /**
-   * Estimated fee breakdown from the provider quote.
+   * Estimated fee breakdown from the provider quote. Only present for cross-chain or
+   * cross-asset transfers. Populated after on-chain confirmation.
    */
-  estimated_fees?: Array<WalletsAPI.FeeLineItem>;
+  estimated_fees?: Array<WalletsAPI.FeeLineItem> | null;
 
   /**
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
    * human-readable decimal string, plus the gas token symbol.
    */
-  estimated_gas?: WalletsAPI.Gas;
+  estimated_gas?: WalletsAPI.Gas | null;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -801,15 +902,16 @@ export interface TransferActionResponse {
   failure_reason?: FailureReason;
 
   /**
-   * Actual fees paid for the transfer. Populated after on-chain confirmation.
+   * Actual fees paid for the transfer. Populated after on-chain confirmation. Only
+   * present for cross-chain transfers.
    */
-  fees?: Array<WalletsAPI.FeeLineItem>;
+  fees?: Array<WalletsAPI.FeeLineItem> | null;
 
   /**
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
    * human-readable decimal string, plus the gas token symbol.
    */
-  gas?: WalletsAPI.Gas;
+  gas?: WalletsAPI.Gas | null;
 
   /**
    * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
@@ -842,6 +944,11 @@ export interface TransferActionResponse {
 }
 
 /**
+ * Expandable relations to include on a wallet action response.
+ */
+export type WalletActionInclude = 'steps';
+
+/**
  * Response for a wallet action, discriminated on type.
  */
 export type WalletActionResponse =
@@ -863,7 +970,8 @@ export type WalletActionStep =
   | EvmTransactionWalletActionStep
   | EvmUserOperationWalletActionStep
   | SvmTransactionWalletActionStep
-  | ExternalTransactionWalletActionStep;
+  | ExternalTransactionWalletActionStep
+  | CustodianTransactionWalletActionStep;
 
 /**
  * Type of a wallet action step.
@@ -872,7 +980,8 @@ export type WalletActionStepType =
   | 'evm_transaction'
   | 'evm_user_operation'
   | 'svm_transaction'
-  | 'external_transaction';
+  | 'external_transaction'
+  | 'custodian_transaction';
 
 /**
  * Type of wallet action
@@ -886,6 +995,8 @@ export type WalletActionType =
 
 export declare namespace WalletActions {
   export {
+    type CustodianTransactionWalletActionStep as CustodianTransactionWalletActionStep,
+    type CustodianTransactionWalletActionStepStatus as CustodianTransactionWalletActionStepStatus,
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
     type EvmWalletActionStepStatus as EvmWalletActionStepStatus,
@@ -907,10 +1018,13 @@ export declare namespace WalletActions {
     type ExternalTransactionWalletActionStep as ExternalTransactionWalletActionStep,
     type ExternalTransactionWalletActionStepStatus as ExternalTransactionWalletActionStepStatus,
     type FailureReason as FailureReason,
+    type ListWalletActionsQuery as ListWalletActionsQuery,
+    type ListWalletActionsResponse as ListWalletActionsResponse,
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
     type SwapActionResponse as SwapActionResponse,
     type TransferActionResponse as TransferActionResponse,
+    type WalletActionInclude as WalletActionInclude,
     type WalletActionResponse as WalletActionResponse,
     type WalletActionStatus as WalletActionStatus,
     type WalletActionStep as WalletActionStep,

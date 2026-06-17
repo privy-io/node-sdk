@@ -6,6 +6,8 @@ import * as SharedAPI from '../shared';
 import * as UsersAPI from '../users';
 import * as WalletActionsAPI from '../wallet-actions';
 import * as AppsAPI from '../apps/apps';
+import * as ActionsAPI from './actions';
+import { ActionGetParams, Actions } from './actions';
 import * as BalanceAPI from './balance';
 import { Balance, BalanceGetParams, BalanceGetResponse } from './balance';
 import * as SwapAPI from './swap';
@@ -21,6 +23,7 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Wallets extends APIResource {
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
   _earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
@@ -314,6 +317,20 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Archives a wallet, preventing it from being used in any write or signing
+   * operations. Archived wallets are hidden from list endpoints by default. Returns
+   * 404 if the wallet does not exist or is already archived.
+   *
+   * @example
+   * ```ts
+   * const wallet = await client.wallets.archive('wallet_id');
+   * ```
+   */
+  archive(walletID: string, options?: RequestOptions): APIPromise<Wallet> {
+    return this._client.post(path`/v1/wallets/${walletID}/archive`, options);
+  }
+
+  /**
    * Exchange a user JWT for a session key authorized to act on the user's wallets.
    * Returns the encrypted authorization key and the list of wallets it can access.
    *
@@ -381,11 +398,15 @@ export class Wallets extends APIResource {
    * const wallet = await client.wallets.get('wallet_id');
    * ```
    */
-  get(walletID: string, options?: RequestOptions): APIPromise<Wallet> {
+  get(
+    walletID: string,
+    query: WalletGetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Wallet> {
     if (walletID === '') {
       throw new Error('walletID must not be an empty string');
     }
-    return this._client.get(path`/v1/wallets/${walletID}`, options);
+    return this._client.get(path`/v1/wallets/${walletID}`, { query, ...options });
   }
 
   /**
@@ -404,6 +425,15 @@ export class Wallets extends APIResource {
 }
 
 export type WalletsCursor = Cursor<Wallet>;
+
+/**
+ * An entry in an EIP-2930 access list, specifying an address and its storage keys.
+ */
+export interface AccessListEntry {
+  address: string;
+
+  storage_keys: Array<Hex>;
+}
 
 /**
  * Additional signers for the wallet.
@@ -429,6 +459,139 @@ export interface AdditionalSignerItemInput {
  * A blockchain wallet address (Ethereum or Solana).
  */
 export type Address = string;
+
+/**
+ * Platform fee collected on a swap.
+ */
+export interface AdvancedSwapPlatformFee {
+  /**
+   * Token the fee was taken from (output token in v1).
+   */
+  token: string;
+
+  /**
+   * Fee amount in the smallest unit of the fee token.
+   */
+  amount: string;
+
+  /**
+   * Fee in basis points.
+   */
+  bps: number;
+}
+
+/**
+ * Request body for initiating a synchronous Solana token swap through an embedded
+ * wallet.
+ */
+export interface AdvancedSwapRequestBody {
+  /**
+   * Amount in the smallest unit of the input token (e.g. lamports for SOL).
+   */
+  amount: string;
+
+  /**
+   * Input token address (base58 mint address).
+   */
+  input_token: string;
+
+  /**
+   * Output token address (base58 mint address).
+   */
+  output_token: string;
+
+  /**
+   * CAIP-2 chain identifier. Defaults to Solana mainnet.
+   */
+  caip2?: string;
+
+  /**
+   * When true, skip transaction submission (quote + sign only). The signed
+   * transaction is still returned.
+   */
+  dry_run?: boolean;
+
+  /**
+   * Token account (base58) to receive the platform fee. Must exist on-chain for the
+   * output token.
+   */
+  fee_recipient?: string;
+
+  /**
+   * Platform fee in basis points, taken from the output token. Requires
+   * fee_recipient when > 0.
+   */
+  platform_fee_bps?: number;
+
+  /**
+   * Max slippage tolerance in basis points (0-10000), or "auto" for
+   * provider-determined. Defaults to "auto".
+   */
+  slippage_bps?: number | 'auto';
+}
+
+/**
+ * Response from the synchronous Solana swap endpoint.
+ */
+export interface AdvancedSwapResponse {
+  /**
+   * Input amount consumed (smallest unit).
+   */
+  in_amount: string;
+
+  /**
+   * Input token address (base58).
+   */
+  input_token: string;
+
+  /**
+   * Minimum output amount guaranteed by slippage tolerance (smallest unit).
+   */
+  min_out_amount: string;
+
+  /**
+   * Expected output amount before slippage (smallest unit).
+   */
+  out_amount: string;
+
+  /**
+   * Output token address (base58).
+   */
+  output_token: string;
+
+  /**
+   * Which aggregator fulfilled the swap (e.g. "dflow").
+   */
+  provider: string;
+
+  /**
+   * Fully signed transaction (base64). Callers can re-submit to any Solana RPC for
+   * redundancy.
+   */
+  signed_transaction: string;
+
+  /**
+   * Slippage applied in basis points. Reflects the resolved value if "auto" was
+   * requested.
+   */
+  slippage_bps: number;
+
+  /**
+   * "accepted" if the network has acknowledged the transaction, "rejected" if the
+   * network refused it, "skipped" if dry_run was set. Not an onchain confirmation.
+   */
+  submission_status: 'accepted' | 'rejected' | 'skipped';
+
+  /**
+   * Solana transaction signature (base58).
+   */
+  transaction_hash: string;
+
+  /**
+   * Platform fee collected on a swap.
+   */
+  platform_fee?: AdvancedSwapPlatformFee;
+}
 
 /**
  * Whether the amount refers to the input token or output token.
@@ -514,7 +677,10 @@ export interface CustodialWallet {
    */
   custody: WalletCustodian;
 
-  owner_id: string | null;
+  /**
+   * A unique identifier for a key quorum.
+   */
+  owner_id: SharedAPI.KeyQuorumID | null;
 
   /**
    * Additional signers for the wallet.
@@ -612,6 +778,62 @@ export interface DeveloperFee {
 }
 
 /**
+ * HPKE-encrypted authorization key with encapsulated key and ciphertext.
+ */
+export interface EncryptedAuthorizationKey {
+  /**
+   * The encrypted authorization key corresponding to the user's current
+   * authentication session.
+   */
+  ciphertext: string;
+
+  /**
+   * Base64-encoded ephemeral public key used in the HPKE encryption process.
+   * Required for decryption.
+   */
+  encapsulated_key: string;
+
+  /**
+   * The encryption type used. Currently only supports HPKE.
+   */
+  encryption_type: 'HPKE';
+}
+
+/**
+ * Encrypted response from bound wallet authentication, with bindings.
+ */
+export interface EncryptedBoundAuthenticateResponse {
+  bindings: Array<UserSigningKeyBinding>;
+
+  /**
+   * HPKE-encrypted authorization key with encapsulated key and ciphertext.
+   */
+  encrypted_authorization_key: EncryptedAuthorizationKey;
+
+  expires_at: number;
+
+  wallets: Array<Wallet>;
+}
+
+/**
+ * The response from authenticating a wallet with HPKE encryption, containing an
+ * encrypted authorization key and wallet data.
+ */
+export interface EncryptedWalletAuthenticateResponse {
+  /**
+   * HPKE-encrypted authorization key with encapsulated key and ciphertext.
+   */
+  encrypted_authorization_key: EncryptedAuthorizationKey;
+
+  /**
+   * The expiration time of the authorization key in milliseconds since the epoch.
+   */
+  expires_at: number;
+
+  wallets: Array<Wallet>;
+}
+
+/**
  * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
  */
 export interface EthereumPersonalSignRpcInput {
@@ -624,7 +846,18 @@ export interface EthereumPersonalSignRpcInput {
 
   address?: string;
 
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2?: AppsAPI.Caip2;
+
   chain_type?: 'ethereum';
+
+  /**
+   * Options controlling signature production for personal_sign and
+   * eth_signTypedData_v4.
+   */
+  signature_options?: SignatureOptions;
 
   wallet_id?: string;
 }
@@ -1061,7 +1294,18 @@ export interface EthereumSignTypedDataRpcInput {
 
   address?: string;
 
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2?: AppsAPI.Caip2;
+
   chain_type?: 'ethereum';
+
+  /**
+   * Options controlling signature production for personal_sign and
+   * eth_signTypedData_v4.
+   */
+  signature_options?: SignatureOptions;
 
   wallet_id?: string;
 }
@@ -1303,6 +1547,12 @@ export interface GetByWalletAddressRequestBody {
    * A blockchain wallet address (Ethereum or Solana).
    */
   address: Address;
+
+  /**
+   * Include archived wallets in lookup. Defaults to false (archived wallets return
+   * 404).
+   */
+  include_archived?: boolean;
 }
 
 /**
@@ -1429,6 +1679,15 @@ export interface HpkeImportConfig {
  * bytes).
  */
 export type Hex = string;
+
+/**
+ * A binding that scopes a user signing key to a specific intent.
+ */
+export interface IntentBinding {
+  intentId: string;
+
+  type: 'intent';
+}
 
 /**
  * Source for a transfer identified by a named asset (e.g. "usdc", "eth"). Use this
@@ -1598,6 +1857,19 @@ export interface PrivyFee {
 export type Quantity = Hex | number;
 
 /**
+ * Unencrypted response from bound wallet authentication, with bindings.
+ */
+export interface RawBoundAuthenticateResponse {
+  authorization_key: string;
+
+  bindings: Array<UserSigningKeyBinding>;
+
+  expires_at: number;
+
+  wallets: Array<Wallet>;
+}
+
+/**
  * Encoding scheme for bytes in the `raw_sign` RPC.
  */
 export type RawSignBytesEncoding = 'utf-8' | 'hex' | 'base64';
@@ -1680,6 +1952,24 @@ export interface RawSignResponseData {
 }
 
 /**
+ * The response from authenticating a wallet without encryption, containing a raw
+ * authorization key and wallet data.
+ */
+export interface RawWalletAuthenticateResponse {
+  /**
+   * The raw authorization key data.
+   */
+  authorization_key: string;
+
+  /**
+   * The expiration time of the authorization key in milliseconds since the epoch.
+   */
+  expires_at: number;
+
+  wallets: Array<Wallet>;
+}
+
+/**
  * The recipient public key for HPKE encryption, in PEM or DER (base64-encoded)
  * format.
  */
@@ -1736,6 +2026,26 @@ export interface SeedPhraseExportResponse {
    */
   encryption_type: HpkeEncryption;
 }
+
+/**
+ * Options controlling signature production for personal_sign and
+ * eth_signTypedData_v4.
+ */
+export interface SignatureOptions {
+  /**
+   * The type of cryptographic signature to produce. Use "ecdsa" for standard ECDSA
+   * signatures, or "erc1271" for ERC-1271 compliant signatures for smart account
+   * wallets.
+   */
+  type: SignatureType;
+}
+
+/**
+ * The type of cryptographic signature to produce. Use "ecdsa" for standard ECDSA
+ * signatures, or "erc1271" for ERC-1271 compliant signatures for smart account
+ * wallets.
+ */
+export type SignatureType = 'ecdsa' | 'erc1271';
 
 /**
  * The signing algorithm used by the wallet.
@@ -2732,17 +3042,12 @@ export interface TransferQuoteResponse {
   destination: TokenTransferDestination;
 
   /**
-   * Estimated fees in USD
-   */
-  estimated_fees: Array<FeeLineItem>;
-
-  /**
    * Estimated output amount in decimals
    */
   estimated_output_amount: string;
 
   /**
-   * Quote expiry as unix timestamp (seconds)
+   * Quote expiry as Unix timestamp (seconds).
    */
   expires_at: number;
 
@@ -2756,6 +3061,11 @@ export interface TransferQuoteResponse {
    * Whether the amount refers to the input token or output token.
    */
   amount_type?: AmountType;
+
+  /**
+   * Estimated fees in USD for the transfer. Only present for cross-chain transfers.
+   */
+  estimated_fees?: Array<FeeLineItem>;
 
   /**
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
@@ -2886,6 +3196,214 @@ export interface TransferSentTransactionDetail {
 }
 
 /**
+ * A Tron contract, discriminated by type. Supported types: TransferContract,
+ * TriggerSmartContract.
+ */
+export type TronContract = TronTransferContract | TronTriggerSmartContract;
+
+/**
+ * Tron raw_data for tron_sendTransaction. Block reference fields are optional;
+ * Privy fetches fresh values if omitted.
+ */
+export interface TronRawDataForSend {
+  contract: Array<TronContract>;
+
+  call_value?: number;
+
+  data?: string;
+
+  expiration?: number;
+
+  fee_limit?: number;
+
+  ref_block_bytes?: string;
+
+  ref_block_hash?: string;
+
+  timestamp?: number;
+}
+
+/**
+ * Tron raw_data for tron_signTransaction. Block reference fields are required;
+ * caller is responsible for fetching them.
+ */
+export interface TronRawDataForSign {
+  contract: Array<TronContract>;
+
+  expiration: number;
+
+  ref_block_bytes: string;
+
+  ref_block_hash: string;
+
+  call_value?: number;
+
+  data?: string;
+
+  fee_limit?: number;
+
+  timestamp?: number;
+}
+
+/**
+ * Request body for Tron wallet RPC operations, discriminated by method.
+ */
+export type TronRpcInput = TronSignTransactionRpcInput | TronSendTransactionRpcInput;
+
+/**
+ * Response body for Tron wallet RPC operations, discriminated by method.
+ */
+export type TronRpcResponse = TronSignTransactionRpcResponse | TronSendTransactionRpcResponse;
+
+/**
+ * Executes the Tron `tron_sendTransaction` RPC to sign and broadcast a
+ * transaction.
+ */
+export interface TronSendTransactionRpcInput {
+  method: 'tron_sendTransaction';
+
+  /**
+   * Parameters for the Tron `tron_sendTransaction` RPC.
+   */
+  params: TronSendTransactionRpcInputParams;
+
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2?: AppsAPI.Caip2;
+}
+
+/**
+ * Parameters for the Tron `tron_sendTransaction` RPC.
+ */
+export interface TronSendTransactionRpcInputParams {
+  /**
+   * Tron raw_data for tron_sendTransaction. Block reference fields are optional;
+   * Privy fetches fresh values if omitted.
+   */
+  raw_data: TronRawDataForSend;
+
+  reference_id?: string;
+}
+
+/**
+ * Response to the Tron `tron_sendTransaction` RPC.
+ */
+export interface TronSendTransactionRpcResponse {
+  /**
+   * Data returned by the Tron `tron_sendTransaction` RPC.
+   */
+  data: TronSendTransactionRpcResponseData;
+
+  method: 'tron_sendTransaction';
+}
+
+/**
+ * Data returned by the Tron `tron_sendTransaction` RPC.
+ */
+export interface TronSendTransactionRpcResponseData {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   */
+  caip2: AppsAPI.Caip2;
+
+  hash: string;
+
+  transaction_id: string;
+
+  reference_id?: string;
+}
+
+/**
+ * Executes the Tron `tron_signTransaction` RPC to sign a transaction. The caller
+ * is responsible for broadcasting.
+ */
+export interface TronSignTransactionRpcInput {
+  method: 'tron_signTransaction';
+
+  /**
+   * Parameters for the Tron `tron_signTransaction` RPC.
+   */
+  params: TronSignTransactionRpcInputParams;
+}
+
+/**
+ * Parameters for the Tron `tron_signTransaction` RPC.
+ */
+export interface TronSignTransactionRpcInputParams {
+  /**
+   * Tron raw_data for tron_signTransaction. Block reference fields are required;
+   * caller is responsible for fetching them.
+   */
+  raw_data: TronRawDataForSign;
+}
+
+/**
+ * Response to the Tron `tron_signTransaction` RPC.
+ */
+export interface TronSignTransactionRpcResponse {
+  /**
+   * Data returned by the Tron `tron_signTransaction` RPC.
+   */
+  data: TronSignTransactionRpcResponseData;
+
+  method: 'tron_signTransaction';
+}
+
+/**
+ * Data returned by the Tron `tron_signTransaction` RPC.
+ */
+export interface TronSignTransactionRpcResponseData {
+  encoding: 'hex';
+
+  signed_transaction: string;
+}
+
+/**
+ * Tron native TRX transfer contract.
+ */
+export interface TronTransferContract {
+  amount: number;
+
+  /**
+   * Tron address in hex format: 41-prefixed, 42 hex characters (21 bytes), no 0x
+   * prefix.
+   */
+  owner_address: SharedAPI.TronHexAddress;
+
+  /**
+   * Tron address in hex format: 41-prefixed, 42 hex characters (21 bytes), no 0x
+   * prefix.
+   */
+  to_address: SharedAPI.TronHexAddress;
+
+  type: 'TransferContract';
+}
+
+/**
+ * Tron smart contract call (TRC-20 transfers and general contract interactions).
+ */
+export interface TronTriggerSmartContract {
+  /**
+   * Tron address in hex format: 41-prefixed, 42 hex characters (21 bytes), no 0x
+   * prefix.
+   */
+  contract_address: SharedAPI.TronHexAddress;
+
+  /**
+   * Tron address in hex format: 41-prefixed, 42 hex characters (21 bytes), no 0x
+   * prefix.
+   */
+  owner_address: SharedAPI.TronHexAddress;
+
+  type: 'TriggerSmartContract';
+
+  call_token_value?: number;
+
+  token_id?: number;
+}
+
+/**
  * The domain parameters for EIP-712 typed data signing.
  */
 export type TypedDataDomainInputParams = { [key: string]: unknown };
@@ -2982,7 +3500,7 @@ export interface UnsignedTempoTransaction {
 
   aa_authorization_list?: Array<TempoAaAuthorization>;
 
-  access_list?: Array<UnsignedTempoTransaction.AccessList>;
+  access_list?: Array<AccessListEntry>;
 
   /**
    * A quantity value that can be either a hex string starting with '0x' or a
@@ -3040,14 +3558,6 @@ export interface UnsignedTempoTransaction {
    * non-negative integer.
    */
   valid_before?: Quantity;
-}
-
-export namespace UnsignedTempoTransaction {
-  export interface AccessList {
-    address: string;
-
-    storage_keys: Array<WalletsAPI.Hex>;
-  }
 }
 
 /**
@@ -3120,6 +3630,15 @@ export interface UserOperationInput {
 }
 
 /**
+ * A binding that scopes a user signing key to a specific intent.
+ */
+export interface UserSigningKeyBinding {
+  intentId: string;
+
+  type: 'intent';
+}
+
+/**
  * A wallet managed by Privy's wallet infrastructure.
  */
 export interface Wallet {
@@ -3170,6 +3689,12 @@ export interface Wallet {
    * List of policy IDs for policies that are enforced on the wallet.
    */
   policy_ids: Array<string>;
+
+  /**
+   * Unix timestamp of when the wallet was archived in milliseconds, or null if the
+   * wallet is active.
+   */
+  archived_at?: number | null;
 
   /**
    * The number of keys that must sign for an action to be valid.
@@ -3248,6 +3773,51 @@ export interface WalletAPIRevokeAuthorizationKeyInput {
 export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
 
 /**
+ * Request body for creating an encrypted, bound user signing key.
+ */
+export interface WalletAuthenticateBoundEncryptedRequestBody {
+  /**
+   * Bindings that scope the USK. The key can only authorize the bound values.
+   */
+  bindings: Array<UserSigningKeyBinding>;
+
+  encryption_type: 'HPKE';
+
+  recipient_public_key: string;
+
+  user_jwt: string;
+}
+
+/**
+ * Request body for creating a user signing key scoped to specific bindings. The
+ * returned USK can only authorize the bound values and cannot sign other RPC
+ * requests.
+ */
+export type WalletAuthenticateBoundRequestBody =
+  | WalletAuthenticateBoundEncryptedRequestBody
+  | WalletAuthenticateBoundUnencryptedRequestBody;
+
+/**
+ * Request body for creating an unencrypted, bound user signing key.
+ */
+export interface WalletAuthenticateBoundUnencryptedRequestBody {
+  /**
+   * Bindings that scope the USK. The key can only authorize the bound values.
+   */
+  bindings: Array<UserSigningKeyBinding>;
+
+  user_jwt: string;
+}
+
+/**
+ * The response from authenticating a wallet with intent bindings, containing an
+ * authorization key, wallet data, and the bindings the key is scoped to.
+ */
+export type WalletAuthenticateIntentsResponse =
+  | EncryptedBoundAuthenticateResponse
+  | RawBoundAuthenticateResponse;
+
+/**
  * Request body for wallet authentication with HPKE-encrypted response.
  */
 export interface WalletAuthenticateRequestBody {
@@ -3274,62 +3844,8 @@ export interface WalletAuthenticateRequestBody {
  * wallet data.
  */
 export type WalletAuthenticateWithJwtResponse =
-  | WalletAuthenticateWithJwtResponse.WithEncryption
-  | WalletAuthenticateWithJwtResponse.WithoutEncryption;
-
-export namespace WalletAuthenticateWithJwtResponse {
-  export interface WithEncryption {
-    /**
-     * The encrypted authorization key data.
-     */
-    encrypted_authorization_key: WithEncryption.EncryptedAuthorizationKey;
-
-    /**
-     * The expiration time of the authorization key in milliseconds since the epoch.
-     */
-    expires_at: number;
-
-    wallets: Array<WalletsAPI.Wallet>;
-  }
-
-  export namespace WithEncryption {
-    /**
-     * The encrypted authorization key data.
-     */
-    export interface EncryptedAuthorizationKey {
-      /**
-       * The encrypted authorization key corresponding to the user's current
-       * authentication session.
-       */
-      ciphertext: string;
-
-      /**
-       * Base64-encoded ephemeral public key used in the HPKE encryption process.
-       * Required for decryption.
-       */
-      encapsulated_key: string;
-
-      /**
-       * The encryption type used. Currently only supports HPKE.
-       */
-      encryption_type: 'HPKE';
-    }
-  }
-
-  export interface WithoutEncryption {
-    /**
-     * The raw authorization key data.
-     */
-    authorization_key: string;
-
-    /**
-     * The expiration time of the authorization key in milliseconds since the epoch.
-     */
-    expires_at: number;
-
-    wallets: Array<WalletsAPI.Wallet>;
-  }
-}
+  | EncryptedWalletAuthenticateResponse
+  | RawWalletAuthenticateResponse;
 
 /**
  * Headers required to authorize wallet operations.
@@ -3623,6 +4139,8 @@ export type WalletRpcRequestBody =
   | SparkCreateLightningInvoiceRpcInput
   | SparkPayLightningInvoiceRpcInput
   | SparkSignMessageWithIdentityKeyRpcInput
+  | TronSignTransactionRpcInput
+  | TronSendTransactionRpcInput
   | ExportPrivateKeyRpcInput
   | ExportSeedPhraseRpcInput;
 
@@ -3650,6 +4168,8 @@ export type WalletRpcResponse =
   | SparkCreateLightningInvoiceRpcResponse
   | SparkPayLightningInvoiceRpcResponse
   | SparkSignMessageWithIdentityKeyRpcResponse
+  | TronSignTransactionRpcResponse
+  | TronSendTransactionRpcResponse
   | ExportPrivateKeyRpcResponse
   | ExportSeedPhraseRpcResponse;
 
@@ -3768,6 +4288,11 @@ export interface WalletListParams extends CursorParams {
    * Filter wallets by external ID.
    */
   external_id?: string;
+
+  /**
+   * Include archived wallets in lookup. Defaults to false.
+   */
+  include_archived?: boolean;
 
   /**
    * Filter wallets by user ID. Cannot be used together with authorization_key.
@@ -3906,6 +4431,8 @@ export type WalletRpcParams =
   | WalletRpcParams.SparkCreateLightningInvoiceRpcInput
   | WalletRpcParams.SparkPayLightningInvoiceRpcInput
   | WalletRpcParams.SparkSignMessageWithIdentityKeyRpcInput
+  | WalletRpcParams.TronSignTransactionRpcInput
+  | WalletRpcParams.TronSendTransactionRpcInput
   | WalletRpcParams.ExportPrivateKeyRpcInput
   | WalletRpcParams.ExportSeedPhraseRpcInput;
 
@@ -4038,9 +4565,20 @@ export declare namespace WalletRpcParams {
     address?: string;
 
     /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2?: AppsAPI.Caip2;
+
+    /**
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param: Options controlling signature production for personal_sign and
+     * eth_signTypedData_v4.
+     */
+    signature_options?: SignatureOptions;
 
     /**
      * Body param
@@ -4083,9 +4621,20 @@ export declare namespace WalletRpcParams {
     address?: string;
 
     /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2?: AppsAPI.Caip2;
+
+    /**
      * Body param
      */
     chain_type?: 'ethereum';
+
+    /**
+     * Body param: Options controlling signature production for personal_sign and
+     * eth_signTypedData_v4.
+     */
+    signature_options?: SignatureOptions;
 
     /**
      * Body param
@@ -4767,6 +5316,71 @@ export declare namespace WalletRpcParams {
     'privy-request-expiry'?: string;
   }
 
+  export interface TronSignTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'tron_signTransaction';
+
+    /**
+     * Body param: Parameters for the Tron `tron_signTransaction` RPC.
+     */
+    params: TronSignTransactionRpcInputParams;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface TronSendTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'tron_sendTransaction';
+
+    /**
+     * Body param: Parameters for the Tron `tron_sendTransaction` RPC.
+     */
+    params: TronSendTransactionRpcInputParams;
+
+    /**
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     */
+    caip2?: AppsAPI.Caip2;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
   export interface ExportPrivateKeyRpcInput {
     /**
      * Body param
@@ -5043,13 +5657,27 @@ export namespace WalletCreateWalletsWithRecoveryParams {
   }
 }
 
+export interface WalletGetParams {
+  /**
+   * Include archived wallets in lookup. Defaults to false.
+   */
+  include_archived?: boolean;
+}
+
 export interface WalletGetWalletByAddressParams {
   /**
    * A blockchain wallet address (Ethereum or Solana).
    */
   address: Address;
+
+  /**
+   * Include archived wallets in lookup. Defaults to false (archived wallets return
+   * 404).
+   */
+  include_archived?: boolean;
 }
 
+Wallets.Actions = Actions;
 Wallets.Earn = Earn;
 Wallets.Transactions = Transactions;
 Wallets.Balance = Balance;
@@ -5057,9 +5685,13 @@ Wallets.Swap = Swap;
 
 export declare namespace Wallets {
   export {
+    type AccessListEntry as AccessListEntry,
     type AdditionalSignerInput as AdditionalSignerInput,
     type AdditionalSignerItemInput as AdditionalSignerItemInput,
     type Address as Address,
+    type AdvancedSwapPlatformFee as AdvancedSwapPlatformFee,
+    type AdvancedSwapRequestBody as AdvancedSwapRequestBody,
+    type AdvancedSwapResponse as AdvancedSwapResponse,
     type AmountType as AmountType,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
     type AuthorizationKeyResponse as AuthorizationKeyResponse,
@@ -5072,6 +5704,9 @@ export declare namespace Wallets {
     type CustodialWalletProvider as CustodialWalletProvider,
     type CustomTokenTransferSource as CustomTokenTransferSource,
     type DeveloperFee as DeveloperFee,
+    type EncryptedAuthorizationKey as EncryptedAuthorizationKey,
+    type EncryptedBoundAuthenticateResponse as EncryptedBoundAuthenticateResponse,
+    type EncryptedWalletAuthenticateResponse as EncryptedWalletAuthenticateResponse,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
@@ -5127,6 +5762,7 @@ export declare namespace Wallets {
     type HpkeEncryption as HpkeEncryption,
     type HpkeImportConfig as HpkeImportConfig,
     type Hex as Hex,
+    type IntentBinding as IntentBinding,
     type NamedTokenTransferSource as NamedTokenTransferSource,
     type OutputWithPreviousTransactionData as OutputWithPreviousTransactionData,
     type PolicyInput as PolicyInput,
@@ -5136,6 +5772,7 @@ export declare namespace Wallets {
     type PrivateKeySubmitInput as PrivateKeySubmitInput,
     type PrivyFee as PrivyFee,
     type Quantity as Quantity,
+    type RawBoundAuthenticateResponse as RawBoundAuthenticateResponse,
     type RawSignBytesEncoding as RawSignBytesEncoding,
     type RawSignBytesHashFunction as RawSignBytesHashFunction,
     type RawSignBytesParams as RawSignBytesParams,
@@ -5144,10 +5781,13 @@ export declare namespace Wallets {
     type RawSignInputParams as RawSignInputParams,
     type RawSignResponse as RawSignResponse,
     type RawSignResponseData as RawSignResponseData,
+    type RawWalletAuthenticateResponse as RawWalletAuthenticateResponse,
     type RecipientPublicKey as RecipientPublicKey,
     type RelayerFee as RelayerFee,
     type SeedPhraseExportInput as SeedPhraseExportInput,
     type SeedPhraseExportResponse as SeedPhraseExportResponse,
+    type SignatureOptions as SignatureOptions,
+    type SignatureType as SignatureType,
     type SigningAlgorithm as SigningAlgorithm,
     type SolanaRpcInput as SolanaRpcInput,
     type SolanaRpcResponse as SolanaRpcResponse,
@@ -5223,6 +5863,21 @@ export declare namespace Wallets {
     type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
     type TransferRequestBody as TransferRequestBody,
     type TransferSentTransactionDetail as TransferSentTransactionDetail,
+    type TronContract as TronContract,
+    type TronRawDataForSend as TronRawDataForSend,
+    type TronRawDataForSign as TronRawDataForSign,
+    type TronRpcInput as TronRpcInput,
+    type TronRpcResponse as TronRpcResponse,
+    type TronSendTransactionRpcInput as TronSendTransactionRpcInput,
+    type TronSendTransactionRpcInputParams as TronSendTransactionRpcInputParams,
+    type TronSendTransactionRpcResponse as TronSendTransactionRpcResponse,
+    type TronSendTransactionRpcResponseData as TronSendTransactionRpcResponseData,
+    type TronSignTransactionRpcInput as TronSignTransactionRpcInput,
+    type TronSignTransactionRpcInputParams as TronSignTransactionRpcInputParams,
+    type TronSignTransactionRpcResponse as TronSignTransactionRpcResponse,
+    type TronSignTransactionRpcResponseData as TronSignTransactionRpcResponseData,
+    type TronTransferContract as TronTransferContract,
+    type TronTriggerSmartContract as TronTriggerSmartContract,
     type TypedDataDomainInputParams as TypedDataDomainInputParams,
     type TypedDataTypeFieldInput as TypedDataTypeFieldInput,
     type TypedDataTypesInputParams as TypedDataTypesInputParams,
@@ -5230,12 +5885,17 @@ export declare namespace Wallets {
     type UnsignedStandardEthereumTransaction as UnsignedStandardEthereumTransaction,
     type UnsignedTempoTransaction as UnsignedTempoTransaction,
     type UserOperationInput as UserOperationInput,
+    type UserSigningKeyBinding as UserSigningKeyBinding,
     type Wallet as Wallet,
     type WalletAdditionalSigner as WalletAdditionalSigner,
     type WalletAdditionalSignerItem as WalletAdditionalSignerItem,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
     type WalletAsset as WalletAsset,
+    type WalletAuthenticateBoundEncryptedRequestBody as WalletAuthenticateBoundEncryptedRequestBody,
+    type WalletAuthenticateBoundRequestBody as WalletAuthenticateBoundRequestBody,
+    type WalletAuthenticateBoundUnencryptedRequestBody as WalletAuthenticateBoundUnencryptedRequestBody,
+    type WalletAuthenticateIntentsResponse as WalletAuthenticateIntentsResponse,
     type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
@@ -5272,8 +5932,11 @@ export declare namespace Wallets {
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateBatchParams as WalletCreateBatchParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
+    type WalletGetParams as WalletGetParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };
+
+  export { Actions as Actions, type ActionGetParams as ActionGetParams };
 
   export { Earn as Earn };
 

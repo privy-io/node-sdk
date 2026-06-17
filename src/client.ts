@@ -50,6 +50,7 @@ import {
   AggregationMetric,
   AggregationWindow,
   Aggregations,
+  RollingAggregationWindow,
 } from './resources/aggregations';
 import { Analytics, AnalyticsEventInput } from './resources/analytics';
 import {
@@ -271,8 +272,11 @@ import {
   BaseActionResult,
   BaseIntentResponse,
   IntentAuthorization,
+  IntentAuthorizationKeyMember,
+  IntentAuthorizationKeyQuorum,
   IntentAuthorizationKeyQuorumMember,
   IntentAuthorizationMember,
+  IntentAuthorizationUserMember,
   IntentAuthorizeInput,
   IntentCreatePolicyRuleParams,
   IntentCreationHeaders,
@@ -296,6 +300,7 @@ import {
   RpcIntentResponse,
   RuleDeleteIntentResponse,
   RuleIntentCreateRequestDetails,
+  RuleIntentDeleteRequestBody,
   RuleIntentDeleteRequestDetails,
   RuleIntentRequestDetails,
   RuleIntentResponse,
@@ -306,6 +311,7 @@ import {
   WalletIntentResponse,
 } from './resources/intents';
 import {
+  AuthorizationKey,
   KeyQuorum,
   KeyQuorumAuthorizationHeaders,
   KeyQuorumCreateParams,
@@ -338,6 +344,7 @@ import {
   KrakenEmbedEarnAprEstimate,
   KrakenEmbedEarnAsset,
   KrakenEmbedEarnUserAllocation,
+  KrakenEmbedFullName,
   KrakenEmbedGetAssetListQueryParamsSchema,
   KrakenEmbedGetCustomOrderHistoryQueryParams,
   KrakenEmbedGetCustomOrderHistoryResponse,
@@ -356,11 +363,16 @@ import {
   KrakenEmbedGetPortfolioDetailsQueryParamsSchema,
   KrakenEmbedGetPortfolioSummaryQueryParams,
   KrakenEmbedGetPortfolioSummaryResponse,
+  KrakenEmbedGetPortfolioSummaryResult,
   KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
   KrakenEmbedGetQuoteQueryParams,
   KrakenEmbedListCustomOrdersQueryParams,
   KrakenEmbedListCustomOrdersResponse,
   KrakenEmbedListCustomOrdersResult,
+  KrakenEmbedPortfolioSummaryPayload,
+  KrakenEmbedPortfolioTransactionRefID,
+  KrakenEmbedPortfolioTransactionRefIDType,
+  KrakenEmbedResidence,
   KrakenEmbedStartAddressMetadata,
   KrakenEmbedStartAddressVerificationURLInput,
   KrakenEmbedStartIdentityInfo,
@@ -420,7 +432,6 @@ import {
   LinkAuthIntentNoAccount,
   ListStripeConsumerWalletsResponse,
   ListStripePaymentTokensResponse,
-  OnrampSessionFees,
   OnrampSessionParams,
   OnrampSessionTransactionDetails,
   Onramps,
@@ -429,10 +440,10 @@ import {
   StripeCryptoCustomerActive,
   StripeCryptoCustomerExpired,
   StripeCryptoCustomerNone,
+  StripeKYCTier,
   StripeOnrampCheckoutResponse,
   StripeOnrampSessionStatus,
   StripePaymentToken,
-  StripeQuote,
   StripeTransactionDetails,
   StripeVerification,
 } from './resources/onramps';
@@ -466,6 +477,8 @@ import {
   EthereumTransactionCondition,
   EthereumTypedDataDomainCondition,
   EthereumTypedDataMessageCondition,
+  MessageSigningCondition,
+  MessageSigningField,
   Policies,
   Policy,
   PolicyAction,
@@ -495,6 +508,7 @@ import {
   TempoTransactionConditionField,
   TronCalldataCondition,
   TronTransactionCondition,
+  TypedDataInput,
   UpdateConditionSetRequestBody,
 } from './resources/policies';
 import {
@@ -513,6 +527,7 @@ import {
   SolanaAddress,
   SuccessResponse,
   TronAddress,
+  TronHexAddress,
 } from './resources/shared';
 import {
   SwapDestination,
@@ -633,6 +648,8 @@ import {
   UsersCursor,
 } from './resources/users';
 import {
+  CustodianTransactionWalletActionStep,
+  CustodianTransactionWalletActionStepStatus,
   EarnAsset,
   EarnDepositActionResponse,
   EarnDepositRequestBody,
@@ -654,10 +671,13 @@ import {
   ExternalTransactionWalletActionStep,
   ExternalTransactionWalletActionStepStatus,
   FailureReason,
+  ListWalletActionsQuery,
+  ListWalletActionsResponse,
   SvmTransactionWalletActionStep,
   SvmWalletActionStepStatus,
   SwapActionResponse,
   TransferActionResponse,
+  WalletActionInclude,
   WalletActionResponse,
   WalletActionStatus,
   WalletActionStep,
@@ -666,6 +686,7 @@ import {
   WalletActions,
 } from './resources/wallet-actions';
 import {
+  BlockInfo,
   BridgeCryptoDepositMetadata,
   BridgeCryptoTransferMetadata,
   BridgeFiatDepositMetadata,
@@ -706,6 +727,7 @@ import {
   UserCreatedWebhookPayload,
   UserLinkedAccountWebhookPayload,
   UserOperationCompletedWebhookPayload,
+  UserReference,
   UserTransferredAccountWebhookPayload,
   UserUnlinkedAccountWebhookPayload,
   UserUpdatedAccountWebhookPayload,
@@ -730,6 +752,7 @@ import {
   WalletActionTransferFailedWebhookPayload,
   WalletActionTransferRejectedWebhookPayload,
   WalletActionTransferSucceededWebhookPayload,
+  WalletArchivedWebhookPayload,
   WalletFundsAsset,
   WalletFundsErc20Asset,
   WalletFundsNativeTokenAsset,
@@ -740,6 +763,7 @@ import {
   WebhookPayload,
   Webhooks,
   YieldClaimConfirmedWebhookPayload,
+  YieldClaimReward,
   YieldDepositConfirmedWebhookPayload,
   YieldWithdrawConfirmedWebhookPayload,
 } from './resources/webhooks';
@@ -762,12 +786,15 @@ import {
   EthereumYieldSweepType,
   EthereumYieldWithdrawInput,
   EvmCaip2ChainID,
+  VaultAsset,
   Yield,
   YieldAuthorizationHeaders,
 } from './resources/yield';
 import {
   AllowlistDeletionResponse,
   AllowlistEntry,
+  AppAllowlistConfig,
+  AppCustomOAuthProvider,
   AppGetGasSpendParams,
   AppResponse,
   Apps,
@@ -797,9 +824,13 @@ import {
   WalletInviteInput,
 } from './resources/apps/apps';
 import {
+  AccessListEntry,
   AdditionalSignerInput,
   AdditionalSignerItemInput,
   Address,
+  AdvancedSwapPlatformFee,
+  AdvancedSwapRequestBody,
+  AdvancedSwapResponse,
   AmountType,
   AuthorizationKeyDashboardResponse,
   AuthorizationKeyResponse,
@@ -812,6 +843,9 @@ import {
   CustodialWalletProvider,
   CustomTokenTransferSource,
   DeveloperFee,
+  EncryptedAuthorizationKey,
+  EncryptedBoundAuthenticateResponse,
+  EncryptedWalletAuthenticateResponse,
   EthereumPersonalSignRpcInput,
   EthereumPersonalSignRpcInputParams,
   EthereumPersonalSignRpcResponse,
@@ -867,6 +901,7 @@ import {
   HpkeAeadAlgorithm,
   HpkeEncryption,
   HpkeImportConfig,
+  IntentBinding,
   NamedTokenTransferSource,
   OutputWithPreviousTransactionData,
   PolicyInput,
@@ -876,6 +911,7 @@ import {
   PrivateKeySubmitInput,
   PrivyFee,
   Quantity,
+  RawBoundAuthenticateResponse,
   RawSignBytesEncoding,
   RawSignBytesHashFunction,
   RawSignBytesParams,
@@ -884,10 +920,13 @@ import {
   RawSignInputParams,
   RawSignResponse,
   RawSignResponseData,
+  RawWalletAuthenticateResponse,
   RecipientPublicKey,
   RelayerFee,
   SeedPhraseExportInput,
   SeedPhraseExportResponse,
+  SignatureOptions,
+  SignatureType,
   SigningAlgorithm,
   SolanaRpcInput,
   SolanaRpcResponse,
@@ -963,6 +1002,21 @@ import {
   TransferReceivedTransactionDetail,
   TransferRequestBody,
   TransferSentTransactionDetail,
+  TronContract,
+  TronRawDataForSend,
+  TronRawDataForSign,
+  TronRpcInput,
+  TronRpcResponse,
+  TronSendTransactionRpcInput,
+  TronSendTransactionRpcInputParams,
+  TronSendTransactionRpcResponse,
+  TronSendTransactionRpcResponseData,
+  TronSignTransactionRpcInput,
+  TronSignTransactionRpcInputParams,
+  TronSignTransactionRpcResponse,
+  TronSignTransactionRpcResponseData,
+  TronTransferContract,
+  TronTriggerSmartContract,
   TypedDataDomainInputParams,
   TypedDataTypeFieldInput,
   TypedDataTypesInputParams,
@@ -970,12 +1024,17 @@ import {
   UnsignedStandardEthereumTransaction,
   UnsignedTempoTransaction,
   UserOperationInput,
+  UserSigningKeyBinding,
   Wallet,
   WalletAPIRegisterAuthorizationKeyInput,
   WalletAPIRevokeAuthorizationKeyInput,
   WalletAdditionalSigner,
   WalletAdditionalSignerItem,
   WalletAsset,
+  WalletAuthenticateBoundEncryptedRequestBody,
+  WalletAuthenticateBoundRequestBody,
+  WalletAuthenticateBoundUnencryptedRequestBody,
+  WalletAuthenticateIntentsResponse,
   WalletAuthenticateRequestBody,
   WalletAuthenticateWithJwtParams,
   WalletAuthenticateWithJwtResponse,
@@ -995,6 +1054,7 @@ import {
   WalletExportParams,
   WalletExportRequestBody,
   WalletExportResponseBody,
+  WalletGetParams,
   WalletGetWalletByAddressParams,
   WalletImportInitResponse,
   WalletImportSupportedChains,
@@ -1753,11 +1813,19 @@ export class PrivyAPI {
     return () => controller.abort();
   }
 
-  private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
+  private buildBody({ options }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
   } {
+    const { body, headers: rawHeaders } = options;
     if (!body) {
+      // A resource method always passes a `body` key when its operation defines a
+      // request body, even if the caller omitted an optional body param. Keep the
+      // content-type for those, and only elide it for operations with no body at
+      // all (e.g. GET/DELETE).
+      if (body == null && 'body' in options) {
+        return this.#encoder({ body, headers: buildHeaders([rawHeaders]) });
+      }
       return { bodyHeaders: undefined, body: undefined };
     }
     const headers = buildHeaders([rawHeaders]);
@@ -1853,8 +1921,8 @@ export class PrivyAPI {
   funding: API.Funding = new API.Funding(this);
   organizations: API.Organizations = new API.Organizations(this);
   crossApp: API.CrossApp = new API.CrossApp(this);
-  oAuth: API.OAuth = new API.OAuth(this);
   walletActions: API.WalletActions = new API.WalletActions(this);
+  oAuth: API.OAuth = new API.OAuth(this);
   yield: API.Yield = new API.Yield(this);
   krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
   swaps: API.Swaps = new API.Swaps(this);
@@ -1878,8 +1946,8 @@ PrivyAPI.Onramps = Onramps;
 PrivyAPI.Funding = Funding;
 PrivyAPI.Organizations = Organizations;
 PrivyAPI.CrossApp = CrossApp;
-PrivyAPI.OAuth = OAuth;
 PrivyAPI.WalletActions = WalletActions;
+PrivyAPI.OAuth = OAuth;
 PrivyAPI.Yield = Yield;
 PrivyAPI.KrakenEmbed = KrakenEmbed;
 PrivyAPI.Swaps = Swaps;
@@ -1892,9 +1960,13 @@ export declare namespace PrivyAPI {
 
   export {
     Wallets as Wallets,
+    type AccessListEntry as AccessListEntry,
     type AdditionalSignerInput as AdditionalSignerInput,
     type AdditionalSignerItemInput as AdditionalSignerItemInput,
     type Address as Address,
+    type AdvancedSwapPlatformFee as AdvancedSwapPlatformFee,
+    type AdvancedSwapRequestBody as AdvancedSwapRequestBody,
+    type AdvancedSwapResponse as AdvancedSwapResponse,
     type AmountType as AmountType,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
     type AuthorizationKeyResponse as AuthorizationKeyResponse,
@@ -1907,6 +1979,9 @@ export declare namespace PrivyAPI {
     type CustodialWalletProvider as CustodialWalletProvider,
     type CustomTokenTransferSource as CustomTokenTransferSource,
     type DeveloperFee as DeveloperFee,
+    type EncryptedAuthorizationKey as EncryptedAuthorizationKey,
+    type EncryptedBoundAuthenticateResponse as EncryptedBoundAuthenticateResponse,
+    type EncryptedWalletAuthenticateResponse as EncryptedWalletAuthenticateResponse,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
@@ -1962,6 +2037,7 @@ export declare namespace PrivyAPI {
     type HpkeEncryption as HpkeEncryption,
     type HpkeImportConfig as HpkeImportConfig,
     type Hex as Hex,
+    type IntentBinding as IntentBinding,
     type NamedTokenTransferSource as NamedTokenTransferSource,
     type OutputWithPreviousTransactionData as OutputWithPreviousTransactionData,
     type PolicyInput as PolicyInput,
@@ -1971,6 +2047,7 @@ export declare namespace PrivyAPI {
     type PrivateKeySubmitInput as PrivateKeySubmitInput,
     type PrivyFee as PrivyFee,
     type Quantity as Quantity,
+    type RawBoundAuthenticateResponse as RawBoundAuthenticateResponse,
     type RawSignBytesEncoding as RawSignBytesEncoding,
     type RawSignBytesHashFunction as RawSignBytesHashFunction,
     type RawSignBytesParams as RawSignBytesParams,
@@ -1979,10 +2056,13 @@ export declare namespace PrivyAPI {
     type RawSignInputParams as RawSignInputParams,
     type RawSignResponse as RawSignResponse,
     type RawSignResponseData as RawSignResponseData,
+    type RawWalletAuthenticateResponse as RawWalletAuthenticateResponse,
     type RecipientPublicKey as RecipientPublicKey,
     type RelayerFee as RelayerFee,
     type SeedPhraseExportInput as SeedPhraseExportInput,
     type SeedPhraseExportResponse as SeedPhraseExportResponse,
+    type SignatureOptions as SignatureOptions,
+    type SignatureType as SignatureType,
     type SigningAlgorithm as SigningAlgorithm,
     type SolanaRpcInput as SolanaRpcInput,
     type SolanaRpcResponse as SolanaRpcResponse,
@@ -2058,6 +2138,21 @@ export declare namespace PrivyAPI {
     type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
     type TransferRequestBody as TransferRequestBody,
     type TransferSentTransactionDetail as TransferSentTransactionDetail,
+    type TronContract as TronContract,
+    type TronRawDataForSend as TronRawDataForSend,
+    type TronRawDataForSign as TronRawDataForSign,
+    type TronRpcInput as TronRpcInput,
+    type TronRpcResponse as TronRpcResponse,
+    type TronSendTransactionRpcInput as TronSendTransactionRpcInput,
+    type TronSendTransactionRpcInputParams as TronSendTransactionRpcInputParams,
+    type TronSendTransactionRpcResponse as TronSendTransactionRpcResponse,
+    type TronSendTransactionRpcResponseData as TronSendTransactionRpcResponseData,
+    type TronSignTransactionRpcInput as TronSignTransactionRpcInput,
+    type TronSignTransactionRpcInputParams as TronSignTransactionRpcInputParams,
+    type TronSignTransactionRpcResponse as TronSignTransactionRpcResponse,
+    type TronSignTransactionRpcResponseData as TronSignTransactionRpcResponseData,
+    type TronTransferContract as TronTransferContract,
+    type TronTriggerSmartContract as TronTriggerSmartContract,
     type TypedDataDomainInputParams as TypedDataDomainInputParams,
     type TypedDataTypeFieldInput as TypedDataTypeFieldInput,
     type TypedDataTypesInputParams as TypedDataTypesInputParams,
@@ -2065,12 +2160,17 @@ export declare namespace PrivyAPI {
     type UnsignedStandardEthereumTransaction as UnsignedStandardEthereumTransaction,
     type UnsignedTempoTransaction as UnsignedTempoTransaction,
     type UserOperationInput as UserOperationInput,
+    type UserSigningKeyBinding as UserSigningKeyBinding,
     type Wallet as Wallet,
     type WalletAdditionalSigner as WalletAdditionalSigner,
     type WalletAdditionalSignerItem as WalletAdditionalSignerItem,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
     type WalletAsset as WalletAsset,
+    type WalletAuthenticateBoundEncryptedRequestBody as WalletAuthenticateBoundEncryptedRequestBody,
+    type WalletAuthenticateBoundRequestBody as WalletAuthenticateBoundRequestBody,
+    type WalletAuthenticateBoundUnencryptedRequestBody as WalletAuthenticateBoundUnencryptedRequestBody,
+    type WalletAuthenticateIntentsResponse as WalletAuthenticateIntentsResponse,
     type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
@@ -2107,6 +2207,7 @@ export declare namespace PrivyAPI {
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateBatchParams as WalletCreateBatchParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
+    type WalletGetParams as WalletGetParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };
 
@@ -2222,6 +2323,8 @@ export declare namespace PrivyAPI {
     type EthereumTransactionCondition as EthereumTransactionCondition,
     type EthereumTypedDataDomainCondition as EthereumTypedDataDomainCondition,
     type EthereumTypedDataMessageCondition as EthereumTypedDataMessageCondition,
+    type MessageSigningCondition as MessageSigningCondition,
+    type MessageSigningField as MessageSigningField,
     type Policy as Policy,
     type PolicyAction as PolicyAction,
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
@@ -2243,6 +2346,7 @@ export declare namespace PrivyAPI {
     type TempoTransactionConditionField as TempoTransactionConditionField,
     type TronCalldataCondition as TronCalldataCondition,
     type TronTransactionCondition as TronTransactionCondition,
+    type TypedDataInput as TypedDataInput,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,
@@ -2277,6 +2381,7 @@ export declare namespace PrivyAPI {
 
   export {
     KeyQuorums as KeyQuorums,
+    type AuthorizationKey as AuthorizationKey,
     type KeyQuorum as KeyQuorum,
     type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
     type KeyQuorumCreateRequestBody as KeyQuorumCreateRequestBody,
@@ -2291,8 +2396,11 @@ export declare namespace PrivyAPI {
     type BaseActionResult as BaseActionResult,
     type BaseIntentResponse as BaseIntentResponse,
     type IntentAuthorization as IntentAuthorization,
+    type IntentAuthorizationKeyMember as IntentAuthorizationKeyMember,
+    type IntentAuthorizationKeyQuorum as IntentAuthorizationKeyQuorum,
     type IntentAuthorizationKeyQuorumMember as IntentAuthorizationKeyQuorumMember,
     type IntentAuthorizationMember as IntentAuthorizationMember,
+    type IntentAuthorizationUserMember as IntentAuthorizationUserMember,
     type IntentAuthorizeInput as IntentAuthorizeInput,
     type IntentCreationHeaders as IntentCreationHeaders,
     type IntentResponse as IntentResponse,
@@ -2305,6 +2413,7 @@ export declare namespace PrivyAPI {
     type RpcIntentResponse as RpcIntentResponse,
     type RuleDeleteIntentResponse as RuleDeleteIntentResponse,
     type RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails,
+    type RuleIntentDeleteRequestBody as RuleIntentDeleteRequestBody,
     type RuleIntentDeleteRequestDetails as RuleIntentDeleteRequestDetails,
     type RuleIntentRequestDetails as RuleIntentRequestDetails,
     type RuleIntentResponse as RuleIntentResponse,
@@ -2329,6 +2438,8 @@ export declare namespace PrivyAPI {
     Apps as Apps,
     type AllowlistDeletionResponse as AllowlistDeletionResponse,
     type AllowlistEntry as AllowlistEntry,
+    type AppAllowlistConfig as AppAllowlistConfig,
+    type AppCustomOAuthProvider as AppCustomOAuthProvider,
     type AppResponse as AppResponse,
     type Caip2 as Caip2,
     type Currency as Currency,
@@ -2359,6 +2470,7 @@ export declare namespace PrivyAPI {
 
   export {
     Webhooks as Webhooks,
+    type BlockInfo as BlockInfo,
     type BridgeCryptoDepositMetadata as BridgeCryptoDepositMetadata,
     type BridgeCryptoTransferMetadata as BridgeCryptoTransferMetadata,
     type BridgeFiatDepositMetadata as BridgeFiatDepositMetadata,
@@ -2398,6 +2510,7 @@ export declare namespace PrivyAPI {
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
     type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
     type UserOperationCompletedWebhookPayload as UserOperationCompletedWebhookPayload,
+    type UserReference as UserReference,
     type UserTransferredAccountWebhookPayload as UserTransferredAccountWebhookPayload,
     type UserUnlinkedAccountWebhookPayload as UserUnlinkedAccountWebhookPayload,
     type UserUpdatedAccountWebhookPayload as UserUpdatedAccountWebhookPayload,
@@ -2422,6 +2535,7 @@ export declare namespace PrivyAPI {
     type WalletActionTransferFailedWebhookPayload as WalletActionTransferFailedWebhookPayload,
     type WalletActionTransferRejectedWebhookPayload as WalletActionTransferRejectedWebhookPayload,
     type WalletActionTransferSucceededWebhookPayload as WalletActionTransferSucceededWebhookPayload,
+    type WalletArchivedWebhookPayload as WalletArchivedWebhookPayload,
     type WalletFundsAsset as WalletFundsAsset,
     type WalletFundsErc20Asset as WalletFundsErc20Asset,
     type WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset,
@@ -2431,6 +2545,7 @@ export declare namespace PrivyAPI {
     type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
     type WebhookPayload as WebhookPayload,
     type YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
+    type YieldClaimReward as YieldClaimReward,
     type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
     type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
     type UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent,
@@ -2468,6 +2583,7 @@ export declare namespace PrivyAPI {
     type AggregationMethod as AggregationMethod,
     type AggregationMetric as AggregationMetric,
     type AggregationWindow as AggregationWindow,
+    type RollingAggregationWindow as RollingAggregationWindow,
   };
 
   export {
@@ -2678,6 +2794,7 @@ export declare namespace PrivyAPI {
     type SolanaAddress as SolanaAddress,
     type SuccessResponse as SuccessResponse,
     type TronAddress as TronAddress,
+    type TronHexAddress as TronHexAddress,
   };
 
   export {
@@ -2718,7 +2835,6 @@ export declare namespace PrivyAPI {
     type LinkAuthIntentNoAccount as LinkAuthIntentNoAccount,
     type ListStripeConsumerWalletsResponse as ListStripeConsumerWalletsResponse,
     type ListStripePaymentTokensResponse as ListStripePaymentTokensResponse,
-    type OnrampSessionFees as OnrampSessionFees,
     type OnrampSessionParams as OnrampSessionParams,
     type OnrampSessionTransactionDetails as OnrampSessionTransactionDetails,
     type RefreshStripeQuoteResponse as RefreshStripeQuoteResponse,
@@ -2726,10 +2842,10 @@ export declare namespace PrivyAPI {
     type StripeCryptoCustomerActive as StripeCryptoCustomerActive,
     type StripeCryptoCustomerExpired as StripeCryptoCustomerExpired,
     type StripeCryptoCustomerNone as StripeCryptoCustomerNone,
+    type StripeKYCTier as StripeKYCTier,
     type StripeOnrampCheckoutResponse as StripeOnrampCheckoutResponse,
     type StripeOnrampSessionStatus as StripeOnrampSessionStatus,
     type StripePaymentToken as StripePaymentToken,
-    type StripeQuote as StripeQuote,
     type StripeTransactionDetails as StripeTransactionDetails,
     type StripeVerification as StripeVerification,
   };
@@ -2777,15 +2893,9 @@ export declare namespace PrivyAPI {
   };
 
   export {
-    OAuth as OAuth,
-    type DeviceAuthorizationResponse as DeviceAuthorizationResponse,
-    type OAuthGrant as OAuthGrant,
-    type OAuthGrantListResponse as OAuthGrantListResponse,
-    type OAuthGrantRevokeResponse as OAuthGrantRevokeResponse,
-  };
-
-  export {
     WalletActions as WalletActions,
+    type CustodianTransactionWalletActionStep as CustodianTransactionWalletActionStep,
+    type CustodianTransactionWalletActionStepStatus as CustodianTransactionWalletActionStepStatus,
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
     type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
     type EvmWalletActionStepStatus as EvmWalletActionStepStatus,
@@ -2807,15 +2917,26 @@ export declare namespace PrivyAPI {
     type ExternalTransactionWalletActionStep as ExternalTransactionWalletActionStep,
     type ExternalTransactionWalletActionStepStatus as ExternalTransactionWalletActionStepStatus,
     type FailureReason as FailureReason,
+    type ListWalletActionsQuery as ListWalletActionsQuery,
+    type ListWalletActionsResponse as ListWalletActionsResponse,
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
     type SwapActionResponse as SwapActionResponse,
     type TransferActionResponse as TransferActionResponse,
+    type WalletActionInclude as WalletActionInclude,
     type WalletActionResponse as WalletActionResponse,
     type WalletActionStatus as WalletActionStatus,
     type WalletActionStep as WalletActionStep,
     type WalletActionStepType as WalletActionStepType,
     type WalletActionType as WalletActionType,
+  };
+
+  export {
+    OAuth as OAuth,
+    type DeviceAuthorizationResponse as DeviceAuthorizationResponse,
+    type OAuthGrant as OAuthGrant,
+    type OAuthGrantListResponse as OAuthGrantListResponse,
+    type OAuthGrantRevokeResponse as OAuthGrantRevokeResponse,
   };
 
   export {
@@ -2838,6 +2959,7 @@ export declare namespace PrivyAPI {
     type EthereumYieldSweepType as EthereumYieldSweepType,
     type EthereumYieldWithdrawInput as EthereumYieldWithdrawInput,
     type EvmCaip2ChainID as EvmCaip2ChainID,
+    type VaultAsset as VaultAsset,
     type YieldAuthorizationHeaders as YieldAuthorizationHeaders,
   };
 
@@ -2864,6 +2986,7 @@ export declare namespace PrivyAPI {
     type KrakenEmbedEarnAprEstimate as KrakenEmbedEarnAprEstimate,
     type KrakenEmbedEarnAsset as KrakenEmbedEarnAsset,
     type KrakenEmbedEarnUserAllocation as KrakenEmbedEarnUserAllocation,
+    type KrakenEmbedFullName as KrakenEmbedFullName,
     type KrakenEmbedGetAssetListQueryParamsSchema as KrakenEmbedGetAssetListQueryParamsSchema,
     type KrakenEmbedGetCustomOrderHistoryQueryParams as KrakenEmbedGetCustomOrderHistoryQueryParams,
     type KrakenEmbedGetCustomOrderHistoryResponse as KrakenEmbedGetCustomOrderHistoryResponse,
@@ -2882,11 +3005,16 @@ export declare namespace PrivyAPI {
     type KrakenEmbedGetPortfolioDetailsQueryParamsSchema as KrakenEmbedGetPortfolioDetailsQueryParamsSchema,
     type KrakenEmbedGetPortfolioSummaryQueryParams as KrakenEmbedGetPortfolioSummaryQueryParams,
     type KrakenEmbedGetPortfolioSummaryResponse as KrakenEmbedGetPortfolioSummaryResponse,
+    type KrakenEmbedGetPortfolioSummaryResult as KrakenEmbedGetPortfolioSummaryResult,
     type KrakenEmbedGetPortfolioTransactionsQueryParamsSchema as KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
     type KrakenEmbedGetQuoteQueryParams as KrakenEmbedGetQuoteQueryParams,
     type KrakenEmbedListCustomOrdersQueryParams as KrakenEmbedListCustomOrdersQueryParams,
     type KrakenEmbedListCustomOrdersResponse as KrakenEmbedListCustomOrdersResponse,
     type KrakenEmbedListCustomOrdersResult as KrakenEmbedListCustomOrdersResult,
+    type KrakenEmbedPortfolioSummaryPayload as KrakenEmbedPortfolioSummaryPayload,
+    type KrakenEmbedPortfolioTransactionRefID as KrakenEmbedPortfolioTransactionRefID,
+    type KrakenEmbedPortfolioTransactionRefIDType as KrakenEmbedPortfolioTransactionRefIDType,
+    type KrakenEmbedResidence as KrakenEmbedResidence,
     type KrakenEmbedStartAddressMetadata as KrakenEmbedStartAddressMetadata,
     type KrakenEmbedStartAddressVerificationURLInput as KrakenEmbedStartAddressVerificationURLInput,
     type KrakenEmbedStartIdentityInfo as KrakenEmbedStartIdentityInfo,

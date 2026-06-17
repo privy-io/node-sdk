@@ -2,9 +2,13 @@
 
 Types:
 
+- <code><a href="./src/resources/wallets/wallets.ts">AccessListEntry</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AdditionalSignerInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AdditionalSignerItemInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Address</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AdvancedSwapPlatformFee</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AdvancedSwapRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AdvancedSwapResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AmountType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyDashboardResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyResponse</a></code>
@@ -17,6 +21,9 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustomTokenTransferSource</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">DeveloperFee</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EncryptedAuthorizationKey</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EncryptedBoundAuthenticateResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EncryptedWalletAuthenticateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
@@ -72,6 +79,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeEncryption</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Hex</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">IntentBinding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">NamedTokenTransferSource</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">OutputWithPreviousTransactionData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PolicyInput</a></code>
@@ -81,6 +89,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeySubmitInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PrivyFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Quantity</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawBoundAuthenticateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesEncoding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesHashFunction</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignBytesParams</a></code>
@@ -89,10 +98,13 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RawSignResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RawWalletAuthenticateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RecipientPublicKey</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RelayerFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SignatureOptions</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SignatureType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SigningAlgorithm</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SolanaRpcResponse</a></code>
@@ -168,6 +180,21 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">TransferReceivedTransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferSentTransactionDetail</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronContract</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronRawDataForSend</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronRawDataForSign</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSendTransactionRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSendTransactionRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSendTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSendTransactionRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSignTransactionRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSignTransactionRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSignTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronSignTransactionRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronTransferContract</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TronTriggerSmartContract</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TypedDataDomainInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TypedDataTypeFieldInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TypedDataTypesInputParams</a></code>
@@ -175,12 +202,17 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">UnsignedStandardEthereumTransaction</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">UnsignedTempoTransaction</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">UserOperationInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">UserSigningKeyBinding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAdditionalSigner</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAdditionalSignerItem</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAPIRegisterAuthorizationKeyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAPIRevokeAuthorizationKeyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAsset</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateBoundEncryptedRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateBoundRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateBoundUnencryptedRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateIntentsResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateWithJwtResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthorizationHeaders</a></code>
@@ -216,11 +248,18 @@ Methods:
 - <code title="post /v1/wallets/import/submit">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_submitImport</a>({ ...params }) -> Wallet</code>
 - <code title="post /v1/wallets/{wallet_id}/transfer">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_transfer</a>(walletID, { ...params }) -> TransferActionResponse</code>
 - <code title="patch /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_update</a>(walletID, { ...params }) -> Wallet</code>
+- <code title="post /v1/wallets/{wallet_id}/archive">client.wallets.<a href="./src/resources/wallets/wallets.ts">archive</a>(walletID) -> Wallet</code>
 - <code title="post /v1/wallets/authenticate">client.wallets.<a href="./src/resources/wallets/wallets.ts">authenticateWithJwt</a>({ ...params }) -> WalletAuthenticateWithJwtResponse</code>
 - <code title="post /v1/wallets/batch">client.wallets.<a href="./src/resources/wallets/wallets.ts">createBatch</a>({ ...params }) -> WalletBatchCreateResponse</code>
 - <code title="post /v1/wallets_with_recovery">client.wallets.<a href="./src/resources/wallets/wallets.ts">createWalletsWithRecovery</a>({ ...params }) -> WalletCreateWalletsWithRecoveryResponse</code>
-- <code title="get /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">get</a>(walletID) -> Wallet</code>
+- <code title="get /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">get</a>(walletID, { ...params }) -> Wallet</code>
 - <code title="post /v1/wallets/address">client.wallets.<a href="./src/resources/wallets/wallets.ts">getWalletByAddress</a>({ ...params }) -> Wallet</code>
+
+## Actions
+
+Methods:
+
+- <code title="get /v1/wallets/{wallet_id}/actions/{action_id}">client.wallets.actions.<a href="./src/resources/wallets/actions.ts">get</a>(actionID, { ...params }) -> WalletActionResponse</code>
 
 ## Earn
 
@@ -383,6 +422,8 @@ Types:
 - <code><a href="./src/resources/policies.ts">EthereumTransactionCondition</a></code>
 - <code><a href="./src/resources/policies.ts">EthereumTypedDataDomainCondition</a></code>
 - <code><a href="./src/resources/policies.ts">EthereumTypedDataMessageCondition</a></code>
+- <code><a href="./src/resources/policies.ts">MessageSigningCondition</a></code>
+- <code><a href="./src/resources/policies.ts">MessageSigningField</a></code>
 - <code><a href="./src/resources/policies.ts">Policy</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyAction</a></code>
 - <code><a href="./src/resources/policies.ts">PolicyAuthorizationHeaders</a></code>
@@ -404,6 +445,7 @@ Types:
 - <code><a href="./src/resources/policies.ts">TempoTransactionConditionField</a></code>
 - <code><a href="./src/resources/policies.ts">TronCalldataCondition</a></code>
 - <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">TypedDataInput</a></code>
 - <code><a href="./src/resources/policies.ts">UpdateConditionSetRequestBody</a></code>
 
 Methods:
@@ -448,6 +490,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/key-quorums.ts">AuthorizationKey</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateRequestBody</a></code>
@@ -467,8 +510,11 @@ Types:
 - <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
 - <code><a href="./src/resources/intents.ts">BaseIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorum</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationUserMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizeInput</a></code>
 - <code><a href="./src/resources/intents.ts">IntentCreationHeaders</a></code>
 - <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
@@ -481,6 +527,7 @@ Types:
 - <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">RuleDeleteIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentCreateRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentDeleteRequestBody</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentDeleteRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
@@ -509,6 +556,8 @@ Types:
 
 - <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AllowlistEntry</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AppAllowlistConfig</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AppCustomOAuthProvider</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AppResponse</a></code>
 - <code><a href="./src/resources/apps/apps.ts">Caip2</a></code>
 - <code><a href="./src/resources/apps/apps.ts">Currency</a></code>
@@ -557,6 +606,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/webhooks.ts">BlockInfo</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeCryptoDepositMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeCryptoTransferMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeFiatDepositMetadata</a></code>
@@ -596,6 +646,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserOperationCompletedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserReference</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserTransferredAccountWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserUnlinkedAccountWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserUpdatedAccountWebhookPayload</a></code>
@@ -620,6 +671,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletActionTransferFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionTransferRejectedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionTransferSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletArchivedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsAsset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsErc20Asset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsNativeTokenAsset</a></code>
@@ -629,6 +681,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldClaimConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">YieldClaimReward</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UnsafeUnwrapWebhookEvent</a></code>
@@ -672,6 +725,7 @@ Types:
 - <code><a href="./src/resources/aggregations.ts">AggregationMethod</a></code>
 - <code><a href="./src/resources/aggregations.ts">AggregationMetric</a></code>
 - <code><a href="./src/resources/aggregations.ts">AggregationWindow</a></code>
+- <code><a href="./src/resources/aggregations.ts">RollingAggregationWindow</a></code>
 
 # EmbeddedWallets
 
@@ -889,6 +943,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">SolanaAddress</a></code>
 - <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
 - <code><a href="./src/resources/shared.ts">TronAddress</a></code>
+- <code><a href="./src/resources/shared.ts">TronHexAddress</a></code>
 
 # Onramps
 
@@ -930,7 +985,6 @@ Types:
 - <code><a href="./src/resources/onramps.ts">LinkAuthIntentNoAccount</a></code>
 - <code><a href="./src/resources/onramps.ts">ListStripeConsumerWalletsResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">ListStripePaymentTokensResponse</a></code>
-- <code><a href="./src/resources/onramps.ts">OnrampSessionFees</a></code>
 - <code><a href="./src/resources/onramps.ts">OnrampSessionParams</a></code>
 - <code><a href="./src/resources/onramps.ts">OnrampSessionTransactionDetails</a></code>
 - <code><a href="./src/resources/onramps.ts">RefreshStripeQuoteResponse</a></code>
@@ -938,10 +992,10 @@ Types:
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerActive</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerExpired</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerNone</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeKYCTier</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeOnrampCheckoutResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeOnrampSessionStatus</a></code>
 - <code><a href="./src/resources/onramps.ts">StripePaymentToken</a></code>
-- <code><a href="./src/resources/onramps.ts">StripeQuote</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeTransactionDetails</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeVerification</a></code>
 
@@ -990,19 +1044,12 @@ Types:
 - <code><a href="./src/resources/cross-app.ts">CrossAppConnection</a></code>
 - <code><a href="./src/resources/cross-app.ts">CrossAppConnectionsResponse</a></code>
 
-# OAuth
-
-Types:
-
-- <code><a href="./src/resources/oauth.ts">DeviceAuthorizationResponse</a></code>
-- <code><a href="./src/resources/oauth.ts">OAuthGrant</a></code>
-- <code><a href="./src/resources/oauth.ts">OAuthGrantListResponse</a></code>
-- <code><a href="./src/resources/oauth.ts">OAuthGrantRevokeResponse</a></code>
-
 # WalletActions
 
 Types:
 
+- <code><a href="./src/resources/wallet-actions.ts">CustodianTransactionWalletActionStep</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">CustodianTransactionWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EvmUserOperationWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">EvmWalletActionStepStatus</a></code>
@@ -1024,15 +1071,27 @@ Types:
 - <code><a href="./src/resources/wallet-actions.ts">ExternalTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">ExternalTransactionWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">FailureReason</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">ListWalletActionsQuery</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">ListWalletActionsResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">SvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">SvmWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">SwapActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">TransferActionResponse</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">WalletActionInclude</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">WalletActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">WalletActionStatus</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">WalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">WalletActionStepType</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">WalletActionType</a></code>
+
+# OAuth
+
+Types:
+
+- <code><a href="./src/resources/oauth.ts">DeviceAuthorizationResponse</a></code>
+- <code><a href="./src/resources/oauth.ts">OAuthGrant</a></code>
+- <code><a href="./src/resources/oauth.ts">OAuthGrantListResponse</a></code>
+- <code><a href="./src/resources/oauth.ts">OAuthGrantRevokeResponse</a></code>
 
 # Yield
 
@@ -1056,6 +1115,7 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldSweepType</a></code>
 - <code><a href="./src/resources/yield.ts">EthereumYieldWithdrawInput</a></code>
 - <code><a href="./src/resources/yield.ts">EvmCaip2ChainID</a></code>
+- <code><a href="./src/resources/yield.ts">VaultAsset</a></code>
 - <code><a href="./src/resources/yield.ts">YieldAuthorizationHeaders</a></code>
 
 # KrakenEmbed
@@ -1083,6 +1143,7 @@ Types:
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnAprEstimate</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnAsset</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedEarnUserAllocation</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedFullName</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetAssetListQueryParamsSchema</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderHistoryQueryParams</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetCustomOrderHistoryResponse</a></code>
@@ -1101,11 +1162,16 @@ Types:
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioDetailsQueryParamsSchema</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryQueryParams</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryResponse</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioSummaryResult</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetPortfolioTransactionsQueryParamsSchema</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedGetQuoteQueryParams</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedListCustomOrdersQueryParams</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedListCustomOrdersResponse</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedListCustomOrdersResult</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedPortfolioSummaryPayload</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedPortfolioTransactionRefID</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedPortfolioTransactionRefIDType</a></code>
+- <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedResidence</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartAddressMetadata</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartAddressVerificationURLInput</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedStartIdentityInfo</a></code>

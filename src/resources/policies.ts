@@ -375,7 +375,17 @@ export interface AggregationCondition {
 /**
  * Operator to use for policy conditions.
  */
-export type ConditionOperator = 'eq' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'in_condition_set';
+export type ConditionOperator =
+  | 'eq'
+  | 'gt'
+  | 'gte'
+  | 'lt'
+  | 'lte'
+  | 'in'
+  | 'in_condition_set'
+  | 'contains'
+  | 'starts_with'
+  | 'ends_with';
 
 /**
  * A condition set for grouping related condition values.
@@ -400,7 +410,7 @@ export interface ConditionSet {
   /**
    * A unique identifier for a key quorum.
    */
-  owner_id: SharedAPI.KeyQuorumID;
+  owner_id: SharedAPI.KeyQuorumID | null;
 }
 
 /**
@@ -630,7 +640,11 @@ export interface EthereumTypedDataMessageCondition {
    */
   operator: ConditionOperator;
 
-  typed_data: EthereumTypedDataMessageCondition.TypedData;
+  /**
+   * The typed data structure containing EIP-712 types and the primary type for typed
+   * data message policy conditions.
+   */
+  typed_data: TypedDataInput;
 
   /**
    * Value to compare against in a policy condition. Can be a single string or an
@@ -639,16 +653,33 @@ export interface EthereumTypedDataMessageCondition {
   value: ConditionValue;
 }
 
-export namespace EthereumTypedDataMessageCondition {
-  export interface TypedData {
-    primary_type: string;
+/**
+ * Condition on the message being signed (e.g. in personal_sign).
+ */
+export interface MessageSigningCondition {
+  /**
+   * Supported fields for message signing conditions.
+   */
+  field: MessageSigningField;
 
-    /**
-     * The type definitions for EIP-712 typed data signing.
-     */
-    types: WalletsAPI.TypedDataTypesInputParams;
-  }
+  field_source: 'message';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
 }
+
+/**
+ * Supported fields for message signing conditions.
+ */
+export type MessageSigningField = 'content' | 'byte_length';
 
 /**
  * A policy for controlling wallet operations.
@@ -676,9 +707,9 @@ export interface Policy {
   name: string;
 
   /**
-   * The key quorum ID of the owner of the policy.
+   * A unique identifier for a key quorum.
    */
-  owner_id: string | null;
+  owner_id: SharedAPI.KeyQuorumID | null;
 
   rules: Array<PolicyRuleResponse>;
 
@@ -734,7 +765,8 @@ export type PolicyCondition =
   | SuiTransactionCommandCondition
   | SuiTransferObjectsCommandCondition
   | ActionRequestBodyCondition
-  | AggregationCondition;
+  | AggregationCondition
+  | MessageSigningCondition;
 
 /**
  * Method the rule applies to.
@@ -749,9 +781,11 @@ export type PolicyMethod =
   | 'wallet_sendCalls'
   | 'signTransaction'
   | 'signAndSendTransaction'
+  | 'signMessage'
   | 'exportPrivateKey'
   | 'exportSeedPhrase'
   | 'signTransactionBytes'
+  | 'raw_sign'
   | 'earn_deposit'
   | 'earn_withdraw'
   | 'transfer'
@@ -1071,6 +1105,19 @@ export interface TronTransactionCondition {
 }
 
 /**
+ * The typed data structure containing EIP-712 types and the primary type for typed
+ * data message policy conditions.
+ */
+export interface TypedDataInput {
+  primary_type: string;
+
+  /**
+   * The type definitions for EIP-712 typed data signing.
+   */
+  types: WalletsAPI.TypedDataTypesInputParams;
+}
+
+/**
  * Request body for updating a condition set. At least one field must be provided.
  * `owner` and `owner_id` are mutually exclusive.
  */
@@ -1322,6 +1369,8 @@ export declare namespace Policies {
     type EthereumTransactionCondition as EthereumTransactionCondition,
     type EthereumTypedDataDomainCondition as EthereumTypedDataDomainCondition,
     type EthereumTypedDataMessageCondition as EthereumTypedDataMessageCondition,
+    type MessageSigningCondition as MessageSigningCondition,
+    type MessageSigningField as MessageSigningField,
     type Policy as Policy,
     type PolicyAction as PolicyAction,
     type PolicyAuthorizationHeaders as PolicyAuthorizationHeaders,
@@ -1343,6 +1392,7 @@ export declare namespace Policies {
     type TempoTransactionConditionField as TempoTransactionConditionField,
     type TronCalldataCondition as TronCalldataCondition,
     type TronTransactionCondition as TronTransactionCondition,
+    type TypedDataInput as TypedDataInput,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,

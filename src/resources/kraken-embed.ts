@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as KrakenEmbedAPI from './kraken-embed';
 
 export class KrakenEmbed extends APIResource {}
 
@@ -26,18 +25,11 @@ export interface KrakenEmbedCancelCustomOrderResponse {
   /**
    * Result payload for cancel custom order response.
    */
-  result: KrakenEmbedCancelCustomOrderResponse.Result;
+  result: KrakenEmbedCancelCustomOrderResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedCancelCustomOrderResponse {
-  /**
-   * Result payload for cancel custom order response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedCancelCustomOrderResult {}
 }
 
 /**
@@ -77,18 +69,11 @@ export interface KrakenEmbedCreateCustomOrderResponse {
   /**
    * Result payload for create custom order response.
    */
-  result: KrakenEmbedCreateCustomOrderResponse.Result;
+  result: KrakenEmbedCreateCustomOrderResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedCreateCustomOrderResponse {
-  /**
-   * Result payload for create custom order response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedCreateCustomOrderResult {}
 }
 
 /**
@@ -192,18 +177,11 @@ export interface KrakenEmbedCustomOrderOccurrence {
   /**
    * Executed action details for a custom order occurrence.
    */
-  executed_action?: KrakenEmbedCustomOrderOccurrence.ExecutedAction;
+  executed_action?: KrakenEmbedCustomOrderOccurrenceExecutedAction | null;
 
   failure_reason?: string;
 
   skip_reason?: string;
-}
-
-export namespace KrakenEmbedCustomOrderOccurrence {
-  /**
-   * Executed action details for a custom order occurrence.
-   */
-  export interface ExecutedAction extends KrakenEmbedAPI.KrakenEmbedCustomOrderOccurrenceExecutedAction {}
 }
 
 /**
@@ -277,24 +255,12 @@ export interface KrakenEmbedEarnAsset {
   /**
    * Low and high estimate of the yield of an earn asset.
    */
-  apr_estimate: KrakenEmbedEarnAsset.AprEstimate;
+  apr_estimate: KrakenEmbedEarnAprEstimate | null;
 
   /**
    * User allocation for an earn asset.
    */
-  user_allocation?: KrakenEmbedEarnAsset.UserAllocation;
-}
-
-export namespace KrakenEmbedEarnAsset {
-  /**
-   * Low and high estimate of the yield of an earn asset.
-   */
-  export interface AprEstimate extends KrakenEmbedAPI.KrakenEmbedEarnAprEstimate {}
-
-  /**
-   * User allocation for an earn asset.
-   */
-  export interface UserAllocation extends KrakenEmbedAPI.KrakenEmbedEarnUserAllocation {}
+  user_allocation?: KrakenEmbedEarnUserAllocation | null;
 }
 
 /**
@@ -304,26 +270,25 @@ export interface KrakenEmbedEarnUserAllocation {
   /**
    * An earn amount with native and converted values.
    */
-  total_allocated: KrakenEmbedEarnUserAllocation.TotalAllocated;
+  total_allocated: KrakenEmbedEarnAmount | null;
 
   /**
    * An earn amount with native and converted values.
    */
-  total_rewarded: KrakenEmbedEarnUserAllocation.TotalRewarded;
+  total_rewarded: KrakenEmbedEarnAmount | null;
 
   upcoming_reward_date?: string | null;
 }
 
-export namespace KrakenEmbedEarnUserAllocation {
-  /**
-   * An earn amount with native and converted values.
-   */
-  export interface TotalAllocated extends KrakenEmbedAPI.KrakenEmbedEarnAmount {}
+/**
+ * User's full name including first, optional middle, and last name.
+ */
+export interface KrakenEmbedFullName {
+  first_name: string;
 
-  /**
-   * An earn amount with native and converted values.
-   */
-  export interface TotalRewarded extends KrakenEmbedAPI.KrakenEmbedEarnAmount {}
+  last_name: string;
+
+  middle_name?: string | null;
 }
 
 /**
@@ -391,18 +356,11 @@ export interface KrakenEmbedGetCustomOrderHistoryResponse {
   /**
    * Result payload for custom order history response.
    */
-  result: KrakenEmbedGetCustomOrderHistoryResponse.Result;
+  result: KrakenEmbedGetCustomOrderHistoryResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedGetCustomOrderHistoryResponse {
-  /**
-   * Result payload for custom order history response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedGetCustomOrderHistoryResult {}
 }
 
 /**
@@ -428,18 +386,11 @@ export interface KrakenEmbedGetCustomOrderResponse {
   /**
    * Result payload for get custom order response.
    */
-  result: KrakenEmbedGetCustomOrderResponse.Result;
+  result: KrakenEmbedGetCustomOrderResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedGetCustomOrderResponse {
-  /**
-   * Result payload for get custom order response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedGetCustomOrderResult {}
 }
 
 /**
@@ -459,18 +410,11 @@ export interface KrakenEmbedGetEarnAssetsKrakenResponse {
   /**
    * Result payload for earn assets response.
    */
-  result: KrakenEmbedGetEarnAssetsKrakenResponse.Result;
+  result: KrakenEmbedGetEarnAssetsResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedGetEarnAssetsKrakenResponse {
-  /**
-   * Result payload for earn assets response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedGetEarnAssetsResult {}
 }
 
 /**
@@ -508,18 +452,11 @@ export interface KrakenEmbedGetEarnSummaryKrakenResponse {
   /**
    * Result payload for earn summary response.
    */
-  result: KrakenEmbedGetEarnSummaryKrakenResponse.Result;
+  result: KrakenEmbedGetEarnSummaryResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedGetEarnSummaryKrakenResponse {
-  /**
-   * Result payload for earn summary response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedGetEarnSummaryResult {}
 }
 
 /**
@@ -584,43 +521,27 @@ export interface KrakenEmbedGetPortfolioSummaryQueryParams {
  * balance, and unrealized P&L.
  */
 export interface KrakenEmbedGetPortfolioSummaryResponse {
-  data: KrakenEmbedGetPortfolioSummaryResponse.Data;
+  /**
+   * Kraken API response envelope for portfolio summary, containing optional errors
+   * and the result payload.
+   */
+  data: KrakenEmbedGetPortfolioSummaryResult;
 }
 
-export namespace KrakenEmbedGetPortfolioSummaryResponse {
-  export interface Data {
-    result: Data.Result | null;
+/**
+ * Kraken API response envelope for portfolio summary, containing optional errors
+ * and the result payload.
+ */
+export interface KrakenEmbedGetPortfolioSummaryResult {
+  /**
+   * Portfolio summary payload containing balances, value, and profit/loss
+   * information.
+   */
+  result: KrakenEmbedPortfolioSummaryPayload | null;
 
-    error?: Array<string>;
+  error?: Array<string>;
 
-    errors?: Array<string>;
-  }
-
-  export namespace Data {
-    export interface Result {
-      available_balance: string;
-
-      currency: string;
-
-      open_orders: string;
-
-      portfolio_value: string;
-
-      timestamp: string;
-
-      withheld_value: string;
-
-      cost_basis?: string | null;
-
-      /**
-       * Current day profit and loss for a portfolio, calculated from the most recent
-       * available balance.
-       */
-      current_day_pnl?: KrakenEmbedAPI.KrakenEmbedCurrentDayPnl | null;
-
-      lots_upnl?: string | null;
-    }
-  }
+  errors?: Array<string>;
 }
 
 /**
@@ -639,7 +560,7 @@ export interface KrakenEmbedGetPortfolioTransactionsQueryParamsSchema {
 
   quote?: string;
 
-  ref_ids?: Array<KrakenEmbedGetPortfolioTransactionsQueryParamsSchema.RefID>;
+  ref_ids?: Array<KrakenEmbedPortfolioTransactionRefID>;
 
   sorting?: 'descending' | 'ascending';
 
@@ -648,14 +569,6 @@ export interface KrakenEmbedGetPortfolioTransactionsQueryParamsSchema {
   types?: Array<'simple_order' | 'simple_order_failed' | 'earn_reward'>;
 
   until_time?: string;
-}
-
-export namespace KrakenEmbedGetPortfolioTransactionsQueryParamsSchema {
-  export interface RefID {
-    ref_id: string;
-
-    type: 'simple_order_quote' | 'simple_order_quote_failed';
-  }
 }
 
 /**
@@ -686,18 +599,11 @@ export interface KrakenEmbedListCustomOrdersResponse {
   /**
    * Result payload for list custom orders response.
    */
-  result: KrakenEmbedListCustomOrdersResponse.Result;
+  result: KrakenEmbedListCustomOrdersResult | null;
 
   error?: Array<unknown>;
 
   errors?: Array<unknown>;
-}
-
-export namespace KrakenEmbedListCustomOrdersResponse {
-  /**
-   * Result payload for list custom orders response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedListCustomOrdersResult {}
 }
 
 /**
@@ -708,10 +614,340 @@ export interface KrakenEmbedListCustomOrdersResult {
 }
 
 /**
+ * Portfolio summary payload containing balances, value, and profit/loss
+ * information.
+ */
+export interface KrakenEmbedPortfolioSummaryPayload {
+  available_balance: string;
+
+  currency: string;
+
+  open_orders: string;
+
+  portfolio_value: string;
+
+  timestamp: string;
+
+  withheld_value: string;
+
+  cost_basis?: string | null;
+
+  /**
+   * Current day profit and loss for a portfolio, calculated from the most recent
+   * available balance.
+   */
+  current_day_pnl?: KrakenEmbedCurrentDayPnl | null;
+
+  lots_upnl?: string | null;
+}
+
+/**
+ * A reference ID filter for portfolio transaction queries, identifying a
+ * transaction by type and reference identifier.
+ */
+export interface KrakenEmbedPortfolioTransactionRefID {
+  ref_id: string;
+
+  /**
+   * The type of reference ID used to filter portfolio transactions by quote or
+   * failed quote references.
+   */
+  type: KrakenEmbedPortfolioTransactionRefIDType;
+}
+
+/**
+ * The type of reference ID used to filter portfolio transactions by quote or
+ * failed quote references.
+ */
+export type KrakenEmbedPortfolioTransactionRefIDType = 'simple_order_quote' | 'simple_order_quote_failed';
+
+/**
+ * User's residential address including street, city, postal code, and country.
+ */
+export interface KrakenEmbedResidence {
+  city: string;
+
+  country:
+    | 'AD'
+    | 'AE'
+    | 'AF'
+    | 'AG'
+    | 'AI'
+    | 'AL'
+    | 'AM'
+    | 'AO'
+    | 'AQ'
+    | 'AR'
+    | 'AS'
+    | 'AT'
+    | 'AU'
+    | 'AW'
+    | 'AX'
+    | 'AZ'
+    | 'BA'
+    | 'BB'
+    | 'BD'
+    | 'BE'
+    | 'BF'
+    | 'BG'
+    | 'BH'
+    | 'BI'
+    | 'BJ'
+    | 'BL'
+    | 'BM'
+    | 'BN'
+    | 'BO'
+    | 'BQ'
+    | 'BR'
+    | 'BS'
+    | 'BT'
+    | 'BV'
+    | 'BW'
+    | 'BY'
+    | 'BZ'
+    | 'CA'
+    | 'CC'
+    | 'CD'
+    | 'CF'
+    | 'CG'
+    | 'CH'
+    | 'CI'
+    | 'CK'
+    | 'CL'
+    | 'CM'
+    | 'CN'
+    | 'CO'
+    | 'CR'
+    | 'CU'
+    | 'CV'
+    | 'CW'
+    | 'CX'
+    | 'CY'
+    | 'CZ'
+    | 'DE'
+    | 'DJ'
+    | 'DK'
+    | 'DM'
+    | 'DO'
+    | 'DZ'
+    | 'EC'
+    | 'EE'
+    | 'EG'
+    | 'EH'
+    | 'ER'
+    | 'ES'
+    | 'ET'
+    | 'FI'
+    | 'FJ'
+    | 'FK'
+    | 'FM'
+    | 'FO'
+    | 'FR'
+    | 'GA'
+    | 'GB'
+    | 'GD'
+    | 'GE'
+    | 'GF'
+    | 'GG'
+    | 'GH'
+    | 'GI'
+    | 'GL'
+    | 'GM'
+    | 'GN'
+    | 'GP'
+    | 'GQ'
+    | 'GR'
+    | 'GS'
+    | 'GT'
+    | 'GU'
+    | 'GW'
+    | 'GY'
+    | 'HK'
+    | 'HM'
+    | 'HN'
+    | 'HR'
+    | 'HT'
+    | 'HU'
+    | 'ID'
+    | 'IE'
+    | 'IL'
+    | 'IM'
+    | 'IN'
+    | 'IO'
+    | 'IQ'
+    | 'IR'
+    | 'IS'
+    | 'IT'
+    | 'JE'
+    | 'JM'
+    | 'JO'
+    | 'JP'
+    | 'KE'
+    | 'KG'
+    | 'KH'
+    | 'KI'
+    | 'KM'
+    | 'KN'
+    | 'KP'
+    | 'KR'
+    | 'KW'
+    | 'KY'
+    | 'KZ'
+    | 'LA'
+    | 'LB'
+    | 'LC'
+    | 'LI'
+    | 'LK'
+    | 'LR'
+    | 'LS'
+    | 'LT'
+    | 'LU'
+    | 'LV'
+    | 'LY'
+    | 'MA'
+    | 'MC'
+    | 'MD'
+    | 'ME'
+    | 'MF'
+    | 'MG'
+    | 'MH'
+    | 'MK'
+    | 'ML'
+    | 'MM'
+    | 'MN'
+    | 'MO'
+    | 'MP'
+    | 'MQ'
+    | 'MR'
+    | 'MS'
+    | 'MT'
+    | 'MU'
+    | 'MV'
+    | 'MW'
+    | 'MX'
+    | 'MY'
+    | 'MZ'
+    | 'NA'
+    | 'NC'
+    | 'NE'
+    | 'NF'
+    | 'NG'
+    | 'NI'
+    | 'NL'
+    | 'NO'
+    | 'NP'
+    | 'NR'
+    | 'NU'
+    | 'NZ'
+    | 'OM'
+    | 'PA'
+    | 'PE'
+    | 'PF'
+    | 'PG'
+    | 'PH'
+    | 'PK'
+    | 'PL'
+    | 'PM'
+    | 'PN'
+    | 'PR'
+    | 'PS'
+    | 'PT'
+    | 'PW'
+    | 'PY'
+    | 'QA'
+    | 'RE'
+    | 'RO'
+    | 'RS'
+    | 'RU'
+    | 'RW'
+    | 'SA'
+    | 'SB'
+    | 'SC'
+    | 'SD'
+    | 'SE'
+    | 'SG'
+    | 'SH'
+    | 'SI'
+    | 'SJ'
+    | 'SK'
+    | 'SL'
+    | 'SM'
+    | 'SN'
+    | 'SO'
+    | 'SR'
+    | 'SS'
+    | 'ST'
+    | 'SV'
+    | 'SX'
+    | 'SY'
+    | 'SZ'
+    | 'TC'
+    | 'TD'
+    | 'TF'
+    | 'TG'
+    | 'TH'
+    | 'TJ'
+    | 'TK'
+    | 'TL'
+    | 'TM'
+    | 'TN'
+    | 'TO'
+    | 'TR'
+    | 'TT'
+    | 'TV'
+    | 'TW'
+    | 'TZ'
+    | 'UA'
+    | 'UG'
+    | 'UM'
+    | 'US'
+    | 'UY'
+    | 'UZ'
+    | 'VA'
+    | 'VC'
+    | 'VE'
+    | 'VG'
+    | 'VI'
+    | 'VN'
+    | 'VU'
+    | 'WF'
+    | 'WS'
+    | 'YE'
+    | 'YT'
+    | 'ZA'
+    | 'ZM'
+    | 'ZW'
+    | 'AC'
+    | 'AN'
+    | 'AP'
+    | 'CP'
+    | 'DG'
+    | 'EA'
+    | 'EU'
+    | 'IC'
+    | 'JX'
+    | 'TA'
+    | 'QO'
+    | 'XK'
+    | '0C';
+
+  line1: string;
+
+  postal_code: string;
+
+  line2?: string | null;
+
+  province?: string | null;
+}
+
+/**
  * Optional best-effort metadata hints for proof of address verification.
  */
 export interface KrakenEmbedStartAddressMetadata {
-  address?: KrakenEmbedStartAddressMetadata.Address | null;
+  /**
+   * User's residential address including street, city, postal code, and country.
+   */
+  address?: KrakenEmbedResidence | null;
 
   document_number?: string | null;
 
@@ -738,284 +974,6 @@ export interface KrakenEmbedStartAddressMetadata {
   expiration_date?: string | null;
 }
 
-export namespace KrakenEmbedStartAddressMetadata {
-  export interface Address {
-    city: string;
-
-    country:
-      | 'AD'
-      | 'AE'
-      | 'AF'
-      | 'AG'
-      | 'AI'
-      | 'AL'
-      | 'AM'
-      | 'AO'
-      | 'AQ'
-      | 'AR'
-      | 'AS'
-      | 'AT'
-      | 'AU'
-      | 'AW'
-      | 'AX'
-      | 'AZ'
-      | 'BA'
-      | 'BB'
-      | 'BD'
-      | 'BE'
-      | 'BF'
-      | 'BG'
-      | 'BH'
-      | 'BI'
-      | 'BJ'
-      | 'BL'
-      | 'BM'
-      | 'BN'
-      | 'BO'
-      | 'BQ'
-      | 'BR'
-      | 'BS'
-      | 'BT'
-      | 'BV'
-      | 'BW'
-      | 'BY'
-      | 'BZ'
-      | 'CA'
-      | 'CC'
-      | 'CD'
-      | 'CF'
-      | 'CG'
-      | 'CH'
-      | 'CI'
-      | 'CK'
-      | 'CL'
-      | 'CM'
-      | 'CN'
-      | 'CO'
-      | 'CR'
-      | 'CU'
-      | 'CV'
-      | 'CW'
-      | 'CX'
-      | 'CY'
-      | 'CZ'
-      | 'DE'
-      | 'DJ'
-      | 'DK'
-      | 'DM'
-      | 'DO'
-      | 'DZ'
-      | 'EC'
-      | 'EE'
-      | 'EG'
-      | 'EH'
-      | 'ER'
-      | 'ES'
-      | 'ET'
-      | 'FI'
-      | 'FJ'
-      | 'FK'
-      | 'FM'
-      | 'FO'
-      | 'FR'
-      | 'GA'
-      | 'GB'
-      | 'GD'
-      | 'GE'
-      | 'GF'
-      | 'GG'
-      | 'GH'
-      | 'GI'
-      | 'GL'
-      | 'GM'
-      | 'GN'
-      | 'GP'
-      | 'GQ'
-      | 'GR'
-      | 'GS'
-      | 'GT'
-      | 'GU'
-      | 'GW'
-      | 'GY'
-      | 'HK'
-      | 'HM'
-      | 'HN'
-      | 'HR'
-      | 'HT'
-      | 'HU'
-      | 'ID'
-      | 'IE'
-      | 'IL'
-      | 'IM'
-      | 'IN'
-      | 'IO'
-      | 'IQ'
-      | 'IR'
-      | 'IS'
-      | 'IT'
-      | 'JE'
-      | 'JM'
-      | 'JO'
-      | 'JP'
-      | 'KE'
-      | 'KG'
-      | 'KH'
-      | 'KI'
-      | 'KM'
-      | 'KN'
-      | 'KP'
-      | 'KR'
-      | 'KW'
-      | 'KY'
-      | 'KZ'
-      | 'LA'
-      | 'LB'
-      | 'LC'
-      | 'LI'
-      | 'LK'
-      | 'LR'
-      | 'LS'
-      | 'LT'
-      | 'LU'
-      | 'LV'
-      | 'LY'
-      | 'MA'
-      | 'MC'
-      | 'MD'
-      | 'ME'
-      | 'MF'
-      | 'MG'
-      | 'MH'
-      | 'MK'
-      | 'ML'
-      | 'MM'
-      | 'MN'
-      | 'MO'
-      | 'MP'
-      | 'MQ'
-      | 'MR'
-      | 'MS'
-      | 'MT'
-      | 'MU'
-      | 'MV'
-      | 'MW'
-      | 'MX'
-      | 'MY'
-      | 'MZ'
-      | 'NA'
-      | 'NC'
-      | 'NE'
-      | 'NF'
-      | 'NG'
-      | 'NI'
-      | 'NL'
-      | 'NO'
-      | 'NP'
-      | 'NR'
-      | 'NU'
-      | 'NZ'
-      | 'OM'
-      | 'PA'
-      | 'PE'
-      | 'PF'
-      | 'PG'
-      | 'PH'
-      | 'PK'
-      | 'PL'
-      | 'PM'
-      | 'PN'
-      | 'PR'
-      | 'PS'
-      | 'PT'
-      | 'PW'
-      | 'PY'
-      | 'QA'
-      | 'RE'
-      | 'RO'
-      | 'RS'
-      | 'RU'
-      | 'RW'
-      | 'SA'
-      | 'SB'
-      | 'SC'
-      | 'SD'
-      | 'SE'
-      | 'SG'
-      | 'SH'
-      | 'SI'
-      | 'SJ'
-      | 'SK'
-      | 'SL'
-      | 'SM'
-      | 'SN'
-      | 'SO'
-      | 'SR'
-      | 'SS'
-      | 'ST'
-      | 'SV'
-      | 'SX'
-      | 'SY'
-      | 'SZ'
-      | 'TC'
-      | 'TD'
-      | 'TF'
-      | 'TG'
-      | 'TH'
-      | 'TJ'
-      | 'TK'
-      | 'TL'
-      | 'TM'
-      | 'TN'
-      | 'TO'
-      | 'TR'
-      | 'TT'
-      | 'TV'
-      | 'TW'
-      | 'TZ'
-      | 'UA'
-      | 'UG'
-      | 'UM'
-      | 'US'
-      | 'UY'
-      | 'UZ'
-      | 'VA'
-      | 'VC'
-      | 'VE'
-      | 'VG'
-      | 'VI'
-      | 'VN'
-      | 'VU'
-      | 'WF'
-      | 'WS'
-      | 'YE'
-      | 'YT'
-      | 'ZA'
-      | 'ZM'
-      | 'ZW'
-      | 'AC'
-      | 'AN'
-      | 'AP'
-      | 'CP'
-      | 'DG'
-      | 'EA'
-      | 'EU'
-      | 'IC'
-      | 'JX'
-      | 'TA'
-      | 'QO'
-      | 'XK'
-      | '0C';
-
-    line1: string;
-
-    postal_code: string;
-
-    line2?: string | null;
-
-    province?: string | null;
-  }
-}
-
 /**
  * Input payload for starting proof of address verification via URL.
  */
@@ -1027,24 +985,12 @@ export interface KrakenEmbedStartAddressVerificationURLInput {
   /**
    * Debug options for start verification. Only works in non-production environments.
    */
-  debug?: KrakenEmbedStartAddressVerificationURLInput.Debug;
+  debug?: KrakenEmbedStartVerificationDebug | null;
 
   /**
    * Optional best-effort metadata hints for proof of address verification.
    */
-  metadata?: KrakenEmbedStartAddressVerificationURLInput.Metadata;
-}
-
-export namespace KrakenEmbedStartAddressVerificationURLInput {
-  /**
-   * Debug options for start verification. Only works in non-production environments.
-   */
-  export interface Debug extends KrakenEmbedAPI.KrakenEmbedStartVerificationDebug {}
-
-  /**
-   * Optional best-effort metadata hints for proof of address verification.
-   */
-  export interface Metadata extends KrakenEmbedAPI.KrakenEmbedStartAddressMetadata {}
+  metadata?: KrakenEmbedStartAddressMetadata | null;
 }
 
 /**
@@ -1054,17 +1000,10 @@ export namespace KrakenEmbedStartAddressVerificationURLInput {
 export interface KrakenEmbedStartIdentityInfo {
   date_of_birth?: string | null;
 
-  full_name?: KrakenEmbedStartIdentityInfo.FullName | null;
-}
-
-export namespace KrakenEmbedStartIdentityInfo {
-  export interface FullName {
-    first_name: string;
-
-    last_name: string;
-
-    middle_name?: string | null;
-  }
+  /**
+   * User's full name including first, optional middle, and last name.
+   */
+  full_name?: KrakenEmbedFullName | null;
 }
 
 /**
@@ -1087,7 +1026,7 @@ export interface KrakenEmbedStartIdentityMetadata {
    * Identity information hints including full name and date of birth for proof of
    * identity verification.
    */
-  identity?: KrakenEmbedStartIdentityMetadata.Identity;
+  identity?: KrakenEmbedStartIdentityInfo | null;
 
   issuing_country?:
     | 'AD'
@@ -1620,14 +1559,6 @@ export interface KrakenEmbedStartIdentityMetadata {
     | null;
 }
 
-export namespace KrakenEmbedStartIdentityMetadata {
-  /**
-   * Identity information hints including full name and date of birth for proof of
-   * identity verification.
-   */
-  export interface Identity extends KrakenEmbedAPI.KrakenEmbedStartIdentityInfo {}
-}
-
 /**
  * Input payload for starting proof of identity verification via URLs.
  */
@@ -1641,24 +1572,12 @@ export interface KrakenEmbedStartIdentityVerificationURLInput {
   /**
    * Debug options for start verification. Only works in non-production environments.
    */
-  debug?: KrakenEmbedStartIdentityVerificationURLInput.Debug;
+  debug?: KrakenEmbedStartVerificationDebug | null;
 
   /**
    * Optional best-effort metadata hints for proof of identity verification.
    */
-  metadata?: KrakenEmbedStartIdentityVerificationURLInput.Metadata;
-}
-
-export namespace KrakenEmbedStartIdentityVerificationURLInput {
-  /**
-   * Debug options for start verification. Only works in non-production environments.
-   */
-  export interface Debug extends KrakenEmbedAPI.KrakenEmbedStartVerificationDebug {}
-
-  /**
-   * Optional best-effort metadata hints for proof of identity verification.
-   */
-  export interface Metadata extends KrakenEmbedAPI.KrakenEmbedStartIdentityMetadata {}
+  metadata?: KrakenEmbedStartIdentityMetadata | null;
 }
 
 /**
@@ -1676,14 +1595,7 @@ export interface KrakenEmbedStartLivenessVerificationURLInput {
   /**
    * Debug options for start verification. Only works in non-production environments.
    */
-  debug?: KrakenEmbedStartLivenessVerificationURLInput.Debug;
-}
-
-export namespace KrakenEmbedStartLivenessVerificationURLInput {
-  /**
-   * Debug options for start verification. Only works in non-production environments.
-   */
-  export interface Debug extends KrakenEmbedAPI.KrakenEmbedStartVerificationDebug {}
+  debug?: KrakenEmbedStartVerificationDebug | null;
 }
 
 /**
@@ -1708,14 +1620,7 @@ export interface KrakenEmbedStartVerificationURLResponse {
   /**
    * Result payload for start verification URL response.
    */
-  result: KrakenEmbedStartVerificationURLResponse.Result;
-}
-
-export namespace KrakenEmbedStartVerificationURLResponse {
-  /**
-   * Result payload for start verification URL response.
-   */
-  export interface Result extends KrakenEmbedAPI.KrakenEmbedStartVerificationURLResult {}
+  result: KrakenEmbedStartVerificationURLResult | null;
 }
 
 /**
@@ -1769,14 +1674,7 @@ export interface KrakenEmbedUpcomingReward {
   /**
    * An earn amount with native and converted values.
    */
-  estimated_pending_amount: KrakenEmbedUpcomingReward.EstimatedPendingAmount;
-}
-
-export namespace KrakenEmbedUpcomingReward {
-  /**
-   * An earn amount with native and converted values.
-   */
-  export interface EstimatedPendingAmount extends KrakenEmbedAPI.KrakenEmbedEarnAmount {}
+  estimated_pending_amount: KrakenEmbedEarnAmount | null;
 }
 
 export declare namespace KrakenEmbed {
@@ -1802,6 +1700,7 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedEarnAprEstimate as KrakenEmbedEarnAprEstimate,
     type KrakenEmbedEarnAsset as KrakenEmbedEarnAsset,
     type KrakenEmbedEarnUserAllocation as KrakenEmbedEarnUserAllocation,
+    type KrakenEmbedFullName as KrakenEmbedFullName,
     type KrakenEmbedGetAssetListQueryParamsSchema as KrakenEmbedGetAssetListQueryParamsSchema,
     type KrakenEmbedGetCustomOrderHistoryQueryParams as KrakenEmbedGetCustomOrderHistoryQueryParams,
     type KrakenEmbedGetCustomOrderHistoryResponse as KrakenEmbedGetCustomOrderHistoryResponse,
@@ -1820,11 +1719,16 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedGetPortfolioDetailsQueryParamsSchema as KrakenEmbedGetPortfolioDetailsQueryParamsSchema,
     type KrakenEmbedGetPortfolioSummaryQueryParams as KrakenEmbedGetPortfolioSummaryQueryParams,
     type KrakenEmbedGetPortfolioSummaryResponse as KrakenEmbedGetPortfolioSummaryResponse,
+    type KrakenEmbedGetPortfolioSummaryResult as KrakenEmbedGetPortfolioSummaryResult,
     type KrakenEmbedGetPortfolioTransactionsQueryParamsSchema as KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
     type KrakenEmbedGetQuoteQueryParams as KrakenEmbedGetQuoteQueryParams,
     type KrakenEmbedListCustomOrdersQueryParams as KrakenEmbedListCustomOrdersQueryParams,
     type KrakenEmbedListCustomOrdersResponse as KrakenEmbedListCustomOrdersResponse,
     type KrakenEmbedListCustomOrdersResult as KrakenEmbedListCustomOrdersResult,
+    type KrakenEmbedPortfolioSummaryPayload as KrakenEmbedPortfolioSummaryPayload,
+    type KrakenEmbedPortfolioTransactionRefID as KrakenEmbedPortfolioTransactionRefID,
+    type KrakenEmbedPortfolioTransactionRefIDType as KrakenEmbedPortfolioTransactionRefIDType,
+    type KrakenEmbedResidence as KrakenEmbedResidence,
     type KrakenEmbedStartAddressMetadata as KrakenEmbedStartAddressMetadata,
     type KrakenEmbedStartAddressVerificationURLInput as KrakenEmbedStartAddressVerificationURLInput,
     type KrakenEmbedStartIdentityInfo as KrakenEmbedStartIdentityInfo,

@@ -942,6 +942,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">P256PublicKey</a></code>
 - <code><a href="./src/resources/shared.ts">SolanaAddress</a></code>
 - <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
+- <code><a href="./src/resources/shared.ts">TokenIdentifier</a></code>
 - <code><a href="./src/resources/shared.ts">TronAddress</a></code>
 - <code><a href="./src/resources/shared.ts">TronHexAddress</a></code>
 
@@ -958,7 +959,6 @@ Types:
 - <code><a href="./src/resources/onramps.ts">CreateOrUpdateFiatCustomerRequestInput</a></code>
 - <code><a href="./src/resources/onramps.ts">CreateStripeOnrampSessionInput</a></code>
 - <code><a href="./src/resources/onramps.ts">CreateStripeOnrampSessionResponse</a></code>
-- <code><a href="./src/resources/onramps.ts">CryptoCurrencyCode</a></code>
 - <code><a href="./src/resources/onramps.ts">ExchangeStripeTokensInput</a></code>
 - <code><a href="./src/resources/onramps.ts">ExchangeStripeTokensResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">FiatAmount</a></code>

@@ -405,7 +405,6 @@ import {
   CreateOrUpdateFiatCustomerRequestInput,
   CreateStripeOnrampSessionInput,
   CreateStripeOnrampSessionResponse,
-  CryptoCurrencyCode,
   ExchangeStripeTokensInput,
   ExchangeStripeTokensResponse,
   FiatAmount,
@@ -526,6 +525,7 @@ import {
   Shared,
   SolanaAddress,
   SuccessResponse,
+  TokenIdentifier,
   TronAddress,
   TronHexAddress,
 } from './resources/shared';
@@ -2783,6 +2783,7 @@ export declare namespace PrivyAPI {
     type P256PublicKey as P256PublicKey,
     type SolanaAddress as SolanaAddress,
     type SuccessResponse as SuccessResponse,
+    type TokenIdentifier as TokenIdentifier,
     type TronAddress as TronAddress,
     type TronHexAddress as TronHexAddress,
   };
@@ -2798,7 +2799,6 @@ export declare namespace PrivyAPI {
     type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,
     type CreateStripeOnrampSessionInput as CreateStripeOnrampSessionInput,
     type CreateStripeOnrampSessionResponse as CreateStripeOnrampSessionResponse,
-    type CryptoCurrencyCode as CryptoCurrencyCode,
     type ExchangeStripeTokensInput as ExchangeStripeTokensInput,
     type ExchangeStripeTokensResponse as ExchangeStripeTokensResponse,
     type FiatAmount as FiatAmount,

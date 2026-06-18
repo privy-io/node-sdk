@@ -420,7 +420,6 @@ export {
   type CreateOrUpdateFiatCustomerRequestInput,
   type CreateStripeOnrampSessionInput,
   type CreateStripeOnrampSessionResponse,
-  type CryptoCurrencyCode,
   type ExchangeStripeTokensInput,
   type ExchangeStripeTokensResponse,
   type FiatAmount,
@@ -540,6 +539,7 @@ export {
   type P256PublicKey,
   type SolanaAddress,
   type SuccessResponse,
+  type TokenIdentifier,
   type TronAddress,
   type TronHexAddress,
 } from './shared';

@@ -480,6 +480,8 @@ export interface TestAccount {
   phone_number: string;
 
   updated_at: string;
+
+  name?: string | null;
 }
 
 /**

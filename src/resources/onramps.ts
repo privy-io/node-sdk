@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as ClientAuthAPI from './client-auth';
+import * as SharedAPI from './shared';
 
 export class Onramps extends APIResource {}
 
@@ -142,11 +143,6 @@ export interface CreateStripeOnrampSessionResponse {
 }
 
 /**
- * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
- */
-export type CryptoCurrencyCode = string;
-
-/**
  * Input for exchanging a Link auth intent for OAuth tokens.
  */
 export interface ExchangeStripeTokensInput {
@@ -189,9 +185,11 @@ export interface FiatOnrampDestination {
   address: string;
 
   /**
-   * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
+   * Token identifier string. EVM-shaped 40-hex token addresses normalize to checksum
+   * case, 16-byte Hyperliquid token IDs normalize to lowercase, and all other
+   * identifiers pass through unchanged.
    */
-  asset: CryptoCurrencyCode;
+  asset: SharedAPI.TokenIdentifier;
 
   /**
    * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
@@ -459,9 +457,11 @@ export interface OnrampSessionParams {
   crypto_customer_id: string;
 
   /**
-   * Cryptocurrency symbol. Uppercase alphanumeric, 2-10 characters.
+   * Token identifier string. EVM-shaped 40-hex token addresses normalize to checksum
+   * case, 16-byte Hyperliquid token IDs normalize to lowercase, and all other
+   * identifiers pass through unchanged.
    */
-  destination_currency: CryptoCurrencyCode;
+  destination_currency: SharedAPI.TokenIdentifier;
 
   destination_network: string;
 
@@ -613,7 +613,6 @@ export declare namespace Onramps {
     type CreateOrUpdateFiatCustomerRequestInput as CreateOrUpdateFiatCustomerRequestInput,
     type CreateStripeOnrampSessionInput as CreateStripeOnrampSessionInput,
     type CreateStripeOnrampSessionResponse as CreateStripeOnrampSessionResponse,
-    type CryptoCurrencyCode as CryptoCurrencyCode,
     type ExchangeStripeTokensInput as ExchangeStripeTokensInput,
     type ExchangeStripeTokensResponse as ExchangeStripeTokensResponse,
     type FiatAmount as FiatAmount,

@@ -1026,6 +1026,7 @@ export {
   type WalletFundsSplAsset,
   type WalletRecoveredWebhookPayload,
   type WalletRecoverySetupWebhookPayload,
+  type WalletRestoredWebhookPayload,
   type WebhookPayload,
   type YieldClaimConfirmedWebhookPayload,
   type YieldClaimReward,

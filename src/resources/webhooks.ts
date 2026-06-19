@@ -2954,6 +2954,31 @@ export interface WalletRecoverySetupWebhookPayload {
 }
 
 /**
+ * Payload for the wallet.restored webhook event.
+ */
+export interface WalletRestoredWebhookPayload {
+  /**
+   * The chain type of the restored wallet.
+   */
+  chain_type: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet.restored';
+
+  /**
+   * The address of the restored wallet.
+   */
+  wallet_address: string;
+
+  /**
+   * The ID of the restored wallet.
+   */
+  wallet_id: string;
+}
+
+/**
  * Union of all webhook payload schemas.
  */
 export type WebhookPayload =
@@ -2978,6 +3003,7 @@ export type WebhookPayload =
   | WalletRecoverySetupWebhookPayload
   | WalletRecoveredWebhookPayload
   | WalletArchivedWebhookPayload
+  | WalletRestoredWebhookPayload
   | MfaEnabledWebhookPayload
   | MfaDisabledWebhookPayload
   | YieldDepositConfirmedWebhookPayload
@@ -3117,6 +3143,7 @@ export type UnsafeUnwrapWebhookEvent =
   | PrivateKeyExportWebhookPayload
   | WalletRecoveredWebhookPayload
   | WalletRecoverySetupWebhookPayload
+  | WalletRestoredWebhookPayload
   | WalletActionEarnDepositCreatedWebhookPayload
   | WalletActionEarnDepositFailedWebhookPayload
   | WalletActionEarnDepositRejectedWebhookPayload
@@ -3216,6 +3243,7 @@ export declare namespace Webhooks {
     type WalletFundsSplAsset as WalletFundsSplAsset,
     type WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload,
     type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
+    type WalletRestoredWebhookPayload as WalletRestoredWebhookPayload,
     type WebhookPayload as WebhookPayload,
     type YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
     type YieldClaimReward as YieldClaimReward,

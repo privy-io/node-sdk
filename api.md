@@ -679,6 +679,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletFundsSplAsset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletRestoredWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldClaimConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldClaimReward</a></code>

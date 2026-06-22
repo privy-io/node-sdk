@@ -526,6 +526,11 @@ export interface StripeConsumerWallet {
 export interface StripeCryptoCustomerActive {
   crypto_customer_id: string;
 
+  /**
+   * Region derived from a Stripe user's country of residence.
+   */
+  kyc_region: StripeKYCRegion | null;
+
   kyc_tiers: Array<StripeKYCTier>;
 
   provided_fields: Array<string>;
@@ -552,12 +557,19 @@ export interface StripeCryptoCustomerNone {
 }
 
 /**
+ * Region derived from a Stripe user's country of residence.
+ */
+export type StripeKYCRegion = 'us' | 'eu';
+
+/**
  * A KYC tier with its verification status.
  */
 export interface StripeKYCTier {
   tier: string;
 
   verification_status: string;
+
+  verification_errors?: Array<string>;
 }
 
 /**
@@ -646,6 +658,7 @@ export declare namespace Onramps {
     type StripeCryptoCustomerActive as StripeCryptoCustomerActive,
     type StripeCryptoCustomerExpired as StripeCryptoCustomerExpired,
     type StripeCryptoCustomerNone as StripeCryptoCustomerNone,
+    type StripeKYCRegion as StripeKYCRegion,
     type StripeKYCTier as StripeKYCTier,
     type StripeOnrampCheckoutResponse as StripeOnrampCheckoutResponse,
     type StripeOnrampSessionStatus as StripeOnrampSessionStatus,

@@ -453,6 +453,7 @@ export {
   type StripeCryptoCustomerActive,
   type StripeCryptoCustomerExpired,
   type StripeCryptoCustomerNone,
+  type StripeKYCRegion,
   type StripeKYCTier,
   type StripeOnrampCheckoutResponse,
   type StripeOnrampSessionStatus,

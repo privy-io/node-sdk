@@ -993,6 +993,7 @@ Types:
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerActive</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerExpired</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerNone</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeKYCRegion</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeKYCTier</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeOnrampCheckoutResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeOnrampSessionStatus</a></code>

@@ -2,6 +2,7 @@ import { createX402Client } from '../src/x402';
 import type { PrivyClient } from '@privy-io/node';
 import { registerExactEvmScheme } from '@x402/evm/exact/client';
 import { registerExactSvmScheme } from '@x402/svm/exact/client';
+import { createViemAccount } from '../src/viem';
 
 jest.mock('@x402/fetch', () => ({
   x402Client: jest.fn().mockImplementation(() => ({})),
@@ -43,5 +44,31 @@ describe('createX402Client', () => {
         address: 'invalid-address',
       }),
     ).toThrow('Invalid wallet address');
+  });
+
+  it('forwards useErc1271 to createViemAccount for EVM address', () => {
+    createX402Client(mockClient, {
+      walletId: 'test-wallet',
+      address: '0x1234567890123456789012345678901234567890',
+      useErc1271: true,
+    });
+
+    expect(createViemAccount).toHaveBeenCalledWith(mockClient, {
+      walletId: 'test-wallet',
+      address: '0x1234567890123456789012345678901234567890',
+      useErc1271: true,
+    });
+  });
+
+  it('does not pass useErc1271 when not specified', () => {
+    createX402Client(mockClient, {
+      walletId: 'test-wallet',
+      address: '0x1234567890123456789012345678901234567890',
+    });
+
+    expect(createViemAccount).toHaveBeenCalledWith(mockClient, {
+      walletId: 'test-wallet',
+      address: '0x1234567890123456789012345678901234567890',
+    });
   });
 });

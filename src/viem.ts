@@ -36,6 +36,8 @@ export interface CreateViemAccountInput {
   address: Hex;
   /** Authorization context for the wallet. */
   authorizationContext?: AuthorizationContext;
+  /** When true, produces ERC-1271 signatures for EIP-7702 gas-sponsored wallets. */
+  useErc1271?: boolean;
 }
 
 /**
@@ -48,7 +50,7 @@ export interface CreateViemAccountInput {
  */
 export function createViemAccount(
   client: PrivyClient,
-  { walletId, address, authorizationContext }: CreateViemAccountInput,
+  { walletId, address, authorizationContext, useErc1271 }: CreateViemAccountInput,
 ): PrivyViemAccount {
   return toAccount({
     address: address as Hex,
@@ -79,6 +81,8 @@ export function createViemAccount(
       if (!domain) throw new PrivyAPIError('typedData.domain must be defined');
       if (!message) throw new PrivyAPIError('typedData.message must be defined');
       if (!types) throw new PrivyAPIError('typedData.message must be defined');
+      const chainId = (domain as Record<string, unknown>)['chainId'];
+      const caip2 = useErc1271 && chainId ? `eip155:${chainId}` : undefined;
       const { signature } = await client
         .wallets()
         .ethereum()
@@ -86,6 +90,8 @@ export function createViemAccount(
           params: {
             typed_data: { domain, message, primary_type: primaryType as string, types: types as any },
           },
+          ...(useErc1271 ? { signature_options: { type: 'erc1271' } } : {}),
+          ...(caip2 ? { caip2 } : {}),
           ...(authorizationContext ? { authorization_context: authorizationContext } : {}),
         });
       return signature as Hex;

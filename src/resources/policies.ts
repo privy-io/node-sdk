@@ -776,7 +776,7 @@ export type PolicyMethod =
   | 'exportPrivateKey'
   | 'exportSeedPhrase'
   | 'signTransactionBytes'
-  | 'raw_sign'
+  | 'signRawMessageBytes'
   | 'earn_deposit'
   | 'earn_withdraw'
   | 'transfer'

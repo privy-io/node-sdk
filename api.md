@@ -166,6 +166,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SparkUserTokenMetadata</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkWalletLeaf</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SwapSubmissionStatus</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TempoAaAuthorization</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TempoCall</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TempoFeePayerSignature</a></code>
@@ -560,6 +561,7 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">AppCustomOAuthProvider</a></code>
 - <code><a href="./src/resources/apps/apps.ts">AppResponse</a></code>
 - <code><a href="./src/resources/apps/apps.ts">Caip2</a></code>
+- <code><a href="./src/resources/apps/apps.ts">CaptchaProvider</a></code>
 - <code><a href="./src/resources/apps/apps.ts">Currency</a></code>
 - <code><a href="./src/resources/apps/apps.ts">CurrencyAsset</a></code>
 - <code><a href="./src/resources/apps/apps.ts">EmailDomain</a></code>
@@ -576,6 +578,7 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">GasSpendCurrency</a></code>
 - <code><a href="./src/resources/apps/apps.ts">GasSpendRequestBody</a></code>
 - <code><a href="./src/resources/apps/apps.ts">GasSpendResponseBody</a></code>
+- <code><a href="./src/resources/apps/apps.ts">MfaMethod</a></code>
 - <code><a href="./src/resources/apps/apps.ts">PhoneInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TelegramAuthConfigSchema</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>
@@ -709,6 +712,7 @@ Types:
 - <code><a href="./src/resources/accounts.ts">BalanceAsset</a></code>
 - <code><a href="./src/resources/accounts.ts">BalanceAssetByChain</a></code>
 - <code><a href="./src/resources/accounts.ts">BalanceResponse</a></code>
+- <code><a href="./src/resources/accounts.ts">ChainTestnetMode</a></code>
 - <code><a href="./src/resources/accounts.ts">CreateAccountFromWalletIDsInput</a></code>
 - <code><a href="./src/resources/accounts.ts">CreateAccountFromWalletsConfigurationInput</a></code>
 - <code><a href="./src/resources/accounts.ts">CreateAccountInput</a></code>
@@ -910,6 +914,7 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">SiwsInitResponseBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">SiwsInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">SiwsLinkRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">SiwsMessageType</a></code>
 - <code><a href="./src/resources/client-auth.ts">SiwsNonce</a></code>
 - <code><a href="./src/resources/client-auth.ts">SiwsUnlinkRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">SmartWalletSiweInput</a></code>
@@ -1078,6 +1083,8 @@ Types:
 - <code><a href="./src/resources/wallet-actions.ts">SvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">SvmWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">SwapActionResponse</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">TvmTransactionWalletActionStep</a></code>
+- <code><a href="./src/resources/wallet-actions.ts">TvmWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">TransferActionResponse</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">WalletActionInclude</a></code>
 - <code><a href="./src/resources/wallet-actions.ts">WalletActionResponse</a></code>

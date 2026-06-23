@@ -171,6 +171,7 @@ export {
   type SparkUserTokenMetadata,
   type SparkWalletLeaf,
   type SuiCommandName,
+  type SwapSubmissionStatus,
   type TempoAaAuthorization,
   type TempoCall,
   type TempoFeePayerSignature,

@@ -832,6 +832,45 @@ export interface SwapActionResponse {
 }
 
 /**
+ * A wallet action step consisting of a TVM (Tron) transaction.
+ */
+export interface TvmTransactionWalletActionStep {
+  /**
+   * CAIP-2 chain identifier for the Tron network.
+   */
+  caip2: string;
+
+  /**
+   * Status of a TVM (Tron) step in a wallet action.
+   */
+  status: TvmWalletActionStepStatus;
+
+  /**
+   * The Tron transaction ID. Null until broadcast.
+   */
+  transaction_id: string | null;
+
+  type: 'tvm_transaction';
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+}
+
+/**
+ * Status of a TVM (Tron) step in a wallet action.
+ */
+export type TvmWalletActionStepStatus =
+  | 'preparing'
+  | 'queued'
+  | 'pending'
+  | 'confirmed'
+  | 'rejected'
+  | 'reverted'
+  | 'failed';
+
+/**
  * Response for a transfer action.
  */
 export interface TransferActionResponse {
@@ -975,6 +1014,7 @@ export type WalletActionStep =
   | EvmTransactionWalletActionStep
   | EvmUserOperationWalletActionStep
   | SvmTransactionWalletActionStep
+  | TvmTransactionWalletActionStep
   | ExternalTransactionWalletActionStep
   | CustodianTransactionWalletActionStep;
 
@@ -985,6 +1025,7 @@ export type WalletActionStepType =
   | 'evm_transaction'
   | 'evm_user_operation'
   | 'svm_transaction'
+  | 'tvm_transaction'
   | 'external_transaction'
   | 'custodian_transaction';
 
@@ -1028,6 +1069,8 @@ export declare namespace WalletActions {
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
     type SwapActionResponse as SwapActionResponse,
+    type TvmTransactionWalletActionStep as TvmTransactionWalletActionStep,
+    type TvmWalletActionStepStatus as TvmWalletActionStepStatus,
     type TransferActionResponse as TransferActionResponse,
     type WalletActionInclude as WalletActionInclude,
     type WalletActionResponse as WalletActionResponse,

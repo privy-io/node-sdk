@@ -577,7 +577,7 @@ export interface AdvancedSwapResponse {
    * "accepted" if the network has acknowledged the transaction, "rejected" if the
    * network refused it, "skipped" if dry_run was set. Not an onchain confirmation.
    */
-  submission_status: 'accepted' | 'rejected' | 'skipped';
+  submission_status: SwapSubmissionStatus;
 
   /**
    * Solana transaction signature (base58).
@@ -2856,6 +2856,12 @@ export interface SparkWalletLeaf {
  * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
  */
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
+
+/**
+ * "accepted" if the network has acknowledged the transaction, "rejected" if the
+ * network refused it, "skipped" if dry_run was set. Not an onchain confirmation.
+ */
+export type SwapSubmissionStatus = 'accepted' | 'rejected' | 'skipped';
 
 /**
  * An AA authorization for Tempo transactions with P256/WebAuthn signatures.
@@ -5877,6 +5883,7 @@ export declare namespace Wallets {
     type SparkUserTokenMetadata as SparkUserTokenMetadata,
     type SparkWalletLeaf as SparkWalletLeaf,
     type SuiCommandName as SuiCommandName,
+    type SwapSubmissionStatus as SwapSubmissionStatus,
     type TempoAaAuthorization as TempoAaAuthorization,
     type TempoCall as TempoCall,
     type TempoFeePayerSignature as TempoFeePayerSignature,

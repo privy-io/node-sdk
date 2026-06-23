@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import * as IntentsAPI from './intents';
 import * as UsersAPI from './users';
 import * as WalletActionsAPI from './wallet-actions';
+import * as AppsAPI from './apps/apps';
 import * as WalletsAPI from './wallets/wallets';
 
 export class Webhooks extends APIResource {
@@ -768,9 +769,9 @@ export interface KrakenEmbedUserVerifiedWebhookPayload {
  */
 export interface MfaDisabledWebhookPayload {
   /**
-   * The MFA method that was disabled.
+   * A multi-factor authentication method supported by the app.
    */
-  method: 'sms' | 'totp' | 'passkey';
+  method: AppsAPI.MfaMethod;
 
   /**
    * The type of webhook event.
@@ -788,9 +789,9 @@ export interface MfaDisabledWebhookPayload {
  */
 export interface MfaEnabledWebhookPayload {
   /**
-   * The MFA method that was enabled.
+   * A multi-factor authentication method supported by the app.
    */
-  method: 'sms' | 'totp' | 'passkey';
+  method: AppsAPI.MfaMethod;
 
   /**
    * The type of webhook event.

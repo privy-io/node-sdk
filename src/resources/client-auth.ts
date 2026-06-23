@@ -63,7 +63,10 @@ export interface AuthenticateSiwsInput {
 
   connectorType?: string | null;
 
-  message_type?: 'transaction' | 'plain' | 'offchain-message';
+  /**
+   * The type of SIWS message being signed.
+   */
+  message_type?: SiwsMessageType;
 
   /**
    * Whether to allow sign-up during authentication.
@@ -1670,7 +1673,10 @@ export interface SiwsAuthenticateRequestBody {
 
   connectorType?: string | null;
 
-  message_type?: 'transaction' | 'plain' | 'offchain-message';
+  /**
+   * The type of SIWS message being signed.
+   */
+  message_type?: SiwsMessageType;
 
   /**
    * Whether to allow sign-up during authentication.
@@ -1717,7 +1723,10 @@ export interface SiwsInput {
 
   connectorType?: string | null;
 
-  message_type?: 'transaction' | 'plain' | 'offchain-message';
+  /**
+   * The type of SIWS message being signed.
+   */
+  message_type?: SiwsMessageType;
 
   walletClientType?: string | null;
 }
@@ -1732,10 +1741,18 @@ export interface SiwsLinkRequestBody {
 
   connectorType?: string | null;
 
-  message_type?: 'transaction' | 'plain' | 'offchain-message';
+  /**
+   * The type of SIWS message being signed.
+   */
+  message_type?: SiwsMessageType;
 
   walletClientType?: string | null;
 }
+
+/**
+ * The type of SIWS message being signed.
+ */
+export type SiwsMessageType = 'transaction' | 'plain' | 'offchain-message';
 
 /**
  * A SIWS nonce response.
@@ -2113,6 +2130,7 @@ export declare namespace ClientAuth {
     type SiwsInitResponseBody as SiwsInitResponseBody,
     type SiwsInput as SiwsInput,
     type SiwsLinkRequestBody as SiwsLinkRequestBody,
+    type SiwsMessageType as SiwsMessageType,
     type SiwsNonce as SiwsNonce,
     type SiwsUnlinkRequestBody as SiwsUnlinkRequestBody,
     type SmartWalletSiweInput as SmartWalletSiweInput,

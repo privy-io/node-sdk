@@ -13,7 +13,7 @@ export interface AccountBalanceParams {
   /**
    * When set to true, returns balances from testnet chains instead of mainnets.
    */
-  testnet_mode?: 'true' | 'false';
+  testnet_mode?: ChainTestnetMode;
 }
 
 /**
@@ -237,6 +237,11 @@ export interface BalanceResponse {
 }
 
 /**
+ * When set to true, returns balances from testnet chains instead of mainnets.
+ */
+export type ChainTestnetMode = 'true' | 'false';
+
+/**
  * Input for creating a digital asset account from existing wallets with a
  * `wallet_ids` parameter.
  */
@@ -326,6 +331,7 @@ export declare namespace Accounts {
     type BalanceAsset as BalanceAsset,
     type BalanceAssetByChain as BalanceAssetByChain,
     type BalanceResponse as BalanceResponse,
+    type ChainTestnetMode as ChainTestnetMode,
     type CreateAccountFromWalletIDsInput as CreateAccountFromWalletIDsInput,
     type CreateAccountFromWalletsConfigurationInput as CreateAccountFromWalletsConfigurationInput,
     type CreateAccountInput as CreateAccountInput,

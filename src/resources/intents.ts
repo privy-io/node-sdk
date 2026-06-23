@@ -1836,6 +1836,13 @@ export interface IntentTransferParams {
   source: WalletsAPI.TokenTransferSource;
 
   /**
+   * Body param: Amount as a decimal string in the token's standard unit (e.g. "1.5"
+   * for 1.5 USDC). For exact_input, the amount to send. For exact_output, the exact
+   * amount to receive. Takes precedence over source.amount when both are provided.
+   */
+  amount?: string;
+
+  /**
    * Body param: Whether the amount refers to the input token or output token.
    */
   amount_type?: WalletsAPI.AmountType;

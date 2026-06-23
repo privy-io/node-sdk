@@ -743,9 +743,10 @@ export type CustodialWalletProvider = 'bridge';
  */
 export interface CustomTokenTransferSource {
   /**
-   * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
-   * USDC, "0.01" for 0.01 ETH). Not in the smallest on-chain unit (wei, lamports,
-   * etc.). Maximum 100 characters.
+   * @deprecated Amount as a decimal string in the token's standard unit (e.g. "1.5"
+   * for 1.5 USDC, "0.01" for 0.01 ETH). For exact_input, specifies the amount to
+   * send. Not in the smallest on-chain unit (wei, lamports, etc.). Maximum 100
+   * characters.
    */
   amount: string;
 
@@ -1565,8 +1566,8 @@ export interface HDInitInput {
   address: string;
 
   /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
+   * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+   * `stellar`, `tron`, `sui`, and `aptos`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -1601,8 +1602,8 @@ export interface HDSubmitInput {
   address: string;
 
   /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
+   * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+   * `stellar`, `tron`, `sui`, and `aptos`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -1695,9 +1696,10 @@ export interface IntentBinding {
  */
 export interface NamedTokenTransferSource {
   /**
-   * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
-   * USDC, "0.01" for 0.01 ETH). Not in the smallest on-chain unit (wei, lamports,
-   * etc.). Maximum 100 characters.
+   * @deprecated Amount as a decimal string in the token's standard unit (e.g. "1.5"
+   * for 1.5 USDC, "0.01" for 0.01 ETH). For exact_input, specifies the amount to
+   * send. Not in the smallest on-chain unit (wei, lamports, etc.). Maximum 100
+   * characters.
    */
   amount: string;
 
@@ -1782,8 +1784,8 @@ export interface PrivateKeyInitInput {
   address: string;
 
   /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
+   * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+   * `stellar`, `tron`, `sui`, and `aptos`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -1805,8 +1807,8 @@ export interface PrivateKeySubmitInput {
   address: string;
 
   /**
-   * The chain type of the wallet to import. Currently supports `ethereum` and
-   * `solana`.
+   * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+   * `stellar`, `tron`, `sui`, and `aptos`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -3015,6 +3017,13 @@ export interface TransferQuoteRequestBody {
   source: TokenTransferSource;
 
   /**
+   * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
+   * USDC). For exact_input, the amount to send. For exact_output, the exact amount
+   * to receive. Takes precedence over source.amount when both are provided.
+   */
+  amount?: string;
+
+  /**
    * Whether the amount refers to the input token or output token.
    */
   amount_type?: AmountType;
@@ -3042,7 +3051,20 @@ export interface TransferQuoteResponse {
   destination: TokenTransferDestination;
 
   /**
-   * Estimated output amount in decimals
+   * Estimated fees in USD for the transfer. Only present for cross-chain transfers.
+   */
+  estimated_fees: Array<FeeLineItem>;
+
+  /**
+   * Estimated input amount in decimals. For exact_input, this equals source.amount.
+   * For exact_output, this is the estimated amount the sender needs to provide.
+   */
+  estimated_input_amount: string;
+
+  /**
+   * Estimated output amount in decimals. For exact_input, this is an estimate
+   * subject to slippage. For exact_output, this is the guaranteed exact amount to be
+   * received.
    */
   estimated_output_amount: string;
 
@@ -3061,11 +3083,6 @@ export interface TransferQuoteResponse {
    * Whether the amount refers to the input token or output token.
    */
   amount_type?: AmountType;
-
-  /**
-   * Estimated fees in USD for the transfer. Only present for cross-chain transfers.
-   */
-  estimated_fees?: Array<FeeLineItem>;
 
   /**
    * Gas cost for a blockchain action. Includes both raw base-unit amount and a
@@ -3133,6 +3150,13 @@ export interface TransferRequestBody {
    * (named) or `asset_address` (custom), not both.
    */
   source: TokenTransferSource;
+
+  /**
+   * Amount as a decimal string in the token's standard unit (e.g. "1.5" for 1.5
+   * USDC). For exact_input, the amount to send. For exact_output, the exact amount
+   * to receive. Takes precedence over source.amount when both are provided.
+   */
+  amount?: string;
 
   /**
    * Whether the amount refers to the input token or output token.
@@ -3208,8 +3232,6 @@ export type TronContract = TronTransferContract | TronTriggerSmartContract;
 export interface TronRawDataForSend {
   contract: Array<TronContract>;
 
-  call_value?: number;
-
   data?: string;
 
   expiration?: number;
@@ -3235,8 +3257,6 @@ export interface TronRawDataForSign {
   ref_block_bytes: string;
 
   ref_block_hash: string;
-
-  call_value?: number;
 
   data?: string;
 
@@ -3399,6 +3419,10 @@ export interface TronTriggerSmartContract {
   type: 'TriggerSmartContract';
 
   call_token_value?: number;
+
+  call_value?: number;
+
+  data?: string;
 
   token_id?: number;
 }
@@ -4097,10 +4121,10 @@ export interface WalletImportInitResponse {
 }
 
 /**
- * The chain type of the wallet to import. Currently supports `ethereum` and
- * `solana`.
+ * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+ * `stellar`, `tron`, `sui`, and `aptos`.
  */
-export type WalletImportSupportedChains = 'ethereum' | 'solana';
+export type WalletImportSupportedChains = 'ethereum' | 'solana' | 'stellar' | 'tron' | 'sui' | 'aptos';
 
 /**
  * The entropy type of the wallet to import. Supports `private-key` for raw private
@@ -4343,8 +4367,8 @@ export declare namespace WalletInitImportParams {
     address: string;
 
     /**
-     * The chain type of the wallet to import. Currently supports `ethereum` and
-     * `solana`.
+     * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+     * `stellar`, `tron`, `sui`, and `aptos`.
      */
     chain_type: WalletImportSupportedChains;
 
@@ -4371,8 +4395,8 @@ export declare namespace WalletInitImportParams {
     address: string;
 
     /**
-     * The chain type of the wallet to import. Currently supports `ethereum` and
-     * `solana`.
+     * The chain type of the wallet to import. Supports `ethereum`, `solana`,
+     * `stellar`, `tron`, `sui`, and `aptos`.
      */
     chain_type: WalletImportSupportedChains;
 
@@ -5507,6 +5531,13 @@ export interface WalletTransferParams {
    * either `asset` (named) or `asset_address` (custom), not both.
    */
   source: TokenTransferSource;
+
+  /**
+   * Body param: Amount as a decimal string in the token's standard unit (e.g. "1.5"
+   * for 1.5 USDC). For exact_input, the amount to send. For exact_output, the exact
+   * amount to receive. Takes precedence over source.amount when both are provided.
+   */
+  amount?: string;
 
   /**
    * Body param: Whether the amount refers to the input token or output token.

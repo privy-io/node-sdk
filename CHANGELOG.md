@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.23.0 (2026-06-23)
+
+Full Changelog: [v0.22.0...v0.23.0](https://github.com/privy-io/node-sdk/compare/v0.22.0...v0.23.0)
+
+### Features
+
+* adds wallet import support for other chains ([#180](https://github.com/privy-io/node-sdk/issues/180)) ([eb562cb](https://github.com/privy-io/node-sdk/commit/eb562cbf678a7be9ca33b9e04eca617b93ec5d7a))
+* **api:** api update ([6f22da2](https://github.com/privy-io/node-sdk/commit/6f22da231db34ac3f10ec61b505c39d8308767db))
+* **api:** api update ([0b2b061](https://github.com/privy-io/node-sdk/commit/0b2b061d92c4488e2b5d1eddda4d69913e4d3f76))
+* **api:** api update ([4ca50b4](https://github.com/privy-io/node-sdk/commit/4ca50b40b249f132d59114a929e641589b632491))
+* **api:** api update ([d2576ed](https://github.com/privy-io/node-sdk/commit/d2576ed041eb01a2d9a622cc7b7633ac40f5aa58))
+* **api:** api update ([d915b5f](https://github.com/privy-io/node-sdk/commit/d915b5ffaf3482e4076dec5dc9432ea6329ceec7))
+* **api:** api update ([67dd769](https://github.com/privy-io/node-sdk/commit/67dd76961a0655830e2e18fca833070297428e06))
+* **x402:** add ERC-1271 support for gas-sponsored wallets ([#179](https://github.com/privy-io/node-sdk/issues/179)) ([e92da5b](https://github.com/privy-io/node-sdk/commit/e92da5b08ee55a3031bb9d99790f567389df1575))
+
 ## 0.22.0 (2026-06-17)
 
 Full Changelog: [v0.21.0...v0.22.0](https://github.com/privy-io/node-sdk/compare/v0.21.0...v0.22.0)

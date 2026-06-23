@@ -851,9 +851,9 @@ export interface TransferActionResponse {
   destination_address: string;
 
   /**
-   * Amount received on the destination chain. Set at creation for same-chain
-   * transfers. Null until fill confirmation for cross-chain or cross-asset
-   * transfers.
+   * Amount received on the destination chain. For exact_output cross-chain
+   * transfers, set at creation (the guaranteed exact amount). For exact_input
+   * cross-chain transfers, null until fill confirmation.
    */
   destination_amount: string | null;
 
@@ -873,6 +873,11 @@ export interface TransferActionResponse {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Whether the amount refers to the input token or output token.
+   */
+  amount_type?: WalletsAPI.AmountType;
 
   /**
    * Destination asset for cross-asset transfers. Omitted for same-asset transfers.
@@ -914,8 +919,8 @@ export interface TransferActionResponse {
   gas?: WalletsAPI.Gas | null;
 
   /**
-   * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
-   * cross-chain transfers until the source amount is determined.
+   * Decimal amount sent on the source chain (e.g. "1.5"). For exact_output
+   * cross-chain transfers, null until fill confirmation.
    */
   source_amount?: string;
 

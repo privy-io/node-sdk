@@ -35,8 +35,9 @@ export type EvmAddress = string;
 export type EvmChecksumAddress = string;
 
 /**
- * Hyperliquid L1 spot token identifier: 0x followed by 32–40 hex characters,
- * normalized to lowercase.
+ * Hyperliquid L1 token identifier: 0x followed by either 32 hex characters
+ * (16-byte spot/perps token IDs) or 40 hex characters (20-byte HIP-3 DEX token
+ * IDs), normalized to lowercase.
  */
 export type HyperliquidTokenAddress = string;
 
@@ -92,6 +93,13 @@ export interface SuccessResponse {
 }
 
 /**
+ * Token identifier string. EVM-shaped 40-hex token addresses normalize to checksum
+ * case, 16-byte Hyperliquid token IDs normalize to lowercase, and all other
+ * identifiers pass through unchanged.
+ */
+export type TokenIdentifier = string;
+
+/**
  * Tron address: base58check-encoded, starting with T, 34 characters.
  */
 export type TronAddress = string;
@@ -117,6 +125,7 @@ export declare namespace Shared {
     type P256PublicKey as P256PublicKey,
     type SolanaAddress as SolanaAddress,
     type SuccessResponse as SuccessResponse,
+    type TokenIdentifier as TokenIdentifier,
     type TronAddress as TronAddress,
     type TronHexAddress as TronHexAddress,
   };

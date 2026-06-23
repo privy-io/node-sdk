@@ -503,8 +503,8 @@ export interface ConditionSetItemsResponse {
 }
 
 /**
- * Request body for creating a condition set. Exactly one of `owner` or `owner_id`
- * is required.
+ * Request body for creating a condition set. Optionally provide `owner` or
+ * `owner_id` (but not both) to specify ownership.
  */
 export interface ConditionSetRequestBody {
   /**

@@ -679,6 +679,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletFundsSplAsset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletRestoredWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldClaimConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldClaimReward</a></code>
@@ -942,6 +943,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">P256PublicKey</a></code>
 - <code><a href="./src/resources/shared.ts">SolanaAddress</a></code>
 - <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
+- <code><a href="./src/resources/shared.ts">TokenIdentifier</a></code>
 - <code><a href="./src/resources/shared.ts">TronAddress</a></code>
 - <code><a href="./src/resources/shared.ts">TronHexAddress</a></code>
 
@@ -958,7 +960,6 @@ Types:
 - <code><a href="./src/resources/onramps.ts">CreateOrUpdateFiatCustomerRequestInput</a></code>
 - <code><a href="./src/resources/onramps.ts">CreateStripeOnrampSessionInput</a></code>
 - <code><a href="./src/resources/onramps.ts">CreateStripeOnrampSessionResponse</a></code>
-- <code><a href="./src/resources/onramps.ts">CryptoCurrencyCode</a></code>
 - <code><a href="./src/resources/onramps.ts">ExchangeStripeTokensInput</a></code>
 - <code><a href="./src/resources/onramps.ts">ExchangeStripeTokensResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">FiatAmount</a></code>
@@ -992,6 +993,7 @@ Types:
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerActive</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerExpired</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeCryptoCustomerNone</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeKYCRegion</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeKYCTier</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeOnrampCheckoutResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeOnrampSessionStatus</a></code>

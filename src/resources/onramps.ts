@@ -341,6 +341,8 @@ export interface GetFiatOnrampQuotesInput {
 export interface GetFiatOnrampQuotesResponse {
   destination_currency_icon_url: string | null;
 
+  destination_currency_symbol: string;
+
   destination_network_icon_url: string | null;
 
   quotes: Array<FiatOnrampQuote>;

@@ -82,7 +82,7 @@ export function createViemAccount(
       if (!message) throw new PrivyAPIError('typedData.message must be defined');
       if (!types) throw new PrivyAPIError('typedData.message must be defined');
       const chainId = (domain as Record<string, unknown>)['chainId'];
-      const caip2 = signatureOptions && chainId ? `eip155:${chainId}` : undefined;
+      const caip2 = signatureOptions?.type === 'erc1271' && chainId ? `eip155:${chainId}` : undefined;
       const { signature } = await client
         .wallets()
         .ethereum()

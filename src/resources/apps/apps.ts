@@ -161,7 +161,10 @@ export interface AppResponse {
    */
   embedded_wallet_config: EmbeddedWalletConfigSchema;
 
-  enabled_captcha_provider: 'turnstile' | 'hcaptcha' | null;
+  /**
+   * The captcha provider enabled for an app.
+   */
+  enabled_captcha_provider: CaptchaProvider | null;
 
   enforce_wallet_uis: boolean;
 
@@ -195,7 +198,7 @@ export interface AppResponse {
 
   merge_accounts_by_email: boolean;
 
-  mfa_methods: Array<'sms' | 'totp' | 'passkey'>;
+  mfa_methods: Array<MfaMethod>;
 
   name: string;
 
@@ -261,6 +264,11 @@ export interface AppResponse {
  * A valid CAIP-2 chain ID (e.g. 'eip155:1').
  */
 export type Caip2 = string;
+
+/**
+ * The captcha provider enabled for an app.
+ */
+export type CaptchaProvider = 'turnstile' | 'hcaptcha';
 
 /**
  * A crypto currency identified by a CAIP-2 chain ID and optional asset.
@@ -444,6 +452,11 @@ export interface GasSpendResponseBody {
 }
 
 /**
+ * A multi-factor authentication method supported by the app.
+ */
+export type MfaMethod = 'sms' | 'totp' | 'passkey';
+
+/**
  * Allowlist invite input for a phone number.
  */
 export interface PhoneInviteInput {
@@ -532,6 +545,7 @@ export declare namespace Apps {
     type AppCustomOAuthProvider as AppCustomOAuthProvider,
     type AppResponse as AppResponse,
     type Caip2 as Caip2,
+    type CaptchaProvider as CaptchaProvider,
     type Currency as Currency,
     type CurrencyAsset as CurrencyAsset,
     type EmailDomain as EmailDomain,
@@ -548,6 +562,7 @@ export declare namespace Apps {
     type GasSpendCurrency as GasSpendCurrency,
     type GasSpendRequestBody as GasSpendRequestBody,
     type GasSpendResponseBody as GasSpendResponseBody,
+    type MfaMethod as MfaMethod,
     type PhoneInviteInput as PhoneInviteInput,
     type TelegramAuthConfigSchema as TelegramAuthConfigSchema,
     type TestAccount as TestAccount,

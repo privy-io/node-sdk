@@ -46,21 +46,21 @@ describe('createX402Client', () => {
     ).toThrow('Invalid wallet address');
   });
 
-  it('forwards useErc1271 to createViemAccount for EVM address', () => {
+  it('forwards signatureOptions to createViemAccount for EVM address', () => {
     createX402Client(mockClient, {
       walletId: 'test-wallet',
       address: '0x1234567890123456789012345678901234567890',
-      useErc1271: true,
+      signatureOptions: { type: 'erc1271' },
     });
 
     expect(createViemAccount).toHaveBeenCalledWith(mockClient, {
       walletId: 'test-wallet',
       address: '0x1234567890123456789012345678901234567890',
-      useErc1271: true,
+      signatureOptions: { type: 'erc1271' },
     });
   });
 
-  it('does not pass useErc1271 when not specified', () => {
+  it('does not pass signatureOptions when not specified', () => {
     createX402Client(mockClient, {
       walletId: 'test-wallet',
       address: '0x1234567890123456789012345678901234567890',

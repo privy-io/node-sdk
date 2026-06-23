@@ -8,6 +8,7 @@ import { createViemAccount } from './viem';
 import { createSolanaKitSigner } from './solana-kit';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
+import type { SignatureOptions } from './resources';
 
 export interface CreateX402ClientInput {
   /** ID for the wallet. */
@@ -16,8 +17,8 @@ export interface CreateX402ClientInput {
   address: string;
   /** Authorization context for the wallet. */
   authorizationContext?: AuthorizationContext;
-  /** When true, produces ERC-1271 signatures for EIP-7702 gas-sponsored wallets. */
-  useErc1271?: boolean;
+  /** Signature options for the wallet. Use `{ type: 'erc1271' }` for EIP-7702 gas-sponsored wallets. */
+  signatureOptions?: SignatureOptions;
 }
 
 /**
@@ -63,7 +64,7 @@ export interface CreateX402ClientInput {
  */
 export function createX402Client(
   client: PrivyClient,
-  { walletId, address, authorizationContext, useErc1271 }: CreateX402ClientInput,
+  { walletId, address, authorizationContext, signatureOptions }: CreateX402ClientInput,
 ): x402Client {
   const x402client = new x402Client();
 
@@ -72,7 +73,7 @@ export function createX402Client(
       walletId,
       address: address as Hex,
       ...(authorizationContext ? { authorizationContext } : {}),
-      ...(useErc1271 ? { useErc1271 } : {}),
+      ...(signatureOptions ? { signatureOptions } : {}),
     });
     registerExactEvmScheme(x402client, { signer: evmSigner });
   } else if (isSolanaAddress(address)) {

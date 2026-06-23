@@ -12,7 +12,7 @@ import { formatTempoTransaction, isTempoTransaction, type TempoTransaction } fro
 import { formatViemQuantity } from './internal/utils/viem';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
-import type { EthereumSignTransactionRpcInputParams } from './resources';
+import type { EthereumSignTransactionRpcInputParams, SignatureOptions } from './resources';
 
 // Runtime formatting accepts normal viem transactions plus viem/tempo transactions.
 type StandardViemTransaction = ViemSignTransactionParameters['transaction'];
@@ -36,6 +36,8 @@ export interface CreateViemAccountInput {
   address: Hex;
   /** Authorization context for the wallet. */
   authorizationContext?: AuthorizationContext;
+  /** Signature options for the wallet. Use `{ type: 'erc1271' }` for EIP-7702 gas-sponsored wallets. */
+  signatureOptions?: SignatureOptions;
 }
 
 /**
@@ -48,7 +50,7 @@ export interface CreateViemAccountInput {
  */
 export function createViemAccount(
   client: PrivyClient,
-  { walletId, address, authorizationContext }: CreateViemAccountInput,
+  { walletId, address, authorizationContext, signatureOptions }: CreateViemAccountInput,
 ): PrivyViemAccount {
   return toAccount({
     address: address as Hex,
@@ -79,6 +81,8 @@ export function createViemAccount(
       if (!domain) throw new PrivyAPIError('typedData.domain must be defined');
       if (!message) throw new PrivyAPIError('typedData.message must be defined');
       if (!types) throw new PrivyAPIError('typedData.message must be defined');
+      const chainId = (domain as Record<string, unknown>)['chainId'];
+      const caip2 = signatureOptions?.type === 'erc1271' && chainId ? `eip155:${chainId}` : undefined;
       const { signature } = await client
         .wallets()
         .ethereum()
@@ -86,6 +90,8 @@ export function createViemAccount(
           params: {
             typed_data: { domain, message, primary_type: primaryType as string, types: types as any },
           },
+          ...(signatureOptions ? { signature_options: signatureOptions } : {}),
+          ...(caip2 ? { caip2 } : {}),
           ...(authorizationContext ? { authorization_context: authorizationContext } : {}),
         });
       return signature as Hex;

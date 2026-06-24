@@ -24,12 +24,14 @@ import { PrivyClient } from '../PrivyClient';
 import { PrivyEarnService } from './earn';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
+import { PrivySwapsService } from './swaps';
 import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
 
 export class PrivyWalletsService extends Wallets {
   private ethereumService: PrivyEthereumService;
   private solanaService: PrivySolanaService;
   private earnService: PrivyEarnService;
+  private swapsService: PrivySwapsService;
   private privyClient: PrivyClient;
 
   constructor(privyApiClient: PrivyAPI, privyClient: PrivyClient) {
@@ -38,6 +40,7 @@ export class PrivyWalletsService extends Wallets {
     this.ethereumService = new PrivyEthereumService(this);
     this.solanaService = new PrivySolanaService(this);
     this.earnService = new PrivyEarnService(privyApiClient, privyClient);
+    this.swapsService = new PrivySwapsService(privyApiClient, privyClient);
   }
 
   public earn(): PrivyEarnService {
@@ -50,6 +53,10 @@ export class PrivyWalletsService extends Wallets {
 
   public solana(): PrivySolanaService {
     return this.solanaService;
+  }
+
+  public swaps(): PrivySwapsService {
+    return this.swapsService;
   }
 
   public override create({

@@ -16,18 +16,21 @@ describe('PrivySwapsService', () => {
 
   describe('quote', () => {
     it.skip('should get a swap quote for an EVM token pair', async () => {
-      const quote = await privyClient.wallets().swaps().quote(walletId, {
-        base_amount: '1000000000000000000',
-        source: {
-          asset_address: 'native',
-          caip2: 'eip155:8453',
-        },
-        destination: {
-          asset_address: '0x0000000000000000000000000000000000000001',
-          caip2: 'eip155:8453',
-        },
-        amount_type: 'exact_input',
-      });
+      const quote = await privyClient
+        .wallets()
+        .swaps()
+        .quote(walletId, {
+          base_amount: '1000000000000000000',
+          source: {
+            asset_address: 'native',
+            caip2: 'eip155:8453',
+          },
+          destination: {
+            asset_address: '0x0000000000000000000000000000000000000001',
+            caip2: 'eip155:8453',
+          },
+          amount_type: 'exact_input',
+        });
 
       expect(quote.input_amount).toBeDefined();
       expect(quote.est_output_amount).toBeDefined();
@@ -37,18 +40,21 @@ describe('PrivySwapsService', () => {
     });
 
     it.skip('should get a swap quote with slippage tolerance', async () => {
-      const quote = await privyClient.wallets().swaps().quote(walletId, {
-        base_amount: '1000000',
-        source: {
-          asset_address: '0x0000000000000000000000000000000000000001',
-          caip2: 'eip155:8453',
-        },
-        destination: {
-          asset_address: 'native',
-          caip2: 'eip155:8453',
-        },
-        slippage_bps: 100,
-      });
+      const quote = await privyClient
+        .wallets()
+        .swaps()
+        .quote(walletId, {
+          base_amount: '1000000',
+          source: {
+            asset_address: '0x0000000000000000000000000000000000000001',
+            caip2: 'eip155:8453',
+          },
+          destination: {
+            asset_address: 'native',
+            caip2: 'eip155:8453',
+          },
+          slippage_bps: 100,
+        });
 
       expect(quote.input_amount).toBeDefined();
       expect(quote.est_output_amount).toBeDefined();
@@ -56,18 +62,21 @@ describe('PrivySwapsService', () => {
     });
 
     it.skip('should get a cross-chain swap quote', async () => {
-      const quote = await privyClient.wallets().swaps().quote(walletId, {
-        base_amount: '1000000000000000000',
-        source: {
-          asset_address: 'native',
-          caip2: 'eip155:8453',
-        },
-        destination: {
-          asset_address: 'native',
-          caip2: 'eip155:42161',
-        },
-        amount_type: 'exact_input',
-      });
+      const quote = await privyClient
+        .wallets()
+        .swaps()
+        .quote(walletId, {
+          base_amount: '1000000000000000000',
+          source: {
+            asset_address: 'native',
+            caip2: 'eip155:8453',
+          },
+          destination: {
+            asset_address: 'native',
+            caip2: 'eip155:42161',
+          },
+          amount_type: 'exact_input',
+        });
 
       expect(quote.input_amount).toBeDefined();
       expect(quote.est_output_amount).toBeDefined();
@@ -77,19 +86,22 @@ describe('PrivySwapsService', () => {
 
   describe('execute', () => {
     it.skip('should execute a swap on EVM', async () => {
-      const result = await privyClient.wallets().swaps().execute(walletId, {
-        base_amount: '1000000000000000000',
-        source: {
-          asset_address: 'native',
-          caip2: 'eip155:8453',
-        },
-        destination: {
-          asset_address: '0x0000000000000000000000000000000000000001',
-          caip2: 'eip155:8453',
-        },
-        amount_type: 'exact_input',
-        slippage_bps: 50,
-      });
+      const result = await privyClient
+        .wallets()
+        .swaps()
+        .execute(walletId, {
+          base_amount: '1000000000000000000',
+          source: {
+            asset_address: 'native',
+            caip2: 'eip155:8453',
+          },
+          destination: {
+            asset_address: '0x0000000000000000000000000000000000000001',
+            caip2: 'eip155:8453',
+          },
+          amount_type: 'exact_input',
+          slippage_bps: 50,
+        });
 
       expect(result.id).toBeDefined();
       expect(result.type).toBe('swap');
@@ -105,22 +117,25 @@ describe('PrivySwapsService', () => {
         owner: { public_key: resources.p256KeyPair.publicKey },
       });
 
-      const result = await privyClient.wallets().swaps().execute(ownedWallet.id, {
-        base_amount: '1000000000000000000',
-        source: {
-          asset_address: 'native',
-          caip2: 'eip155:8453',
-        },
-        destination: {
-          asset_address: '0x0000000000000000000000000000000000000001',
-          caip2: 'eip155:8453',
-        },
-        amount_type: 'exact_input',
-        slippage_bps: 50,
-        authorization_context: {
-          authorization_private_keys: [resources.p256KeyPair.privateKey],
-        },
-      });
+      const result = await privyClient
+        .wallets()
+        .swaps()
+        .execute(ownedWallet.id, {
+          base_amount: '1000000000000000000',
+          source: {
+            asset_address: 'native',
+            caip2: 'eip155:8453',
+          },
+          destination: {
+            asset_address: '0x0000000000000000000000000000000000000001',
+            caip2: 'eip155:8453',
+          },
+          amount_type: 'exact_input',
+          slippage_bps: 50,
+          authorization_context: {
+            authorization_private_keys: [resources.p256KeyPair.privateKey],
+          },
+        });
 
       expect(result.id).toBeDefined();
       expect(result.type).toBe('swap');
@@ -130,39 +145,45 @@ describe('PrivySwapsService', () => {
     it.skip('should execute a swap with idempotency key', async () => {
       const idempotencyKey = `swap-${crypto.randomUUID()}`;
 
-      const result = await privyClient.wallets().swaps().execute(walletId, {
-        base_amount: '1000000000000000000',
-        source: {
-          asset_address: 'native',
-          caip2: 'eip155:8453',
-        },
-        destination: {
-          asset_address: '0x0000000000000000000000000000000000000001',
-          caip2: 'eip155:8453',
-        },
-        amount_type: 'exact_input',
-        slippage_bps: 50,
-        idempotency_key: idempotencyKey,
-      });
+      const result = await privyClient
+        .wallets()
+        .swaps()
+        .execute(walletId, {
+          base_amount: '1000000000000000000',
+          source: {
+            asset_address: 'native',
+            caip2: 'eip155:8453',
+          },
+          destination: {
+            asset_address: '0x0000000000000000000000000000000000000001',
+            caip2: 'eip155:8453',
+          },
+          amount_type: 'exact_input',
+          slippage_bps: 50,
+          idempotency_key: idempotencyKey,
+        });
 
       expect(result.id).toBeDefined();
       expect(result.type).toBe('swap');
     });
 
     it.skip('should execute a cross-chain swap', async () => {
-      const result = await privyClient.wallets().swaps().execute(walletId, {
-        base_amount: '1000000000000000000',
-        source: {
-          asset_address: 'native',
-          caip2: 'eip155:8453',
-        },
-        destination: {
-          asset_address: 'native',
-          caip2: 'eip155:42161',
-        },
-        amount_type: 'exact_input',
-        slippage_bps: 100,
-      });
+      const result = await privyClient
+        .wallets()
+        .swaps()
+        .execute(walletId, {
+          base_amount: '1000000000000000000',
+          source: {
+            asset_address: 'native',
+            caip2: 'eip155:8453',
+          },
+          destination: {
+            asset_address: 'native',
+            caip2: 'eip155:42161',
+          },
+          amount_type: 'exact_input',
+          slippage_bps: 100,
+        });
 
       expect(result.id).toBeDefined();
       expect(result.type).toBe('swap');

@@ -39,10 +39,7 @@ export class PrivySwapsService {
 
   public async quote(
     walletId: string,
-    {
-      authorization_context: authorizationContext = {},
-      ...params
-    }: PrivySwapsService.QuoteInput,
+    { authorization_context: authorizationContext = {}, ...params }: PrivySwapsService.QuoteInput,
   ): Promise<SwapQuoteResponse> {
     const { headers } = await prepareRequest(this.privyClient, this.appID, {
       authorizationContext,

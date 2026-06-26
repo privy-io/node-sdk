@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as TransactionsAPI from './transactions';
 
 export class Yield extends APIResource {}
 
@@ -187,17 +188,9 @@ export interface EthereumYieldClaimResponse {
   rewards: Array<EthereumYieldClaimReward>;
 
   /**
-   * The current status of the claim transaction.
+   * Status of a blockchain transaction submitted by Privy.
    */
-  status:
-    | 'broadcasted'
-    | 'confirmed'
-    | 'execution_reverted'
-    | 'failed'
-    | 'replaced'
-    | 'finalized'
-    | 'provider_error'
-    | 'pending';
+  status: TransactionsAPI.BlockchainTransactionStatus;
 
   /**
    * Unix timestamp of when the claim was last updated, in milliseconds.

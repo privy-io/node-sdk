@@ -3,8 +3,8 @@
 import { APIResource } from '../core/resource';
 import * as IntentsAPI from './intents';
 import * as UsersAPI from './users';
-import * as WalletActionsAPI from './wallet-actions';
 import * as AppsAPI from './apps/apps';
+import * as ActionsAPI from './wallets/actions';
 import * as WalletsAPI from './wallets/wallets';
 
 export class Webhooks extends APIResource {
@@ -828,7 +828,11 @@ export interface PrivateKeyExportWebhookPayload {
    */
   wallet_id: string;
 
-  export_source?: 'display' | 'client';
+  /**
+   * The export type. 'display' is for showing the key to the user in the UI,
+   * 'client' is for exporting to the client application.
+   */
+  export_source?: WalletsAPI.ExportType;
 }
 
 /**
@@ -855,7 +859,11 @@ export interface SeedPhraseExportWebhookPayload {
    */
   wallet_id: string;
 
-  export_source?: 'display' | 'client';
+  /**
+   * The export type. 'display' is for showing the key to the user in the UI,
+   * 'client' is for exporting to the client application.
+   */
+  export_source?: WalletsAPI.ExportType;
 }
 
 /**
@@ -1304,7 +1312,7 @@ export interface WalletActionEarnDepositCreatedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Underlying asset token address.
@@ -1382,7 +1390,7 @@ export interface WalletActionEarnDepositFailedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Underlying asset token address.
@@ -1407,7 +1415,7 @@ export interface WalletActionEarnDepositFailedWebhookPayload {
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason: WalletActionsAPI.FailureReason;
+  failure_reason: ActionsAPI.FailureReason;
 
   /**
    * Base-unit amount of asset deposited (e.g. "1500000").
@@ -1423,7 +1431,7 @@ export interface WalletActionEarnDepositFailedWebhookPayload {
    * The steps of the wallet action. Completed steps will have transaction hashes;
    * the failing step will have a failure_reason.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -1476,7 +1484,7 @@ export interface WalletActionEarnDepositRejectedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Underlying asset token address.
@@ -1496,7 +1504,7 @@ export interface WalletActionEarnDepositRejectedWebhookPayload {
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason: WalletActionsAPI.FailureReason;
+  failure_reason: ActionsAPI.FailureReason;
 
   /**
    * Base-unit amount of asset deposited (e.g. "1500000").
@@ -1516,7 +1524,7 @@ export interface WalletActionEarnDepositRejectedWebhookPayload {
   /**
    * The steps of the wallet action at the time of rejection.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -1569,7 +1577,7 @@ export interface WalletActionEarnDepositSucceededWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Underlying asset token address.
@@ -1609,7 +1617,7 @@ export interface WalletActionEarnDepositSucceededWebhookPayload {
   /**
    * The steps of the wallet action, including transaction hashes.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -1662,7 +1670,7 @@ export interface WalletActionEarnIncentiveClaimCreatedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * EVM chain name (e.g. "base", "ethereum").
@@ -1677,7 +1685,7 @@ export interface WalletActionEarnIncentiveClaimCreatedWebhookPayload {
   /**
    * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
    */
-  rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
+  rewards: Array<ActionsAPI.EarnIncetiveClaimRewardEntry> | null;
 
   /**
    * The status of the wallet action.
@@ -1707,7 +1715,7 @@ export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * EVM chain name (e.g. "base", "ethereum").
@@ -1727,12 +1735,12 @@ export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason: WalletActionsAPI.FailureReason;
+  failure_reason: ActionsAPI.FailureReason;
 
   /**
    * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
    */
-  rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
+  rewards: Array<ActionsAPI.EarnIncetiveClaimRewardEntry> | null;
 
   /**
    * The status of the wallet action.
@@ -1743,7 +1751,7 @@ export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
    * The steps of the wallet action. Completed steps will have transaction hashes;
    * the failing step will have a failure_reason.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -1768,7 +1776,7 @@ export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * EVM chain name (e.g. "base", "ethereum").
@@ -1783,7 +1791,7 @@ export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason: WalletActionsAPI.FailureReason;
+  failure_reason: ActionsAPI.FailureReason;
 
   /**
    * ISO 8601 timestamp of when the wallet action was rejected.
@@ -1793,7 +1801,7 @@ export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
   /**
    * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
    */
-  rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
+  rewards: Array<ActionsAPI.EarnIncetiveClaimRewardEntry> | null;
 
   /**
    * The status of the wallet action.
@@ -1803,7 +1811,7 @@ export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
   /**
    * The steps of the wallet action at the time of rejection.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -1828,7 +1836,7 @@ export interface WalletActionEarnIncentiveClaimSucceededWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * EVM chain name (e.g. "base", "ethereum").
@@ -1848,7 +1856,7 @@ export interface WalletActionEarnIncentiveClaimSucceededWebhookPayload {
   /**
    * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
    */
-  rewards: Array<WalletActionsAPI.EarnIncetiveClaimRewardEntry> | null;
+  rewards: Array<ActionsAPI.EarnIncetiveClaimRewardEntry> | null;
 
   /**
    * The status of the wallet action.
@@ -1858,7 +1866,7 @@ export interface WalletActionEarnIncentiveClaimSucceededWebhookPayload {
   /**
    * The steps of the wallet action, including transaction hashes.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -1883,7 +1891,7 @@ export interface WalletActionEarnWithdrawCreatedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Underlying asset token address.
@@ -1961,7 +1969,7 @@ export interface WalletActionEarnWithdrawFailedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Underlying asset token address.
@@ -1986,7 +1994,7 @@ export interface WalletActionEarnWithdrawFailedWebhookPayload {
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason: WalletActionsAPI.FailureReason;
+  failure_reason: ActionsAPI.FailureReason;
 
   /**
    * Base-unit amount of asset withdrawn (e.g. "1500000").
@@ -2002,7 +2010,7 @@ export interface WalletActionEarnWithdrawFailedWebhookPayload {
    * The steps of the wallet action. Completed steps will have transaction hashes;
    * the failing step will have a failure_reason.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -2055,7 +2063,7 @@ export interface WalletActionEarnWithdrawRejectedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Underlying asset token address.
@@ -2075,7 +2083,7 @@ export interface WalletActionEarnWithdrawRejectedWebhookPayload {
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason: WalletActionsAPI.FailureReason;
+  failure_reason: ActionsAPI.FailureReason;
 
   /**
    * Base-unit amount of asset withdrawn (e.g. "1500000").
@@ -2095,7 +2103,7 @@ export interface WalletActionEarnWithdrawRejectedWebhookPayload {
   /**
    * The steps of the wallet action at the time of rejection.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -2148,7 +2156,7 @@ export interface WalletActionEarnWithdrawSucceededWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Underlying asset token address.
@@ -2188,7 +2196,7 @@ export interface WalletActionEarnWithdrawSucceededWebhookPayload {
   /**
    * The steps of the wallet action, including transaction hashes.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -2241,7 +2249,7 @@ export interface WalletActionSwapCreatedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Chain identifier.
@@ -2296,7 +2304,7 @@ export interface WalletActionSwapFailedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Chain identifier.
@@ -2316,7 +2324,7 @@ export interface WalletActionSwapFailedWebhookPayload {
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason: WalletActionsAPI.FailureReason;
+  failure_reason: ActionsAPI.FailureReason;
 
   /**
    * Amount of input token in base units. Populated after onchain confirmation.
@@ -2342,7 +2350,7 @@ export interface WalletActionSwapFailedWebhookPayload {
    * The steps of the wallet action. Completed steps will have transaction hashes;
    * the failing step will have a failure_reason.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -2367,7 +2375,7 @@ export interface WalletActionSwapRejectedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Chain identifier.
@@ -2382,7 +2390,7 @@ export interface WalletActionSwapRejectedWebhookPayload {
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason: WalletActionsAPI.FailureReason;
+  failure_reason: ActionsAPI.FailureReason;
 
   /**
    * Amount of input token in base units. Populated after onchain confirmation.
@@ -2412,7 +2420,7 @@ export interface WalletActionSwapRejectedWebhookPayload {
   /**
    * The steps of the wallet action at the time of rejection.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -2437,7 +2445,7 @@ export interface WalletActionSwapSucceededWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * Chain identifier.
@@ -2483,7 +2491,7 @@ export interface WalletActionSwapSucceededWebhookPayload {
   /**
    * The steps of the wallet action, including transaction hashes.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -2508,7 +2516,7 @@ export interface WalletActionTransferCreatedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * ISO 8601 timestamp of when the wallet action was created.
@@ -2577,7 +2585,7 @@ export interface WalletActionTransferFailedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * ISO 8601 timestamp of when the wallet action was created.
@@ -2597,7 +2605,7 @@ export interface WalletActionTransferFailedWebhookPayload {
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason: WalletActionsAPI.FailureReason;
+  failure_reason: ActionsAPI.FailureReason;
 
   /**
    * Chain name (e.g. "base", "ethereum").
@@ -2613,7 +2621,7 @@ export interface WalletActionTransferFailedWebhookPayload {
    * The steps of the wallet action. Completed steps will have transaction hashes;
    * the failing step will have a failure_reason.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -2662,7 +2670,7 @@ export interface WalletActionTransferRejectedWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * ISO 8601 timestamp of when the wallet action was created.
@@ -2677,7 +2685,7 @@ export interface WalletActionTransferRejectedWebhookPayload {
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
-  failure_reason: WalletActionsAPI.FailureReason;
+  failure_reason: ActionsAPI.FailureReason;
 
   /**
    * ISO 8601 timestamp of when the wallet action was rejected.
@@ -2697,7 +2705,7 @@ export interface WalletActionTransferRejectedWebhookPayload {
   /**
    * The steps of the wallet action at the time of rejection.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -2746,7 +2754,7 @@ export interface WalletActionTransferSucceededWebhookPayload {
   /**
    * Type of wallet action
    */
-  action_type: WalletActionsAPI.WalletActionType;
+  action_type: ActionsAPI.WalletActionType;
 
   /**
    * ISO 8601 timestamp of when the wallet action completed successfully.
@@ -2776,7 +2784,7 @@ export interface WalletActionTransferSucceededWebhookPayload {
   /**
    * The steps of the wallet action, including transaction hashes.
    */
-  steps: Array<WalletActionsAPI.WalletActionStep>;
+  steps: Array<ActionsAPI.WalletActionStep>;
 
   /**
    * The type of webhook event.
@@ -2919,19 +2927,24 @@ export interface WalletRecoveredWebhookPayload {
 }
 
 /**
+ * Recovery method types for embedded wallet recovery setup webhooks.
+ */
+export type WalletRecoverySetupMethod =
+  | 'user_passcode_derived_recovery_key'
+  | 'privy_passcode_derived_recovery_key'
+  | 'privy_generated_recovery_key'
+  | 'google_drive_recovery_secret'
+  | 'icloud_recovery_secret'
+  | 'recovery_encryption_key';
+
+/**
  * Payload for the wallet.recovery_setup webhook event.
  */
 export interface WalletRecoverySetupWebhookPayload {
   /**
-   * The recovery method that was set up.
+   * Recovery method types for embedded wallet recovery setup webhooks.
    */
-  method:
-    | 'user_passcode_derived_recovery_key'
-    | 'privy_passcode_derived_recovery_key'
-    | 'privy_generated_recovery_key'
-    | 'google_drive_recovery_secret'
-    | 'icloud_recovery_secret'
-    | 'recovery_encryption_key';
+  method: WalletRecoverySetupMethod;
 
   /**
    * The type of webhook event.
@@ -3243,6 +3256,7 @@ export declare namespace Webhooks {
     type WalletFundsSacAsset as WalletFundsSacAsset,
     type WalletFundsSplAsset as WalletFundsSplAsset,
     type WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload,
+    type WalletRecoverySetupMethod as WalletRecoverySetupMethod,
     type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
     type WalletRestoredWebhookPayload as WalletRestoredWebhookPayload,
     type WebhookPayload as WebhookPayload,

@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as SwapsAPI from '../swaps';
-import * as WalletActionsAPI from '../wallet-actions';
+import * as ActionsAPI from './actions';
 import * as WalletsAPI from './wallets';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
@@ -36,10 +36,11 @@ export class Swap extends APIResource {
     walletID: string,
     params: SwapExecuteParams,
     options?: RequestOptions,
-  ): APIPromise<WalletActionsAPI.SwapActionResponse> {
+  ): APIPromise<ActionsAPI.SwapActionResponse> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-idempotency-key': privyIdempotencyKey,
+      'privy-request-expiry': privyRequestExpiry,
       ...body
     } = params;
     return this._client.post(path`/v1/wallets/${walletID}/swap`, {
@@ -51,6 +52,7 @@ export class Swap extends APIResource {
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
           ...(privyIdempotencyKey != null ? { 'privy-idempotency-key': privyIdempotencyKey } : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -82,7 +84,11 @@ export class Swap extends APIResource {
     params: SwapQuoteParams,
     options?: RequestOptions,
   ): APIPromise<SwapsAPI.SwapQuoteResponse> {
-    const { 'privy-authorization-signature': privyAuthorizationSignature, ...body } = params;
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
     return this._client.post(path`/v1/wallets/${walletID}/swap/quote`, {
       body,
       ...options,
@@ -91,6 +97,7 @@ export class Swap extends APIResource {
           ...(privyAuthorizationSignature != null ?
             { 'privy-authorization-signature': privyAuthorizationSignature }
           : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
         },
         options?.headers,
       ]),
@@ -141,6 +148,12 @@ export interface SwapExecuteParams {
    * a 24-hour window.
    */
   'privy-idempotency-key'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export interface SwapQuoteParams {
@@ -181,6 +194,12 @@ export interface SwapQuoteParams {
    * required, they should be comma separated.
    */
   'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
 }
 
 export declare namespace Swap {

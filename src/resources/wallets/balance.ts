@@ -40,26 +40,10 @@ export namespace BalanceGetResponse {
   export interface Balance {
     asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
-    chain:
-      | 'ethereum'
-      | 'arbitrum'
-      | 'avalanche'
-      | 'base'
-      | 'tempo'
-      | 'linea'
-      | 'optimism'
-      | 'polygon'
-      | 'solana'
-      | 'zksync_era'
-      | 'sepolia'
-      | 'arbitrum_sepolia'
-      | 'avalanche_fuji'
-      | 'base_sepolia'
-      | 'linea_testnet'
-      | 'optimism_sepolia'
-      | 'polygon_amoy'
-      | 'solana_devnet'
-      | 'solana_testnet';
+    /**
+     * Supported blockchain network names for wallet balance and transaction queries.
+     */
+    chain: WalletsAPI.WalletAssetChainNameInput;
 
     display_values: { [key: string]: string };
 
@@ -98,47 +82,7 @@ export interface BalanceGetParams {
    * Chain(s) to query named assets on (e.g. `base`, `ethereum`). Use together with
    * `asset`. Cannot be used with `token`.
    */
-  chain?:
-    | 'ethereum'
-    | 'arbitrum'
-    | 'avalanche'
-    | 'base'
-    | 'tempo'
-    | 'linea'
-    | 'optimism'
-    | 'polygon'
-    | 'solana'
-    | 'zksync_era'
-    | 'sepolia'
-    | 'arbitrum_sepolia'
-    | 'avalanche_fuji'
-    | 'base_sepolia'
-    | 'linea_testnet'
-    | 'optimism_sepolia'
-    | 'polygon_amoy'
-    | 'solana_devnet'
-    | 'solana_testnet'
-    | Array<
-        | 'ethereum'
-        | 'arbitrum'
-        | 'avalanche'
-        | 'base'
-        | 'tempo'
-        | 'linea'
-        | 'optimism'
-        | 'polygon'
-        | 'solana'
-        | 'zksync_era'
-        | 'sepolia'
-        | 'arbitrum_sepolia'
-        | 'avalanche_fuji'
-        | 'base_sepolia'
-        | 'linea_testnet'
-        | 'optimism_sepolia'
-        | 'polygon_amoy'
-        | 'solana_devnet'
-        | 'solana_testnet'
-      >;
+  chain?: WalletsAPI.WalletAssetChainNameInput | Array<WalletsAPI.WalletAssetChainNameInput>;
 
   /**
    * Include archived wallets in lookup. Defaults to false.

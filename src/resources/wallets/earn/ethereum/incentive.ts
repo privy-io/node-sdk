@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../../core/resource';
-import * as WalletActionsAPI from '../../../wallet-actions';
+import * as ActionsAPI from '../../actions';
 import { APIPromise } from '../../../../core/api-promise';
 import { buildHeaders } from '../../../../internal/headers';
 import { RequestOptions } from '../../../../internal/request-options';
@@ -27,7 +27,7 @@ export class Incentive extends APIResource {
     walletID: string,
     params: IncentiveClaimParams,
     options?: RequestOptions,
-  ): APIPromise<WalletActionsAPI.EarnIncentiveClaimActionResponse> {
+  ): APIPromise<ActionsAPI.EarnIncentiveClaimActionResponse> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-idempotency-key': privyIdempotencyKey,

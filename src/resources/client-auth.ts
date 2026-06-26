@@ -287,8 +287,13 @@ export interface BridgeUsdFiatVirtualAccountDepositInstructions {
 
   bank_routing_number: string;
 
-  payment_rails: Array<'ach_push' | 'wire'>;
+  payment_rails: Array<BridgeUsdFiatVirtualAccountDepositPaymentRail>;
 }
+
+/**
+ * Payment rails supported for USD virtual account deposits.
+ */
+export type BridgeUsdFiatVirtualAccountDepositPaymentRail = 'ach_push' | 'wire';
 
 /**
  * The request body for authenticating with a custom JWT.
@@ -926,9 +931,9 @@ export interface OAuthTokenAuthorizationCodeRequestBody {
  */
 export interface OAuthTokenDeviceCodePendingError {
   /**
-   * The error code indicating why the token request failed.
+   * Error codes for the device authorization pending response per RFC 8628.
    */
-  error: 'authorization_pending' | 'slow_down' | 'access_denied' | 'expired_token';
+  error: OAuthTokenDeviceCodePendingErrorCode;
 
   /**
    * Human-readable description of the error.
@@ -940,6 +945,15 @@ export interface OAuthTokenDeviceCodePendingError {
    */
   interval?: number;
 }
+
+/**
+ * Error codes for the device authorization pending response per RFC 8628.
+ */
+export type OAuthTokenDeviceCodePendingErrorCode =
+  | 'authorization_pending'
+  | 'slow_down'
+  | 'access_denied'
+  | 'expired_token';
 
 /**
  * Request body for the urn:ietf:params:oauth:grant-type:device_code grant type
@@ -2005,6 +2019,7 @@ export declare namespace ClientAuth {
     type BridgeSandboxFiatVirtualAccountResponse as BridgeSandboxFiatVirtualAccountResponse,
     type BridgeSourceAsset as BridgeSourceAsset,
     type BridgeUsdFiatVirtualAccountDepositInstructions as BridgeUsdFiatVirtualAccountDepositInstructions,
+    type BridgeUsdFiatVirtualAccountDepositPaymentRail as BridgeUsdFiatVirtualAccountDepositPaymentRail,
     type CustomJwtAuthenticateRequestBody as CustomJwtAuthenticateRequestBody,
     type CustomJwtLinkRequestBody as CustomJwtLinkRequestBody,
     type CustomOAuthProviderID as CustomOAuthProviderID,
@@ -2065,6 +2080,7 @@ export declare namespace ClientAuth {
     type OAuthProviderID as OAuthProviderID,
     type OAuthTokenAuthorizationCodeRequestBody as OAuthTokenAuthorizationCodeRequestBody,
     type OAuthTokenDeviceCodePendingError as OAuthTokenDeviceCodePendingError,
+    type OAuthTokenDeviceCodePendingErrorCode as OAuthTokenDeviceCodePendingErrorCode,
     type OAuthTokenDeviceCodeRequestBody as OAuthTokenDeviceCodeRequestBody,
     type OAuthTokenGrantType as OAuthTokenGrantType,
     type OAuthTokenRefreshTokenRequestBody as OAuthTokenRefreshTokenRequestBody,

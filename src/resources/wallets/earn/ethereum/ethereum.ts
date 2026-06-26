@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../../core/resource';
-import * as WalletActionsAPI from '../../../wallet-actions';
+import * as ActionsAPI from '../../actions';
 import * as IncentiveAPI from './incentive';
 import { Incentive, IncentiveClaimParams } from './incentive';
 import { APIPromise } from '../../../../core/api-promise';
@@ -31,7 +31,7 @@ export class Ethereum extends APIResource {
     walletID: string,
     params: EthereumDepositParams,
     options?: RequestOptions,
-  ): APIPromise<WalletActionsAPI.EarnDepositActionResponse> {
+  ): APIPromise<ActionsAPI.EarnDepositActionResponse> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-idempotency-key': privyIdempotencyKey,
@@ -73,7 +73,7 @@ export class Ethereum extends APIResource {
     walletID: string,
     params: EthereumWithdrawParams,
     options?: RequestOptions,
-  ): APIPromise<WalletActionsAPI.EarnWithdrawActionResponse> {
+  ): APIPromise<ActionsAPI.EarnWithdrawActionResponse> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-idempotency-key': privyIdempotencyKey,

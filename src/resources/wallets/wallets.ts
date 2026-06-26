@@ -4,10 +4,50 @@ import { APIResource } from '../../core/resource';
 import * as WalletsAPI from './wallets';
 import * as SharedAPI from '../shared';
 import * as UsersAPI from '../users';
-import * as WalletActionsAPI from '../wallet-actions';
 import * as AppsAPI from '../apps/apps';
 import * as ActionsAPI from './actions';
-import { ActionGetParams, Actions } from './actions';
+import {
+  ActionGetParams,
+  Actions,
+  CustodianTransactionWalletActionStep,
+  CustodianTransactionWalletActionStepStatus,
+  EarnAsset,
+  EarnDepositActionResponse,
+  EarnDepositRequestBody,
+  EarnIncentiveClaimActionResponse,
+  EarnIncentiveClaimRequestBody,
+  EarnIncentiveRewardEntry,
+  EarnIncentiveRewardsQuery,
+  EarnIncentiveRewardsResponse,
+  EarnIncetiveClaimRewardEntry,
+  EarnWithdrawActionResponse,
+  EarnWithdrawRequestBody,
+  EthereumEarnPositionQuery,
+  EthereumEarnPositionResponse,
+  EthereumEarnProvider,
+  EthereumEarnVaultDetailsResponse,
+  EvmTransactionWalletActionStep,
+  EvmUserOperationEntrypointVersion,
+  EvmUserOperationWalletActionStep,
+  EvmWalletActionStepStatus,
+  ExternalTransactionWalletActionStep,
+  ExternalTransactionWalletActionStepStatus,
+  FailureReason,
+  ListWalletActionsQuery,
+  ListWalletActionsResponse,
+  SvmTransactionWalletActionStep,
+  SvmWalletActionStepStatus,
+  SwapActionResponse,
+  TransferActionResponse,
+  TvmTransactionWalletActionStep,
+  TvmWalletActionStepStatus,
+  WalletActionInclude,
+  WalletActionResponse,
+  WalletActionStatus,
+  WalletActionStep,
+  WalletActionStepType,
+  WalletActionType,
+} from './actions';
 import * as BalanceAPI from './balance';
 import { Balance, BalanceGetParams, BalanceGetResponse } from './balance';
 import * as SwapAPI from './swap';
@@ -262,7 +302,7 @@ export class Wallets extends APIResource {
     walletID: string,
     params: WalletTransferParams,
     options?: RequestOptions,
-  ): APIPromise<WalletActionsAPI.TransferActionResponse> {
+  ): APIPromise<ActionsAPI.TransferActionResponse> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-idempotency-key': privyIdempotencyKey,
@@ -3100,26 +3140,10 @@ export interface TransferQuoteResponse {
 export interface TransferReceivedTransactionDetail {
   asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
-  chain:
-    | 'ethereum'
-    | 'arbitrum'
-    | 'avalanche'
-    | 'base'
-    | 'tempo'
-    | 'linea'
-    | 'optimism'
-    | 'polygon'
-    | 'solana'
-    | 'zksync_era'
-    | 'sepolia'
-    | 'arbitrum_sepolia'
-    | 'avalanche_fuji'
-    | 'base_sepolia'
-    | 'linea_testnet'
-    | 'optimism_sepolia'
-    | 'polygon_amoy'
-    | 'solana_devnet'
-    | 'solana_testnet';
+  /**
+   * Supported blockchain network names for wallet balance and transaction queries.
+   */
+  chain: WalletAssetChainNameInput;
 
   display_values: { [key: string]: string };
 
@@ -3184,26 +3208,10 @@ export interface TransferRequestBody {
 export interface TransferSentTransactionDetail {
   asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
 
-  chain:
-    | 'ethereum'
-    | 'arbitrum'
-    | 'avalanche'
-    | 'base'
-    | 'tempo'
-    | 'linea'
-    | 'optimism'
-    | 'polygon'
-    | 'solana'
-    | 'zksync_era'
-    | 'sepolia'
-    | 'arbitrum_sepolia'
-    | 'avalanche_fuji'
-    | 'base_sepolia'
-    | 'linea_testnet'
-    | 'optimism_sepolia'
-    | 'polygon_amoy'
-    | 'solana_devnet'
-    | 'solana_testnet';
+  /**
+   * Supported blockchain network names for wallet balance and transaction queries.
+   */
+  chain: WalletAssetChainNameInput;
 
   display_values: { [key: string]: string };
 
@@ -3798,6 +3806,30 @@ export interface WalletAPIRevokeAuthorizationKeyInput {
  * A named asset supported across all chains.
  */
 export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+
+/**
+ * Supported blockchain network names for wallet balance and transaction queries.
+ */
+export type WalletAssetChainNameInput =
+  | 'ethereum'
+  | 'arbitrum'
+  | 'avalanche'
+  | 'base'
+  | 'tempo'
+  | 'linea'
+  | 'optimism'
+  | 'polygon'
+  | 'solana'
+  | 'zksync_era'
+  | 'sepolia'
+  | 'arbitrum_sepolia'
+  | 'avalanche_fuji'
+  | 'base_sepolia'
+  | 'linea_testnet'
+  | 'optimism_sepolia'
+  | 'polygon_amoy'
+  | 'solana_devnet'
+  | 'solana_testnet';
 
 /**
  * Request body for creating an encrypted, bound user signing key.
@@ -5927,6 +5959,7 @@ export declare namespace Wallets {
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
     type WalletAPIRevokeAuthorizationKeyInput as WalletAPIRevokeAuthorizationKeyInput,
     type WalletAsset as WalletAsset,
+    type WalletAssetChainNameInput as WalletAssetChainNameInput,
     type WalletAuthenticateBoundEncryptedRequestBody as WalletAuthenticateBoundEncryptedRequestBody,
     type WalletAuthenticateBoundRequestBody as WalletAuthenticateBoundRequestBody,
     type WalletAuthenticateBoundUnencryptedRequestBody as WalletAuthenticateBoundUnencryptedRequestBody,
@@ -5971,7 +6004,48 @@ export declare namespace Wallets {
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
   };
 
-  export { Actions as Actions, type ActionGetParams as ActionGetParams };
+  export {
+    Actions as Actions,
+    type CustodianTransactionWalletActionStep as CustodianTransactionWalletActionStep,
+    type CustodianTransactionWalletActionStepStatus as CustodianTransactionWalletActionStepStatus,
+    type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
+    type EvmUserOperationEntrypointVersion as EvmUserOperationEntrypointVersion,
+    type EvmUserOperationWalletActionStep as EvmUserOperationWalletActionStep,
+    type EvmWalletActionStepStatus as EvmWalletActionStepStatus,
+    type EarnAsset as EarnAsset,
+    type EarnDepositActionResponse as EarnDepositActionResponse,
+    type EarnDepositRequestBody as EarnDepositRequestBody,
+    type EarnIncentiveClaimActionResponse as EarnIncentiveClaimActionResponse,
+    type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
+    type EarnIncentiveRewardEntry as EarnIncentiveRewardEntry,
+    type EarnIncentiveRewardsQuery as EarnIncentiveRewardsQuery,
+    type EarnIncentiveRewardsResponse as EarnIncentiveRewardsResponse,
+    type EarnIncetiveClaimRewardEntry as EarnIncetiveClaimRewardEntry,
+    type EarnWithdrawActionResponse as EarnWithdrawActionResponse,
+    type EarnWithdrawRequestBody as EarnWithdrawRequestBody,
+    type EthereumEarnPositionQuery as EthereumEarnPositionQuery,
+    type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
+    type EthereumEarnProvider as EthereumEarnProvider,
+    type EthereumEarnVaultDetailsResponse as EthereumEarnVaultDetailsResponse,
+    type ExternalTransactionWalletActionStep as ExternalTransactionWalletActionStep,
+    type ExternalTransactionWalletActionStepStatus as ExternalTransactionWalletActionStepStatus,
+    type FailureReason as FailureReason,
+    type ListWalletActionsQuery as ListWalletActionsQuery,
+    type ListWalletActionsResponse as ListWalletActionsResponse,
+    type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
+    type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
+    type SwapActionResponse as SwapActionResponse,
+    type TvmTransactionWalletActionStep as TvmTransactionWalletActionStep,
+    type TvmWalletActionStepStatus as TvmWalletActionStepStatus,
+    type TransferActionResponse as TransferActionResponse,
+    type WalletActionInclude as WalletActionInclude,
+    type WalletActionResponse as WalletActionResponse,
+    type WalletActionStatus as WalletActionStatus,
+    type WalletActionStep as WalletActionStep,
+    type WalletActionStepType as WalletActionStepType,
+    type WalletActionType as WalletActionType,
+    type ActionGetParams as ActionGetParams,
+  };
 
   export { Earn as Earn };
 

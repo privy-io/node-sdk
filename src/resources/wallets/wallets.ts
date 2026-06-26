@@ -493,7 +493,9 @@ export interface AdditionalSignerItemInput {
 }
 
 /**
- * A blockchain wallet address (Ethereum or Solana).
+ * A blockchain wallet address. Ethereum addresses are normalized to EIP-55
+ * checksum format. Solana addresses are validated as base58. All other chain
+ * addresses (Stellar, Tron, Sui, Aptos, etc.) are accepted as-is.
  */
 export type Address = string;
 
@@ -1582,7 +1584,9 @@ export interface Gas {
  */
 export interface GetByWalletAddressRequestBody {
   /**
-   * A blockchain wallet address (Ethereum or Solana).
+   * A blockchain wallet address. Ethereum addresses are normalized to EIP-55
+   * checksum format. Solana addresses are validated as base58. All other chain
+   * addresses (Stellar, Tron, Sui, Aptos, etc.) are accepted as-is.
    */
   address: Address;
 
@@ -4332,6 +4336,13 @@ export interface WalletCreateParams {
 
 export interface WalletListParams extends CursorParams {
   /**
+   * A blockchain wallet address. Ethereum addresses are normalized to EIP-55
+   * checksum format. Solana addresses are validated as base58. All other chain
+   * addresses (Stellar, Tron, Sui, Aptos, etc.) are accepted as-is.
+   */
+  address?: Address;
+
+  /**
    * Filter wallets by authorization public key. Returns wallets owned by key quorums
    * that include the specified P-256 public key (base64-encoded DER format). Cannot
    * be used together with user_id.
@@ -5732,7 +5743,9 @@ export interface WalletGetParams {
 
 export interface WalletGetWalletByAddressParams {
   /**
-   * A blockchain wallet address (Ethereum or Solana).
+   * A blockchain wallet address. Ethereum addresses are normalized to EIP-55
+   * checksum format. Solana addresses are validated as base58. All other chain
+   * addresses (Stellar, Tron, Sui, Aptos, etc.) are accepted as-is.
    */
   address: Address;
 

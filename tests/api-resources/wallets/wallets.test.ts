@@ -53,6 +53,7 @@ describe('resource wallets', () => {
     await expect(
       client.wallets.list(
         {
+          address: 'string',
           authorization_key: 's=-/fw-L-+N\n',
           chain_type: 'ethereum',
           cursor: 'x',

@@ -16,10 +16,10 @@ import {
   WalletSubmitImportParams,
   WalletUpdateParams,
   WalletTransferParams,
-  TransferActionResponse,
   HDSubmitInput,
   PrivateKeySubmitInput,
 } from '../../resources';
+import { TransferActionResponse } from '../../resources/wallets/actions';
 import { PrivyClient } from '../PrivyClient';
 import { PrivyEarnService } from './earn';
 import { PrivyEthereumService } from './ethereum';

@@ -1,5 +1,5 @@
 import { PrivyAPI } from '../../../client';
-import { EarnDepositActionResponse, EarnWithdrawActionResponse } from '../../../resources';
+import { EarnDepositActionResponse, EarnWithdrawActionResponse } from '../../../resources/wallets/actions';
 import {
   Ethereum,
   EthereumDepositParams,

@@ -1,5 +1,6 @@
 import { PrivyAPI } from '../../client';
-import { SwapActionResponse, SwapQuoteResponse } from '../../resources';
+import { SwapActionResponse } from '../../resources/wallets/actions';
+import { SwapQuoteResponse } from '../../resources';
 import { Swap, SwapExecuteParams, SwapQuoteParams } from '../../resources/wallets/swap';
 import { prepareRequest } from '../../lib/authorization';
 import { PrivyClient } from '../PrivyClient';

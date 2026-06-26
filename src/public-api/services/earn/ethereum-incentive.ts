@@ -1,5 +1,5 @@
 import { PrivyAPI } from '../../../client';
-import { EarnIncentiveClaimActionResponse } from '../../../resources';
+import { EarnIncentiveClaimActionResponse } from '../../../resources/wallets/actions';
 import { Incentive, IncentiveClaimParams } from '../../../resources/wallets/earn/ethereum/incentive';
 import { prepareRequest } from '../../../lib/authorization';
 import { PrivyClient } from '../../PrivyClient';

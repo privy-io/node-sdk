@@ -40,6 +40,7 @@ describe('resource swap', () => {
       slippage_bps: 50,
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 
@@ -73,6 +74,7 @@ describe('resource swap', () => {
       fee_configuration: { type: 'total_fee_bps', value: 50 },
       slippage_bps: 0,
       'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-request-expiry': 'privy-request-expiry',
     });
   });
 });

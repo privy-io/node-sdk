@@ -12,6 +12,7 @@ export { type PrivyKeyQuorumsService } from './public-api/services/key-quorums';
 export { type PrivyUsersService } from './public-api/services/users';
 export { type PrivyIntentsService } from './public-api/services/intents';
 export { type PrivyAppsService } from './public-api/services/apps';
+export { type PrivySwapsService } from './public-api/services/swaps';
 export { type PrivyUtils } from './public-api/services/utils';
 export {
   InvalidAuthTokenError,

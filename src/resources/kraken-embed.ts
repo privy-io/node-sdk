@@ -5,6 +5,30 @@ import { APIResource } from '../core/resource';
 export class KrakenEmbed extends APIResource {}
 
 /**
+ * Sorting options for the asset list endpoint.
+ */
+export type KrakenEmbedAssetSortOption =
+  | 'trending'
+  | 'market_cap_rank'
+  | '-market_cap_rank'
+  | 'symbol'
+  | '-symbol'
+  | 'name'
+  | '-name'
+  | 'change_percent_1h'
+  | '-change_percent_1h'
+  | 'change_percent_24h'
+  | '-change_percent_24h'
+  | 'change_percent_7d'
+  | '-change_percent_7d'
+  | 'change_percent_30d'
+  | '-change_percent_30d'
+  | 'change_percent_1y'
+  | '-change_percent_1y'
+  | 'listing_date'
+  | '-listing_date';
+
+/**
  * Request body for cancelling a custom order.
  */
 export interface KrakenEmbedCancelCustomOrderInput {
@@ -41,6 +65,273 @@ export interface KrakenEmbedCancelCustomOrderResult {
    */
   order: KrakenEmbedCustomOrder;
 }
+
+/**
+ * ISO 3166-1 alpha-2 country codes supported by Kraken Embed.
+ */
+export type KrakenEmbedCountryCode =
+  | 'AD'
+  | 'AE'
+  | 'AF'
+  | 'AG'
+  | 'AI'
+  | 'AL'
+  | 'AM'
+  | 'AO'
+  | 'AQ'
+  | 'AR'
+  | 'AS'
+  | 'AT'
+  | 'AU'
+  | 'AW'
+  | 'AX'
+  | 'AZ'
+  | 'BA'
+  | 'BB'
+  | 'BD'
+  | 'BE'
+  | 'BF'
+  | 'BG'
+  | 'BH'
+  | 'BI'
+  | 'BJ'
+  | 'BL'
+  | 'BM'
+  | 'BN'
+  | 'BO'
+  | 'BQ'
+  | 'BR'
+  | 'BS'
+  | 'BT'
+  | 'BV'
+  | 'BW'
+  | 'BY'
+  | 'BZ'
+  | 'CA'
+  | 'CC'
+  | 'CD'
+  | 'CF'
+  | 'CG'
+  | 'CH'
+  | 'CI'
+  | 'CK'
+  | 'CL'
+  | 'CM'
+  | 'CN'
+  | 'CO'
+  | 'CR'
+  | 'CU'
+  | 'CV'
+  | 'CW'
+  | 'CX'
+  | 'CY'
+  | 'CZ'
+  | 'DE'
+  | 'DJ'
+  | 'DK'
+  | 'DM'
+  | 'DO'
+  | 'DZ'
+  | 'EC'
+  | 'EE'
+  | 'EG'
+  | 'EH'
+  | 'ER'
+  | 'ES'
+  | 'ET'
+  | 'FI'
+  | 'FJ'
+  | 'FK'
+  | 'FM'
+  | 'FO'
+  | 'FR'
+  | 'GA'
+  | 'GB'
+  | 'GD'
+  | 'GE'
+  | 'GF'
+  | 'GG'
+  | 'GH'
+  | 'GI'
+  | 'GL'
+  | 'GM'
+  | 'GN'
+  | 'GP'
+  | 'GQ'
+  | 'GR'
+  | 'GS'
+  | 'GT'
+  | 'GU'
+  | 'GW'
+  | 'GY'
+  | 'HK'
+  | 'HM'
+  | 'HN'
+  | 'HR'
+  | 'HT'
+  | 'HU'
+  | 'ID'
+  | 'IE'
+  | 'IL'
+  | 'IM'
+  | 'IN'
+  | 'IO'
+  | 'IQ'
+  | 'IR'
+  | 'IS'
+  | 'IT'
+  | 'JE'
+  | 'JM'
+  | 'JO'
+  | 'JP'
+  | 'KE'
+  | 'KG'
+  | 'KH'
+  | 'KI'
+  | 'KM'
+  | 'KN'
+  | 'KP'
+  | 'KR'
+  | 'KW'
+  | 'KY'
+  | 'KZ'
+  | 'LA'
+  | 'LB'
+  | 'LC'
+  | 'LI'
+  | 'LK'
+  | 'LR'
+  | 'LS'
+  | 'LT'
+  | 'LU'
+  | 'LV'
+  | 'LY'
+  | 'MA'
+  | 'MC'
+  | 'MD'
+  | 'ME'
+  | 'MF'
+  | 'MG'
+  | 'MH'
+  | 'MK'
+  | 'ML'
+  | 'MM'
+  | 'MN'
+  | 'MO'
+  | 'MP'
+  | 'MQ'
+  | 'MR'
+  | 'MS'
+  | 'MT'
+  | 'MU'
+  | 'MV'
+  | 'MW'
+  | 'MX'
+  | 'MY'
+  | 'MZ'
+  | 'NA'
+  | 'NC'
+  | 'NE'
+  | 'NF'
+  | 'NG'
+  | 'NI'
+  | 'NL'
+  | 'NO'
+  | 'NP'
+  | 'NR'
+  | 'NU'
+  | 'NZ'
+  | 'OM'
+  | 'PA'
+  | 'PE'
+  | 'PF'
+  | 'PG'
+  | 'PH'
+  | 'PK'
+  | 'PL'
+  | 'PM'
+  | 'PN'
+  | 'PR'
+  | 'PS'
+  | 'PT'
+  | 'PW'
+  | 'PY'
+  | 'QA'
+  | 'RE'
+  | 'RO'
+  | 'RS'
+  | 'RU'
+  | 'RW'
+  | 'SA'
+  | 'SB'
+  | 'SC'
+  | 'SD'
+  | 'SE'
+  | 'SG'
+  | 'SH'
+  | 'SI'
+  | 'SJ'
+  | 'SK'
+  | 'SL'
+  | 'SM'
+  | 'SN'
+  | 'SO'
+  | 'SR'
+  | 'SS'
+  | 'ST'
+  | 'SV'
+  | 'SX'
+  | 'SY'
+  | 'SZ'
+  | 'TC'
+  | 'TD'
+  | 'TF'
+  | 'TG'
+  | 'TH'
+  | 'TJ'
+  | 'TK'
+  | 'TL'
+  | 'TM'
+  | 'TN'
+  | 'TO'
+  | 'TR'
+  | 'TT'
+  | 'TV'
+  | 'TW'
+  | 'TZ'
+  | 'UA'
+  | 'UG'
+  | 'UM'
+  | 'US'
+  | 'UY'
+  | 'UZ'
+  | 'VA'
+  | 'VC'
+  | 'VE'
+  | 'VG'
+  | 'VI'
+  | 'VN'
+  | 'VU'
+  | 'WF'
+  | 'WS'
+  | 'YE'
+  | 'YT'
+  | 'ZA'
+  | 'ZM'
+  | 'ZW'
+  | 'AC'
+  | 'AN'
+  | 'AP'
+  | 'CP'
+  | 'DG'
+  | 'EA'
+  | 'EU'
+  | 'IC'
+  | 'JX'
+  | 'TA'
+  | 'QO'
+  | 'XK'
+  | '0C';
 
 /**
  * Request body for creating a custom order.
@@ -143,7 +434,10 @@ export interface KrakenEmbedCustomOrderAction {
 
   spread_bps: string;
 
-  type: 'receive' | 'spend';
+  /**
+   * Whether the quote amount refers to the asset being received or spent.
+   */
+  type: KrakenEmbedQuoteType;
 }
 
 /**
@@ -165,7 +459,10 @@ export interface KrakenEmbedCustomOrderOccurrence {
 
   created_at: string;
 
-  status: 'success' | 'failure' | 'skipped';
+  /**
+   * Outcome status of a custom order execution occurrence.
+   */
+  status: KrakenEmbedCustomOrderOccurrenceStatus;
 
   /**
    * Trigger metadata for a custom order occurrence.
@@ -192,11 +489,24 @@ export interface KrakenEmbedCustomOrderOccurrenceExecutedAction {
 }
 
 /**
+ * Outcome status of a custom order execution occurrence.
+ */
+export type KrakenEmbedCustomOrderOccurrenceStatus = 'success' | 'failure' | 'skipped';
+
+/**
  * Trigger metadata for a custom order occurrence.
  */
 export interface KrakenEmbedCustomOrderOccurrenceTrigger {
-  type: 'time' | 'price' | 'crypto_deposit' | 'market_open';
+  /**
+   * The trigger type that caused a custom order occurrence to execute.
+   */
+  type: KrakenEmbedCustomOrderOccurrenceTriggerType;
 }
+
+/**
+ * The trigger type that caused a custom order occurrence to execute.
+ */
+export type KrakenEmbedCustomOrderOccurrenceTriggerType = 'time' | 'price' | 'crypto_deposit' | 'market_open';
 
 /**
  * Target asset for the other side of the custom order trade.
@@ -209,10 +519,18 @@ export interface KrakenEmbedCustomOrderQuoteAsset {
  * Custom order status with optional reason for cancelled or paused states.
  */
 export interface KrakenEmbedCustomOrderStatus {
-  status: 'active' | 'completed' | 'cancelled' | 'paused';
+  /**
+   * The lifecycle state of a custom order.
+   */
+  status: KrakenEmbedCustomOrderStatusValue;
 
   reason?: unknown;
 }
+
+/**
+ * The lifecycle state of a custom order.
+ */
+export type KrakenEmbedCustomOrderStatusValue = 'active' | 'completed' | 'cancelled' | 'paused';
 
 /**
  * Price trigger for a custom order. The order executes when base_asset/quote_asset
@@ -221,7 +539,10 @@ export interface KrakenEmbedCustomOrderStatus {
 export interface KrakenEmbedCustomOrderTrigger {
   base_asset: string;
 
-  condition: 'gte' | 'lte';
+  /**
+   * Comparison operator for a custom order price trigger.
+   */
+  condition: KrakenEmbedCustomOrderTriggerCondition;
 
   quote_asset: string;
 
@@ -229,6 +550,11 @@ export interface KrakenEmbedCustomOrderTrigger {
 
   type: 'price';
 }
+
+/**
+ * Comparison operator for a custom order price trigger.
+ */
+export type KrakenEmbedCustomOrderTriggerCondition = 'gte' | 'lte';
 
 /**
  * An earn amount with native and converted values.
@@ -318,26 +644,10 @@ export interface KrakenEmbedGetAssetListQueryParamsSchema {
 
   quote?: string;
 
-  sort?:
-    | 'trending'
-    | 'market_cap_rank'
-    | '-market_cap_rank'
-    | 'symbol'
-    | '-symbol'
-    | 'name'
-    | '-name'
-    | 'change_percent_1h'
-    | '-change_percent_1h'
-    | 'change_percent_24h'
-    | '-change_percent_24h'
-    | 'change_percent_7d'
-    | '-change_percent_7d'
-    | 'change_percent_30d'
-    | '-change_percent_30d'
-    | 'change_percent_1y'
-    | '-change_percent_1y'
-    | 'listing_date'
-    | '-listing_date';
+  /**
+   * Sorting options for the asset list endpoint.
+   */
+  sort?: KrakenEmbedAssetSortOption;
 }
 
 /**
@@ -511,7 +821,11 @@ export interface KrakenEmbedGetPortfolioDetailsQueryParamsSchema {
  * Query parameters for getting a portfolio summary.
  */
 export interface KrakenEmbedGetPortfolioSummaryQueryParams {
-  'include[current_day_pnl]'?: 'true' | 'false';
+  /**
+   * A string-encoded boolean query parameter on including current day profit and
+   * loss.
+   */
+  'include[current_day_pnl]'?: KrakenEmbedIncludeCurrentDayPnlQueryParam;
 
   quote?: string;
 }
@@ -562,11 +876,14 @@ export interface KrakenEmbedGetPortfolioTransactionsQueryParamsSchema {
 
   ref_ids?: Array<KrakenEmbedPortfolioTransactionRefID>;
 
-  sorting?: 'descending' | 'ascending';
+  /**
+   * Sort direction for paginated transaction lists.
+   */
+  sorting?: KrakenEmbedSortingOrder;
 
-  statuses?: Array<'unspecified' | 'in_progress' | 'successful' | 'failed'>;
+  statuses?: Array<KrakenEmbedTransactionStatus>;
 
-  types?: Array<'simple_order' | 'simple_order_failed' | 'earn_reward'>;
+  types?: Array<KrakenEmbedTransactionType>;
 
   until_time?: string;
 }
@@ -582,6 +899,22 @@ export interface KrakenEmbedGetQuoteQueryParams {
 }
 
 /**
+ * Document types accepted for proof of identity verification.
+ */
+export type KrakenEmbedIdentityDocumentType =
+  | 'passport'
+  | 'drivers_license'
+  | 'id_card'
+  | 'residence_card'
+  | 'special_permanent_residence_card';
+
+/**
+ * A string-encoded boolean query parameter on including current day profit and
+ * loss.
+ */
+export type KrakenEmbedIncludeCurrentDayPnlQueryParam = 'true' | 'false';
+
+/**
  * Query parameters for listing custom orders.
  */
 export interface KrakenEmbedListCustomOrdersQueryParams {
@@ -589,7 +922,7 @@ export interface KrakenEmbedListCustomOrdersQueryParams {
 
   cursor?: string;
 
-  statuses?: Array<'active' | 'paused' | 'cancelled' | 'completed'> | string;
+  statuses?: Array<KrakenEmbedCustomOrderStatusValue> | string;
 }
 
 /**
@@ -662,274 +995,20 @@ export interface KrakenEmbedPortfolioTransactionRefID {
 export type KrakenEmbedPortfolioTransactionRefIDType = 'simple_order_quote' | 'simple_order_quote_failed';
 
 /**
+ * Whether the quote amount refers to the asset being received or spent.
+ */
+export type KrakenEmbedQuoteType = 'receive' | 'spend';
+
+/**
  * User's residential address including street, city, postal code, and country.
  */
 export interface KrakenEmbedResidence {
   city: string;
 
-  country:
-    | 'AD'
-    | 'AE'
-    | 'AF'
-    | 'AG'
-    | 'AI'
-    | 'AL'
-    | 'AM'
-    | 'AO'
-    | 'AQ'
-    | 'AR'
-    | 'AS'
-    | 'AT'
-    | 'AU'
-    | 'AW'
-    | 'AX'
-    | 'AZ'
-    | 'BA'
-    | 'BB'
-    | 'BD'
-    | 'BE'
-    | 'BF'
-    | 'BG'
-    | 'BH'
-    | 'BI'
-    | 'BJ'
-    | 'BL'
-    | 'BM'
-    | 'BN'
-    | 'BO'
-    | 'BQ'
-    | 'BR'
-    | 'BS'
-    | 'BT'
-    | 'BV'
-    | 'BW'
-    | 'BY'
-    | 'BZ'
-    | 'CA'
-    | 'CC'
-    | 'CD'
-    | 'CF'
-    | 'CG'
-    | 'CH'
-    | 'CI'
-    | 'CK'
-    | 'CL'
-    | 'CM'
-    | 'CN'
-    | 'CO'
-    | 'CR'
-    | 'CU'
-    | 'CV'
-    | 'CW'
-    | 'CX'
-    | 'CY'
-    | 'CZ'
-    | 'DE'
-    | 'DJ'
-    | 'DK'
-    | 'DM'
-    | 'DO'
-    | 'DZ'
-    | 'EC'
-    | 'EE'
-    | 'EG'
-    | 'EH'
-    | 'ER'
-    | 'ES'
-    | 'ET'
-    | 'FI'
-    | 'FJ'
-    | 'FK'
-    | 'FM'
-    | 'FO'
-    | 'FR'
-    | 'GA'
-    | 'GB'
-    | 'GD'
-    | 'GE'
-    | 'GF'
-    | 'GG'
-    | 'GH'
-    | 'GI'
-    | 'GL'
-    | 'GM'
-    | 'GN'
-    | 'GP'
-    | 'GQ'
-    | 'GR'
-    | 'GS'
-    | 'GT'
-    | 'GU'
-    | 'GW'
-    | 'GY'
-    | 'HK'
-    | 'HM'
-    | 'HN'
-    | 'HR'
-    | 'HT'
-    | 'HU'
-    | 'ID'
-    | 'IE'
-    | 'IL'
-    | 'IM'
-    | 'IN'
-    | 'IO'
-    | 'IQ'
-    | 'IR'
-    | 'IS'
-    | 'IT'
-    | 'JE'
-    | 'JM'
-    | 'JO'
-    | 'JP'
-    | 'KE'
-    | 'KG'
-    | 'KH'
-    | 'KI'
-    | 'KM'
-    | 'KN'
-    | 'KP'
-    | 'KR'
-    | 'KW'
-    | 'KY'
-    | 'KZ'
-    | 'LA'
-    | 'LB'
-    | 'LC'
-    | 'LI'
-    | 'LK'
-    | 'LR'
-    | 'LS'
-    | 'LT'
-    | 'LU'
-    | 'LV'
-    | 'LY'
-    | 'MA'
-    | 'MC'
-    | 'MD'
-    | 'ME'
-    | 'MF'
-    | 'MG'
-    | 'MH'
-    | 'MK'
-    | 'ML'
-    | 'MM'
-    | 'MN'
-    | 'MO'
-    | 'MP'
-    | 'MQ'
-    | 'MR'
-    | 'MS'
-    | 'MT'
-    | 'MU'
-    | 'MV'
-    | 'MW'
-    | 'MX'
-    | 'MY'
-    | 'MZ'
-    | 'NA'
-    | 'NC'
-    | 'NE'
-    | 'NF'
-    | 'NG'
-    | 'NI'
-    | 'NL'
-    | 'NO'
-    | 'NP'
-    | 'NR'
-    | 'NU'
-    | 'NZ'
-    | 'OM'
-    | 'PA'
-    | 'PE'
-    | 'PF'
-    | 'PG'
-    | 'PH'
-    | 'PK'
-    | 'PL'
-    | 'PM'
-    | 'PN'
-    | 'PR'
-    | 'PS'
-    | 'PT'
-    | 'PW'
-    | 'PY'
-    | 'QA'
-    | 'RE'
-    | 'RO'
-    | 'RS'
-    | 'RU'
-    | 'RW'
-    | 'SA'
-    | 'SB'
-    | 'SC'
-    | 'SD'
-    | 'SE'
-    | 'SG'
-    | 'SH'
-    | 'SI'
-    | 'SJ'
-    | 'SK'
-    | 'SL'
-    | 'SM'
-    | 'SN'
-    | 'SO'
-    | 'SR'
-    | 'SS'
-    | 'ST'
-    | 'SV'
-    | 'SX'
-    | 'SY'
-    | 'SZ'
-    | 'TC'
-    | 'TD'
-    | 'TF'
-    | 'TG'
-    | 'TH'
-    | 'TJ'
-    | 'TK'
-    | 'TL'
-    | 'TM'
-    | 'TN'
-    | 'TO'
-    | 'TR'
-    | 'TT'
-    | 'TV'
-    | 'TW'
-    | 'TZ'
-    | 'UA'
-    | 'UG'
-    | 'UM'
-    | 'US'
-    | 'UY'
-    | 'UZ'
-    | 'VA'
-    | 'VC'
-    | 'VE'
-    | 'VG'
-    | 'VI'
-    | 'VN'
-    | 'VU'
-    | 'WF'
-    | 'WS'
-    | 'YE'
-    | 'YT'
-    | 'ZA'
-    | 'ZM'
-    | 'ZW'
-    | 'AC'
-    | 'AN'
-    | 'AP'
-    | 'CP'
-    | 'DG'
-    | 'EA'
-    | 'EU'
-    | 'IC'
-    | 'JX'
-    | 'TA'
-    | 'QO'
-    | 'XK'
-    | '0C';
+  /**
+   * ISO 3166-1 alpha-2 country codes supported by Kraken Embed.
+   */
+  country: KrakenEmbedCountryCode;
 
   line1: string;
 
@@ -939,6 +1018,33 @@ export interface KrakenEmbedResidence {
 
   province?: string | null;
 }
+
+/**
+ * Document types accepted for proof of address verification.
+ */
+export type KrakenEmbedResidenceDocumentType =
+  | 'bank_statement'
+  | 'credit_card_statement'
+  | 'employer_letter_or_work_contract'
+  | 'government_issued_document'
+  | 'home_or_rental_insurance'
+  | 'internet_or_cable_bill'
+  | 'mobile_phone_bill'
+  | 'mortgage_statement'
+  | 'official_government_letter'
+  | 'passport_address_page'
+  | 'rental_or_lease_agreement'
+  | 'residence_certificate'
+  | 'social_insurance_payment_receipt'
+  | 'tax_receipt'
+  | 'tax_return'
+  | 'utility_bill'
+  | 'other';
+
+/**
+ * Sort direction for paginated transaction lists.
+ */
+export type KrakenEmbedSortingOrder = 'descending' | 'ascending';
 
 /**
  * Optional best-effort metadata hints for proof of address verification.
@@ -951,25 +1057,10 @@ export interface KrakenEmbedStartAddressMetadata {
 
   document_number?: string | null;
 
-  document_type?:
-    | 'bank_statement'
-    | 'credit_card_statement'
-    | 'employer_letter_or_work_contract'
-    | 'government_issued_document'
-    | 'home_or_rental_insurance'
-    | 'internet_or_cable_bill'
-    | 'mobile_phone_bill'
-    | 'mortgage_statement'
-    | 'official_government_letter'
-    | 'passport_address_page'
-    | 'rental_or_lease_agreement'
-    | 'residence_certificate'
-    | 'social_insurance_payment_receipt'
-    | 'tax_receipt'
-    | 'tax_return'
-    | 'utility_bill'
-    | 'other'
-    | null;
+  /**
+   * Document types accepted for proof of address verification.
+   */
+  document_type?: KrakenEmbedResidenceDocumentType | null;
 
   expiration_date?: string | null;
 }
@@ -1012,13 +1103,10 @@ export interface KrakenEmbedStartIdentityInfo {
 export interface KrakenEmbedStartIdentityMetadata {
   document_number?: string | null;
 
-  document_type?:
-    | 'passport'
-    | 'drivers_license'
-    | 'id_card'
-    | 'residence_card'
-    | 'special_permanent_residence_card'
-    | null;
+  /**
+   * Document types accepted for proof of identity verification.
+   */
+  document_type?: KrakenEmbedIdentityDocumentType | null;
 
   expiration_date?: string | null;
 
@@ -1028,535 +1116,15 @@ export interface KrakenEmbedStartIdentityMetadata {
    */
   identity?: KrakenEmbedStartIdentityInfo | null;
 
-  issuing_country?:
-    | 'AD'
-    | 'AE'
-    | 'AF'
-    | 'AG'
-    | 'AI'
-    | 'AL'
-    | 'AM'
-    | 'AO'
-    | 'AQ'
-    | 'AR'
-    | 'AS'
-    | 'AT'
-    | 'AU'
-    | 'AW'
-    | 'AX'
-    | 'AZ'
-    | 'BA'
-    | 'BB'
-    | 'BD'
-    | 'BE'
-    | 'BF'
-    | 'BG'
-    | 'BH'
-    | 'BI'
-    | 'BJ'
-    | 'BL'
-    | 'BM'
-    | 'BN'
-    | 'BO'
-    | 'BQ'
-    | 'BR'
-    | 'BS'
-    | 'BT'
-    | 'BV'
-    | 'BW'
-    | 'BY'
-    | 'BZ'
-    | 'CA'
-    | 'CC'
-    | 'CD'
-    | 'CF'
-    | 'CG'
-    | 'CH'
-    | 'CI'
-    | 'CK'
-    | 'CL'
-    | 'CM'
-    | 'CN'
-    | 'CO'
-    | 'CR'
-    | 'CU'
-    | 'CV'
-    | 'CW'
-    | 'CX'
-    | 'CY'
-    | 'CZ'
-    | 'DE'
-    | 'DJ'
-    | 'DK'
-    | 'DM'
-    | 'DO'
-    | 'DZ'
-    | 'EC'
-    | 'EE'
-    | 'EG'
-    | 'EH'
-    | 'ER'
-    | 'ES'
-    | 'ET'
-    | 'FI'
-    | 'FJ'
-    | 'FK'
-    | 'FM'
-    | 'FO'
-    | 'FR'
-    | 'GA'
-    | 'GB'
-    | 'GD'
-    | 'GE'
-    | 'GF'
-    | 'GG'
-    | 'GH'
-    | 'GI'
-    | 'GL'
-    | 'GM'
-    | 'GN'
-    | 'GP'
-    | 'GQ'
-    | 'GR'
-    | 'GS'
-    | 'GT'
-    | 'GU'
-    | 'GW'
-    | 'GY'
-    | 'HK'
-    | 'HM'
-    | 'HN'
-    | 'HR'
-    | 'HT'
-    | 'HU'
-    | 'ID'
-    | 'IE'
-    | 'IL'
-    | 'IM'
-    | 'IN'
-    | 'IO'
-    | 'IQ'
-    | 'IR'
-    | 'IS'
-    | 'IT'
-    | 'JE'
-    | 'JM'
-    | 'JO'
-    | 'JP'
-    | 'KE'
-    | 'KG'
-    | 'KH'
-    | 'KI'
-    | 'KM'
-    | 'KN'
-    | 'KP'
-    | 'KR'
-    | 'KW'
-    | 'KY'
-    | 'KZ'
-    | 'LA'
-    | 'LB'
-    | 'LC'
-    | 'LI'
-    | 'LK'
-    | 'LR'
-    | 'LS'
-    | 'LT'
-    | 'LU'
-    | 'LV'
-    | 'LY'
-    | 'MA'
-    | 'MC'
-    | 'MD'
-    | 'ME'
-    | 'MF'
-    | 'MG'
-    | 'MH'
-    | 'MK'
-    | 'ML'
-    | 'MM'
-    | 'MN'
-    | 'MO'
-    | 'MP'
-    | 'MQ'
-    | 'MR'
-    | 'MS'
-    | 'MT'
-    | 'MU'
-    | 'MV'
-    | 'MW'
-    | 'MX'
-    | 'MY'
-    | 'MZ'
-    | 'NA'
-    | 'NC'
-    | 'NE'
-    | 'NF'
-    | 'NG'
-    | 'NI'
-    | 'NL'
-    | 'NO'
-    | 'NP'
-    | 'NR'
-    | 'NU'
-    | 'NZ'
-    | 'OM'
-    | 'PA'
-    | 'PE'
-    | 'PF'
-    | 'PG'
-    | 'PH'
-    | 'PK'
-    | 'PL'
-    | 'PM'
-    | 'PN'
-    | 'PR'
-    | 'PS'
-    | 'PT'
-    | 'PW'
-    | 'PY'
-    | 'QA'
-    | 'RE'
-    | 'RO'
-    | 'RS'
-    | 'RU'
-    | 'RW'
-    | 'SA'
-    | 'SB'
-    | 'SC'
-    | 'SD'
-    | 'SE'
-    | 'SG'
-    | 'SH'
-    | 'SI'
-    | 'SJ'
-    | 'SK'
-    | 'SL'
-    | 'SM'
-    | 'SN'
-    | 'SO'
-    | 'SR'
-    | 'SS'
-    | 'ST'
-    | 'SV'
-    | 'SX'
-    | 'SY'
-    | 'SZ'
-    | 'TC'
-    | 'TD'
-    | 'TF'
-    | 'TG'
-    | 'TH'
-    | 'TJ'
-    | 'TK'
-    | 'TL'
-    | 'TM'
-    | 'TN'
-    | 'TO'
-    | 'TR'
-    | 'TT'
-    | 'TV'
-    | 'TW'
-    | 'TZ'
-    | 'UA'
-    | 'UG'
-    | 'UM'
-    | 'US'
-    | 'UY'
-    | 'UZ'
-    | 'VA'
-    | 'VC'
-    | 'VE'
-    | 'VG'
-    | 'VI'
-    | 'VN'
-    | 'VU'
-    | 'WF'
-    | 'WS'
-    | 'YE'
-    | 'YT'
-    | 'ZA'
-    | 'ZM'
-    | 'ZW'
-    | 'AC'
-    | 'AN'
-    | 'AP'
-    | 'CP'
-    | 'DG'
-    | 'EA'
-    | 'EU'
-    | 'IC'
-    | 'JX'
-    | 'TA'
-    | 'QO'
-    | 'XK'
-    | '0C'
-    | null;
+  /**
+   * ISO 3166-1 alpha-2 country codes supported by Kraken Embed.
+   */
+  issuing_country?: KrakenEmbedCountryCode | null;
 
-  nationality?:
-    | 'AD'
-    | 'AE'
-    | 'AF'
-    | 'AG'
-    | 'AI'
-    | 'AL'
-    | 'AM'
-    | 'AO'
-    | 'AQ'
-    | 'AR'
-    | 'AS'
-    | 'AT'
-    | 'AU'
-    | 'AW'
-    | 'AX'
-    | 'AZ'
-    | 'BA'
-    | 'BB'
-    | 'BD'
-    | 'BE'
-    | 'BF'
-    | 'BG'
-    | 'BH'
-    | 'BI'
-    | 'BJ'
-    | 'BL'
-    | 'BM'
-    | 'BN'
-    | 'BO'
-    | 'BQ'
-    | 'BR'
-    | 'BS'
-    | 'BT'
-    | 'BV'
-    | 'BW'
-    | 'BY'
-    | 'BZ'
-    | 'CA'
-    | 'CC'
-    | 'CD'
-    | 'CF'
-    | 'CG'
-    | 'CH'
-    | 'CI'
-    | 'CK'
-    | 'CL'
-    | 'CM'
-    | 'CN'
-    | 'CO'
-    | 'CR'
-    | 'CU'
-    | 'CV'
-    | 'CW'
-    | 'CX'
-    | 'CY'
-    | 'CZ'
-    | 'DE'
-    | 'DJ'
-    | 'DK'
-    | 'DM'
-    | 'DO'
-    | 'DZ'
-    | 'EC'
-    | 'EE'
-    | 'EG'
-    | 'EH'
-    | 'ER'
-    | 'ES'
-    | 'ET'
-    | 'FI'
-    | 'FJ'
-    | 'FK'
-    | 'FM'
-    | 'FO'
-    | 'FR'
-    | 'GA'
-    | 'GB'
-    | 'GD'
-    | 'GE'
-    | 'GF'
-    | 'GG'
-    | 'GH'
-    | 'GI'
-    | 'GL'
-    | 'GM'
-    | 'GN'
-    | 'GP'
-    | 'GQ'
-    | 'GR'
-    | 'GS'
-    | 'GT'
-    | 'GU'
-    | 'GW'
-    | 'GY'
-    | 'HK'
-    | 'HM'
-    | 'HN'
-    | 'HR'
-    | 'HT'
-    | 'HU'
-    | 'ID'
-    | 'IE'
-    | 'IL'
-    | 'IM'
-    | 'IN'
-    | 'IO'
-    | 'IQ'
-    | 'IR'
-    | 'IS'
-    | 'IT'
-    | 'JE'
-    | 'JM'
-    | 'JO'
-    | 'JP'
-    | 'KE'
-    | 'KG'
-    | 'KH'
-    | 'KI'
-    | 'KM'
-    | 'KN'
-    | 'KP'
-    | 'KR'
-    | 'KW'
-    | 'KY'
-    | 'KZ'
-    | 'LA'
-    | 'LB'
-    | 'LC'
-    | 'LI'
-    | 'LK'
-    | 'LR'
-    | 'LS'
-    | 'LT'
-    | 'LU'
-    | 'LV'
-    | 'LY'
-    | 'MA'
-    | 'MC'
-    | 'MD'
-    | 'ME'
-    | 'MF'
-    | 'MG'
-    | 'MH'
-    | 'MK'
-    | 'ML'
-    | 'MM'
-    | 'MN'
-    | 'MO'
-    | 'MP'
-    | 'MQ'
-    | 'MR'
-    | 'MS'
-    | 'MT'
-    | 'MU'
-    | 'MV'
-    | 'MW'
-    | 'MX'
-    | 'MY'
-    | 'MZ'
-    | 'NA'
-    | 'NC'
-    | 'NE'
-    | 'NF'
-    | 'NG'
-    | 'NI'
-    | 'NL'
-    | 'NO'
-    | 'NP'
-    | 'NR'
-    | 'NU'
-    | 'NZ'
-    | 'OM'
-    | 'PA'
-    | 'PE'
-    | 'PF'
-    | 'PG'
-    | 'PH'
-    | 'PK'
-    | 'PL'
-    | 'PM'
-    | 'PN'
-    | 'PR'
-    | 'PS'
-    | 'PT'
-    | 'PW'
-    | 'PY'
-    | 'QA'
-    | 'RE'
-    | 'RO'
-    | 'RS'
-    | 'RU'
-    | 'RW'
-    | 'SA'
-    | 'SB'
-    | 'SC'
-    | 'SD'
-    | 'SE'
-    | 'SG'
-    | 'SH'
-    | 'SI'
-    | 'SJ'
-    | 'SK'
-    | 'SL'
-    | 'SM'
-    | 'SN'
-    | 'SO'
-    | 'SR'
-    | 'SS'
-    | 'ST'
-    | 'SV'
-    | 'SX'
-    | 'SY'
-    | 'SZ'
-    | 'TC'
-    | 'TD'
-    | 'TF'
-    | 'TG'
-    | 'TH'
-    | 'TJ'
-    | 'TK'
-    | 'TL'
-    | 'TM'
-    | 'TN'
-    | 'TO'
-    | 'TR'
-    | 'TT'
-    | 'TV'
-    | 'TW'
-    | 'TZ'
-    | 'UA'
-    | 'UG'
-    | 'UM'
-    | 'US'
-    | 'UY'
-    | 'UZ'
-    | 'VA'
-    | 'VC'
-    | 'VE'
-    | 'VG'
-    | 'VI'
-    | 'VN'
-    | 'VU'
-    | 'WF'
-    | 'WS'
-    | 'YE'
-    | 'YT'
-    | 'ZA'
-    | 'ZM'
-    | 'ZW'
-    | 'AC'
-    | 'AN'
-    | 'AP'
-    | 'CP'
-    | 'DG'
-    | 'EA'
-    | 'EU'
-    | 'IC'
-    | 'JX'
-    | 'TA'
-    | 'QO'
-    | 'XK'
-    | '0C'
-    | null;
+  /**
+   * ISO 3166-1 alpha-2 country codes supported by Kraken Embed.
+   */
+  nationality?: KrakenEmbedCountryCode | null;
 }
 
 /**
@@ -1659,6 +1227,16 @@ export interface KrakenEmbedToggleAutoEarnResponse {
 }
 
 /**
+ * Lifecycle status of a portfolio transaction.
+ */
+export type KrakenEmbedTransactionStatus = 'unspecified' | 'in_progress' | 'successful' | 'failed';
+
+/**
+ * Type of portfolio transaction in the transaction history.
+ */
+export type KrakenEmbedTransactionType = 'simple_order' | 'simple_order_failed' | 'earn_reward';
+
+/**
  * An upcoming earn reward for a specific asset.
  */
 export interface KrakenEmbedUpcomingReward {
@@ -1679,10 +1257,12 @@ export interface KrakenEmbedUpcomingReward {
 
 export declare namespace KrakenEmbed {
   export {
+    type KrakenEmbedAssetSortOption as KrakenEmbedAssetSortOption,
     type KrakenEmbedCancelCustomOrderInput as KrakenEmbedCancelCustomOrderInput,
     type KrakenEmbedCancelCustomOrderPath as KrakenEmbedCancelCustomOrderPath,
     type KrakenEmbedCancelCustomOrderResponse as KrakenEmbedCancelCustomOrderResponse,
     type KrakenEmbedCancelCustomOrderResult as KrakenEmbedCancelCustomOrderResult,
+    type KrakenEmbedCountryCode as KrakenEmbedCountryCode,
     type KrakenEmbedCreateCustomOrderInput as KrakenEmbedCreateCustomOrderInput,
     type KrakenEmbedCreateCustomOrderResponse as KrakenEmbedCreateCustomOrderResponse,
     type KrakenEmbedCreateCustomOrderResult as KrakenEmbedCreateCustomOrderResult,
@@ -1692,10 +1272,14 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedCustomOrderAmount as KrakenEmbedCustomOrderAmount,
     type KrakenEmbedCustomOrderOccurrence as KrakenEmbedCustomOrderOccurrence,
     type KrakenEmbedCustomOrderOccurrenceExecutedAction as KrakenEmbedCustomOrderOccurrenceExecutedAction,
+    type KrakenEmbedCustomOrderOccurrenceStatus as KrakenEmbedCustomOrderOccurrenceStatus,
     type KrakenEmbedCustomOrderOccurrenceTrigger as KrakenEmbedCustomOrderOccurrenceTrigger,
+    type KrakenEmbedCustomOrderOccurrenceTriggerType as KrakenEmbedCustomOrderOccurrenceTriggerType,
     type KrakenEmbedCustomOrderQuoteAsset as KrakenEmbedCustomOrderQuoteAsset,
     type KrakenEmbedCustomOrderStatus as KrakenEmbedCustomOrderStatus,
+    type KrakenEmbedCustomOrderStatusValue as KrakenEmbedCustomOrderStatusValue,
     type KrakenEmbedCustomOrderTrigger as KrakenEmbedCustomOrderTrigger,
+    type KrakenEmbedCustomOrderTriggerCondition as KrakenEmbedCustomOrderTriggerCondition,
     type KrakenEmbedEarnAmount as KrakenEmbedEarnAmount,
     type KrakenEmbedEarnAprEstimate as KrakenEmbedEarnAprEstimate,
     type KrakenEmbedEarnAsset as KrakenEmbedEarnAsset,
@@ -1722,13 +1306,18 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedGetPortfolioSummaryResult as KrakenEmbedGetPortfolioSummaryResult,
     type KrakenEmbedGetPortfolioTransactionsQueryParamsSchema as KrakenEmbedGetPortfolioTransactionsQueryParamsSchema,
     type KrakenEmbedGetQuoteQueryParams as KrakenEmbedGetQuoteQueryParams,
+    type KrakenEmbedIdentityDocumentType as KrakenEmbedIdentityDocumentType,
+    type KrakenEmbedIncludeCurrentDayPnlQueryParam as KrakenEmbedIncludeCurrentDayPnlQueryParam,
     type KrakenEmbedListCustomOrdersQueryParams as KrakenEmbedListCustomOrdersQueryParams,
     type KrakenEmbedListCustomOrdersResponse as KrakenEmbedListCustomOrdersResponse,
     type KrakenEmbedListCustomOrdersResult as KrakenEmbedListCustomOrdersResult,
     type KrakenEmbedPortfolioSummaryPayload as KrakenEmbedPortfolioSummaryPayload,
     type KrakenEmbedPortfolioTransactionRefID as KrakenEmbedPortfolioTransactionRefID,
     type KrakenEmbedPortfolioTransactionRefIDType as KrakenEmbedPortfolioTransactionRefIDType,
+    type KrakenEmbedQuoteType as KrakenEmbedQuoteType,
     type KrakenEmbedResidence as KrakenEmbedResidence,
+    type KrakenEmbedResidenceDocumentType as KrakenEmbedResidenceDocumentType,
+    type KrakenEmbedSortingOrder as KrakenEmbedSortingOrder,
     type KrakenEmbedStartAddressMetadata as KrakenEmbedStartAddressMetadata,
     type KrakenEmbedStartAddressVerificationURLInput as KrakenEmbedStartAddressVerificationURLInput,
     type KrakenEmbedStartIdentityInfo as KrakenEmbedStartIdentityInfo,
@@ -1742,6 +1331,8 @@ export declare namespace KrakenEmbed {
     type KrakenEmbedToggleAutoEarnKrakenResponse as KrakenEmbedToggleAutoEarnKrakenResponse,
     type KrakenEmbedToggleAutoEarnQueryParams as KrakenEmbedToggleAutoEarnQueryParams,
     type KrakenEmbedToggleAutoEarnResponse as KrakenEmbedToggleAutoEarnResponse,
+    type KrakenEmbedTransactionStatus as KrakenEmbedTransactionStatus,
+    type KrakenEmbedTransactionType as KrakenEmbedTransactionType,
     type KrakenEmbedUpcomingReward as KrakenEmbedUpcomingReward,
   };
 }

@@ -337,9 +337,9 @@ export interface AuthenticatedUser {
   refresh_token: string | null;
 
   /**
-   * Instructs the client on how to handle tokens received
+   * Instructs the client on how to handle tokens received from a session response.
    */
-  session_update_action: 'set' | 'ignore' | 'clear';
+  session_update_action: ClientSessionUpdateAction;
 
   /**
    * A Privy user object.
@@ -355,6 +355,11 @@ export interface AuthenticatedUser {
    */
   oauth_tokens?: OAuthTokens;
 }
+
+/**
+ * Instructs the client on how to handle tokens received from a session response.
+ */
+export type ClientSessionUpdateAction = 'set' | 'ignore' | 'clear';
 
 /**
  * An embedded wallet associated with a cross-app account.
@@ -468,10 +473,21 @@ export interface LinkedAccountAuthorizationKey {
 export interface LinkedAccountBaseWallet {
   address: string;
 
-  chain_type: 'solana' | 'ethereum';
+  /**
+   * The wallet chain types that offer first class support.
+   */
+  chain_type: WalletsAPI.FirstClassChainType;
 
-  type: 'wallet' | 'smart_wallet';
+  /**
+   * The type of wallet linked account (external wallet or smart wallet).
+   */
+  type: LinkedAccountBaseWalletType;
 }
+
+/**
+ * The type of wallet linked account (external wallet or smart wallet).
+ */
+export type LinkedAccountBaseWalletType = 'wallet' | 'smart_wallet';
 
 /**
  * A Bitcoin SegWit embedded wallet account linked to the user.
@@ -1130,10 +1146,20 @@ export interface LinkedAccountPasskey {
 }
 
 /**
+ * WebAuthn credential device type indicating platform or cross-platform
+ * authenticator residency.
+ */
+export type LinkedAccountPasskeyCredentialDeviceType = 'singleDevice' | 'multiDevice';
+
+/**
  * The payload for importing a passkey account.
  */
 export interface LinkedAccountPasskeyInput {
-  credential_device_type: 'singleDevice' | 'multiDevice';
+  /**
+   * WebAuthn credential device type indicating platform or cross-platform
+   * authenticator residency.
+   */
+  credential_device_type: LinkedAccountPasskeyCredentialDeviceType;
 
   credential_id: string;
 
@@ -1456,7 +1482,10 @@ export type LinkedAccountType =
 export interface LinkedAccountWalletInput {
   address: string;
 
-  chain_type: 'ethereum' | 'solana';
+  /**
+   * The wallet chain types that offer first class support.
+   */
+  chain_type: WalletsAPI.FirstClassChainType;
 
   type: 'wallet';
 }
@@ -1745,6 +1774,7 @@ export interface UserUnlinkLinkedAccountParams {
 export declare namespace Users {
   export {
     type AuthenticatedUser as AuthenticatedUser,
+    type ClientSessionUpdateAction as ClientSessionUpdateAction,
     type CrossAppEmbeddedWallet as CrossAppEmbeddedWallet,
     type CrossAppSmartWallet as CrossAppSmartWallet,
     type CustomMetadata as CustomMetadata,
@@ -1754,6 +1784,7 @@ export declare namespace Users {
     type LinkedAccountAppleOAuth as LinkedAccountAppleOAuth,
     type LinkedAccountAuthorizationKey as LinkedAccountAuthorizationKey,
     type LinkedAccountBaseWallet as LinkedAccountBaseWallet,
+    type LinkedAccountBaseWalletType as LinkedAccountBaseWalletType,
     type LinkedAccountBitcoinSegwitEmbeddedWallet as LinkedAccountBitcoinSegwitEmbeddedWallet,
     type LinkedAccountBitcoinTaprootEmbeddedWallet as LinkedAccountBitcoinTaprootEmbeddedWallet,
     type LinkedAccountCrossApp as LinkedAccountCrossApp,
@@ -1783,6 +1814,7 @@ export declare namespace Users {
     type LinkedAccountLinkedInInput as LinkedAccountLinkedInInput,
     type LinkedAccountLinkedInOAuth as LinkedAccountLinkedInOAuth,
     type LinkedAccountPasskey as LinkedAccountPasskey,
+    type LinkedAccountPasskeyCredentialDeviceType as LinkedAccountPasskeyCredentialDeviceType,
     type LinkedAccountPasskeyInput as LinkedAccountPasskeyInput,
     type LinkedAccountPhone as LinkedAccountPhone,
     type LinkedAccountPhoneInput as LinkedAccountPhoneInput,

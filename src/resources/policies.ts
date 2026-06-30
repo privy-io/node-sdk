@@ -590,7 +590,10 @@ export interface EthereumCalldataCondition {
  * eth_sendTransaction request.
  */
 export interface EthereumTransactionCondition {
-  field: 'to' | 'value' | 'chain_id';
+  /**
+   * Ethereum transaction-level fields that can be referenced in a policy condition.
+   */
+  field: EthereumTransactionConditionField;
 
   field_source: 'ethereum_transaction';
 
@@ -607,10 +610,18 @@ export interface EthereumTransactionCondition {
 }
 
 /**
+ * Ethereum transaction-level fields that can be referenced in a policy condition.
+ */
+export type EthereumTransactionConditionField = 'to' | 'value' | 'chain_id';
+
+/**
  * Attributes from the signing domain that will verify the signature.
  */
 export interface EthereumTypedDataDomainCondition {
-  field: 'chainId' | 'verifyingContract' | 'chain_id' | 'verifying_contract';
+  /**
+   * Supported fields for Ethereum typed data domain conditions.
+   */
+  field: EthereumTypedDataDomainConditionField;
 
   field_source: 'ethereum_typed_data_domain';
 
@@ -625,6 +636,15 @@ export interface EthereumTypedDataDomainCondition {
    */
   value: ConditionValue;
 }
+
+/**
+ * Supported fields for Ethereum typed data domain conditions.
+ */
+export type EthereumTypedDataDomainConditionField =
+  | 'chainId'
+  | 'verifyingContract'
+  | 'chain_id'
+  | 'verifying_contract';
 
 /**
  * 'types' and 'primary_type' attributes of the TypedData JSON object defined in
@@ -785,7 +805,9 @@ export type PolicyMethod =
   | 'exportPrivateKey'
   | 'exportSeedPhrase'
   | 'signTransactionBytes'
-  | 'raw_sign'
+  | 'signRawMessageBytes'
+  | 'tron_sendTransaction'
+  | 'tron_signTransaction'
   | 'earn_deposit'
   | 'earn_withdraw'
   | 'transfer'
@@ -873,7 +895,11 @@ export interface SolanaProgramInstructionCondition {
  * fields.
  */
 export interface SolanaSystemProgramInstructionCondition {
-  field: 'instructionName' | 'Transfer.from' | 'Transfer.to' | 'Transfer.lamports';
+  /**
+   * Supported fields for Solana System Program conditions including Transfer
+   * instruction fields.
+   */
+  field: SolanaSystemProgramInstructionConditionField;
 
   field_source: 'solana_system_program_instruction';
 
@@ -890,35 +916,26 @@ export interface SolanaSystemProgramInstructionCondition {
 }
 
 /**
+ * Supported fields for Solana System Program conditions including Transfer
+ * instruction fields.
+ */
+export type SolanaSystemProgramInstructionConditionField =
+  | 'instructionName'
+  | 'Transfer.from'
+  | 'Transfer.to'
+  | 'Transfer.lamports';
+
+/**
  * Solana Token Program attributes, including more granular TransferChecked
  * instruction fields.
  */
 export interface SolanaTokenProgramInstructionCondition {
-  field:
-    | 'instructionName'
-    | 'Transfer.source'
-    | 'Transfer.destination'
-    | 'Transfer.authority'
-    | 'Transfer.amount'
-    | 'TransferChecked.source'
-    | 'TransferChecked.destination'
-    | 'TransferChecked.authority'
-    | 'TransferChecked.amount'
-    | 'TransferChecked.mint'
-    | 'Burn.account'
-    | 'Burn.mint'
-    | 'Burn.authority'
-    | 'Burn.amount'
-    | 'MintTo.mint'
-    | 'MintTo.account'
-    | 'MintTo.authority'
-    | 'MintTo.amount'
-    | 'CloseAccount.account'
-    | 'CloseAccount.destination'
-    | 'CloseAccount.authority'
-    | 'InitializeAccount3.account'
-    | 'InitializeAccount3.mint'
-    | 'InitializeAccount3.owner';
+  /**
+   * Supported fields for Solana Token Program conditions including Transfer,
+   * TransferChecked, Burn, MintTo, CloseAccount, and InitializeAccount3 instruction
+   * fields.
+   */
+  field: SolanaTokenProgramInstructionConditionField;
 
   field_source: 'solana_token_program_instruction';
 
@@ -933,6 +950,37 @@ export interface SolanaTokenProgramInstructionCondition {
    */
   value: ConditionValue;
 }
+
+/**
+ * Supported fields for Solana Token Program conditions including Transfer,
+ * TransferChecked, Burn, MintTo, CloseAccount, and InitializeAccount3 instruction
+ * fields.
+ */
+export type SolanaTokenProgramInstructionConditionField =
+  | 'instructionName'
+  | 'Transfer.source'
+  | 'Transfer.destination'
+  | 'Transfer.authority'
+  | 'Transfer.amount'
+  | 'TransferChecked.source'
+  | 'TransferChecked.destination'
+  | 'TransferChecked.authority'
+  | 'TransferChecked.amount'
+  | 'TransferChecked.mint'
+  | 'Burn.account'
+  | 'Burn.mint'
+  | 'Burn.authority'
+  | 'Burn.amount'
+  | 'MintTo.mint'
+  | 'MintTo.account'
+  | 'MintTo.authority'
+  | 'MintTo.amount'
+  | 'CloseAccount.account'
+  | 'CloseAccount.destination'
+  | 'CloseAccount.authority'
+  | 'InitializeAccount3.account'
+  | 'InitializeAccount3.mint'
+  | 'InitializeAccount3.owner';
 
 /**
  * SUI transaction command attributes, enables allowlisting specific command types.
@@ -1080,15 +1128,10 @@ export interface TronCalldataCondition {
  */
 export interface TronTransactionCondition {
   /**
-   * Supported TRON transaction fields in format "TransactionType.field_name"
+   * Supported TRON transaction fields for TransferContract and TriggerSmartContract
+   * in format "TransactionType.field_name".
    */
-  field:
-    | 'TransferContract.to_address'
-    | 'TransferContract.amount'
-    | 'TriggerSmartContract.contract_address'
-    | 'TriggerSmartContract.call_value'
-    | 'TriggerSmartContract.token_id'
-    | 'TriggerSmartContract.call_token_value';
+  field: TronTransactionConditionField;
 
   field_source: 'tron_transaction';
 
@@ -1103,6 +1146,18 @@ export interface TronTransactionCondition {
    */
   value: ConditionValue;
 }
+
+/**
+ * Supported TRON transaction fields for TransferContract and TriggerSmartContract
+ * in format "TransactionType.field_name".
+ */
+export type TronTransactionConditionField =
+  | 'TransferContract.to_address'
+  | 'TransferContract.amount'
+  | 'TriggerSmartContract.contract_address'
+  | 'TriggerSmartContract.call_value'
+  | 'TriggerSmartContract.token_id'
+  | 'TriggerSmartContract.call_token_value';
 
 /**
  * The typed data structure containing EIP-712 types and the primary type for typed
@@ -1367,7 +1422,9 @@ export declare namespace Policies {
     type Ethereum7702AuthorizationCondition as Ethereum7702AuthorizationCondition,
     type EthereumCalldataCondition as EthereumCalldataCondition,
     type EthereumTransactionCondition as EthereumTransactionCondition,
+    type EthereumTransactionConditionField as EthereumTransactionConditionField,
     type EthereumTypedDataDomainCondition as EthereumTypedDataDomainCondition,
+    type EthereumTypedDataDomainConditionField as EthereumTypedDataDomainConditionField,
     type EthereumTypedDataMessageCondition as EthereumTypedDataMessageCondition,
     type MessageSigningCondition as MessageSigningCondition,
     type MessageSigningField as MessageSigningField,
@@ -1382,7 +1439,9 @@ export declare namespace Policies {
     type PolicyRuleResponse as PolicyRuleResponse,
     type SolanaProgramInstructionCondition as SolanaProgramInstructionCondition,
     type SolanaSystemProgramInstructionCondition as SolanaSystemProgramInstructionCondition,
+    type SolanaSystemProgramInstructionConditionField as SolanaSystemProgramInstructionConditionField,
     type SolanaTokenProgramInstructionCondition as SolanaTokenProgramInstructionCondition,
+    type SolanaTokenProgramInstructionConditionField as SolanaTokenProgramInstructionConditionField,
     type SuiTransactionCommandCondition as SuiTransactionCommandCondition,
     type SuiTransactionCommandOperator as SuiTransactionCommandOperator,
     type SuiTransferObjectsCommandCondition as SuiTransferObjectsCommandCondition,
@@ -1392,6 +1451,7 @@ export declare namespace Policies {
     type TempoTransactionConditionField as TempoTransactionConditionField,
     type TronCalldataCondition as TronCalldataCondition,
     type TronTransactionCondition as TronTransactionCondition,
+    type TronTransactionConditionField as TronTransactionConditionField,
     type TypedDataInput as TypedDataInput,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
     type PolicyCreateParams as PolicyCreateParams,

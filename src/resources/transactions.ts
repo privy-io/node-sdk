@@ -28,6 +28,19 @@ export class Transactions extends APIResource {
 }
 
 /**
+ * Status of a blockchain transaction submitted by Privy.
+ */
+export type BlockchainTransactionStatus =
+  | 'broadcasted'
+  | 'confirmed'
+  | 'execution_reverted'
+  | 'failed'
+  | 'replaced'
+  | 'finalized'
+  | 'provider_error'
+  | 'pending';
+
+/**
  * A transaction from a Privy wallet.
  */
 export interface Transaction {
@@ -37,15 +50,10 @@ export interface Transaction {
 
   created_at: number;
 
-  status:
-    | 'broadcasted'
-    | 'confirmed'
-    | 'execution_reverted'
-    | 'failed'
-    | 'replaced'
-    | 'finalized'
-    | 'provider_error'
-    | 'pending';
+  /**
+   * Status of a blockchain transaction submitted by Privy.
+   */
+  status: BlockchainTransactionStatus;
 
   transaction_hash: string | null;
 
@@ -259,6 +267,7 @@ export interface TransactionScanningValidationSuccessResult {
 
 export declare namespace Transactions {
   export {
+    type BlockchainTransactionStatus as BlockchainTransactionStatus,
     type Transaction as Transaction,
     type TransactionList as TransactionList,
     type TransactionScanningAssetDiff as TransactionScanningAssetDiff,

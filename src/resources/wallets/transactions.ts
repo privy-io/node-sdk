@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as TransactionsAPI from '../transactions';
 import * as WalletsAPI from './wallets';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -52,15 +53,10 @@ export namespace TransactionGetResponse {
 
     privy_transaction_id: string;
 
-    status:
-      | 'broadcasted'
-      | 'confirmed'
-      | 'execution_reverted'
-      | 'failed'
-      | 'replaced'
-      | 'finalized'
-      | 'provider_error'
-      | 'pending';
+    /**
+     * Status of a blockchain transaction submitted by Privy.
+     */
+    status: TransactionsAPI.BlockchainTransactionStatus;
 
     transaction_hash: string | null;
 

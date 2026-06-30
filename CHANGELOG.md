@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.24.0 (2026-06-26)
+
+Full Changelog: [v0.23.0...v0.24.0](https://github.com/privy-io/node-sdk/compare/v0.23.0...v0.24.0)
+
+### Features
+
+* add swap API to public-api service layer ([#182](https://github.com/privy-io/node-sdk/issues/182)) ([a85b057](https://github.com/privy-io/node-sdk/commit/a85b057a6f23aa83ae3ccbf009cdb7f5c1f281ae))
+* **api:** api update ([7b09911](https://github.com/privy-io/node-sdk/commit/7b0991141b24a1a0190533bc0ab116793a2eb74a))
+* **api:** api update ([6ae3630](https://github.com/privy-io/node-sdk/commit/6ae3630b2fef6c91f38939054dd97ca89dca2d34))
+* **api:** api update ([68fc65c](https://github.com/privy-io/node-sdk/commit/68fc65cd22f380594d6f1177be72ea99915eaec2))
+
+
+### Bug Fixes
+
+* update action response type imports after API codegen update ([#183](https://github.com/privy-io/node-sdk/issues/183)) ([1022715](https://github.com/privy-io/node-sdk/commit/1022715d3ab0af994568f849ae9b7b07f5a57706))
+
 ## 0.23.0 (2026-06-23)
 
 Full Changelog: [v0.22.0...v0.23.0](https://github.com/privy-io/node-sdk/compare/v0.22.0...v0.23.0)

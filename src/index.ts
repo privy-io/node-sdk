@@ -6,6 +6,7 @@ export {
 export { type PrivyWalletsService } from './public-api/services/wallets';
 export { type PrivyEthereumService } from './public-api/services/ethereum';
 export { type PrivySolanaService } from './public-api/services/solana';
+export { type PrivyTronService } from './public-api/services/tron';
 export { type PrivyPoliciesService } from './public-api/services/policies';
 export { type PrivyTransactionsService } from './public-api/services/transactions';
 export { type PrivyKeyQuorumsService } from './public-api/services/key-quorums';

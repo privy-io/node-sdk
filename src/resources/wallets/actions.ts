@@ -99,8 +99,8 @@ export interface AaveVaultDetails {
   tvl_usd: number | null;
 
   /**
-   * Current annual percentage yield in basis points (e.g. 500 for 5%). 1 basis point
-   * = 0.01%.
+   * Annual percentage yield available to the user, after fees and excluding rewards,
+   * in basis points (e.g. 500 for 5%). 1 basis point = 0.01%.
    */
   user_apy: number | null;
 
@@ -790,13 +790,18 @@ export interface MorphoVaultDetails {
   provider: 'morpho';
 
   /**
+   * Total rewards annual percentage rate in basis points.
+   */
+  total_rewards_apr: number;
+
+  /**
    * Total value locked in USD.
    */
   tvl_usd: number | null;
 
   /**
-   * Current annual percentage yield in basis points (e.g. 500 for 5%). 1 basis point
-   * = 0.01%.
+   * Annual percentage yield available to the user, after fees and excluding rewards,
+   * in basis points (e.g. 500 for 5%). 1 basis point = 0.01%.
    */
   user_apy: number | null;
 

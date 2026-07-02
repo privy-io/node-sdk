@@ -7,6 +7,7 @@ import * as UsersAPI from '../users';
 import * as AppsAPI from '../apps/apps';
 import * as ActionsAPI from './actions';
 import {
+  AaveVaultDetails,
   ActionGetParams,
   Actions,
   CustodianTransactionWalletActionStep,
@@ -35,6 +36,7 @@ import {
   FailureReason,
   ListWalletActionsQuery,
   ListWalletActionsResponse,
+  MorphoVaultDetails,
   SvmTransactionWalletActionStep,
   SvmWalletActionStepStatus,
   SwapActionResponse,
@@ -2343,6 +2345,92 @@ export interface SparkClaimStaticDepositRpcResponseData {
 }
 
 /**
+ * A fee quote for a cooperative exit from Spark to Bitcoin L1.
+ */
+export interface SparkCoopExitFeeQuote {
+  id: string;
+
+  created_at: string;
+
+  expires_at: string;
+
+  /**
+   * A currency amount with its original value and unit.
+   */
+  l1_broadcast_fee_fast: SparkCurrencyAmount;
+
+  /**
+   * A currency amount with its original value and unit.
+   */
+  l1_broadcast_fee_medium: SparkCurrencyAmount;
+
+  /**
+   * A currency amount with its original value and unit.
+   */
+  l1_broadcast_fee_slow: SparkCurrencyAmount;
+
+  network: string;
+
+  /**
+   * A currency amount with its original value and unit.
+   */
+  total_amount: SparkCurrencyAmount;
+
+  updated_at: string;
+
+  /**
+   * A currency amount with its original value and unit.
+   */
+  user_fee_fast: SparkCurrencyAmount;
+
+  /**
+   * A currency amount with its original value and unit.
+   */
+  user_fee_medium: SparkCurrencyAmount;
+
+  /**
+   * A currency amount with its original value and unit.
+   */
+  user_fee_slow: SparkCurrencyAmount;
+}
+
+/**
+ * A cooperative exit request from Spark to Bitcoin L1.
+ */
+export interface SparkCoopExitRequest {
+  id: string;
+
+  coop_exit_txid: string;
+
+  created_at: string;
+
+  expires_at: string;
+
+  /**
+   * A currency amount with its original value and unit.
+   */
+  fee: SparkCurrencyAmount;
+
+  /**
+   * A currency amount with its original value and unit.
+   */
+  l1_broadcast_fee: SparkCurrencyAmount;
+
+  network: string;
+
+  status: string;
+
+  updated_at: string;
+
+  /**
+   * The exit speed for a cooperative withdrawal from Spark to L1.
+   */
+  exit_speed?: SparkExitSpeed;
+
+  fee_quote_id?: string;
+}
+
+/**
  * Creates a Lightning invoice for the Spark wallet.
  */
 export interface SparkCreateLightningInvoiceRpcInput {
@@ -2387,6 +2475,20 @@ export interface SparkCreateLightningInvoiceRpcResponse {
    */
   data?: SparkLightningReceiveRequest;
 }
+
+/**
+ * A currency amount with its original value and unit.
+ */
+export interface SparkCurrencyAmount {
+  original_unit: string;
+
+  original_value: number;
+}
+
+/**
+ * The exit speed for a cooperative withdrawal from Spark to L1.
+ */
+export type SparkExitSpeed = 'FAST' | 'MEDIUM' | 'SLOW';
 
 /**
  * Gets the balance of the Spark wallet.
@@ -2494,6 +2596,44 @@ export interface SparkGetStaticDepositAddressRpcResponse {
  */
 export interface SparkGetStaticDepositAddressRpcResponseData {
   address: string;
+}
+
+/**
+ * Gets a fee quote for withdrawing from Spark to a Bitcoin L1 address.
+ */
+export interface SparkGetWithdrawalFeeQuoteRpcInput {
+  method: 'getWithdrawalFeeQuote';
+
+  /**
+   * Parameters for the Spark `getWithdrawalFeeQuote` RPC.
+   */
+  params: SparkGetWithdrawalFeeQuoteRpcInputParams;
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Parameters for the Spark `getWithdrawalFeeQuote` RPC.
+ */
+export interface SparkGetWithdrawalFeeQuoteRpcInputParams {
+  amount_sats: number;
+
+  onchain_address: string;
+}
+
+/**
+ * Response to the Spark `getWithdrawalFeeQuote` RPC.
+ */
+export interface SparkGetWithdrawalFeeQuoteRpcResponse {
+  method: 'getWithdrawalFeeQuote';
+
+  /**
+   * A fee quote for a cooperative exit from Spark to Bitcoin L1.
+   */
+  data?: SparkCoopExitFeeQuote;
 }
 
 /**
@@ -2624,7 +2764,9 @@ export type SparkRpcInput =
   | SparkClaimStaticDepositRpcInput
   | SparkCreateLightningInvoiceRpcInput
   | SparkPayLightningInvoiceRpcInput
-  | SparkSignMessageWithIdentityKeyRpcInput;
+  | SparkSignMessageWithIdentityKeyRpcInput
+  | SparkWithdrawRpcInput
+  | SparkGetWithdrawalFeeQuoteRpcInput;
 
 /**
  * Response body for Spark wallet RPC operations, discriminated by method.
@@ -2638,7 +2780,9 @@ export type SparkRpcResponse =
   | SparkClaimStaticDepositRpcResponse
   | SparkCreateLightningInvoiceRpcResponse
   | SparkPayLightningInvoiceRpcResponse
-  | SparkSignMessageWithIdentityKeyRpcResponse;
+  | SparkSignMessageWithIdentityKeyRpcResponse
+  | SparkWithdrawRpcResponse
+  | SparkGetWithdrawalFeeQuoteRpcResponse;
 
 /**
  * Signs a message with the Spark identity key.
@@ -2900,6 +3044,55 @@ export interface SparkWalletLeaf {
 }
 
 /**
+ * Withdraws from Spark to a Bitcoin L1 address (cooperative exit).
+ */
+export interface SparkWithdrawRpcInput {
+  method: 'withdraw';
+
+  /**
+   * Parameters for the Spark `withdraw` RPC.
+   */
+  params: SparkWithdrawRpcInputParams;
+
+  /**
+   * The Spark network.
+   */
+  network?: SparkNetwork;
+}
+
+/**
+ * Parameters for the Spark `withdraw` RPC.
+ */
+export interface SparkWithdrawRpcInputParams {
+  /**
+   * The exit speed for a cooperative withdrawal from Spark to L1.
+   */
+  exit_speed: SparkExitSpeed;
+
+  onchain_address: string;
+
+  amount_sats?: number;
+
+  deduct_fee_from_withdrawal_amount?: boolean;
+
+  fee_amount_sats?: number;
+
+  fee_quote_id?: string;
+}
+
+/**
+ * Response to the Spark `withdraw` RPC.
+ */
+export interface SparkWithdrawRpcResponse {
+  method: 'withdraw';
+
+  /**
+   * A cooperative exit request from Spark to Bitcoin L1.
+   */
+  data?: SparkCoopExitRequest;
+}
+
+/**
  * SUI transaction commands allowlist for raw_sign endpoint policy evaluation
  */
 export type SuiCommandName = 'TransferObjects' | 'SplitCoins' | 'MergeCoins';
@@ -3145,7 +3338,19 @@ export interface TransferQuoteResponse {
  * Details for a received transfer transaction.
  */
 export interface TransferReceivedTransactionDetail {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+  asset:
+    | 'usdc'
+    | 'usdc.e'
+    | 'eth'
+    | 'avax'
+    | 'pol'
+    | 'bnb'
+    | 'usdt'
+    | 'eurc'
+    | 'usdb'
+    | 'sol'
+    | 'trx'
+    | (string & {});
 
   /**
    * Supported blockchain network names for wallet balance and transaction queries.
@@ -3213,7 +3418,19 @@ export interface TransferRequestBody {
  * Details for a sent transfer transaction.
  */
 export interface TransferSentTransactionDetail {
-  asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+  asset:
+    | 'usdc'
+    | 'usdc.e'
+    | 'eth'
+    | 'avax'
+    | 'pol'
+    | 'bnb'
+    | 'usdt'
+    | 'eurc'
+    | 'usdb'
+    | 'sol'
+    | 'trx'
+    | (string & {});
 
   /**
    * Supported blockchain network names for wallet balance and transaction queries.
@@ -3812,7 +4029,18 @@ export interface WalletAPIRevokeAuthorizationKeyInput {
 /**
  * A named asset supported across all chains.
  */
-export type WalletAsset = 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol';
+export type WalletAsset =
+  | 'usdc'
+  | 'usdc.e'
+  | 'eth'
+  | 'avax'
+  | 'pol'
+  | 'bnb'
+  | 'usdt'
+  | 'eurc'
+  | 'usdb'
+  | 'sol'
+  | 'trx';
 
 /**
  * Supported blockchain network names for wallet balance and transaction queries.
@@ -3826,7 +4054,9 @@ export type WalletAssetChainNameInput =
   | 'linea'
   | 'optimism'
   | 'polygon'
+  | 'bsc'
   | 'solana'
+  | 'tron'
   | 'zksync_era'
   | 'sepolia'
   | 'arbitrum_sepolia'
@@ -3836,7 +4066,8 @@ export type WalletAssetChainNameInput =
   | 'optimism_sepolia'
   | 'polygon_amoy'
   | 'solana_devnet'
-  | 'solana_testnet';
+  | 'solana_testnet'
+  | 'tron_nile';
 
 /**
  * Request body for creating an encrypted, bound user signing key.
@@ -4107,7 +4338,16 @@ export type WalletEntropyType = 'hd' | 'private-key';
 /**
  * A named asset on Ethereum-compatible chains.
  */
-export type WalletEthereumAsset = 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb';
+export type WalletEthereumAsset =
+  | 'usdc'
+  | 'usdc.e'
+  | 'eth'
+  | 'avax'
+  | 'pol'
+  | 'bnb'
+  | 'usdt'
+  | 'eurc'
+  | 'usdb';
 
 /**
  * Request body for exporting a wallet private key.
@@ -4205,6 +4445,8 @@ export type WalletRpcRequestBody =
   | SparkCreateLightningInvoiceRpcInput
   | SparkPayLightningInvoiceRpcInput
   | SparkSignMessageWithIdentityKeyRpcInput
+  | SparkWithdrawRpcInput
+  | SparkGetWithdrawalFeeQuoteRpcInput
   | TronSignTransactionRpcInput
   | TronSendTransactionRpcInput
   | ExportPrivateKeyRpcInput
@@ -4234,6 +4476,8 @@ export type WalletRpcResponse =
   | SparkCreateLightningInvoiceRpcResponse
   | SparkPayLightningInvoiceRpcResponse
   | SparkSignMessageWithIdentityKeyRpcResponse
+  | SparkWithdrawRpcResponse
+  | SparkGetWithdrawalFeeQuoteRpcResponse
   | TronSignTransactionRpcResponse
   | TronSendTransactionRpcResponse
   | ExportPrivateKeyRpcResponse
@@ -4243,6 +4487,11 @@ export type WalletRpcResponse =
  * A named asset on Solana.
  */
 export type WalletSolanaAsset = 'sol' | 'usdc' | 'eurc' | 'usdb';
+
+/**
+ * A named asset on Tron.
+ */
+export type WalletTronAsset = 'trx' | 'usdt' | 'usdc';
 
 /**
  * Request body for updating a wallet. `owner` and `owner_id` are mutually
@@ -4504,6 +4753,8 @@ export type WalletRpcParams =
   | WalletRpcParams.SparkCreateLightningInvoiceRpcInput
   | WalletRpcParams.SparkPayLightningInvoiceRpcInput
   | WalletRpcParams.SparkSignMessageWithIdentityKeyRpcInput
+  | WalletRpcParams.SparkWithdrawRpcInput
+  | WalletRpcParams.SparkGetWithdrawalFeeQuoteRpcInput
   | WalletRpcParams.TronSignTransactionRpcInput
   | WalletRpcParams.TronSendTransactionRpcInput
   | WalletRpcParams.ExportPrivateKeyRpcInput
@@ -5389,6 +5640,76 @@ export declare namespace WalletRpcParams {
     'privy-request-expiry'?: string;
   }
 
+  export interface SparkWithdrawRpcInput {
+    /**
+     * Body param
+     */
+    method: 'withdraw';
+
+    /**
+     * Body param: Parameters for the Spark `withdraw` RPC.
+     */
+    params: SparkWithdrawRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: SparkNetwork;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkGetWithdrawalFeeQuoteRpcInput {
+    /**
+     * Body param
+     */
+    method: 'getWithdrawalFeeQuote';
+
+    /**
+     * Body param: Parameters for the Spark `getWithdrawalFeeQuote` RPC.
+     */
+    params: SparkGetWithdrawalFeeQuoteRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: SparkNetwork;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
   export interface TronSignTransactionRpcInput {
     /**
      * Body param
@@ -5891,9 +6212,13 @@ export declare namespace Wallets {
     type SparkClaimStaticDepositRpcInputParams as SparkClaimStaticDepositRpcInputParams,
     type SparkClaimStaticDepositRpcResponse as SparkClaimStaticDepositRpcResponse,
     type SparkClaimStaticDepositRpcResponseData as SparkClaimStaticDepositRpcResponseData,
+    type SparkCoopExitFeeQuote as SparkCoopExitFeeQuote,
+    type SparkCoopExitRequest as SparkCoopExitRequest,
     type SparkCreateLightningInvoiceRpcInput as SparkCreateLightningInvoiceRpcInput,
     type SparkCreateLightningInvoiceRpcInputParams as SparkCreateLightningInvoiceRpcInputParams,
     type SparkCreateLightningInvoiceRpcResponse as SparkCreateLightningInvoiceRpcResponse,
+    type SparkCurrencyAmount as SparkCurrencyAmount,
+    type SparkExitSpeed as SparkExitSpeed,
     type SparkGetBalanceRpcInput as SparkGetBalanceRpcInput,
     type SparkGetBalanceRpcResponse as SparkGetBalanceRpcResponse,
     type SparkGetClaimStaticDepositQuoteRpcInput as SparkGetClaimStaticDepositQuoteRpcInput,
@@ -5903,6 +6228,9 @@ export declare namespace Wallets {
     type SparkGetStaticDepositAddressRpcInput as SparkGetStaticDepositAddressRpcInput,
     type SparkGetStaticDepositAddressRpcResponse as SparkGetStaticDepositAddressRpcResponse,
     type SparkGetStaticDepositAddressRpcResponseData as SparkGetStaticDepositAddressRpcResponseData,
+    type SparkGetWithdrawalFeeQuoteRpcInput as SparkGetWithdrawalFeeQuoteRpcInput,
+    type SparkGetWithdrawalFeeQuoteRpcInputParams as SparkGetWithdrawalFeeQuoteRpcInputParams,
+    type SparkGetWithdrawalFeeQuoteRpcResponse as SparkGetWithdrawalFeeQuoteRpcResponse,
     type SparkLightningFee as SparkLightningFee,
     type SparkLightningReceiveRequest as SparkLightningReceiveRequest,
     type SparkLightningSendRequest as SparkLightningSendRequest,
@@ -5930,6 +6258,9 @@ export declare namespace Wallets {
     type SparkTransferTokensRpcResponseData as SparkTransferTokensRpcResponseData,
     type SparkUserTokenMetadata as SparkUserTokenMetadata,
     type SparkWalletLeaf as SparkWalletLeaf,
+    type SparkWithdrawRpcInput as SparkWithdrawRpcInput,
+    type SparkWithdrawRpcInputParams as SparkWithdrawRpcInputParams,
+    type SparkWithdrawRpcResponse as SparkWithdrawRpcResponse,
     type SuiCommandName as SuiCommandName,
     type SwapSubmissionStatus as SwapSubmissionStatus,
     type TempoAaAuthorization as TempoAaAuthorization,
@@ -6001,6 +6332,7 @@ export declare namespace Wallets {
     type WalletRpcRequestBody as WalletRpcRequestBody,
     type WalletRpcResponse as WalletRpcResponse,
     type WalletSolanaAsset as WalletSolanaAsset,
+    type WalletTronAsset as WalletTronAsset,
     type WalletUpdateRequestBody as WalletUpdateRequestBody,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletsCursor as WalletsCursor,
@@ -6022,6 +6354,7 @@ export declare namespace Wallets {
 
   export {
     Actions as Actions,
+    type AaveVaultDetails as AaveVaultDetails,
     type CustodianTransactionWalletActionStep as CustodianTransactionWalletActionStep,
     type CustodianTransactionWalletActionStepStatus as CustodianTransactionWalletActionStepStatus,
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
@@ -6048,6 +6381,7 @@ export declare namespace Wallets {
     type FailureReason as FailureReason,
     type ListWalletActionsQuery as ListWalletActionsQuery,
     type ListWalletActionsResponse as ListWalletActionsResponse,
+    type MorphoVaultDetails as MorphoVaultDetails,
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
     type SwapActionResponse as SwapActionResponse,

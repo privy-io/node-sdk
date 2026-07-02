@@ -35,6 +35,11 @@ Tests live in `tests/integration/services/`. Key helpers:
 Use `setupTestWalletResources()` + `beforeAll` for shared state across a suite.
 Use `createTestWallets()` + `describe.each(WALLET_CASES)` to cover all ownership types.
 
+## Pull Requests
+
+All pull requests must target the `next` branch, **not** `main`. The `main` branch is
+only updated via release automation. PRs opened against `main` will be rejected.
+
 ## Lint
 
 ```sh

@@ -91,10 +91,12 @@ export interface TransactionGetParams {
     | 'eth'
     | 'avax'
     | 'pol'
+    | 'bnb'
     | 'usdt'
     | 'eurc'
     | 'usdb'
     | 'sol'
+    | 'trx'
     | Array<WalletsAPI.WalletAsset>;
 
   cursor?: string;

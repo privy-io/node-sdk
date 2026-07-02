@@ -35,7 +35,19 @@ export interface BalanceGetResponse {
 
 export namespace BalanceGetResponse {
   export interface Balance {
-    asset: 'usdc' | 'usdc.e' | 'eth' | 'avax' | 'pol' | 'usdt' | 'eurc' | 'usdb' | 'sol' | (string & {});
+    asset:
+      | 'usdc'
+      | 'usdc.e'
+      | 'eth'
+      | 'avax'
+      | 'pol'
+      | 'bnb'
+      | 'usdt'
+      | 'eurc'
+      | 'usdb'
+      | 'sol'
+      | 'trx'
+      | (string & {});
 
     /**
      * Supported blockchain network names for wallet balance and transaction queries.
@@ -69,10 +81,12 @@ export interface BalanceGetParams {
     | 'eth'
     | 'avax'
     | 'pol'
+    | 'bnb'
     | 'usdt'
     | 'eurc'
     | 'usdb'
     | 'sol'
+    | 'trx'
     | Array<WalletsAPI.WalletAsset>;
 
   /**

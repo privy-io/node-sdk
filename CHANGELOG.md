@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.25.0 (2026-07-07)
+
+Full Changelog: [v0.24.0...v0.25.0](https://github.com/privy-io/node-sdk/compare/v0.24.0...v0.25.0)
+
+### Features
+
+* add typed wallets.tron() interface for signTransaction and sendTransaction ([#185](https://github.com/privy-io/node-sdk/issues/185)) ([b3c6b08](https://github.com/privy-io/node-sdk/commit/b3c6b08aad85f318885ad0f40b7e13201c58c823))
+* **api:** api update ([8e619c9](https://github.com/privy-io/node-sdk/commit/8e619c9a85c40b930339cb429735be6a810cc799))
+* **api:** api update ([00c80ac](https://github.com/privy-io/node-sdk/commit/00c80acfe4dcaa62e22d1d487805689e526ce07e))
+* **api:** api update ([ef30db2](https://github.com/privy-io/node-sdk/commit/ef30db2211f6b773ebf58b88241c9691cb1b814e))
+
 ## 0.24.0 (2026-06-26)
 
 Full Changelog: [v0.23.0...v0.24.0](https://github.com/privy-io/node-sdk/compare/v0.23.0...v0.24.0)

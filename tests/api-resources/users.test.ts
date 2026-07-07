@@ -309,6 +309,7 @@ describe('resource users', () => {
           chain_type: 'ethereum',
           additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
           create_smart_wallet: true,
+          external_id: 'my-order-123',
           policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
         },
       ],

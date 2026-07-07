@@ -3232,6 +3232,22 @@ export interface TotalFeeConfigurationBps {
 }
 
 /**
+ * Chains supported for transaction history queries.
+ */
+export type TransactionChainNameInput =
+  | 'ethereum'
+  | 'arbitrum'
+  | 'avalanche'
+  | 'base'
+  | 'bsc'
+  | 'tempo'
+  | 'linea'
+  | 'optimism'
+  | 'polygon'
+  | 'solana'
+  | 'sepolia';
+
+/**
  * Details of a wallet transaction, varying by transaction type.
  */
 export type TransactionDetail = TransferSentTransactionDetail | TransferReceivedTransactionDetail;
@@ -6270,6 +6286,7 @@ export declare namespace Wallets {
     type TokenTransferDestination as TokenTransferDestination,
     type TokenTransferSource as TokenTransferSource,
     type TotalFeeConfigurationBps as TotalFeeConfigurationBps,
+    type TransactionChainNameInput as TransactionChainNameInput,
     type TransactionDetail as TransactionDetail,
     type TransactionTokenAddressInput as TransactionTokenAddressInput,
     type TransferQuoteRequestBody as TransferQuoteRequestBody,

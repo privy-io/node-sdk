@@ -184,6 +184,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferDestination</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferSource</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TotalFeeConfigurationBps</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransactionChainNameInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionTokenAddressInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferQuoteRequestBody</a></code>

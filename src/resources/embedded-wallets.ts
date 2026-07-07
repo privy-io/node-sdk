@@ -266,6 +266,13 @@ export interface WalletCreationInput {
   create_smart_wallet?: boolean;
 
   /**
+   * A customer-provided identifier for mapping to external systems. Write-once, set
+   * only at creation. Must be alphanumeric, hyphens, or underscores, max 64
+   * characters.
+   */
+  external_id?: string;
+
+  /**
    * Policy IDs to enforce on the wallet. Currently, only one policy is supported per
    * wallet.
    */

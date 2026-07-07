@@ -874,6 +874,7 @@ export {
   type TokenTransferDestination,
   type TokenTransferSource,
   type TotalFeeConfigurationBps,
+  type TransactionChainNameInput,
   type TransactionDetail,
   type TransactionTokenAddressInput,
   type TransferQuoteRequestBody,

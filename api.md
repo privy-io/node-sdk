@@ -126,9 +126,13 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SparkClaimStaticDepositRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkClaimStaticDepositRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkClaimStaticDepositRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkCoopExitFeeQuote</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkCoopExitRequest</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkCreateLightningInvoiceRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkCreateLightningInvoiceRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkCreateLightningInvoiceRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkCurrencyAmount</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkExitSpeed</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkGetBalanceRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkGetBalanceRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkGetClaimStaticDepositQuoteRpcInput</a></code>
@@ -138,6 +142,9 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SparkGetStaticDepositAddressRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkGetStaticDepositAddressRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkGetStaticDepositAddressRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetWithdrawalFeeQuoteRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetWithdrawalFeeQuoteRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkGetWithdrawalFeeQuoteRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkLightningFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkLightningReceiveRequest</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkLightningSendRequest</a></code>
@@ -165,6 +172,9 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">SparkTransferTokensRpcResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkUserTokenMetadata</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SparkWalletLeaf</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkWithdrawRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkWithdrawRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">SparkWithdrawRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SuiCommandName</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SwapSubmissionStatus</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TempoAaAuthorization</a></code>
@@ -174,6 +184,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferDestination</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TokenTransferSource</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TotalFeeConfigurationBps</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransactionChainNameInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionTokenAddressInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferQuoteRequestBody</a></code>
@@ -236,6 +247,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRpcRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletRpcResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletSolanaAsset</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletTronAsset</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletUpdateRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 
@@ -261,6 +273,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/wallets/actions.ts">AaveVaultDetails</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">CustodianTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">CustodianTransactionWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EvmTransactionWalletActionStep</a></code>
@@ -287,6 +300,7 @@ Types:
 - <code><a href="./src/resources/wallets/actions.ts">FailureReason</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">ListWalletActionsQuery</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">ListWalletActionsResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">MorphoVaultDetails</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">SvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">SvmWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">SwapActionResponse</a></code>

@@ -76,7 +76,10 @@ export namespace TransactionGetResponse {
 }
 
 export interface TransactionGetParams {
-  chain: 'ethereum' | 'arbitrum' | 'base' | 'tempo' | 'linea' | 'optimism' | 'polygon' | 'solana' | 'sepolia';
+  /**
+   * Chains supported for transaction history queries.
+   */
+  chain: WalletsAPI.TransactionChainNameInput;
 
   /**
    * Exactly one of `token` or `asset` is required. Cannot be used together with
@@ -94,10 +97,12 @@ export interface TransactionGetParams {
     | 'eth'
     | 'avax'
     | 'pol'
+    | 'bnb'
     | 'usdt'
     | 'eurc'
     | 'usdb'
     | 'sol'
+    | 'trx'
     | Array<WalletsAPI.WalletAsset>;
 
   cursor?: string;

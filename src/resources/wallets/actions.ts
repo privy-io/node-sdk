@@ -42,6 +42,75 @@ export class Actions extends APIResource {
 }
 
 /**
+ * Vault details for an Aave earn vault, including fee visibility.
+ */
+export interface AaveVaultDetails {
+  /**
+   * Vault identifier.
+   */
+  id: string;
+
+  /**
+   * EVM address of the vault admin wallet.
+   */
+  admin_wallet_address: string;
+
+  /**
+   * Privy wallet ID of the vault admin.
+   */
+  admin_wallet_id: string;
+
+  /**
+   * Annual percentage yield earned by the app from fee wrapper fees, in basis
+   * points.
+   */
+  app_apy: number | null;
+
+  /**
+   * Asset metadata for an earn vault position.
+   */
+  asset: EarnAsset;
+
+  /**
+   * Fees available to collect, in smallest unit of the underlying asset.
+   */
+  available_fees: string;
+
+  /**
+   * Available liquidity in USD.
+   */
+  available_liquidity_usd: number | null;
+
+  /**
+   * CAIP-2 chain identifier (e.g. "eip155:8453").
+   */
+  caip2: string;
+
+  /**
+   * Human-readable vault name from the yield provider.
+   */
+  name: string;
+
+  provider: 'aave';
+
+  /**
+   * Total value locked in USD.
+   */
+  tvl_usd: number | null;
+
+  /**
+   * Annual percentage yield available to the user, after fees and excluding rewards,
+   * in basis points (e.g. 500 for 5%). 1 basis point = 0.01%.
+   */
+  user_apy: number | null;
+
+  /**
+   * Onchain vault contract address.
+   */
+  vault_address: string;
+}
+
+/**
  * A wallet action step representing a transaction executed by a custodian (e.g.
  * Bridge).
  */
@@ -602,60 +671,9 @@ export type EthereumEarnProvider = 'morpho' | 'aave';
 
 /**
  * Detailed vault information including current APY, liquidity, and asset metadata.
+ * Discriminated on provider.
  */
-export interface EthereumEarnVaultDetailsResponse {
-  /**
-   * Vault identifier.
-   */
-  id: string;
-
-  /**
-   * Annual percentage yield earned by the app from fee wrapper fees, in basis
-   * points.
-   */
-  app_apy: number | null;
-
-  /**
-   * Asset metadata for an earn vault position.
-   */
-  asset: EarnAsset;
-
-  /**
-   * Available liquidity in USD.
-   */
-  available_liquidity_usd: number | null;
-
-  /**
-   * CAIP-2 chain identifier (e.g. "eip155:8453").
-   */
-  caip2: string;
-
-  /**
-   * Human-readable vault name from the yield provider.
-   */
-  name: string;
-
-  /**
-   * Supported earn provider protocols.
-   */
-  provider: EthereumEarnProvider;
-
-  /**
-   * Total value locked in USD.
-   */
-  tvl_usd: number | null;
-
-  /**
-   * Current annual percentage yield in basis points (e.g. 500 for 5%). 1 basis point
-   * = 0.01%.
-   */
-  user_apy: number | null;
-
-  /**
-   * Onchain vault contract address.
-   */
-  vault_address: string;
-}
+export type EthereumEarnVaultDetailsResponse = AaveVaultDetails | MorphoVaultDetails;
 
 /**
  * A wallet action step representing a cross-chain/cross-asset fill by an external
@@ -722,6 +740,75 @@ export interface ListWalletActionsResponse {
   data: Array<WalletActionResponse>;
 
   next_cursor: string | null;
+}
+
+/**
+ * Vault details for a Morpho earn vault.
+ */
+export interface MorphoVaultDetails {
+  /**
+   * Vault identifier.
+   */
+  id: string;
+
+  /**
+   * EVM address of the vault admin wallet.
+   */
+  admin_wallet_address: string;
+
+  /**
+   * Privy wallet ID of the vault admin.
+   */
+  admin_wallet_id: string;
+
+  /**
+   * Annual percentage yield earned by the app from fee wrapper fees, in basis
+   * points.
+   */
+  app_apy: number | null;
+
+  /**
+   * Asset metadata for an earn vault position.
+   */
+  asset: EarnAsset;
+
+  /**
+   * Available liquidity in USD.
+   */
+  available_liquidity_usd: number | null;
+
+  /**
+   * CAIP-2 chain identifier (e.g. "eip155:8453").
+   */
+  caip2: string;
+
+  /**
+   * Human-readable vault name from the yield provider.
+   */
+  name: string;
+
+  provider: 'morpho';
+
+  /**
+   * Total rewards annual percentage rate in basis points.
+   */
+  total_rewards_apr: number;
+
+  /**
+   * Total value locked in USD.
+   */
+  tvl_usd: number | null;
+
+  /**
+   * Annual percentage yield available to the user, after fees and excluding rewards,
+   * in basis points (e.g. 500 for 5%). 1 basis point = 0.01%.
+   */
+  user_apy: number | null;
+
+  /**
+   * Onchain vault contract address.
+   */
+  vault_address: string;
 }
 
 /**
@@ -1100,6 +1187,7 @@ export interface ActionGetParams {
 
 export declare namespace Actions {
   export {
+    type AaveVaultDetails as AaveVaultDetails,
     type CustodianTransactionWalletActionStep as CustodianTransactionWalletActionStep,
     type CustodianTransactionWalletActionStepStatus as CustodianTransactionWalletActionStepStatus,
     type EvmTransactionWalletActionStep as EvmTransactionWalletActionStep,
@@ -1126,6 +1214,7 @@ export declare namespace Actions {
     type FailureReason as FailureReason,
     type ListWalletActionsQuery as ListWalletActionsQuery,
     type ListWalletActionsResponse as ListWalletActionsResponse,
+    type MorphoVaultDetails as MorphoVaultDetails,
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
     type SwapActionResponse as SwapActionResponse,

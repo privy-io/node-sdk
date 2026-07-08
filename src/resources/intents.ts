@@ -1087,6 +1087,8 @@ export type IntentRpcParams =
   | IntentRpcParams.SparkCreateLightningInvoiceRpcInput
   | IntentRpcParams.SparkPayLightningInvoiceRpcInput
   | IntentRpcParams.SparkSignMessageWithIdentityKeyRpcInput
+  | IntentRpcParams.SparkWithdrawRpcInput
+  | IntentRpcParams.SparkGetWithdrawalFeeQuoteRpcInput
   | IntentRpcParams.TronSignTransactionRpcInput
   | IntentRpcParams.TronSendTransactionRpcInput
   | IntentRpcParams.ExportPrivateKeyRpcInput
@@ -1719,6 +1721,52 @@ export declare namespace IntentRpcParams {
      * Body param: Parameters for the Spark `signMessageWithIdentityKey` RPC.
      */
     params: WalletsAPI.SparkSignMessageWithIdentityKeyRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkWithdrawRpcInput {
+    /**
+     * Body param
+     */
+    method: 'withdraw';
+
+    /**
+     * Body param: Parameters for the Spark `withdraw` RPC.
+     */
+    params: WalletsAPI.SparkWithdrawRpcInputParams;
+
+    /**
+     * Body param: The Spark network.
+     */
+    network?: WalletsAPI.SparkNetwork;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface SparkGetWithdrawalFeeQuoteRpcInput {
+    /**
+     * Body param
+     */
+    method: 'getWithdrawalFeeQuote';
+
+    /**
+     * Body param: Parameters for the Spark `getWithdrawalFeeQuote` RPC.
+     */
+    params: WalletsAPI.SparkGetWithdrawalFeeQuoteRpcInputParams;
 
     /**
      * Body param: The Spark network.

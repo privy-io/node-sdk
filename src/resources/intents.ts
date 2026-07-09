@@ -156,11 +156,7 @@ export class Intents extends APIResource {
    *     destination: {
    *       address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
    *     },
-   *     source: {
-   *       amount: '10.5',
-   *       asset: 'usdc',
-   *       chain: 'base',
-   *     },
+   *     source: { asset: 'usdc', chain: 'base' },
    *   });
    * ```
    */

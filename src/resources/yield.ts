@@ -282,7 +282,7 @@ export interface EthereumYieldPositionsInput {
 /**
  * Supported yield/lending protocol providers.
  */
-export type EthereumYieldProvider = 'morpho' | 'aave';
+export type EthereumYieldProvider = 'morpho' | 'aave' | 'veda';
 
 /**
  * Input for fetching a yield sweep by ID.

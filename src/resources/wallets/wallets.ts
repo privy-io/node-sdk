@@ -786,14 +786,6 @@ export type CustodialWalletProvider = 'bridge';
  */
 export interface CustomTokenTransferSource {
   /**
-   * @deprecated Amount as a decimal string in the token's standard unit (e.g. "1.5"
-   * for 1.5 USDC, "0.01" for 0.01 ETH). For exact_input, specifies the amount to
-   * send. Not in the smallest on-chain unit (wei, lamports, etc.). Maximum 100
-   * characters.
-   */
-  amount: string;
-
-  /**
    * The token contract address (EVM) or mint address (Solana) of the asset to
    * transfer.
    */
@@ -805,6 +797,14 @@ export interface CustomTokenTransferSource {
    * respective testnets.
    */
   chain: string;
+
+  /**
+   * @deprecated Amount as a decimal string in the token's standard unit (e.g. "1.5"
+   * for 1.5 USDC, "0.01" for 0.01 ETH). For exact_input, specifies the amount to
+   * send. Not in the smallest on-chain unit (wei, lamports, etc.). Maximum 100
+   * characters. Deprecated: use the top-level `amount` field instead.
+   */
+  amount?: string;
 }
 
 /**
@@ -1741,14 +1741,6 @@ export interface IntentBinding {
  */
 export interface NamedTokenTransferSource {
   /**
-   * @deprecated Amount as a decimal string in the token's standard unit (e.g. "1.5"
-   * for 1.5 USDC, "0.01" for 0.01 ETH). For exact_input, specifies the amount to
-   * send. Not in the smallest on-chain unit (wei, lamports, etc.). Maximum 100
-   * characters.
-   */
-  amount: string;
-
-  /**
    * The asset to transfer. Supported: 'usdc', 'usdb', 'usdt' (stablecoins), 'eth'
    * (native Ethereum), 'sol' (native Solana).
    */
@@ -1760,6 +1752,14 @@ export interface NamedTokenTransferSource {
    * respective testnets.
    */
   chain: string;
+
+  /**
+   * @deprecated Amount as a decimal string in the token's standard unit (e.g. "1.5"
+   * for 1.5 USDC, "0.01" for 0.01 ETH). For exact_input, specifies the amount to
+   * send. Not in the smallest on-chain unit (wei, lamports, etc.). Maximum 100
+   * characters. Deprecated: use the top-level `amount` field instead.
+   */
+  amount?: string;
 }
 
 /**

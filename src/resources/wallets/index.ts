@@ -38,6 +38,7 @@ export {
   type TvmTransactionWalletActionStep,
   type TvmWalletActionStepStatus,
   type TransferActionResponse,
+  type VedaVaultDetails,
   type WalletActionInclude,
   type WalletActionResponse,
   type WalletActionStatus,

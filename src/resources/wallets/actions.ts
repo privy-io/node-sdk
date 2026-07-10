@@ -765,7 +765,7 @@ export type EthereumEarnProvider = 'morpho' | 'aave' | 'veda';
  * Detailed vault information including current APY, liquidity, and asset metadata.
  * Discriminated on provider.
  */
-export type EthereumEarnVaultDetailsResponse = AaveVaultDetails | MorphoVaultDetails;
+export type EthereumEarnVaultDetailsResponse = AaveVaultDetails | MorphoVaultDetails | VedaVaultDetails;
 
 /**
  * A wallet action step representing a cross-chain/cross-asset fill by an external
@@ -1208,6 +1208,70 @@ export interface TransferActionResponse {
 }
 
 /**
+ * Vault details for a Veda (BoringVault) earn vault.
+ */
+export interface VedaVaultDetails {
+  /**
+   * Vault identifier.
+   */
+  id: string;
+
+  /**
+   * EVM address of the vault admin wallet.
+   */
+  admin_wallet_address: string;
+
+  /**
+   * Privy wallet ID of the vault admin.
+   */
+  admin_wallet_id: string;
+
+  /**
+   * Annual percentage yield earned by the app from fee wrapper fees, in basis
+   * points.
+   */
+  app_apy: number | null;
+
+  /**
+   * Asset metadata for an earn vault position.
+   */
+  asset: EarnAsset;
+
+  /**
+   * Available liquidity in USD.
+   */
+  available_liquidity_usd: number | null;
+
+  /**
+   * CAIP-2 chain identifier (e.g. "eip155:8453").
+   */
+  caip2: string;
+
+  /**
+   * Human-readable vault name from the yield provider.
+   */
+  name: string;
+
+  provider: 'veda';
+
+  /**
+   * Total value locked in USD.
+   */
+  tvl_usd: number | null;
+
+  /**
+   * Annual percentage yield available to the user, after fees and excluding rewards,
+   * in basis points (e.g. 500 for 5%). 1 basis point = 0.01%.
+   */
+  user_apy: number | null;
+
+  /**
+   * Onchain vault contract address.
+   */
+  vault_address: string;
+}
+
+/**
  * Expandable relations to include on a wallet action response.
  */
 export type WalletActionInclude = 'steps';
@@ -1317,6 +1381,7 @@ export declare namespace Actions {
     type TvmTransactionWalletActionStep as TvmTransactionWalletActionStep,
     type TvmWalletActionStepStatus as TvmWalletActionStepStatus,
     type TransferActionResponse as TransferActionResponse,
+    type VedaVaultDetails as VedaVaultDetails,
     type WalletActionInclude as WalletActionInclude,
     type WalletActionResponse as WalletActionResponse,
     type WalletActionStatus as WalletActionStatus,

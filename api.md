@@ -309,6 +309,7 @@ Types:
 - <code><a href="./src/resources/wallets/actions.ts">TvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">TvmWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">TransferActionResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">VedaVaultDetails</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionInclude</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionStatus</a></code>

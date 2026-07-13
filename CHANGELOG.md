@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.26.0 (2026-07-13)
+
+Full Changelog: [v0.25.0...v0.26.0](https://github.com/privy-io/node-sdk/compare/v0.25.0...v0.26.0)
+
+### Features
+
+* **api:** api update ([c21679a](https://github.com/privy-io/node-sdk/commit/c21679aeef946117ba39c3b61610dd79c3128e7a))
+* **api:** api update ([6042196](https://github.com/privy-io/node-sdk/commit/60421962705137eb29fd9efe7da9b0cdd2148be0))
+* **api:** api update ([0935175](https://github.com/privy-io/node-sdk/commit/093517533abc3001de9784c13f5359317ac1f88d))
+
+
+### Bug Fixes
+
+* **ci:** bump @arethetypeswrong/cli to ^0.18.0 and run CI workflows on Node 24 ([a91d47c](https://github.com/privy-io/node-sdk/commit/a91d47cd6248033bf370220d7e62b2b14e763019))
+
 ## 0.25.0 (2026-07-07)
 
 Full Changelog: [v0.24.0...v0.25.0](https://github.com/privy-io/node-sdk/compare/v0.24.0...v0.25.0)

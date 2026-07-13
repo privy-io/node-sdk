@@ -1664,6 +1664,359 @@ export interface WalletActionEarnDepositSucceededWebhookPayload {
 }
 
 /**
+ * Payload for the wallet_action.earn_fee_collect.created webhook event.
+ */
+export interface WalletActionEarnFeeCollectCreatedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * Base-unit amount of fees collected (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'pending';
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_fee_collect.created';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of fees collected (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_fee_collect.failed webhook event.
+ */
+export interface WalletActionEarnFeeCollectFailedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action failed.
+   */
+  failed_at: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: ActionsAPI.FailureReason;
+
+  /**
+   * Base-unit amount of fees collected (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'failed';
+
+  /**
+   * The steps of the wallet action. Completed steps will have transaction hashes;
+   * the failing step will have a failure_reason.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_fee_collect.failed';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of fees collected (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_fee_collect.rejected webhook event.
+ */
+export interface WalletActionEarnFeeCollectRejectedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: ActionsAPI.FailureReason;
+
+  /**
+   * Base-unit amount of fees collected (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was rejected.
+   */
+  rejected_at: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'rejected';
+
+  /**
+   * The steps of the wallet action at the time of rejection.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_fee_collect.rejected';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of fees collected (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
+ * Payload for the wallet_action.earn_fee_collect.succeeded webhook event.
+ */
+export interface WalletActionEarnFeeCollectSucceededWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action completed successfully.
+   */
+  completed_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * Base-unit amount of fees collected (e.g. "1500000").
+   */
+  raw_amount: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'succeeded';
+
+  /**
+   * The steps of the wallet action, including transaction hashes.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.earn_fee_collect.succeeded';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of fees collected (e.g. "1.5"). Only present when
+   * the token is known in the asset registry.
+   */
+  amount?: string;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+}
+
+/**
  * Payload for the wallet_action.earn_incentive_claim.created webhook event.
  */
 export interface WalletActionEarnIncentiveClaimCreatedWebhookPayload {
@@ -3048,7 +3401,11 @@ export type WebhookPayload =
   | WalletActionEarnIncentiveClaimCreatedWebhookPayload
   | WalletActionEarnIncentiveClaimSucceededWebhookPayload
   | WalletActionEarnIncentiveClaimRejectedWebhookPayload
-  | WalletActionEarnIncentiveClaimFailedWebhookPayload;
+  | WalletActionEarnIncentiveClaimFailedWebhookPayload
+  | WalletActionEarnFeeCollectCreatedWebhookPayload
+  | WalletActionEarnFeeCollectSucceededWebhookPayload
+  | WalletActionEarnFeeCollectRejectedWebhookPayload
+  | WalletActionEarnFeeCollectFailedWebhookPayload;
 
 /**
  * Payload for the yield.claim.confirmed webhook event.
@@ -3162,6 +3519,10 @@ export type UnsafeUnwrapWebhookEvent =
   | WalletActionEarnDepositFailedWebhookPayload
   | WalletActionEarnDepositRejectedWebhookPayload
   | WalletActionEarnDepositSucceededWebhookPayload
+  | WalletActionEarnFeeCollectCreatedWebhookPayload
+  | WalletActionEarnFeeCollectFailedWebhookPayload
+  | WalletActionEarnFeeCollectRejectedWebhookPayload
+  | WalletActionEarnFeeCollectSucceededWebhookPayload
   | WalletActionEarnIncentiveClaimCreatedWebhookPayload
   | WalletActionEarnIncentiveClaimFailedWebhookPayload
   | WalletActionEarnIncentiveClaimRejectedWebhookPayload
@@ -3233,6 +3594,10 @@ export declare namespace Webhooks {
     type WalletActionEarnDepositFailedWebhookPayload as WalletActionEarnDepositFailedWebhookPayload,
     type WalletActionEarnDepositRejectedWebhookPayload as WalletActionEarnDepositRejectedWebhookPayload,
     type WalletActionEarnDepositSucceededWebhookPayload as WalletActionEarnDepositSucceededWebhookPayload,
+    type WalletActionEarnFeeCollectCreatedWebhookPayload as WalletActionEarnFeeCollectCreatedWebhookPayload,
+    type WalletActionEarnFeeCollectFailedWebhookPayload as WalletActionEarnFeeCollectFailedWebhookPayload,
+    type WalletActionEarnFeeCollectRejectedWebhookPayload as WalletActionEarnFeeCollectRejectedWebhookPayload,
+    type WalletActionEarnFeeCollectSucceededWebhookPayload as WalletActionEarnFeeCollectSucceededWebhookPayload,
     type WalletActionEarnIncentiveClaimCreatedWebhookPayload as WalletActionEarnIncentiveClaimCreatedWebhookPayload,
     type WalletActionEarnIncentiveClaimFailedWebhookPayload as WalletActionEarnIncentiveClaimFailedWebhookPayload,
     type WalletActionEarnIncentiveClaimRejectedWebhookPayload as WalletActionEarnIncentiveClaimRejectedWebhookPayload,

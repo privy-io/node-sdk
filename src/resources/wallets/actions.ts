@@ -377,6 +377,98 @@ export interface EarnDepositRequestBody {
 }
 
 /**
+ * Response for an earn fee collect action.
+ */
+export interface EarnFeeCollectActionResponse {
+  /**
+   * The ID of the wallet action.
+   */
+  id: string;
+
+  /**
+   * Underlying asset token address.
+   */
+  asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier.
+   */
+  caip2: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * Base-unit amount of fees collected (e.g. "1500000"). Populated after on-chain
+   * confirmation.
+   */
+  raw_amount: string | null;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionStatus;
+
+  type: 'earn_fee_collect';
+
+  /**
+   * ERC-4626 vault contract address.
+   */
+  vault_address: string;
+
+  /**
+   * The vault ID.
+   */
+  vault_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Human-readable decimal amount of fees collected (e.g. "1.5"). Omitted when the
+   * token is not in the asset registry. Null while the action is pending; populated
+   * after on-chain confirmation.
+   */
+  amount?: string | null;
+
+  /**
+   * Asset identifier (e.g. "usdc", "eth"). Only present when the token is known in
+   * the asset registry.
+   */
+  asset?: string;
+
+  /**
+   * Number of decimals for the underlying asset (e.g. 6 for USDC, 18 for ETH). Only
+   * present when the token is known in the asset registry.
+   */
+  decimals?: number;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+
+  /**
+   * The steps of the wallet action. Only returned if `?include=steps` is provided.
+   */
+  steps?: Array<WalletActionStep>;
+}
+
+/**
+ * Input for collecting accumulated fees from an Aave vault.
+ */
+export interface EarnFeeCollectRequestBody {
+  /**
+   * The ID of the vault to collect fees from.
+   */
+  vault_id: string;
+}
+
+/**
  * Response for an earn incentive claim action.
  */
 export interface EarnIncentiveClaimActionResponse {
@@ -667,13 +759,13 @@ export interface EthereumEarnPositionResponse {
 /**
  * Supported earn provider protocols.
  */
-export type EthereumEarnProvider = 'morpho' | 'aave';
+export type EthereumEarnProvider = 'morpho' | 'aave' | 'veda';
 
 /**
  * Detailed vault information including current APY, liquidity, and asset metadata.
  * Discriminated on provider.
  */
-export type EthereumEarnVaultDetailsResponse = AaveVaultDetails | MorphoVaultDetails;
+export type EthereumEarnVaultDetailsResponse = AaveVaultDetails | MorphoVaultDetails | VedaVaultDetails;
 
 /**
  * A wallet action step representing a cross-chain/cross-asset fill by an external
@@ -1116,6 +1208,70 @@ export interface TransferActionResponse {
 }
 
 /**
+ * Vault details for a Veda (BoringVault) earn vault.
+ */
+export interface VedaVaultDetails {
+  /**
+   * Vault identifier.
+   */
+  id: string;
+
+  /**
+   * EVM address of the vault admin wallet.
+   */
+  admin_wallet_address: string;
+
+  /**
+   * Privy wallet ID of the vault admin.
+   */
+  admin_wallet_id: string;
+
+  /**
+   * Annual percentage yield earned by the app from fee wrapper fees, in basis
+   * points.
+   */
+  app_apy: number | null;
+
+  /**
+   * Asset metadata for an earn vault position.
+   */
+  asset: EarnAsset;
+
+  /**
+   * Available liquidity in USD.
+   */
+  available_liquidity_usd: number | null;
+
+  /**
+   * CAIP-2 chain identifier (e.g. "eip155:8453").
+   */
+  caip2: string;
+
+  /**
+   * Human-readable vault name from the yield provider.
+   */
+  name: string;
+
+  provider: 'veda';
+
+  /**
+   * Total value locked in USD.
+   */
+  tvl_usd: number | null;
+
+  /**
+   * Annual percentage yield available to the user, after fees and excluding rewards,
+   * in basis points (e.g. 500 for 5%). 1 basis point = 0.01%.
+   */
+  user_apy: number | null;
+
+  /**
+   * Onchain vault contract address.
+   */
+  vault_address: string;
+}
+
+/**
  * Expandable relations to include on a wallet action response.
  */
 export type WalletActionInclude = 'steps';
@@ -1128,7 +1284,8 @@ export type WalletActionResponse =
   | TransferActionResponse
   | EarnDepositActionResponse
   | EarnWithdrawActionResponse
-  | EarnIncentiveClaimActionResponse;
+  | EarnIncentiveClaimActionResponse
+  | EarnFeeCollectActionResponse;
 
 /**
  * Status of a wallet action.
@@ -1165,7 +1322,8 @@ export type WalletActionType =
   | 'transfer'
   | 'earn_deposit'
   | 'earn_withdraw'
-  | 'earn_incentive_claim';
+  | 'earn_incentive_claim'
+  | 'earn_fee_collect';
 
 export interface ActionGetParams {
   /**
@@ -1197,6 +1355,8 @@ export declare namespace Actions {
     type EarnAsset as EarnAsset,
     type EarnDepositActionResponse as EarnDepositActionResponse,
     type EarnDepositRequestBody as EarnDepositRequestBody,
+    type EarnFeeCollectActionResponse as EarnFeeCollectActionResponse,
+    type EarnFeeCollectRequestBody as EarnFeeCollectRequestBody,
     type EarnIncentiveClaimActionResponse as EarnIncentiveClaimActionResponse,
     type EarnIncentiveClaimRequestBody as EarnIncentiveClaimRequestBody,
     type EarnIncentiveRewardEntry as EarnIncentiveRewardEntry,
@@ -1221,6 +1381,7 @@ export declare namespace Actions {
     type TvmTransactionWalletActionStep as TvmTransactionWalletActionStep,
     type TvmWalletActionStepStatus as TvmWalletActionStepStatus,
     type TransferActionResponse as TransferActionResponse,
+    type VedaVaultDetails as VedaVaultDetails,
     type WalletActionInclude as WalletActionInclude,
     type WalletActionResponse as WalletActionResponse,
     type WalletActionStatus as WalletActionStatus,

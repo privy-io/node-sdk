@@ -283,6 +283,8 @@ Types:
 - <code><a href="./src/resources/wallets/actions.ts">EarnAsset</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EarnDepositActionResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EarnDepositRequestBody</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">EarnFeeCollectActionResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">EarnFeeCollectRequestBody</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EarnIncentiveClaimActionResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EarnIncentiveClaimRequestBody</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EarnIncentiveRewardEntry</a></code>
@@ -307,6 +309,7 @@ Types:
 - <code><a href="./src/resources/wallets/actions.ts">TvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">TvmWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">TransferActionResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">VedaVaultDetails</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionInclude</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionStatus</a></code>
@@ -723,6 +726,10 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositRejectedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnDepositSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnFeeCollectCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnFeeCollectFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnFeeCollectRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionEarnFeeCollectSucceededWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnIncentiveClaimRejectedWebhookPayload</a></code>

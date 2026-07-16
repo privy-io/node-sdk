@@ -195,7 +195,8 @@ export interface SwapSource {
   asset_address: string;
 
   /**
-   * CAIP-2 chain identifier (e.g., "eip155:1").
+   * CAIP-2 chain identifier (e.g., "eip155:4217" for Tempo, "eip155:1" for
+   * Ethereum).
    */
   caip2: string;
 }

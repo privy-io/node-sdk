@@ -1123,7 +1123,8 @@ export declare namespace IntentRpcParams {
 
   export interface EthereumSendTransactionRpcInput {
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2: AppsAPI.Caip2;
 
@@ -1192,7 +1193,8 @@ export declare namespace IntentRpcParams {
     address?: string;
 
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2?: AppsAPI.Caip2;
 
@@ -1236,7 +1238,8 @@ export declare namespace IntentRpcParams {
     address?: string;
 
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2?: AppsAPI.Caip2;
 
@@ -1364,7 +1367,8 @@ export declare namespace IntentRpcParams {
 
   export interface EthereumSendCallsRpcInput {
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2: AppsAPI.Caip2;
 
@@ -1446,7 +1450,8 @@ export declare namespace IntentRpcParams {
 
   export interface SolanaSignAndSendTransactionRpcInput {
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2: AppsAPI.Caip2;
 
@@ -1803,7 +1808,8 @@ export declare namespace IntentRpcParams {
     params: WalletsAPI.TronSendTransactionRpcInputParams;
 
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2?: AppsAPI.Caip2;
 

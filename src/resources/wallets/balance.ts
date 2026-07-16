@@ -65,7 +65,7 @@ export namespace BalanceGetResponse {
 export interface BalanceGetParams {
   /**
    * The token contract address(es) to query in format "chain:address" (e.g.,
-   * "base:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" or
+   * "tempo:0x20c000000000000000000000b9537d11c60e8b50" or
    * "solana:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"). Cannot be used together
    * with `asset`/`chain` or with `include_currency`.
    */
@@ -90,7 +90,7 @@ export interface BalanceGetParams {
     | Array<WalletsAPI.WalletAsset>;
 
   /**
-   * Chain(s) to query named assets on (e.g. `base`, `ethereum`). Use together with
+   * Chain(s) to query named assets on (e.g. `tempo`, `base`). Use together with
    * `asset`. Cannot be used with `token`.
    */
   chain?: WalletsAPI.WalletAssetChainNameInput | Array<WalletsAPI.WalletAssetChainNameInput>;

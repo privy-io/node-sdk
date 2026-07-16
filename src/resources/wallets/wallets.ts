@@ -794,7 +794,7 @@ export interface CustomTokenTransferSource {
 
   /**
    * The blockchain network on which to perform the transfer. Supported chains
-   * include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and their
+   * include: 'tempo', 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and their
    * respective testnets.
    */
   chain: string;
@@ -892,7 +892,7 @@ export interface EthereumPersonalSignRpcInput {
   address?: string;
 
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   caip2?: AppsAPI.Caip2;
 
@@ -1042,7 +1042,7 @@ export interface EthereumSendCallsCall {
  */
 export interface EthereumSendCallsRpcInput {
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   caip2: AppsAPI.Caip2;
 
@@ -1092,7 +1092,7 @@ export interface EthereumSendCallsRpcResponse {
  */
 export interface EthereumSendCallsRpcResponseData {
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   caip2: AppsAPI.Caip2;
 
@@ -1104,7 +1104,7 @@ export interface EthereumSendCallsRpcResponseData {
  */
 export interface EthereumSendTransactionRpcInput {
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   caip2: AppsAPI.Caip2;
 
@@ -1160,7 +1160,7 @@ export interface EthereumSendTransactionRpcResponse {
  */
 export interface EthereumSendTransactionRpcResponseData {
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   caip2: AppsAPI.Caip2;
 
@@ -1340,7 +1340,7 @@ export interface EthereumSignTypedDataRpcInput {
   address?: string;
 
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   caip2?: AppsAPI.Caip2;
 
@@ -1749,7 +1749,7 @@ export interface NamedTokenTransferSource {
 
   /**
    * The blockchain network on which to perform the transfer. Supported chains
-   * include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and their
+   * include: 'tempo', 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and their
    * respective testnets.
    */
   chain: string;
@@ -2122,7 +2122,7 @@ export type SolanaRpcResponse =
  */
 export interface SolanaSignAndSendTransactionRpcInput {
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   caip2: AppsAPI.Caip2;
 
@@ -2172,7 +2172,7 @@ export interface SolanaSignAndSendTransactionRpcResponse {
  */
 export interface SolanaSignAndSendTransactionRpcResponseData {
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   caip2: AppsAPI.Caip2;
 
@@ -3205,7 +3205,7 @@ export interface TokenTransferDestination {
 
   /**
    * The destination blockchain network. Required for cross-chain transfers (e.g.,
-   * source 'base' to destination 'arbitrum').
+   * source 'tempo' to destination 'base').
    */
   chain?: string;
 }
@@ -3539,7 +3539,7 @@ export interface TronSendTransactionRpcInput {
   params: TronSendTransactionRpcInputParams;
 
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   caip2?: AppsAPI.Caip2;
 }
@@ -3574,7 +3574,7 @@ export interface TronSendTransactionRpcResponse {
  */
 export interface TronSendTransactionRpcResponseData {
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   caip2: AppsAPI.Caip2;
 
@@ -4824,7 +4824,8 @@ export declare namespace WalletRpcParams {
 
   export interface EthereumSendTransactionRpcInput {
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2: AppsAPI.Caip2;
 
@@ -4905,7 +4906,8 @@ export declare namespace WalletRpcParams {
     address?: string;
 
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2?: AppsAPI.Caip2;
 
@@ -4961,7 +4963,8 @@ export declare namespace WalletRpcParams {
     address?: string;
 
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2?: AppsAPI.Caip2;
 
@@ -5137,7 +5140,8 @@ export declare namespace WalletRpcParams {
 
   export interface EthereumSendCallsRpcInput {
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2: AppsAPI.Caip2;
 
@@ -5243,7 +5247,8 @@ export declare namespace WalletRpcParams {
 
   export interface SolanaSignAndSendTransactionRpcInput {
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2: AppsAPI.Caip2;
 
@@ -5768,7 +5773,8 @@ export declare namespace WalletRpcParams {
     params: TronSendTransactionRpcInputParams;
 
     /**
-     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:1').
+     * Body param: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1'
+     * for Ethereum).
      */
     caip2?: AppsAPI.Caip2;
 

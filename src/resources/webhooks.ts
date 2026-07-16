@@ -871,7 +871,8 @@ export interface SeedPhraseExportWebhookPayload {
  */
 export interface TransactionBroadcastedWebhookPayload {
   /**
-   * The CAIP-2 chain identifier (e.g., eip155:1 for Ethereum mainnet).
+   * The CAIP-2 chain identifier (e.g., eip155:4217 for Tempo, eip155:1 for Ethereum
+   * mainnet).
    */
   caip2: string;
 
@@ -907,7 +908,8 @@ export interface TransactionBroadcastedWebhookPayload {
  */
 export interface TransactionConfirmedWebhookPayload {
   /**
-   * The CAIP-2 chain identifier (e.g., eip155:1 for Ethereum mainnet).
+   * The CAIP-2 chain identifier (e.g., eip155:4217 for Tempo, eip155:1 for Ethereum
+   * mainnet).
    */
   caip2: string;
 
@@ -943,7 +945,8 @@ export interface TransactionConfirmedWebhookPayload {
  */
 export interface TransactionExecutionRevertedWebhookPayload {
   /**
-   * The CAIP-2 chain identifier (e.g., eip155:1 for Ethereum mainnet).
+   * The CAIP-2 chain identifier (e.g., eip155:4217 for Tempo, eip155:1 for Ethereum
+   * mainnet).
    */
   caip2: string;
 
@@ -979,7 +982,8 @@ export interface TransactionExecutionRevertedWebhookPayload {
  */
 export interface TransactionFailedWebhookPayload {
   /**
-   * The CAIP-2 chain identifier (e.g., eip155:1 for Ethereum mainnet).
+   * The CAIP-2 chain identifier (e.g., eip155:4217 for Tempo, eip155:1 for Ethereum
+   * mainnet).
    */
   caip2: string;
 
@@ -1015,7 +1019,8 @@ export interface TransactionFailedWebhookPayload {
  */
 export interface TransactionProviderErrorWebhookPayload {
   /**
-   * The CAIP-2 chain identifier (e.g., eip155:1 for Ethereum mainnet).
+   * The CAIP-2 chain identifier (e.g., eip155:4217 for Tempo, eip155:1 for Ethereum
+   * mainnet).
    */
   caip2: string;
 
@@ -1051,7 +1056,8 @@ export interface TransactionProviderErrorWebhookPayload {
  */
 export interface TransactionReplacedWebhookPayload {
   /**
-   * The CAIP-2 chain identifier (e.g., eip155:1 for Ethereum mainnet).
+   * The CAIP-2 chain identifier (e.g., eip155:4217 for Tempo, eip155:1 for Ethereum
+   * mainnet).
    */
   caip2: string;
 
@@ -1087,7 +1093,8 @@ export interface TransactionReplacedWebhookPayload {
  */
 export interface TransactionStillPendingWebhookPayload {
   /**
-   * The CAIP-2 chain identifier (e.g., eip155:1 for Ethereum mainnet).
+   * The CAIP-2 chain identifier (e.g., eip155:4217 for Tempo, eip155:1 for Ethereum
+   * mainnet).
    */
   caip2: string;
 
@@ -2026,7 +2033,7 @@ export interface WalletActionEarnIncentiveClaimCreatedWebhookPayload {
   action_type: ActionsAPI.WalletActionType;
 
   /**
-   * EVM chain name (e.g. "base", "ethereum").
+   * EVM chain name (e.g. "tempo", "base").
    */
   chain: string;
 
@@ -2071,7 +2078,7 @@ export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
   action_type: ActionsAPI.WalletActionType;
 
   /**
-   * EVM chain name (e.g. "base", "ethereum").
+   * EVM chain name (e.g. "tempo", "base").
    */
   chain: string;
 
@@ -2132,7 +2139,7 @@ export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
   action_type: ActionsAPI.WalletActionType;
 
   /**
-   * EVM chain name (e.g. "base", "ethereum").
+   * EVM chain name (e.g. "tempo", "base").
    */
   chain: string;
 
@@ -2192,7 +2199,7 @@ export interface WalletActionEarnIncentiveClaimSucceededWebhookPayload {
   action_type: ActionsAPI.WalletActionType;
 
   /**
-   * EVM chain name (e.g. "base", "ethereum").
+   * EVM chain name (e.g. "tempo", "base").
    */
   chain: string;
 
@@ -2882,7 +2889,7 @@ export interface WalletActionTransferCreatedWebhookPayload {
   destination_address: string;
 
   /**
-   * Chain name (e.g. "base", "ethereum").
+   * Chain name (e.g. "tempo", "base").
    */
   source_chain: string;
 
@@ -2961,7 +2968,7 @@ export interface WalletActionTransferFailedWebhookPayload {
   failure_reason: ActionsAPI.FailureReason;
 
   /**
-   * Chain name (e.g. "base", "ethereum").
+   * Chain name (e.g. "tempo", "base").
    */
   source_chain: string;
 
@@ -3046,7 +3053,7 @@ export interface WalletActionTransferRejectedWebhookPayload {
   rejected_at: string;
 
   /**
-   * Chain name (e.g. "base", "ethereum").
+   * Chain name (e.g. "tempo", "base").
    */
   source_chain: string;
 
@@ -3125,7 +3132,7 @@ export interface WalletActionTransferSucceededWebhookPayload {
   destination_address: string;
 
   /**
-   * Chain name (e.g. "base", "ethereum").
+   * Chain name (e.g. "tempo", "base").
    */
   source_chain: string;
 

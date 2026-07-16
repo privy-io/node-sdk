@@ -54,8 +54,8 @@ export class Incentive extends APIResource {
 export interface IncentiveClaimParams {
   /**
    * Body param: The blockchain network on which to perform the incentive claim.
-   * Supported chains include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana',
-   * and more, along with their respective testnets.
+   * Supported chains include: 'tempo', 'ethereum', 'base', 'arbitrum', 'polygon',
+   * 'solana', and more, along with their respective testnets.
    */
   chain: string;
 

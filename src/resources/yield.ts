@@ -41,7 +41,7 @@ export interface EthereumVaultDetailsResponse {
   available_liquidity_usd: number | null;
 
   /**
-   * Chain identifier (e.g., eip155:8453).
+   * Chain identifier (e.g., eip155:4217 for Tempo, eip155:8453 for Base).
    */
   caip2: string;
 
@@ -158,7 +158,8 @@ export interface EthereumYieldClaimIDInput {
  */
 export interface EthereumYieldClaimInput {
   /**
-   * An EVM CAIP-2 chain identifier (e.g., "eip155:8453" for Base).
+   * An EVM CAIP-2 chain identifier (e.g., "eip155:4217" for Tempo, "eip155:8453" for
+   * Base).
    */
   caip2: EvmCaip2ChainID;
 }
@@ -173,7 +174,8 @@ export interface EthereumYieldClaimResponse {
   id: string;
 
   /**
-   * An EVM CAIP-2 chain identifier (e.g., "eip155:8453" for Base).
+   * An EVM CAIP-2 chain identifier (e.g., "eip155:4217" for Tempo, "eip155:8453" for
+   * Base).
    */
   caip2: EvmCaip2ChainID;
 
@@ -372,7 +374,8 @@ export interface EthereumYieldWithdrawInput {
 }
 
 /**
- * An EVM CAIP-2 chain identifier (e.g., "eip155:8453" for Base).
+ * An EVM CAIP-2 chain identifier (e.g., "eip155:4217" for Tempo, "eip155:8453" for
+ * Base).
  */
 export type EvmCaip2ChainID = string;
 

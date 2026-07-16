@@ -201,7 +201,7 @@ export interface BalanceAssetByChain {
   amount: string;
 
   /**
-   * The CAIP-2 chain identifier (e.g. eip155:8453).
+   * The CAIP-2 chain identifier (e.g. eip155:4217 for Tempo, eip155:8453 for Base).
    */
   chain_id: string;
 

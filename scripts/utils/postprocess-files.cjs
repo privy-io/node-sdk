@@ -53,11 +53,11 @@ async function postprocess() {
     },
     './resources': {
       require: {
-        types: './resources.d.ts',
-        default: './resources.js',
+        types: './resources-types.d.ts',
+        default: './resources-types.js',
       },
-      types: './resources.d.mts',
-      default: './resources.mjs',
+      types: './resources-types.d.mts',
+      default: './resources-types.mjs',
     },
     './viem': {
       require: {

@@ -3886,6 +3886,14 @@ export interface UserOperationInput {
    */
   verification_gas_limit: Hex;
 
+  factory?: string;
+
+  /**
+   * A hex-encoded string prefixed with '0x', capped at 100002 characters (50,000
+   * bytes).
+   */
+  factory_data?: Hex;
+
   paymaster?: string;
 
   /**

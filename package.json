@@ -118,6 +118,16 @@
         "default": "./dist/index.js"
       }
     },
+    "./resources": {
+      "import": {
+        "types": "./dist/resources.d.mts",
+        "default": "./dist/resources.mjs"
+      },
+      "require": {
+        "types": "./dist/resources.d.ts",
+        "default": "./dist/resources.js"
+      }
+    },
     "./viem": {
       "import": {
         "types": "./dist/viem.d.mts",

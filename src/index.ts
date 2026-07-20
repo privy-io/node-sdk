@@ -27,26 +27,56 @@ export {
   type VerifyIdentityTokenInput,
 } from './lib/auth';
 
-export { type User, type LinkedAccountEmbeddedWallet, type LinkedAccount } from './resources/users';
 export {
+  /** @deprecated Import `User` from `@privy-io/node/resources` instead. */
+  type User,
+  /** @deprecated Import `LinkedAccountEmbeddedWallet` from `@privy-io/node/resources` instead. */
+  type LinkedAccountEmbeddedWallet,
+  /** @deprecated Import `LinkedAccount` from `@privy-io/node/resources` instead. */
+  type LinkedAccount,
+} from './resources/users';
+export {
+  /** @deprecated Import `AppResponse` from `@privy-io/node/resources` instead. */
   type AppResponse,
+  /** @deprecated Import `AllowlistEntry` from `@privy-io/node/resources` instead. */
   type AllowlistEntry,
+  /** @deprecated Import `AllowlistDeletionResponse` from `@privy-io/node/resources` instead. */
   type AllowlistDeletionResponse,
+  /** @deprecated Import `UserInviteInput` from `@privy-io/node/resources` instead. */
   type UserInviteInput,
+  /** @deprecated Import `EmailInviteInput` from `@privy-io/node/resources` instead. */
   type EmailInviteInput,
+  /** @deprecated Import `WalletInviteInput` from `@privy-io/node/resources` instead. */
   type WalletInviteInput,
+  /** @deprecated Import `PhoneInviteInput` from `@privy-io/node/resources` instead. */
   type PhoneInviteInput,
 } from './resources/apps/apps';
-export { type Wallet } from './resources/wallets';
-export { type Policy } from './resources/policies';
-export { type KeyQuorum } from './resources/key-quorums';
 export {
+  /** @deprecated Import `Wallet` from `@privy-io/node/resources` instead. */
+  type Wallet,
+} from './resources/wallets';
+export {
+  /** @deprecated Import `Policy` from `@privy-io/node/resources` instead. */
+  type Policy,
+} from './resources/policies';
+export {
+  /** @deprecated Import `KeyQuorum` from `@privy-io/node/resources` instead. */
+  type KeyQuorum,
+} from './resources/key-quorums';
+export {
+  /** @deprecated Import `IntentResponse` from `@privy-io/node/resources` instead. */
   type IntentResponse,
+  /** @deprecated Import `RpcIntentResponse` from `@privy-io/node/resources` instead. */
   type RpcIntentResponse,
+  /** @deprecated Import `WalletIntentResponse` from `@privy-io/node/resources` instead. */
   type WalletIntentResponse,
+  /** @deprecated Import `PolicyIntentResponse` from `@privy-io/node/resources` instead. */
   type PolicyIntentResponse,
+  /** @deprecated Import `RuleIntentResponse` from `@privy-io/node/resources` instead. */
   type RuleIntentResponse,
+  /** @deprecated Import `KeyQuorumIntentResponse` from `@privy-io/node/resources` instead. */
   type KeyQuorumIntentResponse,
+  /** @deprecated Import `IntentListParams` from `@privy-io/node/resources` instead. */
   type IntentListParams,
 } from './resources/intents';
 

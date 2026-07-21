@@ -98,6 +98,7 @@ export interface TransactionGetParams {
     | 'usdt'
     | 'eurc'
     | 'usdb'
+    | 'pathusd'
     | 'sol'
     | 'trx'
     | Array<WalletsAPI.WalletAsset>;

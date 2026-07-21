@@ -45,6 +45,7 @@ export namespace BalanceGetResponse {
       | 'usdt'
       | 'eurc'
       | 'usdb'
+      | 'pathusd'
       | 'sol'
       | 'trx'
       | (string & {});
@@ -85,6 +86,7 @@ export interface BalanceGetParams {
     | 'usdt'
     | 'eurc'
     | 'usdb'
+    | 'pathusd'
     | 'sol'
     | 'trx'
     | Array<WalletsAPI.WalletAsset>;

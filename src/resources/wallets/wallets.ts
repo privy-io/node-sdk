@@ -3364,6 +3364,7 @@ export interface TransferReceivedTransactionDetail {
     | 'usdt'
     | 'eurc'
     | 'usdb'
+    | 'pathusd'
     | 'sol'
     | 'trx'
     | (string & {});
@@ -3444,6 +3445,7 @@ export interface TransferSentTransactionDetail {
     | 'usdt'
     | 'eurc'
     | 'usdb'
+    | 'pathusd'
     | 'sol'
     | 'trx'
     | (string & {});
@@ -4063,6 +4065,7 @@ export type WalletAsset =
   | 'usdt'
   | 'eurc'
   | 'usdb'
+  | 'pathusd'
   | 'sol'
   | 'trx';
 
@@ -4371,7 +4374,8 @@ export type WalletEthereumAsset =
   | 'bnb'
   | 'usdt'
   | 'eurc'
-  | 'usdb';
+  | 'usdb'
+  | 'pathusd';
 
 /**
  * Request body for exporting a wallet private key.

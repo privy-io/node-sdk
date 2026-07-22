@@ -1742,8 +1742,8 @@ export interface IntentBinding {
  */
 export interface NamedTokenTransferSource {
   /**
-   * The asset to transfer. Supported: 'usdc', 'usdb', 'usdt' (stablecoins), 'eth'
-   * (native Ethereum), 'sol' (native Solana).
+   * The asset to transfer. Supported: 'usdc', 'usdb', 'usdt', 'pathusd'
+   * (stablecoins), 'eth' (native Ethereum), 'sol' (native Solana).
    */
   asset: string;
 
@@ -3239,6 +3239,7 @@ export type TransactionChainNameInput =
   | 'arbitrum'
   | 'avalanche'
   | 'base'
+  | 'base_sepolia'
   | 'bsc'
   | 'tempo'
   | 'linea'

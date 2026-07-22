@@ -261,7 +261,7 @@ export interface AppResponse {
 }
 
 /**
- * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+ * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
  */
 export type Caip2 = string;
 
@@ -275,7 +275,7 @@ export type CaptchaProvider = 'turnstile' | 'hcaptcha';
  */
 export interface Currency {
   /**
-   * A valid CAIP-2 chain ID (e.g. 'eip155:1').
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   chain: Caip2;
 

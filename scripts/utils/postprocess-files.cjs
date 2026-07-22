@@ -51,6 +51,14 @@ async function postprocess() {
       types: './index.d.mts',
       default: './index.mjs',
     },
+    './resources': {
+      require: {
+        types: './resources-types.d.ts',
+        default: './resources-types.js',
+      },
+      types: './resources-types.d.mts',
+      default: './resources-types.mjs',
+    },
     './viem': {
       require: {
         types: './viem.d.ts',

@@ -82,7 +82,7 @@ export interface AaveVaultDetails {
   available_liquidity_usd: number | null;
 
   /**
-   * CAIP-2 chain identifier (e.g. "eip155:8453").
+   * CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:8453" for Base).
    */
   caip2: string;
 
@@ -478,7 +478,7 @@ export interface EarnIncentiveClaimActionResponse {
   id: string;
 
   /**
-   * EVM chain name (e.g. "base", "ethereum").
+   * EVM chain name (e.g. "tempo", "base").
    */
   chain: string;
 
@@ -521,8 +521,8 @@ export interface EarnIncentiveClaimActionResponse {
 export interface EarnIncentiveClaimRequestBody {
   /**
    * The blockchain network on which to perform the incentive claim. Supported chains
-   * include: 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and more, along
-   * with their respective testnets.
+   * include: 'tempo', 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and more,
+   * along with their respective testnets.
    */
   chain: string;
 }
@@ -562,7 +562,7 @@ export interface EarnIncentiveRewardEntry {
  */
 export interface EarnIncentiveRewardsQuery {
   /**
-   * Chain name to fetch rewards for (e.g. "base", "ethereum").
+   * Chain name to fetch rewards for (e.g. "tempo", "base").
    */
   chain: string;
 }
@@ -870,7 +870,7 @@ export interface MorphoVaultDetails {
   available_liquidity_usd: number | null;
 
   /**
-   * CAIP-2 chain identifier (e.g. "eip155:8453").
+   * CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:8453" for Base).
    */
   caip2: string;
 
@@ -1117,7 +1117,7 @@ export interface TransferActionResponse {
   destination_amount: string | null;
 
   /**
-   * Chain name (e.g. "base", "ethereum").
+   * Chain name (e.g. "tempo", "base").
    */
   source_chain: string;
 
@@ -1243,7 +1243,7 @@ export interface VedaVaultDetails {
   available_liquidity_usd: number | null;
 
   /**
-   * CAIP-2 chain identifier (e.g. "eip155:8453").
+   * CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:8453" for Base).
    */
   caip2: string;
 

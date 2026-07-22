@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.27.0 (2026-07-22)
+
+Full Changelog: [v0.26.0...v0.27.0](https://github.com/privy-io/node-sdk/compare/v0.26.0...v0.27.0)
+
+### Features
+
+* **api:** api update ([3711fbb](https://github.com/privy-io/node-sdk/commit/3711fbbc370bcbda412681fe6b84e39e41c7023e))
+* **api:** api update ([8fc9a19](https://github.com/privy-io/node-sdk/commit/8fc9a19aa5ddd411234632e2b4ab6dd5987faccc))
+* **api:** api update ([f0b912e](https://github.com/privy-io/node-sdk/commit/f0b912ec60d03f7bfab617c50eae9c39428f14d5))
+* **api:** api update ([9bdc393](https://github.com/privy-io/node-sdk/commit/9bdc3936d43016238623d69056e04fb729ea44b2))
+* defines a new /resources entrypoint ([#193](https://github.com/privy-io/node-sdk/issues/193)) ([ff15ebf](https://github.com/privy-io/node-sdk/commit/ff15ebf696a4647bd7ded2de9fa1f9aced4468ed))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([b31a7b3](https://github.com/privy-io/node-sdk/commit/b31a7b338e45eef0b67ef66d5c2fee108704441e))
+
 ## 0.26.0 (2026-07-13)
 
 Full Changelog: [v0.25.0...v0.26.0](https://github.com/privy-io/node-sdk/compare/v0.25.0...v0.26.0)

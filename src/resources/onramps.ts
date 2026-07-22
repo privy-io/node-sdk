@@ -70,8 +70,8 @@ export interface BridgeSandboxFiatCustomerResponse {
 }
 
 /**
- * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
- * Ethereum mainnet, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
+ * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:4217" for
+ * Tempo or "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
  */
 export type Caip2ChainID = string;
 
@@ -192,8 +192,8 @@ export interface FiatOnrampDestination {
   asset: SharedAPI.TokenIdentifier;
 
   /**
-   * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:1" for
-   * Ethereum mainnet, "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
+   * A CAIP-2 chain identifier in namespace:reference format (e.g. "eip155:4217" for
+   * Tempo or "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" for Solana mainnet).
    */
   chain: Caip2ChainID;
 }

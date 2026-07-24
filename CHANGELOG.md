@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.28.0 (2026-07-24)
+
+Full Changelog: [v0.27.0...v0.28.0](https://github.com/privy-io/node-sdk/compare/v0.27.0...v0.28.0)
+
+### Features
+
+* **api:** api update ([f285615](https://github.com/privy-io/node-sdk/commit/f28561534091163b2212febba780324740ccd255))
+
 ## 0.27.0 (2026-07-22)
 
 Full Changelog: [v0.26.0...v0.27.0](https://github.com/privy-io/node-sdk/compare/v0.26.0...v0.27.0)

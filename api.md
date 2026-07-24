@@ -372,6 +372,7 @@ Types:
 - <code><a href="./src/resources/users.ts">CrossAppEmbeddedWallet</a></code>
 - <code><a href="./src/resources/users.ts">CrossAppSmartWallet</a></code>
 - <code><a href="./src/resources/users.ts">CustomMetadata</a></code>
+- <code><a href="./src/resources/users.ts">EmailMfaMethod</a></code>
 - <code><a href="./src/resources/users.ts">EmbeddedWalletRecoveryMethod</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccount</a></code>
 - <code><a href="./src/resources/users.ts">LinkedAccountAppleInput</a></code>
@@ -901,6 +902,11 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">FiatVirtualAccountResponse</a></code>
 - <code><a href="./src/resources/client-auth.ts">GuestAuthenticateRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">LinkJwtInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaEmailEnrollRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaEmailInitEnrollInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaEmailInitRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaEmailInitVerifyInput</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaEmailVerifyRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaPasskeyEnrollmentRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaPasskeyInitRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaPasskeyInitResponseBody</a></code>

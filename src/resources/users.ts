@@ -378,6 +378,15 @@ export interface CrossAppSmartWallet {
 export type CustomMetadata = { [key: string]: string | number | boolean };
 
 /**
+ * An Email MFA method.
+ */
+export interface EmailMfaMethod {
+  type: 'email';
+
+  verified_at: number;
+}
+
+/**
  * The method used to recover an embedded wallet account.
  */
 export type EmbeddedWalletRecoveryMethod =
@@ -1490,7 +1499,7 @@ export interface LinkedAccountWalletInput {
 /**
  * A multi-factor authentication method linked to the user.
  */
-export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod;
+export type LinkedMfaMethod = SMSMfaMethod | TotpMfaMethod | PasskeyMfaMethod | EmailMfaMethod;
 
 /**
  * OAuth tokens associated with the user.
@@ -1775,6 +1784,7 @@ export declare namespace Users {
     type CrossAppEmbeddedWallet as CrossAppEmbeddedWallet,
     type CrossAppSmartWallet as CrossAppSmartWallet,
     type CustomMetadata as CustomMetadata,
+    type EmailMfaMethod as EmailMfaMethod,
     type EmbeddedWalletRecoveryMethod as EmbeddedWalletRecoveryMethod,
     type LinkedAccount as LinkedAccount,
     type LinkedAccountAppleInput as LinkedAccountAppleInput,

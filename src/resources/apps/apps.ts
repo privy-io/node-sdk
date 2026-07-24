@@ -451,7 +451,7 @@ export interface GasSpendResponseBody {
 /**
  * A multi-factor authentication method supported by the app.
  */
-export type MfaMethod = 'sms' | 'totp' | 'passkey';
+export type MfaMethod = 'sms' | 'totp' | 'passkey' | 'email';
 
 /**
  * Allowlist invite input for a phone number.

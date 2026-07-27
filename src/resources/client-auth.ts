@@ -704,6 +704,43 @@ export interface LinkJwtInput {
 }
 
 /**
+ * The request body for enrolling an email MFA code.
+ */
+export interface MfaEmailEnrollRequestBody {
+  code: string;
+
+  email_address: string;
+}
+
+/**
+ * Input for enrolling email MFA.
+ */
+export interface MfaEmailInitEnrollInput {
+  action: 'enroll';
+
+  email_address: string;
+}
+
+/**
+ * The request body for initiating an email MFA flow.
+ */
+export type MfaEmailInitRequestBody = MfaEmailInitVerifyInput | MfaEmailInitEnrollInput;
+
+/**
+ * Input for verifying email MFA.
+ */
+export interface MfaEmailInitVerifyInput {
+  action: 'verify';
+}
+
+/**
+ * The request body for verifying an email MFA code.
+ */
+export interface MfaEmailVerifyRequestBody {
+  code: string;
+}
+
+/**
  * The request body for enrolling a passkey MFA flow.
  */
 export interface MfaPasskeyEnrollmentRequestBody {
@@ -2058,6 +2095,11 @@ export declare namespace ClientAuth {
     type FiatVirtualAccountResponse as FiatVirtualAccountResponse,
     type GuestAuthenticateRequestBody as GuestAuthenticateRequestBody,
     type LinkJwtInput as LinkJwtInput,
+    type MfaEmailEnrollRequestBody as MfaEmailEnrollRequestBody,
+    type MfaEmailInitEnrollInput as MfaEmailInitEnrollInput,
+    type MfaEmailInitRequestBody as MfaEmailInitRequestBody,
+    type MfaEmailInitVerifyInput as MfaEmailInitVerifyInput,
+    type MfaEmailVerifyRequestBody as MfaEmailVerifyRequestBody,
     type MfaPasskeyEnrollmentRequestBody as MfaPasskeyEnrollmentRequestBody,
     type MfaPasskeyInitRequestBody as MfaPasskeyInitRequestBody,
     type MfaPasskeyInitResponseBody as MfaPasskeyInitResponseBody,

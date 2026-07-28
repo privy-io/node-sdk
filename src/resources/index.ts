@@ -268,6 +268,20 @@ export {
   type WalletCreationInput,
 } from './embedded-wallets';
 export {
+  Fiat,
+  type FiatCurrency,
+  type FiatPaymentRail,
+  type OfframpDepositInstructions,
+  type OfframpResponse,
+  type OnrampAsset,
+  type OnrampChain,
+  type OnrampDepositInstructions,
+  type OnrampKYCResponse,
+  type OnrampKYCStatus,
+  type OnrampResponse,
+  type OnrampTransferStatus,
+} from './fiat';
+export {
   Funding,
   type CoinbaseBlockchain,
   type CoinbaseEthereumAsset,

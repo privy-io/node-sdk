@@ -1166,6 +1166,22 @@ Types:
 - <code><a href="./src/resources/yield.ts">VaultAsset</a></code>
 - <code><a href="./src/resources/yield.ts">YieldAuthorizationHeaders</a></code>
 
+# Fiat
+
+Types:
+
+- <code><a href="./src/resources/fiat.ts">FiatCurrency</a></code>
+- <code><a href="./src/resources/fiat.ts">FiatPaymentRail</a></code>
+- <code><a href="./src/resources/fiat.ts">OfframpDepositInstructions</a></code>
+- <code><a href="./src/resources/fiat.ts">OfframpResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampAsset</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampChain</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampDepositInstructions</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampKYCResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampKYCStatus</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampTransferStatus</a></code>
+
 # KrakenEmbed
 
 Types:

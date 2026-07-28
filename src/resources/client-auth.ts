@@ -1850,7 +1850,7 @@ export interface TelegramAuthResult {
 
   first_name: string;
 
-  hash: string;
+  hash?: string;
 
   last_name?: string;
 

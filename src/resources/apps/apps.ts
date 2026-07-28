@@ -258,6 +258,8 @@ export interface AppResponse {
    * Configuration for Telegram authentication.
    */
   telegram_auth_config?: TelegramAuthConfigSchema;
+
+  telegram_seamless_auth_enabled?: boolean;
 }
 
 /**

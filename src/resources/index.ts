@@ -811,6 +811,8 @@ export {
   type RawWalletAuthenticateResponse,
   type RecipientPublicKey,
   type RelayerFee,
+  type RpcSponsorAsset,
+  type RpcSponsorOptions,
   type SeedPhraseExportInput,
   type SeedPhraseExportResponse,
   type SignatureOptions,

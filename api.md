@@ -101,6 +101,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">RawWalletAuthenticateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RecipientPublicKey</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">RelayerFee</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RpcSponsorAsset</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">RpcSponsorOptions</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SeedPhraseExportResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">SignatureOptions</a></code>

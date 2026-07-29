@@ -1168,6 +1168,13 @@ export declare namespace IntentRpcParams {
     sponsor?: boolean;
 
     /**
+     * Body param: Options for user-pays gas sponsorship on the RPC endpoint. When
+     * provided alongside `sponsor: true`, controls which token asset the user pays gas
+     * with.
+     */
+    sponsor_options?: WalletsAPI.RpcSponsorOptions;
+
+    /**
      * Body param
      */
     wallet_id?: string;
@@ -1407,6 +1414,13 @@ export declare namespace IntentRpcParams {
     sponsor?: boolean;
 
     /**
+     * Body param: Options for user-pays gas sponsorship on the RPC endpoint. When
+     * provided alongside `sponsor: true`, controls which token asset the user pays gas
+     * with.
+     */
+    sponsor_options?: WalletsAPI.RpcSponsorOptions;
+
+    /**
      * Body param
      */
     wallet_id?: string;
@@ -1492,6 +1506,13 @@ export declare namespace IntentRpcParams {
      * Body param
      */
     sponsor?: boolean;
+
+    /**
+     * Body param: Options for user-pays gas sponsorship on the RPC endpoint. When
+     * provided alongside `sponsor: true`, controls which token asset the user pays gas
+     * with.
+     */
+    sponsor_options?: WalletsAPI.RpcSponsorOptions;
 
     /**
      * Body param

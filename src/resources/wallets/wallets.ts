@@ -1068,6 +1068,12 @@ export interface EthereumSendCallsRpcInput {
 
   sponsor?: boolean;
 
+  /**
+   * Options for user-pays gas sponsorship on the RPC endpoint. When provided
+   * alongside `sponsor: true`, controls which token asset the user pays gas with.
+   */
+  sponsor_options?: RpcSponsorOptions;
+
   wallet_id?: string;
 }
 
@@ -1131,6 +1137,12 @@ export interface EthereumSendTransactionRpcInput {
   reference_id?: string;
 
   sponsor?: boolean;
+
+  /**
+   * Options for user-pays gas sponsorship on the RPC endpoint. When provided
+   * alongside `sponsor: true`, controls which token asset the user pays gas with.
+   */
+  sponsor_options?: RpcSponsorOptions;
 
   wallet_id?: string;
 }
@@ -2041,6 +2053,24 @@ export interface RelayerFee {
 }
 
 /**
+ * Token asset identifier for user-pays gas sponsorship. Common values: 'usdc',
+ * 'usdt', 'eurc', 'usdg', 'usdc_e'. Available tokens vary by chain.
+ */
+export type RpcSponsorAsset = string;
+
+/**
+ * Options for user-pays gas sponsorship on the RPC endpoint. When provided
+ * alongside `sponsor: true`, controls which token asset the user pays gas with.
+ */
+export interface RpcSponsorOptions {
+  /**
+   * Token asset identifier for user-pays gas sponsorship. Common values: 'usdc',
+   * 'usdt', 'eurc', 'usdg', 'usdc_e'. Available tokens vary by chain.
+   */
+  asset: RpcSponsorAsset;
+}
+
+/**
  * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
  */
 export interface SeedPhraseExportInput {
@@ -2145,6 +2175,12 @@ export interface SolanaSignAndSendTransactionRpcInput {
   reference_id?: string;
 
   sponsor?: boolean;
+
+  /**
+   * Options for user-pays gas sponsorship on the RPC endpoint. When provided
+   * alongside `sponsor: true`, controls which token asset the user pays gas with.
+   */
+  sponsor_options?: RpcSponsorOptions;
 
   wallet_id?: string;
 }
@@ -4882,6 +4918,13 @@ export declare namespace WalletRpcParams {
     sponsor?: boolean;
 
     /**
+     * Body param: Options for user-pays gas sponsorship on the RPC endpoint. When
+     * provided alongside `sponsor: true`, controls which token asset the user pays gas
+     * with.
+     */
+    sponsor_options?: RpcSponsorOptions;
+
+    /**
      * Body param
      */
     wallet_id?: string;
@@ -5193,6 +5236,13 @@ export declare namespace WalletRpcParams {
     sponsor?: boolean;
 
     /**
+     * Body param: Options for user-pays gas sponsorship on the RPC endpoint. When
+     * provided alongside `sponsor: true`, controls which token asset the user pays gas
+     * with.
+     */
+    sponsor_options?: RpcSponsorOptions;
+
+    /**
      * Body param
      */
     wallet_id?: string;
@@ -5302,6 +5352,13 @@ export declare namespace WalletRpcParams {
      * Body param
      */
     sponsor?: boolean;
+
+    /**
+     * Body param: Options for user-pays gas sponsorship on the RPC endpoint. When
+     * provided alongside `sponsor: true`, controls which token asset the user pays gas
+     * with.
+     */
+    sponsor_options?: RpcSponsorOptions;
 
     /**
      * Body param
@@ -6225,6 +6282,8 @@ export declare namespace Wallets {
     type RawWalletAuthenticateResponse as RawWalletAuthenticateResponse,
     type RecipientPublicKey as RecipientPublicKey,
     type RelayerFee as RelayerFee,
+    type RpcSponsorAsset as RpcSponsorAsset,
+    type RpcSponsorOptions as RpcSponsorOptions,
     type SeedPhraseExportInput as SeedPhraseExportInput,
     type SeedPhraseExportResponse as SeedPhraseExportResponse,
     type SignatureOptions as SignatureOptions,

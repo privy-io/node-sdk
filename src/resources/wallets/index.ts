@@ -289,6 +289,7 @@ export {
   type WalletChainType,
   type WalletCreateWalletsWithRecoveryResponse,
   type WalletCustodian,
+  type WalletEntity,
   type WalletEntropyType,
   type WalletEthereumAsset,
   type WalletExportRequestBody,

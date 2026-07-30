@@ -4037,6 +4037,11 @@ export interface Wallet {
   display_name?: string;
 
   /**
+   * The entity a wallet is attributed to.
+   */
+  entity?: WalletEntity | null;
+
+  /**
    * A customer-provided identifier for mapping to external systems. Write-once, set
    * only at creation.
    */
@@ -4398,6 +4403,18 @@ export interface WalletCustodian {
 }
 
 /**
+ * The entity a wallet is attributed to.
+ */
+export interface WalletEntity {
+  /**
+   * The Privy DID of the entity.
+   */
+  id: string;
+
+  type: 'user';
+}
+
+/**
  * The entropy type of the wallet.
  */
 export type WalletEntropyType = 'hd' | 'private-key';
@@ -4624,6 +4641,11 @@ export interface WalletCreateParams {
   display_name?: string;
 
   /**
+   * Body param: The entity the wallet is attributed to.
+   */
+  entity?: WalletCreateParams.Entity;
+
+  /**
    * Body param: A customer-provided identifier for mapping to external systems.
    * URL-safe characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be
    * changed after creation.
@@ -4652,6 +4674,17 @@ export interface WalletCreateParams {
    * a 24-hour window.
    */
   'privy-idempotency-key'?: string;
+}
+
+export namespace WalletCreateParams {
+  /**
+   * The entity the wallet is attributed to.
+   */
+  export interface Entity {
+    id: string;
+
+    type: 'user';
+  }
 }
 
 export interface WalletListParams extends CursorParams {
@@ -6419,6 +6452,7 @@ export declare namespace Wallets {
     type WalletChainType as WalletChainType,
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletCustodian as WalletCustodian,
+    type WalletEntity as WalletEntity,
     type WalletEntropyType as WalletEntropyType,
     type WalletEthereumAsset as WalletEthereumAsset,
     type WalletExportRequestBody as WalletExportRequestBody,

@@ -238,6 +238,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCreateWalletsWithRecoveryResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCustodian</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletEntity</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletEntropyType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletEthereumAsset</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportRequestBody</a></code>

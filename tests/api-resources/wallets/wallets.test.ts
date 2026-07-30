@@ -27,6 +27,7 @@ describe('resource wallets', () => {
       chain_type: 'ethereum',
       additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
       display_name: 'display_name',
+      entity: { id: 'x', type: 'user' },
       external_id: 'my-order-123',
       owner: { user_id: 'user_id' },
       owner_id: 'string',

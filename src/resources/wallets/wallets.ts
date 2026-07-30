@@ -4130,6 +4130,7 @@ export type WalletAssetChainNameInput =
   | 'solana'
   | 'tron'
   | 'zksync_era'
+  | 'hoodi'
   | 'sepolia'
   | 'arbitrum_sepolia'
   | 'avalanche_fuji'

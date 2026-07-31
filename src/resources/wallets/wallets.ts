@@ -4709,6 +4709,11 @@ export interface WalletListParams extends CursorParams {
   chain_type?: WalletChainType;
 
   /**
+   * Filter wallets by the entity ID the wallet is attributed to.
+   */
+  entity_id?: string;
+
+  /**
    * Filter wallets by external ID.
    */
   external_id?: string;

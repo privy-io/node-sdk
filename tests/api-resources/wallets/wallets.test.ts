@@ -58,6 +58,7 @@ describe('resource wallets', () => {
           authorization_key: 's=-/fw-L-+N\n',
           chain_type: 'ethereum',
           cursor: 'x',
+          entity_id: 'entity_id',
           external_id: 'external_id',
           include_archived: true,
           limit: 100,

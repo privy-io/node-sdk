@@ -2,7 +2,6 @@
 
 import { APIResource } from '../core/resource';
 import * as ClientAuthAPI from './client-auth';
-import * as FiatAPI from './fiat';
 import * as SharedAPI from './shared';
 
 export class Onramps extends APIResource {}
@@ -18,7 +17,17 @@ export interface BridgeFiatCustomerResponse {
   /**
    * Status of the KYC verification process.
    */
-  status: FiatAPI.OnrampKYCStatus;
+  status:
+    | 'not_found'
+    | 'active'
+    | 'awaiting_questionnaire'
+    | 'awaiting_ubo'
+    | 'incomplete'
+    | 'not_started'
+    | 'offboarded'
+    | 'paused'
+    | 'rejected'
+    | 'under_review';
 
   kyc_url?: string;
 
@@ -43,7 +52,17 @@ export interface BridgeSandboxFiatCustomerResponse {
   /**
    * Status of the KYC verification process.
    */
-  status: FiatAPI.OnrampKYCStatus;
+  status:
+    | 'not_found'
+    | 'active'
+    | 'awaiting_questionnaire'
+    | 'awaiting_ubo'
+    | 'incomplete'
+    | 'not_started'
+    | 'offboarded'
+    | 'paused'
+    | 'rejected'
+    | 'under_review';
 
   kyc_url?: string;
 

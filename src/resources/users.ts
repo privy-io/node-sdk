@@ -536,6 +536,11 @@ export interface LinkedAccountBitcoinSegwitEmbeddedWallet {
   wallet_client_type: 'privy';
 
   wallet_index: number;
+
+  /**
+   * Whether the user can unilaterally sign with this wallet.
+   */
+  user_can_sign?: boolean;
 }
 
 /**
@@ -576,6 +581,11 @@ export interface LinkedAccountBitcoinTaprootEmbeddedWallet {
   wallet_client_type: 'privy';
 
   wallet_index: number;
+
+  /**
+   * Whether the user can unilaterally sign with this wallet.
+   */
+  user_can_sign?: boolean;
 }
 
 /**
@@ -640,6 +650,11 @@ export interface LinkedAccountCurveSigningEmbeddedWallet {
   wallet_client_type: 'privy';
 
   wallet_index: number;
+
+  /**
+   * Whether the user can unilaterally sign with this wallet.
+   */
+  user_can_sign?: boolean;
 }
 
 /**
@@ -882,6 +897,11 @@ export interface LinkedAccountEthereumEmbeddedWallet {
   wallet_client_type: 'privy';
 
   wallet_index: number;
+
+  /**
+   * Whether the user can unilaterally sign with this wallet.
+   */
+  user_can_sign?: boolean;
 }
 
 /**
@@ -1288,6 +1308,11 @@ export interface LinkedAccountSolanaEmbeddedWallet {
   wallet_client_type: 'privy';
 
   wallet_index: number;
+
+  /**
+   * Whether the user can unilaterally sign with this wallet.
+   */
+  user_can_sign?: boolean;
 }
 
 /**

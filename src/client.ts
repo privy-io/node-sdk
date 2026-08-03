@@ -252,20 +252,6 @@ import {
   WalletCreationInput,
 } from './resources/embedded-wallets';
 import {
-  Fiat,
-  FiatCurrency,
-  FiatPaymentRail,
-  OfframpDepositInstructions,
-  OfframpResponse,
-  OnrampAsset,
-  OnrampChain,
-  OnrampDepositInstructions,
-  OnrampKYCResponse,
-  OnrampKYCStatus,
-  OnrampResponse,
-  OnrampTransferStatus,
-} from './resources/fiat';
-import {
   CoinbaseBlockchain,
   CoinbaseEthereumAsset,
   CoinbaseOnRampEthereumAddress,
@@ -1958,7 +1944,6 @@ export class PrivyAPI {
   crossApp: API.CrossApp = new API.CrossApp(this);
   oAuth: API.OAuth = new API.OAuth(this);
   yield: API.Yield = new API.Yield(this);
-  fiat: API.Fiat = new API.Fiat(this);
   krakenEmbed: API.KrakenEmbed = new API.KrakenEmbed(this);
   swaps: API.Swaps = new API.Swaps(this);
 }
@@ -1983,7 +1968,6 @@ PrivyAPI.Organizations = Organizations;
 PrivyAPI.CrossApp = CrossApp;
 PrivyAPI.OAuth = OAuth;
 PrivyAPI.Yield = Yield;
-PrivyAPI.Fiat = Fiat;
 PrivyAPI.KrakenEmbed = KrakenEmbed;
 PrivyAPI.Swaps = Swaps;
 
@@ -3003,21 +2987,6 @@ export declare namespace PrivyAPI {
     type EvmCaip2ChainID as EvmCaip2ChainID,
     type VaultAsset as VaultAsset,
     type YieldAuthorizationHeaders as YieldAuthorizationHeaders,
-  };
-
-  export {
-    Fiat as Fiat,
-    type FiatCurrency as FiatCurrency,
-    type FiatPaymentRail as FiatPaymentRail,
-    type OfframpDepositInstructions as OfframpDepositInstructions,
-    type OfframpResponse as OfframpResponse,
-    type OnrampAsset as OnrampAsset,
-    type OnrampChain as OnrampChain,
-    type OnrampDepositInstructions as OnrampDepositInstructions,
-    type OnrampKYCResponse as OnrampKYCResponse,
-    type OnrampKYCStatus as OnrampKYCStatus,
-    type OnrampResponse as OnrampResponse,
-    type OnrampTransferStatus as OnrampTransferStatus,
   };
 
   export {

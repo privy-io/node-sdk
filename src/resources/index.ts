@@ -1056,6 +1056,7 @@ export {
   type WalletFundsNativeTokenAsset,
   type WalletFundsSacAsset,
   type WalletFundsSplAsset,
+  type WalletFundsTrc20Asset,
   type WalletRecoveredWebhookPayload,
   type WalletRecoverySetupMethod,
   type WalletRecoverySetupWebhookPayload,

@@ -3223,7 +3223,8 @@ export type WalletFundsAsset =
   | WalletFundsNativeTokenAsset
   | WalletFundsErc20Asset
   | WalletFundsSplAsset
-  | WalletFundsSacAsset;
+  | WalletFundsSacAsset
+  | WalletFundsTrc20Asset;
 
 /**
  * An ERC-20 token asset.
@@ -3259,6 +3260,15 @@ export interface WalletFundsSplAsset {
   mint: string;
 
   type: 'spl';
+}
+
+/**
+ * A Tron TRC-20 token asset.
+ */
+export interface WalletFundsTrc20Asset {
+  address: string;
+
+  type: 'trc20';
 }
 
 /**
@@ -3627,6 +3637,7 @@ export declare namespace Webhooks {
     type WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset,
     type WalletFundsSacAsset as WalletFundsSacAsset,
     type WalletFundsSplAsset as WalletFundsSplAsset,
+    type WalletFundsTrc20Asset as WalletFundsTrc20Asset,
     type WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload,
     type WalletRecoverySetupMethod as WalletRecoverySetupMethod,
     type WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,

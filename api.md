@@ -756,6 +756,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletFundsNativeTokenAsset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsSacAsset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsSplAsset</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsTrc20Asset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoveredWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupMethod</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletRecoverySetupWebhookPayload</a></code>

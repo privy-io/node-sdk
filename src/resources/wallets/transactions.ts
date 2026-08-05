@@ -49,7 +49,7 @@ export namespace TransactionGetResponse {
     /**
      * Details of a wallet transaction, varying by transaction type.
      */
-    details: Transaction.Details;
+    details: WalletsAPI.TransactionDetail;
 
     privy_transaction_id: string;
 
@@ -65,13 +65,6 @@ export namespace TransactionGetResponse {
     sponsored?: boolean;
 
     user_operation_hash?: string;
-  }
-
-  export namespace Transaction {
-    /**
-     * Details of a wallet transaction, varying by transaction type.
-     */
-    export type Details = WalletsAPI.TransactionDetail & {};
   }
 }
 

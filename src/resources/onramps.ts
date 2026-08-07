@@ -516,6 +516,8 @@ export interface StripeCryptoCustomerActive {
 
   kyc_tiers: Array<StripeKYCTier>;
 
+  link_auth_intent_id: string | null;
+
   provided_fields: Array<string>;
 
   status: 'active';

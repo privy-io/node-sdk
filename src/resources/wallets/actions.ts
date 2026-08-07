@@ -759,7 +759,7 @@ export interface EthereumEarnPositionResponse {
 /**
  * Supported earn provider protocols.
  */
-export type EthereumEarnProvider = 'morpho' | 'aave' | 'veda';
+export type EthereumEarnProvider = 'morpho' | 'aave' | 'veda' | 'tempo';
 
 /**
  * Detailed vault information including current APY, liquidity, and asset metadata.

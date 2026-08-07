@@ -25,6 +25,11 @@ export interface CurrencyAmount {
 }
 
 /**
+ * The Privy API environment.
+ */
+export type IntegrationEnvironment = 'sandbox' | 'production';
+
+/**
  * EVM address: 0x followed by 40 hex characters. Preserves input case.
  */
 export type EvmAddress = string;
@@ -114,6 +119,7 @@ export declare namespace Shared {
   export {
     type BitcoinAddress as BitcoinAddress,
     type CurrencyAmount as CurrencyAmount,
+    type IntegrationEnvironment as IntegrationEnvironment,
     type EvmAddress as EvmAddress,
     type EvmChecksumAddress as EvmChecksumAddress,
     type HyperliquidTokenAddress as HyperliquidTokenAddress,

@@ -71,6 +71,25 @@ export {
   type AppGetGasSpendParams,
 } from './apps/apps';
 export {
+  Cards,
+  type CardIssuingCardResponse,
+  type CardIssuingCardsResponse,
+  type CardIssuingCreateCardInput,
+  type CardIssuingCustomerInput,
+  type CardIssuingCustomerKYCRequiredResponse,
+  type CardIssuingCustomerNotCreatedResponse,
+  type CardIssuingCustomerPendingResponse,
+  type CardIssuingCustomerReadyResponse,
+  type CardIssuingCustomerResponse,
+  type CardIssuingCustomerTermsRequiredResponse,
+  type CardIssuingListCardsInput,
+  type CardIssuingListTransactionsInput,
+  type CardIssuingMerchant,
+  type CardIssuingTransactionResponse,
+  type CardIssuingTransactionStatus,
+  type CardIssuingTransactionsResponse,
+} from './cards';
+export {
   ClientAuth,
   type AuthenticateJwtInput,
   type AuthenticateMode,
@@ -572,6 +591,7 @@ export {
   Shared,
   type BitcoinAddress,
   type CurrencyAmount,
+  type IntegrationEnvironment,
   type EvmAddress,
   type EvmChecksumAddress,
   type HyperliquidTokenAddress,

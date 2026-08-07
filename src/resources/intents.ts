@@ -119,6 +119,21 @@ export class Intents extends APIResource {
   }
 
   /**
+   * Reject a pending intent, preventing it from being executed. Can be called by the
+   * intent creator (via user token) or with the app secret.
+   *
+   * @example
+   * ```ts
+   * const intentResponse = await client.intents.reject(
+   *   'intent_id',
+   * );
+   * ```
+   */
+  reject(intentID: string, options?: RequestOptions): APIPromise<IntentResponse> {
+    return this._client.post(path`/v1/intents/${intentID}/reject`, options);
+  }
+
+  /**
    * Create an intent to execute an RPC method on a wallet. The intent must be
    * authorized by either the wallet owner or signers before it can be executed.
    *

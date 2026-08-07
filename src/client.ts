@@ -55,6 +55,25 @@ import {
 } from './resources/aggregations';
 import { Analytics, AnalyticsEventInput } from './resources/analytics';
 import {
+  CardIssuingCardResponse,
+  CardIssuingCardsResponse,
+  CardIssuingCreateCardInput,
+  CardIssuingCustomerInput,
+  CardIssuingCustomerKYCRequiredResponse,
+  CardIssuingCustomerNotCreatedResponse,
+  CardIssuingCustomerPendingResponse,
+  CardIssuingCustomerReadyResponse,
+  CardIssuingCustomerResponse,
+  CardIssuingCustomerTermsRequiredResponse,
+  CardIssuingListCardsInput,
+  CardIssuingListTransactionsInput,
+  CardIssuingMerchant,
+  CardIssuingTransactionResponse,
+  CardIssuingTransactionStatus,
+  CardIssuingTransactionsResponse,
+  Cards,
+} from './resources/cards';
+import {
   AuthenticateJwtInput,
   AuthenticateMode,
   AuthenticateModeOption,
@@ -558,6 +577,7 @@ import {
   EvmAddress,
   EvmChecksumAddress,
   HyperliquidTokenAddress,
+  IntegrationEnvironment,
   KeyQuorumID,
   OwnerIDInput,
   OwnerInput,
@@ -1921,6 +1941,7 @@ export class PrivyAPI {
   static toFile = Uploads.toFile;
 
   wallets: API.Wallets = new API.Wallets(this);
+  cards: API.Cards = new API.Cards(this);
   /**
    * Operations related to users
    */
@@ -1964,6 +1985,7 @@ export class PrivyAPI {
 }
 
 PrivyAPI.Wallets = Wallets;
+PrivyAPI.Cards = Cards;
 PrivyAPI.Users = Users;
 PrivyAPI.Policies = Policies;
 PrivyAPI.Transactions = Transactions;
@@ -2261,6 +2283,26 @@ export declare namespace PrivyAPI {
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
     type WalletGetParams as WalletGetParams,
     type WalletGetWalletByAddressParams as WalletGetWalletByAddressParams,
+  };
+
+  export {
+    Cards as Cards,
+    type CardIssuingCardResponse as CardIssuingCardResponse,
+    type CardIssuingCardsResponse as CardIssuingCardsResponse,
+    type CardIssuingCreateCardInput as CardIssuingCreateCardInput,
+    type CardIssuingCustomerInput as CardIssuingCustomerInput,
+    type CardIssuingCustomerKYCRequiredResponse as CardIssuingCustomerKYCRequiredResponse,
+    type CardIssuingCustomerNotCreatedResponse as CardIssuingCustomerNotCreatedResponse,
+    type CardIssuingCustomerPendingResponse as CardIssuingCustomerPendingResponse,
+    type CardIssuingCustomerReadyResponse as CardIssuingCustomerReadyResponse,
+    type CardIssuingCustomerResponse as CardIssuingCustomerResponse,
+    type CardIssuingCustomerTermsRequiredResponse as CardIssuingCustomerTermsRequiredResponse,
+    type CardIssuingListCardsInput as CardIssuingListCardsInput,
+    type CardIssuingListTransactionsInput as CardIssuingListTransactionsInput,
+    type CardIssuingMerchant as CardIssuingMerchant,
+    type CardIssuingTransactionResponse as CardIssuingTransactionResponse,
+    type CardIssuingTransactionStatus as CardIssuingTransactionStatus,
+    type CardIssuingTransactionsResponse as CardIssuingTransactionsResponse,
   };
 
   export {
@@ -2862,6 +2904,7 @@ export declare namespace PrivyAPI {
     Shared as Shared,
     type BitcoinAddress as BitcoinAddress,
     type CurrencyAmount as CurrencyAmount,
+    type IntegrationEnvironment as IntegrationEnvironment,
     type EvmAddress as EvmAddress,
     type EvmChecksumAddress as EvmChecksumAddress,
     type HyperliquidTokenAddress as HyperliquidTokenAddress,

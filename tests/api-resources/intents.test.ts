@@ -117,6 +117,18 @@ describe('resource intents', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('reject', async () => {
+    const responsePromise = client.intents.reject('intent_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('rpc: only required params', async () => {
     const responsePromise = client.intents.rpc('wallet_id', {
       method: 'eth_signTransaction',

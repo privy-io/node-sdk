@@ -366,6 +366,27 @@ Methods:
 - <code title="post /v1/wallets/{wallet_id}/swap">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">execute</a>(walletID, { ...params }) -> SwapActionResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/swap/quote">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">quote</a>(walletID, { ...params }) -> SwapQuoteResponse</code>
 
+# Cards
+
+Types:
+
+- <code><a href="./src/resources/cards.ts">CardIssuingCardResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCardsResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCreateCardInput</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerInput</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerKYCRequiredResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerNotCreatedResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerPendingResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerReadyResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerTermsRequiredResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingListCardsInput</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingListTransactionsInput</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingMerchant</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingTransactionResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingTransactionStatus</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingTransactionsResponse</a></code>
+
 # Users
 
 Types:
@@ -616,6 +637,7 @@ Methods:
 - <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleMutateIntentResponse</code>
 - <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicyRule</a>(ruleID, { ...params }) -> RuleDeleteIntentResponse</code>
 - <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/resources/intents.ts">get</a>(intentID) -> IntentResponse</code>
+- <code title="post /v1/intents/{intent_id}/reject">client.intents.<a href="./src/resources/intents.ts">reject</a>(intentID) -> IntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/resources/intents.ts">rpc</a>(walletID, { ...params }) -> RpcIntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/transfer">client.intents.<a href="./src/resources/intents.ts">transfer</a>(walletID, { ...params }) -> TransferIntentResponse</code>
 - <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/resources/intents.ts">updateKeyQuorum</a>(keyQuorumID, { ...params }) -> KeyQuorumIntentResponse</code>
@@ -1022,6 +1044,7 @@ Types:
 
 - <code><a href="./src/resources/shared.ts">BitcoinAddress</a></code>
 - <code><a href="./src/resources/shared.ts">CurrencyAmount</a></code>
+- <code><a href="./src/resources/shared.ts">IntegrationEnvironment</a></code>
 - <code><a href="./src/resources/shared.ts">EvmAddress</a></code>
 - <code><a href="./src/resources/shared.ts">EvmChecksumAddress</a></code>
 - <code><a href="./src/resources/shared.ts">HyperliquidTokenAddress</a></code>

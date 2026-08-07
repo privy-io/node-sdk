@@ -187,7 +187,7 @@ export interface CardIssuingTransactionResponse {
 /**
  * Status for a card issuing transaction.
  */
-export type CardIssuingTransactionStatus = 'pending' | 'completed' | 'declined' | 'disputed' | 'refunded';
+export type CardIssuingTransactionStatus = 'pending' | 'posted';
 
 /**
  * A list of Stripe Issuing transactions for a Privy card.

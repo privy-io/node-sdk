@@ -743,6 +743,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">TransactionStillPendingWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserDeletedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserOperationCompletedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserReference</a></code>

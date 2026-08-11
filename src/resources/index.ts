@@ -1041,6 +1041,7 @@ export {
   type TransactionStillPendingWebhookPayload,
   type UserAuthenticatedWebhookPayload,
   type UserCreatedWebhookPayload,
+  type UserDeletedWebhookPayload,
   type UserLinkedAccountWebhookPayload,
   type UserOperationCompletedWebhookPayload,
   type UserReference,

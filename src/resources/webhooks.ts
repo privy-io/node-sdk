@@ -1167,6 +1167,21 @@ export interface UserCreatedWebhookPayload {
 }
 
 /**
+ * Payload for the user.deleted webhook event.
+ */
+export interface UserDeletedWebhookPayload {
+  /**
+   * The type of webhook event.
+   */
+  type: 'user.deleted';
+
+  /**
+   * A Privy user object.
+   */
+  user: UsersAPI.User;
+}
+
+/**
  * Payload for the user.linked_account webhook event.
  */
 export interface UserLinkedAccountWebhookPayload {
@@ -3367,6 +3382,7 @@ export interface WalletRestoredWebhookPayload {
  */
 export type WebhookPayload =
   | UserCreatedWebhookPayload
+  | UserDeletedWebhookPayload
   | UserAuthenticatedWebhookPayload
   | UserLinkedAccountWebhookPayload
   | UserUnlinkedAccountWebhookPayload
@@ -3519,6 +3535,7 @@ export type UnsafeUnwrapWebhookEvent =
   | TransactionStillPendingWebhookPayload
   | UserAuthenticatedWebhookPayload
   | UserCreatedWebhookPayload
+  | UserDeletedWebhookPayload
   | UserLinkedAccountWebhookPayload
   | UserTransferredAccountWebhookPayload
   | UserUnlinkedAccountWebhookPayload
@@ -3600,6 +3617,7 @@ export declare namespace Webhooks {
     type TransactionStillPendingWebhookPayload as TransactionStillPendingWebhookPayload,
     type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
+    type UserDeletedWebhookPayload as UserDeletedWebhookPayload,
     type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
     type UserOperationCompletedWebhookPayload as UserOperationCompletedWebhookPayload,
     type UserReference as UserReference,

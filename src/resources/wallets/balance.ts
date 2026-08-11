@@ -98,7 +98,32 @@ export interface BalanceGetParams {
    * Chain(s) to query named assets on (e.g. `tempo`, `base`). Use together with
    * `asset`. Cannot be used with `token`.
    */
-  chain?: WalletsAPI.WalletAssetChainNameInput | Array<WalletsAPI.WalletAssetChainNameInput>;
+  chain?:
+    | 'ethereum'
+    | 'arbitrum'
+    | 'avalanche'
+    | 'base'
+    | 'tempo'
+    | 'linea'
+    | 'optimism'
+    | 'polygon'
+    | 'bsc'
+    | 'solana'
+    | 'tron'
+    | 'zksync_era'
+    | 'hoodi'
+    | 'sepolia'
+    | 'arbitrum_sepolia'
+    | 'avalanche_fuji'
+    | 'base_sepolia'
+    | 'linea_testnet'
+    | 'optimism_sepolia'
+    | 'polygon_amoy'
+    | 'solana_devnet'
+    | 'solana_testnet'
+    | 'tron_nile'
+    | string
+    | Array<WalletsAPI.WalletAssetChainNameInput>;
 
   /**
    * Include archived wallets in lookup. Defaults to false.

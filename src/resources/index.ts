@@ -82,6 +82,8 @@ export {
   type CardIssuingCustomerReadyResponse,
   type CardIssuingCustomerResponse,
   type CardIssuingCustomerTermsRequiredResponse,
+  type CardIssuingDispute,
+  type CardIssuingDisputeStatus,
   type CardIssuingListCardsInput,
   type CardIssuingListTransactionsInput,
   type CardIssuingMerchant,

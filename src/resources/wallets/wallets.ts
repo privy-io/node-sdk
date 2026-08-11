@@ -699,7 +699,8 @@ export type CurveSigningChainType =
   | 'pearl'
   | 'near'
   | 'ton'
-  | 'starknet';
+  | 'starknet'
+  | 'xrpl';
 
 /**
  * The cryptographic curve type used by the wallet.
@@ -1551,6 +1552,7 @@ export type ExtendedChainType =
   | 'near'
   | 'ton'
   | 'starknet'
+  | 'xrpl'
   | 'spark';
 
 /**
@@ -1628,7 +1630,7 @@ export interface HDInitInput {
 
   /**
    * The chain type of the wallet to import. Supports `ethereum`, `solana`,
-   * `stellar`, `tron`, `sui`, and `aptos`.
+   * `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -1664,7 +1666,7 @@ export interface HDSubmitInput {
 
   /**
    * The chain type of the wallet to import. Supports `ethereum`, `solana`,
-   * `stellar`, `tron`, `sui`, and `aptos`.
+   * `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -1846,7 +1848,7 @@ export interface PrivateKeyInitInput {
 
   /**
    * The chain type of the wallet to import. Supports `ethereum`, `solana`,
-   * `stellar`, `tron`, `sui`, and `aptos`.
+   * `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -1869,7 +1871,7 @@ export interface PrivateKeySubmitInput {
 
   /**
    * The chain type of the wallet to import. Supports `ethereum`, `solana`,
-   * `stellar`, `tron`, `sui`, and `aptos`.
+   * `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
    */
   chain_type: WalletImportSupportedChains;
 
@@ -3285,7 +3287,8 @@ export type TransactionChainNameInput =
   | 'optimism'
   | 'polygon'
   | 'solana'
-  | 'sepolia';
+  | 'sepolia'
+  | (string & {});
 
 /**
  * Details of a wallet transaction, varying by transaction type.
@@ -4140,7 +4143,8 @@ export type WalletAssetChainNameInput =
   | 'polygon_amoy'
   | 'solana_devnet'
   | 'solana_testnet'
-  | 'tron_nile';
+  | 'tron_nile'
+  | (string & {});
 
 /**
  * Request body for creating an encrypted, bound user signing key.
@@ -4371,6 +4375,7 @@ export type WalletChainType =
   | 'near'
   | 'ton'
   | 'starknet'
+  | 'xrpl'
   | 'spark';
 
 /**
@@ -4490,9 +4495,16 @@ export interface WalletImportInitResponse {
 
 /**
  * The chain type of the wallet to import. Supports `ethereum`, `solana`,
- * `stellar`, `tron`, `sui`, and `aptos`.
+ * `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
  */
-export type WalletImportSupportedChains = 'ethereum' | 'solana' | 'stellar' | 'tron' | 'sui' | 'aptos';
+export type WalletImportSupportedChains =
+  | 'ethereum'
+  | 'solana'
+  | 'stellar'
+  | 'tron'
+  | 'sui'
+  | 'aptos'
+  | 'xrpl';
 
 /**
  * The entropy type of the wallet to import. Supports `private-key` for raw private
@@ -4773,7 +4785,7 @@ export declare namespace WalletInitImportParams {
 
     /**
      * The chain type of the wallet to import. Supports `ethereum`, `solana`,
-     * `stellar`, `tron`, `sui`, and `aptos`.
+     * `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
      */
     chain_type: WalletImportSupportedChains;
 
@@ -4801,7 +4813,7 @@ export declare namespace WalletInitImportParams {
 
     /**
      * The chain type of the wallet to import. Supports `ethereum`, `solana`,
-     * `stellar`, `tron`, `sui`, and `aptos`.
+     * `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
      */
     chain_type: WalletImportSupportedChains;
 

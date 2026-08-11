@@ -12,7 +12,11 @@ export class Cards extends APIResource {}
 export interface CardIssuingCardResponse {
   id: string;
 
-  balance: string | null;
+  /**
+   * USD balance of the card funding wallet on the configured chain, or null when
+   * unavailable.
+   */
+  balance_formatted: string | null;
 
   brand: string | null;
 
@@ -123,6 +127,21 @@ export interface CardIssuingCustomerTermsRequiredResponse {
 }
 
 /**
+ * Dispute associated with card activity.
+ */
+export interface CardIssuingDispute {
+  /**
+   * Status of a dispute for card activity.
+   */
+  status: CardIssuingDisputeStatus;
+}
+
+/**
+ * Status of a dispute for card activity.
+ */
+export type CardIssuingDisputeStatus = 'expired' | 'lost' | 'submitted' | 'unsubmitted' | 'won';
+
+/**
  * Query parameters for listing cards bound to the authenticated Privy user.
  */
 export interface CardIssuingListCardsInput {
@@ -137,7 +156,7 @@ export interface CardIssuingListCardsInput {
 }
 
 /**
- * Query parameters for listing Stripe Issuing transactions for a Privy card.
+ * Query parameters for listing activity for a Privy card.
  */
 export interface CardIssuingListTransactionsInput {
   /**
@@ -145,22 +164,26 @@ export interface CardIssuingListTransactionsInput {
    */
   environment: SharedAPI.IntegrationEnvironment;
 
-  ending_before?: string;
+  /**
+   * Opaque cursor returned by the previous page.
+   */
+  cursor?: string;
 
-  limit?: number | null;
-
-  starting_after?: string;
+  /**
+   * Maximum number of records requested from each card activity source.
+   */
+  limit?: number;
 }
 
 /**
- * Merchant metadata for a card issuing transaction.
+ * Merchant metadata for card activity.
  */
 export interface CardIssuingMerchant {
   name: string | null;
 }
 
 /**
- * Stripe Issuing transaction state for a Privy card.
+ * Card activity
  */
 export interface CardIssuingTransactionResponse {
   id: string;
@@ -172,25 +195,28 @@ export interface CardIssuingTransactionResponse {
   currency: string;
 
   /**
-   * Merchant metadata for a card issuing transaction.
+   * Dispute associated with card activity.
+   */
+  dispute: CardIssuingDispute | null;
+
+  /**
+   * Merchant metadata for card activity.
    */
   merchant: CardIssuingMerchant;
 
   /**
-   * Status for a card issuing transaction.
+   * Status for card activity.
    */
   status: CardIssuingTransactionStatus;
-
-  type: string;
 }
 
 /**
- * Status for a card issuing transaction.
+ * Status for card activity.
  */
-export type CardIssuingTransactionStatus = 'pending' | 'posted';
+export type CardIssuingTransactionStatus = 'pending' | 'posted' | 'declined' | 'expired' | 'reversed';
 
 /**
- * A list of Stripe Issuing transactions for a Privy card.
+ * A chronological list of card activity.
  */
 export interface CardIssuingTransactionsResponse {
   data: Array<CardIssuingTransactionResponse>;
@@ -210,6 +236,8 @@ export declare namespace Cards {
     type CardIssuingCustomerReadyResponse as CardIssuingCustomerReadyResponse,
     type CardIssuingCustomerResponse as CardIssuingCustomerResponse,
     type CardIssuingCustomerTermsRequiredResponse as CardIssuingCustomerTermsRequiredResponse,
+    type CardIssuingDispute as CardIssuingDispute,
+    type CardIssuingDisputeStatus as CardIssuingDisputeStatus,
     type CardIssuingListCardsInput as CardIssuingListCardsInput,
     type CardIssuingListTransactionsInput as CardIssuingListTransactionsInput,
     type CardIssuingMerchant as CardIssuingMerchant,

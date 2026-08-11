@@ -380,6 +380,8 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerReadyResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerTermsRequiredResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingDispute</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingDisputeStatus</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingListCardsInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingListTransactionsInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingMerchant</a></code>

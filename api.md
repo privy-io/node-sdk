@@ -370,7 +370,9 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/cards.ts">CardIssuingCancellationReason</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCardResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCardStatus</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCardsResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCreateCardInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerInput</a></code>
@@ -385,9 +387,11 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingListCardsInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingListTransactionsInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingMerchant</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingStatementQueryParams</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingTransactionResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingTransactionStatus</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingTransactionsResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingUpdateCardInput</a></code>
 
 # Users
 
@@ -1098,6 +1102,8 @@ Types:
 - <code><a href="./src/resources/onramps.ts">GetFiatOnrampURLInput</a></code>
 - <code><a href="./src/resources/onramps.ts">GetFiatOnrampURLResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">GetStripeCryptoCustomerResponse</a></code>
+- <code><a href="./src/resources/onramps.ts">GetStripeOnrampTransactionLimitsQueryParams</a></code>
+- <code><a href="./src/resources/onramps.ts">GetStripeOnrampTransactionLimitsResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">LinkAuthIntentCreated</a></code>
 - <code><a href="./src/resources/onramps.ts">LinkAuthIntentNoAccount</a></code>
 - <code><a href="./src/resources/onramps.ts">ListStripeConsumerWalletsResponse</a></code>
@@ -1113,6 +1119,7 @@ Types:
 - <code><a href="./src/resources/onramps.ts">StripeKYCTier</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeOnrampCheckoutResponse</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeOnrampSessionStatus</a></code>
+- <code><a href="./src/resources/onramps.ts">StripeOnrampTransactionLimit</a></code>
 - <code><a href="./src/resources/onramps.ts">StripePaymentToken</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeTransactionDetails</a></code>
 - <code><a href="./src/resources/onramps.ts">StripeVerification</a></code>

@@ -7,6 +7,11 @@ import * as AppsAPI from './apps/apps';
 export class Cards extends APIResource {}
 
 /**
+ * Why a lost or stolen card is being canceled.
+ */
+export type CardIssuingCancellationReason = 'lost' | 'stolen';
+
+/**
  * Stripe Issuing card state bound to a Privy user and wallet.
  */
 export interface CardIssuingCardResponse {
@@ -33,6 +38,12 @@ export interface CardIssuingCardResponse {
 
   wallet_id: string;
 }
+
+/**
+ * Lifecycle status of a card. Active unfreezes the card, inactive freezes it, and
+ * canceled closes it.
+ */
+export type CardIssuingCardStatus = 'active' | 'inactive' | 'canceled';
 
 /**
  * Stripe Issuing cards bound to the authenticated Privy user.
@@ -183,6 +194,16 @@ export interface CardIssuingMerchant {
 }
 
 /**
+ * Query parameters for downloading a monthly card statement.
+ */
+export interface CardIssuingStatementQueryParams {
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+}
+
+/**
  * Card activity
  */
 export interface CardIssuingTransactionResponse {
@@ -224,9 +245,32 @@ export interface CardIssuingTransactionsResponse {
   next_cursor: string | null;
 }
 
+/**
+ * Input for updating the status of a card.
+ */
+export interface CardIssuingUpdateCardInput {
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Lifecycle status of a card. Active unfreezes the card, inactive freezes it, and
+   * canceled closes it.
+   */
+  status: CardIssuingCardStatus;
+
+  /**
+   * Why a lost or stolen card is being canceled.
+   */
+  cancellation_reason?: CardIssuingCancellationReason;
+}
+
 export declare namespace Cards {
   export {
+    type CardIssuingCancellationReason as CardIssuingCancellationReason,
     type CardIssuingCardResponse as CardIssuingCardResponse,
+    type CardIssuingCardStatus as CardIssuingCardStatus,
     type CardIssuingCardsResponse as CardIssuingCardsResponse,
     type CardIssuingCreateCardInput as CardIssuingCreateCardInput,
     type CardIssuingCustomerInput as CardIssuingCustomerInput,
@@ -241,8 +285,10 @@ export declare namespace Cards {
     type CardIssuingListCardsInput as CardIssuingListCardsInput,
     type CardIssuingListTransactionsInput as CardIssuingListTransactionsInput,
     type CardIssuingMerchant as CardIssuingMerchant,
+    type CardIssuingStatementQueryParams as CardIssuingStatementQueryParams,
     type CardIssuingTransactionResponse as CardIssuingTransactionResponse,
     type CardIssuingTransactionStatus as CardIssuingTransactionStatus,
     type CardIssuingTransactionsResponse as CardIssuingTransactionsResponse,
+    type CardIssuingUpdateCardInput as CardIssuingUpdateCardInput,
   };
 }

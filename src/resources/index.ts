@@ -72,7 +72,9 @@ export {
 } from './apps/apps';
 export {
   Cards,
+  type CardIssuingCancellationReason,
   type CardIssuingCardResponse,
+  type CardIssuingCardStatus,
   type CardIssuingCardsResponse,
   type CardIssuingCreateCardInput,
   type CardIssuingCustomerInput,
@@ -87,9 +89,11 @@ export {
   type CardIssuingListCardsInput,
   type CardIssuingListTransactionsInput,
   type CardIssuingMerchant,
+  type CardIssuingStatementQueryParams,
   type CardIssuingTransactionResponse,
   type CardIssuingTransactionStatus,
   type CardIssuingTransactionsResponse,
+  type CardIssuingUpdateCardInput,
 } from './cards';
 export {
   ClientAuth,
@@ -501,6 +505,8 @@ export {
   type GetFiatOnrampURLInput,
   type GetFiatOnrampURLResponse,
   type GetStripeCryptoCustomerResponse,
+  type GetStripeOnrampTransactionLimitsQueryParams,
+  type GetStripeOnrampTransactionLimitsResponse,
   type LinkAuthIntentCreated,
   type LinkAuthIntentNoAccount,
   type ListStripeConsumerWalletsResponse,
@@ -516,6 +522,7 @@ export {
   type StripeKYCTier,
   type StripeOnrampCheckoutResponse,
   type StripeOnrampSessionStatus,
+  type StripeOnrampTransactionLimit,
   type StripePaymentToken,
   type StripeTransactionDetails,
   type StripeVerification,

@@ -55,7 +55,9 @@ import {
 } from './resources/aggregations';
 import { Analytics, AnalyticsEventInput } from './resources/analytics';
 import {
+  CardIssuingCancellationReason,
   CardIssuingCardResponse,
+  CardIssuingCardStatus,
   CardIssuingCardsResponse,
   CardIssuingCreateCardInput,
   CardIssuingCustomerInput,
@@ -70,9 +72,11 @@ import {
   CardIssuingListCardsInput,
   CardIssuingListTransactionsInput,
   CardIssuingMerchant,
+  CardIssuingStatementQueryParams,
   CardIssuingTransactionResponse,
   CardIssuingTransactionStatus,
   CardIssuingTransactionsResponse,
+  CardIssuingUpdateCardInput,
   Cards,
 } from './resources/cards';
 import {
@@ -484,6 +488,8 @@ import {
   GetFiatOnrampURLInput,
   GetFiatOnrampURLResponse,
   GetStripeCryptoCustomerResponse,
+  GetStripeOnrampTransactionLimitsQueryParams,
+  GetStripeOnrampTransactionLimitsResponse,
   LinkAuthIntentCreated,
   LinkAuthIntentNoAccount,
   ListStripeConsumerWalletsResponse,
@@ -500,6 +506,7 @@ import {
   StripeKYCTier,
   StripeOnrampCheckoutResponse,
   StripeOnrampSessionStatus,
+  StripeOnrampTransactionLimit,
   StripePaymentToken,
   StripeTransactionDetails,
   StripeVerification,
@@ -2290,7 +2297,9 @@ export declare namespace PrivyAPI {
 
   export {
     Cards as Cards,
+    type CardIssuingCancellationReason as CardIssuingCancellationReason,
     type CardIssuingCardResponse as CardIssuingCardResponse,
+    type CardIssuingCardStatus as CardIssuingCardStatus,
     type CardIssuingCardsResponse as CardIssuingCardsResponse,
     type CardIssuingCreateCardInput as CardIssuingCreateCardInput,
     type CardIssuingCustomerInput as CardIssuingCustomerInput,
@@ -2305,9 +2314,11 @@ export declare namespace PrivyAPI {
     type CardIssuingListCardsInput as CardIssuingListCardsInput,
     type CardIssuingListTransactionsInput as CardIssuingListTransactionsInput,
     type CardIssuingMerchant as CardIssuingMerchant,
+    type CardIssuingStatementQueryParams as CardIssuingStatementQueryParams,
     type CardIssuingTransactionResponse as CardIssuingTransactionResponse,
     type CardIssuingTransactionStatus as CardIssuingTransactionStatus,
     type CardIssuingTransactionsResponse as CardIssuingTransactionsResponse,
+    type CardIssuingUpdateCardInput as CardIssuingUpdateCardInput,
   };
 
   export {
@@ -2960,6 +2971,8 @@ export declare namespace PrivyAPI {
     type GetFiatOnrampURLInput as GetFiatOnrampURLInput,
     type GetFiatOnrampURLResponse as GetFiatOnrampURLResponse,
     type GetStripeCryptoCustomerResponse as GetStripeCryptoCustomerResponse,
+    type GetStripeOnrampTransactionLimitsQueryParams as GetStripeOnrampTransactionLimitsQueryParams,
+    type GetStripeOnrampTransactionLimitsResponse as GetStripeOnrampTransactionLimitsResponse,
     type LinkAuthIntentCreated as LinkAuthIntentCreated,
     type LinkAuthIntentNoAccount as LinkAuthIntentNoAccount,
     type ListStripeConsumerWalletsResponse as ListStripeConsumerWalletsResponse,
@@ -2975,6 +2988,7 @@ export declare namespace PrivyAPI {
     type StripeKYCTier as StripeKYCTier,
     type StripeOnrampCheckoutResponse as StripeOnrampCheckoutResponse,
     type StripeOnrampSessionStatus as StripeOnrampSessionStatus,
+    type StripeOnrampTransactionLimit as StripeOnrampTransactionLimit,
     type StripePaymentToken as StripePaymentToken,
     type StripeTransactionDetails as StripeTransactionDetails,
     type StripeVerification as StripeVerification,

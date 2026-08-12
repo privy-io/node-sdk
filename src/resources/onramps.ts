@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import * as ClientAuthAPI from './client-auth';
 import * as FiatAPI from './fiat';
 import * as SharedAPI from './shared';
+import * as AppsAPI from './apps/apps';
 
 export class Onramps extends APIResource {}
 
@@ -401,6 +402,33 @@ export interface GetStripeCryptoCustomerResponse {
 }
 
 /**
+ * Query parameters for retrieving Stripe onramp transaction limits.
+ */
+export interface GetStripeOnrampTransactionLimitsQueryParams {
+  /**
+   * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
+   */
+  destination_chain: AppsAPI.Caip2;
+
+  /**
+   * Whether to use the sandbox or production environment for fiat onramp.
+   */
+  environment: FiatOnrampEnvironment;
+
+  /**
+   * The destination wallet address.
+   */
+  wallet_address: string;
+}
+
+/**
+ * The remaining Stripe onramp limits by source currency and payment method.
+ */
+export interface GetStripeOnrampTransactionLimitsResponse {
+  limits: { [key: string]: { [key: string]: Array<StripeOnrampTransactionLimit> } };
+}
+
+/**
  * Auth intent created. Pass id to authenticate().
  */
 export interface LinkAuthIntentCreated {
@@ -575,6 +603,16 @@ export interface StripeOnrampCheckoutResponse {
 export type StripeOnrampSessionStatus = 'active' | 'expired' | 'none';
 
 /**
+ * The remaining Stripe onramp amount for a payment method.
+ */
+export interface StripeOnrampTransactionLimit {
+  /**
+   * The remaining amount available for the payment method.
+   */
+  limit: number;
+}
+
+/**
  * A saved payment token.
  */
 export interface StripePaymentToken {
@@ -632,6 +670,8 @@ export declare namespace Onramps {
     type GetFiatOnrampURLInput as GetFiatOnrampURLInput,
     type GetFiatOnrampURLResponse as GetFiatOnrampURLResponse,
     type GetStripeCryptoCustomerResponse as GetStripeCryptoCustomerResponse,
+    type GetStripeOnrampTransactionLimitsQueryParams as GetStripeOnrampTransactionLimitsQueryParams,
+    type GetStripeOnrampTransactionLimitsResponse as GetStripeOnrampTransactionLimitsResponse,
     type LinkAuthIntentCreated as LinkAuthIntentCreated,
     type LinkAuthIntentNoAccount as LinkAuthIntentNoAccount,
     type ListStripeConsumerWalletsResponse as ListStripeConsumerWalletsResponse,
@@ -647,6 +687,7 @@ export declare namespace Onramps {
     type StripeKYCTier as StripeKYCTier,
     type StripeOnrampCheckoutResponse as StripeOnrampCheckoutResponse,
     type StripeOnrampSessionStatus as StripeOnrampSessionStatus,
+    type StripeOnrampTransactionLimit as StripeOnrampTransactionLimit,
     type StripePaymentToken as StripePaymentToken,
     type StripeTransactionDetails as StripeTransactionDetails,
     type StripeVerification as StripeVerification,

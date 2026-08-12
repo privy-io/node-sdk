@@ -4,7 +4,7 @@ import { PrivyAPIError } from '../error';
 export interface EntropyToBytesInput {
   entropy: string | Uint8Array;
   entropyType: 'hd' | 'private-key';
-  chainType: 'ethereum' | 'solana' | 'stellar' | 'tron' | 'sui' | 'aptos';
+  chainType: 'ethereum' | 'solana' | 'stellar' | 'tron' | 'sui' | 'aptos' | 'xrpl';
 }
 
 export function entropyToBytes(wallet: EntropyToBytesInput): Uint8Array {
@@ -19,7 +19,13 @@ export function entropyToBytes(wallet: EntropyToBytesInput): Uint8Array {
       // HD entropy is a BIP39 mnemonic that can be encoded as utf-8
       return new TextEncoder().encode(entropy);
     case 'private-key': {
-      if (chainType === 'ethereum' || chainType === 'tron' || chainType === 'sui' || chainType === 'aptos') {
+      if (
+        chainType === 'ethereum' ||
+        chainType === 'tron' ||
+        chainType === 'sui' ||
+        chainType === 'aptos' ||
+        chainType === 'xrpl'
+      ) {
         try {
           // Private key strings are hex encoded for Ethereum
           const entropyWithout0x = entropy.startsWith('0x') ? entropy.slice(2) : entropy;

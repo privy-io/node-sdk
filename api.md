@@ -1064,6 +1064,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">EvmChecksumAddress</a></code>
 - <code><a href="./src/resources/shared.ts">HyperliquidTokenAddress</a></code>
 - <code><a href="./src/resources/shared.ts">KeyQuorumID</a></code>
+- <code><a href="./src/resources/shared.ts">OrchestrationProvider</a></code>
 - <code><a href="./src/resources/shared.ts">OwnerIDInput</a></code>
 - <code><a href="./src/resources/shared.ts">OwnerInput</a></code>
 - <code><a href="./src/resources/shared.ts">OwnerInputPublicKey</a></code>

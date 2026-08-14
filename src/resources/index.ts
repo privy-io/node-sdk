@@ -610,6 +610,7 @@ export {
   type EvmChecksumAddress,
   type HyperliquidTokenAddress,
   type KeyQuorumID,
+  type OrchestrationProvider,
   type OwnerIDInput,
   type OwnerInput,
   type OwnerInputPublicKey,

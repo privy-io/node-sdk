@@ -52,6 +52,11 @@ export type HyperliquidTokenAddress = string;
 export type KeyQuorumID = string;
 
 /**
+ * Supported fiat orchestration providers.
+ */
+export type OrchestrationProvider = 'bridge';
+
+/**
  * The key quorum ID to set as the owner of the resource. If you provide this, do
  * not specify an owner.
  */
@@ -124,6 +129,7 @@ export declare namespace Shared {
     type EvmChecksumAddress as EvmChecksumAddress,
     type HyperliquidTokenAddress as HyperliquidTokenAddress,
     type KeyQuorumID as KeyQuorumID,
+    type OrchestrationProvider as OrchestrationProvider,
     type OwnerIDInput as OwnerIDInput,
     type OwnerInput as OwnerInput,
     type OwnerInputPublicKey as OwnerInputPublicKey,

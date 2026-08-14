@@ -4413,11 +4413,11 @@ export interface WalletCustodian {
  */
 export interface WalletEntity {
   /**
-   * The Privy DID of the entity.
+   * The Privy entity ID.
    */
   id: string;
 
-  type: 'user';
+  type: 'user' | 'organization';
 }
 
 /**
@@ -4696,7 +4696,7 @@ export namespace WalletCreateParams {
   export interface Entity {
     id: string;
 
-    type: 'user';
+    type: 'user' | 'organization';
   }
 }
 

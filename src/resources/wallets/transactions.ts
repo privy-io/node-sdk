@@ -51,7 +51,11 @@ export namespace TransactionGetResponse {
      */
     details: WalletsAPI.TransactionDetail;
 
-    privy_transaction_id: string;
+    /**
+     * Privy's ID for the transaction, or `null` if the transaction was not broadcasted
+     * through Privy.
+     */
+    privy_transaction_id: string | null;
 
     /**
      * Status of a blockchain transaction submitted by Privy.
@@ -60,6 +64,11 @@ export namespace TransactionGetResponse {
 
     transaction_hash: string | null;
 
+    /**
+     * The wallet whose history this transaction belongs to. The sending wallet for
+     * outbound transactions, including every transaction Privy broadcasted, and the
+     * receiving wallet for inbound transfers.
+     */
     wallet_id: string;
 
     sponsored?: boolean;

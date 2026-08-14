@@ -72,6 +72,13 @@ export interface CardIssuingCreateCardInput {
 }
 
 /**
+ * The cards customer cannot continue onboarding or issue cards.
+ */
+export interface CardIssuingCustomerErrorResponse {
+  status: 'error';
+}
+
+/**
  * Input for getting or creating a cards customer.
  */
 export interface CardIssuingCustomerInput {
@@ -114,6 +121,13 @@ export interface CardIssuingCustomerReadyResponse {
 }
 
 /**
+ * Bridge rejected the cards customer during verification.
+ */
+export interface CardIssuingCustomerRejectedResponse {
+  status: 'rejected';
+}
+
+/**
  * Cards customer state for a Privy user.
  */
 export interface CardIssuingCustomerResponse {
@@ -125,6 +139,8 @@ export interface CardIssuingCustomerResponse {
     | CardIssuingCustomerTermsRequiredResponse
     | CardIssuingCustomerKYCRequiredResponse
     | CardIssuingCustomerPendingResponse
+    | CardIssuingCustomerRejectedResponse
+    | CardIssuingCustomerErrorResponse
     | CardIssuingCustomerReadyResponse;
 }
 
@@ -153,6 +169,41 @@ export interface CardIssuingDispute {
 export type CardIssuingDisputeStatus = 'expired' | 'lost' | 'submitted' | 'unsubmitted' | 'won';
 
 /**
+ * Short-lived Stripe authorization for displaying card details.
+ */
+export interface CardIssuingEphemeralKey {
+  /**
+   * Secret used only by Stripe Issuing Elements in the authenticated browser.
+   */
+  ephemeral_key_secret: string;
+}
+
+/**
+ * Request body for authorizing Stripe Issuing Elements to display card details.
+ */
+export interface CardIssuingEphemeralKeyRequestBody {
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Browser nonce returned by Stripe.js for the card provider ID.
+   */
+  nonce: string;
+}
+
+/**
+ * Short-lived Stripe authorization for displaying an authenticated card.
+ */
+export interface CardIssuingEphemeralKeyResponse {
+  /**
+   * Short-lived Stripe authorization for displaying card details.
+   */
+  data: CardIssuingEphemeralKey;
+}
+
+/**
  * Query parameters for listing cards bound to the authenticated Privy user.
  */
 export interface CardIssuingListCardsInput {
@@ -161,9 +212,15 @@ export interface CardIssuingListCardsInput {
    */
   environment: SharedAPI.IntegrationEnvironment;
 
-  limit?: number | null;
+  /**
+   * Cursor returned by the previous page.
+   */
+  cursor?: string;
 
-  starting_after?: string;
+  /**
+   * Maximum number of cards to return.
+   */
+  limit?: number;
 }
 
 /**
@@ -273,15 +330,20 @@ export declare namespace Cards {
     type CardIssuingCardStatus as CardIssuingCardStatus,
     type CardIssuingCardsResponse as CardIssuingCardsResponse,
     type CardIssuingCreateCardInput as CardIssuingCreateCardInput,
+    type CardIssuingCustomerErrorResponse as CardIssuingCustomerErrorResponse,
     type CardIssuingCustomerInput as CardIssuingCustomerInput,
     type CardIssuingCustomerKYCRequiredResponse as CardIssuingCustomerKYCRequiredResponse,
     type CardIssuingCustomerNotCreatedResponse as CardIssuingCustomerNotCreatedResponse,
     type CardIssuingCustomerPendingResponse as CardIssuingCustomerPendingResponse,
     type CardIssuingCustomerReadyResponse as CardIssuingCustomerReadyResponse,
+    type CardIssuingCustomerRejectedResponse as CardIssuingCustomerRejectedResponse,
     type CardIssuingCustomerResponse as CardIssuingCustomerResponse,
     type CardIssuingCustomerTermsRequiredResponse as CardIssuingCustomerTermsRequiredResponse,
     type CardIssuingDispute as CardIssuingDispute,
     type CardIssuingDisputeStatus as CardIssuingDisputeStatus,
+    type CardIssuingEphemeralKey as CardIssuingEphemeralKey,
+    type CardIssuingEphemeralKeyRequestBody as CardIssuingEphemeralKeyRequestBody,
+    type CardIssuingEphemeralKeyResponse as CardIssuingEphemeralKeyResponse,
     type CardIssuingListCardsInput as CardIssuingListCardsInput,
     type CardIssuingListTransactionsInput as CardIssuingListTransactionsInput,
     type CardIssuingMerchant as CardIssuingMerchant,

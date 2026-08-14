@@ -1132,6 +1132,55 @@ export interface TransactionStillPendingWebhookPayload {
 }
 
 /**
+ * Payload for the usage.cross_chain_fee.recorded webhook event (Privy fee on a
+ * cross-chain transfer or swap).
+ */
+export interface UsageCrossChainFeeRecordedWebhookPayload {
+  amount_usd: string;
+
+  recorded_at: number;
+
+  source_id: string;
+
+  /**
+   * The type of wallet action that incurred a usage charge.
+   */
+  source_type: UsageSourceType;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'usage.cross_chain_fee.recorded';
+}
+
+/**
+ * Payload for the usage.gas_sponsorship.recorded webhook event (sponsored network
+ * gas).
+ */
+export interface UsageGasSponsorshipRecordedWebhookPayload {
+  amount_usd: string;
+
+  recorded_at: number;
+
+  source_id: string;
+
+  /**
+   * The type of wallet action that incurred a usage charge.
+   */
+  source_type: UsageSourceType;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'usage.gas_sponsorship.recorded';
+}
+
+/**
+ * The type of wallet action that incurred a usage charge.
+ */
+export type UsageSourceType = 'wallet-action-transfer' | 'wallet-action-swap';
+
+/**
  * Payload for the user.authenticated webhook event.
  */
 export interface UserAuthenticatedWebhookPayload {
@@ -3410,6 +3459,8 @@ export type WebhookPayload =
   | YieldWithdrawConfirmedWebhookPayload
   | YieldClaimConfirmedWebhookPayload
   | UserOperationCompletedWebhookPayload
+  | UsageGasSponsorshipRecordedWebhookPayload
+  | UsageCrossChainFeeRecordedWebhookPayload
   | IntentCreatedWebhookPayload
   | IntentAuthorizedWebhookPayload
   | IntentRejectedWebhookPayload
@@ -3533,6 +3584,8 @@ export type UnsafeUnwrapWebhookEvent =
   | TransactionProviderErrorWebhookPayload
   | TransactionReplacedWebhookPayload
   | TransactionStillPendingWebhookPayload
+  | UsageCrossChainFeeRecordedWebhookPayload
+  | UsageGasSponsorshipRecordedWebhookPayload
   | UserAuthenticatedWebhookPayload
   | UserCreatedWebhookPayload
   | UserDeletedWebhookPayload
@@ -3615,6 +3668,9 @@ export declare namespace Webhooks {
     type TransactionProviderErrorWebhookPayload as TransactionProviderErrorWebhookPayload,
     type TransactionReplacedWebhookPayload as TransactionReplacedWebhookPayload,
     type TransactionStillPendingWebhookPayload as TransactionStillPendingWebhookPayload,
+    type UsageCrossChainFeeRecordedWebhookPayload as UsageCrossChainFeeRecordedWebhookPayload,
+    type UsageGasSponsorshipRecordedWebhookPayload as UsageGasSponsorshipRecordedWebhookPayload,
+    type UsageSourceType as UsageSourceType,
     type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
     type UserDeletedWebhookPayload as UserDeletedWebhookPayload,

@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.29.0](https://github.com/privy-io/node-sdk/compare/v0.28.0...v0.29.0) (2026-08-14)
+
+
+### Features
+
+* add xrpl support to pk entropyToBytes ([#197](https://github.com/privy-io/node-sdk/issues/197)) ([78ab325](https://github.com/privy-io/node-sdk/commit/78ab325d41b8a76173c196555fb1c9887b64ec1e))
+* **api:** api update ([0d6a001](https://github.com/privy-io/node-sdk/commit/0d6a00187c754e623c84536edc21527fcf57d994))
+* **api:** api update ([5076b87](https://github.com/privy-io/node-sdk/commit/5076b87dfc83bdeb13547459fdd70f736a48501e))
+* **api:** api update ([3024e1e](https://github.com/privy-io/node-sdk/commit/3024e1ecc8745809b821363a08996294904bbabb))
+* **api:** api update ([439747d](https://github.com/privy-io/node-sdk/commit/439747df700aad6adae26423092237355c06de38))
+* **api:** api update ([50a5b1e](https://github.com/privy-io/node-sdk/commit/50a5b1e32063bc7c39bdcd07981020a5beaa83dc))
+* **api:** api update ([61deb74](https://github.com/privy-io/node-sdk/commit/61deb74cfaabac0e491bcb14aaef97afb9c891a2))
+* **api:** api update ([bbf479c](https://github.com/privy-io/node-sdk/commit/bbf479ce30f10b706c89a8b7512485d1ad341033))
+* **api:** api update ([95d4d67](https://github.com/privy-io/node-sdk/commit/95d4d677c11da3932bd5db7f52776b94338f1ecc))
+* **api:** api update ([1463eed](https://github.com/privy-io/node-sdk/commit/1463eed70a957897118deb175c3ba01760885de7))
+* **api:** api update ([66352f9](https://github.com/privy-io/node-sdk/commit/66352f9dbd0c2acdffac8a524205edbacbc87ab2))
+* **api:** api update ([2474aca](https://github.com/privy-io/node-sdk/commit/2474aca1b23859603fb7a7eb9aa448e63ea237cc))
+* **api:** api update ([85c926e](https://github.com/privy-io/node-sdk/commit/85c926e7ea7426b06514ff5e80533a06494c1d49))
+* **api:** api update ([b966ee6](https://github.com/privy-io/node-sdk/commit/b966ee61659fcc329c1817d0b184f7f19d1ed0d4))
+* **api:** api update ([df5bcad](https://github.com/privy-io/node-sdk/commit/df5bcadca59ceb1997d056a6887b88f991a7c476))
+* **api:** api update ([0f504ef](https://github.com/privy-io/node-sdk/commit/0f504ef4ec8ffc9b72265b6c3c213af47b2c4950))
+* initial stlc build ([e088aca](https://github.com/privy-io/node-sdk/commit/e088acaadbc24afa72233d767c3f9cdf1b708d29))
+
+
+### Bug Fixes
+
+* **ci:** authenticate staging back-sync with builder blobby ([429e12c](https://github.com/privy-io/node-sdk/commit/429e12cebd36ef8c0dab616749cf420009761660))
+
 ## 0.28.0 (2026-07-24)
 
 Full Changelog: [v0.27.0...v0.28.0](https://github.com/privy-io/node-sdk/compare/v0.27.0...v0.28.0)

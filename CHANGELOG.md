@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.30.0](https://github.com/privy-io/node-sdk/compare/v0.29.0...v0.30.0) (2026-08-20)
+
+
+### Features
+
+* **api:** api update ([21203a8](https://github.com/privy-io/node-sdk/commit/21203a86a529426299cfd345bbc6ff23acead106))
+
+
+### Bug Fixes
+
+* use named import in organizations test ([#7](https://github.com/privy-io/node-sdk/issues/7)) ([c357acd](https://github.com/privy-io/node-sdk/commit/c357acdc7b5252c89dbbd1435d981debbc7361a2))
+
 ## [0.29.0](https://github.com/privy-io/node-sdk/compare/v0.28.0...v0.29.0) (2026-08-14)
 
 

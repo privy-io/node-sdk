@@ -27,7 +27,7 @@ describe('resource wallets', () => {
       chain_type: 'ethereum',
       additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
       display_name: 'display_name',
-      entity: { id: 'x', type: 'user' },
+      entity: { id: 'jorpjo4rfxj62nx1itt8y1zt', type: 'user' },
       external_id: 'my-order-123',
       owner: { user_id: 'user_id' },
       owner_id: 'string',
@@ -292,6 +292,7 @@ describe('resource wallets', () => {
       amount: 'amount',
       amount_type: 'exact_input',
       fee_configuration: { type: 'total_fee_bps', value: 50 },
+      nonce: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       slippage_bps: 100,
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
@@ -321,6 +322,29 @@ describe('resource wallets', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('assignEntity: only required params', async () => {
+    const responsePromise = client.wallets.assignEntity('wallet_id', {
+      id: 'jorpjo4rfxj62nx1itt8y1zt',
+      type: 'user',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('assignEntity: required and optional params', async () => {
+    const response = await client.wallets.assignEntity('wallet_id', {
+      id: 'jorpjo4rfxj62nx1itt8y1zt',
+      type: 'user',
+    });
   });
 
   // Mock server tests are disabled

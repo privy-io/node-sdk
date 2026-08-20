@@ -782,6 +782,7 @@ export type PolicyCondition =
   | SystemCondition
   | TronTransactionCondition
   | TronCalldataCondition
+  | XrplTransactionCondition
   | SuiTransactionCommandCondition
   | SuiTransferObjectsCommandCondition
   | ActionRequestBodyCondition
@@ -808,6 +809,7 @@ export type PolicyMethod =
   | 'signRawMessageBytes'
   | 'tron_sendTransaction'
   | 'tron_signTransaction'
+  | 'xrpl_signTransaction'
   | 'earn_deposit'
   | 'earn_withdraw'
   | 'transfer'
@@ -1195,6 +1197,63 @@ export interface UpdateConditionSetRequestBody {
   owner_id?: SharedAPI.OwnerIDInput | null;
 }
 
+/**
+ * Policy condition evaluated against decoded XRPL transaction fields.
+ */
+export interface XrplTransactionCondition {
+  /**
+   * Supported XRPL transaction field paths for policy conditions.
+   */
+  field: XrplTransactionConditionField;
+
+  field_source: 'xrpl_transaction';
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
+}
+
+/**
+ * Supported XRPL transaction field paths for policy conditions.
+ */
+export type XrplTransactionConditionField =
+  | 'TransactionType'
+  | 'Payment.Destination'
+  | 'Payment.DestinationTag'
+  | 'Payment.Amount.drops'
+  | 'Payment.Amount.value'
+  | 'Payment.Amount.currency'
+  | 'Payment.Amount.issuer'
+  | 'Payment.SendMax.drops'
+  | 'Payment.SendMax.value'
+  | 'Payment.SendMax.currency'
+  | 'Payment.SendMax.issuer'
+  | 'Payment.DeliverMin.drops'
+  | 'Payment.DeliverMin.value'
+  | 'Payment.DeliverMin.currency'
+  | 'Payment.DeliverMin.issuer'
+  | 'OfferCreate.TakerPays.drops'
+  | 'OfferCreate.TakerPays.value'
+  | 'OfferCreate.TakerPays.currency'
+  | 'OfferCreate.TakerPays.issuer'
+  | 'OfferCreate.TakerGets.drops'
+  | 'OfferCreate.TakerGets.value'
+  | 'OfferCreate.TakerGets.currency'
+  | 'OfferCreate.TakerGets.issuer'
+  | 'OfferCreate.Expiration'
+  | 'TrustSet.LimitAmount.value'
+  | 'TrustSet.LimitAmount.currency'
+  | 'TrustSet.LimitAmount.issuer'
+  | 'TrustSet.QualityIn'
+  | 'TrustSet.QualityOut';
+
 export interface PolicyCreateParams {
   /**
    * Body param: The wallet chain types.
@@ -1454,6 +1513,8 @@ export declare namespace Policies {
     type TronTransactionConditionField as TronTransactionConditionField,
     type TypedDataInput as TypedDataInput,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
+    type XrplTransactionCondition as XrplTransactionCondition,
+    type XrplTransactionConditionField as XrplTransactionConditionField,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,
     type PolicyDeleteParams as PolicyDeleteParams,

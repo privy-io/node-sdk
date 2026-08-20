@@ -26,9 +26,24 @@ export interface CardIssuingCardResponse {
   brand: string | null;
 
   /**
+   * Cardholder metadata for a card.
+   */
+  cardholder: CardIssuingCardholder;
+
+  /**
    * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */
   chain_id: AppsAPI.Caip2;
+
+  /**
+   * Card expiration month from 1 to 12, or null when unavailable.
+   */
+  exp_month: number | null;
+
+  /**
+   * Four-digit card expiration year, or null when unavailable.
+   */
+  exp_year: number | null;
 
   last4: string | null;
 
@@ -46,12 +61,52 @@ export interface CardIssuingCardResponse {
 export type CardIssuingCardStatus = 'active' | 'inactive' | 'canceled';
 
 /**
+ * Cardholder metadata for a card.
+ */
+export interface CardIssuingCardholder {
+  /**
+   * Cardholder name printed on the card, or null when unavailable.
+   */
+  name: string | null;
+}
+
+/**
  * Stripe Issuing cards bound to the authenticated Privy user.
  */
 export interface CardIssuingCardsResponse {
   data: Array<CardIssuingCardResponse>;
 
   next_cursor: string | null;
+}
+
+/**
+ * Browser-safe configuration for rendering Stripe Issuing card details.
+ */
+export interface CardIssuingConfig {
+  /**
+   * Stripe publishable key for initializing Stripe.js in the browser.
+   */
+  publishable_key: string;
+}
+
+/**
+ * Query parameters for reading an app's card-issuing client configuration.
+ */
+export interface CardIssuingConfigQueryParams {
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+}
+
+/**
+ * Browser-safe card-issuing configuration for the authenticated user's app.
+ */
+export interface CardIssuingConfigResponse {
+  /**
+   * Browser-safe configuration for rendering Stripe Issuing card details.
+   */
+  data: CardIssuingConfig;
 }
 
 /**
@@ -328,7 +383,11 @@ export declare namespace Cards {
     type CardIssuingCancellationReason as CardIssuingCancellationReason,
     type CardIssuingCardResponse as CardIssuingCardResponse,
     type CardIssuingCardStatus as CardIssuingCardStatus,
+    type CardIssuingCardholder as CardIssuingCardholder,
     type CardIssuingCardsResponse as CardIssuingCardsResponse,
+    type CardIssuingConfig as CardIssuingConfig,
+    type CardIssuingConfigQueryParams as CardIssuingConfigQueryParams,
+    type CardIssuingConfigResponse as CardIssuingConfigResponse,
     type CardIssuingCreateCardInput as CardIssuingCreateCardInput,
     type CardIssuingCustomerErrorResponse as CardIssuingCustomerErrorResponse,
     type CardIssuingCustomerInput as CardIssuingCustomerInput,

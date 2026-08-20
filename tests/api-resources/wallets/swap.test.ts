@@ -37,6 +37,7 @@ describe('resource swap', () => {
       source: { asset_address: 'native', caip2: 'eip155:1' },
       amount_type: 'exact_input',
       fee_configuration: { type: 'total_fee_bps', value: 50 },
+      nonce: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       slippage_bps: 50,
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',

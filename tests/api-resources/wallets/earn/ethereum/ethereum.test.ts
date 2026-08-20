@@ -28,6 +28,7 @@ describe('resource ethereum', () => {
     const response = await client.wallets._earn._ethereum._deposit('wallet_id', {
       vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
       amount: '1.5',
+      nonce: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       raw_amount: '321669910225',
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
@@ -54,6 +55,7 @@ describe('resource ethereum', () => {
     const response = await client.wallets._earn._ethereum._withdraw('wallet_id', {
       vault_id: 'cm7oxq1el000e11o8iwp7d0d0',
       amount: '1.5',
+      nonce: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       raw_amount: '321669910225',
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',

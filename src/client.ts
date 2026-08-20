@@ -58,7 +58,11 @@ import {
   CardIssuingCancellationReason,
   CardIssuingCardResponse,
   CardIssuingCardStatus,
+  CardIssuingCardholder,
   CardIssuingCardsResponse,
+  CardIssuingConfig,
+  CardIssuingConfigQueryParams,
+  CardIssuingConfigResponse,
   CardIssuingCreateCardInput,
   CardIssuingCustomerErrorResponse,
   CardIssuingCustomerInput,
@@ -518,10 +522,18 @@ import {
 } from './resources/onramps';
 import {
   CreateOrganizationSecretResponse,
+  Organization,
+  OrganizationCreateParams,
+  OrganizationCreateRequestBody,
+  OrganizationListParams,
   OrganizationSecretIDInput,
   OrganizationSecretView,
   OrganizationSecretsListResponse,
+  OrganizationUpdateParams,
+  OrganizationUpdateRequestBody,
   Organizations,
+  OrganizationsCursor,
+  OrganizationsListResponse,
   UpdateOrganizationSecretSigningKeyInput,
 } from './resources/organizations';
 import {
@@ -584,6 +596,8 @@ import {
   TronTransactionConditionField,
   TypedDataInput,
   UpdateConditionSetRequestBody,
+  XrplTransactionCondition,
+  XrplTransactionConditionField,
 } from './resources/policies';
 import {
   BitcoinAddress,
@@ -903,6 +917,7 @@ import {
   EncryptedAuthorizationKey,
   EncryptedBoundAuthenticateResponse,
   EncryptedWalletAuthenticateResponse,
+  EntityID,
   EthereumPersonalSignRpcInput,
   EthereumPersonalSignRpcInputParams,
   EthereumPersonalSignRpcResponse,
@@ -1099,10 +1114,12 @@ import {
   Wallet,
   WalletAPIRegisterAuthorizationKeyInput,
   WalletAPIRevokeAuthorizationKeyInput,
+  WalletActionNonce,
   WalletAdditionalSigner,
   WalletAdditionalSignerItem,
   WalletAsset,
   WalletAssetChainNameInput,
+  WalletAssignEntityParams,
   WalletAuthenticateBoundEncryptedRequestBody,
   WalletAuthenticateBoundRequestBody,
   WalletAuthenticateBoundUnencryptedRequestBody,
@@ -1122,6 +1139,9 @@ import {
   WalletCreateWalletsWithRecoveryResponse,
   WalletCustodian,
   WalletEntity,
+  WalletEntityAssignmentRequestBody,
+  WalletEntityAssignmentResponse,
+  WalletEntityType,
   WalletEntropyType,
   WalletEthereumAsset,
   WalletExportParams,
@@ -1148,6 +1168,12 @@ import {
   WalletUpdateRequestBody,
   Wallets,
   WalletsCursor,
+  XrplRpcInput,
+  XrplRpcResponse,
+  XrplSignTransactionRpcInput,
+  XrplSignTransactionRpcInputParams,
+  XrplSignTransactionRpcResponse,
+  XrplSignTransactionRpcResponseData,
 } from './resources/wallets/wallets';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
@@ -1966,6 +1992,10 @@ export class PrivyAPI {
    */
   users: API.Users = new API.Users(this);
   /**
+   * Operations related to organizations
+   */
+  organizations: API.Organizations = new API.Organizations(this);
+  /**
    * Operations related to policies
    */
   policies: API.Policies = new API.Policies(this);
@@ -1994,7 +2024,6 @@ export class PrivyAPI {
   shared: API.Shared = new API.Shared(this);
   onramps: API.Onramps = new API.Onramps(this);
   funding: API.Funding = new API.Funding(this);
-  organizations: API.Organizations = new API.Organizations(this);
   crossApp: API.CrossApp = new API.CrossApp(this);
   oAuth: API.OAuth = new API.OAuth(this);
   yield: API.Yield = new API.Yield(this);
@@ -2006,6 +2035,7 @@ export class PrivyAPI {
 PrivyAPI.Wallets = Wallets;
 PrivyAPI.Cards = Cards;
 PrivyAPI.Users = Users;
+PrivyAPI.Organizations = Organizations;
 PrivyAPI.Policies = Policies;
 PrivyAPI.Transactions = Transactions;
 PrivyAPI.KeyQuorums = KeyQuorums;
@@ -2020,7 +2050,6 @@ PrivyAPI.ClientAuth = ClientAuth;
 PrivyAPI.Shared = Shared;
 PrivyAPI.Onramps = Onramps;
 PrivyAPI.Funding = Funding;
-PrivyAPI.Organizations = Organizations;
 PrivyAPI.CrossApp = CrossApp;
 PrivyAPI.OAuth = OAuth;
 PrivyAPI.Yield = Yield;
@@ -2058,6 +2087,7 @@ export declare namespace PrivyAPI {
     type EncryptedAuthorizationKey as EncryptedAuthorizationKey,
     type EncryptedBoundAuthenticateResponse as EncryptedBoundAuthenticateResponse,
     type EncryptedWalletAuthenticateResponse as EncryptedWalletAuthenticateResponse,
+    type EntityID as EntityID,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
@@ -2252,6 +2282,7 @@ export declare namespace PrivyAPI {
     type UserOperationInput as UserOperationInput,
     type UserSigningKeyBinding as UserSigningKeyBinding,
     type Wallet as Wallet,
+    type WalletActionNonce as WalletActionNonce,
     type WalletAdditionalSigner as WalletAdditionalSigner,
     type WalletAdditionalSignerItem as WalletAdditionalSignerItem,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
@@ -2273,6 +2304,9 @@ export declare namespace PrivyAPI {
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletCustodian as WalletCustodian,
     type WalletEntity as WalletEntity,
+    type WalletEntityAssignmentRequestBody as WalletEntityAssignmentRequestBody,
+    type WalletEntityAssignmentResponse as WalletEntityAssignmentResponse,
+    type WalletEntityType as WalletEntityType,
     type WalletEntropyType as WalletEntropyType,
     type WalletEthereumAsset as WalletEthereumAsset,
     type WalletExportRequestBody as WalletExportRequestBody,
@@ -2286,6 +2320,12 @@ export declare namespace PrivyAPI {
     type WalletSolanaAsset as WalletSolanaAsset,
     type WalletTronAsset as WalletTronAsset,
     type WalletUpdateRequestBody as WalletUpdateRequestBody,
+    type XrplRpcInput as XrplRpcInput,
+    type XrplRpcResponse as XrplRpcResponse,
+    type XrplSignTransactionRpcInput as XrplSignTransactionRpcInput,
+    type XrplSignTransactionRpcInputParams as XrplSignTransactionRpcInputParams,
+    type XrplSignTransactionRpcResponse as XrplSignTransactionRpcResponse,
+    type XrplSignTransactionRpcResponseData as XrplSignTransactionRpcResponseData,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
@@ -2297,6 +2337,7 @@ export declare namespace PrivyAPI {
     type WalletSubmitImportParams as WalletSubmitImportParams,
     type WalletTransferParams as WalletTransferParams,
     type WalletUpdateParams as WalletUpdateParams,
+    type WalletAssignEntityParams as WalletAssignEntityParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateBatchParams as WalletCreateBatchParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
@@ -2309,7 +2350,11 @@ export declare namespace PrivyAPI {
     type CardIssuingCancellationReason as CardIssuingCancellationReason,
     type CardIssuingCardResponse as CardIssuingCardResponse,
     type CardIssuingCardStatus as CardIssuingCardStatus,
+    type CardIssuingCardholder as CardIssuingCardholder,
     type CardIssuingCardsResponse as CardIssuingCardsResponse,
+    type CardIssuingConfig as CardIssuingConfig,
+    type CardIssuingConfigQueryParams as CardIssuingConfigQueryParams,
+    type CardIssuingConfigResponse as CardIssuingConfigResponse,
     type CardIssuingCreateCardInput as CardIssuingCreateCardInput,
     type CardIssuingCustomerErrorResponse as CardIssuingCustomerErrorResponse,
     type CardIssuingCustomerInput as CardIssuingCustomerInput,
@@ -2429,6 +2474,23 @@ export declare namespace PrivyAPI {
   };
 
   export {
+    Organizations as Organizations,
+    type CreateOrganizationSecretResponse as CreateOrganizationSecretResponse,
+    type Organization as Organization,
+    type OrganizationCreateRequestBody as OrganizationCreateRequestBody,
+    type OrganizationSecretIDInput as OrganizationSecretIDInput,
+    type OrganizationSecretView as OrganizationSecretView,
+    type OrganizationSecretsListResponse as OrganizationSecretsListResponse,
+    type OrganizationUpdateRequestBody as OrganizationUpdateRequestBody,
+    type OrganizationsListResponse as OrganizationsListResponse,
+    type UpdateOrganizationSecretSigningKeyInput as UpdateOrganizationSecretSigningKeyInput,
+    type OrganizationsCursor as OrganizationsCursor,
+    type OrganizationCreateParams as OrganizationCreateParams,
+    type OrganizationUpdateParams as OrganizationUpdateParams,
+    type OrganizationListParams as OrganizationListParams,
+  };
+
+  export {
     Policies as Policies,
     type AbiParameter as AbiParameter,
     type AbiSchema as AbiSchema,
@@ -2481,6 +2543,8 @@ export declare namespace PrivyAPI {
     type TronTransactionConditionField as TronTransactionConditionField,
     type TypedDataInput as TypedDataInput,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
+    type XrplTransactionCondition as XrplTransactionCondition,
+    type XrplTransactionConditionField as XrplTransactionConditionField,
     type PolicyCreateParams as PolicyCreateParams,
     type PolicyCreateRuleParams as PolicyCreateRuleParams,
     type PolicyDeleteParams as PolicyDeleteParams,
@@ -3037,15 +3101,6 @@ export declare namespace PrivyAPI {
     type MoonpaySolanaCurrencyCode as MoonpaySolanaCurrencyCode,
     type MoonpayUiConfig as MoonpayUiConfig,
     type MoonpayUiTheme as MoonpayUiTheme,
-  };
-
-  export {
-    Organizations as Organizations,
-    type CreateOrganizationSecretResponse as CreateOrganizationSecretResponse,
-    type OrganizationSecretIDInput as OrganizationSecretIDInput,
-    type OrganizationSecretView as OrganizationSecretView,
-    type OrganizationSecretsListResponse as OrganizationSecretsListResponse,
-    type UpdateOrganizationSecretSigningKeyInput as UpdateOrganizationSecretSigningKeyInput,
   };
 
   export {

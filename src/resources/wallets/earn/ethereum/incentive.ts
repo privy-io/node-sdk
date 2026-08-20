@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../../../core/resource';
 import * as ActionsAPI from '../../actions';
+import * as WalletsAPI from '../../wallets';
 import { APIPromise } from '../../../../core/api-promise';
 import { buildHeaders } from '../../../../internal/headers';
 import { RequestOptions } from '../../../../internal/request-options';
@@ -58,6 +59,12 @@ export interface IncentiveClaimParams {
    * 'solana', and more, along with their respective testnets.
    */
   chain: string;
+
+  /**
+   * Body param: Unique caller-generated nonce used to prevent replaying a signed
+   * wallet action request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are

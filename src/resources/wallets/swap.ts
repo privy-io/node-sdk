@@ -133,6 +133,12 @@ export interface SwapExecuteParams {
   fee_configuration?: WalletsAPI.FeeConfiguration;
 
   /**
+   * Body param: Unique caller-generated nonce used to prevent replaying a signed
+   * wallet action request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
+
+  /**
    * Body param: Maximum slippage tolerance in basis points (e.g., 50 for 0.5%).
    */
   slippage_bps?: number;

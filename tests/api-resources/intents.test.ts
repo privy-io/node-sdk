@@ -210,6 +210,7 @@ describe('resource intents', () => {
       amount: '10.5',
       amount_type: 'exact_input',
       fee_configuration: { type: 'total_fee_bps', value: 50 },
+      nonce: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       slippage_bps: 0,
       'privy-request-expiry': 'privy-request-expiry',
     });

@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../../../core/resource';
 import * as ActionsAPI from '../../actions';
+import * as WalletsAPI from '../../wallets';
 import * as IncentiveAPI from './incentive';
 import { Incentive, IncentiveClaimParams } from './incentive';
 import { APIPromise } from '../../../../core/api-promise';
@@ -110,6 +111,12 @@ export interface EthereumDepositParams {
   amount?: string;
 
   /**
+   * Body param: Unique caller-generated nonce used to prevent replaying a signed
+   * wallet action request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
+
+  /**
    * Body param: Amount in smallest unit to deposit (e.g. "1500000" for 1.5 USDC with
    * 6 decimals). Exactly one of `amount` or `raw_amount` must be provided.
    */
@@ -145,6 +152,12 @@ export interface EthereumWithdrawParams {
    * Exactly one of `amount` or `raw_amount` must be provided.
    */
   amount?: string;
+
+  /**
+   * Body param: Unique caller-generated nonce used to prevent replaying a signed
+   * wallet action request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
 
   /**
    * Body param: Amount in smallest unit to withdraw (e.g. "1500000" for 1.5 USDC

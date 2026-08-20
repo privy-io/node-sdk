@@ -1102,6 +1102,7 @@ export type IntentRpcParams =
   | IntentRpcParams.SparkGetWithdrawalFeeQuoteRpcInput
   | IntentRpcParams.TronSignTransactionRpcInput
   | IntentRpcParams.TronSendTransactionRpcInput
+  | IntentRpcParams.XrplSignTransactionRpcInput
   | IntentRpcParams.ExportPrivateKeyRpcInput
   | IntentRpcParams.ExportSeedPhraseRpcInput;
 
@@ -1859,6 +1860,24 @@ export declare namespace IntentRpcParams {
     'privy-request-expiry'?: string;
   }
 
+  export interface XrplSignTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'xrpl_signTransaction';
+
+    /**
+     * Body param: Parameters for the XRPL `xrpl_signTransaction` RPC.
+     */
+    params: WalletsAPI.XrplSignTransactionRpcInputParams;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
   export interface ExportPrivateKeyRpcInput {
     /**
      * Body param
@@ -1937,6 +1956,12 @@ export interface IntentTransferParams {
    * Body param: Total fees assessed on a transfer, in BPS
    */
   fee_configuration?: WalletsAPI.FeeConfiguration;
+
+  /**
+   * Body param: Unique caller-generated nonce used to prevent replaying a signed
+   * wallet action request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
 
   /**
    * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%). Only

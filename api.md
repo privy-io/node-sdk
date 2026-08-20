@@ -24,6 +24,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">EncryptedAuthorizationKey</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EncryptedBoundAuthenticateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EncryptedWalletAuthenticateResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">EntityID</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcInputParams</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EthereumPersonalSignRpcResponse</a></code>
@@ -218,6 +219,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">UserOperationInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">UserSigningKeyBinding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Wallet</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletActionNonce</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAdditionalSigner</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAdditionalSignerItem</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAPIRegisterAuthorizationKeyInput</a></code>
@@ -239,6 +241,9 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCreateWalletsWithRecoveryResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletCustodian</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletEntity</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletEntityAssignmentRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletEntityAssignmentResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletEntityType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletEntropyType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletEthereumAsset</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletExportRequestBody</a></code>
@@ -252,6 +257,12 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletSolanaAsset</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletTronAsset</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletUpdateRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">XrplRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">XrplRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">XrplSignTransactionRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">XrplSignTransactionRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">XrplSignTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">XrplSignTransactionRpcResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletInitImportResponse</a></code>
 
 Methods:
@@ -266,6 +277,7 @@ Methods:
 - <code title="post /v1/wallets/{wallet_id}/transfer">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_transfer</a>(walletID, { ...params }) -> TransferActionResponse</code>
 - <code title="patch /v1/wallets/{wallet_id}">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_update</a>(walletID, { ...params }) -> Wallet</code>
 - <code title="post /v1/wallets/{wallet_id}/archive">client.wallets.<a href="./src/resources/wallets/wallets.ts">archive</a>(walletID) -> Wallet</code>
+- <code title="post /v1/wallets/{wallet_id}/entity">client.wallets.<a href="./src/resources/wallets/wallets.ts">assignEntity</a>(walletID, { ...params }) -> WalletEntityAssignmentResponse</code>
 - <code title="post /v1/wallets/authenticate">client.wallets.<a href="./src/resources/wallets/wallets.ts">authenticateWithJwt</a>({ ...params }) -> WalletAuthenticateWithJwtResponse</code>
 - <code title="post /v1/wallets/batch">client.wallets.<a href="./src/resources/wallets/wallets.ts">createBatch</a>({ ...params }) -> WalletBatchCreateResponse</code>
 - <code title="post /v1/wallets_with_recovery">client.wallets.<a href="./src/resources/wallets/wallets.ts">createWalletsWithRecovery</a>({ ...params }) -> WalletCreateWalletsWithRecoveryResponse</code>
@@ -373,7 +385,11 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingCancellationReason</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCardResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCardStatus</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCardholder</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCardsResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingConfig</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingConfigQueryParams</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingConfigResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCreateCardInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerErrorResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerInput</a></code>
@@ -496,6 +512,28 @@ Methods:
 - <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/resources/users.ts">setCustomMetadata</a>(userID, { ...params }) -> User</code>
 - <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/resources/users.ts">unlinkLinkedAccount</a>(userID, { ...params }) -> User</code>
 
+# Organizations
+
+Types:
+
+- <code><a href="./src/resources/organizations.ts">CreateOrganizationSecretResponse</a></code>
+- <code><a href="./src/resources/organizations.ts">Organization</a></code>
+- <code><a href="./src/resources/organizations.ts">OrganizationCreateRequestBody</a></code>
+- <code><a href="./src/resources/organizations.ts">OrganizationSecretIDInput</a></code>
+- <code><a href="./src/resources/organizations.ts">OrganizationSecretView</a></code>
+- <code><a href="./src/resources/organizations.ts">OrganizationSecretsListResponse</a></code>
+- <code><a href="./src/resources/organizations.ts">OrganizationUpdateRequestBody</a></code>
+- <code><a href="./src/resources/organizations.ts">OrganizationsListResponse</a></code>
+- <code><a href="./src/resources/organizations.ts">UpdateOrganizationSecretSigningKeyInput</a></code>
+
+Methods:
+
+- <code title="post /v1/organizations">client.organizations.<a href="./src/resources/organizations.ts">create</a>({ ...params }) -> Organization</code>
+- <code title="patch /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations.ts">update</a>(organizationID, { ...params }) -> Organization</code>
+- <code title="get /v1/organizations">client.organizations.<a href="./src/resources/organizations.ts">list</a>({ ...params }) -> OrganizationsCursor</code>
+- <code title="delete /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations.ts">delete</a>(organizationID) -> void</code>
+- <code title="get /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations.ts">get</a>(organizationID) -> Organization</code>
+
 # Policies
 
 Types:
@@ -551,6 +589,8 @@ Types:
 - <code><a href="./src/resources/policies.ts">TronTransactionConditionField</a></code>
 - <code><a href="./src/resources/policies.ts">TypedDataInput</a></code>
 - <code><a href="./src/resources/policies.ts">UpdateConditionSetRequestBody</a></code>
+- <code><a href="./src/resources/policies.ts">XrplTransactionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">XrplTransactionConditionField</a></code>
 
 Methods:
 
@@ -1160,16 +1200,6 @@ Types:
 - <code><a href="./src/resources/funding.ts">MoonpaySolanaCurrencyCode</a></code>
 - <code><a href="./src/resources/funding.ts">MoonpayUiConfig</a></code>
 - <code><a href="./src/resources/funding.ts">MoonpayUiTheme</a></code>
-
-# Organizations
-
-Types:
-
-- <code><a href="./src/resources/organizations.ts">CreateOrganizationSecretResponse</a></code>
-- <code><a href="./src/resources/organizations.ts">OrganizationSecretIDInput</a></code>
-- <code><a href="./src/resources/organizations.ts">OrganizationSecretView</a></code>
-- <code><a href="./src/resources/organizations.ts">OrganizationSecretsListResponse</a></code>
-- <code><a href="./src/resources/organizations.ts">UpdateOrganizationSecretSigningKeyInput</a></code>
 
 # CrossApp
 

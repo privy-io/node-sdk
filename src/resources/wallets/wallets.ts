@@ -376,6 +376,26 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Assign a user or organization to a wallet.
+   *
+   * @example
+   * ```ts
+   * const walletEntityAssignmentResponse =
+   *   await client.wallets.assignEntity('wallet_id', {
+   *     id: 'jorpjo4rfxj62nx1itt8y1zt',
+   *     type: 'user',
+   *   });
+   * ```
+   */
+  assignEntity(
+    walletID: string,
+    body: WalletAssignEntityParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletEntityAssignmentResponse> {
+    return this._client.post(path`/v1/wallets/${walletID}/entity`, { body, ...options });
+  }
+
+  /**
    * Exchange a user JWT for a session key authorized to act on the user's wallets.
    * Returns the encrypted authorization key and the list of wallets it can access.
    *
@@ -700,7 +720,8 @@ export type CurveSigningChainType =
   | 'near'
   | 'ton'
   | 'starknet'
-  | 'xrpl';
+  | 'xrpl'
+  | 'canton';
 
 /**
  * The cryptographic curve type used by the wallet.
@@ -881,6 +902,11 @@ export interface EncryptedWalletAuthenticateResponse {
 
   wallets: Array<Wallet>;
 }
+
+/**
+ * A Privy entity ID.
+ */
+export type EntityID = string;
 
 /**
  * Executes the EVM `personal_sign` RPC (EIP-191) to sign a message.
@@ -1553,6 +1579,7 @@ export type ExtendedChainType =
   | 'ton'
   | 'starknet'
   | 'xrpl'
+  | 'canton'
   | 'spark';
 
 /**
@@ -1759,8 +1786,8 @@ export interface IntentBinding {
  */
 export interface NamedTokenTransferSource {
   /**
-   * The asset to transfer. Supported: 'usdc', 'usdb', 'usdt', 'pathusd'
-   * (stablecoins), 'eth' (native Ethereum), 'sol' (native Solana).
+   * The asset to transfer. Supported: 'usdc', 'usdb', 'usdt', 'eurc', 'ousd',
+   * 'pathusd' (stablecoins), 'eth' (native Ethereum), 'sol' (native Solana).
    */
   asset: string;
 
@@ -3407,6 +3434,7 @@ export interface TransferReceivedTransactionDetail {
     | 'usdt'
     | 'eurc'
     | 'usdb'
+    | 'ousd'
     | 'pathusd'
     | 'sol'
     | 'trx'
@@ -3468,6 +3496,12 @@ export interface TransferRequestBody {
   fee_configuration?: FeeConfiguration;
 
   /**
+   * Unique caller-generated nonce used to prevent replaying a signed wallet action
+   * request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletActionNonce;
+
+  /**
    * Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
    * cross-chain or cross-asset transfers; omit to use the provider default.
    */
@@ -3488,6 +3522,7 @@ export interface TransferSentTransactionDetail {
     | 'usdt'
     | 'eurc'
     | 'usdb'
+    | 'ousd'
     | 'pathusd'
     | 'sol'
     | 'trx'
@@ -4058,6 +4093,12 @@ export interface Wallet {
 }
 
 /**
+ * Unique caller-generated nonce used to prevent replaying a signed wallet action
+ * request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+ */
+export type WalletActionNonce = string;
+
+/**
  * Additional signers for the wallet.
  */
 export type WalletAdditionalSigner = Array<WalletAdditionalSignerItem>;
@@ -4113,6 +4154,7 @@ export type WalletAsset =
   | 'usdt'
   | 'eurc'
   | 'usdb'
+  | 'ousd'
   | 'pathusd'
   | 'sol'
   | 'trx';
@@ -4376,6 +4418,7 @@ export type WalletChainType =
   | 'ton'
   | 'starknet'
   | 'xrpl'
+  | 'canton'
   | 'spark';
 
 /**
@@ -4413,12 +4456,65 @@ export interface WalletCustodian {
  */
 export interface WalletEntity {
   /**
-   * The Privy entity ID.
+   * A Privy entity ID.
+   */
+  id: EntityID;
+
+  /**
+   * The type of entity a wallet is attributed to.
+   */
+  type: WalletEntityType;
+}
+
+/**
+ * Request body for assigning an entity to a wallet.
+ */
+export interface WalletEntityAssignmentRequestBody {
+  /**
+   * A Privy entity ID.
+   */
+  id: EntityID;
+
+  /**
+   * The type of entity a wallet is attributed to.
+   */
+  type: WalletEntityType;
+}
+
+/**
+ * The entity assignment for a wallet.
+ */
+export interface WalletEntityAssignmentResponse {
+  /**
+   * Unique wallet entity assignment identifier.
    */
   id: string;
 
-  type: 'user' | 'organization';
+  /**
+   * Unix timestamp when the assignment was created.
+   */
+  created_at: number;
+
+  /**
+   * The entity a wallet is attributed to.
+   */
+  entity: WalletEntity;
+
+  /**
+   * Unix timestamp when the assignment was last updated.
+   */
+  updated_at: number;
+
+  /**
+   * ID of the assigned wallet.
+   */
+  wallet_id: string;
 }
+
+/**
+ * The type of entity a wallet is attributed to.
+ */
+export type WalletEntityType = 'user' | 'organization';
 
 /**
  * The entropy type of the wallet.
@@ -4438,6 +4534,7 @@ export type WalletEthereumAsset =
   | 'usdt'
   | 'eurc'
   | 'usdb'
+  | 'ousd'
   | 'pathusd';
 
 /**
@@ -4547,6 +4644,7 @@ export type WalletRpcRequestBody =
   | SparkGetWithdrawalFeeQuoteRpcInput
   | TronSignTransactionRpcInput
   | TronSendTransactionRpcInput
+  | XrplSignTransactionRpcInput
   | ExportPrivateKeyRpcInput
   | ExportSeedPhraseRpcInput;
 
@@ -4578,13 +4676,14 @@ export type WalletRpcResponse =
   | SparkGetWithdrawalFeeQuoteRpcResponse
   | TronSignTransactionRpcResponse
   | TronSendTransactionRpcResponse
+  | XrplSignTransactionRpcResponse
   | ExportPrivateKeyRpcResponse
   | ExportSeedPhraseRpcResponse;
 
 /**
  * A named asset on Solana.
  */
-export type WalletSolanaAsset = 'sol' | 'usdc' | 'eurc' | 'usdb';
+export type WalletSolanaAsset = 'sol' | 'usdc' | 'eurc' | 'usdb' | 'ousd';
 
 /**
  * A named asset on Tron.
@@ -4625,6 +4724,76 @@ export interface WalletUpdateRequestBody {
   policy_ids?: Array<string>;
 }
 
+/**
+ * Executes the XRPL `xrpl_signTransaction` RPC to sign a transaction. The caller
+ * is responsible for broadcasting.
+ */
+export interface XrplRpcInput {
+  method: 'xrpl_signTransaction';
+
+  /**
+   * Parameters for the XRPL `xrpl_signTransaction` RPC.
+   */
+  params: XrplSignTransactionRpcInputParams;
+}
+
+/**
+ * Response to the XRPL `xrpl_signTransaction` RPC.
+ */
+export interface XrplRpcResponse {
+  /**
+   * Data returned by the XRPL `xrpl_signTransaction` RPC.
+   */
+  data: XrplSignTransactionRpcResponseData;
+
+  method: 'xrpl_signTransaction';
+}
+
+/**
+ * Executes the XRPL `xrpl_signTransaction` RPC to sign a transaction. The caller
+ * is responsible for broadcasting.
+ */
+export interface XrplSignTransactionRpcInput {
+  method: 'xrpl_signTransaction';
+
+  /**
+   * Parameters for the XRPL `xrpl_signTransaction` RPC.
+   */
+  params: XrplSignTransactionRpcInputParams;
+}
+
+/**
+ * Parameters for the XRPL `xrpl_signTransaction` RPC.
+ */
+export interface XrplSignTransactionRpcInputParams {
+  encoding: 'hex';
+
+  transaction: string;
+}
+
+/**
+ * Response to the XRPL `xrpl_signTransaction` RPC.
+ */
+export interface XrplSignTransactionRpcResponse {
+  /**
+   * Data returned by the XRPL `xrpl_signTransaction` RPC.
+   */
+  data: XrplSignTransactionRpcResponseData;
+
+  method: 'xrpl_signTransaction';
+}
+
+/**
+ * Data returned by the XRPL `xrpl_signTransaction` RPC.
+ */
+export interface XrplSignTransactionRpcResponseData {
+  encoding: 'hex';
+
+  signed_transaction: string;
+
+  txn_signature: string;
+}
+
 export interface WalletInitImportResponse {
   /**
    * The base64-encoded encryption public key to encrypt the wallet entropy with.
@@ -4654,9 +4823,9 @@ export interface WalletCreateParams {
   display_name?: string;
 
   /**
-   * Body param: The entity the wallet is attributed to.
+   * Body param: Request body for assigning an entity to a wallet.
    */
-  entity?: WalletCreateParams.Entity;
+  entity?: WalletEntityAssignmentRequestBody;
 
   /**
    * Body param: A customer-provided identifier for mapping to external systems.
@@ -4687,17 +4856,6 @@ export interface WalletCreateParams {
    * a 24-hour window.
    */
   'privy-idempotency-key'?: string;
-}
-
-export namespace WalletCreateParams {
-  /**
-   * The entity the wallet is attributed to.
-   */
-  export interface Entity {
-    id: string;
-
-    type: 'user' | 'organization';
-  }
 }
 
 export interface WalletListParams extends CursorParams {
@@ -4876,6 +5034,7 @@ export type WalletRpcParams =
   | WalletRpcParams.SparkGetWithdrawalFeeQuoteRpcInput
   | WalletRpcParams.TronSignTransactionRpcInput
   | WalletRpcParams.TronSendTransactionRpcInput
+  | WalletRpcParams.XrplSignTransactionRpcInput
   | WalletRpcParams.ExportPrivateKeyRpcInput
   | WalletRpcParams.ExportSeedPhraseRpcInput;
 
@@ -5921,6 +6080,36 @@ export declare namespace WalletRpcParams {
     'privy-request-expiry'?: string;
   }
 
+  export interface XrplSignTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'xrpl_signTransaction';
+
+    /**
+     * Body param: Parameters for the XRPL `xrpl_signTransaction` RPC.
+     */
+    params: XrplSignTransactionRpcInputParams;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
   export interface ExportPrivateKeyRpcInput {
     /**
      * Body param
@@ -6066,6 +6255,12 @@ export interface WalletTransferParams {
   fee_configuration?: FeeConfiguration;
 
   /**
+   * Body param: Unique caller-generated nonce used to prevent replaying a signed
+   * wallet action request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletActionNonce;
+
+  /**
    * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%). Only
    * applicable for cross-chain or cross-asset transfers; omit to use the provider
    * default.
@@ -6131,6 +6326,18 @@ export interface WalletUpdateParams {
    * representing the deadline by which the request must be processed.
    */
   'privy-request-expiry'?: string;
+}
+
+export interface WalletAssignEntityParams {
+  /**
+   * A Privy entity ID.
+   */
+  id: EntityID;
+
+  /**
+   * The type of entity a wallet is attributed to.
+   */
+  type: WalletEntityType;
 }
 
 export interface WalletAuthenticateWithJwtParams {
@@ -6256,6 +6463,7 @@ export declare namespace Wallets {
     type EncryptedAuthorizationKey as EncryptedAuthorizationKey,
     type EncryptedBoundAuthenticateResponse as EncryptedBoundAuthenticateResponse,
     type EncryptedWalletAuthenticateResponse as EncryptedWalletAuthenticateResponse,
+    type EntityID as EntityID,
     type EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput,
     type EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
     type EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse,
@@ -6450,6 +6658,7 @@ export declare namespace Wallets {
     type UserOperationInput as UserOperationInput,
     type UserSigningKeyBinding as UserSigningKeyBinding,
     type Wallet as Wallet,
+    type WalletActionNonce as WalletActionNonce,
     type WalletAdditionalSigner as WalletAdditionalSigner,
     type WalletAdditionalSignerItem as WalletAdditionalSignerItem,
     type WalletAPIRegisterAuthorizationKeyInput as WalletAPIRegisterAuthorizationKeyInput,
@@ -6471,6 +6680,9 @@ export declare namespace Wallets {
     type WalletCreateWalletsWithRecoveryResponse as WalletCreateWalletsWithRecoveryResponse,
     type WalletCustodian as WalletCustodian,
     type WalletEntity as WalletEntity,
+    type WalletEntityAssignmentRequestBody as WalletEntityAssignmentRequestBody,
+    type WalletEntityAssignmentResponse as WalletEntityAssignmentResponse,
+    type WalletEntityType as WalletEntityType,
     type WalletEntropyType as WalletEntropyType,
     type WalletEthereumAsset as WalletEthereumAsset,
     type WalletExportRequestBody as WalletExportRequestBody,
@@ -6484,6 +6696,12 @@ export declare namespace Wallets {
     type WalletSolanaAsset as WalletSolanaAsset,
     type WalletTronAsset as WalletTronAsset,
     type WalletUpdateRequestBody as WalletUpdateRequestBody,
+    type XrplRpcInput as XrplRpcInput,
+    type XrplRpcResponse as XrplRpcResponse,
+    type XrplSignTransactionRpcInput as XrplSignTransactionRpcInput,
+    type XrplSignTransactionRpcInputParams as XrplSignTransactionRpcInputParams,
+    type XrplSignTransactionRpcResponse as XrplSignTransactionRpcResponse,
+    type XrplSignTransactionRpcResponseData as XrplSignTransactionRpcResponseData,
     type WalletInitImportResponse as WalletInitImportResponse,
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
@@ -6495,6 +6713,7 @@ export declare namespace Wallets {
     type WalletSubmitImportParams as WalletSubmitImportParams,
     type WalletTransferParams as WalletTransferParams,
     type WalletUpdateParams as WalletUpdateParams,
+    type WalletAssignEntityParams as WalletAssignEntityParams,
     type WalletAuthenticateWithJwtParams as WalletAuthenticateWithJwtParams,
     type WalletCreateBatchParams as WalletCreateBatchParams,
     type WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,

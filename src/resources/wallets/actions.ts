@@ -370,6 +370,12 @@ export interface EarnDepositRequestBody {
   amount?: string;
 
   /**
+   * Unique caller-generated nonce used to prevent replaying a signed wallet action
+   * request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
+
+  /**
    * Amount in smallest unit to deposit (e.g. "1500000" for 1.5 USDC with 6
    * decimals). Exactly one of `amount` or `raw_amount` must be provided.
    */
@@ -466,6 +472,12 @@ export interface EarnFeeCollectRequestBody {
    * The ID of the vault to collect fees from.
    */
   vault_id: string;
+
+  /**
+   * Unique caller-generated nonce used to prevent replaying a signed wallet action
+   * request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
 }
 
 /**
@@ -525,6 +537,12 @@ export interface EarnIncentiveClaimRequestBody {
    * along with their respective testnets.
    */
   chain: string;
+
+  /**
+   * Unique caller-generated nonce used to prevent replaying a signed wallet action
+   * request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
 }
 
 /**
@@ -703,6 +721,12 @@ export interface EarnWithdrawRequestBody {
    * of `amount` or `raw_amount` must be provided.
    */
   amount?: string;
+
+  /**
+   * Unique caller-generated nonce used to prevent replaying a signed wallet action
+   * request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
 
   /**
    * Amount in smallest unit to withdraw (e.g. "1500000" for 1.5 USDC with 6

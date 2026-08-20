@@ -103,6 +103,7 @@ export interface TransactionGetParams {
     | 'usdt'
     | 'eurc'
     | 'usdb'
+    | 'ousd'
     | 'pathusd'
     | 'sol'
     | 'trx'

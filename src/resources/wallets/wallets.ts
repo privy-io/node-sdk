@@ -720,8 +720,7 @@ export type CurveSigningChainType =
   | 'near'
   | 'ton'
   | 'starknet'
-  | 'xrpl'
-  | 'canton';
+  | 'xrpl';
 
 /**
  * The cryptographic curve type used by the wallet.
@@ -1579,7 +1578,6 @@ export type ExtendedChainType =
   | 'ton'
   | 'starknet'
   | 'xrpl'
-  | 'canton'
   | 'spark';
 
 /**
@@ -4418,7 +4416,6 @@ export type WalletChainType =
   | 'ton'
   | 'starknet'
   | 'xrpl'
-  | 'canton'
   | 'spark';
 
 /**

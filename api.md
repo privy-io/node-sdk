@@ -382,6 +382,8 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/cards.ts">CardIssuingBankAgreement</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingBankInfo</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCancellationReason</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCardResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCardStatus</a></code>
@@ -391,6 +393,10 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingConfigQueryParams</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingConfigResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCreateCardInput</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerBankTermsRequiredResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerBridgeTermsRequiredResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerConsentsRequestBody</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerElectronicDisclosureRequiredResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerErrorResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerKYCRequiredResponse</a></code>
@@ -399,7 +405,6 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerReadyResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerRejectedResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerTermsRequiredResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingDispute</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingDisputeStatus</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKey</a></code>

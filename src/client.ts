@@ -55,6 +55,8 @@ import {
 } from './resources/aggregations';
 import { Analytics, AnalyticsEventInput } from './resources/analytics';
 import {
+  CardIssuingBankAgreement,
+  CardIssuingBankInfo,
   CardIssuingCancellationReason,
   CardIssuingCardResponse,
   CardIssuingCardStatus,
@@ -64,6 +66,10 @@ import {
   CardIssuingConfigQueryParams,
   CardIssuingConfigResponse,
   CardIssuingCreateCardInput,
+  CardIssuingCustomerBankTermsRequiredResponse,
+  CardIssuingCustomerBridgeTermsRequiredResponse,
+  CardIssuingCustomerConsentsRequestBody,
+  CardIssuingCustomerElectronicDisclosureRequiredResponse,
   CardIssuingCustomerErrorResponse,
   CardIssuingCustomerInput,
   CardIssuingCustomerKYCRequiredResponse,
@@ -72,7 +78,6 @@ import {
   CardIssuingCustomerReadyResponse,
   CardIssuingCustomerRejectedResponse,
   CardIssuingCustomerResponse,
-  CardIssuingCustomerTermsRequiredResponse,
   CardIssuingDispute,
   CardIssuingDisputeStatus,
   CardIssuingEphemeralKey,
@@ -2347,6 +2352,8 @@ export declare namespace PrivyAPI {
 
   export {
     Cards as Cards,
+    type CardIssuingBankAgreement as CardIssuingBankAgreement,
+    type CardIssuingBankInfo as CardIssuingBankInfo,
     type CardIssuingCancellationReason as CardIssuingCancellationReason,
     type CardIssuingCardResponse as CardIssuingCardResponse,
     type CardIssuingCardStatus as CardIssuingCardStatus,
@@ -2356,6 +2363,10 @@ export declare namespace PrivyAPI {
     type CardIssuingConfigQueryParams as CardIssuingConfigQueryParams,
     type CardIssuingConfigResponse as CardIssuingConfigResponse,
     type CardIssuingCreateCardInput as CardIssuingCreateCardInput,
+    type CardIssuingCustomerBankTermsRequiredResponse as CardIssuingCustomerBankTermsRequiredResponse,
+    type CardIssuingCustomerBridgeTermsRequiredResponse as CardIssuingCustomerBridgeTermsRequiredResponse,
+    type CardIssuingCustomerConsentsRequestBody as CardIssuingCustomerConsentsRequestBody,
+    type CardIssuingCustomerElectronicDisclosureRequiredResponse as CardIssuingCustomerElectronicDisclosureRequiredResponse,
     type CardIssuingCustomerErrorResponse as CardIssuingCustomerErrorResponse,
     type CardIssuingCustomerInput as CardIssuingCustomerInput,
     type CardIssuingCustomerKYCRequiredResponse as CardIssuingCustomerKYCRequiredResponse,
@@ -2364,7 +2375,6 @@ export declare namespace PrivyAPI {
     type CardIssuingCustomerReadyResponse as CardIssuingCustomerReadyResponse,
     type CardIssuingCustomerRejectedResponse as CardIssuingCustomerRejectedResponse,
     type CardIssuingCustomerResponse as CardIssuingCustomerResponse,
-    type CardIssuingCustomerTermsRequiredResponse as CardIssuingCustomerTermsRequiredResponse,
     type CardIssuingDispute as CardIssuingDispute,
     type CardIssuingDisputeStatus as CardIssuingDisputeStatus,
     type CardIssuingEphemeralKey as CardIssuingEphemeralKey,

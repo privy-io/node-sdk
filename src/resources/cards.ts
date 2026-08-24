@@ -7,6 +7,45 @@ import * as AppsAPI from './apps/apps';
 export class Cards extends APIResource {}
 
 /**
+ * A single agreement the user must accept for the issuing bank.
+ */
+export interface CardIssuingBankAgreement {
+  /**
+   * Stable identifier for this agreement, e.g. "cardholder_agreement". Match on this
+   * rather than on `name`, which is display copy and can be reworded.
+   */
+  id: string;
+
+  /**
+   * Display name, e.g. "Cardholder Agreement".
+   */
+  name: string;
+
+  /**
+   * Link to the agreement. Empty when the document has not been published yet.
+   */
+  url: (string & {}) | '';
+}
+
+/**
+ * The bank issuing the card and the agreements the user must accept for it. Served
+ * from the backend so the agreements can change without an SDK release, and so
+ * swapping banks does not require a client change.
+ */
+export interface CardIssuingBankInfo {
+  /**
+   * Agreements the user must accept for this bank, in the order they should be
+   * presented. Render every entry — the set and size vary by bank.
+   */
+  agreements: Array<CardIssuingBankAgreement>;
+
+  /**
+   * Display name of the issuing bank, e.g. "Lead Bank".
+   */
+  name: string;
+}
+
+/**
  * Why a lost or stolen card is being canceled.
  */
 export type CardIssuingCancellationReason = 'lost' | 'stolen';
@@ -127,6 +166,69 @@ export interface CardIssuingCreateCardInput {
 }
 
 /**
+ * A cards customer exists and must accept the bank agreements. Privy records these
+ * rather than the provider, so this step is reached even when the provider already
+ * has its own terms — for example a customer onboarded through another product.
+ */
+export interface CardIssuingCustomerBankTermsRequiredResponse {
+  /**
+   * The bank issuing the card and the agreements the user must accept for it. Served
+   * from the backend so the agreements can change without an SDK release, and so
+   * swapping banks does not require a client change.
+   */
+  bank_info: CardIssuingBankInfo;
+
+  status: 'bank_terms_required';
+}
+
+/**
+ * A cards customer exists and must accept the provider terms hosted at `tos_url`
+ * before KYC. Reached only once the bank agreements are recorded.
+ */
+export interface CardIssuingCustomerBridgeTermsRequiredResponse {
+  status: 'bridge_terms_required';
+
+  tos_url: string;
+}
+
+/**
+ * Request body for recording that the user accepted the agreements Privy tracks.
+ * Send one field per screen the user accepted. Acceptances are recorded once —
+ * re-sending a field that is already recorded leaves the original timestamp
+ * unchanged.
+ */
+export interface CardIssuingCustomerConsentsRequestBody {
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Set to true when the user accepted the bank agreements. Requires the electronic
+   * disclosure to be accepted first, in this request or a previous one.
+   */
+  accept_bank_terms?: boolean;
+
+  /**
+   * Set to true when the user accepted the electronic disclosure (E-Sign consent).
+   */
+  accept_electronic_disclosure?: boolean;
+}
+
+/**
+ * A cards customer exists and the user must accept the electronic disclosure
+ * (E-Sign consent) before any other agreement can be accepted electronically.
+ */
+export interface CardIssuingCustomerElectronicDisclosureRequiredResponse {
+  /**
+   * The disclosure the user must accept, rendered by the client.
+   */
+  disclosure_url: string;
+
+  status: 'electronic_disclosure_required';
+}
+
+/**
  * The cards customer cannot continue onboarding or issue cards.
  */
 export interface CardIssuingCustomerErrorResponse {
@@ -191,21 +293,14 @@ export interface CardIssuingCustomerResponse {
    */
   data:
     | CardIssuingCustomerNotCreatedResponse
-    | CardIssuingCustomerTermsRequiredResponse
+    | CardIssuingCustomerElectronicDisclosureRequiredResponse
+    | CardIssuingCustomerBankTermsRequiredResponse
+    | CardIssuingCustomerBridgeTermsRequiredResponse
     | CardIssuingCustomerKYCRequiredResponse
     | CardIssuingCustomerPendingResponse
     | CardIssuingCustomerRejectedResponse
     | CardIssuingCustomerErrorResponse
     | CardIssuingCustomerReadyResponse;
-}
-
-/**
- * A Bridge cards customer exists and must accept terms before KYC.
- */
-export interface CardIssuingCustomerTermsRequiredResponse {
-  status: 'terms_required';
-
-  tos_url: string;
 }
 
 /**
@@ -380,6 +475,8 @@ export interface CardIssuingUpdateCardInput {
 
 export declare namespace Cards {
   export {
+    type CardIssuingBankAgreement as CardIssuingBankAgreement,
+    type CardIssuingBankInfo as CardIssuingBankInfo,
     type CardIssuingCancellationReason as CardIssuingCancellationReason,
     type CardIssuingCardResponse as CardIssuingCardResponse,
     type CardIssuingCardStatus as CardIssuingCardStatus,
@@ -389,6 +486,10 @@ export declare namespace Cards {
     type CardIssuingConfigQueryParams as CardIssuingConfigQueryParams,
     type CardIssuingConfigResponse as CardIssuingConfigResponse,
     type CardIssuingCreateCardInput as CardIssuingCreateCardInput,
+    type CardIssuingCustomerBankTermsRequiredResponse as CardIssuingCustomerBankTermsRequiredResponse,
+    type CardIssuingCustomerBridgeTermsRequiredResponse as CardIssuingCustomerBridgeTermsRequiredResponse,
+    type CardIssuingCustomerConsentsRequestBody as CardIssuingCustomerConsentsRequestBody,
+    type CardIssuingCustomerElectronicDisclosureRequiredResponse as CardIssuingCustomerElectronicDisclosureRequiredResponse,
     type CardIssuingCustomerErrorResponse as CardIssuingCustomerErrorResponse,
     type CardIssuingCustomerInput as CardIssuingCustomerInput,
     type CardIssuingCustomerKYCRequiredResponse as CardIssuingCustomerKYCRequiredResponse,
@@ -397,7 +498,6 @@ export declare namespace Cards {
     type CardIssuingCustomerReadyResponse as CardIssuingCustomerReadyResponse,
     type CardIssuingCustomerRejectedResponse as CardIssuingCustomerRejectedResponse,
     type CardIssuingCustomerResponse as CardIssuingCustomerResponse,
-    type CardIssuingCustomerTermsRequiredResponse as CardIssuingCustomerTermsRequiredResponse,
     type CardIssuingDispute as CardIssuingDispute,
     type CardIssuingDisputeStatus as CardIssuingDisputeStatus,
     type CardIssuingEphemeralKey as CardIssuingEphemeralKey,

@@ -72,6 +72,8 @@ export {
 } from './apps/apps';
 export {
   Cards,
+  type CardIssuingBankAgreement,
+  type CardIssuingBankInfo,
   type CardIssuingCancellationReason,
   type CardIssuingCardResponse,
   type CardIssuingCardStatus,
@@ -81,6 +83,10 @@ export {
   type CardIssuingConfigQueryParams,
   type CardIssuingConfigResponse,
   type CardIssuingCreateCardInput,
+  type CardIssuingCustomerBankTermsRequiredResponse,
+  type CardIssuingCustomerBridgeTermsRequiredResponse,
+  type CardIssuingCustomerConsentsRequestBody,
+  type CardIssuingCustomerElectronicDisclosureRequiredResponse,
   type CardIssuingCustomerErrorResponse,
   type CardIssuingCustomerInput,
   type CardIssuingCustomerKYCRequiredResponse,
@@ -89,7 +95,6 @@ export {
   type CardIssuingCustomerReadyResponse,
   type CardIssuingCustomerRejectedResponse,
   type CardIssuingCustomerResponse,
-  type CardIssuingCustomerTermsRequiredResponse,
   type CardIssuingDispute,
   type CardIssuingDisputeStatus,
   type CardIssuingEphemeralKey,

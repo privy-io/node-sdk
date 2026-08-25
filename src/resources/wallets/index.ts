@@ -32,11 +32,13 @@ export {
   type ListWalletActionsQuery,
   type ListWalletActionsResponse,
   type MorphoVaultDetails,
+  type PayoutResponse,
   type SvmTransactionWalletActionStep,
   type SvmWalletActionStepStatus,
   type SwapActionResponse,
   type TvmTransactionWalletActionStep,
   type TvmWalletActionStepStatus,
+  type TempoVaultDetails,
   type TransferActionResponse,
   type VedaVaultDetails,
   type WalletActionInclude,
@@ -48,6 +50,7 @@ export {
   type ActionGetParams,
 } from './actions';
 export { Balance, type BalanceGetResponse, type BalanceGetParams } from './balance';
+export { DepositAccounts } from './deposit-accounts/index';
 export { Earn } from './earn/index';
 export { Swap, type SwapExecuteParams, type SwapQuoteParams } from './swap';
 export { Transactions, type TransactionGetResponse, type TransactionGetParams } from './transactions';
@@ -61,9 +64,15 @@ export {
   type AdvancedSwapRequestBody,
   type AdvancedSwapResponse,
   type AmountType,
+  type AttachWalletAutomationRequestBody,
   type AuthorizationKeyDashboardResponse,
   type AuthorizationKeyResponse,
   type AuthorizationKeyRole,
+  type CreateCryptoDepositAccountRequestBody,
+  type CreateCryptoDepositAccountResponse,
+  type CreateCryptoDepositAccountWithConfigRequestBody,
+  type CreateCryptoDepositAccountWithRouteRequestBody,
+  type CryptoDepositAddressRoute,
   type CurveSigningChainType,
   type CurveType,
   type CustodialWallet,
@@ -71,6 +80,7 @@ export {
   type CustodialWalletCreateInput,
   type CustodialWalletProvider,
   type CustomTokenTransferSource,
+  type DetachWalletAutomationRequestBody,
   type DeveloperFee,
   type EncryptedAuthorizationKey,
   type EncryptedBoundAuthenticateResponse,
@@ -284,6 +294,8 @@ export {
   type WalletAuthenticateRequestBody,
   type WalletAuthenticateWithJwtResponse,
   type WalletAuthorizationHeaders,
+  type WalletAutomationAttachmentListResponse,
+  type WalletAutomationAttachmentResponse,
   type WalletBatchCreateInput,
   type WalletBatchCreateResponse,
   type WalletBatchCreateResult,

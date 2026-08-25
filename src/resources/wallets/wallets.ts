@@ -3,8 +3,9 @@
 import { APIResource } from '../../core/resource';
 import * as WalletsAPI from './wallets';
 import * as SharedAPI from '../shared';
-import * as UsersAPI from '../users';
+import * as WalletAutomationsAPI from '../wallet-automations';
 import * as AppsAPI from '../apps/apps';
+import * as UsersAPI from '../users/users';
 import * as ActionsAPI from './actions';
 import {
   AaveVaultDetails,
@@ -39,9 +40,11 @@ import {
   ListWalletActionsQuery,
   ListWalletActionsResponse,
   MorphoVaultDetails,
+  PayoutResponse,
   SvmTransactionWalletActionStep,
   SvmWalletActionStepStatus,
   SwapActionResponse,
+  TempoVaultDetails,
   TransferActionResponse,
   TvmTransactionWalletActionStep,
   TvmWalletActionStepStatus,
@@ -59,6 +62,8 @@ import * as SwapAPI from './swap';
 import { Swap, SwapExecuteParams, SwapQuoteParams } from './swap';
 import * as TransactionsAPI from './transactions';
 import { TransactionGetParams, TransactionGetResponse, Transactions } from './transactions';
+import * as DepositAccountsAPI from './deposit-accounts/deposit-accounts';
+import { DepositAccounts } from './deposit-accounts/deposit-accounts';
 import * as EarnAPI from './earn/earn';
 import { Earn } from './earn/earn';
 import { APIPromise } from '../../core/api-promise';
@@ -73,6 +78,7 @@ export class Wallets extends APIResource {
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
   swap: SwapAPI.Swap = new SwapAPI.Swap(this._client);
+  depositAccounts: DepositAccountsAPI.DepositAccounts = new DepositAccountsAPI.DepositAccounts(this._client);
 
   /**
    * Creates a new wallet on the requested chain and for the requested owner.
@@ -666,6 +672,19 @@ export interface AdvancedSwapResponse {
 export type AmountType = 'exact_input' | 'exact_output';
 
 /**
+ * Request body for attaching automations to a wallet (wallet ID comes from the
+ * URL).
+ */
+export interface AttachWalletAutomationRequestBody {
+  automation_ids: Array<string>;
+
+  /**
+   * Per-attachment parameters for swap automations.
+   */
+  params: WalletAutomationsAPI.SwapAttachmentParams;
+}
+
+/**
  * Dashboard response for a wallet authorization key (includes role, which is an
  * internal-only concept).
  */
@@ -703,6 +722,64 @@ export interface AuthorizationKeyResponse {
  * wallet.
  */
 export type AuthorizationKeyRole = 'root' | 'manager' | 'delegated-actions' | null;
+
+/**
+ * Request body for creating a crypto deposit account.
+ */
+export type CreateCryptoDepositAccountRequestBody =
+  | CreateCryptoDepositAccountWithConfigRequestBody
+  | CreateCryptoDepositAccountWithRouteRequestBody;
+
+/**
+ * Response returned after creating a crypto deposit account.
+ */
+export interface CreateCryptoDepositAccountResponse {
+  deposit_addresses: Array<CryptoDepositAddressRoute>;
+}
+
+/**
+ * Creates a crypto deposit account from an existing deposit configuration.
+ */
+export interface CreateCryptoDepositAccountWithConfigRequestBody {
+  deposit_config_id: string;
+}
+
+/**
+ * Creates a crypto deposit account from an inline source and destination.
+ */
+export interface CreateCryptoDepositAccountWithRouteRequestBody {
+  /**
+   * A destination asset spec accepting either raw identifiers (asset_address, caip2)
+   * or human-readable aliases (asset, chain). Exactly one of asset_address or asset
+   * must be provided; exactly one of caip2 or chain must be provided.
+   */
+  destination: WalletAutomationsAPI.AutomationDestinationAssetInput;
+
+  /**
+   * Which assets to include/exclude for an automation trigger (input form with alias
+   * support).
+   */
+  source: WalletAutomationsAPI.AutomationAssetFilterInput;
+}
+
+/**
+ * One deposit address and the source/destination route it accepts.
+ */
+export interface CryptoDepositAddressRoute {
+  deposit_address: string;
+
+  /**
+   * Destination asset identified by contract address on a specific chain (CAIP-2).
+   */
+  destination: WalletAutomationsAPI.AutomationDestinationAsset;
+
+  /**
+   * Which assets to include/exclude for an automation trigger.
+   */
+  source: WalletAutomationsAPI.AutomationAssetFilter;
+
+  wallet_id: string;
+}
 
 /**
  * The wallet chain types that support curve-based signing.
@@ -830,6 +907,14 @@ export interface CustomTokenTransferSource {
    * characters. Deprecated: use the top-level `amount` field instead.
    */
   amount?: string;
+}
+
+/**
+ * Request body for detaching automations from a wallet (wallet ID comes from the
+ * URL).
+ */
+export interface DetachWalletAutomationRequestBody {
+  automation_ids: Array<string>;
 }
 
 /**
@@ -4284,6 +4369,38 @@ export interface WalletAuthorizationHeaders {
 }
 
 /**
+ * List of wallet automation attachments.
+ */
+export interface WalletAutomationAttachmentListResponse {
+  data: Array<WalletAutomationAttachmentResponse>;
+}
+
+/**
+ * A wallet automation attachment linking an automation to a specific wallet.
+ */
+export interface WalletAutomationAttachmentResponse {
+  id: string;
+
+  automation_id: string;
+
+  created_at: string;
+
+  /**
+   * Per-attachment parameters for swap automations.
+   */
+  params: WalletAutomationsAPI.SwapAttachmentParams | null;
+
+  /**
+   * Automation lifecycle state: 'enabled' = running, 'disabled' = not running.
+   */
+  status: WalletAutomationsAPI.WalletAutomationStatus;
+
+  updated_at: string;
+
+  wallet_id: string;
+}
+
+/**
  * Request body for batch wallet creation.
  */
 export interface WalletBatchCreateInput {
@@ -6435,6 +6552,7 @@ Wallets.Earn = Earn;
 Wallets.Transactions = Transactions;
 Wallets.Balance = Balance;
 Wallets.Swap = Swap;
+Wallets.DepositAccounts = DepositAccounts;
 
 export declare namespace Wallets {
   export {
@@ -6446,9 +6564,15 @@ export declare namespace Wallets {
     type AdvancedSwapRequestBody as AdvancedSwapRequestBody,
     type AdvancedSwapResponse as AdvancedSwapResponse,
     type AmountType as AmountType,
+    type AttachWalletAutomationRequestBody as AttachWalletAutomationRequestBody,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
     type AuthorizationKeyResponse as AuthorizationKeyResponse,
     type AuthorizationKeyRole as AuthorizationKeyRole,
+    type CreateCryptoDepositAccountRequestBody as CreateCryptoDepositAccountRequestBody,
+    type CreateCryptoDepositAccountResponse as CreateCryptoDepositAccountResponse,
+    type CreateCryptoDepositAccountWithConfigRequestBody as CreateCryptoDepositAccountWithConfigRequestBody,
+    type CreateCryptoDepositAccountWithRouteRequestBody as CreateCryptoDepositAccountWithRouteRequestBody,
+    type CryptoDepositAddressRoute as CryptoDepositAddressRoute,
     type CurveSigningChainType as CurveSigningChainType,
     type CurveType as CurveType,
     type CustodialWallet as CustodialWallet,
@@ -6456,6 +6580,7 @@ export declare namespace Wallets {
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWalletProvider as CustodialWalletProvider,
     type CustomTokenTransferSource as CustomTokenTransferSource,
+    type DetachWalletAutomationRequestBody as DetachWalletAutomationRequestBody,
     type DeveloperFee as DeveloperFee,
     type EncryptedAuthorizationKey as EncryptedAuthorizationKey,
     type EncryptedBoundAuthenticateResponse as EncryptedBoundAuthenticateResponse,
@@ -6669,6 +6794,8 @@ export declare namespace Wallets {
     type WalletAuthenticateRequestBody as WalletAuthenticateRequestBody,
     type WalletAuthenticateWithJwtResponse as WalletAuthenticateWithJwtResponse,
     type WalletAuthorizationHeaders as WalletAuthorizationHeaders,
+    type WalletAutomationAttachmentListResponse as WalletAutomationAttachmentListResponse,
+    type WalletAutomationAttachmentResponse as WalletAutomationAttachmentResponse,
     type WalletBatchCreateInput as WalletBatchCreateInput,
     type WalletBatchCreateResponse as WalletBatchCreateResponse,
     type WalletBatchCreateResult as WalletBatchCreateResult,
@@ -6750,11 +6877,13 @@ export declare namespace Wallets {
     type ListWalletActionsQuery as ListWalletActionsQuery,
     type ListWalletActionsResponse as ListWalletActionsResponse,
     type MorphoVaultDetails as MorphoVaultDetails,
+    type PayoutResponse as PayoutResponse,
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
     type SwapActionResponse as SwapActionResponse,
     type TvmTransactionWalletActionStep as TvmTransactionWalletActionStep,
     type TvmWalletActionStepStatus as TvmWalletActionStepStatus,
+    type TempoVaultDetails as TempoVaultDetails,
     type TransferActionResponse as TransferActionResponse,
     type VedaVaultDetails as VedaVaultDetails,
     type WalletActionInclude as WalletActionInclude,
@@ -6785,4 +6914,6 @@ export declare namespace Wallets {
     type SwapExecuteParams as SwapExecuteParams,
     type SwapQuoteParams as SwapQuoteParams,
   };
+
+  export { DepositAccounts as DepositAccounts };
 }

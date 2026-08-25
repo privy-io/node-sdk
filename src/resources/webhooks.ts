@@ -1,9 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as FiatAPI from './fiat';
 import * as IntentsAPI from './intents';
-import * as UsersAPI from './users';
+import * as SharedAPI from './shared';
 import * as AppsAPI from './apps/apps';
+import * as UsersAPI from './users/users';
 import * as ActionsAPI from './wallets/actions';
 import * as WalletsAPI from './wallets/wallets';
 
@@ -148,6 +150,128 @@ export interface BridgeTransferRefundMetadata {
    * The original transfer transaction hash (if available).
    */
   original_transaction_hash?: string;
+}
+
+/**
+ * Details of a fiat deposit that has finished converting and been delivered to the
+ * wallet.
+ */
+export interface DepositCompletedData {
+  created_at: string;
+
+  /**
+   * The crypto asset, chain, delivered amount, and settlement transaction for a
+   * completed deposit.
+   */
+  destination: DepositCompletedDestination;
+
+  /**
+   * The fiat deposit that was received, including amount, currency, and originator.
+   */
+  source: DepositStartedSource;
+}
+
+/**
+ * The crypto asset, chain, delivered amount, and settlement transaction for a
+ * completed deposit.
+ */
+export interface DepositCompletedDestination {
+  /**
+   * The crypto amount delivered to the wallet, after conversion and fees.
+   */
+  amount: string;
+
+  /**
+   * The crypto asset the deposit was converted into (e.g. "usdc").
+   */
+  asset: string;
+
+  /**
+   * The chain the converted crypto was delivered on (e.g. "base").
+   */
+  chain: string;
+
+  /**
+   * The on-chain settlement transaction for the delivered crypto.
+   */
+  transaction_hash: string;
+}
+
+/**
+ * Details of a fiat deposit that failed to convert and was refunded to the sender.
+ */
+export interface DepositFailedData {
+  created_at: string;
+
+  /**
+   * The crypto asset and chain the fiat deposit is being converted into.
+   */
+  destination: DepositStartedDestination;
+
+  reason: string;
+
+  reason_code: string;
+
+  refunded_at: string;
+
+  /**
+   * The fiat deposit that was received, including amount, currency, and originator.
+   */
+  source: DepositStartedSource;
+}
+
+/**
+ * Details of a fiat deposit that has begun processing into a deposit account.
+ */
+export interface DepositStartedData {
+  created_at: string;
+
+  /**
+   * The crypto asset and chain the fiat deposit is being converted into.
+   */
+  destination: DepositStartedDestination;
+
+  /**
+   * The fiat deposit that was received, including amount, currency, and originator.
+   */
+  source: DepositStartedSource;
+}
+
+/**
+ * The crypto asset and chain the fiat deposit is being converted into.
+ */
+export interface DepositStartedDestination {
+  /**
+   * The crypto asset the deposit is converted into (e.g. "usdc").
+   */
+  asset: string;
+
+  /**
+   * The chain the converted crypto is delivered on (e.g. "base").
+   */
+  chain: string;
+}
+
+/**
+ * The fiat deposit that was received, including amount, currency, and originator.
+ */
+export interface DepositStartedSource {
+  /**
+   * The fiat amount deposited.
+   */
+  amount: string;
+
+  /**
+   * Supported fiat currencies.
+   */
+  currency: FiatAPI.FiatCurrency;
+
+  /**
+   * Supported fiat payment rails.
+   */
+  payment_rail?: FiatAPI.FiatPaymentRail;
+
+  sender_name?: string;
 }
 
 /**
@@ -805,6 +929,53 @@ export interface MfaEnabledWebhookPayload {
 }
 
 /**
+ * Full KYB state snapshot in a KYB update event.
+ */
+export interface OrganizationKYBUpdatedData {
+  /**
+   * Capability statuses for the customer.
+   */
+  capabilities: FiatAPI.KyxCapabilities;
+
+  endorsements: Array<FiatAPI.KyxEndorsement>;
+
+  /**
+   * KYB verification status in a KYB update event.
+   */
+  kyb: OrganizationKYBUpdatedKYBData;
+
+  /**
+   * KYC/KYB status for the user.
+   */
+  status: FiatAPI.KyxProviderStatus;
+
+  /**
+   * Terms of service status in a KYB update event.
+   */
+  tos: OrganizationKYBUpdatedTosData;
+}
+
+/**
+ * KYB verification status in a KYB update event.
+ */
+export interface OrganizationKYBUpdatedKYBData {
+  /**
+   * Status of KYC/KYB verification. Passthrough from the provider.
+   */
+  status: FiatAPI.KyxVerificationStatus;
+}
+
+/**
+ * Terms of service status in a KYB update event.
+ */
+export interface OrganizationKYBUpdatedTosData {
+  /**
+   * Status of Terms of Service acceptance. Passthrough from the provider.
+   */
+  status: FiatAPI.KyxTosStatus;
+}
+
+/**
  * Payload for the wallet.private_key_export webhook event.
  */
 export interface PrivateKeyExportWebhookPayload {
@@ -1138,12 +1309,18 @@ export interface TransactionStillPendingWebhookPayload {
 export interface UsageCrossChainFeeRecordedWebhookPayload {
   amount_usd: string;
 
+  /**
+   * An opaque, stable identifier for this charge. Use it to deduplicate webhook
+   * deliveries.
+   */
+  event_id: string;
+
   recorded_at: number;
 
   source_id: string;
 
   /**
-   * The type of wallet action that incurred a usage charge.
+   * The type of operation that incurred a usage charge.
    */
   source_type: UsageSourceType;
 
@@ -1160,12 +1337,18 @@ export interface UsageCrossChainFeeRecordedWebhookPayload {
 export interface UsageGasSponsorshipRecordedWebhookPayload {
   amount_usd: string;
 
+  /**
+   * An opaque, stable identifier for this charge. Use it to deduplicate webhook
+   * deliveries.
+   */
+  event_id: string;
+
   recorded_at: number;
 
   source_id: string;
 
   /**
-   * The type of wallet action that incurred a usage charge.
+   * The type of operation that incurred a usage charge.
    */
   source_type: UsageSourceType;
 
@@ -1176,9 +1359,9 @@ export interface UsageGasSponsorshipRecordedWebhookPayload {
 }
 
 /**
- * The type of wallet action that incurred a usage charge.
+ * The type of operation that incurred a usage charge.
  */
-export type UsageSourceType = 'wallet-action-transfer' | 'wallet-action-swap';
+export type UsageSourceType = 'wallet-action-transfer' | 'wallet-action-swap' | 'rpc';
 
 /**
  * Payload for the user.authenticated webhook event.
@@ -1228,6 +1411,53 @@ export interface UserDeletedWebhookPayload {
    * A Privy user object.
    */
   user: UsersAPI.User;
+}
+
+/**
+ * Full KYC state snapshot in a KYC update event.
+ */
+export interface UserKYCUpdatedData {
+  /**
+   * Capability statuses for the customer.
+   */
+  capabilities: FiatAPI.KyxCapabilities;
+
+  endorsements: Array<FiatAPI.KyxEndorsement>;
+
+  /**
+   * KYC verification status in a KYC update event.
+   */
+  kyc: UserKYCUpdatedKYCData;
+
+  /**
+   * KYC/KYB status for the user.
+   */
+  status: FiatAPI.KyxProviderStatus;
+
+  /**
+   * Terms of service status in a KYC update event.
+   */
+  tos: UserKYCUpdatedTosData;
+}
+
+/**
+ * KYC verification status in a KYC update event.
+ */
+export interface UserKYCUpdatedKYCData {
+  /**
+   * Status of KYC/KYB verification. Passthrough from the provider.
+   */
+  status: FiatAPI.KyxVerificationStatus;
+}
+
+/**
+ * Terms of service status in a KYC update event.
+ */
+export interface UserKYCUpdatedTosData {
+  /**
+   * Status of Terms of Service acceptance. Passthrough from the provider.
+   */
+  status: FiatAPI.KyxTosStatus;
 }
 
 /**
@@ -2667,6 +2897,347 @@ export interface WalletActionEarnWithdrawSucceededWebhookPayload {
 }
 
 /**
+ * Payload for the wallet_action.payout.created webhook event.
+ */
+export interface WalletActionPayoutCreatedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The fiat currency the payout settles in (e.g. "usd").
+   */
+  destination_currency: string;
+
+  /**
+   * The registered external fiat account the payout settles to.
+   */
+  destination_fiat_account_id: string;
+
+  /**
+   * The fiat payment rail the payout settles over (e.g. "ach", "sepa", "wire").
+   */
+  destination_payment_rail: string;
+
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Supported fiat orchestration providers.
+   */
+  provider: SharedAPI.OrchestrationProvider;
+
+  /**
+   * Decimal amount offramped, in the asset's standard units (e.g. "100.00").
+   */
+  source_amount: string;
+
+  /**
+   * Source crypto asset sent on-chain (e.g. "usdc").
+   */
+  source_asset: string;
+
+  /**
+   * Source chain the crypto was sent from (e.g. "base").
+   */
+  source_chain: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'pending';
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.payout.created';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
+ * Payload for the wallet_action.payout.failed webhook event.
+ */
+export interface WalletActionPayoutFailedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The fiat currency the payout settles in (e.g. "usd").
+   */
+  destination_currency: string;
+
+  /**
+   * The registered external fiat account the payout settles to.
+   */
+  destination_fiat_account_id: string;
+
+  /**
+   * The fiat payment rail the payout settles over (e.g. "ach", "sepa", "wire").
+   */
+  destination_payment_rail: string;
+
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action failed.
+   */
+  failed_at: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: ActionsAPI.FailureReason;
+
+  /**
+   * Supported fiat orchestration providers.
+   */
+  provider: SharedAPI.OrchestrationProvider;
+
+  /**
+   * Decimal amount offramped, in the asset's standard units (e.g. "100.00").
+   */
+  source_amount: string;
+
+  /**
+   * Source crypto asset sent on-chain (e.g. "usdc").
+   */
+  source_asset: string;
+
+  /**
+   * Source chain the crypto was sent from (e.g. "base").
+   */
+  source_chain: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'failed';
+
+  /**
+   * The steps of the wallet action. Completed steps will have transaction hashes;
+   * the failing step will have a failure_reason.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.payout.failed';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
+ * Payload for the wallet_action.payout.rejected webhook event.
+ */
+export interface WalletActionPayoutRejectedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The fiat currency the payout settles in (e.g. "usd").
+   */
+  destination_currency: string;
+
+  /**
+   * The registered external fiat account the payout settles to.
+   */
+  destination_fiat_account_id: string;
+
+  /**
+   * The fiat payment rail the payout settles over (e.g. "ach", "sepa", "wire").
+   */
+  destination_payment_rail: string;
+
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: ActionsAPI.FailureReason;
+
+  /**
+   * Supported fiat orchestration providers.
+   */
+  provider: SharedAPI.OrchestrationProvider;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was rejected.
+   */
+  rejected_at: string;
+
+  /**
+   * Decimal amount offramped, in the asset's standard units (e.g. "100.00").
+   */
+  source_amount: string;
+
+  /**
+   * Source crypto asset sent on-chain (e.g. "usdc").
+   */
+  source_asset: string;
+
+  /**
+   * Source chain the crypto was sent from (e.g. "base").
+   */
+  source_chain: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'rejected';
+
+  /**
+   * The steps of the wallet action at the time of rejection.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.payout.rejected';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
+ * Payload for the wallet_action.payout.succeeded webhook event.
+ */
+export interface WalletActionPayoutSucceededWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action completed successfully.
+   */
+  completed_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The fiat currency the payout settles in (e.g. "usd").
+   */
+  destination_currency: string;
+
+  /**
+   * The registered external fiat account the payout settles to.
+   */
+  destination_fiat_account_id: string;
+
+  /**
+   * The fiat payment rail the payout settles over (e.g. "ach", "sepa", "wire").
+   */
+  destination_payment_rail: string;
+
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Supported fiat orchestration providers.
+   */
+  provider: SharedAPI.OrchestrationProvider;
+
+  /**
+   * Decimal amount offramped, in the asset's standard units (e.g. "100.00").
+   */
+  source_amount: string;
+
+  /**
+   * Source crypto asset sent on-chain (e.g. "usdc").
+   */
+  source_asset: string;
+
+  /**
+   * Source chain the crypto was sent from (e.g. "base").
+   */
+  source_chain: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'succeeded';
+
+  /**
+   * The steps of the wallet action, including transaction hashes.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.payout.succeeded';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+}
+
+/**
  * Payload for the wallet_action.swap.created webhook event.
  */
 export interface WalletActionSwapCreatedWebhookPayload {
@@ -3281,6 +3852,52 @@ export interface WalletArchivedWebhookPayload {
 }
 
 /**
+ * Payload for the wallet_automation.submitted webhook event.
+ */
+export interface WalletAutomationSubmittedWebhookPayload {
+  /**
+   * The ID of the wallet action created to fulfill the automation.
+   */
+  action_id: string;
+
+  /**
+   * The ID of the automation that fired.
+   */
+  automation_id: string;
+
+  /**
+   * ISO 8601 timestamp of when the automation was submitted.
+   */
+  created_at: string;
+
+  /**
+   * Contract address of the triggering deposit's asset, or 'native-token' for the
+   * native asset.
+   */
+  trigger_asset_address: string;
+
+  /**
+   * CAIP-2 chain identifier of the triggering deposit (e.g., 'eip155:8453').
+   */
+  trigger_caip2: string;
+
+  /**
+   * The ID of the automation execution that fired.
+   */
+  trigger_id: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_automation.submitted';
+
+  /**
+   * The ID of the wallet the automation fired for.
+   */
+  wallet_id: string;
+}
+
+/**
  * An asset involved in a wallet transfer.
  */
 export type WalletFundsAsset =
@@ -3489,7 +4106,12 @@ export type WebhookPayload =
   | WalletActionEarnFeeCollectCreatedWebhookPayload
   | WalletActionEarnFeeCollectSucceededWebhookPayload
   | WalletActionEarnFeeCollectRejectedWebhookPayload
-  | WalletActionEarnFeeCollectFailedWebhookPayload;
+  | WalletActionEarnFeeCollectFailedWebhookPayload
+  | WalletActionPayoutCreatedWebhookPayload
+  | WalletActionPayoutSucceededWebhookPayload
+  | WalletActionPayoutRejectedWebhookPayload
+  | WalletActionPayoutFailedWebhookPayload
+  | WalletAutomationSubmittedWebhookPayload;
 
 /**
  * Payload for the yield.claim.confirmed webhook event.
@@ -3566,6 +4188,159 @@ export interface YieldWithdrawConfirmedWebhookPayload {
   vault_address: string;
 }
 
+export interface OrganizationKYBUpdatedWebhookEvent {
+  changes: { [key: string]: Array<unknown> };
+
+  /**
+   * Full KYB state snapshot in a KYB update event.
+   */
+  data: OrganizationKYBUpdatedData;
+
+  /**
+   * Provider environment (production or sandbox).
+   */
+  environment: FiatAPI.KyxEnvironment;
+
+  organization_id: string;
+
+  /**
+   * KYC/KYB provider identifier.
+   */
+  provider: FiatAPI.KyxProvider;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'organization.kyb.updated';
+}
+
+export interface UserKYCUpdatedWebhookEvent {
+  changes: { [key: string]: Array<unknown> };
+
+  /**
+   * Full KYC state snapshot in a KYC update event.
+   */
+  data: UserKYCUpdatedData;
+
+  /**
+   * Provider environment (production or sandbox).
+   */
+  environment: FiatAPI.KyxEnvironment;
+
+  /**
+   * KYC/KYB provider identifier.
+   */
+  provider: FiatAPI.KyxProvider;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'user.kyc.updated';
+
+  user_id: string;
+}
+
+export interface WalletDepositAccountDepositCompletedWebhookEvent {
+  /**
+   * Details of a fiat deposit that has finished converting and been delivered to the
+   * wallet.
+   */
+  data: DepositCompletedData;
+
+  deposit_account_id: string;
+
+  deposit_type: 'fiat';
+
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Supported fiat orchestration providers.
+   */
+  provider: SharedAPI.OrchestrationProvider;
+
+  /**
+   * The deposit's ID in the provider's system (e.g. Bridge), not a Privy ID.
+   */
+  provider_deposit_id: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet.deposit_account.deposit_completed';
+
+  wallet_id: string;
+}
+
+export interface WalletDepositAccountDepositFailedWebhookEvent {
+  /**
+   * Details of a fiat deposit that failed to convert and was refunded to the sender.
+   */
+  data: DepositFailedData;
+
+  deposit_account_id: string;
+
+  deposit_type: 'fiat';
+
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Supported fiat orchestration providers.
+   */
+  provider: SharedAPI.OrchestrationProvider;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet.deposit_account.deposit_failed';
+
+  wallet_id: string;
+
+  /**
+   * The deposit's ID in the provider's system (e.g. Bridge), when the provider
+   * assigned one.
+   */
+  provider_deposit_id?: string;
+}
+
+export interface WalletDepositAccountDepositStartedWebhookEvent {
+  /**
+   * Details of a fiat deposit that has begun processing into a deposit account.
+   */
+  data: DepositStartedData;
+
+  deposit_account_id: string;
+
+  deposit_type: 'fiat';
+
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Supported fiat orchestration providers.
+   */
+  provider: SharedAPI.OrchestrationProvider;
+
+  /**
+   * The deposit's ID in the provider's system (e.g. Bridge), not a Privy ID.
+   */
+  provider_deposit_id: string;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet.deposit_account.deposit_started';
+
+  wallet_id: string;
+}
+
 /**
  * Payload for the intent.authorized webhook event.
  */
@@ -3577,6 +4352,7 @@ export type UnsafeUnwrapWebhookEvent =
   | IntentRejectedWebhookPayload
   | MfaDisabledWebhookPayload
   | MfaEnabledWebhookPayload
+  | OrganizationKYBUpdatedWebhookEvent
   | TransactionBroadcastedWebhookPayload
   | TransactionConfirmedWebhookPayload
   | TransactionExecutionRevertedWebhookPayload
@@ -3589,6 +4365,7 @@ export type UnsafeUnwrapWebhookEvent =
   | UserAuthenticatedWebhookPayload
   | UserCreatedWebhookPayload
   | UserDeletedWebhookPayload
+  | UserKYCUpdatedWebhookEvent
   | UserLinkedAccountWebhookPayload
   | UserTransferredAccountWebhookPayload
   | UserUnlinkedAccountWebhookPayload
@@ -3596,6 +4373,9 @@ export type UnsafeUnwrapWebhookEvent =
   | UserWalletCreatedWebhookPayload
   | UserOperationCompletedWebhookPayload
   | WalletArchivedWebhookPayload
+  | WalletDepositAccountDepositCompletedWebhookEvent
+  | WalletDepositAccountDepositFailedWebhookEvent
+  | WalletDepositAccountDepositStartedWebhookEvent
   | FundsDepositedWebhookPayload
   | FundsWithdrawnWebhookPayload
   | PrivateKeyExportWebhookPayload
@@ -3618,6 +4398,10 @@ export type UnsafeUnwrapWebhookEvent =
   | WalletActionEarnWithdrawFailedWebhookPayload
   | WalletActionEarnWithdrawRejectedWebhookPayload
   | WalletActionEarnWithdrawSucceededWebhookPayload
+  | WalletActionPayoutCreatedWebhookPayload
+  | WalletActionPayoutFailedWebhookPayload
+  | WalletActionPayoutRejectedWebhookPayload
+  | WalletActionPayoutSucceededWebhookPayload
   | WalletActionSwapCreatedWebhookPayload
   | WalletActionSwapFailedWebhookPayload
   | WalletActionSwapRejectedWebhookPayload
@@ -3626,6 +4410,7 @@ export type UnsafeUnwrapWebhookEvent =
   | WalletActionTransferFailedWebhookPayload
   | WalletActionTransferRejectedWebhookPayload
   | WalletActionTransferSucceededWebhookPayload
+  | WalletAutomationSubmittedWebhookPayload
   | YieldClaimConfirmedWebhookPayload
   | YieldDepositConfirmedWebhookPayload
   | YieldWithdrawConfirmedWebhookPayload;
@@ -3641,6 +4426,12 @@ export declare namespace Webhooks {
     type BridgeRefundMetadata as BridgeRefundMetadata,
     type BridgeStaticMemoDepositMetadata as BridgeStaticMemoDepositMetadata,
     type BridgeTransferRefundMetadata as BridgeTransferRefundMetadata,
+    type DepositCompletedData as DepositCompletedData,
+    type DepositCompletedDestination as DepositCompletedDestination,
+    type DepositFailedData as DepositFailedData,
+    type DepositStartedData as DepositStartedData,
+    type DepositStartedDestination as DepositStartedDestination,
+    type DepositStartedSource as DepositStartedSource,
     type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
     type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,
     type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,
@@ -3659,6 +4450,9 @@ export declare namespace Webhooks {
     type KrakenEmbedUserVerifiedWebhookPayload as KrakenEmbedUserVerifiedWebhookPayload,
     type MfaDisabledWebhookPayload as MfaDisabledWebhookPayload,
     type MfaEnabledWebhookPayload as MfaEnabledWebhookPayload,
+    type OrganizationKYBUpdatedData as OrganizationKYBUpdatedData,
+    type OrganizationKYBUpdatedKYBData as OrganizationKYBUpdatedKYBData,
+    type OrganizationKYBUpdatedTosData as OrganizationKYBUpdatedTosData,
     type PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload,
     type SeedPhraseExportWebhookPayload as SeedPhraseExportWebhookPayload,
     type TransactionBroadcastedWebhookPayload as TransactionBroadcastedWebhookPayload,
@@ -3674,6 +4468,9 @@ export declare namespace Webhooks {
     type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
     type UserDeletedWebhookPayload as UserDeletedWebhookPayload,
+    type UserKYCUpdatedData as UserKYCUpdatedData,
+    type UserKYCUpdatedKYCData as UserKYCUpdatedKYCData,
+    type UserKYCUpdatedTosData as UserKYCUpdatedTosData,
     type UserLinkedAccountWebhookPayload as UserLinkedAccountWebhookPayload,
     type UserOperationCompletedWebhookPayload as UserOperationCompletedWebhookPayload,
     type UserReference as UserReference,
@@ -3697,6 +4494,10 @@ export declare namespace Webhooks {
     type WalletActionEarnWithdrawFailedWebhookPayload as WalletActionEarnWithdrawFailedWebhookPayload,
     type WalletActionEarnWithdrawRejectedWebhookPayload as WalletActionEarnWithdrawRejectedWebhookPayload,
     type WalletActionEarnWithdrawSucceededWebhookPayload as WalletActionEarnWithdrawSucceededWebhookPayload,
+    type WalletActionPayoutCreatedWebhookPayload as WalletActionPayoutCreatedWebhookPayload,
+    type WalletActionPayoutFailedWebhookPayload as WalletActionPayoutFailedWebhookPayload,
+    type WalletActionPayoutRejectedWebhookPayload as WalletActionPayoutRejectedWebhookPayload,
+    type WalletActionPayoutSucceededWebhookPayload as WalletActionPayoutSucceededWebhookPayload,
     type WalletActionSwapCreatedWebhookPayload as WalletActionSwapCreatedWebhookPayload,
     type WalletActionSwapFailedWebhookPayload as WalletActionSwapFailedWebhookPayload,
     type WalletActionSwapRejectedWebhookPayload as WalletActionSwapRejectedWebhookPayload,
@@ -3706,6 +4507,7 @@ export declare namespace Webhooks {
     type WalletActionTransferRejectedWebhookPayload as WalletActionTransferRejectedWebhookPayload,
     type WalletActionTransferSucceededWebhookPayload as WalletActionTransferSucceededWebhookPayload,
     type WalletArchivedWebhookPayload as WalletArchivedWebhookPayload,
+    type WalletAutomationSubmittedWebhookPayload as WalletAutomationSubmittedWebhookPayload,
     type WalletFundsAsset as WalletFundsAsset,
     type WalletFundsErc20Asset as WalletFundsErc20Asset,
     type WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset,
@@ -3721,6 +4523,11 @@ export declare namespace Webhooks {
     type YieldClaimReward as YieldClaimReward,
     type YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
     type YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
+    type OrganizationKYBUpdatedWebhookEvent as OrganizationKYBUpdatedWebhookEvent,
+    type UserKYCUpdatedWebhookEvent as UserKYCUpdatedWebhookEvent,
+    type WalletDepositAccountDepositCompletedWebhookEvent as WalletDepositAccountDepositCompletedWebhookEvent,
+    type WalletDepositAccountDepositFailedWebhookEvent as WalletDepositAccountDepositFailedWebhookEvent,
+    type WalletDepositAccountDepositStartedWebhookEvent as WalletDepositAccountDepositStartedWebhookEvent,
     type UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent,
   };
 }

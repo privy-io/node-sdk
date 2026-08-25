@@ -1,6 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as FiatAPI from '../fiat';
+import * as SharedAPI from '../shared';
 import * as WalletsAPI from './wallets';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
@@ -789,7 +791,11 @@ export type EthereumEarnProvider = 'morpho' | 'aave' | 'veda' | 'tempo';
  * Detailed vault information including current APY, liquidity, and asset metadata.
  * Discriminated on provider.
  */
-export type EthereumEarnVaultDetailsResponse = AaveVaultDetails | MorphoVaultDetails | VedaVaultDetails;
+export type EthereumEarnVaultDetailsResponse =
+  | AaveVaultDetails
+  | MorphoVaultDetails
+  | TempoVaultDetails
+  | VedaVaultDetails;
 
 /**
  * A wallet action step representing a cross-chain/cross-asset fill by an external
@@ -925,6 +931,64 @@ export interface MorphoVaultDetails {
    * Onchain vault contract address.
    */
   vault_address: string;
+}
+
+/**
+ * A payout wallet action. Crypto is sent on-chain to a liquidation address that
+ * offramps to the destination bank account.
+ */
+export interface PayoutResponse {
+  /**
+   * The ID of the wallet action.
+   */
+  id: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The destination bank account for a payout.
+   */
+  destination: FiatAPI.PayoutDestination;
+
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Supported fiat orchestration providers.
+   */
+  provider: SharedAPI.OrchestrationProvider;
+
+  /**
+   * The source crypto asset, chain, and amount for a payout.
+   */
+  source: FiatAPI.PayoutSource;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionStatus;
+
+  type: 'payout';
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+
+  /**
+   * The steps of the wallet action. Only returned if `?include=steps` is provided.
+   */
+  steps?: Array<WalletActionStep>;
 }
 
 /**
@@ -1113,6 +1177,70 @@ export type TvmWalletActionStepStatus =
   | 'rejected'
   | 'reverted'
   | 'failed';
+
+/**
+ * Vault details for a Tempo earn vault.
+ */
+export interface TempoVaultDetails {
+  /**
+   * Vault identifier.
+   */
+  id: string;
+
+  /**
+   * EVM address of the vault admin wallet.
+   */
+  admin_wallet_address: string;
+
+  /**
+   * Privy wallet ID of the vault admin.
+   */
+  admin_wallet_id: string;
+
+  /**
+   * Annual percentage yield earned by the app from fee wrapper fees, in basis
+   * points.
+   */
+  app_apy: number | null;
+
+  /**
+   * Asset metadata for an earn vault position.
+   */
+  asset: EarnAsset;
+
+  /**
+   * Available liquidity in USD.
+   */
+  available_liquidity_usd: number | null;
+
+  /**
+   * CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:8453" for Base).
+   */
+  caip2: string;
+
+  /**
+   * Human-readable vault name from the yield provider.
+   */
+  name: string;
+
+  provider: 'tempo';
+
+  /**
+   * Total value locked in USD.
+   */
+  tvl_usd: number | null;
+
+  /**
+   * Annual percentage yield available to the user, after fees and excluding rewards,
+   * in basis points (e.g. 500 for 5%). 1 basis point = 0.01%.
+   */
+  user_apy: number | null;
+
+  /**
+   * Onchain vault contract address.
+   */
+  vault_address: string;
+}
 
 /**
  * Response for a transfer action.
@@ -1309,7 +1437,8 @@ export type WalletActionResponse =
   | EarnDepositActionResponse
   | EarnWithdrawActionResponse
   | EarnIncentiveClaimActionResponse
-  | EarnFeeCollectActionResponse;
+  | EarnFeeCollectActionResponse
+  | PayoutResponse;
 
 /**
  * Status of a wallet action.
@@ -1347,7 +1476,8 @@ export type WalletActionType =
   | 'earn_deposit'
   | 'earn_withdraw'
   | 'earn_incentive_claim'
-  | 'earn_fee_collect';
+  | 'earn_fee_collect'
+  | 'payout';
 
 export interface ActionGetParams {
   /**
@@ -1399,11 +1529,13 @@ export declare namespace Actions {
     type ListWalletActionsQuery as ListWalletActionsQuery,
     type ListWalletActionsResponse as ListWalletActionsResponse,
     type MorphoVaultDetails as MorphoVaultDetails,
+    type PayoutResponse as PayoutResponse,
     type SvmTransactionWalletActionStep as SvmTransactionWalletActionStep,
     type SvmWalletActionStepStatus as SvmWalletActionStepStatus,
     type SwapActionResponse as SwapActionResponse,
     type TvmTransactionWalletActionStep as TvmTransactionWalletActionStep,
     type TvmWalletActionStepStatus as TvmWalletActionStepStatus,
+    type TempoVaultDetails as TempoVaultDetails,
     type TransferActionResponse as TransferActionResponse,
     type VedaVaultDetails as VedaVaultDetails,
     type WalletActionInclude as WalletActionInclude,

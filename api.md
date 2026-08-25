@@ -10,9 +10,15 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">AdvancedSwapRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AdvancedSwapResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AmountType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AttachWalletAutomationRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyDashboardResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyRole</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CreateCryptoDepositAccountRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CreateCryptoDepositAccountResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CreateCryptoDepositAccountWithConfigRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CreateCryptoDepositAccountWithRouteRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAddressRoute</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CurveType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
@@ -20,6 +26,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustomTokenTransferSource</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">DetachWalletAutomationRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">DeveloperFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EncryptedAuthorizationKey</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EncryptedBoundAuthenticateResponse</a></code>
@@ -233,6 +240,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthenticateWithJwtResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletAuthorizationHeaders</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAutomationAttachmentListResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">WalletAutomationAttachmentResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">WalletBatchCreateResult</a></code>
@@ -318,11 +327,13 @@ Types:
 - <code><a href="./src/resources/wallets/actions.ts">ListWalletActionsQuery</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">ListWalletActionsResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">MorphoVaultDetails</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">PayoutResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">SvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">SvmWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">SwapActionResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">TvmTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">TvmWalletActionStepStatus</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TempoVaultDetails</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">TransferActionResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">VedaVaultDetails</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionInclude</a></code>
@@ -378,6 +389,22 @@ Methods:
 - <code title="post /v1/wallets/{wallet_id}/swap">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">execute</a>(walletID, { ...params }) -> SwapActionResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/swap/quote">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">quote</a>(walletID, { ...params }) -> SwapQuoteResponse</code>
 
+## DepositAccounts
+
+### Crypto
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto.ts">\_create</a>(walletID, { ...params }) -> CreateCryptoDepositAccountResponse</code>
+
+### Fiat
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/deposit_accounts/fiat">client.wallets.depositAccounts.fiat.<a href="./src/resources/wallets/deposit-accounts/fiat.ts">create</a>(walletID, { ...params }) -> FiatDepositAccountResponse</code>
+- <code title="get /v1/wallets/{wallet_id}/deposit_accounts/fiat">client.wallets.depositAccounts.fiat.<a href="./src/resources/wallets/deposit-accounts/fiat.ts">list</a>(walletID, { ...params }) -> ListFiatDepositAccountsResponse</code>
+- <code title="get /v1/wallets/{wallet_id}/deposit_accounts/fiat/{deposit_account_id}">client.wallets.depositAccounts.fiat.<a href="./src/resources/wallets/deposit-accounts/fiat.ts">get</a>(depositAccountID, { ...params }) -> FiatDepositAccountResponse</code>
+
 # Cards
 
 Types:
@@ -423,121 +450,155 @@ Types:
 
 Types:
 
-- <code><a href="./src/resources/users.ts">AuthenticatedUser</a></code>
-- <code><a href="./src/resources/users.ts">ClientSessionUpdateAction</a></code>
-- <code><a href="./src/resources/users.ts">CrossAppEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users.ts">CrossAppSmartWallet</a></code>
-- <code><a href="./src/resources/users.ts">CustomMetadata</a></code>
-- <code><a href="./src/resources/users.ts">EmailMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">EmbeddedWalletRecoveryMethod</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccount</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountAppleInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountAppleOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountAuthorizationKey</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountBaseWallet</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountBaseWalletType</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountBitcoinSegwitEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountBitcoinTaprootEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountCrossApp</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountCurveSigningEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountCustomJwtInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountCustomJwt</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountCustomOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountDiscordInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountDiscordOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountEmail</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountEmailInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountEmbeddedWalletWithID</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountEthereum</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountEthereumEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountFarcaster</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountFarcasterInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountGitHubInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountGitHubOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountGoogleInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountGoogleOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountInstagramInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountInstagramOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountLineInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountLineOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountLinkedInInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountLinkedInOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountPasskey</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountPasskeyCredentialDeviceType</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountPasskeyInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountPhone</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountPhoneInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountSmartWallet</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountSolana</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountSolanaEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountSpotifyInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountSpotifyOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTelegram</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTelegramInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTiktokInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTiktokOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTwitchInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTwitchOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTwitterInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountTwitterOAuth</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountType</a></code>
-- <code><a href="./src/resources/users.ts">LinkedAccountWalletInput</a></code>
-- <code><a href="./src/resources/users.ts">LinkedMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">OAuthTokens</a></code>
-- <code><a href="./src/resources/users.ts">PasskeyMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">PatchUsersCustomMetadata</a></code>
-- <code><a href="./src/resources/users.ts">SMSMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">TotpMfaMethod</a></code>
-- <code><a href="./src/resources/users.ts">User</a></code>
-- <code><a href="./src/resources/users.ts">UserBatchCreateInput</a></code>
-- <code><a href="./src/resources/users.ts">UserWithIdentityToken</a></code>
+- <code><a href="./src/resources/users/users.ts">AuthenticatedUser</a></code>
+- <code><a href="./src/resources/users/users.ts">ClientSessionUpdateAction</a></code>
+- <code><a href="./src/resources/users/users.ts">CrossAppEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">CrossAppSmartWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">CustomMetadata</a></code>
+- <code><a href="./src/resources/users/users.ts">EmailMfaMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">EmbeddedWalletRecoveryMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccount</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountAppleInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountAppleOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountAuthorizationKey</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountBaseWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountBaseWalletType</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountBitcoinSegwitEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountBitcoinTaprootEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountCrossApp</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountCurveSigningEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountCustomJwtInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountCustomJwt</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountCustomOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountDiscordInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountDiscordOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEmail</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEmailInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEmbeddedWalletWithID</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEthereum</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEthereumEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountFarcaster</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountFarcasterInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountGitHubInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountGitHubOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountGoogleInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountGoogleOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountInstagramInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountInstagramOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountLineInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountLineOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountLinkedInInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountLinkedInOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountPasskey</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountPasskeyCredentialDeviceType</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountPasskeyInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountPhone</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountPhoneInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountSmartWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountSolana</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountSolanaEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountSpotifyInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountSpotifyOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTelegram</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTelegramInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTiktokInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTiktokOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitchInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitchOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitterInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitterOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountType</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountWalletInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedMfaMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">OAuthTokens</a></code>
+- <code><a href="./src/resources/users/users.ts">PasskeyMfaMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">PatchUsersCustomMetadata</a></code>
+- <code><a href="./src/resources/users/users.ts">SMSMfaMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">TotpMfaMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">User</a></code>
+- <code><a href="./src/resources/users/users.ts">UserBatchCreateInput</a></code>
+- <code><a href="./src/resources/users/users.ts">UserWithIdentityToken</a></code>
 
 Methods:
 
-- <code title="post /v1/users">client.users.<a href="./src/resources/users.ts">create</a>({ ...params }) -> User</code>
-- <code title="get /v1/users">client.users.<a href="./src/resources/users.ts">list</a>({ ...params }) -> UsersCursor</code>
-- <code title="delete /v1/users/{user_id}">client.users.<a href="./src/resources/users.ts">delete</a>(userID) -> void</code>
-- <code title="get /v1/users/{user_id}">client.users.<a href="./src/resources/users.ts">\_get</a>(userID) -> User</code>
-- <code title="post /v1/users/custom_auth/id">client.users.<a href="./src/resources/users.ts">getByCustomAuthID</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/discord/username">client.users.<a href="./src/resources/users.ts">getByDiscordUsername</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/email/address">client.users.<a href="./src/resources/users.ts">getByEmailAddress</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/farcaster/fid">client.users.<a href="./src/resources/users.ts">getByFarcasterID</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/github/username">client.users.<a href="./src/resources/users.ts">getByGitHubUsername</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/phone/number">client.users.<a href="./src/resources/users.ts">getByPhoneNumber</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/smart_wallet/address">client.users.<a href="./src/resources/users.ts">getBySmartWalletAddress</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/telegram/telegram_user_id">client.users.<a href="./src/resources/users.ts">getByTelegramUserID</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/telegram/username">client.users.<a href="./src/resources/users.ts">getByTelegramUsername</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/twitter/subject">client.users.<a href="./src/resources/users.ts">getByTwitterSubject</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/twitter/username">client.users.<a href="./src/resources/users.ts">getByTwitterUsername</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/wallet/address">client.users.<a href="./src/resources/users.ts">getByWalletAddress</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/{user_id}/wallets">client.users.<a href="./src/resources/users.ts">pregenerateWallets</a>(userID, { ...params }) -> User</code>
-- <code title="post /v1/users/search">client.users.<a href="./src/resources/users.ts">search</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/resources/users.ts">setCustomMetadata</a>(userID, { ...params }) -> User</code>
-- <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/resources/users.ts">unlinkLinkedAccount</a>(userID, { ...params }) -> User</code>
+- <code title="post /v1/users">client.users.<a href="./src/resources/users/users.ts">create</a>({ ...params }) -> User</code>
+- <code title="get /v1/users">client.users.<a href="./src/resources/users/users.ts">list</a>({ ...params }) -> UsersCursor</code>
+- <code title="delete /v1/users/{user_id}">client.users.<a href="./src/resources/users/users.ts">delete</a>(userID) -> void</code>
+- <code title="get /v1/users/{user_id}">client.users.<a href="./src/resources/users/users.ts">\_get</a>(userID) -> User</code>
+- <code title="post /v1/users/custom_auth/id">client.users.<a href="./src/resources/users/users.ts">getByCustomAuthID</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/discord/username">client.users.<a href="./src/resources/users/users.ts">getByDiscordUsername</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/email/address">client.users.<a href="./src/resources/users/users.ts">getByEmailAddress</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/farcaster/fid">client.users.<a href="./src/resources/users/users.ts">getByFarcasterID</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/github/username">client.users.<a href="./src/resources/users/users.ts">getByGitHubUsername</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/phone/number">client.users.<a href="./src/resources/users/users.ts">getByPhoneNumber</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/smart_wallet/address">client.users.<a href="./src/resources/users/users.ts">getBySmartWalletAddress</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/telegram/telegram_user_id">client.users.<a href="./src/resources/users/users.ts">getByTelegramUserID</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/telegram/username">client.users.<a href="./src/resources/users/users.ts">getByTelegramUsername</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/twitter/subject">client.users.<a href="./src/resources/users/users.ts">getByTwitterSubject</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/twitter/username">client.users.<a href="./src/resources/users/users.ts">getByTwitterUsername</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/wallet/address">client.users.<a href="./src/resources/users/users.ts">getByWalletAddress</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/{user_id}/wallets">client.users.<a href="./src/resources/users/users.ts">pregenerateWallets</a>(userID, { ...params }) -> User</code>
+- <code title="post /v1/users/search">client.users.<a href="./src/resources/users/users.ts">search</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/resources/users/users.ts">setCustomMetadata</a>(userID, { ...params }) -> User</code>
+- <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/resources/users/users.ts">unlinkLinkedAccount</a>(userID, { ...params }) -> User</code>
+
+## KYC
+
+Methods:
+
+- <code title="get /v1/users/{user_id}/kyc">client.users.kyc.<a href="./src/resources/users/kyc.ts">list</a>(userID) -> KYCStatusListResponse</code>
+- <code title="post /v1/users/{user_id}/kyc/links">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateLinks</a>(userID, { ...params }) -> KYCStatusResponse</code>
+- <code title="post /v1/users/{user_id}/kyc/tos">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateTos</a>(userID, { ...params }) -> KyxTosResponse</code>
+
+## ExternalFiatAccounts
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/external_fiat_accounts">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">create</a>(userID, { ...params }) -> ExternalFiatAccountResponse</code>
+- <code title="get /v1/users/{user_id}/external_fiat_accounts">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">list</a>(userID, { ...params }) -> ListExternalFiatAccountsResponse</code>
+- <code title="delete /v1/users/{user_id}/external_fiat_accounts/{account_id}">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">delete</a>(accountID, { ...params }) -> SuccessResponse</code>
+- <code title="get /v1/users/{user_id}/external_fiat_accounts/{account_id}">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">get</a>(accountID, { ...params }) -> ExternalFiatAccountResponse</code>
 
 # Organizations
 
 Types:
 
-- <code><a href="./src/resources/organizations.ts">CreateOrganizationSecretResponse</a></code>
-- <code><a href="./src/resources/organizations.ts">Organization</a></code>
-- <code><a href="./src/resources/organizations.ts">OrganizationCreateRequestBody</a></code>
-- <code><a href="./src/resources/organizations.ts">OrganizationSecretIDInput</a></code>
-- <code><a href="./src/resources/organizations.ts">OrganizationSecretView</a></code>
-- <code><a href="./src/resources/organizations.ts">OrganizationSecretsListResponse</a></code>
-- <code><a href="./src/resources/organizations.ts">OrganizationUpdateRequestBody</a></code>
-- <code><a href="./src/resources/organizations.ts">OrganizationsListResponse</a></code>
-- <code><a href="./src/resources/organizations.ts">UpdateOrganizationSecretSigningKeyInput</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">CreateOrganizationSecretResponse</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">Organization</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationCreateRequestBody</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretIDInput</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretView</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretsListResponse</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationUpdateRequestBody</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationsListResponse</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">UpdateOrganizationSecretSigningKeyInput</a></code>
 
 Methods:
 
-- <code title="post /v1/organizations">client.organizations.<a href="./src/resources/organizations.ts">create</a>({ ...params }) -> Organization</code>
-- <code title="patch /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations.ts">update</a>(organizationID, { ...params }) -> Organization</code>
-- <code title="get /v1/organizations">client.organizations.<a href="./src/resources/organizations.ts">list</a>({ ...params }) -> OrganizationsCursor</code>
-- <code title="delete /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations.ts">delete</a>(organizationID) -> void</code>
-- <code title="get /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations.ts">get</a>(organizationID) -> Organization</code>
+- <code title="post /v1/organizations">client.organizations.<a href="./src/resources/organizations/organizations.ts">create</a>({ ...params }) -> Organization</code>
+- <code title="patch /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations/organizations.ts">update</a>(organizationID, { ...params }) -> Organization</code>
+- <code title="get /v1/organizations">client.organizations.<a href="./src/resources/organizations/organizations.ts">list</a>({ ...params }) -> OrganizationsCursor</code>
+- <code title="delete /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations/organizations.ts">delete</a>(organizationID) -> void</code>
+- <code title="get /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations/organizations.ts">get</a>(organizationID) -> Organization</code>
+
+## KYB
+
+Methods:
+
+- <code title="get /v1/organizations/{organization_id}/kyb">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">list</a>(organizationID) -> KYBStatusListResponse</code>
+- <code title="post /v1/organizations/{organization_id}/kyb/links">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">initiateLinks</a>(organizationID, { ...params }) -> KYBStatusResponse</code>
+- <code title="post /v1/organizations/{organization_id}/kyb/tos">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">initiateTos</a>(organizationID, { ...params }) -> KyxTosResponse</code>
+
+## ExternalFiatAccounts
+
+Methods:
+
+- <code title="post /v1/organizations/{organization_id}/external_fiat_accounts">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">create</a>(organizationID, { ...params }) -> OrganizationExternalFiatAccountResponse</code>
+- <code title="get /v1/organizations/{organization_id}/external_fiat_accounts">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">list</a>(organizationID, { ...params }) -> ListOrganizationExternalFiatAccountsResponse</code>
+- <code title="delete /v1/organizations/{organization_id}/external_fiat_accounts/{account_id}">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">delete</a>(accountID, { ...params }) -> SuccessResponse</code>
+- <code title="get /v1/organizations/{organization_id}/external_fiat_accounts/{account_id}">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">get</a>(accountID, { ...params }) -> OrganizationExternalFiatAccountResponse</code>
 
 # Policies
 
@@ -768,6 +829,12 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">BridgeRefundMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeStaticMemoDepositMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">BridgeTransferRefundMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">DepositCompletedData</a></code>
+- <code><a href="./src/resources/webhooks.ts">DepositCompletedDestination</a></code>
+- <code><a href="./src/resources/webhooks.ts">DepositFailedData</a></code>
+- <code><a href="./src/resources/webhooks.ts">DepositStartedData</a></code>
+- <code><a href="./src/resources/webhooks.ts">DepositStartedDestination</a></code>
+- <code><a href="./src/resources/webhooks.ts">DepositStartedSource</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentAuthorizedWebhookPayload</a></code>
@@ -786,6 +853,9 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">KrakenEmbedUserVerifiedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">MfaDisabledWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">MfaEnabledWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">OrganizationKYBUpdatedData</a></code>
+- <code><a href="./src/resources/webhooks.ts">OrganizationKYBUpdatedKYBData</a></code>
+- <code><a href="./src/resources/webhooks.ts">OrganizationKYBUpdatedTosData</a></code>
 - <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">SeedPhraseExportWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionBroadcastedWebhookPayload</a></code>
@@ -801,6 +871,9 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserDeletedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserKYCUpdatedData</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserKYCUpdatedKYCData</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserKYCUpdatedTosData</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserLinkedAccountWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserOperationCompletedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserReference</a></code>
@@ -824,6 +897,10 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawRejectedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionEarnWithdrawSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionPayoutCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionPayoutFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionPayoutRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionPayoutSucceededWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionSwapCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionSwapFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionSwapRejectedWebhookPayload</a></code>
@@ -833,6 +910,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletActionTransferRejectedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionTransferSucceededWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletArchivedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletAutomationSubmittedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsAsset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsErc20Asset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsNativeTokenAsset</a></code>
@@ -848,6 +926,11 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">YieldClaimReward</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldDepositConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">YieldWithdrawConfirmedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">OrganizationKYBUpdatedWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">UserKYCUpdatedWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletDepositAccountDepositCompletedWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletDepositAccountDepositFailedWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletDepositAccountDepositStartedWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">UnsafeUnwrapWebhookEvent</a></code>
 
 Methods:
@@ -1098,6 +1181,42 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">TransferTelegramInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">UnlinkPasskeyInput</a></code>
 
+# WalletAutomations
+
+Types:
+
+- <code><a href="./src/resources/wallet-automations.ts">AutomationActionConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationActionConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilter</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterAll</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterExclude</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInclude</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInputExclude</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInputInclude</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetSpec</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetSpecInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationDepositTriggerConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationDepositTriggerConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationDestinationAsset</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationDestinationAssetInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationSwapActionConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationSwapActionConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationTriggerConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationTriggerConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">CreateAutomationRequestBody</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">SwapAttachmentParams</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">UpdateAutomationRequestBody</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationExecutionListResponse</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationExecutionResponse</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationExecutionStatus</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationListResponse</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationResponse</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationStatus</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationSuccessResponse</a></code>
+
 # Shared
 
 Types:
@@ -1120,6 +1239,80 @@ Types:
 - <code><a href="./src/resources/shared.ts">TokenIdentifier</a></code>
 - <code><a href="./src/resources/shared.ts">TronAddress</a></code>
 - <code><a href="./src/resources/shared.ts">TronHexAddress</a></code>
+
+# Fiat
+
+Types:
+
+- <code><a href="./src/resources/fiat.ts">BridgeCreateExternalFiatAccountRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">BridgeCreateFiatDepositAccountRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">BridgeExternalFiatAccount</a></code>
+- <code><a href="./src/resources/fiat.ts">BridgeFiatDepositAccount</a></code>
+- <code><a href="./src/resources/fiat.ts">BridgeOrganizationExternalFiatAccount</a></code>
+- <code><a href="./src/resources/fiat.ts">CreateExternalFiatAccountRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">CreateFiatDepositAccountRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">CreateFiatDepositAccountSource</a></code>
+- <code><a href="./src/resources/fiat.ts">CreatePayoutRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccount</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountAddress</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountData</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountGBData</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountIbanData</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountPixData</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountSwiftCategory</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountSwiftData</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountSwiftPurposeOfFunds</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountUsData</a></code>
+- <code><a href="./src/resources/fiat.ts">FiatCurrency</a></code>
+- <code><a href="./src/resources/fiat.ts">FiatDepositAccount</a></code>
+- <code><a href="./src/resources/fiat.ts">FiatDepositAccountDestination</a></code>
+- <code><a href="./src/resources/fiat.ts">FiatDepositAccountResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">FiatDepositAccountSource</a></code>
+- <code><a href="./src/resources/fiat.ts">FiatDepositAccountStatus</a></code>
+- <code><a href="./src/resources/fiat.ts">FiatDepositInstructions</a></code>
+- <code><a href="./src/resources/fiat.ts">FiatPaymentRail</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBLinksRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBStatusListResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBStatusResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBTosRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">KYCIdentifyingDocument</a></code>
+- <code><a href="./src/resources/fiat.ts">KYCLinksRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">KYCResidentialAddress</a></code>
+- <code><a href="./src/resources/fiat.ts">KYCStatusListResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">KYCStatusResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">KYCSubmitData</a></code>
+- <code><a href="./src/resources/fiat.ts">KYCSubmitRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxCapabilities</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxCapabilityStatus</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxEndorsement</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxEndorsementName</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxEndorsementStatus</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxEnvironment</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxProvider</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxProviderStatus</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxTosRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxTosResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxTosStatus</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxTosStatusDetail</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxVerificationStatus</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxVerificationStatusDetail</a></code>
+- <code><a href="./src/resources/fiat.ts">ListExternalFiatAccountsResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">ListFiatDepositAccountsResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">ListOrganizationExternalFiatAccountsResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">OfframpDepositInstructions</a></code>
+- <code><a href="./src/resources/fiat.ts">OfframpResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampAsset</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampChain</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampDepositInstructions</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampKYCResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampKYCStatus</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">OnrampTransferStatus</a></code>
+- <code><a href="./src/resources/fiat.ts">OrganizationExternalFiatAccount</a></code>
+- <code><a href="./src/resources/fiat.ts">OrganizationExternalFiatAccountResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">PayoutDestination</a></code>
+- <code><a href="./src/resources/fiat.ts">PayoutSource</a></code>
 
 # Onramps
 
@@ -1246,22 +1439,6 @@ Types:
 - <code><a href="./src/resources/yield.ts">EvmCaip2ChainID</a></code>
 - <code><a href="./src/resources/yield.ts">VaultAsset</a></code>
 - <code><a href="./src/resources/yield.ts">YieldAuthorizationHeaders</a></code>
-
-# Fiat
-
-Types:
-
-- <code><a href="./src/resources/fiat.ts">FiatCurrency</a></code>
-- <code><a href="./src/resources/fiat.ts">FiatPaymentRail</a></code>
-- <code><a href="./src/resources/fiat.ts">OfframpDepositInstructions</a></code>
-- <code><a href="./src/resources/fiat.ts">OfframpResponse</a></code>
-- <code><a href="./src/resources/fiat.ts">OnrampAsset</a></code>
-- <code><a href="./src/resources/fiat.ts">OnrampChain</a></code>
-- <code><a href="./src/resources/fiat.ts">OnrampDepositInstructions</a></code>
-- <code><a href="./src/resources/fiat.ts">OnrampKYCResponse</a></code>
-- <code><a href="./src/resources/fiat.ts">OnrampKYCStatus</a></code>
-- <code><a href="./src/resources/fiat.ts">OnrampResponse</a></code>
-- <code><a href="./src/resources/fiat.ts">OnrampTransferStatus</a></code>
 
 # KrakenEmbed
 

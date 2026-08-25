@@ -2,7 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as EmbeddedWalletsAPI from './embedded-wallets';
-import * as UsersAPI from './users';
+import * as UsersAPI from './users/users';
 
 export class ClientAuth extends APIResource {}
 

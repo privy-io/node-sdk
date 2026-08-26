@@ -21,6 +21,7 @@ import {
 } from '../../resources';
 import { TransferActionResponse } from '../../resources/wallets/actions';
 import { PrivyClient } from '../PrivyClient';
+import { PrivyDepositAccountsService } from './deposit-accounts';
 import { PrivyEarnService } from './earn';
 import { PrivyEthereumService } from './ethereum';
 import { PrivySolanaService } from './solana';
@@ -29,6 +30,7 @@ import { PrivySwapsService } from './swaps';
 import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
 
 export class PrivyWalletsService extends Wallets {
+  override depositAccounts: PrivyDepositAccountsService;
   private ethereumService: PrivyEthereumService;
   private solanaService: PrivySolanaService;
   private tronService: PrivyTronService;
@@ -39,6 +41,7 @@ export class PrivyWalletsService extends Wallets {
   constructor(privyApiClient: PrivyAPI, privyClient: PrivyClient) {
     super(privyApiClient);
     this.privyClient = privyClient;
+    this.depositAccounts = new PrivyDepositAccountsService(privyApiClient, privyClient);
     this.ethereumService = new PrivyEthereumService(this);
     this.solanaService = new PrivySolanaService(this);
     this.tronService = new PrivyTronService(this);

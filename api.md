@@ -19,6 +19,11 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CreateCryptoDepositAccountWithConfigRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CreateCryptoDepositAccountWithRouteRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAddressRoute</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAsset</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAssetFilter</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAssetFilterAll</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAssetFilterExclude</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAssetFilterInclude</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CurveType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
@@ -440,6 +445,8 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingListCardsInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingListTransactionsInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingMerchant</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingReplaceCardRequestBody</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingReplacementReason</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingStatementQueryParams</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingTransactionResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingTransactionStatus</a></code>

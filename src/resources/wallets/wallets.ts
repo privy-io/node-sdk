@@ -769,16 +769,69 @@ export interface CryptoDepositAddressRoute {
   deposit_address: string;
 
   /**
-   * Destination asset identified by contract address on a specific chain (CAIP-2).
+   * An asset on a chain. Uses a human-readable alias (usdc, base) when one is on
+   * file, otherwise the raw asset address and CAIP-2.
    */
-  destination: WalletAutomationsAPI.AutomationDestinationAsset;
+  destination: CryptoDepositAsset;
 
   /**
-   * Which assets to include/exclude for an automation trigger.
+   * Which assets a deposit address accepts. Asset and chain use human-readable
+   * aliases when known.
    */
-  source: WalletAutomationsAPI.AutomationAssetFilter;
+  source: CryptoDepositAssetFilter;
 
   wallet_id: string;
+}
+
+/**
+ * An asset on a chain. Uses a human-readable alias (usdc, base) when one is on
+ * file, otherwise the raw asset address and CAIP-2.
+ */
+export interface CryptoDepositAsset {
+  /**
+   * Known alias (usdc) or raw asset address.
+   */
+  asset: string;
+
+  /**
+   * Known alias (base) or CAIP-2.
+   */
+  chain: string;
+}
+
+/**
+ * Which assets a deposit address accepts. Asset and chain use human-readable
+ * aliases when known.
+ */
+export type CryptoDepositAssetFilter =
+  | CryptoDepositAssetFilterAll
+  | CryptoDepositAssetFilterInclude
+  | CryptoDepositAssetFilterExclude;
+
+/**
+ * Match all assets.
+ */
+export interface CryptoDepositAssetFilterAll {
+  mode: 'all';
+}
+
+/**
+ * Match all assets except the specified ones, using human-readable aliases when
+ * known.
+ */
+export interface CryptoDepositAssetFilterExclude {
+  mode: 'exclude';
+
+  values: Array<CryptoDepositAsset>;
+}
+
+/**
+ * Match only the specified assets, using human-readable aliases when known.
+ */
+export interface CryptoDepositAssetFilterInclude {
+  mode: 'include';
+
+  values: Array<CryptoDepositAsset>;
 }
 
 /**
@@ -4258,6 +4311,7 @@ export type WalletAssetChainNameInput =
   | 'solana'
   | 'tron'
   | 'zksync_era'
+  | 'robinhood'
   | 'hoodi'
   | 'sepolia'
   | 'arbitrum_sepolia'
@@ -4269,6 +4323,7 @@ export type WalletAssetChainNameInput =
   | 'solana_devnet'
   | 'solana_testnet'
   | 'tron_nile'
+  | 'robinhood_testnet'
   | (string & {});
 
 /**
@@ -6573,6 +6628,11 @@ export declare namespace Wallets {
     type CreateCryptoDepositAccountWithConfigRequestBody as CreateCryptoDepositAccountWithConfigRequestBody,
     type CreateCryptoDepositAccountWithRouteRequestBody as CreateCryptoDepositAccountWithRouteRequestBody,
     type CryptoDepositAddressRoute as CryptoDepositAddressRoute,
+    type CryptoDepositAsset as CryptoDepositAsset,
+    type CryptoDepositAssetFilter as CryptoDepositAssetFilter,
+    type CryptoDepositAssetFilterAll as CryptoDepositAssetFilterAll,
+    type CryptoDepositAssetFilterExclude as CryptoDepositAssetFilterExclude,
+    type CryptoDepositAssetFilterInclude as CryptoDepositAssetFilterInclude,
     type CurveSigningChainType as CurveSigningChainType,
     type CurveType as CurveType,
     type CustodialWallet as CustodialWallet,

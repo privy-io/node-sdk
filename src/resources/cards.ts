@@ -401,6 +401,26 @@ export interface CardIssuingMerchant {
 }
 
 /**
+ * Input for replacing a lost, stolen, or expired card.
+ */
+export interface CardIssuingReplaceCardRequestBody {
+  /**
+   * The Privy API environment.
+   */
+  environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Why a card is being replaced.
+   */
+  replacement_reason: CardIssuingReplacementReason;
+}
+
+/**
+ * Why a card is being replaced.
+ */
+export type CardIssuingReplacementReason = 'lost' | 'stolen' | 'expired';
+
+/**
  * Query parameters for downloading a monthly card statement.
  */
 export interface CardIssuingStatementQueryParams {
@@ -506,6 +526,8 @@ export declare namespace Cards {
     type CardIssuingListCardsInput as CardIssuingListCardsInput,
     type CardIssuingListTransactionsInput as CardIssuingListTransactionsInput,
     type CardIssuingMerchant as CardIssuingMerchant,
+    type CardIssuingReplaceCardRequestBody as CardIssuingReplaceCardRequestBody,
+    type CardIssuingReplacementReason as CardIssuingReplacementReason,
     type CardIssuingStatementQueryParams as CardIssuingStatementQueryParams,
     type CardIssuingTransactionResponse as CardIssuingTransactionResponse,
     type CardIssuingTransactionStatus as CardIssuingTransactionStatus,

@@ -113,6 +113,7 @@ export interface BalanceGetParams {
     | 'solana'
     | 'tron'
     | 'zksync_era'
+    | 'robinhood'
     | 'hoodi'
     | 'sepolia'
     | 'arbitrum_sepolia'
@@ -124,6 +125,7 @@ export interface BalanceGetParams {
     | 'solana_devnet'
     | 'solana_testnet'
     | 'tron_nile'
+    | 'robinhood_testnet'
     | string
     | Array<WalletsAPI.WalletAssetChainNameInput>;
 

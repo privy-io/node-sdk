@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.32.0](https://github.com/privy-io/node-sdk/compare/v0.31.0...v0.32.0) (2026-08-26)
+
+
+### Features
+
+* **api:** api update ([6f2981b](https://github.com/privy-io/node-sdk/commit/6f2981ba7357853a44bd652b4bcb9580df0f942f))
+* **wallets:** add crypto deposit account create ([#12](https://github.com/privy-io/node-sdk/issues/12)) ([bbb5996](https://github.com/privy-io/node-sdk/commit/bbb59967b7fea290e84720ba37608a517cc85ba4))
+
 ## [0.31.0](https://github.com/privy-io/node-sdk/compare/v0.30.0...v0.31.0) (2026-08-25)
 
 

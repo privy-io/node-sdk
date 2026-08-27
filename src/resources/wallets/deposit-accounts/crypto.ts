@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as WalletAutomationsAPI from '../../wallet-automations';
 import * as WalletsAPI from '../wallets';
 import { APIPromise } from '../../../core/api-promise';
 import { buildHeaders } from '../../../internal/headers';
@@ -87,18 +86,16 @@ export declare namespace CryptoCreateParams {
 
   export interface CreateCryptoDepositAccountWithRouteRequestBody {
     /**
-     * Body param: A destination asset spec accepting either raw identifiers
-     * (asset_address, caip2) or human-readable aliases (asset, chain). Exactly one of
-     * asset_address or asset must be provided; exactly one of caip2 or chain must be
-     * provided.
+     * Body param: An asset on a chain. Uses a human-readable alias (usdc, base) when
+     * one is on file, otherwise the raw asset address and CAIP-2.
      */
-    destination: WalletAutomationsAPI.AutomationDestinationAssetInput;
+    destination: WalletsAPI.CryptoDepositAsset;
 
     /**
-     * Body param: Which assets to include/exclude for an automation trigger (input
-     * form with alias support).
+     * Body param: Which assets a deposit address accepts. Asset and chain use
+     * human-readable aliases when known.
      */
-    source: WalletAutomationsAPI.AutomationAssetFilterInput;
+    source: WalletsAPI.CryptoDepositAssetFilter;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are

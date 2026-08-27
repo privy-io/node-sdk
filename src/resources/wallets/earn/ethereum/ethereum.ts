@@ -96,6 +96,46 @@ export class Ethereum extends APIResource {
       ]),
     });
   }
+
+  /**
+   * Retrieve detailed information about an earn vault, including current APY and
+   * liquidity.
+   *
+   * @example
+   * ```ts
+   * const ethereumEarnVaultDetailsResponse =
+   *   await client.wallets.earn.ethereum.vaultDetails(
+   *     'vault_id',
+   *   );
+   * ```
+   */
+  vaultDetails(
+    vaultID: string,
+    options?: RequestOptions,
+  ): APIPromise<ActionsAPI.EthereumEarnVaultDetailsResponse> {
+    return this._client.get(path`/v1/earn/ethereum/vaults/${vaultID}`, options);
+  }
+
+  /**
+   * Retrieve a wallet's current position in a specific earn vault, including
+   * deposit/withdraw totals and current onchain vault shares.
+   *
+   * @example
+   * ```ts
+   * const ethereumEarnPositionResponse =
+   *   await client.wallets.earn.ethereum.vaultPosition(
+   *     'wallet_id',
+   *     { vault_id: 'vault_id' },
+   *   );
+   * ```
+   */
+  vaultPosition(
+    walletID: string,
+    query: EthereumVaultPositionParams,
+    options?: RequestOptions,
+  ): APIPromise<ActionsAPI.EthereumEarnPositionResponse> {
+    return this._client.get(path`/v1/wallets/${walletID}/earn/ethereum/vaults`, { query, ...options });
+  }
 }
 
 export interface EthereumDepositParams {
@@ -184,12 +224,25 @@ export interface EthereumWithdrawParams {
   'privy-request-expiry'?: string;
 }
 
+export interface EthereumVaultPositionParams {
+  /**
+   * The vault ID to get position for.
+   */
+  vault_id: string;
+
+  /**
+   * Include archived wallets in lookup. Defaults to false.
+   */
+  include_archived?: boolean;
+}
+
 Ethereum.Incentive = Incentive;
 
 export declare namespace Ethereum {
   export {
     type EthereumDepositParams as EthereumDepositParams,
     type EthereumWithdrawParams as EthereumWithdrawParams,
+    type EthereumVaultPositionParams as EthereumVaultPositionParams,
   };
 
   export { Incentive as Incentive, type IncentiveClaimParams as IncentiveClaimParams };

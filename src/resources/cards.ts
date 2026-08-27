@@ -75,6 +75,11 @@ export interface CardIssuingCardResponse {
   chain_id: AppsAPI.Caip2;
 
   /**
+   * Unix timestamp, in seconds, of when the card was created.
+   */
+  created_at: number;
+
+  /**
    * Card expiration month from 1 to 12, or null when unavailable.
    */
   exp_month: number | null;

@@ -749,17 +749,16 @@ export interface CreateCryptoDepositAccountWithConfigRequestBody {
  */
 export interface CreateCryptoDepositAccountWithRouteRequestBody {
   /**
-   * A destination asset spec accepting either raw identifiers (asset_address, caip2)
-   * or human-readable aliases (asset, chain). Exactly one of asset_address or asset
-   * must be provided; exactly one of caip2 or chain must be provided.
+   * An asset on a chain. Uses a human-readable alias (usdc, base) when one is on
+   * file, otherwise the raw asset address and CAIP-2.
    */
-  destination: WalletAutomationsAPI.AutomationDestinationAssetInput;
+  destination: CryptoDepositAsset;
 
   /**
-   * Which assets to include/exclude for an automation trigger (input form with alias
-   * support).
+   * Which assets a deposit address accepts. Asset and chain use human-readable
+   * aliases when known.
    */
-  source: WalletAutomationsAPI.AutomationAssetFilterInput;
+  source: CryptoDepositAssetFilter;
 }
 
 /**
@@ -794,9 +793,10 @@ export interface CryptoDepositAsset {
   asset: string;
 
   /**
-   * Known alias (base) or CAIP-2.
+   * Known alias (base) or CAIP-2. Omit on a source value to match every supported
+   * chain for that asset.
    */
-  chain: string;
+  chain?: string;
 }
 
 /**

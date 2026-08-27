@@ -360,6 +360,8 @@ Methods:
 
 - <code title="post /v1/wallets/{wallet_id}/earn/ethereum/deposit">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">\_deposit</a>(walletID, { ...params }) -> EarnDepositActionResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/earn/ethereum/withdraw">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">\_withdraw</a>(walletID, { ...params }) -> EarnWithdrawActionResponse</code>
+- <code title="get /v1/earn/ethereum/vaults/{vault_id}">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">vaultDetails</a>(vaultID) -> EthereumEarnVaultDetailsResponse</code>
+- <code title="get /v1/wallets/{wallet_id}/earn/ethereum/vaults">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">vaultPosition</a>(walletID, { ...params }) -> EthereumEarnPositionResponse</code>
 
 #### Incentive
 

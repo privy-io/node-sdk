@@ -188,6 +188,11 @@ export interface AppResponse {
 
   legacy_wallet_ui_config: boolean;
 
+  /**
+   * The legal name of the company that operates the app.
+   */
+  legal_name: string | null;
+
   line_oauth: boolean;
 
   linkedin_oauth: boolean;

@@ -62,4 +62,36 @@ describe('resource ethereum', () => {
       'privy-request-expiry': 'privy-request-expiry',
     });
   });
+
+  // Mock server tests are disabled
+  test.skip('vaultDetails', async () => {
+    const responsePromise = client.wallets.earn.ethereum.vaultDetails('vault_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('vaultPosition: only required params', async () => {
+    const responsePromise = client.wallets.earn.ethereum.vaultPosition('wallet_id', { vault_id: 'vault_id' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('vaultPosition: required and optional params', async () => {
+    const response = await client.wallets.earn.ethereum.vaultPosition('wallet_id', {
+      vault_id: 'vault_id',
+      include_archived: true,
+    });
+  });
 });

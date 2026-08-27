@@ -65,7 +65,7 @@ describe('resource ethereum', () => {
 
   // Mock server tests are disabled
   test.skip('vaultDetails', async () => {
-    const responsePromise = client.wallets.earn.ethereum.vaultDetails('vault_id');
+    const responsePromise = client.wallets._earn._ethereum.vaultDetails('vault_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -77,7 +77,9 @@ describe('resource ethereum', () => {
 
   // Mock server tests are disabled
   test.skip('vaultPosition: only required params', async () => {
-    const responsePromise = client.wallets.earn.ethereum.vaultPosition('wallet_id', { vault_id: 'vault_id' });
+    const responsePromise = client.wallets._earn._ethereum.vaultPosition('wallet_id', {
+      vault_id: 'vault_id',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -89,7 +91,7 @@ describe('resource ethereum', () => {
 
   // Mock server tests are disabled
   test.skip('vaultPosition: required and optional params', async () => {
-    const response = await client.wallets.earn.ethereum.vaultPosition('wallet_id', {
+    const response = await client.wallets._earn._ethereum.vaultPosition('wallet_id', {
       vault_id: 'vault_id',
       include_archived: true,
     });

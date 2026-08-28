@@ -7,6 +7,7 @@ import { PrivyKeyQuorumsService } from './services/key-quorums';
 import { PrivyUsersService } from './services/users';
 import { PrivyAppsService } from './services/apps';
 import { PrivyIntentsService } from './services/intents';
+import { PrivyOrganizationsService } from './services/organizations';
 import { PrivyUtils } from './services/utils';
 import { JwtExchangeService } from '../lib/jwt-exchange';
 import { VERSION } from '../version';
@@ -84,6 +85,7 @@ export class PrivyClient {
   private keyQuorumsService: PrivyKeyQuorumsService;
   private usersService: PrivyUsersService;
   private intentsService: PrivyIntentsService;
+  private organizationsService: PrivyOrganizationsService;
   private appsService: PrivyAppsService;
   private utilsService: PrivyUtils;
   private jwtExchangeService: JwtExchangeService;
@@ -141,6 +143,7 @@ export class PrivyClient {
     this.keyQuorumsService = new PrivyKeyQuorumsService(this.privyApiClient, this);
     this.intentsService = new PrivyIntentsService(this.privyApiClient, this);
     this.usersService = new PrivyUsersService(this.privyApiClient, appJwks);
+    this.organizationsService = new PrivyOrganizationsService(this.privyApiClient);
     this.appsService = new PrivyAppsService(this.privyApiClient);
     this.utilsService = new PrivyUtils(this.privyApiClient, this, appJwks);
     this.webhooksService = new PrivyWebhooksService(this.privyApiClient.webhooks, webhookSigningSecret);
@@ -172,6 +175,10 @@ export class PrivyClient {
 
   public users(): PrivyUsersService {
     return this.usersService;
+  }
+
+  public organizations(): PrivyOrganizationsService {
+    return this.organizationsService;
   }
 
   public apps(): PrivyAppsService {

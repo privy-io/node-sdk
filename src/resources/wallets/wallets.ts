@@ -681,7 +681,7 @@ export interface AttachWalletAutomationRequestBody {
   /**
    * Per-attachment parameters for swap automations.
    */
-  params: WalletAutomationsAPI.SwapAttachmentParams;
+  params?: WalletAutomationsAPI.SwapAttachmentParams;
 }
 
 /**
@@ -734,7 +734,7 @@ export type CreateCryptoDepositAccountRequestBody =
  * Response returned after creating a crypto deposit account.
  */
 export interface CreateCryptoDepositAccountResponse {
-  deposit_addresses: Array<CryptoDepositAddressRoute>;
+  deposit_accounts: Array<CryptoDepositAddressRoute>;
 }
 
 /**

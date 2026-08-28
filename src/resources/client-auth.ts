@@ -1061,16 +1061,27 @@ export interface OAuthTokenSuccessResponse {
 }
 
 /**
- * The request body for transferring an OAuth account.
+ * OAuth transfer request body for native SDKs using PKCE.
  */
-export interface OAuthTransferRequestBody {
+export interface OAuthTransferNativeSDKRequestBody {
+  authorization_code: string;
+
   nonce: string;
 
+  state_code: string;
+
   /**
-   * User info for an OAuth transfer.
+   * The type of OAuth authorization code.
    */
-  userInfo: OAuthTransferUserInfo;
+  code_type?: OAuthCodeType;
+
+  code_verifier?: string;
 }
+
+/**
+ * The request body for transferring an OAuth account.
+ */
+export type OAuthTransferRequestBody = OAuthTransferNativeSDKRequestBody | OAuthTransferWebSDKRequestBody;
 
 /**
  * User info for an OAuth transfer.
@@ -1103,6 +1114,18 @@ export interface OAuthTransferUserInfo {
  */
 export interface OAuthTransferUserInfoMeta {
   providerAppId?: string;
+}
+
+/**
+ * OAuth transfer request body for the web SDK.
+ */
+export interface OAuthTransferWebSDKRequestBody {
+  nonce: string;
+
+  /**
+   * User info for an OAuth transfer.
+   */
+  userInfo: OAuthTransferUserInfo;
 }
 
 /**
@@ -2128,9 +2151,11 @@ export declare namespace ClientAuth {
     type OAuthTokenRefreshTokenRequestBody as OAuthTokenRefreshTokenRequestBody,
     type OAuthTokenRequestBody as OAuthTokenRequestBody,
     type OAuthTokenSuccessResponse as OAuthTokenSuccessResponse,
+    type OAuthTransferNativeSDKRequestBody as OAuthTransferNativeSDKRequestBody,
     type OAuthTransferRequestBody as OAuthTransferRequestBody,
     type OAuthTransferUserInfo as OAuthTransferUserInfo,
     type OAuthTransferUserInfoMeta as OAuthTransferUserInfoMeta,
+    type OAuthTransferWebSDKRequestBody as OAuthTransferWebSDKRequestBody,
     type OAuthUnlinkRequestBody as OAuthUnlinkRequestBody,
     type OAuthVerifyRequestBody as OAuthVerifyRequestBody,
     type OAuthVerifyResponseBody as OAuthVerifyResponseBody,

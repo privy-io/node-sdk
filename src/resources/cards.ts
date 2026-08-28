@@ -187,16 +187,6 @@ export interface CardIssuingCustomerBankTermsRequiredResponse {
 }
 
 /**
- * A cards customer exists and must accept the provider terms hosted at `tos_url`
- * before KYC. Reached only once the bank agreements are recorded.
- */
-export interface CardIssuingCustomerBridgeTermsRequiredResponse {
-  status: 'bridge_terms_required';
-
-  tos_url: string;
-}
-
-/**
  * Request body for recording that the user accepted the agreements Privy tracks.
  * Send one field per screen the user accepted. Acceptances are recorded once —
  * re-sending a field that is already recorded leaves the original timestamp
@@ -274,19 +264,36 @@ export interface CardIssuingCustomerPendingResponse {
 }
 
 /**
- * A cards customer that has a Stripe cardholder external ID and can issue cards.
+ * A cards customer exists and must accept the provider terms hosted at `tos_url`
+ * before KYC. Reached only once the bank agreements are recorded.
+ */
+export interface CardIssuingCustomerProviderTermsRequiredResponse {
+  status: 'provider_terms_required';
+
+  tos_url: string;
+}
+
+/**
+ * A cards customer that has completed onboarding and can issue cards.
  */
 export interface CardIssuingCustomerReadyResponse {
-  external_id: string;
-
   status: 'ready';
 }
 
 /**
- * Bridge rejected the cards customer during verification.
+ * The cards customer was rejected during verification.
  */
 export interface CardIssuingCustomerRejectedResponse {
   status: 'rejected';
+
+  rejection_reasons?: Array<CardIssuingCustomerRejectionReason>;
+}
+
+/**
+ * A customer-facing reason the cards customer was rejected.
+ */
+export interface CardIssuingCustomerRejectionReason {
+  reason: string;
 }
 
 /**
@@ -300,12 +307,20 @@ export interface CardIssuingCustomerResponse {
     | CardIssuingCustomerNotCreatedResponse
     | CardIssuingCustomerElectronicDisclosureRequiredResponse
     | CardIssuingCustomerBankTermsRequiredResponse
-    | CardIssuingCustomerBridgeTermsRequiredResponse
+    | CardIssuingCustomerProviderTermsRequiredResponse
     | CardIssuingCustomerKYCRequiredResponse
     | CardIssuingCustomerPendingResponse
+    | CardIssuingCustomerUnderReviewResponse
     | CardIssuingCustomerRejectedResponse
     | CardIssuingCustomerErrorResponse
     | CardIssuingCustomerReadyResponse;
+}
+
+/**
+ * A cards customer undergoing provider review before onboarding can continue.
+ */
+export interface CardIssuingCustomerUnderReviewResponse {
+  status: 'under_review';
 }
 
 /**
@@ -512,7 +527,6 @@ export declare namespace Cards {
     type CardIssuingConfigResponse as CardIssuingConfigResponse,
     type CardIssuingCreateCardInput as CardIssuingCreateCardInput,
     type CardIssuingCustomerBankTermsRequiredResponse as CardIssuingCustomerBankTermsRequiredResponse,
-    type CardIssuingCustomerBridgeTermsRequiredResponse as CardIssuingCustomerBridgeTermsRequiredResponse,
     type CardIssuingCustomerConsentsRequestBody as CardIssuingCustomerConsentsRequestBody,
     type CardIssuingCustomerElectronicDisclosureRequiredResponse as CardIssuingCustomerElectronicDisclosureRequiredResponse,
     type CardIssuingCustomerErrorResponse as CardIssuingCustomerErrorResponse,
@@ -520,9 +534,12 @@ export declare namespace Cards {
     type CardIssuingCustomerKYCRequiredResponse as CardIssuingCustomerKYCRequiredResponse,
     type CardIssuingCustomerNotCreatedResponse as CardIssuingCustomerNotCreatedResponse,
     type CardIssuingCustomerPendingResponse as CardIssuingCustomerPendingResponse,
+    type CardIssuingCustomerProviderTermsRequiredResponse as CardIssuingCustomerProviderTermsRequiredResponse,
     type CardIssuingCustomerReadyResponse as CardIssuingCustomerReadyResponse,
     type CardIssuingCustomerRejectedResponse as CardIssuingCustomerRejectedResponse,
+    type CardIssuingCustomerRejectionReason as CardIssuingCustomerRejectionReason,
     type CardIssuingCustomerResponse as CardIssuingCustomerResponse,
+    type CardIssuingCustomerUnderReviewResponse as CardIssuingCustomerUnderReviewResponse,
     type CardIssuingDispute as CardIssuingDispute,
     type CardIssuingDisputeStatus as CardIssuingDisputeStatus,
     type CardIssuingEphemeralKey as CardIssuingEphemeralKey,

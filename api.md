@@ -428,7 +428,6 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingConfigResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCreateCardInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerBankTermsRequiredResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerBridgeTermsRequiredResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerConsentsRequestBody</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerElectronicDisclosureRequiredResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerErrorResponse</a></code>
@@ -436,9 +435,12 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerKYCRequiredResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerNotCreatedResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerPendingResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerProviderTermsRequiredResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerReadyResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerRejectedResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerRejectionReason</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingCustomerResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerUnderReviewResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingDispute</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingDisputeStatus</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKey</a></code>
@@ -1113,9 +1115,11 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">OAuthTokenRefreshTokenRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthTokenRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthTokenSuccessResponse</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTransferNativeSDKRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthTransferRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthTransferUserInfo</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthTransferUserInfoMeta</a></code>
+- <code><a href="./src/resources/client-auth.ts">OAuthTransferWebSDKRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthUnlinkRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthVerifyRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">OAuthVerifyResponseBody</a></code>
@@ -1211,6 +1215,8 @@ Types:
 - <code><a href="./src/resources/wallet-automations.ts">AutomationDepositTriggerConfigInput</a></code>
 - <code><a href="./src/resources/wallet-automations.ts">AutomationDestinationAsset</a></code>
 - <code><a href="./src/resources/wallet-automations.ts">AutomationDestinationAssetInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationEarnDepositActionConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationEarnDepositActionConfigInput</a></code>
 - <code><a href="./src/resources/wallet-automations.ts">AutomationSwapActionConfig</a></code>
 - <code><a href="./src/resources/wallet-automations.ts">AutomationSwapActionConfigInput</a></code>
 - <code><a href="./src/resources/wallet-automations.ts">AutomationTriggerConfig</a></code>

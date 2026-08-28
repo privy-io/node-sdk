@@ -5,30 +5,16 @@ import { APIResource } from '../core/resource';
 export class WalletAutomations extends APIResource {}
 
 /**
- * Action configuration for swap operations.
+ * Configuration for an automation action.
  */
-export interface AutomationActionConfig {
-  /**
-   * Destination asset identified by contract address on a specific chain (CAIP-2).
-   */
-  destination_chain_asset: AutomationDestinationAsset;
-
-  type: 'swap';
-}
+export type AutomationActionConfig = AutomationSwapActionConfig | AutomationEarnDepositActionConfig;
 
 /**
- * Action configuration for swap operations (input form with alias support).
+ * Configuration for an automation action (input form with alias support).
  */
-export interface AutomationActionConfigInput {
-  /**
-   * A destination asset spec accepting either raw identifiers (asset_address, caip2)
-   * or human-readable aliases (asset, chain). Exactly one of asset_address or asset
-   * must be provided; exactly one of caip2 or chain must be provided.
-   */
-  destination_chain_asset: AutomationDestinationAssetInput;
-
-  type: 'swap';
-}
+export type AutomationActionConfigInput =
+  | AutomationSwapActionConfigInput
+  | AutomationEarnDepositActionConfigInput;
 
 /**
  * Which assets to include/exclude for an automation trigger.
@@ -115,7 +101,7 @@ export interface AutomationAssetSpecInput extends AutomationAssetSpec {
  */
 export interface AutomationConfig {
   /**
-   * Action configuration for swap operations.
+   * Configuration for an automation action.
    */
   action: AutomationActionConfig;
 
@@ -131,7 +117,7 @@ export interface AutomationConfig {
  */
 export interface AutomationConfigInput {
   /**
-   * Action configuration for swap operations (input form with alias support).
+   * Configuration for an automation action (input form with alias support).
    */
   action: AutomationActionConfigInput;
 
@@ -184,6 +170,24 @@ export interface AutomationDestinationAssetInput extends AutomationDestinationAs
   asset?: string;
 
   chain?: string;
+}
+
+/**
+ * Action configuration for depositing into an Earn vault.
+ */
+export interface AutomationEarnDepositActionConfig {
+  type: 'earn_deposit';
+
+  vault_id: string;
+}
+
+/**
+ * Action configuration for depositing into an Earn vault (input form).
+ */
+export interface AutomationEarnDepositActionConfigInput {
+  type: 'earn_deposit';
+
+  vault_id: string;
 }
 
 /**
@@ -393,6 +397,8 @@ export declare namespace WalletAutomations {
     type AutomationDepositTriggerConfigInput as AutomationDepositTriggerConfigInput,
     type AutomationDestinationAsset as AutomationDestinationAsset,
     type AutomationDestinationAssetInput as AutomationDestinationAssetInput,
+    type AutomationEarnDepositActionConfig as AutomationEarnDepositActionConfig,
+    type AutomationEarnDepositActionConfigInput as AutomationEarnDepositActionConfigInput,
     type AutomationSwapActionConfig as AutomationSwapActionConfig,
     type AutomationSwapActionConfigInput as AutomationSwapActionConfigInput,
     type AutomationTriggerConfig as AutomationTriggerConfig,

@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.34.0](https://github.com/privy-io/node-sdk/compare/v0.33.0...v0.34.0) (2026-08-28)
+
+
+### Features
+
+* add Claude skill for generating auth wrapper services ([#13](https://github.com/privy-io/node-sdk/issues/13)) ([3c3dc78](https://github.com/privy-io/node-sdk/commit/3c3dc78844af100cf9643f6acbb2b79a03b7a32f))
+* **api:** api update ([793b4ac](https://github.com/privy-io/node-sdk/commit/793b4ac2e33b71355508af6e31c759ace60c6557))
+* expose organizations service (incl. KYB) on PrivyClient ([#17](https://github.com/privy-io/node-sdk/issues/17)) ([9ed30c4](https://github.com/privy-io/node-sdk/commit/9ed30c4cbf094e72c35b476f0a8bb3cdd513ab68))
+
 ## [0.33.0](https://github.com/privy-io/node-sdk/compare/v0.32.0...v0.33.0) (2026-08-27)
 
 

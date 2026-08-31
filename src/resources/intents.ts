@@ -1086,6 +1086,7 @@ export type IntentRpcParams =
   | IntentRpcParams.EthereumSign7702AuthorizationRpcInput
   | IntentRpcParams.EthereumSignUserOperationRpcInput
   | IntentRpcParams.EthereumSendCallsRpcInput
+  | IntentRpcParams.AptosSignTransactionRpcInput
   | IntentRpcParams.SolanaSignTransactionRpcInput
   | IntentRpcParams.SolanaSignAndSendTransactionRpcInput
   | IntentRpcParams.SolanaSignMessageRpcInput
@@ -1174,7 +1175,8 @@ export declare namespace IntentRpcParams {
     experimental_data_suffix?: WalletsAPI.Hex;
 
     /**
-     * Body param
+     * Body param: Developer-provided identifier for this request. Must be unique per
+     * app.
      */
     reference_id?: string;
 
@@ -1448,6 +1450,24 @@ export declare namespace IntentRpcParams {
     'privy-request-expiry'?: string;
   }
 
+  export interface AptosSignTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'aptos_signTransaction';
+
+    /**
+     * Body param: Parameters for the Aptos `aptos_signTransaction` RPC.
+     */
+    params: WalletsAPI.AptosSignTransactionRpcInputParams;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
   export interface SolanaSignTransactionRpcInput {
     /**
      * Body param
@@ -1514,7 +1534,8 @@ export declare namespace IntentRpcParams {
     optimistic_broadcast?: boolean;
 
     /**
-     * Body param
+     * Body param: Developer-provided identifier for this request. Must be unique per
+     * app.
      */
     reference_id?: string;
 
@@ -1962,6 +1983,12 @@ export interface IntentTransferParams {
    * wallet action request. Must be at least 24 characters (e.g. a cuid2 or UUID).
    */
   nonce?: WalletsAPI.WalletActionNonce;
+
+  /**
+   * Body param: Developer-provided identifier for this request. Must be unique per
+   * app.
+   */
+  reference_id?: string;
 
   /**
    * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%). Only

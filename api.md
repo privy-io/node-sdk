@@ -10,6 +10,14 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">AdvancedSwapRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AdvancedSwapResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AmountType</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AptosBcsHex</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AptosRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AptosRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AptosSignTransactionRpcInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AptosSignTransactionRpcInputParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AptosSignTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AptosSignTransactionRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AptosSignedTransactionBcsHex</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AttachWalletAutomationRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyDashboardResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyResponse</a></code>

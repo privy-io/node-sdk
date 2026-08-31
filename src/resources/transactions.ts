@@ -59,6 +59,9 @@ export interface Transaction {
 
   wallet_id: string;
 
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
   reference_id?: string | null;
 
   sponsored?: boolean;

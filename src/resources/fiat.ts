@@ -1085,7 +1085,7 @@ export interface KyxVerificationStatusDetail {
  * A list of external fiat accounts linked to a user.
  */
 export interface ListExternalFiatAccountsResponse {
-  accounts: Array<ExternalFiatAccount>;
+  external_fiat_accounts: Array<ExternalFiatAccount>;
 
   next_cursor: string | null;
 }
@@ -1094,7 +1094,7 @@ export interface ListExternalFiatAccountsResponse {
  * A list of fiat deposit accounts linked to a wallet.
  */
 export interface ListFiatDepositAccountsResponse {
-  deposit_accounts: Array<FiatDepositAccount>;
+  fiat_deposit_accounts: Array<FiatDepositAccount>;
 
   next_cursor: string | null;
 }
@@ -1103,7 +1103,7 @@ export interface ListFiatDepositAccountsResponse {
  * A list of external fiat accounts linked to an organization.
  */
 export interface ListOrganizationExternalFiatAccountsResponse {
-  accounts: Array<OrganizationExternalFiatAccount>;
+  external_fiat_accounts: Array<OrganizationExternalFiatAccount>;
 
   next_cursor: string | null;
 }

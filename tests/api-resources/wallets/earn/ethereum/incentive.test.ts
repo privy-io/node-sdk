@@ -26,6 +26,7 @@ describe('resource incentive', () => {
     const response = await client.wallets._earn._ethereum._incentive._claim('wallet_id', {
       chain: 'base',
       nonce: 'xxxxxxxxxxxxxxxxxxxxxxxx',
+      reference_id: 'x',
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
       'privy-request-expiry': 'privy-request-expiry',

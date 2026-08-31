@@ -139,6 +139,12 @@ export interface SwapExecuteParams {
   nonce?: WalletsAPI.WalletActionNonce;
 
   /**
+   * Body param: Developer-provided identifier for this request. Must be unique per
+   * app.
+   */
+  reference_id?: string;
+
+  /**
    * Body param: Maximum slippage tolerance in basis points (e.g., 50 for 0.5%).
    */
   slippage_bps?: number;

@@ -163,6 +163,12 @@ export interface EthereumDepositParams {
   raw_amount?: string;
 
   /**
+   * Body param: Developer-provided identifier for this request. Must be unique per
+   * app.
+   */
+  reference_id?: string;
+
+  /**
    * Header param: Request authorization signature. If multiple signatures are
    * required, they should be comma separated.
    */
@@ -204,6 +210,12 @@ export interface EthereumWithdrawParams {
    * with 6 decimals). Exactly one of `amount` or `raw_amount` must be provided.
    */
   raw_amount?: string;
+
+  /**
+   * Body param: Developer-provided identifier for this request. Must be unique per
+   * app.
+   */
+  reference_id?: string;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are

@@ -186,6 +186,11 @@ export interface SwapRequestBody {
   nonce?: WalletsAPI.WalletActionNonce;
 
   /**
+   * Developer-provided identifier for this request. Must be unique per app.
+   */
+  reference_id?: string;
+
+  /**
    * Maximum slippage tolerance in basis points (e.g., 50 for 0.5%).
    */
   slippage_bps?: number;

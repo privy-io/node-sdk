@@ -350,6 +350,11 @@ export interface EarnDepositActionResponse {
   failure_reason?: FailureReason;
 
   /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+
+  /**
    * The steps of the wallet action. Only returned if `?include=steps` is provided.
    */
   steps?: Array<WalletActionStep>;
@@ -382,6 +387,11 @@ export interface EarnDepositRequestBody {
    * decimals). Exactly one of `amount` or `raw_amount` must be provided.
    */
   raw_amount?: string;
+
+  /**
+   * Developer-provided identifier for this request. Must be unique per app.
+   */
+  reference_id?: string;
 }
 
 /**
@@ -461,6 +471,11 @@ export interface EarnFeeCollectActionResponse {
   failure_reason?: FailureReason;
 
   /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+
+  /**
    * The steps of the wallet action. Only returned if `?include=steps` is provided.
    */
   steps?: Array<WalletActionStep>;
@@ -480,6 +495,11 @@ export interface EarnFeeCollectRequestBody {
    * request. Must be at least 24 characters (e.g. a cuid2 or UUID).
    */
   nonce?: WalletsAPI.WalletActionNonce;
+
+  /**
+   * Developer-provided identifier for this request. Must be unique per app.
+   */
+  reference_id?: string;
 }
 
 /**
@@ -524,6 +544,11 @@ export interface EarnIncentiveClaimActionResponse {
   failure_reason?: FailureReason;
 
   /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+
+  /**
    * The steps of the wallet action. Only returned if `?include=steps` is provided.
    */
   steps?: Array<WalletActionStep>;
@@ -545,6 +570,11 @@ export interface EarnIncentiveClaimRequestBody {
    * request. Must be at least 24 characters (e.g. a cuid2 or UUID).
    */
   nonce?: WalletsAPI.WalletActionNonce;
+
+  /**
+   * Developer-provided identifier for this request. Must be unique per app.
+   */
+  reference_id?: string;
 }
 
 /**
@@ -703,6 +733,11 @@ export interface EarnWithdrawActionResponse {
   failure_reason?: FailureReason;
 
   /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+
+  /**
    * The steps of the wallet action. Only returned if `?include=steps` is provided.
    */
   steps?: Array<WalletActionStep>;
@@ -735,6 +770,11 @@ export interface EarnWithdrawRequestBody {
    * decimals). Exactly one of `amount` or `raw_amount` must be provided.
    */
   raw_amount?: string;
+
+  /**
+   * Developer-provided identifier for this request. Must be unique per app.
+   */
+  reference_id?: string;
 }
 
 /**
@@ -986,6 +1026,11 @@ export interface PayoutResponse {
   failure_reason?: FailureReason;
 
   /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+
+  /**
    * The steps of the wallet action. Only returned if `?include=steps` is provided.
    */
   steps?: Array<WalletActionStep>;
@@ -1132,6 +1177,11 @@ export interface SwapActionResponse {
    * human-readable decimal string, plus the gas token symbol.
    */
   gas?: WalletsAPI.Gas | null;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 
   /**
    * The steps of the wallet action. Only returned if `?include=steps` is provided.
@@ -1328,6 +1378,11 @@ export interface TransferActionResponse {
    * human-readable decimal string, plus the gas token symbol.
    */
   gas?: WalletsAPI.Gas | null;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 
   /**
    * Decimal amount sent on the source chain (e.g. "1.5"). For exact_output

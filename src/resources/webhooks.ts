@@ -1682,6 +1682,11 @@ export interface WalletActionEarnDepositCreatedWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -1776,6 +1781,11 @@ export interface WalletActionEarnDepositFailedWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -1869,6 +1879,11 @@ export interface WalletActionEarnDepositRejectedWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -1962,6 +1977,11 @@ export interface WalletActionEarnDepositSucceededWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2040,6 +2060,11 @@ export interface WalletActionEarnFeeCollectCreatedWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2134,6 +2159,11 @@ export interface WalletActionEarnFeeCollectFailedWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2227,6 +2257,11 @@ export interface WalletActionEarnFeeCollectRejectedWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2315,6 +2350,11 @@ export interface WalletActionEarnFeeCollectSucceededWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2360,6 +2400,11 @@ export interface WalletActionEarnIncentiveClaimCreatedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2421,6 +2466,11 @@ export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2481,6 +2531,11 @@ export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2536,6 +2591,11 @@ export interface WalletActionEarnIncentiveClaimSucceededWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2614,6 +2674,11 @@ export interface WalletActionEarnWithdrawCreatedWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2708,6 +2773,11 @@ export interface WalletActionEarnWithdrawFailedWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2801,6 +2871,11 @@ export interface WalletActionEarnWithdrawRejectedWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2894,6 +2969,11 @@ export interface WalletActionEarnWithdrawSucceededWebhookPayload {
    * present when the token is known in the asset registry.
    */
   decimals?: number;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -2969,6 +3049,11 @@ export interface WalletActionPayoutCreatedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -3060,6 +3145,11 @@ export interface WalletActionPayoutFailedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -3150,6 +3240,11 @@ export interface WalletActionPayoutRejectedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -3235,6 +3330,11 @@ export interface WalletActionPayoutSucceededWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -3290,6 +3390,11 @@ export interface WalletActionSwapCreatedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -3361,6 +3466,11 @@ export interface WalletActionSwapFailedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -3431,6 +3541,11 @@ export interface WalletActionSwapRejectedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -3502,6 +3617,11 @@ export interface WalletActionSwapSucceededWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 }
 
 /**
@@ -3547,6 +3667,11 @@ export interface WalletActionTransferCreatedWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 
   /**
    * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
@@ -3634,6 +3759,11 @@ export interface WalletActionTransferFailedWebhookPayload {
   wallet_id: string;
 
   /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+
+  /**
    * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
    * cross-chain transfers until the source amount is determined.
    */
@@ -3718,6 +3848,11 @@ export interface WalletActionTransferRejectedWebhookPayload {
   wallet_id: string;
 
   /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+
+  /**
    * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output
    * cross-chain transfers until the source amount is determined.
    */
@@ -3795,6 +3930,11 @@ export interface WalletActionTransferSucceededWebhookPayload {
    * The ID of the wallet involved in the action.
    */
   wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
 
   /**
    * Decimal amount sent on the source chain (e.g. "1.5"). Omitted for exact_output

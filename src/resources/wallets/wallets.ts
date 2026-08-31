@@ -672,6 +672,88 @@ export interface AdvancedSwapResponse {
 export type AmountType = 'exact_input' | 'exact_output';
 
 /**
+ * A non-empty, 0x-prefixed, even-length BCS hex string.
+ */
+export type AptosBcsHex = string;
+
+/**
+ * Executes the Aptos `aptos_signTransaction` RPC to sign a legacy single-signer
+ * Ed25519 RawTransaction. The caller is responsible for broadcasting.
+ */
+export interface AptosRpcInput {
+  method: 'aptos_signTransaction';
+
+  /**
+   * Parameters for the Aptos `aptos_signTransaction` RPC.
+   */
+  params: AptosSignTransactionRpcInputParams;
+}
+
+/**
+ * Response to the Aptos `aptos_signTransaction` RPC.
+ */
+export interface AptosRpcResponse {
+  /**
+   * Data returned by the Aptos `aptos_signTransaction` RPC.
+   */
+  data: AptosSignTransactionRpcResponseData;
+
+  method: 'aptos_signTransaction';
+}
+
+/**
+ * Executes the Aptos `aptos_signTransaction` RPC to sign a legacy single-signer
+ * Ed25519 RawTransaction. The caller is responsible for broadcasting.
+ */
+export interface AptosSignTransactionRpcInput {
+  method: 'aptos_signTransaction';
+
+  /**
+   * Parameters for the Aptos `aptos_signTransaction` RPC.
+   */
+  params: AptosSignTransactionRpcInputParams;
+}
+
+/**
+ * Parameters for the Aptos `aptos_signTransaction` RPC.
+ */
+export interface AptosSignTransactionRpcInputParams {
+  /**
+   * A non-empty, 0x-prefixed, even-length BCS hex string.
+   */
+  transaction: AptosBcsHex;
+}
+
+/**
+ * Response to the Aptos `aptos_signTransaction` RPC.
+ */
+export interface AptosSignTransactionRpcResponse {
+  /**
+   * Data returned by the Aptos `aptos_signTransaction` RPC.
+   */
+  data: AptosSignTransactionRpcResponseData;
+
+  method: 'aptos_signTransaction';
+}
+
+/**
+ * Data returned by the Aptos `aptos_signTransaction` RPC.
+ */
+export interface AptosSignTransactionRpcResponseData {
+  encoding: 'hex';
+
+  /**
+   * A non-empty, 0x-prefixed, even-length BCS legacy Ed25519 SignedTransaction.
+   */
+  signed_transaction: AptosSignedTransactionBcsHex;
+}
+
+/**
+ * A non-empty, 0x-prefixed, even-length BCS legacy Ed25519 SignedTransaction.
+ */
+export type AptosSignedTransactionBcsHex = string;
+
+/**
  * Request body for attaching automations to a wallet (wallet ID comes from the
  * URL).
  */
@@ -1298,6 +1380,9 @@ export interface EthereumSendTransactionRpcInput {
    */
   experimental_data_suffix?: Hex;
 
+  /**
+   * Developer-provided identifier for this request. Must be unique per app.
+   */
   reference_id?: string;
 
   sponsor?: boolean;
@@ -1345,6 +1430,9 @@ export interface EthereumSendTransactionRpcResponseData {
 
   hash: string;
 
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
   reference_id?: string | null;
 
   transaction_id?: string;
@@ -2337,6 +2425,9 @@ export interface SolanaSignAndSendTransactionRpcInput {
 
   optimistic_broadcast?: boolean;
 
+  /**
+   * Developer-provided identifier for this request. Must be unique per app.
+   */
   reference_id?: string;
 
   sponsor?: boolean;
@@ -2382,6 +2473,9 @@ export interface SolanaSignAndSendTransactionRpcResponseData {
 
   hash: string;
 
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
   reference_id?: string | null;
 
   signed_transaction?: string;
@@ -3638,6 +3732,11 @@ export interface TransferRequestBody {
   nonce?: WalletActionNonce;
 
   /**
+   * Developer-provided identifier for this request. Must be unique per app.
+   */
+  reference_id?: string;
+
+  /**
    * Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
    * cross-chain or cross-asset transfers; omit to use the provider default.
    */
@@ -4797,6 +4896,7 @@ export type WalletRpcRequestBody =
   | EthereumSign7702AuthorizationRpcInput
   | EthereumSignUserOperationRpcInput
   | EthereumSendCallsRpcInput
+  | AptosSignTransactionRpcInput
   | SolanaSignTransactionRpcInput
   | SolanaSignAndSendTransactionRpcInput
   | SolanaSignMessageRpcInput
@@ -4829,6 +4929,7 @@ export type WalletRpcResponse =
   | EthereumSign7702AuthorizationRpcResponse
   | EthereumSecp256k1SignRpcResponse
   | EthereumSendCallsRpcResponse
+  | AptosSignTransactionRpcResponse
   | SolanaSignMessageRpcResponse
   | SolanaSignTransactionRpcResponse
   | SolanaSignAndSendTransactionRpcResponse
@@ -5187,6 +5288,7 @@ export type WalletRpcParams =
   | WalletRpcParams.EthereumSign7702AuthorizationRpcInput
   | WalletRpcParams.EthereumSignUserOperationRpcInput
   | WalletRpcParams.EthereumSendCallsRpcInput
+  | WalletRpcParams.AptosSignTransactionRpcInput
   | WalletRpcParams.SolanaSignTransactionRpcInput
   | WalletRpcParams.SolanaSignAndSendTransactionRpcInput
   | WalletRpcParams.SolanaSignMessageRpcInput
@@ -5287,7 +5389,8 @@ export declare namespace WalletRpcParams {
     experimental_data_suffix?: Hex;
 
     /**
-     * Body param
+     * Body param: Developer-provided identifier for this request. Must be unique per
+     * app.
      */
     reference_id?: string;
 
@@ -5645,6 +5748,36 @@ export declare namespace WalletRpcParams {
     'privy-request-expiry'?: string;
   }
 
+  export interface AptosSignTransactionRpcInput {
+    /**
+     * Body param
+     */
+    method: 'aptos_signTransaction';
+
+    /**
+     * Body param: Parameters for the Aptos `aptos_signTransaction` RPC.
+     */
+    params: AptosSignTransactionRpcInputParams;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
   export interface SolanaSignTransactionRpcInput {
     /**
      * Body param
@@ -5723,7 +5856,8 @@ export declare namespace WalletRpcParams {
     optimistic_broadcast?: boolean;
 
     /**
-     * Body param
+     * Body param: Developer-provided identifier for this request. Must be unique per
+     * app.
      */
     reference_id?: string;
 
@@ -6430,6 +6564,12 @@ export interface WalletTransferParams {
   nonce?: WalletActionNonce;
 
   /**
+   * Body param: Developer-provided identifier for this request. Must be unique per
+   * app.
+   */
+  reference_id?: string;
+
+  /**
    * Body param: Maximum allowed slippage in basis points (1 bps = 0.01%). Only
    * applicable for cross-chain or cross-asset transfers; omit to use the provider
    * default.
@@ -6619,6 +6759,14 @@ export declare namespace Wallets {
     type AdvancedSwapRequestBody as AdvancedSwapRequestBody,
     type AdvancedSwapResponse as AdvancedSwapResponse,
     type AmountType as AmountType,
+    type AptosBcsHex as AptosBcsHex,
+    type AptosRpcInput as AptosRpcInput,
+    type AptosRpcResponse as AptosRpcResponse,
+    type AptosSignTransactionRpcInput as AptosSignTransactionRpcInput,
+    type AptosSignTransactionRpcInputParams as AptosSignTransactionRpcInputParams,
+    type AptosSignTransactionRpcResponse as AptosSignTransactionRpcResponse,
+    type AptosSignTransactionRpcResponseData as AptosSignTransactionRpcResponseData,
+    type AptosSignedTransactionBcsHex as AptosSignedTransactionBcsHex,
     type AttachWalletAutomationRequestBody as AttachWalletAutomationRequestBody,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
     type AuthorizationKeyResponse as AuthorizationKeyResponse,

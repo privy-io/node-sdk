@@ -67,6 +67,12 @@ export interface IncentiveClaimParams {
   nonce?: WalletsAPI.WalletActionNonce;
 
   /**
+   * Body param: Developer-provided identifier for this request. Must be unique per
+   * app.
+   */
+  reference_id?: string;
+
+  /**
    * Header param: Request authorization signature. If multiple signatures are
    * required, they should be comma separated.
    */

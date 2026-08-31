@@ -211,6 +211,7 @@ describe('resource intents', () => {
       amount_type: 'exact_input',
       fee_configuration: { type: 'total_fee_bps', value: 50 },
       nonce: 'xxxxxxxxxxxxxxxxxxxxxxxx',
+      reference_id: 'x',
       slippage_bps: 0,
       'privy-request-expiry': 'privy-request-expiry',
     });

@@ -1243,9 +1243,10 @@ export interface TempoVaultDetails {
   admin_wallet_address: string;
 
   /**
-   * Privy wallet ID of the vault admin.
+   * Privy wallet ID of the vault admin, or null when the Tempo vault admin is not
+   * Privy-managed.
    */
-  admin_wallet_id: string;
+  admin_wallet_id: string | null;
 
   /**
    * Annual percentage yield earned by the app from fee wrapper fees, in basis

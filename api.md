@@ -1,3 +1,418 @@
+# Apps
+
+Types:
+
+- <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AllowlistEntry</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AppAllowlistConfig</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AppCustomOAuthProvider</a></code>
+- <code><a href="./src/resources/apps/apps.ts">AppResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">Caip2</a></code>
+- <code><a href="./src/resources/apps/apps.ts">CaptchaProvider</a></code>
+- <code><a href="./src/resources/apps/apps.ts">Currency</a></code>
+- <code><a href="./src/resources/apps/apps.ts">CurrencyAsset</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmailDomain</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmailDomainInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmailInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletChainConfig</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletConfigSchema</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletCreateOnLogin</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletInputSchema</a></code>
+- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletMode</a></code>
+- <code><a href="./src/resources/apps/apps.ts">FundingConfigResponseSchema</a></code>
+- <code><a href="./src/resources/apps/apps.ts">FundingMethodEnum</a></code>
+- <code><a href="./src/resources/apps/apps.ts">FundingOption</a></code>
+- <code><a href="./src/resources/apps/apps.ts">GasSpendCurrency</a></code>
+- <code><a href="./src/resources/apps/apps.ts">GasSpendRequestBody</a></code>
+- <code><a href="./src/resources/apps/apps.ts">GasSpendResponseBody</a></code>
+- <code><a href="./src/resources/apps/apps.ts">MfaMethod</a></code>
+- <code><a href="./src/resources/apps/apps.ts">PhoneInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">TelegramAuthConfigSchema</a></code>
+- <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>
+- <code><a href="./src/resources/apps/apps.ts">TestAccountsResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">UserInviteInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">UserOwnedRecoveryOption</a></code>
+- <code><a href="./src/resources/apps/apps.ts">WalletInviteInput</a></code>
+
+Methods:
+
+- <code title="get /v1/apps/{app_id}">client.apps.<a href="./src/resources/apps/apps.ts">get</a>(appID) -> AppResponse</code>
+- <code title="get /v1/apps/gas_spend">client.apps.<a href="./src/resources/apps/apps.ts">getGasSpend</a>({ ...params }) -> GasSpendResponseBody</code>
+- <code title="get /v1/apps/{app_id}/test_credentials">client.apps.<a href="./src/resources/apps/apps.ts">getTestCredentials</a>(appID) -> TestAccountsResponse</code>
+
+## Allowlist
+
+Types:
+
+- <code><a href="./src/resources/apps/allowlist.ts">AllowlistListResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">create</a>(appID, { ...params }) -> AllowlistEntry</code>
+- <code title="get /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">list</a>(appID) -> AllowlistListResponse</code>
+- <code title="delete /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">delete</a>(appID, { ...params }) -> AllowlistDeletionResponse</code>
+
+# Cards
+
+Types:
+
+- <code><a href="./src/resources/cards.ts">CardIssuingBankAgreement</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingBankInfo</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCancellationReason</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCardResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCardStatus</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCardholder</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCardsResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingConfig</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingConfigQueryParams</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingConfigResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCreateCardInput</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerBankTermsRequiredResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerConsentsRequestBody</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerElectronicDisclosureRequiredResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerErrorResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerInput</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerKYCRequiredResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerNotCreatedResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerPendingResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerProviderTermsRequiredResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerReadyResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerRejectedResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerRejectionReason</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingCustomerUnderReviewResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingDispute</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingDisputeStatus</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKey</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKeyRequestBody</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKeyResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingListCardsInput</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingListTransactionsInput</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingMerchant</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingReplaceCardRequestBody</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingReplacementReason</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingStatementQueryParams</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingTransactionResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingTransactionStatus</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingTransactionsResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingUpdateCardInput</a></code>
+
+# Intents
+
+Types:
+
+- <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
+- <code><a href="./src/resources/intents.ts">BaseIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorum</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizationUserMember</a></code>
+- <code><a href="./src/resources/intents.ts">IntentAuthorizeInput</a></code>
+- <code><a href="./src/resources/intents.ts">IntentCreationHeaders</a></code>
+- <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
+- <code><a href="./src/resources/intents.ts">IntentType</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">RpcIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">RuleDeleteIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentCreateRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentDeleteRequestBody</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentDeleteRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">RuleIntentUpdateRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RuleMutateIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">TransferIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">TransferIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/intents">client.intents.<a href="./src/resources/intents.ts">list</a>({ ...params }) -> IntentResponsesCursor</code>
+- <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleMutateIntentResponse</code>
+- <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicyRule</a>(ruleID, { ...params }) -> RuleDeleteIntentResponse</code>
+- <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/resources/intents.ts">get</a>(intentID) -> IntentResponse</code>
+- <code title="post /v1/intents/{intent_id}/reject">client.intents.<a href="./src/resources/intents.ts">reject</a>(intentID) -> IntentResponse</code>
+- <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/resources/intents.ts">rpc</a>(walletID, { ...params }) -> RpcIntentResponse</code>
+- <code title="post /v1/intents/wallets/{wallet_id}/transfer">client.intents.<a href="./src/resources/intents.ts">transfer</a>(walletID, { ...params }) -> TransferIntentResponse</code>
+- <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/resources/intents.ts">updateKeyQuorum</a>(keyQuorumID, { ...params }) -> KeyQuorumIntentResponse</code>
+- <code title="patch /v1/intents/policies/{policy_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicy</a>(policyID, { ...params }) -> PolicyIntentResponse</code>
+- <code title="patch /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicyRule</a>(ruleID, { ...params }) -> RuleMutateIntentResponse</code>
+- <code title="patch /v1/intents/wallets/{wallet_id}">client.intents.<a href="./src/resources/intents.ts">updateWallet</a>(walletID, { ...params }) -> WalletIntentResponse</code>
+
+# KeyQuorums
+
+Types:
+
+- <code><a href="./src/resources/key-quorums.ts">AuthorizationKey</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumAuthorizationHeaders</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateRequestBody</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumUpdateRequestBody</a></code>
+
+Methods:
+
+- <code title="post /v1/key_quorums">client.keyQuorums.<a href="./src/resources/key-quorums.ts">create</a>({ ...params }) -> KeyQuorum</code>
+- <code title="delete /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_delete</a>(keyQuorumID, { ...params }) -> SuccessResponse</code>
+- <code title="patch /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_update</a>(keyQuorumID, { ...params }) -> KeyQuorum</code>
+- <code title="get /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">get</a>(keyQuorumID) -> KeyQuorum</code>
+
+# Organizations
+
+Types:
+
+- <code><a href="./src/resources/organizations/organizations.ts">CreateOrganizationSecretResponse</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">Organization</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationCreateRequestBody</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretIDInput</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretView</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretsListResponse</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationUpdateRequestBody</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationsListResponse</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">UpdateOrganizationSecretSigningKeyInput</a></code>
+
+Methods:
+
+- <code title="post /v1/organizations">client.organizations.<a href="./src/resources/organizations/organizations.ts">create</a>({ ...params }) -> Organization</code>
+- <code title="patch /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations/organizations.ts">update</a>(organizationID, { ...params }) -> Organization</code>
+- <code title="get /v1/organizations">client.organizations.<a href="./src/resources/organizations/organizations.ts">list</a>({ ...params }) -> OrganizationsCursor</code>
+- <code title="delete /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations/organizations.ts">delete</a>(organizationID) -> void</code>
+- <code title="get /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations/organizations.ts">get</a>(organizationID) -> Organization</code>
+
+## ExternalFiatAccounts
+
+Methods:
+
+- <code title="post /v1/organizations/{organization_id}/external_fiat_accounts">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">create</a>(organizationID, { ...params }) -> OrganizationExternalFiatAccountResponse</code>
+- <code title="get /v1/organizations/{organization_id}/external_fiat_accounts">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">list</a>(organizationID, { ...params }) -> ListOrganizationExternalFiatAccountsResponse</code>
+- <code title="delete /v1/organizations/{organization_id}/external_fiat_accounts/{account_id}">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">delete</a>(accountID, { ...params }) -> SuccessResponse</code>
+- <code title="get /v1/organizations/{organization_id}/external_fiat_accounts/{account_id}">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">get</a>(accountID, { ...params }) -> OrganizationExternalFiatAccountResponse</code>
+
+## KYB
+
+Methods:
+
+- <code title="get /v1/organizations/{organization_id}/kyb">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">list</a>(organizationID) -> KYBStatusListResponse</code>
+- <code title="post /v1/organizations/{organization_id}/kyb/links">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">initiateLinks</a>(organizationID, { ...params }) -> KYBStatusResponse</code>
+- <code title="post /v1/organizations/{organization_id}/kyb/tos">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">initiateTos</a>(organizationID, { ...params }) -> KyxTosResponse</code>
+
+# Policies
+
+Types:
+
+- <code><a href="./src/resources/policies.ts">AbiParameter</a></code>
+- <code><a href="./src/resources/policies.ts">AbiSchema</a></code>
+- <code><a href="./src/resources/policies.ts">ActionRequestBodyCondition</a></code>
+- <code><a href="./src/resources/policies.ts">AggregationCondition</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionOperator</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSet</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetAuthorizationHeaders</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItem</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItemRequestParams</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItemValueInput</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItems</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItemsRequestBody</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetItemsResponse</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetRequestBody</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionSetRequestParams</a></code>
+- <code><a href="./src/resources/policies.ts">ConditionValue</a></code>
+- <code><a href="./src/resources/policies.ts">Ethereum7702AuthorizationCondition</a></code>
+- <code><a href="./src/resources/policies.ts">EthereumCalldataCondition</a></code>
+- <code><a href="./src/resources/policies.ts">EthereumTransactionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">EthereumTransactionConditionField</a></code>
+- <code><a href="./src/resources/policies.ts">EthereumTypedDataDomainCondition</a></code>
+- <code><a href="./src/resources/policies.ts">EthereumTypedDataDomainConditionField</a></code>
+- <code><a href="./src/resources/policies.ts">EthereumTypedDataMessageCondition</a></code>
+- <code><a href="./src/resources/policies.ts">MessageSigningCondition</a></code>
+- <code><a href="./src/resources/policies.ts">MessageSigningField</a></code>
+- <code><a href="./src/resources/policies.ts">Policy</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyAction</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyAuthorizationHeaders</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyCondition</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyMethod</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyRequestBody</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyRuleRequestBody</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyRuleRequestParams</a></code>
+- <code><a href="./src/resources/policies.ts">PolicyRuleResponse</a></code>
+- <code><a href="./src/resources/policies.ts">SolanaProgramInstructionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">SolanaSystemProgramInstructionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">SolanaSystemProgramInstructionConditionField</a></code>
+- <code><a href="./src/resources/policies.ts">SolanaTokenProgramInstructionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">SolanaTokenProgramInstructionConditionField</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransactionCommandOperator</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
+- <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
+- <code><a href="./src/resources/policies.ts">SystemCondition</a></code>
+- <code><a href="./src/resources/policies.ts">TempoTransactionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">TempoTransactionConditionField</a></code>
+- <code><a href="./src/resources/policies.ts">TronCalldataCondition</a></code>
+- <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">TronTransactionConditionField</a></code>
+- <code><a href="./src/resources/policies.ts">TypedDataInput</a></code>
+- <code><a href="./src/resources/policies.ts">UpdateConditionSetRequestBody</a></code>
+- <code><a href="./src/resources/policies.ts">XrplTransactionCondition</a></code>
+- <code><a href="./src/resources/policies.ts">XrplTransactionConditionField</a></code>
+
+Methods:
+
+- <code title="post /v1/policies">client.policies.<a href="./src/resources/policies.ts">create</a>({ ...params }) -> Policy</code>
+- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/resources/policies.ts">\_createRule</a>(policyID, { ...params }) -> PolicyRuleResponse</code>
+- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_delete</a>(policyID, { ...params }) -> SuccessResponse</code>
+- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_deleteRule</a>(ruleID, { ...params }) -> SuccessResponse</code>
+- <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
+- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_updateRule</a>(ruleID, { ...params }) -> PolicyRuleResponse</code>
+- <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">get</a>(policyID) -> Policy</code>
+- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">getRule</a>(ruleID, { ...params }) -> PolicyRuleResponse</code>
+
+# Transactions
+
+Types:
+
+- <code><a href="./src/resources/transactions.ts">BlockchainTransactionStatus</a></code>
+- <code><a href="./src/resources/transactions.ts">Transaction</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionList</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningAssetDiff</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningAssetInfo</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningAssetValue</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningCalldata</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningExposure</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningMetadata</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningParams</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningRequestBody</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningResponseBody</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningRpcRequest</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationErrorResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationSuccessResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningValidationErrorResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningValidationResult</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionScanningValidationSuccessResult</a></code>
+
+Methods:
+
+- <code title="get /v1/transactions/{transaction_id}">client.transactions.<a href="./src/resources/transactions.ts">get</a>(transactionID) -> Transaction</code>
+
+# Users
+
+Types:
+
+- <code><a href="./src/resources/users/users.ts">AuthenticatedUser</a></code>
+- <code><a href="./src/resources/users/users.ts">ClientSessionUpdateAction</a></code>
+- <code><a href="./src/resources/users/users.ts">CrossAppEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">CrossAppSmartWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">CustomMetadata</a></code>
+- <code><a href="./src/resources/users/users.ts">EmailMfaMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">EmbeddedWalletRecoveryMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccount</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountAppleInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountAppleOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountAuthorizationKey</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountBaseWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountBaseWalletType</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountBitcoinSegwitEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountBitcoinTaprootEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountCrossApp</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountCurveSigningEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountCustomJwtInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountCustomJwt</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountCustomOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountDiscordInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountDiscordOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEmail</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEmailInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEmbeddedWalletWithID</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEthereum</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountEthereumEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountFarcaster</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountFarcasterInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountGitHubInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountGitHubOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountGoogleInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountGoogleOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountInstagramInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountInstagramOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountLineInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountLineOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountLinkedInInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountLinkedInOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountPasskey</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountPasskeyCredentialDeviceType</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountPasskeyInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountPhone</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountPhoneInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountSmartWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountSolana</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountSolanaEmbeddedWallet</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountSpotifyInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountSpotifyOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTelegram</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTelegramInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTiktokInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTiktokOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitchInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitchOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitterInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitterOAuth</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountType</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedAccountWalletInput</a></code>
+- <code><a href="./src/resources/users/users.ts">LinkedMfaMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">OAuthTokens</a></code>
+- <code><a href="./src/resources/users/users.ts">PasskeyMfaMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">PatchUsersCustomMetadata</a></code>
+- <code><a href="./src/resources/users/users.ts">SMSMfaMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">TotpMfaMethod</a></code>
+- <code><a href="./src/resources/users/users.ts">User</a></code>
+- <code><a href="./src/resources/users/users.ts">UserBatchCreateInput</a></code>
+- <code><a href="./src/resources/users/users.ts">UserWithIdentityToken</a></code>
+
+Methods:
+
+- <code title="post /v1/users">client.users.<a href="./src/resources/users/users.ts">create</a>({ ...params }) -> User</code>
+- <code title="get /v1/users">client.users.<a href="./src/resources/users/users.ts">list</a>({ ...params }) -> UsersCursor</code>
+- <code title="delete /v1/users/{user_id}">client.users.<a href="./src/resources/users/users.ts">delete</a>(userID) -> void</code>
+- <code title="get /v1/users/{user_id}">client.users.<a href="./src/resources/users/users.ts">\_get</a>(userID) -> User</code>
+- <code title="post /v1/users/custom_auth/id">client.users.<a href="./src/resources/users/users.ts">getByCustomAuthID</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/discord/username">client.users.<a href="./src/resources/users/users.ts">getByDiscordUsername</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/email/address">client.users.<a href="./src/resources/users/users.ts">getByEmailAddress</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/farcaster/fid">client.users.<a href="./src/resources/users/users.ts">getByFarcasterID</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/github/username">client.users.<a href="./src/resources/users/users.ts">getByGitHubUsername</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/phone/number">client.users.<a href="./src/resources/users/users.ts">getByPhoneNumber</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/smart_wallet/address">client.users.<a href="./src/resources/users/users.ts">getBySmartWalletAddress</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/telegram/telegram_user_id">client.users.<a href="./src/resources/users/users.ts">getByTelegramUserID</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/telegram/username">client.users.<a href="./src/resources/users/users.ts">getByTelegramUsername</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/twitter/subject">client.users.<a href="./src/resources/users/users.ts">getByTwitterSubject</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/twitter/username">client.users.<a href="./src/resources/users/users.ts">getByTwitterUsername</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/wallet/address">client.users.<a href="./src/resources/users/users.ts">getByWalletAddress</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/{user_id}/wallets">client.users.<a href="./src/resources/users/users.ts">pregenerateWallets</a>(userID, { ...params }) -> User</code>
+- <code title="post /v1/users/search">client.users.<a href="./src/resources/users/users.ts">search</a>({ ...params }) -> User</code>
+- <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/resources/users/users.ts">setCustomMetadata</a>(userID, { ...params }) -> User</code>
+- <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/resources/users/users.ts">unlinkLinkedAccount</a>(userID, { ...params }) -> User</code>
+
+## ExternalFiatAccounts
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/external_fiat_accounts">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">create</a>(userID, { ...params }) -> ExternalFiatAccountResponse</code>
+- <code title="get /v1/users/{user_id}/external_fiat_accounts">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">list</a>(userID, { ...params }) -> ListExternalFiatAccountsResponse</code>
+- <code title="delete /v1/users/{user_id}/external_fiat_accounts/{account_id}">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">delete</a>(accountID, { ...params }) -> SuccessResponse</code>
+- <code title="get /v1/users/{user_id}/external_fiat_accounts/{account_id}">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">get</a>(accountID, { ...params }) -> ExternalFiatAccountResponse</code>
+
+## KYC
+
+Methods:
+
+- <code title="get /v1/users/{user_id}/kyc">client.users.kyc.<a href="./src/resources/users/kyc.ts">list</a>(userID) -> KYCStatusListResponse</code>
+- <code title="post /v1/users/{user_id}/kyc/links">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateLinks</a>(userID, { ...params }) -> KYCStatusResponse</code>
+- <code title="post /v1/users/{user_id}/kyc/tos">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateTos</a>(userID, { ...params }) -> KyxTosResponse</code>
+
 # Wallets
 
 Types:
@@ -102,6 +517,14 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">Hex</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">IntentBinding</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">NamedTokenTransferSource</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">NearRpcRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">NearRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">NearSignTransactionRpcRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">NearSignTransactionRpcRequestBodyParams</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">NearSignTransactionRpcResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">NearSignTransactionRpcResponseData</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">NearSignedTransactionBorshBase64</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">NearUnsignedTransactionBorshBase64</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">OutputWithPreviousTransactionData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PolicyInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">PrivateKeyExportInput</a></code>
@@ -360,33 +783,6 @@ Methods:
 
 - <code title="get /v1/wallets/{wallet_id}/actions/{action_id}">client.wallets.actions.<a href="./src/resources/wallets/actions.ts">get</a>(actionID, { ...params }) -> WalletActionResponse</code>
 
-## Earn
-
-### Ethereum
-
-Methods:
-
-- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/deposit">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">\_deposit</a>(walletID, { ...params }) -> EarnDepositActionResponse</code>
-- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/withdraw">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">\_withdraw</a>(walletID, { ...params }) -> EarnWithdrawActionResponse</code>
-- <code title="get /v1/earn/ethereum/vaults/{vault_id}">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">vaultDetails</a>(vaultID) -> EthereumEarnVaultDetailsResponse</code>
-- <code title="get /v1/wallets/{wallet_id}/earn/ethereum/vaults">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">vaultPosition</a>(walletID, { ...params }) -> EthereumEarnPositionResponse</code>
-
-#### Incentive
-
-Methods:
-
-- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/resources/wallets/earn/ethereum/incentive.ts">\_claim</a>(walletID, { ...params }) -> EarnIncentiveClaimActionResponse</code>
-
-## Transactions
-
-Types:
-
-- <code><a href="./src/resources/wallets/transactions.ts">TransactionGetResponse</a></code>
-
-Methods:
-
-- <code title="get /v1/wallets/{wallet_id}/transactions">client.wallets.transactions.<a href="./src/resources/wallets/transactions.ts">get</a>(walletID, { ...params }) -> TransactionGetResponse</code>
-
 ## Balance
 
 Types:
@@ -396,13 +792,6 @@ Types:
 Methods:
 
 - <code title="get /v1/wallets/{wallet_id}/balance">client.wallets.balance.<a href="./src/resources/wallets/balance.ts">get</a>(walletID, { ...params }) -> BalanceGetResponse</code>
-
-## Swap
-
-Methods:
-
-- <code title="post /v1/wallets/{wallet_id}/swap">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">execute</a>(walletID, { ...params }) -> SwapActionResponse</code>
-- <code title="post /v1/wallets/{wallet_id}/swap/quote">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">quote</a>(walletID, { ...params }) -> SwapQuoteResponse</code>
 
 ## DepositAccounts
 
@@ -420,420 +809,39 @@ Methods:
 - <code title="get /v1/wallets/{wallet_id}/deposit_accounts/fiat">client.wallets.depositAccounts.fiat.<a href="./src/resources/wallets/deposit-accounts/fiat.ts">list</a>(walletID, { ...params }) -> ListFiatDepositAccountsResponse</code>
 - <code title="get /v1/wallets/{wallet_id}/deposit_accounts/fiat/{deposit_account_id}">client.wallets.depositAccounts.fiat.<a href="./src/resources/wallets/deposit-accounts/fiat.ts">get</a>(depositAccountID, { ...params }) -> FiatDepositAccountResponse</code>
 
-# Cards
+## Earn
+
+### Ethereum
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/deposit">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">\_deposit</a>(walletID, { ...params }) -> EarnDepositActionResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/withdraw">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">\_withdraw</a>(walletID, { ...params }) -> EarnWithdrawActionResponse</code>
+- <code title="get /v1/earn/ethereum/vaults/{vault_id}">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">vaultDetails</a>(vaultID) -> EthereumEarnVaultDetailsResponse</code>
+- <code title="get /v1/wallets/{wallet_id}/earn/ethereum/vaults">client.wallets.earn.ethereum.<a href="./src/resources/wallets/earn/ethereum/ethereum.ts">vaultPosition</a>(walletID, { ...params }) -> EthereumEarnPositionResponse</code>
+
+#### Incentive
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/resources/wallets/earn/ethereum/incentive.ts">\_claim</a>(walletID, { ...params }) -> EarnIncentiveClaimActionResponse</code>
+
+## Swap
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/swap">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">execute</a>(walletID, { ...params }) -> SwapActionResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/swap/quote">client.wallets.swap.<a href="./src/resources/wallets/swap.ts">quote</a>(walletID, { ...params }) -> SwapQuoteResponse</code>
+
+## Transactions
 
 Types:
 
-- <code><a href="./src/resources/cards.ts">CardIssuingBankAgreement</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingBankInfo</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCancellationReason</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCardResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCardStatus</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCardholder</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCardsResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingConfig</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingConfigQueryParams</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingConfigResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCreateCardInput</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerBankTermsRequiredResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerConsentsRequestBody</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerElectronicDisclosureRequiredResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerErrorResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerInput</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerKYCRequiredResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerNotCreatedResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerPendingResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerProviderTermsRequiredResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerReadyResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerRejectedResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerRejectionReason</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingCustomerUnderReviewResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingDispute</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingDisputeStatus</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKey</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKeyRequestBody</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKeyResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingListCardsInput</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingListTransactionsInput</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingMerchant</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingReplaceCardRequestBody</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingReplacementReason</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingStatementQueryParams</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingTransactionResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingTransactionStatus</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingTransactionsResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssuingUpdateCardInput</a></code>
-
-# Users
-
-Types:
-
-- <code><a href="./src/resources/users/users.ts">AuthenticatedUser</a></code>
-- <code><a href="./src/resources/users/users.ts">ClientSessionUpdateAction</a></code>
-- <code><a href="./src/resources/users/users.ts">CrossAppEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users/users.ts">CrossAppSmartWallet</a></code>
-- <code><a href="./src/resources/users/users.ts">CustomMetadata</a></code>
-- <code><a href="./src/resources/users/users.ts">EmailMfaMethod</a></code>
-- <code><a href="./src/resources/users/users.ts">EmbeddedWalletRecoveryMethod</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccount</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountAppleInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountAppleOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountAuthorizationKey</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountBaseWallet</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountBaseWalletType</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountBitcoinSegwitEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountBitcoinTaprootEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountCrossApp</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountCurveSigningEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountCustomJwtInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountCustomJwt</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountCustomOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountDiscordInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountDiscordOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountEmail</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountEmailInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountEmbeddedWalletWithID</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountEthereum</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountEthereumEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountFarcaster</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountFarcasterInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountGitHubInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountGitHubOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountGoogleInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountGoogleOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountInstagramInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountInstagramOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountLineInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountLineOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountLinkedInInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountLinkedInOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountPasskey</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountPasskeyCredentialDeviceType</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountPasskeyInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountPhone</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountPhoneInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountSmartWallet</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountSolana</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountSolanaEmbeddedWallet</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountSpotifyInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountSpotifyOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountTelegram</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountTelegramInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountTiktokInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountTiktokOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitchInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitchOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitterInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountTwitterOAuth</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountType</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedAccountWalletInput</a></code>
-- <code><a href="./src/resources/users/users.ts">LinkedMfaMethod</a></code>
-- <code><a href="./src/resources/users/users.ts">OAuthTokens</a></code>
-- <code><a href="./src/resources/users/users.ts">PasskeyMfaMethod</a></code>
-- <code><a href="./src/resources/users/users.ts">PatchUsersCustomMetadata</a></code>
-- <code><a href="./src/resources/users/users.ts">SMSMfaMethod</a></code>
-- <code><a href="./src/resources/users/users.ts">TotpMfaMethod</a></code>
-- <code><a href="./src/resources/users/users.ts">User</a></code>
-- <code><a href="./src/resources/users/users.ts">UserBatchCreateInput</a></code>
-- <code><a href="./src/resources/users/users.ts">UserWithIdentityToken</a></code>
+- <code><a href="./src/resources/wallets/transactions.ts">TransactionGetResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/users">client.users.<a href="./src/resources/users/users.ts">create</a>({ ...params }) -> User</code>
-- <code title="get /v1/users">client.users.<a href="./src/resources/users/users.ts">list</a>({ ...params }) -> UsersCursor</code>
-- <code title="delete /v1/users/{user_id}">client.users.<a href="./src/resources/users/users.ts">delete</a>(userID) -> void</code>
-- <code title="get /v1/users/{user_id}">client.users.<a href="./src/resources/users/users.ts">\_get</a>(userID) -> User</code>
-- <code title="post /v1/users/custom_auth/id">client.users.<a href="./src/resources/users/users.ts">getByCustomAuthID</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/discord/username">client.users.<a href="./src/resources/users/users.ts">getByDiscordUsername</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/email/address">client.users.<a href="./src/resources/users/users.ts">getByEmailAddress</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/farcaster/fid">client.users.<a href="./src/resources/users/users.ts">getByFarcasterID</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/github/username">client.users.<a href="./src/resources/users/users.ts">getByGitHubUsername</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/phone/number">client.users.<a href="./src/resources/users/users.ts">getByPhoneNumber</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/smart_wallet/address">client.users.<a href="./src/resources/users/users.ts">getBySmartWalletAddress</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/telegram/telegram_user_id">client.users.<a href="./src/resources/users/users.ts">getByTelegramUserID</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/telegram/username">client.users.<a href="./src/resources/users/users.ts">getByTelegramUsername</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/twitter/subject">client.users.<a href="./src/resources/users/users.ts">getByTwitterSubject</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/twitter/username">client.users.<a href="./src/resources/users/users.ts">getByTwitterUsername</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/wallet/address">client.users.<a href="./src/resources/users/users.ts">getByWalletAddress</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/{user_id}/wallets">client.users.<a href="./src/resources/users/users.ts">pregenerateWallets</a>(userID, { ...params }) -> User</code>
-- <code title="post /v1/users/search">client.users.<a href="./src/resources/users/users.ts">search</a>({ ...params }) -> User</code>
-- <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/resources/users/users.ts">setCustomMetadata</a>(userID, { ...params }) -> User</code>
-- <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/resources/users/users.ts">unlinkLinkedAccount</a>(userID, { ...params }) -> User</code>
-
-## KYC
-
-Methods:
-
-- <code title="get /v1/users/{user_id}/kyc">client.users.kyc.<a href="./src/resources/users/kyc.ts">list</a>(userID) -> KYCStatusListResponse</code>
-- <code title="post /v1/users/{user_id}/kyc/links">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateLinks</a>(userID, { ...params }) -> KYCStatusResponse</code>
-- <code title="post /v1/users/{user_id}/kyc/tos">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateTos</a>(userID, { ...params }) -> KyxTosResponse</code>
-
-## ExternalFiatAccounts
-
-Methods:
-
-- <code title="post /v1/users/{user_id}/external_fiat_accounts">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">create</a>(userID, { ...params }) -> ExternalFiatAccountResponse</code>
-- <code title="get /v1/users/{user_id}/external_fiat_accounts">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">list</a>(userID, { ...params }) -> ListExternalFiatAccountsResponse</code>
-- <code title="delete /v1/users/{user_id}/external_fiat_accounts/{account_id}">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">delete</a>(accountID, { ...params }) -> SuccessResponse</code>
-- <code title="get /v1/users/{user_id}/external_fiat_accounts/{account_id}">client.users.externalFiatAccounts.<a href="./src/resources/users/external-fiat-accounts.ts">get</a>(accountID, { ...params }) -> ExternalFiatAccountResponse</code>
-
-# Organizations
-
-Types:
-
-- <code><a href="./src/resources/organizations/organizations.ts">CreateOrganizationSecretResponse</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">Organization</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">OrganizationCreateRequestBody</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretIDInput</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretView</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretsListResponse</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">OrganizationUpdateRequestBody</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">OrganizationsListResponse</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">UpdateOrganizationSecretSigningKeyInput</a></code>
-
-Methods:
-
-- <code title="post /v1/organizations">client.organizations.<a href="./src/resources/organizations/organizations.ts">create</a>({ ...params }) -> Organization</code>
-- <code title="patch /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations/organizations.ts">update</a>(organizationID, { ...params }) -> Organization</code>
-- <code title="get /v1/organizations">client.organizations.<a href="./src/resources/organizations/organizations.ts">list</a>({ ...params }) -> OrganizationsCursor</code>
-- <code title="delete /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations/organizations.ts">delete</a>(organizationID) -> void</code>
-- <code title="get /v1/organizations/{organization_id}">client.organizations.<a href="./src/resources/organizations/organizations.ts">get</a>(organizationID) -> Organization</code>
-
-## KYB
-
-Methods:
-
-- <code title="get /v1/organizations/{organization_id}/kyb">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">list</a>(organizationID) -> KYBStatusListResponse</code>
-- <code title="post /v1/organizations/{organization_id}/kyb/links">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">initiateLinks</a>(organizationID, { ...params }) -> KYBStatusResponse</code>
-- <code title="post /v1/organizations/{organization_id}/kyb/tos">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">initiateTos</a>(organizationID, { ...params }) -> KyxTosResponse</code>
-
-## ExternalFiatAccounts
-
-Methods:
-
-- <code title="post /v1/organizations/{organization_id}/external_fiat_accounts">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">create</a>(organizationID, { ...params }) -> OrganizationExternalFiatAccountResponse</code>
-- <code title="get /v1/organizations/{organization_id}/external_fiat_accounts">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">list</a>(organizationID, { ...params }) -> ListOrganizationExternalFiatAccountsResponse</code>
-- <code title="delete /v1/organizations/{organization_id}/external_fiat_accounts/{account_id}">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">delete</a>(accountID, { ...params }) -> SuccessResponse</code>
-- <code title="get /v1/organizations/{organization_id}/external_fiat_accounts/{account_id}">client.organizations.externalFiatAccounts.<a href="./src/resources/organizations/external-fiat-accounts.ts">get</a>(accountID, { ...params }) -> OrganizationExternalFiatAccountResponse</code>
-
-# Policies
-
-Types:
-
-- <code><a href="./src/resources/policies.ts">AbiParameter</a></code>
-- <code><a href="./src/resources/policies.ts">AbiSchema</a></code>
-- <code><a href="./src/resources/policies.ts">ActionRequestBodyCondition</a></code>
-- <code><a href="./src/resources/policies.ts">AggregationCondition</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionOperator</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSet</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetAuthorizationHeaders</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItem</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItemRequestParams</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItemValueInput</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItems</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItemsRequestBody</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItemsResponse</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetRequestBody</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetRequestParams</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionValue</a></code>
-- <code><a href="./src/resources/policies.ts">Ethereum7702AuthorizationCondition</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumCalldataCondition</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumTransactionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumTransactionConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumTypedDataDomainCondition</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumTypedDataDomainConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumTypedDataMessageCondition</a></code>
-- <code><a href="./src/resources/policies.ts">MessageSigningCondition</a></code>
-- <code><a href="./src/resources/policies.ts">MessageSigningField</a></code>
-- <code><a href="./src/resources/policies.ts">Policy</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyAction</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyAuthorizationHeaders</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyCondition</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyMethod</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyRequestBody</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyRuleRequestBody</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyRuleRequestParams</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyRuleResponse</a></code>
-- <code><a href="./src/resources/policies.ts">SolanaProgramInstructionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">SolanaSystemProgramInstructionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">SolanaSystemProgramInstructionConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">SolanaTokenProgramInstructionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">SolanaTokenProgramInstructionConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
-- <code><a href="./src/resources/policies.ts">SuiTransactionCommandOperator</a></code>
-- <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
-- <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
-- <code><a href="./src/resources/policies.ts">SystemCondition</a></code>
-- <code><a href="./src/resources/policies.ts">TempoTransactionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">TempoTransactionConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">TronCalldataCondition</a></code>
-- <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">TronTransactionConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">TypedDataInput</a></code>
-- <code><a href="./src/resources/policies.ts">UpdateConditionSetRequestBody</a></code>
-- <code><a href="./src/resources/policies.ts">XrplTransactionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">XrplTransactionConditionField</a></code>
-
-Methods:
-
-- <code title="post /v1/policies">client.policies.<a href="./src/resources/policies.ts">create</a>({ ...params }) -> Policy</code>
-- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/resources/policies.ts">\_createRule</a>(policyID, { ...params }) -> PolicyRuleResponse</code>
-- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_delete</a>(policyID, { ...params }) -> SuccessResponse</code>
-- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_deleteRule</a>(ruleID, { ...params }) -> SuccessResponse</code>
-- <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
-- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_updateRule</a>(ruleID, { ...params }) -> PolicyRuleResponse</code>
-- <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">get</a>(policyID) -> Policy</code>
-- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">getRule</a>(ruleID, { ...params }) -> PolicyRuleResponse</code>
-
-# Transactions
-
-Types:
-
-- <code><a href="./src/resources/transactions.ts">BlockchainTransactionStatus</a></code>
-- <code><a href="./src/resources/transactions.ts">Transaction</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionList</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningAssetDiff</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningAssetInfo</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningAssetValue</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningCalldata</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningExposure</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningMetadata</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningParams</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningRequestBody</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningResponseBody</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningRpcRequest</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationErrorResult</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationResult</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningSimulationSuccessResult</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningValidationErrorResult</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningValidationResult</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionScanningValidationSuccessResult</a></code>
-
-Methods:
-
-- <code title="get /v1/transactions/{transaction_id}">client.transactions.<a href="./src/resources/transactions.ts">get</a>(transactionID) -> Transaction</code>
-
-# KeyQuorums
-
-Types:
-
-- <code><a href="./src/resources/key-quorums.ts">AuthorizationKey</a></code>
-- <code><a href="./src/resources/key-quorums.ts">KeyQuorum</a></code>
-- <code><a href="./src/resources/key-quorums.ts">KeyQuorumAuthorizationHeaders</a></code>
-- <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateRequestBody</a></code>
-- <code><a href="./src/resources/key-quorums.ts">KeyQuorumUpdateRequestBody</a></code>
-
-Methods:
-
-- <code title="post /v1/key_quorums">client.keyQuorums.<a href="./src/resources/key-quorums.ts">create</a>({ ...params }) -> KeyQuorum</code>
-- <code title="delete /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_delete</a>(keyQuorumID, { ...params }) -> SuccessResponse</code>
-- <code title="patch /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_update</a>(keyQuorumID, { ...params }) -> KeyQuorum</code>
-- <code title="get /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">get</a>(keyQuorumID) -> KeyQuorum</code>
-
-# Intents
-
-Types:
-
-- <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
-- <code><a href="./src/resources/intents.ts">BaseIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyMember</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorum</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorumMember</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationMember</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizationUserMember</a></code>
-- <code><a href="./src/resources/intents.ts">IntentAuthorizeInput</a></code>
-- <code><a href="./src/resources/intents.ts">IntentCreationHeaders</a></code>
-- <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
-- <code><a href="./src/resources/intents.ts">IntentType</a></code>
-- <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">PolicyIntentRequestDetails</a></code>
-- <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">RpcIntentRequestDetails</a></code>
-- <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">RuleDeleteIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">RuleIntentCreateRequestDetails</a></code>
-- <code><a href="./src/resources/intents.ts">RuleIntentDeleteRequestBody</a></code>
-- <code><a href="./src/resources/intents.ts">RuleIntentDeleteRequestDetails</a></code>
-- <code><a href="./src/resources/intents.ts">RuleIntentRequestDetails</a></code>
-- <code><a href="./src/resources/intents.ts">RuleIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">RuleIntentUpdateRequestDetails</a></code>
-- <code><a href="./src/resources/intents.ts">RuleMutateIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">TransferIntentRequestDetails</a></code>
-- <code><a href="./src/resources/intents.ts">TransferIntentResponse</a></code>
-- <code><a href="./src/resources/intents.ts">WalletIntentResponse</a></code>
-
-Methods:
-
-- <code title="get /v1/intents">client.intents.<a href="./src/resources/intents.ts">list</a>({ ...params }) -> IntentResponsesCursor</code>
-- <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleMutateIntentResponse</code>
-- <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicyRule</a>(ruleID, { ...params }) -> RuleDeleteIntentResponse</code>
-- <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/resources/intents.ts">get</a>(intentID) -> IntentResponse</code>
-- <code title="post /v1/intents/{intent_id}/reject">client.intents.<a href="./src/resources/intents.ts">reject</a>(intentID) -> IntentResponse</code>
-- <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/resources/intents.ts">rpc</a>(walletID, { ...params }) -> RpcIntentResponse</code>
-- <code title="post /v1/intents/wallets/{wallet_id}/transfer">client.intents.<a href="./src/resources/intents.ts">transfer</a>(walletID, { ...params }) -> TransferIntentResponse</code>
-- <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/resources/intents.ts">updateKeyQuorum</a>(keyQuorumID, { ...params }) -> KeyQuorumIntentResponse</code>
-- <code title="patch /v1/intents/policies/{policy_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicy</a>(policyID, { ...params }) -> PolicyIntentResponse</code>
-- <code title="patch /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicyRule</a>(ruleID, { ...params }) -> RuleMutateIntentResponse</code>
-- <code title="patch /v1/intents/wallets/{wallet_id}">client.intents.<a href="./src/resources/intents.ts">updateWallet</a>(walletID, { ...params }) -> WalletIntentResponse</code>
-
-# Apps
-
-Types:
-
-- <code><a href="./src/resources/apps/apps.ts">AllowlistDeletionResponse</a></code>
-- <code><a href="./src/resources/apps/apps.ts">AllowlistEntry</a></code>
-- <code><a href="./src/resources/apps/apps.ts">AppAllowlistConfig</a></code>
-- <code><a href="./src/resources/apps/apps.ts">AppCustomOAuthProvider</a></code>
-- <code><a href="./src/resources/apps/apps.ts">AppResponse</a></code>
-- <code><a href="./src/resources/apps/apps.ts">Caip2</a></code>
-- <code><a href="./src/resources/apps/apps.ts">CaptchaProvider</a></code>
-- <code><a href="./src/resources/apps/apps.ts">Currency</a></code>
-- <code><a href="./src/resources/apps/apps.ts">CurrencyAsset</a></code>
-- <code><a href="./src/resources/apps/apps.ts">EmailDomain</a></code>
-- <code><a href="./src/resources/apps/apps.ts">EmailDomainInviteInput</a></code>
-- <code><a href="./src/resources/apps/apps.ts">EmailInviteInput</a></code>
-- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletChainConfig</a></code>
-- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletConfigSchema</a></code>
-- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletCreateOnLogin</a></code>
-- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletInputSchema</a></code>
-- <code><a href="./src/resources/apps/apps.ts">EmbeddedWalletMode</a></code>
-- <code><a href="./src/resources/apps/apps.ts">FundingConfigResponseSchema</a></code>
-- <code><a href="./src/resources/apps/apps.ts">FundingMethodEnum</a></code>
-- <code><a href="./src/resources/apps/apps.ts">FundingOption</a></code>
-- <code><a href="./src/resources/apps/apps.ts">GasSpendCurrency</a></code>
-- <code><a href="./src/resources/apps/apps.ts">GasSpendRequestBody</a></code>
-- <code><a href="./src/resources/apps/apps.ts">GasSpendResponseBody</a></code>
-- <code><a href="./src/resources/apps/apps.ts">MfaMethod</a></code>
-- <code><a href="./src/resources/apps/apps.ts">PhoneInviteInput</a></code>
-- <code><a href="./src/resources/apps/apps.ts">TelegramAuthConfigSchema</a></code>
-- <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>
-- <code><a href="./src/resources/apps/apps.ts">TestAccountsResponse</a></code>
-- <code><a href="./src/resources/apps/apps.ts">UserInviteInput</a></code>
-- <code><a href="./src/resources/apps/apps.ts">UserOwnedRecoveryOption</a></code>
-- <code><a href="./src/resources/apps/apps.ts">WalletInviteInput</a></code>
-
-Methods:
-
-- <code title="get /v1/apps/{app_id}">client.apps.<a href="./src/resources/apps/apps.ts">get</a>(appID) -> AppResponse</code>
-- <code title="get /v1/apps/gas_spend">client.apps.<a href="./src/resources/apps/apps.ts">getGasSpend</a>({ ...params }) -> GasSpendResponseBody</code>
-- <code title="get /v1/apps/{app_id}/test_credentials">client.apps.<a href="./src/resources/apps/apps.ts">getTestCredentials</a>(appID) -> TestAccountsResponse</code>
-
-## Allowlist
-
-Types:
-
-- <code><a href="./src/resources/apps/allowlist.ts">AllowlistListResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">create</a>(appID, { ...params }) -> AllowlistEntry</code>
-- <code title="get /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">list</a>(appID) -> AllowlistListResponse</code>
-- <code title="delete /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">delete</a>(appID, { ...params }) -> AllowlistDeletionResponse</code>
+- <code title="get /v1/wallets/{wallet_id}/transactions">client.wallets.transactions.<a href="./src/resources/wallets/transactions.ts">get</a>(walletID, { ...params }) -> TransactionGetResponse</code>
 
 # Webhooks
 
@@ -854,6 +862,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">DepositStartedData</a></code>
 - <code><a href="./src/resources/webhooks.ts">DepositStartedDestination</a></code>
 - <code><a href="./src/resources/webhooks.ts">DepositStartedSource</a></code>
+- <code><a href="./src/resources/webhooks.ts">FiatDepositCurrency</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsDepositedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">FundsWithdrawnWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">IntentAuthorizedWebhookPayload</a></code>
@@ -1544,6 +1553,12 @@ Types:
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedTransactionStatus</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedTransactionType</a></code>
 - <code><a href="./src/resources/kraken-embed.ts">KrakenEmbedUpcomingReward</a></code>
+
+# Actions
+
+Types:
+
+- <code><a href="./src/resources/actions.ts">ListActions</a></code>
 
 # Swaps
 

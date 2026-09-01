@@ -74,11 +74,11 @@ import { path } from '../../internal/utils/path';
 
 export class Wallets extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
-  _earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
-  transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
-  swap: SwapAPI.Swap = new SwapAPI.Swap(this._client);
   depositAccounts: DepositAccountsAPI.DepositAccounts = new DepositAccountsAPI.DepositAccounts(this._client);
+  _earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
+  swap: SwapAPI.Swap = new SwapAPI.Swap(this._client);
+  transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
 
   /**
    * Creates a new wallet on the requested chain and for the requested owner.
@@ -824,6 +824,8 @@ export interface CreateCryptoDepositAccountResponse {
  */
 export interface CreateCryptoDepositAccountWithConfigRequestBody {
   deposit_config_id: string;
+
+  type: 'deposit_config';
 }
 
 /**
@@ -841,6 +843,8 @@ export interface CreateCryptoDepositAccountWithRouteRequestBody {
    * aliases when known.
    */
   source: CryptoDepositAssetFilter;
+
+  type: 'inline_route';
 }
 
 /**
@@ -2030,6 +2034,88 @@ export interface NamedTokenTransferSource {
    */
   amount?: string;
 }
+
+/**
+ * Executes the NEAR `near_signTransaction` RPC to sign a transaction. The caller
+ * is responsible for broadcasting.
+ */
+export interface NearRpcRequestBody {
+  method: 'near_signTransaction';
+
+  /**
+   * Parameters for the NEAR `near_signTransaction` RPC.
+   */
+  params: NearSignTransactionRpcRequestBodyParams;
+}
+
+/**
+ * Response to the NEAR `near_signTransaction` RPC.
+ */
+export interface NearRpcResponse {
+  /**
+   * Data returned by the NEAR `near_signTransaction` RPC.
+   */
+  data: NearSignTransactionRpcResponseData;
+
+  method: 'near_signTransaction';
+}
+
+/**
+ * Executes the NEAR `near_signTransaction` RPC to sign a transaction. The caller
+ * is responsible for broadcasting.
+ */
+export interface NearSignTransactionRpcRequestBody {
+  method: 'near_signTransaction';
+
+  /**
+   * Parameters for the NEAR `near_signTransaction` RPC.
+   */
+  params: NearSignTransactionRpcRequestBodyParams;
+}
+
+/**
+ * Parameters for the NEAR `near_signTransaction` RPC.
+ */
+export interface NearSignTransactionRpcRequestBodyParams {
+  /**
+   * A non-empty, base64-encoded Borsh NEAR Transaction.
+   */
+  transaction: NearUnsignedTransactionBorshBase64;
+}
+
+/**
+ * Response to the NEAR `near_signTransaction` RPC.
+ */
+export interface NearSignTransactionRpcResponse {
+  /**
+   * Data returned by the NEAR `near_signTransaction` RPC.
+   */
+  data: NearSignTransactionRpcResponseData;
+
+  method: 'near_signTransaction';
+}
+
+/**
+ * Data returned by the NEAR `near_signTransaction` RPC.
+ */
+export interface NearSignTransactionRpcResponseData {
+  encoding: 'base64';
+
+  /**
+   * A non-empty, base64-encoded NEAR Ed25519 SignedTransaction.
+   */
+  signed_transaction: NearSignedTransactionBorshBase64;
+}
+
+/**
+ * A non-empty, base64-encoded NEAR Ed25519 SignedTransaction.
+ */
+export type NearSignedTransactionBorshBase64 = string;
+
+/**
+ * A non-empty, base64-encoded Borsh NEAR Transaction.
+ */
+export type NearUnsignedTransactionBorshBase64 = string;
 
 /**
  * A Spark token output with its previous transaction data.
@@ -4914,6 +5000,7 @@ export type WalletRpcRequestBody =
   | TronSignTransactionRpcInput
   | TronSendTransactionRpcInput
   | XrplSignTransactionRpcInput
+  | NearSignTransactionRpcRequestBody
   | ExportPrivateKeyRpcInput
   | ExportSeedPhraseRpcInput;
 
@@ -4947,6 +5034,7 @@ export type WalletRpcResponse =
   | TronSignTransactionRpcResponse
   | TronSendTransactionRpcResponse
   | XrplSignTransactionRpcResponse
+  | NearSignTransactionRpcResponse
   | ExportPrivateKeyRpcResponse
   | ExportSeedPhraseRpcResponse;
 
@@ -5306,6 +5394,7 @@ export type WalletRpcParams =
   | WalletRpcParams.TronSignTransactionRpcInput
   | WalletRpcParams.TronSendTransactionRpcInput
   | WalletRpcParams.XrplSignTransactionRpcInput
+  | WalletRpcParams.NearSignTransactionRpcRequestBody
   | WalletRpcParams.ExportPrivateKeyRpcInput
   | WalletRpcParams.ExportSeedPhraseRpcInput;
 
@@ -6413,6 +6502,36 @@ export declare namespace WalletRpcParams {
     'privy-request-expiry'?: string;
   }
 
+  export interface NearSignTransactionRpcRequestBody {
+    /**
+     * Body param
+     */
+    method: 'near_signTransaction';
+
+    /**
+     * Body param: Parameters for the NEAR `near_signTransaction` RPC.
+     */
+    params: NearSignTransactionRpcRequestBodyParams;
+
+    /**
+     * Header param: Request authorization signature. If multiple signatures are
+     * required, they should be comma separated.
+     */
+    'privy-authorization-signature'?: string;
+
+    /**
+     * Header param: Idempotency keys ensure API requests are executed only once within
+     * a 24-hour window.
+     */
+    'privy-idempotency-key'?: string;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
   export interface ExportPrivateKeyRpcInput {
     /**
      * Body param
@@ -6743,11 +6862,11 @@ export interface WalletGetWalletByAddressParams {
 }
 
 Wallets.Actions = Actions;
-Wallets.Earn = Earn;
-Wallets.Transactions = Transactions;
 Wallets.Balance = Balance;
-Wallets.Swap = Swap;
 Wallets.DepositAccounts = DepositAccounts;
+Wallets.Earn = Earn;
+Wallets.Swap = Swap;
+Wallets.Transactions = Transactions;
 
 export declare namespace Wallets {
   export {
@@ -6851,6 +6970,14 @@ export declare namespace Wallets {
     type Hex as Hex,
     type IntentBinding as IntentBinding,
     type NamedTokenTransferSource as NamedTokenTransferSource,
+    type NearRpcRequestBody as NearRpcRequestBody,
+    type NearRpcResponse as NearRpcResponse,
+    type NearSignTransactionRpcRequestBody as NearSignTransactionRpcRequestBody,
+    type NearSignTransactionRpcRequestBodyParams as NearSignTransactionRpcRequestBodyParams,
+    type NearSignTransactionRpcResponse as NearSignTransactionRpcResponse,
+    type NearSignTransactionRpcResponseData as NearSignTransactionRpcResponseData,
+    type NearSignedTransactionBorshBase64 as NearSignedTransactionBorshBase64,
+    type NearUnsignedTransactionBorshBase64 as NearUnsignedTransactionBorshBase64,
     type OutputWithPreviousTransactionData as OutputWithPreviousTransactionData,
     type PolicyInput as PolicyInput,
     type PrivateKeyExportInput as PrivateKeyExportInput,
@@ -7103,19 +7230,15 @@ export declare namespace Wallets {
     type ActionGetParams as ActionGetParams,
   };
 
-  export { Earn as Earn };
-
-  export {
-    Transactions as Transactions,
-    type TransactionGetResponse as TransactionGetResponse,
-    type TransactionGetParams as TransactionGetParams,
-  };
-
   export {
     Balance as Balance,
     type BalanceGetResponse as BalanceGetResponse,
     type BalanceGetParams as BalanceGetParams,
   };
+
+  export { DepositAccounts as DepositAccounts };
+
+  export { Earn as Earn };
 
   export {
     Swap as Swap,
@@ -7123,5 +7246,9 @@ export declare namespace Wallets {
     type SwapQuoteParams as SwapQuoteParams,
   };
 
-  export { DepositAccounts as DepositAccounts };
+  export {
+    Transactions as Transactions,
+    type TransactionGetResponse as TransactionGetResponse,
+    type TransactionGetParams as TransactionGetParams,
+  };
 }

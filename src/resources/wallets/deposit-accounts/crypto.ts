@@ -22,7 +22,10 @@ export class Crypto extends APIResource {
    * const createCryptoDepositAccountResponse =
    *   await client.wallets.depositAccounts.crypto._create(
    *     'wallet_id',
-   *     { deposit_config_id: 'clg2rvssg025ny5fmul5m95fn' },
+   *     {
+   *       deposit_config_id: 'clg2rvssg025ny5fmul5m95fn',
+   *       type: 'deposit_config',
+   *     },
    *   );
    * ```
    */
@@ -66,6 +69,11 @@ export declare namespace CryptoCreateParams {
     deposit_config_id: string;
 
     /**
+     * Body param
+     */
+    type: 'deposit_config';
+
+    /**
      * Header param: Request authorization signature. If multiple signatures are
      * required, they should be comma separated.
      */
@@ -96,6 +104,11 @@ export declare namespace CryptoCreateParams {
      * human-readable aliases when known.
      */
     source: WalletsAPI.CryptoDepositAssetFilter;
+
+    /**
+     * Body param
+     */
+    type: 'inline_route';
 
     /**
      * Header param: Request authorization signature. If multiple signatures are

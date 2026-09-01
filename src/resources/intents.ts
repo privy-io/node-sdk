@@ -1104,6 +1104,7 @@ export type IntentRpcParams =
   | IntentRpcParams.TronSignTransactionRpcInput
   | IntentRpcParams.TronSendTransactionRpcInput
   | IntentRpcParams.XrplSignTransactionRpcInput
+  | IntentRpcParams.NearSignTransactionRpcRequestBody
   | IntentRpcParams.ExportPrivateKeyRpcInput
   | IntentRpcParams.ExportSeedPhraseRpcInput;
 
@@ -1891,6 +1892,24 @@ export declare namespace IntentRpcParams {
      * Body param: Parameters for the XRPL `xrpl_signTransaction` RPC.
      */
     params: WalletsAPI.XrplSignTransactionRpcInputParams;
+
+    /**
+     * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+     * representing the deadline by which the request must be processed.
+     */
+    'privy-request-expiry'?: string;
+  }
+
+  export interface NearSignTransactionRpcRequestBody {
+    /**
+     * Body param
+     */
+    method: 'near_signTransaction';
+
+    /**
+     * Body param: Parameters for the NEAR `near_signTransaction` RPC.
+     */
+    params: WalletsAPI.NearSignTransactionRpcRequestBodyParams;
 
     /**
      * Header param: Request expiry. Value is a Unix timestamp in milliseconds

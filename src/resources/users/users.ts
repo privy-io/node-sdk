@@ -26,9 +26,9 @@ import { path } from '../../internal/utils/path';
  * Operations related to users
  */
 export class Users extends APIResource {
-  kyc: KYCAPI.KYC = new KYCAPI.KYC(this._client);
   externalFiatAccounts: ExternalFiatAccountsAPI.ExternalFiatAccounts =
     new ExternalFiatAccountsAPI.ExternalFiatAccounts(this._client);
+  kyc: KYCAPI.KYC = new KYCAPI.KYC(this._client);
 
   /**
    * Create a new user with linked accounts. Optionally pre-generate embedded wallets
@@ -1819,8 +1819,8 @@ export interface UserUnlinkLinkedAccountParams {
   provider?: string;
 }
 
-Users.KYC = KYC;
 Users.ExternalFiatAccounts = ExternalFiatAccounts;
+Users.KYC = KYC;
 
 export declare namespace Users {
   export {
@@ -1916,16 +1916,16 @@ export declare namespace Users {
   };
 
   export {
-    KYC as KYC,
-    type KYCInitiateLinksParams as KYCInitiateLinksParams,
-    type KYCInitiateTosParams as KYCInitiateTosParams,
-  };
-
-  export {
     ExternalFiatAccounts as ExternalFiatAccounts,
     type ExternalFiatAccountCreateParams as ExternalFiatAccountCreateParams,
     type ExternalFiatAccountListParams as ExternalFiatAccountListParams,
     type ExternalFiatAccountDeleteParams as ExternalFiatAccountDeleteParams,
     type ExternalFiatAccountGetParams as ExternalFiatAccountGetParams,
+  };
+
+  export {
+    KYC as KYC,
+    type KYCInitiateLinksParams as KYCInitiateLinksParams,
+    type KYCInitiateTosParams as KYCInitiateTosParams,
   };
 }

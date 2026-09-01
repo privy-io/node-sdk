@@ -24,6 +24,7 @@ export {
   type UpdateAccountFromWalletsConfigurationInput,
   type UpdateAccountInput,
 } from './accounts';
+export { Actions, type ListActions } from './actions';
 export {
   Aggregations,
   type Aggregation,
@@ -966,6 +967,14 @@ export {
   type Hex,
   type IntentBinding,
   type NamedTokenTransferSource,
+  type NearRpcRequestBody,
+  type NearRpcResponse,
+  type NearSignTransactionRpcRequestBody,
+  type NearSignTransactionRpcRequestBodyParams,
+  type NearSignTransactionRpcResponse,
+  type NearSignTransactionRpcResponseData,
+  type NearSignedTransactionBorshBase64,
+  type NearUnsignedTransactionBorshBase64,
   type OutputWithPreviousTransactionData,
   type PolicyInput,
   type PrivateKeyExportInput,
@@ -1184,6 +1193,7 @@ export {
   type DepositStartedData,
   type DepositStartedDestination,
   type DepositStartedSource,
+  type FiatDepositCurrency,
   type FundsDepositedWebhookPayload,
   type FundsWithdrawnWebhookPayload,
   type IntentAuthorizedWebhookPayload,

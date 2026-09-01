@@ -22,9 +22,9 @@ import { path } from '../../internal/utils/path';
  * Operations related to organizations
  */
 export class Organizations extends APIResource {
-  kyb: KYBAPI.KYB = new KYBAPI.KYB(this._client);
   externalFiatAccounts: ExternalFiatAccountsAPI.ExternalFiatAccounts =
     new ExternalFiatAccountsAPI.ExternalFiatAccounts(this._client);
+  kyb: KYBAPI.KYB = new KYBAPI.KYB(this._client);
 
   /**
    * Create an organization in an app.
@@ -259,8 +259,8 @@ export interface OrganizationUpdateParams {
 
 export interface OrganizationListParams extends CursorParams {}
 
-Organizations.KYB = KYB;
 Organizations.ExternalFiatAccounts = ExternalFiatAccounts;
+Organizations.KYB = KYB;
 
 export declare namespace Organizations {
   export {
@@ -280,16 +280,16 @@ export declare namespace Organizations {
   };
 
   export {
-    KYB as KYB,
-    type KYBInitiateLinksParams as KYBInitiateLinksParams,
-    type KYBInitiateTosParams as KYBInitiateTosParams,
-  };
-
-  export {
     ExternalFiatAccounts as ExternalFiatAccounts,
     type ExternalFiatAccountCreateParams as ExternalFiatAccountCreateParams,
     type ExternalFiatAccountListParams as ExternalFiatAccountListParams,
     type ExternalFiatAccountDeleteParams as ExternalFiatAccountDeleteParams,
     type ExternalFiatAccountGetParams as ExternalFiatAccountGetParams,
+  };
+
+  export {
+    KYB as KYB,
+    type KYBInitiateLinksParams as KYBInitiateLinksParams,
+    type KYBInitiateTosParams as KYBInitiateTosParams,
   };
 }

@@ -262,17 +262,24 @@ export interface DepositStartedSource {
   amount: string;
 
   /**
-   * Supported fiat currencies.
+   * Fiat currencies a deposit account can receive deposits in.
    */
-  currency: FiatAPI.FiatCurrency;
+  currency: FiatDepositCurrency;
 
   /**
-   * Supported fiat payment rails.
+   * The payment rail the deposit arrived on. Known values include "sepa",
+   * "ach_push", "wire", "fednow", "faster_payments", "pix", "spei", but the provider
+   * may return others.
    */
-  payment_rail?: FiatAPI.FiatPaymentRail;
+  payment_rail?: string;
 
   sender_name?: string;
 }
+
+/**
+ * Fiat currencies a deposit account can receive deposits in.
+ */
+export type FiatDepositCurrency = 'usd' | 'eur' | 'gbp' | 'brl' | 'mxn' | 'cop';
 
 /**
  * Payload for the wallet.funds_deposited webhook event.
@@ -4572,6 +4579,7 @@ export declare namespace Webhooks {
     type DepositStartedData as DepositStartedData,
     type DepositStartedDestination as DepositStartedDestination,
     type DepositStartedSource as DepositStartedSource,
+    type FiatDepositCurrency as FiatDepositCurrency,
     type FundsDepositedWebhookPayload as FundsDepositedWebhookPayload,
     type FundsWithdrawnWebhookPayload as FundsWithdrawnWebhookPayload,
     type IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload,

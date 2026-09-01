@@ -13,6 +13,7 @@ describe('resource crypto', () => {
   test.skip('_create: only required params', async () => {
     const responsePromise = client.wallets.depositAccounts.crypto._create('wallet_id', {
       deposit_config_id: 'x',
+      type: 'deposit_config',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -27,6 +28,7 @@ describe('resource crypto', () => {
   test.skip('_create: required and optional params', async () => {
     const response = await client.wallets.depositAccounts.crypto._create('wallet_id', {
       deposit_config_id: 'x',
+      type: 'deposit_config',
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
       'privy-request-expiry': 'privy-request-expiry',

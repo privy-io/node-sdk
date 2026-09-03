@@ -17,8 +17,11 @@ import { path } from '../internal/utils/path';
  */
 export class Intents extends APIResource {
   /**
-   * List intents for an app. Returns a paginated list of intents with their current
-   * status and details.
+   * List intents for an app. Returns a paginated list with each intent's current
+   * status and details. Requests authenticated with an app secret can retrieve all
+   * intents for the app. Requests authenticated with a user token return only
+   * intents that the authenticated user created, must approve, or has signed. Query
+   * parameters only narrow this scoped result set.
    *
    * @example
    * ```ts
@@ -101,8 +104,11 @@ export class Intents extends APIResource {
   }
 
   /**
-   * Retrieve an intent by ID. Returns the intent details including its current
-   * status, authorization details, and execution result if applicable.
+   * Retrieve an intent by ID. Returns its current status, authorization details, and
+   * execution result when applicable. Requests authenticated with an app secret can
+   * retrieve any intent for the app. Requests authenticated with a user token can
+   * retrieve only intents that the authenticated user created, must approve, or has
+   * signed. Unrelated intents return a 404 response.
    *
    * @example
    * ```ts
@@ -1015,6 +1021,10 @@ export namespace WalletIntentResponse {
 }
 
 export interface IntentListParams extends CursorParams {
+  /**
+   * Filter by creator user ID. For user-token requests, Privy uses the authenticated
+   * user ID to scope intent visibility. This filter only narrows that scoped result.
+   */
   created_by_id?: string;
 
   current_user_has_signed?: 'true' | 'false';
@@ -1024,6 +1034,11 @@ export interface IntentListParams extends CursorParams {
    */
   intent_type?: IntentType;
 
+  /**
+   * Filter by a user whose approval is still pending. For user-token requests, Privy
+   * uses the authenticated user ID to scope intent visibility. This filter only
+   * narrows that scoped result.
+   */
   pending_member_id?: string;
 
   resource_id?: string;

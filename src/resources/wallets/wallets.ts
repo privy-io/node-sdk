@@ -66,6 +66,8 @@ import * as DepositAccountsAPI from './deposit-accounts/deposit-accounts';
 import { DepositAccounts } from './deposit-accounts/deposit-accounts';
 import * as EarnAPI from './earn/earn';
 import { Earn } from './earn/earn';
+import * as PayoutAPI from './payout/payout';
+import { Payout } from './payout/payout';
 import { APIPromise } from '../../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -77,6 +79,7 @@ export class Wallets extends APIResource {
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
   depositAccounts: DepositAccountsAPI.DepositAccounts = new DepositAccountsAPI.DepositAccounts(this._client);
   _earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
+  payout: PayoutAPI.Payout = new PayoutAPI.Payout(this._client);
   swap: SwapAPI.Swap = new SwapAPI.Swap(this._client);
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
 
@@ -4497,6 +4500,7 @@ export type WalletAssetChainNameInput =
   | 'tron'
   | 'zksync_era'
   | 'robinhood'
+  | 'tempo_testnet'
   | 'hoodi'
   | 'sepolia'
   | 'arbitrum_sepolia'
@@ -4505,6 +4509,7 @@ export type WalletAssetChainNameInput =
   | 'linea_testnet'
   | 'optimism_sepolia'
   | 'polygon_amoy'
+  | 'bsc_testnet'
   | 'solana_devnet'
   | 'solana_testnet'
   | 'tron_nile'
@@ -4727,6 +4732,11 @@ export interface WalletBatchItemInput {
    * A human-readable label for the wallet.
    */
   display_name?: string;
+
+  /**
+   * Request body for assigning an entity to a wallet.
+   */
+  entity?: WalletEntityAssignmentRequestBody;
 
   /**
    * A customer-provided identifier for mapping to external systems. URL-safe
@@ -6622,6 +6632,11 @@ export interface WalletSubmitImportParams {
   display_name?: string;
 
   /**
+   * Request body for assigning an entity to a wallet.
+   */
+  entity?: WalletEntityAssignmentRequestBody;
+
+  /**
    * A customer-provided identifier for mapping to external systems. URL-safe
    * characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
    * after creation.
@@ -6865,6 +6880,7 @@ Wallets.Actions = Actions;
 Wallets.Balance = Balance;
 Wallets.DepositAccounts = DepositAccounts;
 Wallets.Earn = Earn;
+Wallets.Payout = Payout;
 Wallets.Swap = Swap;
 Wallets.Transactions = Transactions;
 
@@ -7239,6 +7255,8 @@ export declare namespace Wallets {
   export { DepositAccounts as DepositAccounts };
 
   export { Earn as Earn };
+
+  export { Payout as Payout };
 
   export {
     Swap as Swap,

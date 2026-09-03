@@ -57,6 +57,11 @@ export interface CardIssuingCardResponse {
   id: string;
 
   /**
+   * The asset the card funds from. 'usdc' on EVM and Solana, 'path_usd' on Tempo.
+   */
+  asset: string;
+
+  /**
    * USD balance of the card funding wallet on the configured chain, or null when
    * unavailable.
    */
@@ -157,6 +162,12 @@ export interface CardIssuingConfigResponse {
  * Input for creating a virtual Stripe Issuing card for a Privy wallet.
  */
 export interface CardIssuingCreateCardInput {
+  /**
+   * The asset to fund the card. Must be 'usdc' on EVM and Solana, or 'path_usd' on
+   * Tempo.
+   */
+  asset: string;
+
   /**
    * A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
    */

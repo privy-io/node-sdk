@@ -826,6 +826,14 @@ Methods:
 
 - <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/resources/wallets/earn/ethereum/incentive.ts">\_claim</a>(walletID, { ...params }) -> EarnIncentiveClaimActionResponse</code>
 
+## Payout
+
+### Fiat
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/payout/fiat">client.wallets.payout.fiat.<a href="./src/resources/wallets/payout/fiat.ts">\_create</a>(walletID, { ...params }) -> PayoutResponse</code>
+
 ## Swap
 
 Methods:

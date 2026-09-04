@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.35.0](https://github.com/privy-io/node-sdk/compare/v0.34.0...v0.35.0) (2026-09-04)
+
+
+### Features
+
+* add payout fiat convenience wrapper on PrivyClient ([#25](https://github.com/privy-io/node-sdk/issues/25)) ([aba07a5](https://github.com/privy-io/node-sdk/commit/aba07a549fcff0944481c14277cc8639406b7a24))
+* **api:** api update ([e54bd7e](https://github.com/privy-io/node-sdk/commit/e54bd7e768d325ff6d8c79dc476014eb39935ca2))
+* **api:** api update ([cf5b2d8](https://github.com/privy-io/node-sdk/commit/cf5b2d8c7eaaebc51cdb20dbd82fda6bd495f408))
+* **api:** api update ([6dd8830](https://github.com/privy-io/node-sdk/commit/6dd8830ca44c82c7f2b40fa03724f11196603d35))
+* **api:** api update ([58116ef](https://github.com/privy-io/node-sdk/commit/58116ef2a7c17f23a6b8a7bca17cae33405d7fbb))
+* **api:** api update ([b035183](https://github.com/privy-io/node-sdk/commit/b035183aba9ec49ffa13f78aeb251089a03975d0))
+
+
+### Chores
+
+* publish stable GitHub releases ([#18](https://github.com/privy-io/node-sdk/issues/18)) ([2794645](https://github.com/privy-io/node-sdk/commit/27946457ad93c10134ed4c41c50a16044de404e3))
+
 ## [0.34.0](https://github.com/privy-io/node-sdk/compare/v0.33.0...v0.34.0) (2026-08-28)
 
 

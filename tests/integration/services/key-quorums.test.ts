@@ -21,22 +21,24 @@ describe('PrivyKeyQuorumsService', () => {
         authorization_threshold: 2,
       });
 
-      expect(keyQuorum.id).toBeDefined();
-      expect(keyQuorum.display_name).toBe('2 of 2 Test Key Quorum');
-      expect(keyQuorum.authorization_threshold).toBe(2);
-      expect(keyQuorum.authorization_keys).toHaveLength(2);
-      expect(keyQuorum.authorization_keys).toContainEqual(
-        expect.objectContaining({ public_key: keyPair.publicKey }),
-      );
-      expect(keyQuorum.authorization_keys).toContainEqual(
-        expect.objectContaining({ public_key: keyPair2.publicKey }),
-      );
-
-      await privyClient.keyQuorums().delete(keyQuorum.id, {
-        authorization_context: {
-          authorization_private_keys: [keyPair.privateKey, keyPair2.privateKey],
-        },
-      });
+      try {
+        expect(keyQuorum.id).toBeDefined();
+        expect(keyQuorum.display_name).toBe('2 of 2 Test Key Quorum');
+        expect(keyQuorum.authorization_threshold).toBe(2);
+        expect(keyQuorum.authorization_keys).toHaveLength(2);
+        expect(keyQuorum.authorization_keys).toContainEqual(
+          expect.objectContaining({ public_key: keyPair.publicKey }),
+        );
+        expect(keyQuorum.authorization_keys).toContainEqual(
+          expect.objectContaining({ public_key: keyPair2.publicKey }),
+        );
+      } finally {
+        await privyClient.keyQuorums().delete(keyQuorum.id, {
+          authorization_context: {
+            authorization_private_keys: [keyPair.privateKey, keyPair2.privateKey],
+          },
+        });
+      }
     });
   });
   describe('update', () => {
@@ -50,25 +52,33 @@ describe('PrivyKeyQuorumsService', () => {
         display_name: 'NodeSDK KeyQuorums Update Test',
         authorization_threshold: 2,
       });
-      expect(keyQuorum.id).toBeDefined();
-      expect(keyQuorum.authorization_threshold).toBe(2);
+      try {
+        expect(keyQuorum.id).toBeDefined();
+        expect(keyQuorum.authorization_threshold).toBe(2);
 
-      // Update into a 1-of-2 key quorums
-      const keyQuorum2 = await privyClient.keyQuorums().update(keyQuorum.id, {
-        authorization_threshold: 1,
-        authorization_context: { authorization_private_keys: [keypair1.privateKey, keypair2.privateKey] },
-      });
-      expect(keyQuorum2.id).toEqual(keyQuorum.id);
-      expect(keyQuorum2.authorization_threshold).toBe(1);
+        // Update into a 1-of-2 key quorums
+        const keyQuorum2 = await privyClient.keyQuorums().update(keyQuorum.id, {
+          authorization_threshold: 1,
+          authorization_context: { authorization_private_keys: [keypair1.privateKey, keypair2.privateKey] },
+        });
+        expect(keyQuorum2.id).toEqual(keyQuorum.id);
+        expect(keyQuorum2.authorization_threshold).toBe(1);
 
-      // Update back to a 2-of-2 key quorums
-      const keyQuorum3 = await privyClient.keyQuorums().update(keyQuorum.id, {
-        authorization_threshold: 2,
-        // A single key is sufficient since it's a 1-of-2 key quorum before this update
-        authorization_context: { authorization_private_keys: [keypair1.privateKey] },
-      });
-      expect(keyQuorum3.id).toEqual(keyQuorum.id);
-      expect(keyQuorum3.authorization_threshold).toBe(2);
+        // Update back to a 2-of-2 key quorums
+        const keyQuorum3 = await privyClient.keyQuorums().update(keyQuorum.id, {
+          authorization_threshold: 2,
+          // A single key is sufficient since it's a 1-of-2 key quorum before this update
+          authorization_context: { authorization_private_keys: [keypair1.privateKey] },
+        });
+        expect(keyQuorum3.id).toEqual(keyQuorum.id);
+        expect(keyQuorum3.authorization_threshold).toBe(2);
+      } finally {
+        await privyClient.keyQuorums().delete(keyQuorum.id, {
+          authorization_context: {
+            authorization_private_keys: [keypair1.privateKey, keypair2.privateKey],
+          },
+        });
+      }
     });
   });
   describe('delete', () => {
@@ -79,20 +89,34 @@ describe('PrivyKeyQuorumsService', () => {
         display_name: 'NodeSDK KeyQuorums Delete Test',
         authorization_threshold: 1,
       });
-      expect(createdKeyQuorum.id).toBeDefined();
+      let deleted = false;
+      try {
+        expect(createdKeyQuorum.id).toBeDefined();
 
-      // Check that the key quorum exists
-      expect(await privyClient.keyQuorums().get(createdKeyQuorum.id)).toMatchObject({
-        id: createdKeyQuorum.id,
-      });
+        // Check that the key quorum exists
+        expect(await privyClient.keyQuorums().get(createdKeyQuorum.id)).toMatchObject({
+          id: createdKeyQuorum.id,
+        });
 
-      const deletedKeyQuorum = await privyClient.keyQuorums().delete(createdKeyQuorum.id, {
-        authorization_context: { authorization_private_keys: [keypair.privateKey] },
-      });
-      expect(deletedKeyQuorum.success).toBe(true);
+        const deletedKeyQuorum = await privyClient.keyQuorums().delete(createdKeyQuorum.id, {
+          authorization_context: { authorization_private_keys: [keypair.privateKey] },
+        });
+        deleted = deletedKeyQuorum.success;
+        expect(deletedKeyQuorum.success).toBe(true);
 
-      // Check that the key quorum no longer exists
-      await expect(() => privyClient.keyQuorums().get(createdKeyQuorum.id)).rejects.toThrow(NotFoundError);
+        // Check that the key quorum no longer exists
+        await expect(() => privyClient.keyQuorums().get(createdKeyQuorum.id)).rejects.toThrow(NotFoundError);
+      } finally {
+        if (!deleted) {
+          try {
+            await privyClient.keyQuorums().delete(createdKeyQuorum.id, {
+              authorization_context: { authorization_private_keys: [keypair.privateKey] },
+            });
+          } catch (error) {
+            if (!(error instanceof NotFoundError)) throw error;
+          }
+        }
+      }
     });
   });
 });

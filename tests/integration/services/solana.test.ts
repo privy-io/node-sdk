@@ -5,6 +5,7 @@ import { PrivyClient } from '@privy-io/node';
 import { createTransferTransaction, SOL_DEVNET_CAIP2 } from '../../helpers/solana';
 import {
   setupTestWalletResources,
+  cleanupTestWalletResources,
   createTestWallets,
   TestWalletResources,
   TestWallet,
@@ -20,6 +21,10 @@ describe('PrivySolanaService', () => {
     resources = await setupTestWalletResources();
     wallets = await createTestWallets(resources, 'solana');
     privyClient = resources.client;
+  });
+
+  afterAll(async () => {
+    if (resources !== undefined) await cleanupTestWalletResources(resources);
   });
 
   describe.each(WALLET_CASES)('$ownership', ({ index }) => {

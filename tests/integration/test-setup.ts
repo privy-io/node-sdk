@@ -32,6 +32,20 @@ export const WALLET_CASES = [
   { index: 3, ownership: 'quorum-owned' },
 ] as const;
 
+function recordCleanupError(primaryError: unknown, cleanupError: unknown): void {
+  if (!(primaryError instanceof Error)) return;
+
+  try {
+    Object.defineProperty(primaryError, 'cleanupError', {
+      value: cleanupError,
+      enumerable: true,
+      configurable: true,
+    });
+  } catch {
+    // Preserve the primary error even when it cannot be annotated.
+  }
+}
+
 export async function setupTestWalletResources(): Promise<TestWalletResources> {
   const client = new PrivyClient({
     appId: TEST_APP.id,
@@ -46,12 +60,22 @@ export async function setupTestWalletResources(): Promise<TestWalletResources> {
     linked_accounts: [{ type: 'custom_auth', custom_user_id: customUserId }],
   });
 
-  const quorum = await client.keyQuorums().create({
-    public_keys: [quorumKeyPair.publicKey],
-    user_ids: [user.id],
-    display_name: 'NodeSDK Test Quorum',
-    authorization_threshold: 1,
-  });
+  let quorum;
+  try {
+    quorum = await client.keyQuorums().create({
+      public_keys: [quorumKeyPair.publicKey],
+      user_ids: [user.id],
+      display_name: 'NodeSDK Test Quorum',
+      authorization_threshold: 1,
+    });
+  } catch (error) {
+    try {
+      await client.users().delete(user.id);
+    } catch (cleanupError) {
+      recordCleanupError(error, cleanupError);
+    }
+    throw error;
+  }
 
   return {
     client,
@@ -61,6 +85,11 @@ export async function setupTestWalletResources(): Promise<TestWalletResources> {
     customUserId,
     quorumId: quorum.id,
   };
+}
+
+export async function cleanupTestWalletResources(resources: TestWalletResources): Promise<void> {
+  // Key quorums with associated wallets cannot be deleted by the API.
+  await resources.client.users().delete(resources.userId);
 }
 
 export async function createTestWallets(

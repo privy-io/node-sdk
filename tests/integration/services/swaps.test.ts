@@ -1,5 +1,5 @@
 import { PrivyClient } from '@privy-io/node';
-import { setupTestWalletResources, TestWalletResources } from '../test-setup';
+import { cleanupTestWalletResources, setupTestWalletResources, TestWalletResources } from '../test-setup';
 
 describe('PrivySwapsService', () => {
   let resources: TestWalletResources;
@@ -12,6 +12,10 @@ describe('PrivySwapsService', () => {
 
     const wallet = await privyClient.wallets().create({ chain_type: 'ethereum' });
     walletId = wallet.id;
+  });
+
+  afterAll(async () => {
+    if (resources !== undefined) await cleanupTestWalletResources(resources);
   });
 
   describe('quote', () => {

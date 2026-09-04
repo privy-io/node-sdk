@@ -17,6 +17,7 @@ import {
 import { generateP256KeyPair } from '@privy-io/node';
 import {
   setupTestWalletResources,
+  cleanupTestWalletResources,
   createTestWallets,
   TestWalletResources,
   TestWallet,
@@ -30,6 +31,10 @@ describe('PrivyWalletsService', () => {
   beforeAll(async () => {
     resources = await setupTestWalletResources();
     privyClient = resources.client;
+  });
+
+  afterAll(async () => {
+    if (resources !== undefined) await cleanupTestWalletResources(resources);
   });
 
   describe('update', () => {

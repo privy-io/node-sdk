@@ -36,17 +36,19 @@ describe('PrivyPoliciesService', () => {
         ],
       });
 
-      expect(policy.id).toBeDefined();
-      expect(policy.name).toBe('Native token transfer maximums');
-      expect(policy.chain_type).toBe('ethereum');
-      expect(policy.rules).toEqual([
-        expect.objectContaining({
-          name: 'Restrict ETH transfers to a maximum value',
-          method: 'eth_sendTransaction',
-        }),
-      ]);
-
-      await privyClient.policies().delete(policy.id, {});
+      try {
+        expect(policy.id).toBeDefined();
+        expect(policy.name).toBe('Native token transfer maximums');
+        expect(policy.chain_type).toBe('ethereum');
+        expect(policy.rules).toEqual([
+          expect.objectContaining({
+            name: 'Restrict ETH transfers to a maximum value',
+            method: 'eth_sendTransaction',
+          }),
+        ]);
+      } finally {
+        await privyClient.policies().delete(policy.id, {});
+      }
     });
   });
   describe('create with viem abi schema', () => {
@@ -81,18 +83,20 @@ describe('PrivyPoliciesService', () => {
         ],
       });
 
-      expect(policy.id).toBeDefined();
-      expect(policy.name).toBe('ERC20 Approve allowlist');
-      expect(policy.chain_type).toBe('ethereum');
-      expect(policy.rules).toEqual([
-        expect.objectContaining({
-          name: 'ERC20 Approve to allowed spenders',
-          method: 'eth_sendTransaction',
-          action: 'ALLOW',
-        }),
-      ]);
-
-      await privyClient.policies().delete(policy.id, {});
+      try {
+        expect(policy.id).toBeDefined();
+        expect(policy.name).toBe('ERC20 Approve allowlist');
+        expect(policy.chain_type).toBe('ethereum');
+        expect(policy.rules).toEqual([
+          expect.objectContaining({
+            name: 'ERC20 Approve to allowed spenders',
+            method: 'eth_sendTransaction',
+            action: 'ALLOW',
+          }),
+        ]);
+      } finally {
+        await privyClient.policies().delete(policy.id, {});
+      }
     });
   });
   describe('create idempotency', () => {
@@ -105,20 +109,22 @@ describe('PrivyPoliciesService', () => {
         rules: [],
         idempotency_key: idempotencyKey,
       });
-      expect(response1.id).toBeDefined();
-      expect(response1.name).toBe('NodeSDK Idempotency Test');
-      expect(response1.chain_type).toBe('ethereum');
+      try {
+        expect(response1.id).toBeDefined();
+        expect(response1.name).toBe('NodeSDK Idempotency Test');
+        expect(response1.chain_type).toBe('ethereum');
 
-      const response2 = await privyClient.policies().create({
-        version: '1.0',
-        name: 'NodeSDK Idempotency Test',
-        chain_type: 'ethereum',
-        rules: [],
-        idempotency_key: idempotencyKey,
-      });
-      expect(response2.id).toBe(response1.id);
-
-      await privyClient.policies().delete(response1.id, {});
+        const response2 = await privyClient.policies().create({
+          version: '1.0',
+          name: 'NodeSDK Idempotency Test',
+          chain_type: 'ethereum',
+          rules: [],
+          idempotency_key: idempotencyKey,
+        });
+        expect(response2.id).toBe(response1.id);
+      } finally {
+        await privyClient.policies().delete(response1.id, {});
+      }
     });
     it('will fail if the idempotency key is reused with a different body', async () => {
       const idempotencyKey = crypto.randomUUID();
@@ -130,19 +136,21 @@ describe('PrivyPoliciesService', () => {
         idempotency_key: idempotencyKey,
       });
 
-      await expect(
-        privyClient.policies().create({
-          version: '1.0',
-          name: 'NodeSDK Idempotency Test Different',
-          chain_type: 'ethereum',
-          rules: [],
-          idempotency_key: idempotencyKey,
-        }),
-      ).rejects.toThrow(
-        `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
-      );
-
-      await privyClient.policies().delete(response.id, {});
+      try {
+        await expect(
+          privyClient.policies().create({
+            version: '1.0',
+            name: 'NodeSDK Idempotency Test Different',
+            chain_type: 'ethereum',
+            rules: [],
+            idempotency_key: idempotencyKey,
+          }),
+        ).rejects.toThrow(
+          `400 {"error":"Idempotency key was reused for a request with a new body. Please create a new idempotency key for the request.","code":"invalid_data"}`,
+        );
+      } finally {
+        await privyClient.policies().delete(response.id, {});
+      }
     });
   });
   describe('update', () => {
@@ -156,22 +164,27 @@ describe('PrivyPoliciesService', () => {
         name: 'NodeSDK Policies Update Test',
         rules: [],
       });
-      expect(policy.id).toBeDefined();
-      expect(policy.owner_id).toBeNull();
-      const policyId = policy.id;
+      try {
+        expect(policy.id).toBeDefined();
+        expect(policy.owner_id).toBeNull();
 
-      // Update the owner field to a p256 key
-      const policy2 = await privyClient.policies().update(policyId, {
-        owner: { public_key: keypair.publicKey },
-      });
-      expect(policy2.owner_id).toBeDefined();
+        // Update the owner field to a p256 key
+        const policy2 = await privyClient.policies().update(policy.id, {
+          owner: { public_key: keypair.publicKey },
+        });
+        expect(policy2.owner_id).toBeDefined();
 
-      // Update the policy back to ownerless
-      const policy3 = await privyClient.policies().update(policyId, {
-        owner: null,
-        authorization_context: { authorization_private_keys: [keypair.privateKey] },
-      });
-      expect(policy3.owner_id).toBeNull();
+        // Update the policy back to ownerless
+        const policy3 = await privyClient.policies().update(policy.id, {
+          owner: null,
+          authorization_context: { authorization_private_keys: [keypair.privateKey] },
+        });
+        expect(policy3.owner_id).toBeNull();
+      } finally {
+        await privyClient.policies().delete(policy.id, {
+          authorization_context: { authorization_private_keys: [keypair.privateKey] },
+        });
+      }
     });
   });
   describe('delete', () => {
@@ -184,20 +197,34 @@ describe('PrivyPoliciesService', () => {
         rules: [],
         owner: { public_key: keypair.publicKey },
       });
-      expect(createdPolicy.id).toBeDefined();
+      let deleted = false;
+      try {
+        expect(createdPolicy.id).toBeDefined();
 
-      // Check that the policy exists
-      expect(await privyClient.policies().get(createdPolicy.id)).toMatchObject({
-        id: createdPolicy.id,
-      });
+        // Check that the policy exists
+        expect(await privyClient.policies().get(createdPolicy.id)).toMatchObject({
+          id: createdPolicy.id,
+        });
 
-      const deletedPolicy = await privyClient.policies().delete(createdPolicy.id, {
-        authorization_context: { authorization_private_keys: [keypair.privateKey] },
-      });
-      expect(deletedPolicy.success).toBe(true);
+        const deletedPolicy = await privyClient.policies().delete(createdPolicy.id, {
+          authorization_context: { authorization_private_keys: [keypair.privateKey] },
+        });
+        deleted = deletedPolicy.success;
+        expect(deletedPolicy.success).toBe(true);
 
-      // Check that the policy no longer exists
-      await expect(() => privyClient.policies().get(createdPolicy.id)).rejects.toThrow(NotFoundError);
+        // Check that the policy no longer exists
+        await expect(() => privyClient.policies().get(createdPolicy.id)).rejects.toThrow(NotFoundError);
+      } finally {
+        if (!deleted) {
+          try {
+            await privyClient.policies().delete(createdPolicy.id, {
+              authorization_context: { authorization_private_keys: [keypair.privateKey] },
+            });
+          } catch (error) {
+            if (!(error instanceof NotFoundError)) throw error;
+          }
+        }
+      }
     });
   });
   describe('rules', () => {

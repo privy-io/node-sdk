@@ -28,20 +28,22 @@ describe('PrivyAppsService', () => {
     });
 
     it('should invite and remove an allowlist entry (round-trip)', async () => {
-      const testEntry = { type: 'email' as const, value: 'integration-test@privy.io' };
+      const testEntry = { type: 'email' as const, value: `node-sdk-test-${crypto.randomUUID()}@privy.io` };
 
       // Invite
       const created = await privyClient.apps().inviteToAllowlist(testEntry);
-      expect(created.id).toBeDefined();
-      expect(created.value).toBe(testEntry.value);
+      try {
+        expect(created.id).toBeDefined();
+        expect(created.value).toBe(testEntry.value);
 
-      // Verify it appears in the list
-      const entries = await privyClient.apps().getAllowlist();
-      expect(entries.some((e) => e.value === testEntry.value)).toBe(true);
-
-      // Remove
-      const deleted = await privyClient.apps().removeFromAllowlist(testEntry);
-      expect(deleted.message).toBeDefined();
+        // Verify it appears in the list
+        const entries = await privyClient.apps().getAllowlist();
+        expect(entries.some((e) => e.value === testEntry.value)).toBe(true);
+      } finally {
+        // Remove
+        const deleted = await privyClient.apps().removeFromAllowlist(testEntry);
+        expect(deleted.message).toBeDefined();
+      }
     });
   });
 

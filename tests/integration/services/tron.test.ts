@@ -7,6 +7,7 @@ import {
 } from '../../helpers/tron';
 import {
   setupTestWalletResources,
+  cleanupTestWalletResources,
   createTestWallets,
   TestWalletResources,
   TestWallet,
@@ -22,6 +23,10 @@ describe('PrivyTronService', () => {
     resources = await setupTestWalletResources();
     wallets = await createTestWallets(resources, 'tron');
     privyClient = resources.client;
+  });
+
+  afterAll(async () => {
+    if (resources !== undefined) await cleanupTestWalletResources(resources);
   });
 
   describe.each(WALLET_CASES)('$ownership', ({ index }) => {

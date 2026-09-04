@@ -79,7 +79,7 @@ export class Wallets extends APIResource {
   balance: BalanceAPI.Balance = new BalanceAPI.Balance(this._client);
   depositAccounts: DepositAccountsAPI.DepositAccounts = new DepositAccountsAPI.DepositAccounts(this._client);
   _earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
-  payout: PayoutAPI.Payout = new PayoutAPI.Payout(this._client);
+  _payout: PayoutAPI.Payout = new PayoutAPI.Payout(this._client);
   swap: SwapAPI.Swap = new SwapAPI.Swap(this._client);
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
 

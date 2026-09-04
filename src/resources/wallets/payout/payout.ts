@@ -5,7 +5,7 @@ import * as FiatAPI from './fiat';
 import { Fiat, FiatCreateParams } from './fiat';
 
 export class Payout extends APIResource {
-  fiat: FiatAPI.Fiat = new FiatAPI.Fiat(this._client);
+  _fiat: FiatAPI.Fiat = new FiatAPI.Fiat(this._client);
 }
 
 Payout.Fiat = Fiat;

@@ -11,7 +11,7 @@ const client = new PrivyAPI({
 describe('resource fiat', () => {
   // Mock server tests are disabled
   test.skip('_create: only required params', async () => {
-    const responsePromise = client.wallets.payout.fiat._create('wallet_id', {
+    const responsePromise = client.wallets._payout._fiat._create('wallet_id', {
       destination: { fiat_account_id: 'fiat_account_id' },
       source: {
         amount: 'amount',
@@ -30,7 +30,7 @@ describe('resource fiat', () => {
 
   // Mock server tests are disabled
   test.skip('_create: required and optional params', async () => {
-    const response = await client.wallets.payout.fiat._create('wallet_id', {
+    const response = await client.wallets._payout._fiat._create('wallet_id', {
       destination: { fiat_account_id: 'fiat_account_id' },
       source: {
         amount: 'amount',

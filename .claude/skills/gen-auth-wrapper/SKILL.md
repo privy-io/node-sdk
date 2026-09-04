@@ -120,25 +120,51 @@ Key rules:
 
 ### 6. Wire into the parent service
 
-If the generated class is a sub-resource (e.g., `Crypto` under `DepositAccounts` under `Wallets`), you may need to create intermediate wrapper classes too. Check if parent wrappers exist:
+If the generated class is a sub-resource (e.g., `Fiat` under `Payout` under `Wallets`), you may need to create intermediate wrapper classes too. Check if parent wrappers exist:
 
-- If a parent wrapper exists (e.g., `PrivyDepositAccountsService`), add the new sub-service as an `override` field
+- If a parent wrapper exists (e.g., `PrivyPayoutService`), add the new sub-service as an `override` field on the intermediate wrapper
 - If no parent wrapper exists, create one that extends the generated parent and overrides the relevant sub-resource field
 - Wire the top-most new wrapper into `wallets.ts` (or whichever service is the entry point)
 
-Wiring pattern in the parent:
+**Always use the accessor method pattern** (`private field + public method()`). This matches `earn()`, `payout()`, `swaps()`, `ethereum()`, `solana()`, etc.:
 
 ```typescript
 import { Privy<Name>Service } from './<file>';
 
 // In the class:
-public override <fieldName>: Privy<Name>Service;
+private <fieldName>Service: Privy<Name>Service;
 
 // In the constructor (after super()):
-this.<fieldName> = new Privy<Name>Service(privyApiClient, privyClient);
+this.<fieldName>Service = new Privy<Name>Service(privyApiClient, privyClient);
+
+// Accessor method:
+public <fieldName>(): Privy<Name>Service {
+  return this.<fieldName>Service;
+}
 ```
 
-### 7. Verify
+**Handling base class property name conflicts.** TypeScript won't allow overriding a base class property with a method of the same name (TS2425). If the generated base class defines a property (e.g., `payout`, `fiat`) that conflicts with the accessor method name, prefix the generated property with `_` in the generated resource file (e.g., `payout` → `_payout`, `fiat` → `_fiat`). This matches the existing convention used by `_earn` on `Wallets` and `_ethereum` on `Earn`. Also update the generated test file under `tests/api-resources/` to use the new `_`-prefixed property name.
+
+**Legacy exception: `depositAccounts`.** The `depositAccounts.crypto` pattern uses `public override` fields instead of accessor methods. Do not follow this pattern for new additions.
+
+### 7. Add integration tests
+
+Create or update a test file in `tests/integration/services/` for the new wrapper method(s). Follow the existing test patterns (e.g., `swaps.test.ts`, `wallets.test.ts`):
+
+- Use `setupTestWalletResources()` in `beforeAll` for shared state
+- Write tests covering: basic usage, with authorization context (key-owned wallet), and with idempotency key
+- Use `it.skip` if the endpoint cannot easily be tested e2e (e.g., requires external state like fiat accounts, third-party integrations, or funded wallets). Skipped contract tests are still valuable — they document the expected API shape and catch type-level regressions at compile time.
+- Use `it` (not skipped) if the endpoint can be tested against the test environment without special prerequisites
+
+Reference files for test patterns:
+
+```bash
+cat tests/integration/services/swaps.test.ts     # skipped contract tests
+cat tests/integration/services/wallets.test.ts    # live e2e tests
+cat tests/integration/test-setup.ts               # shared helpers
+```
+
+### 8. Verify
 
 Run lint to confirm the code compiles and passes all checks:
 
@@ -154,4 +180,5 @@ Report to the user:
 
 1. Which file(s) were created or modified
 2. Which method(s) are now available (e.g., `client.wallets().depositAccounts.crypto.create(...)`)
-3. Lint result (pass/fail)
+3. Whether tests were added (and if skipped, why)
+4. Lint result (pass/fail)

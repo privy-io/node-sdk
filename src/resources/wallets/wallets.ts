@@ -4404,8 +4404,9 @@ export interface Wallet {
   entity?: WalletEntity | null;
 
   /**
-   * A customer-provided identifier for mapping to external systems. Write-once, set
-   * only at creation.
+   * A customer-provided identifier for mapping to external systems. URL-safe
+   * characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
+   * once set.
    */
   external_id?: string;
 
@@ -5072,6 +5073,13 @@ export interface WalletUpdateRequestBody {
    * A human-readable label for the wallet. Set to null to clear.
    */
   display_name?: string | null;
+
+  /**
+   * A customer-provided identifier for mapping to external systems. URL-safe
+   * characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
+   * once set.
+   */
+  external_id?: string;
 
   /**
    * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
@@ -6739,6 +6747,13 @@ export interface WalletUpdateParams {
    * Body param: A human-readable label for the wallet. Set to null to clear.
    */
   display_name?: string | null;
+
+  /**
+   * Body param: A customer-provided identifier for mapping to external systems.
+   * URL-safe characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be
+   * changed once set.
+   */
+  external_id?: string;
 
   /**
    * Body param: The owner of the resource, specified as a Privy user ID, a P-256

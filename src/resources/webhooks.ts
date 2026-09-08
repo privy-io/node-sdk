@@ -4052,7 +4052,17 @@ export type WalletFundsAsset =
   | WalletFundsErc20Asset
   | WalletFundsSplAsset
   | WalletFundsSacAsset
-  | WalletFundsTrc20Asset;
+  | WalletFundsTrc20Asset
+  | WalletFundsBtknAsset;
+
+/**
+ * A token issued on Spark, identified by its BTKN identifier.
+ */
+export interface WalletFundsBtknAsset {
+  identifier: string;
+
+  type: 'btkn';
+}
 
 /**
  * An ERC-20 token asset.
@@ -4657,6 +4667,7 @@ export declare namespace Webhooks {
     type WalletArchivedWebhookPayload as WalletArchivedWebhookPayload,
     type WalletAutomationSubmittedWebhookPayload as WalletAutomationSubmittedWebhookPayload,
     type WalletFundsAsset as WalletFundsAsset,
+    type WalletFundsBtknAsset as WalletFundsBtknAsset,
     type WalletFundsErc20Asset as WalletFundsErc20Asset,
     type WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset,
     type WalletFundsSacAsset as WalletFundsSacAsset,

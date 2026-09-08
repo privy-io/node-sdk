@@ -413,6 +413,53 @@ Methods:
 - <code title="post /v1/users/{user_id}/kyc/links">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateLinks</a>(userID, { ...params }) -> KYCStatusResponse</code>
 - <code title="post /v1/users/{user_id}/kyc/tos">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateTos</a>(userID, { ...params }) -> KyxTosResponse</code>
 
+# WalletAutomations
+
+Types:
+
+- <code><a href="./src/resources/wallet-automations.ts">AutomationActionConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationActionConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilter</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterAll</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterExclude</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInclude</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInputExclude</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInputInclude</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetSpec</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetSpecInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationDepositTriggerConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationDepositTriggerConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationDestinationAsset</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationDestinationAssetInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationEarnDepositActionConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationEarnDepositActionConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationSwapActionConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationSwapActionConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationTriggerConfig</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">AutomationTriggerConfigInput</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">CreateAutomationRequestBody</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">SwapAttachmentParams</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">UpdateAutomationRequestBody</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationExecutionListResponse</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationExecutionResponse</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationExecutionStatus</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationListResponse</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationReindexAssetResult</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationReindexAssetStatus</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationReindexCaip2</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationReindexRequestBody</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationReindexResponse</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationResponse</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationStatus</a></code>
+- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationSuccessResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/wallet_automations/reindex">client.walletAutomations.<a href="./src/resources/wallet-automations.ts">reindex</a>({ ...params }) -> WalletAutomationReindexResponse</code>
+
 # Wallets
 
 Types:
@@ -948,6 +995,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletArchivedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletAutomationSubmittedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsAsset</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletFundsBtknAsset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsErc20Asset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsNativeTokenAsset</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletFundsSacAsset</a></code>
@@ -1219,52 +1267,16 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">TransferTelegramInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">UnlinkPasskeyInput</a></code>
 
-# WalletAutomations
-
-Types:
-
-- <code><a href="./src/resources/wallet-automations.ts">AutomationActionConfig</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationActionConfigInput</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilter</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterAll</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterExclude</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInclude</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInput</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInputExclude</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetFilterInputInclude</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetSpec</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationAssetSpecInput</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationConfig</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationConfigInput</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationDepositTriggerConfig</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationDepositTriggerConfigInput</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationDestinationAsset</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationDestinationAssetInput</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationEarnDepositActionConfig</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationEarnDepositActionConfigInput</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationSwapActionConfig</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationSwapActionConfigInput</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationTriggerConfig</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">AutomationTriggerConfigInput</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">CreateAutomationRequestBody</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">SwapAttachmentParams</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">UpdateAutomationRequestBody</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationExecutionListResponse</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationExecutionResponse</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationExecutionStatus</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationListResponse</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationResponse</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationStatus</a></code>
-- <code><a href="./src/resources/wallet-automations.ts">WalletAutomationSuccessResponse</a></code>
-
 # Shared
 
 Types:
 
 - <code><a href="./src/resources/shared.ts">BitcoinAddress</a></code>
+- <code><a href="./src/resources/shared.ts">BitcoinCaip2</a></code>
 - <code><a href="./src/resources/shared.ts">CurrencyAmount</a></code>
 - <code><a href="./src/resources/shared.ts">IntegrationEnvironment</a></code>
 - <code><a href="./src/resources/shared.ts">EvmAddress</a></code>
+- <code><a href="./src/resources/shared.ts">EvmCaip2</a></code>
 - <code><a href="./src/resources/shared.ts">EvmChecksumAddress</a></code>
 - <code><a href="./src/resources/shared.ts">HyperliquidTokenAddress</a></code>
 - <code><a href="./src/resources/shared.ts">KeyQuorumID</a></code>
@@ -1275,9 +1287,11 @@ Types:
 - <code><a href="./src/resources/shared.ts">OwnerInputUser</a></code>
 - <code><a href="./src/resources/shared.ts">P256PublicKey</a></code>
 - <code><a href="./src/resources/shared.ts">SolanaAddress</a></code>
+- <code><a href="./src/resources/shared.ts">SolanaCaip2</a></code>
 - <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
 - <code><a href="./src/resources/shared.ts">TokenIdentifier</a></code>
 - <code><a href="./src/resources/shared.ts">TronAddress</a></code>
+- <code><a href="./src/resources/shared.ts">TronCaip2</a></code>
 - <code><a href="./src/resources/shared.ts">TronHexAddress</a></code>
 
 # Fiat

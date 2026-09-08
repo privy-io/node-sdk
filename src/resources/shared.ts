@@ -10,6 +10,12 @@ export class Shared extends APIResource {}
 export type BitcoinAddress = string;
 
 /**
+ * Bitcoin CAIP-2 chain identifier (e.g.
+ * "bip122:000000000019d6689c085ae165831e93").
+ */
+export type BitcoinCaip2 = 'bip122:mainnet' | (string & {});
+
+/**
  * A monetary value with its currency denomination.
  */
 export interface CurrencyAmount {
@@ -33,6 +39,12 @@ export type IntegrationEnvironment = 'sandbox' | 'production';
  * EVM address: 0x followed by 40 hex characters. Preserves input case.
  */
 export type EvmAddress = string;
+
+/**
+ * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
+ * Ethereum).
+ */
+export type EvmCaip2 = string;
 
 /**
  * EVM address normalized to EIP-55 checksum case.
@@ -96,6 +108,11 @@ export type P256PublicKey = string;
 export type SolanaAddress = string;
 
 /**
+ * Solana CAIP-2 chain identifier (e.g. "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp").
+ */
+export type SolanaCaip2 = string;
+
+/**
  * A simple success response.
  */
 export interface SuccessResponse {
@@ -115,6 +132,11 @@ export type TokenIdentifier = string;
 export type TronAddress = string;
 
 /**
+ * Tron CAIP-2 chain identifier. Supported values: "tron:mainnet", "tron:nile".
+ */
+export type TronCaip2 = 'tron:mainnet' | 'tron:nile';
+
+/**
  * Tron address in hex format: 41-prefixed, 42 hex characters (21 bytes), no 0x
  * prefix.
  */
@@ -123,9 +145,11 @@ export type TronHexAddress = string;
 export declare namespace Shared {
   export {
     type BitcoinAddress as BitcoinAddress,
+    type BitcoinCaip2 as BitcoinCaip2,
     type CurrencyAmount as CurrencyAmount,
     type IntegrationEnvironment as IntegrationEnvironment,
     type EvmAddress as EvmAddress,
+    type EvmCaip2 as EvmCaip2,
     type EvmChecksumAddress as EvmChecksumAddress,
     type HyperliquidTokenAddress as HyperliquidTokenAddress,
     type KeyQuorumID as KeyQuorumID,
@@ -136,9 +160,11 @@ export declare namespace Shared {
     type OwnerInputUser as OwnerInputUser,
     type P256PublicKey as P256PublicKey,
     type SolanaAddress as SolanaAddress,
+    type SolanaCaip2 as SolanaCaip2,
     type SuccessResponse as SuccessResponse,
     type TokenIdentifier as TokenIdentifier,
     type TronAddress as TronAddress,
+    type TronCaip2 as TronCaip2,
     type TronHexAddress as TronHexAddress,
   };
 }

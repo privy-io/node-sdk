@@ -4501,6 +4501,8 @@ export type WalletAssetChainNameInput =
   | 'tron'
   | 'zksync_era'
   | 'robinhood'
+  | 'hyperevm'
+  | 'hypercore'
   | 'tempo_testnet'
   | 'hoodi'
   | 'sepolia'

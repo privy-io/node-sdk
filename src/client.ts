@@ -655,8 +655,10 @@ import {
 } from './resources/policies';
 import {
   BitcoinAddress,
+  BitcoinCaip2,
   CurrencyAmount,
   EvmAddress,
+  EvmCaip2,
   EvmChecksumAddress,
   HyperliquidTokenAddress,
   IntegrationEnvironment,
@@ -669,9 +671,11 @@ import {
   P256PublicKey,
   Shared,
   SolanaAddress,
+  SolanaCaip2,
   SuccessResponse,
   TokenIdentifier,
   TronAddress,
+  TronCaip2,
   TronHexAddress,
 } from './resources/shared';
 import {
@@ -736,6 +740,12 @@ import {
   WalletAutomationExecutionResponse,
   WalletAutomationExecutionStatus,
   WalletAutomationListResponse,
+  WalletAutomationReindexAssetResult,
+  WalletAutomationReindexAssetStatus,
+  WalletAutomationReindexCaip2,
+  WalletAutomationReindexParams,
+  WalletAutomationReindexRequestBody,
+  WalletAutomationReindexResponse,
   WalletAutomationResponse,
   WalletAutomationStatus,
   WalletAutomationSuccessResponse,
@@ -841,6 +851,7 @@ import {
   WalletDepositAccountDepositFailedWebhookEvent,
   WalletDepositAccountDepositStartedWebhookEvent,
   WalletFundsAsset,
+  WalletFundsBtknAsset,
   WalletFundsErc20Asset,
   WalletFundsNativeTokenAsset,
   WalletFundsSacAsset,
@@ -2173,6 +2184,10 @@ export class PrivyAPI {
    * Operations related to users
    */
   users: API.Users = new API.Users(this);
+  /**
+   * Operations related to wallet automations
+   */
+  walletAutomations: API.WalletAutomations = new API.WalletAutomations(this);
   wallets: API.Wallets = new API.Wallets(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
   accounts: API.Accounts = new API.Accounts(this);
@@ -2180,7 +2195,6 @@ export class PrivyAPI {
   embeddedWallets: API.EmbeddedWallets = new API.EmbeddedWallets(this);
   analytics: API.Analytics = new API.Analytics(this);
   clientAuth: API.ClientAuth = new API.ClientAuth(this);
-  walletAutomations: API.WalletAutomations = new API.WalletAutomations(this);
   shared: API.Shared = new API.Shared(this);
   fiat: API.Fiat = new API.Fiat(this);
   onramps: API.Onramps = new API.Onramps(this);
@@ -2201,6 +2215,7 @@ PrivyAPI.Organizations = Organizations;
 PrivyAPI.Policies = Policies;
 PrivyAPI.Transactions = Transactions;
 PrivyAPI.Users = Users;
+PrivyAPI.WalletAutomations = WalletAutomations;
 PrivyAPI.Wallets = Wallets;
 PrivyAPI.Webhooks = Webhooks;
 PrivyAPI.Accounts = Accounts;
@@ -2208,7 +2223,6 @@ PrivyAPI.Aggregations = Aggregations;
 PrivyAPI.EmbeddedWallets = EmbeddedWallets;
 PrivyAPI.Analytics = Analytics;
 PrivyAPI.ClientAuth = ClientAuth;
-PrivyAPI.WalletAutomations = WalletAutomations;
 PrivyAPI.Shared = Shared;
 PrivyAPI.Fiat = Fiat;
 PrivyAPI.Onramps = Onramps;
@@ -2556,6 +2570,49 @@ export declare namespace PrivyAPI {
     type UserSearchParams as UserSearchParams,
     type UserSetCustomMetadataParams as UserSetCustomMetadataParams,
     type UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams,
+  };
+
+  export {
+    WalletAutomations as WalletAutomations,
+    type AutomationActionConfig as AutomationActionConfig,
+    type AutomationActionConfigInput as AutomationActionConfigInput,
+    type AutomationAssetFilter as AutomationAssetFilter,
+    type AutomationAssetFilterAll as AutomationAssetFilterAll,
+    type AutomationAssetFilterExclude as AutomationAssetFilterExclude,
+    type AutomationAssetFilterInclude as AutomationAssetFilterInclude,
+    type AutomationAssetFilterInput as AutomationAssetFilterInput,
+    type AutomationAssetFilterInputExclude as AutomationAssetFilterInputExclude,
+    type AutomationAssetFilterInputInclude as AutomationAssetFilterInputInclude,
+    type AutomationAssetSpec as AutomationAssetSpec,
+    type AutomationAssetSpecInput as AutomationAssetSpecInput,
+    type AutomationConfig as AutomationConfig,
+    type AutomationConfigInput as AutomationConfigInput,
+    type AutomationDepositTriggerConfig as AutomationDepositTriggerConfig,
+    type AutomationDepositTriggerConfigInput as AutomationDepositTriggerConfigInput,
+    type AutomationDestinationAsset as AutomationDestinationAsset,
+    type AutomationDestinationAssetInput as AutomationDestinationAssetInput,
+    type AutomationEarnDepositActionConfig as AutomationEarnDepositActionConfig,
+    type AutomationEarnDepositActionConfigInput as AutomationEarnDepositActionConfigInput,
+    type AutomationSwapActionConfig as AutomationSwapActionConfig,
+    type AutomationSwapActionConfigInput as AutomationSwapActionConfigInput,
+    type AutomationTriggerConfig as AutomationTriggerConfig,
+    type AutomationTriggerConfigInput as AutomationTriggerConfigInput,
+    type CreateAutomationRequestBody as CreateAutomationRequestBody,
+    type SwapAttachmentParams as SwapAttachmentParams,
+    type UpdateAutomationRequestBody as UpdateAutomationRequestBody,
+    type WalletAutomationExecutionListResponse as WalletAutomationExecutionListResponse,
+    type WalletAutomationExecutionResponse as WalletAutomationExecutionResponse,
+    type WalletAutomationExecutionStatus as WalletAutomationExecutionStatus,
+    type WalletAutomationListResponse as WalletAutomationListResponse,
+    type WalletAutomationReindexAssetResult as WalletAutomationReindexAssetResult,
+    type WalletAutomationReindexAssetStatus as WalletAutomationReindexAssetStatus,
+    type WalletAutomationReindexCaip2 as WalletAutomationReindexCaip2,
+    type WalletAutomationReindexRequestBody as WalletAutomationReindexRequestBody,
+    type WalletAutomationReindexResponse as WalletAutomationReindexResponse,
+    type WalletAutomationResponse as WalletAutomationResponse,
+    type WalletAutomationStatus as WalletAutomationStatus,
+    type WalletAutomationSuccessResponse as WalletAutomationSuccessResponse,
+    type WalletAutomationReindexParams as WalletAutomationReindexParams,
   };
 
   export {
@@ -2965,6 +3022,7 @@ export declare namespace PrivyAPI {
     type WalletArchivedWebhookPayload as WalletArchivedWebhookPayload,
     type WalletAutomationSubmittedWebhookPayload as WalletAutomationSubmittedWebhookPayload,
     type WalletFundsAsset as WalletFundsAsset,
+    type WalletFundsBtknAsset as WalletFundsBtknAsset,
     type WalletFundsErc20Asset as WalletFundsErc20Asset,
     type WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset,
     type WalletFundsSacAsset as WalletFundsSacAsset,
@@ -3226,48 +3284,13 @@ export declare namespace PrivyAPI {
   };
 
   export {
-    WalletAutomations as WalletAutomations,
-    type AutomationActionConfig as AutomationActionConfig,
-    type AutomationActionConfigInput as AutomationActionConfigInput,
-    type AutomationAssetFilter as AutomationAssetFilter,
-    type AutomationAssetFilterAll as AutomationAssetFilterAll,
-    type AutomationAssetFilterExclude as AutomationAssetFilterExclude,
-    type AutomationAssetFilterInclude as AutomationAssetFilterInclude,
-    type AutomationAssetFilterInput as AutomationAssetFilterInput,
-    type AutomationAssetFilterInputExclude as AutomationAssetFilterInputExclude,
-    type AutomationAssetFilterInputInclude as AutomationAssetFilterInputInclude,
-    type AutomationAssetSpec as AutomationAssetSpec,
-    type AutomationAssetSpecInput as AutomationAssetSpecInput,
-    type AutomationConfig as AutomationConfig,
-    type AutomationConfigInput as AutomationConfigInput,
-    type AutomationDepositTriggerConfig as AutomationDepositTriggerConfig,
-    type AutomationDepositTriggerConfigInput as AutomationDepositTriggerConfigInput,
-    type AutomationDestinationAsset as AutomationDestinationAsset,
-    type AutomationDestinationAssetInput as AutomationDestinationAssetInput,
-    type AutomationEarnDepositActionConfig as AutomationEarnDepositActionConfig,
-    type AutomationEarnDepositActionConfigInput as AutomationEarnDepositActionConfigInput,
-    type AutomationSwapActionConfig as AutomationSwapActionConfig,
-    type AutomationSwapActionConfigInput as AutomationSwapActionConfigInput,
-    type AutomationTriggerConfig as AutomationTriggerConfig,
-    type AutomationTriggerConfigInput as AutomationTriggerConfigInput,
-    type CreateAutomationRequestBody as CreateAutomationRequestBody,
-    type SwapAttachmentParams as SwapAttachmentParams,
-    type UpdateAutomationRequestBody as UpdateAutomationRequestBody,
-    type WalletAutomationExecutionListResponse as WalletAutomationExecutionListResponse,
-    type WalletAutomationExecutionResponse as WalletAutomationExecutionResponse,
-    type WalletAutomationExecutionStatus as WalletAutomationExecutionStatus,
-    type WalletAutomationListResponse as WalletAutomationListResponse,
-    type WalletAutomationResponse as WalletAutomationResponse,
-    type WalletAutomationStatus as WalletAutomationStatus,
-    type WalletAutomationSuccessResponse as WalletAutomationSuccessResponse,
-  };
-
-  export {
     Shared as Shared,
     type BitcoinAddress as BitcoinAddress,
+    type BitcoinCaip2 as BitcoinCaip2,
     type CurrencyAmount as CurrencyAmount,
     type IntegrationEnvironment as IntegrationEnvironment,
     type EvmAddress as EvmAddress,
+    type EvmCaip2 as EvmCaip2,
     type EvmChecksumAddress as EvmChecksumAddress,
     type HyperliquidTokenAddress as HyperliquidTokenAddress,
     type KeyQuorumID as KeyQuorumID,
@@ -3278,9 +3301,11 @@ export declare namespace PrivyAPI {
     type OwnerInputUser as OwnerInputUser,
     type P256PublicKey as P256PublicKey,
     type SolanaAddress as SolanaAddress,
+    type SolanaCaip2 as SolanaCaip2,
     type SuccessResponse as SuccessResponse,
     type TokenIdentifier as TokenIdentifier,
     type TronAddress as TronAddress,
+    type TronCaip2 as TronCaip2,
     type TronHexAddress as TronHexAddress,
   };
 

@@ -688,9 +688,11 @@ export {
 export {
   Shared,
   type BitcoinAddress,
+  type BitcoinCaip2,
   type CurrencyAmount,
   type IntegrationEnvironment,
   type EvmAddress,
+  type EvmCaip2,
   type EvmChecksumAddress,
   type HyperliquidTokenAddress,
   type KeyQuorumID,
@@ -701,9 +703,11 @@ export {
   type OwnerInputUser,
   type P256PublicKey,
   type SolanaAddress,
+  type SolanaCaip2,
   type SuccessResponse,
   type TokenIdentifier,
   type TronAddress,
+  type TronCaip2,
   type TronHexAddress,
 } from './shared';
 export {
@@ -861,9 +865,15 @@ export {
   type WalletAutomationExecutionResponse,
   type WalletAutomationExecutionStatus,
   type WalletAutomationListResponse,
+  type WalletAutomationReindexAssetResult,
+  type WalletAutomationReindexAssetStatus,
+  type WalletAutomationReindexCaip2,
+  type WalletAutomationReindexRequestBody,
+  type WalletAutomationReindexResponse,
   type WalletAutomationResponse,
   type WalletAutomationStatus,
   type WalletAutomationSuccessResponse,
+  type WalletAutomationReindexParams,
 } from './wallet-automations';
 export {
   Wallets,
@@ -1271,6 +1281,7 @@ export {
   type WalletArchivedWebhookPayload,
   type WalletAutomationSubmittedWebhookPayload,
   type WalletFundsAsset,
+  type WalletFundsBtknAsset,
   type WalletFundsErc20Asset,
   type WalletFundsNativeTokenAsset,
   type WalletFundsSacAsset,

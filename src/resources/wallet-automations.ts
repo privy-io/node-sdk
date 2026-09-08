@@ -1,8 +1,27 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as SharedAPI from './shared';
+import { APIPromise } from '../core/api-promise';
+import { RequestOptions } from '../internal/request-options';
 
-export class WalletAutomations extends APIResource {}
+/**
+ * Operations related to wallet automations
+ */
+export class WalletAutomations extends APIResource {
+  /**
+   * Re-checks a wallet (identified by wallet_id or deposit_address) for funds
+   * matching its wallet automation configs and triggers an automation run if a match
+   * is found. Use this to recover a deposit whose automation trigger was missed or
+   * failed.
+   */
+  reindex(
+    body: WalletAutomationReindexParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletAutomationReindexResponse> {
+    return this._client.post('/v1/wallet_automations/reindex', { body, ...options });
+  }
+}
 
 /**
  * Configuration for an automation action.
@@ -276,6 +295,11 @@ export interface UpdateAutomationRequestBody {
   enabled?: boolean;
 
   name?: string | null;
+
+  /**
+   * A unique identifier for a key quorum.
+   */
+  owner_id?: SharedAPI.KeyQuorumID | null;
 }
 
 /**
@@ -340,6 +364,101 @@ export interface WalletAutomationListResponse {
 }
 
 /**
+ * The outcome of checking one asset on the requested chain during a reindex.
+ */
+export interface WalletAutomationReindexAssetResult {
+  /**
+   * Asset contract address; the native asset uses `native`.
+   */
+  asset_address: string;
+
+  /**
+   * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
+   * Ethereum).
+   */
+  caip2: WalletAutomationReindexCaip2;
+
+  /**
+   * ID of the in-flight execution blocking a re-trigger. Populated only when
+   * `status` is `skipped_existing_execution`; `null` otherwise.
+   */
+  existing_execution_id: string | null;
+
+  /**
+   * On-chain balance in base units. Populated when `status` is `triggered` or
+   * `skipped_zero_balance`; `null` otherwise. For example, 1 USDC is `1000000`.
+   */
+  raw_balance: string | null;
+
+  /**
+   * Outcome of checking a single asset during a wallet automation reindex. One of
+   * `triggered`, `skipped_zero_balance`, `skipped_no_match`,
+   * `skipped_existing_execution`, or `failed`.
+   */
+  status: WalletAutomationReindexAssetStatus;
+}
+
+/**
+ * Outcome of checking a single asset during a wallet automation reindex. One of
+ * `triggered`, `skipped_zero_balance`, `skipped_no_match`,
+ * `skipped_existing_execution`, or `failed`.
+ */
+export type WalletAutomationReindexAssetStatus = string;
+
+/**
+ * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
+ * Ethereum).
+ */
+export type WalletAutomationReindexCaip2 = string;
+
+/**
+ * Request body for re-checking a wallet against its wallet automations. Identify
+ * the wallet by wallet_id or deposit_address (at least one is required). If both
+ * are provided, wallet_id takes precedence and deposit_address must match that
+ * wallet's address. Specify exactly one of caip2 or chain, and the asset_address
+ * to check. Useful for recovering a deposit that was missed or failed to trigger
+ * its automation.
+ */
+export interface WalletAutomationReindexRequestBody {
+  /**
+   * Asset contract address to check; the native asset uses `native`.
+   */
+  asset_address: string;
+
+  /**
+   * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
+   * Ethereum).
+   */
+  caip2?: WalletAutomationReindexCaip2;
+
+  /**
+   * Human-readable chain name to check. Specify exactly one of `caip2` or `chain`.
+   */
+  chain?: string;
+
+  /**
+   * On-chain deposit address of the wallet to reindex. Must match the resolved
+   * wallet's address if `wallet_id` is also provided.
+   */
+  deposit_address?: string;
+
+  /**
+   * Privy wallet ID to reindex. Takes precedence over `deposit_address` when both
+   * are supplied.
+   */
+  wallet_id?: string;
+}
+
+/**
+ * Result of re-checking a wallet against its wallet automations.
+ */
+export interface WalletAutomationReindexResponse {
+  results: Array<WalletAutomationReindexAssetResult>;
+
+  wallet_id: string;
+}
+
+/**
  * A wallet automation.
  */
 export interface WalletAutomationResponse {
@@ -378,6 +497,36 @@ export interface WalletAutomationSuccessResponse {
   success: true;
 }
 
+export interface WalletAutomationReindexParams {
+  /**
+   * Asset contract address to check; the native asset uses `native`.
+   */
+  asset_address: string;
+
+  /**
+   * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
+   * Ethereum).
+   */
+  caip2?: WalletAutomationReindexCaip2;
+
+  /**
+   * Human-readable chain name to check. Specify exactly one of `caip2` or `chain`.
+   */
+  chain?: string;
+
+  /**
+   * On-chain deposit address of the wallet to reindex. Must match the resolved
+   * wallet's address if `wallet_id` is also provided.
+   */
+  deposit_address?: string;
+
+  /**
+   * Privy wallet ID to reindex. Takes precedence over `deposit_address` when both
+   * are supplied.
+   */
+  wallet_id?: string;
+}
+
 export declare namespace WalletAutomations {
   export {
     type AutomationActionConfig as AutomationActionConfig,
@@ -410,8 +559,14 @@ export declare namespace WalletAutomations {
     type WalletAutomationExecutionResponse as WalletAutomationExecutionResponse,
     type WalletAutomationExecutionStatus as WalletAutomationExecutionStatus,
     type WalletAutomationListResponse as WalletAutomationListResponse,
+    type WalletAutomationReindexAssetResult as WalletAutomationReindexAssetResult,
+    type WalletAutomationReindexAssetStatus as WalletAutomationReindexAssetStatus,
+    type WalletAutomationReindexCaip2 as WalletAutomationReindexCaip2,
+    type WalletAutomationReindexRequestBody as WalletAutomationReindexRequestBody,
+    type WalletAutomationReindexResponse as WalletAutomationReindexResponse,
     type WalletAutomationResponse as WalletAutomationResponse,
     type WalletAutomationStatus as WalletAutomationStatus,
     type WalletAutomationSuccessResponse as WalletAutomationSuccessResponse,
+    type WalletAutomationReindexParams as WalletAutomationReindexParams,
   };
 }

@@ -114,6 +114,8 @@ export interface BalanceGetParams {
     | 'tron'
     | 'zksync_era'
     | 'robinhood'
+    | 'hyperevm'
+    | 'hypercore'
     | 'tempo_testnet'
     | 'hoodi'
     | 'sepolia'

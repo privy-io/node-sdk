@@ -96,7 +96,10 @@ export interface AutomationAssetFilterInputInclude {
 }
 
 /**
- * An asset identified by contract address, scoped to a chain via CAIP-2.
+ * An asset identified by contract address on a specific chain (CAIP-2). Either
+ * field may be "_": asset_address: "_" matches any asset on the chain; caip2: "\*"
+ * matches the asset on any chain (in this case asset_address holds the asset
+ * symbol id, e.g. "usdc" or "eth", not a contract address).
  */
 export interface AutomationAssetSpec {
   asset_address: string;
@@ -107,7 +110,10 @@ export interface AutomationAssetSpec {
 /**
  * An asset spec accepting either raw identifiers (asset_address, caip2) or
  * human-readable aliases (asset, chain). Exactly one of asset_address or asset
- * must be provided; at most one of caip2 or chain may be provided.
+ * must be provided; at most one of caip2 or chain may be provided. Use "_" for
+ * asset_address or asset to match any asset on a given chain (chain is then
+ * required). Omitting chain/caip2 (or passing "_" for either) matches the
+ * specified asset on any chain.
  */
 export interface AutomationAssetSpecInput extends AutomationAssetSpec {
   asset?: string;

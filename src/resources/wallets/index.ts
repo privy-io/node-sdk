@@ -20,6 +20,8 @@ export {
   type EarnIncentiveRewardsQuery,
   type EarnIncentiveRewardsResponse,
   type EarnIncetiveClaimRewardEntry,
+  type EarnPositionApyAllocation,
+  type EarnPositionApyType,
   type EarnWithdrawActionResponse,
   type EarnWithdrawRequestBody,
   type EthereumEarnPositionQuery,

@@ -798,6 +798,8 @@ Types:
 - <code><a href="./src/resources/wallets/actions.ts">EarnIncentiveRewardsQuery</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EarnIncentiveRewardsResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EarnIncetiveClaimRewardEntry</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">EarnPositionApyAllocation</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">EarnPositionApyType</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EarnWithdrawActionResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EarnWithdrawRequestBody</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EthereumEarnPositionQuery</a></code>

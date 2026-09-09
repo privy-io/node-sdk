@@ -654,6 +654,31 @@ export interface EarnIncetiveClaimRewardEntry {
 }
 
 /**
+ * An APY allocation within a vault position.
+ */
+export interface EarnPositionApyAllocation {
+  /**
+   * Net APY in basis points, rounded to the nearest integer.
+   */
+  apy_bps: number;
+
+  /**
+   * Allocated assets in the smallest unit of the underlying asset.
+   */
+  assets_in_vault: string;
+
+  /**
+   * Whether an APY allocation earns the base or boosted rate.
+   */
+  type: EarnPositionApyType;
+}
+
+/**
+ * Whether an APY allocation earns the base or boosted rate.
+ */
+export type EarnPositionApyType = 'boost' | 'base';
+
+/**
  * Response for an earn withdraw action.
  */
 export interface EarnWithdrawActionResponse {
@@ -820,6 +845,17 @@ export interface EthereumEarnPositionResponse {
    * Total amount withdrawn from the vault, in smallest unit.
    */
   total_withdrawn: string;
+
+  /**
+   * Vault APY allocations by origin, returned together with apy_bps when available.
+   */
+  apy_allocation?: Array<EarnPositionApyAllocation>;
+
+  /**
+   * Wallet-specific net APY in basis points, rounded to the nearest integer.
+   * Returned together with apy_allocation when available.
+   */
+  apy_bps?: number;
 }
 
 /**
@@ -1573,6 +1609,8 @@ export declare namespace Actions {
     type EarnIncentiveRewardsQuery as EarnIncentiveRewardsQuery,
     type EarnIncentiveRewardsResponse as EarnIncentiveRewardsResponse,
     type EarnIncetiveClaimRewardEntry as EarnIncetiveClaimRewardEntry,
+    type EarnPositionApyAllocation as EarnPositionApyAllocation,
+    type EarnPositionApyType as EarnPositionApyType,
     type EarnWithdrawActionResponse as EarnWithdrawActionResponse,
     type EarnWithdrawRequestBody as EarnWithdrawRequestBody,
     type EthereumEarnPositionQuery as EthereumEarnPositionQuery,

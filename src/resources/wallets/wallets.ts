@@ -24,6 +24,8 @@ import {
   EarnIncentiveRewardsQuery,
   EarnIncentiveRewardsResponse,
   EarnIncetiveClaimRewardEntry,
+  EarnPositionApyAllocation,
+  EarnPositionApyType,
   EarnWithdrawActionResponse,
   EarnWithdrawRequestBody,
   EthereumEarnPositionQuery,
@@ -4501,6 +4503,11 @@ export type WalletAssetChainNameInput =
   | 'tron'
   | 'zksync_era'
   | 'robinhood'
+  | 'unichain'
+  | 'worldchain'
+  | 'ink'
+  | 'soneium'
+  | 'megaeth'
   | 'hyperevm'
   | 'hypercore'
   | 'tempo_testnet'
@@ -4517,6 +4524,7 @@ export type WalletAssetChainNameInput =
   | 'solana_testnet'
   | 'tron_nile'
   | 'robinhood_testnet'
+  | 'ink_sepolia'
   | (string & {});
 
 /**
@@ -7233,6 +7241,8 @@ export declare namespace Wallets {
     type EarnIncentiveRewardsQuery as EarnIncentiveRewardsQuery,
     type EarnIncentiveRewardsResponse as EarnIncentiveRewardsResponse,
     type EarnIncetiveClaimRewardEntry as EarnIncetiveClaimRewardEntry,
+    type EarnPositionApyAllocation as EarnPositionApyAllocation,
+    type EarnPositionApyType as EarnPositionApyType,
     type EarnWithdrawActionResponse as EarnWithdrawActionResponse,
     type EarnWithdrawRequestBody as EarnWithdrawRequestBody,
     type EthereumEarnPositionQuery as EthereumEarnPositionQuery,

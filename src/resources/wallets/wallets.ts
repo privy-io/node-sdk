@@ -1880,6 +1880,34 @@ export interface GetByWalletAddressRequestBody {
 }
 
 /**
+ * The next crypto deposit-account sweep into the path wallet after `after`, or
+ * null if none. The order object matches GET order.
+ */
+export interface GetCryptoDepositAccountNextOrderResponse {
+  /**
+   * A crypto deposit-account sweep identified by its wallet action ID. Status is the
+   * wallet-action status.
+   */
+  order: GetCryptoDepositAccountOrderResponse | null;
+}
+
+/**
+ * A crypto deposit-account sweep identified by its wallet action ID. Status is the
+ * wallet-action status.
+ */
+export interface GetCryptoDepositAccountOrderResponse {
+  /**
+   * Wallet action ID of the deposit sweep.
+   */
+  id: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: ActionsAPI.WalletActionStatus;
+}
+
+/**
  * The input for HD wallets.
  */
 export interface HDInitInput {
@@ -7002,6 +7030,8 @@ export declare namespace Wallets {
     type FirstClassChainType as FirstClassChainType,
     type Gas as Gas,
     type GetByWalletAddressRequestBody as GetByWalletAddressRequestBody,
+    type GetCryptoDepositAccountNextOrderResponse as GetCryptoDepositAccountNextOrderResponse,
+    type GetCryptoDepositAccountOrderResponse as GetCryptoDepositAccountOrderResponse,
     type HDInitInput as HDInitInput,
     type HDPath as HDPath,
     type HDSubmitInput as HDSubmitInput,

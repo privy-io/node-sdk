@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as CryptoAPI from './crypto';
-import { Crypto, CryptoCreateParams } from './crypto';
 import * as FiatAPI from './fiat';
 import { Fiat, FiatCreateParams, FiatGetParams, FiatListParams } from './fiat';
+import * as CryptoAPI from './crypto/crypto';
+import { Crypto, CryptoCreateParams } from './crypto/crypto';
 
 export class DepositAccounts extends APIResource {
   crypto: CryptoAPI.Crypto = new CryptoAPI.Crypto(this._client);

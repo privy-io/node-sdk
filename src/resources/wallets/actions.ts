@@ -179,6 +179,11 @@ export interface EvmTransactionWalletActionStep {
    * confirmed.
    */
   finalized?: boolean;
+
+  /**
+   * Amount charged in USD for gas sponsorship on this step.
+   */
+  gas_credits_charged_usd?: string;
 }
 
 /**

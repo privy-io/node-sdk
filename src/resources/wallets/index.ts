@@ -150,6 +150,8 @@ export {
   type FirstClassChainType,
   type Gas,
   type GetByWalletAddressRequestBody,
+  type GetCryptoDepositAccountNextOrderResponse,
+  type GetCryptoDepositAccountOrderResponse,
   type HDInitInput,
   type HDPath,
   type HDSubmitInput,

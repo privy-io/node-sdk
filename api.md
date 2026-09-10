@@ -89,6 +89,7 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingListCardsInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingListTransactionsInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingMerchant</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingPinUpdate</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingReplaceCardRequestBody</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingReplacementReason</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingStatementQueryParams</a></code>
@@ -555,6 +556,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">FirstClassChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Gas</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">GetByWalletAddressRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">GetCryptoDepositAccountNextOrderResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">GetCryptoDepositAccountOrderResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HDInitInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HDPath</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">HDSubmitInput</a></code>
@@ -848,7 +851,13 @@ Methods:
 
 Methods:
 
-- <code title="post /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto.ts">\_create</a>(walletID, { ...params }) -> CreateCryptoDepositAccountResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">\_create</a>(walletID, { ...params }) -> CreateCryptoDepositAccountResponse</code>
+
+#### Orders
+
+Methods:
+
+- <code title="get /v1/wallets/{wallet_id}/deposit_accounts/crypto/orders/{order_id}">client.wallets.depositAccounts.crypto.orders.<a href="./src/resources/wallets/deposit-accounts/crypto/orders.ts">get</a>(orderID, { ...params }) -> GetCryptoDepositAccountOrderResponse</code>
 
 ### Fiat
 

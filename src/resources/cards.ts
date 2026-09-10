@@ -432,6 +432,16 @@ export interface CardIssuingMerchant {
 }
 
 /**
+ * Encrypted PIN to set on the card.
+ */
+export interface CardIssuingPinUpdate {
+  /**
+   * The PIN, encrypted with the Stripe Issuing key.
+   */
+  encrypted_number: string;
+}
+
+/**
  * Input for replacing a lost, stolen, or expired card.
  */
 export interface CardIssuingReplaceCardRequestBody {
@@ -504,7 +514,7 @@ export interface CardIssuingTransactionsResponse {
 }
 
 /**
- * Input for updating the status of a card.
+ * Input for updating a card.
  */
 export interface CardIssuingUpdateCardInput {
   /**
@@ -513,15 +523,20 @@ export interface CardIssuingUpdateCardInput {
   environment: SharedAPI.IntegrationEnvironment;
 
   /**
-   * Lifecycle status of a card. Active unfreezes the card, inactive freezes it, and
-   * canceled closes it.
-   */
-  status: CardIssuingCardStatus;
-
-  /**
    * Why a lost or stolen card is being canceled.
    */
   cancellation_reason?: CardIssuingCancellationReason;
+
+  /**
+   * Encrypted PIN to set on the card.
+   */
+  pin?: CardIssuingPinUpdate;
+
+  /**
+   * Lifecycle status of a card. Active unfreezes the card, inactive freezes it, and
+   * canceled closes it.
+   */
+  status?: CardIssuingCardStatus;
 }
 
 export declare namespace Cards {
@@ -559,6 +574,7 @@ export declare namespace Cards {
     type CardIssuingListCardsInput as CardIssuingListCardsInput,
     type CardIssuingListTransactionsInput as CardIssuingListTransactionsInput,
     type CardIssuingMerchant as CardIssuingMerchant,
+    type CardIssuingPinUpdate as CardIssuingPinUpdate,
     type CardIssuingReplaceCardRequestBody as CardIssuingReplaceCardRequestBody,
     type CardIssuingReplacementReason as CardIssuingReplacementReason,
     type CardIssuingStatementQueryParams as CardIssuingStatementQueryParams,

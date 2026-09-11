@@ -21,8 +21,9 @@ export interface SwapDestination {
   caip2?: string;
 
   /**
-   * Address to receive the output tokens. Required for swaps between different
-   * address types and for same-asset transfers.
+   * Address to receive the output tokens. Defaults to the swapping wallet address.
+   * Required when swapping between chains with different address types (e.g. EVM to
+   * Solana) and for same-asset transfers.
    */
   destination_address?: string;
 }

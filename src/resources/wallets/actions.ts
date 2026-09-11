@@ -1179,7 +1179,8 @@ export interface SwapActionResponse {
   wallet_id: string;
 
   /**
-   * Recipient address for the swap.
+   * Recipient address for the swap. Present for newly created swaps; may be absent
+   * for older swap actions.
    */
   destination_address?: string;
 

@@ -121,6 +121,7 @@ export interface BalanceGetParams {
     | 'megaeth'
     | 'hyperevm'
     | 'hypercore'
+    | 'arc'
     | 'tempo_testnet'
     | 'hoodi'
     | 'sepolia'

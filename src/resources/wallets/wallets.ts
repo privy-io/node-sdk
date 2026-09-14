@@ -957,9 +957,9 @@ export interface CustodialWallet {
   address: string;
 
   /**
-   * The chain type of the custodial wallet.
+   * The chain of the custodial wallet.
    */
-  chain_type: CustodialWalletChainType;
+  chain: CustodialWalletChain;
 
   /**
    * Information about the custodian managing this wallet.
@@ -976,6 +976,11 @@ export interface CustodialWallet {
    */
   additional_signers?: WalletAdditionalSigner;
 
+  /**
+   * @deprecated The chain type of the custodial wallet (deprecated).
+   */
+  chain_type?: CustodialWalletChainType;
+
   policy_ids?: Array<string>;
 }
 
@@ -985,7 +990,7 @@ export interface CustodialWallet {
 export type CustodialWalletChain = 'base' | 'solana' | 'tempo';
 
 /**
- * The chain type of the custodial wallet.
+ * The chain type of the custodial wallet (deprecated).
  */
 export type CustodialWalletChainType = 'ethereum' | 'solana';
 
@@ -993,11 +998,6 @@ export type CustodialWalletChainType = 'ethereum' | 'solana';
  * The input for creating a custodial wallet.
  */
 export interface CustodialWalletCreateInput {
-  /**
-   * The chain type of the custodial wallet.
-   */
-  chain_type: CustodialWalletChainType;
-
   /**
    * The provider of the custodial wallet.
    */
@@ -1013,6 +1013,16 @@ export interface CustodialWalletCreateInput {
    * Additional signers for the wallet.
    */
   additional_signers?: AdditionalSignerInput;
+
+  /**
+   * The chain of the custodial wallet.
+   */
+  chain?: CustodialWalletChain;
+
+  /**
+   * @deprecated The chain type of the custodial wallet (deprecated).
+   */
+  chain_type?: CustodialWalletChainType;
 
   /**
    * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
@@ -3669,6 +3679,7 @@ export type TransactionChainNameInput =
   | 'polygon'
   | 'solana'
   | 'sepolia'
+  | 'arc'
   | (string & {});
 
 /**
@@ -4424,6 +4435,11 @@ export interface Wallet {
   authorization_threshold?: number;
 
   /**
+   * The chain of the custodial wallet.
+   */
+  chain?: CustodialWalletChain;
+
+  /**
    * Information about the custodian managing this wallet.
    */
   custody?: WalletCustodian;
@@ -4543,6 +4559,7 @@ export type WalletAssetChainNameInput =
   | 'megaeth'
   | 'hyperevm'
   | 'hypercore'
+  | 'arc'
   | 'tempo_testnet'
   | 'hoodi'
   | 'sepolia'

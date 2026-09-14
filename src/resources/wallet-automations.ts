@@ -379,8 +379,8 @@ export interface WalletAutomationReindexAssetResult {
   asset_address: string;
 
   /**
-   * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
-   * Ethereum).
+   * An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
+   * reindex.
    */
   caip2: WalletAutomationReindexCaip2;
 
@@ -412,10 +412,10 @@ export interface WalletAutomationReindexAssetResult {
 export type WalletAutomationReindexAssetStatus = string;
 
 /**
- * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
- * Ethereum).
+ * An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
+ * reindex.
  */
-export type WalletAutomationReindexCaip2 = string;
+export type WalletAutomationReindexCaip2 = SharedAPI.EvmCaip2 | SharedAPI.TronCaip2;
 
 /**
  * Request body for re-checking a wallet against its wallet automations. Identify
@@ -432,8 +432,8 @@ export interface WalletAutomationReindexRequestBody {
   asset_address: string;
 
   /**
-   * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
-   * Ethereum).
+   * An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
+   * reindex.
    */
   caip2?: WalletAutomationReindexCaip2;
 
@@ -510,8 +510,8 @@ export interface WalletAutomationReindexParams {
   asset_address: string;
 
   /**
-   * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
-   * Ethereum).
+   * An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
+   * reindex.
    */
   caip2?: WalletAutomationReindexCaip2;
 

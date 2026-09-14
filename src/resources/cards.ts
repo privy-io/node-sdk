@@ -57,7 +57,7 @@ export interface CardIssuingCardResponse {
   id: string;
 
   /**
-   * The asset the card funds from. 'usdc' on EVM and Solana, 'path_usd' on Tempo.
+   * The asset the card funds from. 'usdc' on EVM and Solana, 'pathusd' on Tempo.
    */
   asset: string;
 
@@ -163,7 +163,7 @@ export interface CardIssuingConfigResponse {
  */
 export interface CardIssuingCreateCardInput {
   /**
-   * The asset to fund the card. Must be 'usdc' on EVM and Solana, or 'path_usd' on
+   * The asset to fund the card. Must be 'usdc' on EVM and Solana, or 'pathusd' on
    * Tempo.
    */
   asset: string;

@@ -498,6 +498,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CurveSigningChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CurveType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWallet</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletChain</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletChainType</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>

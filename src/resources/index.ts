@@ -911,6 +911,7 @@ export {
   type CurveSigningChainType,
   type CurveType,
   type CustodialWallet,
+  type CustodialWalletChain,
   type CustodialWalletChainType,
   type CustodialWalletCreateInput,
   type CustodialWalletProvider,

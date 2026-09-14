@@ -980,6 +980,11 @@ export interface CustodialWallet {
 }
 
 /**
+ * The chain of the custodial wallet.
+ */
+export type CustodialWalletChain = 'base' | 'solana' | 'tempo';
+
+/**
  * The chain type of the custodial wallet.
  */
 export type CustodialWalletChainType = 'ethereum' | 'solana';
@@ -6972,6 +6977,7 @@ export declare namespace Wallets {
     type CurveSigningChainType as CurveSigningChainType,
     type CurveType as CurveType,
     type CustodialWallet as CustodialWallet,
+    type CustodialWalletChain as CustodialWalletChain,
     type CustodialWalletChainType as CustodialWalletChainType,
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWalletProvider as CustodialWalletProvider,

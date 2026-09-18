@@ -266,7 +266,7 @@ describe('resource wallets', () => {
   test.skip('_transfer: only required params', async () => {
     const responsePromise = client.wallets._transfer('wallet_id', {
       destination: { address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2' },
-      source: { asset: 'usdc', chain: 'base' },
+      source: { asset: 'usdc', chain: 'tempo' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -282,12 +282,12 @@ describe('resource wallets', () => {
     const response = await client.wallets._transfer('wallet_id', {
       destination: {
         address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
-        asset: 'usdc',
-        chain: 'base',
+        asset: 'ousd',
+        chain: 'tempo',
       },
       source: {
         asset: 'usdc',
-        chain: 'base',
+        chain: 'tempo',
         amount: '10.5',
       },
       amount: 'amount',

@@ -7,7 +7,7 @@ export {
   type ExternalFiatAccountDeleteParams,
   type ExternalFiatAccountGetParams,
 } from './external-fiat-accounts';
-export { KYC, type KYCInitiateLinksParams, type KYCInitiateTosParams } from './kyc';
+export { KYC, type KYCInitiateLinksParams, type KYCInitiateTosParams, type KYCSubmitParams } from './kyc';
 export {
   Users,
   type AuthenticatedUser,

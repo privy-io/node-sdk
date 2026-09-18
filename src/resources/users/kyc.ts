@@ -62,6 +62,33 @@ export class KYC extends APIResource {
   ): APIPromise<FiatAPI.KyxTosResponse> {
     return this._client.post(path`/v1/users/${userID}/kyc/tos`, { body, ...options });
   }
+
+  /**
+   * Submits KYC verification data for the user. Safe to call more than once: the
+   * first call creates the provider customer and later calls update it, so a partial
+   * submission can be completed incrementally. The first submission must carry
+   * enough to begin verification — name, date of birth, residential address and at
+   * least one identifying document; later calls may send only the fields that
+   * change.
+   *
+   * @example
+   * ```ts
+   * const kycStatusResponse = await client.users.kyc.submit(
+   *   'user_id',
+   *   {
+   *     data: {},
+   *     provider: 'bridge',
+   *   },
+   * );
+   * ```
+   */
+  submit(
+    userID: string,
+    body: KYCSubmitParams,
+    options?: RequestOptions,
+  ): APIPromise<FiatAPI.KYCStatusResponse> {
+    return this._client.post(path`/v1/users/${userID}/kyc/submit`, { body, ...options });
+  }
 }
 
 export interface KYCInitiateLinksParams {
@@ -113,9 +140,37 @@ export interface KYCInitiateTosParams {
   environment?: FiatAPI.KyxEnvironment;
 }
 
+export interface KYCSubmitParams {
+  /**
+   * KYC verification data for headless submission.
+   */
+  data: FiatAPI.KYCSubmitData;
+
+  /**
+   * KYC/KYB provider identifier.
+   */
+  provider: FiatAPI.KyxProvider;
+
+  /**
+   * Client-side agreement ID for ToS acceptance.
+   */
+  client_agreement_id?: string;
+
+  /**
+   * Endorsements to request during KYC.
+   */
+  endorsements?: Array<FiatAPI.KyxEndorsementName>;
+
+  /**
+   * Provider environment (production or sandbox).
+   */
+  environment?: FiatAPI.KyxEnvironment;
+}
+
 export declare namespace KYC {
   export {
     type KYCInitiateLinksParams as KYCInitiateLinksParams,
     type KYCInitiateTosParams as KYCInitiateTosParams,
+    type KYCSubmitParams as KYCSubmitParams,
   };
 }

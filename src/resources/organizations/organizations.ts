@@ -11,7 +11,7 @@ import {
   ExternalFiatAccounts,
 } from './external-fiat-accounts';
 import * as KYBAPI from './kyb';
-import { KYB, KYBInitiateLinksParams, KYBInitiateTosParams } from './kyb';
+import { KYB, KYBInitiateLinksParams, KYBInitiateTosParams, KYBSubmitParams } from './kyb';
 import { APIPromise } from '../../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -291,5 +291,6 @@ export declare namespace Organizations {
     KYB as KYB,
     type KYBInitiateLinksParams as KYBInitiateLinksParams,
     type KYBInitiateTosParams as KYBInitiateTosParams,
+    type KYBSubmitParams as KYBSubmitParams,
   };
 }

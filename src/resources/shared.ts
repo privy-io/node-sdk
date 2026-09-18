@@ -16,6 +16,11 @@ export type BitcoinAddress = string;
 export type BitcoinCaip2 = 'bip122:mainnet' | (string & {});
 
 /**
+ * Value in basis points: integer from 0 to 10000 (0% to 100%).
+ */
+export type Bps = number;
+
+/**
  * A monetary value with its currency denomination.
  */
 export interface CurrencyAmount {
@@ -146,6 +151,7 @@ export declare namespace Shared {
   export {
     type BitcoinAddress as BitcoinAddress,
     type BitcoinCaip2 as BitcoinCaip2,
+    type Bps as Bps,
     type CurrencyAmount as CurrencyAmount,
     type IntegrationEnvironment as IntegrationEnvironment,
     type EvmAddress as EvmAddress,

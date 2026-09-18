@@ -560,6 +560,210 @@ export interface FiatDepositInstructions {
 export type FiatPaymentRail = 'sepa' | 'ach_push' | 'wire' | 'fednow' | 'faster_payments';
 
 /**
+ * Primary purpose the business will use the account for. Passthrough to the
+ * provider. See the
+ * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+ * for accepted values.
+ */
+export type KYBAccountPurpose = string;
+
+/**
+ * A beneficial owner, control person, or signer associated with the business. At
+ * least one of has_ownership, has_control, or is_signer must be true, and the
+ * business must have at least one control person and one signer.
+ */
+export interface KYBAssociatedPerson {
+  /**
+   * Date of birth in YYYY-MM-DD format. Must be 18 years or older.
+   */
+  date_of_birth: string;
+
+  /**
+   * Email address.
+   */
+  email: string;
+
+  /**
+   * Legal first name.
+   */
+  first_name: string;
+
+  /**
+   * Whether this person is a control person.
+   */
+  has_control: boolean;
+
+  /**
+   * Whether this person owns 25% or more of the business.
+   */
+  has_ownership: boolean;
+
+  /**
+   * Identifying documents for this person.
+   */
+  identifying_information: Array<VerificationDocument>;
+
+  /**
+   * Whether this person is a signer for the business.
+   */
+  is_signer: boolean;
+
+  /**
+   * Legal last name.
+   */
+  last_name: string;
+
+  /**
+   * A postal address used in KYC and KYB data submission.
+   */
+  residential_address: VerificationAddress;
+
+  /**
+   * Supporting documents for this person, such as proof of address.
+   */
+  documents?: Array<KYBIndividualDocument>;
+
+  /**
+   * Whether this person is a director.
+   */
+  is_director?: boolean;
+
+  /**
+   * Legal middle name.
+   */
+  middle_name?: string;
+
+  /**
+   * ISO 3166-1 alpha-3 codes for all nationalities held.
+   */
+  nationalities?: Array<string>;
+
+  /**
+   * Percentage of the business this person owns.
+   */
+  ownership_percentage?: number;
+
+  /**
+   * Phone number in E.164 format.
+   */
+  phone?: string;
+
+  /**
+   * Place of birth for an associated person.
+   */
+  place_of_birth?: KYBPlaceOfBirth;
+
+  /**
+   * Date the relationship with the business was established, in YYYY-MM-DD format.
+   */
+  relationship_established_at?: string;
+
+  /**
+   * Job title. Required when has_control is true.
+   */
+  title?: string;
+
+  /**
+   * Latin-1 transliteration of the first name. Required for non-Latin-1 names.
+   */
+  transliterated_first_name?: string;
+
+  /**
+   * Latin-1 transliteration of the last name. Required for non-Latin-1 names.
+   */
+  transliterated_last_name?: string;
+
+  /**
+   * Latin-1 transliteration of the middle name. Required for non-Latin-1 names.
+   */
+  transliterated_middle_name?: string;
+
+  /**
+   * A postal address used in KYC and KYB data submission.
+   */
+  transliterated_residential_address?: VerificationAddress;
+}
+
+/**
+ * A supporting document for business verification.
+ */
+export interface KYBBusinessDocument {
+  /**
+   * Base64-encoded data URI of the document.
+   */
+  file: string;
+
+  /**
+   * What this document evidences. Supports multiple purposes per file.
+   */
+  purposes: Array<KYBDocumentPurpose>;
+
+  /**
+   * Document description. Required when "other" is one of the purposes.
+   */
+  description?: string;
+}
+
+/**
+ * Legal structure of the business. Passthrough to the provider. See the
+ * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+ * for accepted values.
+ */
+export type KYBBusinessType = string;
+
+/**
+ * What a supporting business document evidences. Passthrough to the provider. See
+ * the
+ * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+ * for accepted values.
+ */
+export type KYBDocumentPurpose = string;
+
+/**
+ * Estimated annual revenue of the business, in USD buckets. Passthrough to the
+ * provider. See the
+ * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+ * for accepted values.
+ */
+export type KYBEstimatedAnnualRevenue = string;
+
+/**
+ * A high-risk activity the business engages in. Passthrough to the provider. See
+ * the
+ * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+ * for accepted values.
+ */
+export type KYBHighRiskActivity = string;
+
+/**
+ * A supporting document for an associated person.
+ */
+export interface KYBIndividualDocument {
+  /**
+   * Base64-encoded data URI of the document.
+   */
+  file: string;
+
+  /**
+   * What this document evidences. Supports multiple purposes per file.
+   */
+  purposes: Array<KYBIndividualDocumentPurpose>;
+
+  /**
+   * Document description. Required when "other" is one of the purposes.
+   */
+  description?: string;
+}
+
+/**
+ * What a supporting document for an associated person evidences. Passthrough to
+ * the provider. See the
+ * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+ * for accepted values.
+ */
+export type KYBIndividualDocumentPurpose = string;
+
+/**
  * Request body for initiating a hosted KYB flow for an organization.
  */
 export interface KYBLinksRequestBody {
@@ -598,6 +802,74 @@ export interface KYBLinksRequestBody {
    */
   redirect_uri?: string;
 }
+
+/**
+ * Place of birth for an associated person.
+ */
+export interface KYBPlaceOfBirth {
+  /**
+   * ISO 3166-1 alpha-3 country code.
+   */
+  country: string;
+
+  /**
+   * City of birth.
+   */
+  city?: string;
+}
+
+/**
+ * A public exchange listing for the business.
+ */
+export interface KYBPubliclyTradedListing {
+  /**
+   * ISO 10383 market identifier code of the listing venue.
+   */
+  market_identifier_code: string;
+
+  /**
+   * ISIN with dashes removed.
+   */
+  stock_number: string;
+
+  /**
+   * Exchange ticker symbol.
+   */
+  ticker: string;
+}
+
+/**
+ * Details of the regulated activity a business is licensed to perform.
+ */
+export interface KYBRegulatedActivity {
+  /**
+   * License number issued by the regulator.
+   */
+  license_number: string;
+
+  /**
+   * ISO 3166-1 alpha-3 country code of the primary regulator.
+   */
+  primary_regulatory_authority_country: string;
+
+  /**
+   * Name of the primary regulator.
+   */
+  primary_regulatory_authority_name: string;
+
+  /**
+   * Description of the regulated activities performed.
+   */
+  regulated_activities_description: string;
+}
+
+/**
+ * Primary source of the funds the business will transact with. Passthrough to the
+ * provider. See the
+ * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+ * for accepted values.
+ */
+export type KYBSourceOfFunds = string;
 
 /**
  * List of KYB status snapshots, one per configured provider/environment.
@@ -656,6 +928,255 @@ export interface KYBStatusResponse {
 }
 
 /**
+ * KYB verification data for headless submission. Fields are individually optional
+ * because the provider accepts partial submissions and grants endorsements once
+ * enough data has arrived; a partial submission can be completed by calling the
+ * endpoint again.
+ */
+export interface KYBSubmitData {
+  /**
+   * Primary purpose the business will use the account for. Passthrough to the
+   * provider. See the
+   * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+   * for accepted values.
+   */
+  account_purpose?: KYBAccountPurpose;
+
+  /**
+   * Free-text purpose. Required when account_purpose is "other".
+   */
+  account_purpose_other?: string;
+
+  /**
+   * Whether the business moves funds on behalf of third parties.
+   */
+  acting_as_intermediary?: boolean;
+
+  /**
+   * Beneficial owners, control persons, and signers.
+   */
+  associated_persons?: Array<KYBAssociatedPerson>;
+
+  /**
+   * Short summary of what the business does.
+   */
+  business_description?: string;
+
+  /**
+   * 2022 NAICS codes describing the industries the business operates in.
+   */
+  business_industry?: Array<string>;
+
+  /**
+   * Registered legal name as filed with government authorities.
+   */
+  business_legal_name?: string;
+
+  /**
+   * Public trading name (DBA), if different from the legal name.
+   */
+  business_trade_name?: string;
+
+  /**
+   * Legal structure of the business. Passthrough to the provider. See the
+   * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+   * for accepted values.
+   */
+  business_type?: KYBBusinessType;
+
+  /**
+   * Description of the AML and sanctions screening controls in place.
+   */
+  compliance_screening_explanation?: string;
+
+  /**
+   * Whether the business conducts money services.
+   */
+  conducts_money_services?: boolean;
+
+  /**
+   * Description of the money services conducted.
+   */
+  conducts_money_services_description?: string;
+
+  /**
+   * Whether money services are conducted through the provider. Requires a
+   * flow_of_funds document when true.
+   */
+  conducts_money_services_using_bridge?: boolean;
+
+  /**
+   * Supporting documents for verification.
+   */
+  documents?: Array<KYBBusinessDocument>;
+
+  /**
+   * Primary business email address.
+   */
+  email?: string;
+
+  /**
+   * Estimated annual revenue of the business, in USD buckets. Passthrough to the
+   * provider. See the
+   * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+   * for accepted values.
+   */
+  estimated_annual_revenue_usd?: KYBEstimatedAnnualRevenue;
+
+  /**
+   * Expected monthly payment volume in USD. Required for high-risk businesses.
+   */
+  expected_monthly_payments_usd?: number;
+
+  /**
+   * Whether the business is tax-registered outside its country of incorporation.
+   */
+  has_foreign_tax_registration?: boolean;
+
+  /**
+   * Whether an intermediate entity owner holds 25% or more of the business.
+   */
+  has_material_intermediary_ownership?: boolean;
+
+  /**
+   * High-risk activities the business engages in.
+   */
+  high_risk_activities?: Array<KYBHighRiskActivity>;
+
+  /**
+   * Explanation of the high-risk activities. Required unless the only value is
+   * "none_of_the_above".
+   */
+  high_risk_activities_explanation?: string;
+
+  /**
+   * Business tax and registration identifiers.
+   */
+  identifying_information?: Array<VerificationDocument>;
+
+  /**
+   * Date of incorporation in YYYY-MM-DD format.
+   */
+  incorporation_date?: string;
+
+  /**
+   * Whether the business is a decentralized autonomous organization.
+   */
+  is_dao?: boolean;
+
+  /**
+   * Whether the business operates in prohibited jurisdictions.
+   */
+  operates_in_prohibited_countries?: boolean;
+
+  /**
+   * Additional websites and social handles.
+   */
+  other_websites?: Array<string>;
+
+  /**
+   * Ownership percentage at which a person is treated as a beneficial owner.
+   */
+  ownership_threshold?: number;
+
+  /**
+   * Business phone number in E.164 format.
+   */
+  phone?: string;
+
+  /**
+   * A postal address used in KYC and KYB data submission.
+   */
+  physical_address?: VerificationAddress;
+
+  /**
+   * Primary website. If omitted, a proof_of_nature_of_business document is required.
+   */
+  primary_website?: string;
+
+  /**
+   * Public exchange listings for the business.
+   */
+  publicly_traded_listings?: Array<KYBPubliclyTradedListing>;
+
+  /**
+   * A postal address used in KYC and KYB data submission.
+   */
+  registered_address?: VerificationAddress;
+
+  /**
+   * Details of the regulated activity a business is licensed to perform.
+   */
+  regulated_activity?: KYBRegulatedActivity;
+
+  /**
+   * Primary source of the funds the business will transact with. Passthrough to the
+   * provider. See the
+   * [Bridge customer API reference](https://apidocs.bridge.xyz/platform/customers/customers/api)
+   * for accepted values.
+   */
+  source_of_funds?: KYBSourceOfFunds;
+
+  /**
+   * Free-text detail on the source of funds. Required for high-risk businesses.
+   */
+  source_of_funds_description?: string;
+
+  /**
+   * Latin-1 transliteration of the legal name. Required for non-Latin-1 names.
+   */
+  transliterated_business_legal_name?: string;
+
+  /**
+   * Latin-1 transliteration of the trade name. Required for non-Latin-1 names.
+   */
+  transliterated_business_trade_name?: string;
+
+  /**
+   * A postal address used in KYC and KYB data submission.
+   */
+  transliterated_physical_address?: VerificationAddress;
+
+  /**
+   * A postal address used in KYC and KYB data submission.
+   */
+  transliterated_registered_address?: VerificationAddress;
+}
+
+/**
+ * Request body for headless KYB data submission.
+ */
+export interface KYBSubmitRequestBody {
+  /**
+   * KYB verification data for headless submission. Fields are individually optional
+   * because the provider accepts partial submissions and grants endorsements once
+   * enough data has arrived; a partial submission can be completed by calling the
+   * endpoint again.
+   */
+  data: KYBSubmitData;
+
+  /**
+   * KYC/KYB provider identifier.
+   */
+  provider: KyxProvider;
+
+  /**
+   * Client-side agreement ID for ToS acceptance.
+   */
+  client_agreement_id?: string;
+
+  /**
+   * Endorsements to request during KYB.
+   */
+  endorsements?: Array<KyxEndorsementName>;
+
+  /**
+   * Provider environment (production or sandbox).
+   */
+  environment?: KyxEnvironment;
+}
+
+/**
  * Request body for initiating Terms of Service acceptance for an organization.
  */
 export interface KYBTosRequestBody {
@@ -678,46 +1199,6 @@ export interface KYBTosRequestBody {
    * Provider environment (production or sandbox).
    */
   environment?: KyxEnvironment;
-}
-
-/**
- * An identity document for KYC verification.
- */
-export interface KYCIdentifyingDocument {
-  /**
-   * ISO 3166-1 alpha-3 issuing country code.
-   */
-  issuing_country: string;
-
-  /**
-   * Document type identifier.
-   */
-  type: string;
-
-  /**
-   * Document description.
-   */
-  description?: string;
-
-  /**
-   * Document expiration date.
-   */
-  expiration?: string;
-
-  /**
-   * Base64-encoded back image.
-   */
-  image_back?: string;
-
-  /**
-   * Base64-encoded front image.
-   */
-  image_front?: string;
-
-  /**
-   * Document number.
-   */
-  number?: string;
 }
 
 /**
@@ -753,41 +1234,6 @@ export interface KYCLinksRequestBody {
    * URI to redirect the user after completing KYC.
    */
   redirect_uri?: string;
-}
-
-/**
- * Residential address for KYC data submission.
- */
-export interface KYCResidentialAddress {
-  /**
-   * City.
-   */
-  city: string;
-
-  /**
-   * ISO 3166-1 alpha-3 country code.
-   */
-  country: string;
-
-  /**
-   * Street address line 1.
-   */
-  street_line_1: string;
-
-  /**
-   * State or province code.
-   */
-  subdivision: string;
-
-  /**
-   * Postal code.
-   */
-  postal_code?: string;
-
-  /**
-   * Street address line 2.
-   */
-  street_line_2?: string;
 }
 
 /**
@@ -853,27 +1299,7 @@ export interface KYCSubmitData {
   /**
    * Date of birth in YYYY-MM-DD format.
    */
-  date_of_birth: string;
-
-  /**
-   * Legal first name.
-   */
-  first_name: string;
-
-  /**
-   * Identifying documents.
-   */
-  identifying_information: Array<KYCIdentifyingDocument>;
-
-  /**
-   * Legal last name.
-   */
-  last_name: string;
-
-  /**
-   * Residential address for KYC data submission.
-   */
-  residential_address: KYCResidentialAddress;
+  date_of_birth?: string;
 
   /**
    * Email address.
@@ -881,9 +1307,29 @@ export interface KYCSubmitData {
   email?: string;
 
   /**
+   * Legal first name.
+   */
+  first_name?: string;
+
+  /**
+   * Identifying documents.
+   */
+  identifying_information?: Array<VerificationDocument>;
+
+  /**
+   * Legal last name.
+   */
+  last_name?: string;
+
+  /**
    * Phone number in E.164 format.
    */
   phone?: string;
+
+  /**
+   * A postal address used in KYC and KYB data submission.
+   */
+  residential_address?: VerificationAddress;
 }
 
 /**
@@ -1325,6 +1771,83 @@ export interface PayoutSource {
   chain: string;
 }
 
+/**
+ * A postal address used in KYC and KYB data submission.
+ */
+export interface VerificationAddress {
+  /**
+   * City.
+   */
+  city: string;
+
+  /**
+   * ISO 3166-1 alpha-3 country code.
+   */
+  country: string;
+
+  /**
+   * Street address line 1.
+   */
+  street_line_1: string;
+
+  /**
+   * Postal code. Required for countries that use them.
+   */
+  postal_code?: string;
+
+  /**
+   * Street address line 2.
+   */
+  street_line_2?: string;
+
+  /**
+   * ISO 3166-2 state or province code. Required for US addresses.
+   */
+  subdivision?: string;
+}
+
+/**
+ * An identifying document for KYC or KYB verification. Also used for business
+ * identifiers such as tax and registration numbers, for which the image and
+ * expiration fields do not apply.
+ */
+export interface VerificationDocument {
+  /**
+   * ISO 3166-1 alpha-3 issuing country code.
+   */
+  issuing_country: string;
+
+  /**
+   * Document type identifier.
+   */
+  type: string;
+
+  /**
+   * Document description.
+   */
+  description?: string;
+
+  /**
+   * Document expiration date.
+   */
+  expiration?: string;
+
+  /**
+   * Base64-encoded back image.
+   */
+  image_back?: string;
+
+  /**
+   * Base64-encoded front image.
+   */
+  image_front?: string;
+
+  /**
+   * Document number.
+   */
+  number?: string;
+}
+
 export declare namespace Fiat {
   export {
     type BridgeCreateExternalFiatAccountRequestBody as BridgeCreateExternalFiatAccountRequestBody,
@@ -1355,13 +1878,26 @@ export declare namespace Fiat {
     type FiatDepositAccountStatus as FiatDepositAccountStatus,
     type FiatDepositInstructions as FiatDepositInstructions,
     type FiatPaymentRail as FiatPaymentRail,
+    type KYBAccountPurpose as KYBAccountPurpose,
+    type KYBAssociatedPerson as KYBAssociatedPerson,
+    type KYBBusinessDocument as KYBBusinessDocument,
+    type KYBBusinessType as KYBBusinessType,
+    type KYBDocumentPurpose as KYBDocumentPurpose,
+    type KYBEstimatedAnnualRevenue as KYBEstimatedAnnualRevenue,
+    type KYBHighRiskActivity as KYBHighRiskActivity,
+    type KYBIndividualDocument as KYBIndividualDocument,
+    type KYBIndividualDocumentPurpose as KYBIndividualDocumentPurpose,
     type KYBLinksRequestBody as KYBLinksRequestBody,
+    type KYBPlaceOfBirth as KYBPlaceOfBirth,
+    type KYBPubliclyTradedListing as KYBPubliclyTradedListing,
+    type KYBRegulatedActivity as KYBRegulatedActivity,
+    type KYBSourceOfFunds as KYBSourceOfFunds,
     type KYBStatusListResponse as KYBStatusListResponse,
     type KYBStatusResponse as KYBStatusResponse,
+    type KYBSubmitData as KYBSubmitData,
+    type KYBSubmitRequestBody as KYBSubmitRequestBody,
     type KYBTosRequestBody as KYBTosRequestBody,
-    type KYCIdentifyingDocument as KYCIdentifyingDocument,
     type KYCLinksRequestBody as KYCLinksRequestBody,
-    type KYCResidentialAddress as KYCResidentialAddress,
     type KYCStatusListResponse as KYCStatusListResponse,
     type KYCStatusResponse as KYCStatusResponse,
     type KYCSubmitData as KYCSubmitData,
@@ -1396,5 +1932,7 @@ export declare namespace Fiat {
     type OrganizationExternalFiatAccountResponse as OrganizationExternalFiatAccountResponse,
     type PayoutDestination as PayoutDestination,
     type PayoutSource as PayoutSource,
+    type VerificationAddress as VerificationAddress,
+    type VerificationDocument as VerificationDocument,
   };
 }

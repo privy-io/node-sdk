@@ -63,6 +63,28 @@ export class KYB extends APIResource {
   ): APIPromise<FiatAPI.KyxTosResponse> {
     return this._client.post(path`/v1/organizations/${organizationID}/kyb/tos`, { body, ...options });
   }
+
+  /**
+   * Submits KYB verification data for the organization. Safe to call more than once:
+   * the first call creates the provider customer and later calls update it, so a
+   * partial submission can be completed incrementally.
+   *
+   * @example
+   * ```ts
+   * const kybStatusResponse =
+   *   await client.organizations.kyb.submit('organization_id', {
+   *     data: {},
+   *     provider: 'bridge',
+   *   });
+   * ```
+   */
+  submit(
+    organizationID: string,
+    body: KYBSubmitParams,
+    options?: RequestOptions,
+  ): APIPromise<FiatAPI.KYBStatusResponse> {
+    return this._client.post(path`/v1/organizations/${organizationID}/kyb/submit`, { body, ...options });
+  }
 }
 
 export interface KYBInitiateLinksParams {
@@ -124,9 +146,40 @@ export interface KYBInitiateTosParams {
   environment?: FiatAPI.KyxEnvironment;
 }
 
+export interface KYBSubmitParams {
+  /**
+   * KYB verification data for headless submission. Fields are individually optional
+   * because the provider accepts partial submissions and grants endorsements once
+   * enough data has arrived; a partial submission can be completed by calling the
+   * endpoint again.
+   */
+  data: FiatAPI.KYBSubmitData;
+
+  /**
+   * KYC/KYB provider identifier.
+   */
+  provider: FiatAPI.KyxProvider;
+
+  /**
+   * Client-side agreement ID for ToS acceptance.
+   */
+  client_agreement_id?: string;
+
+  /**
+   * Endorsements to request during KYB.
+   */
+  endorsements?: Array<FiatAPI.KyxEndorsementName>;
+
+  /**
+   * Provider environment (production or sandbox).
+   */
+  environment?: FiatAPI.KyxEnvironment;
+}
+
 export declare namespace KYB {
   export {
     type KYBInitiateLinksParams as KYBInitiateLinksParams,
     type KYBInitiateTosParams as KYBInitiateTosParams,
+    type KYBSubmitParams as KYBSubmitParams,
   };
 }

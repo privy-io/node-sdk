@@ -14,7 +14,7 @@ import {
   ExternalFiatAccounts,
 } from './external-fiat-accounts';
 import * as KYCAPI from './kyc';
-import { KYC, KYCInitiateLinksParams, KYCInitiateTosParams } from './kyc';
+import { KYC, KYCInitiateLinksParams, KYCInitiateTosParams, KYCSubmitParams } from './kyc';
 import * as WalletsAPI from '../wallets/wallets';
 import { APIPromise } from '../../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../../core/pagination';
@@ -1927,5 +1927,6 @@ export declare namespace Users {
     KYC as KYC,
     type KYCInitiateLinksParams as KYCInitiateLinksParams,
     type KYCInitiateTosParams as KYCInitiateTosParams,
+    type KYCSubmitParams as KYCSubmitParams,
   };
 }

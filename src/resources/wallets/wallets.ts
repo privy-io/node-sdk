@@ -301,13 +301,13 @@ export class Wallets extends APIResource {
    *   await client.wallets._transfer('wallet_id', {
    *     destination: {
    *       address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
-   *       asset: 'usdc',
-   *       chain: 'base',
+   *       asset: 'ousd',
+   *       chain: 'tempo',
    *     },
    *     source: {
    *       amount: '10.5',
    *       asset: 'usdc',
-   *       chain: 'base',
+   *       chain: 'tempo',
    *     },
    *     amount_type: 'exact_input',
    *     slippage_bps: 100,
@@ -501,6 +501,8 @@ export class Wallets extends APIResource {
 }
 
 export type WalletsCursor = Cursor<Wallet>;
+
+export type CryptoDepositAddressRoutesCursor = Cursor<CryptoDepositAddressRoute>;
 
 /**
  * An entry in an EIP-2930 access list, specifying an address and its storage keys.
@@ -772,6 +774,22 @@ export interface AttachWalletAutomationRequestBody {
 }
 
 /**
+ * A summary of an automation attached to a wallet.
+ */
+export interface AttachedWalletAutomation {
+  /**
+   * ID of the automation.
+   */
+  id: string;
+
+  /**
+   * Whether this attachment is currently active — true only if both the attachment
+   * and the underlying automation are enabled.
+   */
+  enabled: boolean;
+}
+
+/**
  * Dashboard response for a wallet authorization key (includes role, which is an
  * internal-only concept).
  */
@@ -831,6 +849,21 @@ export interface CreateCryptoDepositAccountWithConfigRequestBody {
   deposit_config_id: string;
 
   type: 'deposit_config';
+
+  /**
+   * Controls deposit source selection. `dedicated` creates or reuses eligible
+   * dedicated source wallets, never the destination wallet. This is the default when
+   * omitted, including for existing routes. `prefer_destination` uses the
+   * destination wallet when it is eligible and its chain family is requested;
+   * otherwise it uses dedicated source wallets. `require_destination` requires the
+   * destination wallet to serve its own chain family when that family is requested
+   * and fails without fallback if it cannot; other requested families still use
+   * dedicated source wallets. On destination reuse, all strategies remove all
+   * existing automation attachments, including matching and disabled ones, then
+   * attach the requested automation. Exported wallets cannot serve as deposit
+   * sources.
+   */
+  deposit_address_strategy?: CryptoDepositAddressStrategy;
 }
 
 /**
@@ -838,7 +871,7 @@ export interface CreateCryptoDepositAccountWithConfigRequestBody {
  */
 export interface CreateCryptoDepositAccountWithRouteRequestBody {
   /**
-   * An asset on a chain. Uses a human-readable alias (usdc, base) when one is on
+   * An asset on a chain. Uses a human-readable alias (usdc, tempo) when one is on
    * file, otherwise the raw asset address and CAIP-2.
    */
   destination: CryptoDepositAsset;
@@ -850,6 +883,103 @@ export interface CreateCryptoDepositAccountWithRouteRequestBody {
   source: CryptoDepositAssetFilter;
 
   type: 'inline_route';
+
+  /**
+   * Controls deposit source selection. `dedicated` creates or reuses eligible
+   * dedicated source wallets, never the destination wallet. This is the default when
+   * omitted, including for existing routes. `prefer_destination` uses the
+   * destination wallet when it is eligible and its chain family is requested;
+   * otherwise it uses dedicated source wallets. `require_destination` requires the
+   * destination wallet to serve its own chain family when that family is requested
+   * and fails without fallback if it cannot; other requested families still use
+   * dedicated source wallets. On destination reuse, all strategies remove all
+   * existing automation attachments, including matching and disabled ones, then
+   * attach the requested automation. Exported wallets cannot serve as deposit
+   * sources.
+   */
+  deposit_address_strategy?: CryptoDepositAddressStrategy;
+}
+
+/**
+ * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
+ * Ethereum).
+ */
+export type CryptoDepositAccountCaip2 = string;
+
+/**
+ * Chain metadata for rendering the crypto deposit-account source picker.
+ */
+export interface CryptoDepositAccountChain {
+  /**
+   * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
+   * Ethereum).
+   */
+  caip2: CryptoDepositAccountCaip2;
+
+  /**
+   * Numeric chain id used by some clients as an alias.
+   */
+  chain_id: number;
+
+  display_name: string;
+
+  /**
+   * URL of the chain icon.
+   */
+  icon_url: string;
+
+  /**
+   * Execution VM, e.g. evm or svm.
+   */
+  vm_type: string;
+}
+
+/**
+ * Source-token catalog for crypto deposit accounts. Only automation-sweepable,
+ * gas-sponsored mainnets.
+ */
+export interface CryptoDepositAccountConfigResponse {
+  chains: { [key: string]: CryptoDepositAccountChain };
+
+  currencies: Array<CryptoDepositAccountSourceCurrency>;
+}
+
+/**
+ * A token contract on one source chain in the crypto deposit-account catalog.
+ */
+export interface CryptoDepositAccountSourceChain {
+  /**
+   * Token contract or native asset address on this chain.
+   */
+  address: string;
+
+  /**
+   * EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
+   * Ethereum).
+   */
+  caip2: CryptoDepositAccountCaip2;
+
+  /**
+   * Token decimals on this chain.
+   */
+  decimals: number;
+}
+
+/**
+ * A source token in the crypto deposit-account catalog, with the chains it can be
+ * sent from.
+ */
+export interface CryptoDepositAccountSourceCurrency {
+  chains: Array<CryptoDepositAccountSourceChain>;
+
+  /**
+   * URL of the token logo.
+   */
+  logo_uri: string;
+
+  name: string;
+
+  symbol: string;
 }
 
 /**
@@ -859,7 +989,7 @@ export interface CryptoDepositAddressRoute {
   deposit_address: string;
 
   /**
-   * An asset on a chain. Uses a human-readable alias (usdc, base) when one is on
+   * An asset on a chain. Uses a human-readable alias (usdc, tempo) when one is on
    * file, otherwise the raw asset address and CAIP-2.
    */
   destination: CryptoDepositAsset;
@@ -874,7 +1004,22 @@ export interface CryptoDepositAddressRoute {
 }
 
 /**
- * An asset on a chain. Uses a human-readable alias (usdc, base) when one is on
+ * Controls deposit source selection. `dedicated` creates or reuses eligible
+ * dedicated source wallets, never the destination wallet. This is the default when
+ * omitted, including for existing routes. `prefer_destination` uses the
+ * destination wallet when it is eligible and its chain family is requested;
+ * otherwise it uses dedicated source wallets. `require_destination` requires the
+ * destination wallet to serve its own chain family when that family is requested
+ * and fails without fallback if it cannot; other requested families still use
+ * dedicated source wallets. On destination reuse, all strategies remove all
+ * existing automation attachments, including matching and disabled ones, then
+ * attach the requested automation. Exported wallets cannot serve as deposit
+ * sources.
+ */
+export type CryptoDepositAddressStrategy = 'dedicated' | 'prefer_destination' | 'require_destination';
+
+/**
+ * An asset on a chain. Uses a human-readable alias (usdc, tempo) when one is on
  * file, otherwise the raw asset address and CAIP-2.
  */
 export interface CryptoDepositAsset {
@@ -2054,6 +2199,15 @@ export interface IntentBinding {
   intentId: string;
 
   type: 'intent';
+}
+
+/**
+ * A page of active crypto deposit accounts for a destination wallet.
+ */
+export interface ListCryptoDepositAccountsResponse {
+  data: Array<CryptoDepositAddressRoute>;
+
+  next_cursor: string | null;
 }
 
 /**
@@ -4433,6 +4587,11 @@ export interface Wallet {
    * The number of keys that must sign for an action to be valid.
    */
   authorization_threshold?: number;
+
+  /**
+   * Automations attached to the wallet, including disabled ones.
+   */
+  automations?: Array<AttachedWalletAutomation>;
 
   /**
    * The chain of the custodial wallet.
@@ -6978,6 +7137,7 @@ export declare namespace Wallets {
     type AptosSignTransactionRpcResponseData as AptosSignTransactionRpcResponseData,
     type AptosSignedTransactionBcsHex as AptosSignedTransactionBcsHex,
     type AttachWalletAutomationRequestBody as AttachWalletAutomationRequestBody,
+    type AttachedWalletAutomation as AttachedWalletAutomation,
     type AuthorizationKeyDashboardResponse as AuthorizationKeyDashboardResponse,
     type AuthorizationKeyResponse as AuthorizationKeyResponse,
     type AuthorizationKeyRole as AuthorizationKeyRole,
@@ -6985,7 +7145,13 @@ export declare namespace Wallets {
     type CreateCryptoDepositAccountResponse as CreateCryptoDepositAccountResponse,
     type CreateCryptoDepositAccountWithConfigRequestBody as CreateCryptoDepositAccountWithConfigRequestBody,
     type CreateCryptoDepositAccountWithRouteRequestBody as CreateCryptoDepositAccountWithRouteRequestBody,
+    type CryptoDepositAccountCaip2 as CryptoDepositAccountCaip2,
+    type CryptoDepositAccountChain as CryptoDepositAccountChain,
+    type CryptoDepositAccountConfigResponse as CryptoDepositAccountConfigResponse,
+    type CryptoDepositAccountSourceChain as CryptoDepositAccountSourceChain,
+    type CryptoDepositAccountSourceCurrency as CryptoDepositAccountSourceCurrency,
     type CryptoDepositAddressRoute as CryptoDepositAddressRoute,
+    type CryptoDepositAddressStrategy as CryptoDepositAddressStrategy,
     type CryptoDepositAsset as CryptoDepositAsset,
     type CryptoDepositAssetFilter as CryptoDepositAssetFilter,
     type CryptoDepositAssetFilterAll as CryptoDepositAssetFilterAll,
@@ -7063,6 +7229,7 @@ export declare namespace Wallets {
     type HpkeImportConfig as HpkeImportConfig,
     type Hex as Hex,
     type IntentBinding as IntentBinding,
+    type ListCryptoDepositAccountsResponse as ListCryptoDepositAccountsResponse,
     type NamedTokenTransferSource as NamedTokenTransferSource,
     type NearRpcRequestBody as NearRpcRequestBody,
     type NearRpcResponse as NearRpcResponse,

@@ -20,7 +20,7 @@ export class Incentive extends APIResource {
    * const earnIncentiveClaimActionResponse =
    *   await client.wallets.earn.ethereum.incentive._claim(
    *     'wallet_id',
-   *     { chain: 'base' },
+   *     { chain: 'tempo' },
    *   );
    * ```
    */

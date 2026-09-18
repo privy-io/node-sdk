@@ -2,9 +2,11 @@
 
 import { APIResource } from '../../../../core/resource';
 import * as WalletsAPI from '../../wallets';
+import { CryptoDepositAddressRoutesCursor } from '../../wallets';
 import * as OrdersAPI from './orders';
 import { OrderGetParams, Orders } from './orders';
 import { APIPromise } from '../../../../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../../../../core/pagination';
 import { buildHeaders } from '../../../../internal/headers';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
@@ -16,10 +18,41 @@ export class Crypto extends APIResource {
   orders: OrdersAPI.Orders = new OrdersAPI.Orders(this._client);
 
   /**
-   * Creates deposit source wallets and attaches them to a sweep into the path
-   * wallet. Requires a dest-owner privy-authorization-signature. Accepts a
-   * dest-owner user JWT or an app secret (app-secret callers use the dest owner).
-   * JWT-only requests 401 when the app requires an app secret for wallet actions.
+   * Returns active crypto deposit accounts that sweep into the path wallet. Requires
+   * an app secret or a JWT for a wallet signer, plus `privy-app-id`.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const cryptoDepositAddressRoute of client.wallets.depositAccounts.crypto.list(
+   *   'wallet_id',
+   * )) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(
+    walletID: string,
+    query: CryptoListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<CryptoDepositAddressRoutesCursor, WalletsAPI.CryptoDepositAddressRoute> {
+    return this._client.getAPIList(
+      path`/v1/wallets/${walletID}/deposit_accounts/crypto`,
+      Cursor<WalletsAPI.CryptoDepositAddressRoute>,
+      { query, ...options },
+    );
+  }
+
+  /**
+   * Creates or reuses deposit source wallets and attaches them to a sweep into the
+   * path wallet. The optional top-level deposit_address_strategy defaults to
+   * dedicated, including for existing routes. Use prefer_destination to reuse the
+   * path wallet when eligible, or require_destination to require it for its own
+   * requested source chain family without fallback. Other requested families still
+   * use dedicated wallets. Include any explicit strategy in the signed request body.
+   * Requires a dest-owner privy-authorization-signature. Accepts a dest-owner user
+   * JWT or an app secret (app-secret callers use the dest owner). JWT-only requests
+   * 401 when the app requires an app secret for wallet actions.
    *
    * @example
    * ```ts
@@ -29,6 +62,7 @@ export class Crypto extends APIResource {
    *     {
    *       deposit_config_id: 'clg2rvssg025ny5fmul5m95fn',
    *       type: 'deposit_config',
+   *       deposit_address_strategy: 'dedicated',
    *     },
    *   );
    * ```
@@ -59,7 +93,23 @@ export class Crypto extends APIResource {
       ]),
     });
   }
+
+  /**
+   * Returns the tokens and chains a user can send from when creating a crypto
+   * deposit account.
+   *
+   * @example
+   * ```ts
+   * const cryptoDepositAccountConfigResponse =
+   *   await client.wallets.depositAccounts.crypto.getConfig();
+   * ```
+   */
+  getConfig(options?: RequestOptions): APIPromise<WalletsAPI.CryptoDepositAccountConfigResponse> {
+    return this._client.get('/v1/deposit_accounts/crypto/config', options);
+  }
 }
+
+export interface CryptoListParams extends CursorParams {}
 
 export type CryptoCreateParams =
   | CryptoCreateParams.CreateCryptoDepositAccountWithConfigRequestBody
@@ -76,6 +126,21 @@ export declare namespace CryptoCreateParams {
      * Body param
      */
     type: 'deposit_config';
+
+    /**
+     * Body param: Controls deposit source selection. `dedicated` creates or reuses
+     * eligible dedicated source wallets, never the destination wallet. This is the
+     * default when omitted, including for existing routes. `prefer_destination` uses
+     * the destination wallet when it is eligible and its chain family is requested;
+     * otherwise it uses dedicated source wallets. `require_destination` requires the
+     * destination wallet to serve its own chain family when that family is requested
+     * and fails without fallback if it cannot; other requested families still use
+     * dedicated source wallets. On destination reuse, all strategies remove all
+     * existing automation attachments, including matching and disabled ones, then
+     * attach the requested automation. Exported wallets cannot serve as deposit
+     * sources.
+     */
+    deposit_address_strategy?: WalletsAPI.CryptoDepositAddressStrategy;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -98,7 +163,7 @@ export declare namespace CryptoCreateParams {
 
   export interface CreateCryptoDepositAccountWithRouteRequestBody {
     /**
-     * Body param: An asset on a chain. Uses a human-readable alias (usdc, base) when
+     * Body param: An asset on a chain. Uses a human-readable alias (usdc, tempo) when
      * one is on file, otherwise the raw asset address and CAIP-2.
      */
     destination: WalletsAPI.CryptoDepositAsset;
@@ -113,6 +178,21 @@ export declare namespace CryptoCreateParams {
      * Body param
      */
     type: 'inline_route';
+
+    /**
+     * Body param: Controls deposit source selection. `dedicated` creates or reuses
+     * eligible dedicated source wallets, never the destination wallet. This is the
+     * default when omitted, including for existing routes. `prefer_destination` uses
+     * the destination wallet when it is eligible and its chain family is requested;
+     * otherwise it uses dedicated source wallets. `require_destination` requires the
+     * destination wallet to serve its own chain family when that family is requested
+     * and fails without fallback if it cannot; other requested families still use
+     * dedicated source wallets. On destination reuse, all strategies remove all
+     * existing automation attachments, including matching and disabled ones, then
+     * attach the requested automation. Exported wallets cannot serve as deposit
+     * sources.
+     */
+    deposit_address_strategy?: WalletsAPI.CryptoDepositAddressStrategy;
 
     /**
      * Header param: Request authorization signature. If multiple signatures are
@@ -137,7 +217,9 @@ export declare namespace CryptoCreateParams {
 Crypto.Orders = Orders;
 
 export declare namespace Crypto {
-  export { type CryptoCreateParams as CryptoCreateParams };
+  export { type CryptoListParams as CryptoListParams, type CryptoCreateParams as CryptoCreateParams };
 
   export { Orders as Orders, type OrderGetParams as OrderGetParams };
 }
+
+export { type CryptoDepositAddressRoutesCursor };

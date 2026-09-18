@@ -65,4 +65,55 @@ describe('resource kyc', () => {
       environment: 'production',
     });
   });
+
+  // Mock server tests are disabled
+  test.skip('submit: only required params', async () => {
+    const responsePromise = client.users.kyc.submit('user_id', {
+      data: {},
+      provider: 'bridge',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('submit: required and optional params', async () => {
+    const response = await client.users.kyc.submit('user_id', {
+      data: {
+        date_of_birth: '7321-69-10',
+        email: 'dev@stainless.com',
+        first_name: 'x',
+        identifying_information: [
+          {
+            issuing_country: 'xxx',
+            type: 'type',
+            description: 'description',
+            expiration: 'expiration',
+            image_back: 'image_back',
+            image_front: 'image_front',
+            number: 'number',
+          },
+        ],
+        last_name: 'x',
+        phone: 'phone',
+        residential_address: {
+          city: 'x',
+          country: 'xxx',
+          street_line_1: 'xxxx',
+          postal_code: 'x',
+          street_line_2: 'x',
+          subdivision: 'x',
+        },
+      },
+      provider: 'bridge',
+      client_agreement_id: 'client_agreement_id',
+      endorsements: ['sepa'],
+      environment: 'production',
+    });
+  });
 });

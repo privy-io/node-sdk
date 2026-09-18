@@ -201,6 +201,7 @@ Methods:
 - <code title="get /v1/organizations/{organization_id}/kyb">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">list</a>(organizationID) -> KYBStatusListResponse</code>
 - <code title="post /v1/organizations/{organization_id}/kyb/links">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">initiateLinks</a>(organizationID, { ...params }) -> KYBStatusResponse</code>
 - <code title="post /v1/organizations/{organization_id}/kyb/tos">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">initiateTos</a>(organizationID, { ...params }) -> KyxTosResponse</code>
+- <code title="post /v1/organizations/{organization_id}/kyb/submit">client.organizations.kyb.<a href="./src/resources/organizations/kyb.ts">submit</a>(organizationID, { ...params }) -> KYBStatusResponse</code>
 
 # Policies
 
@@ -413,6 +414,7 @@ Methods:
 - <code title="get /v1/users/{user_id}/kyc">client.users.kyc.<a href="./src/resources/users/kyc.ts">list</a>(userID) -> KYCStatusListResponse</code>
 - <code title="post /v1/users/{user_id}/kyc/links">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateLinks</a>(userID, { ...params }) -> KYCStatusResponse</code>
 - <code title="post /v1/users/{user_id}/kyc/tos">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateTos</a>(userID, { ...params }) -> KyxTosResponse</code>
+- <code title="post /v1/users/{user_id}/kyc/submit">client.users.kyc.<a href="./src/resources/users/kyc.ts">submit</a>(userID, { ...params }) -> KYCStatusResponse</code>
 
 # WalletAutomations
 
@@ -482,6 +484,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">AptosSignTransactionRpcResponseData</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AptosSignedTransactionBcsHex</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AttachWalletAutomationRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">AttachedWalletAutomation</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyDashboardResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">AuthorizationKeyRole</a></code>
@@ -489,7 +492,13 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CreateCryptoDepositAccountResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CreateCryptoDepositAccountWithConfigRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CreateCryptoDepositAccountWithRouteRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountCaip2</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountChain</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountConfigResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountSourceChain</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountSourceCurrency</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAddressRoute</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAddressStrategy</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAsset</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAssetFilter</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAssetFilterAll</a></code>
@@ -567,6 +576,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">HpkeImportConfig</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">Hex</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">IntentBinding</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">ListCryptoDepositAccountsResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">NamedTokenTransferSource</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">NearRpcRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">NearRpcResponse</a></code>
@@ -852,7 +862,9 @@ Methods:
 
 Methods:
 
+- <code title="get /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">list</a>(walletID, { ...params }) -> CryptoDepositAddressRoutesCursor</code>
 - <code title="post /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">\_create</a>(walletID, { ...params }) -> CreateCryptoDepositAccountResponse</code>
+- <code title="get /v1/deposit_accounts/crypto/config">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">getConfig</a>() -> CryptoDepositAccountConfigResponse</code>
 
 #### Orders
 
@@ -1285,6 +1297,7 @@ Types:
 
 - <code><a href="./src/resources/shared.ts">BitcoinAddress</a></code>
 - <code><a href="./src/resources/shared.ts">BitcoinCaip2</a></code>
+- <code><a href="./src/resources/shared.ts">Bps</a></code>
 - <code><a href="./src/resources/shared.ts">CurrencyAmount</a></code>
 - <code><a href="./src/resources/shared.ts">IntegrationEnvironment</a></code>
 - <code><a href="./src/resources/shared.ts">EvmAddress</a></code>
@@ -1338,13 +1351,26 @@ Types:
 - <code><a href="./src/resources/fiat.ts">FiatDepositAccountStatus</a></code>
 - <code><a href="./src/resources/fiat.ts">FiatDepositInstructions</a></code>
 - <code><a href="./src/resources/fiat.ts">FiatPaymentRail</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBAccountPurpose</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBAssociatedPerson</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBBusinessDocument</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBBusinessType</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBDocumentPurpose</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBEstimatedAnnualRevenue</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBHighRiskActivity</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBIndividualDocument</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBIndividualDocumentPurpose</a></code>
 - <code><a href="./src/resources/fiat.ts">KYBLinksRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBPlaceOfBirth</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBPubliclyTradedListing</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBRegulatedActivity</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBSourceOfFunds</a></code>
 - <code><a href="./src/resources/fiat.ts">KYBStatusListResponse</a></code>
 - <code><a href="./src/resources/fiat.ts">KYBStatusResponse</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBSubmitData</a></code>
+- <code><a href="./src/resources/fiat.ts">KYBSubmitRequestBody</a></code>
 - <code><a href="./src/resources/fiat.ts">KYBTosRequestBody</a></code>
-- <code><a href="./src/resources/fiat.ts">KYCIdentifyingDocument</a></code>
 - <code><a href="./src/resources/fiat.ts">KYCLinksRequestBody</a></code>
-- <code><a href="./src/resources/fiat.ts">KYCResidentialAddress</a></code>
 - <code><a href="./src/resources/fiat.ts">KYCStatusListResponse</a></code>
 - <code><a href="./src/resources/fiat.ts">KYCStatusResponse</a></code>
 - <code><a href="./src/resources/fiat.ts">KYCSubmitData</a></code>
@@ -1379,6 +1405,8 @@ Types:
 - <code><a href="./src/resources/fiat.ts">OrganizationExternalFiatAccountResponse</a></code>
 - <code><a href="./src/resources/fiat.ts">PayoutDestination</a></code>
 - <code><a href="./src/resources/fiat.ts">PayoutSource</a></code>
+- <code><a href="./src/resources/fiat.ts">VerificationAddress</a></code>
+- <code><a href="./src/resources/fiat.ts">VerificationDocument</a></code>
 
 # Onramps
 

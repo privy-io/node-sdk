@@ -318,7 +318,7 @@ export interface WalletAutomationExecutionListResponse {
 }
 
 /**
- * A record of a single automation execution triggered by a deposit.
+ * A record of a single automation execution created by a deposit.
  */
 export interface WalletAutomationExecutionResponse {
   id: string;
@@ -338,6 +338,8 @@ export interface WalletAutomationExecutionResponse {
    */
   status: WalletAutomationExecutionStatus;
 
+  submitted_at: string | null;
+
   trigger_asset_address: string;
 
   trigger_block_number: string;
@@ -345,8 +347,6 @@ export interface WalletAutomationExecutionResponse {
   trigger_caip2: string;
 
   trigger_tx_hash: string;
-
-  triggered_at: string | null;
 
   updated_at: string;
 
@@ -358,7 +358,7 @@ export interface WalletAutomationExecutionResponse {
 /**
  * Execution lifecycle status.
  */
-export type WalletAutomationExecutionStatus = 'pending' | 'triggered' | 'completed' | 'failed' | 'skipped';
+export type WalletAutomationExecutionStatus = 'pending' | 'submitted' | 'completed' | 'failed' | 'skipped';
 
 /**
  * Paginated list of wallet automations.
@@ -391,23 +391,25 @@ export interface WalletAutomationReindexAssetResult {
   existing_execution_id: string | null;
 
   /**
-   * On-chain balance in base units. Populated when `status` is `triggered` or
-   * `skipped_zero_balance`; `null` otherwise. For example, 1 USDC is `1000000`.
+   * On-chain balance in base units. Populated when `status` is `submitted` or
+   * `skipped_zero_balance`; `null` otherwise. For example, 1 OUSD is `1000000`.
    */
   raw_balance: string | null;
 
   /**
    * Outcome of checking a single asset during a wallet automation reindex. One of
-   * `triggered`, `skipped_zero_balance`, `skipped_no_match`,
-   * `skipped_existing_execution`, or `failed`.
+   * `submitted`, `skipped_zero_balance`, `skipped_no_match`,
+   * `skipped_existing_execution`, or `failed`. `submitted` confirms that an
+   * execution was enqueued.
    */
   status: WalletAutomationReindexAssetStatus;
 }
 
 /**
  * Outcome of checking a single asset during a wallet automation reindex. One of
- * `triggered`, `skipped_zero_balance`, `skipped_no_match`,
- * `skipped_existing_execution`, or `failed`.
+ * `submitted`, `skipped_zero_balance`, `skipped_no_match`,
+ * `skipped_existing_execution`, or `failed`. `submitted` confirms that an
+ * execution was enqueued.
  */
 export type WalletAutomationReindexAssetStatus = string;
 

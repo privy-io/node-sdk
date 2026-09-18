@@ -7,7 +7,7 @@ export {
   type ExternalFiatAccountDeleteParams,
   type ExternalFiatAccountGetParams,
 } from './external-fiat-accounts';
-export { KYB, type KYBInitiateLinksParams, type KYBInitiateTosParams } from './kyb';
+export { KYB, type KYBInitiateLinksParams, type KYBInitiateTosParams, type KYBSubmitParams } from './kyb';
 export {
   Organizations,
   type CreateOrganizationSecretResponse,

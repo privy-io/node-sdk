@@ -37,7 +37,7 @@ describe('resource kyc', () => {
   test.skip('initiateLinks: required and optional params', async () => {
     const response = await client.users.kyc.initiateLinks('user_id', {
       provider: 'bridge',
-      client_agreement_id: 'client_agreement_id',
+      client_agreement_id: 'x',
       email: 'dev@stainless.com',
       endorsements: ['sepa'],
       environment: 'production',
@@ -111,7 +111,7 @@ describe('resource kyc', () => {
         },
       },
       provider: 'bridge',
-      client_agreement_id: 'client_agreement_id',
+      client_agreement_id: 'x',
       endorsements: ['sepa'],
       environment: 'production',
     });

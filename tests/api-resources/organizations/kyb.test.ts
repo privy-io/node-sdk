@@ -42,7 +42,7 @@ describe('resource kyb', () => {
       email: 'dev@stainless.com',
       provider: 'bridge',
       business_name: 'x',
-      client_agreement_id: 'client_agreement_id',
+      client_agreement_id: 'x',
       endorsements: ['sepa'],
       environment: 'production',
       redirect_uri: 'https://example.com',
@@ -244,7 +244,7 @@ describe('resource kyb', () => {
         },
       },
       provider: 'bridge',
-      client_agreement_id: 'client_agreement_id',
+      client_agreement_id: 'x',
       endorsements: ['sepa'],
       environment: 'production',
     });

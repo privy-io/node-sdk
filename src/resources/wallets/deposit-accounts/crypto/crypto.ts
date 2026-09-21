@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../../core/resource';
+import * as SharedAPI from '../../../shared';
 import * as WalletsAPI from '../../wallets';
 import { CryptoDepositAddressRoutesCursor } from '../../wallets';
 import * as OrdersAPI from './orders';
@@ -99,6 +100,52 @@ export class Crypto extends APIResource {
   getConfig(options?: RequestOptions): APIPromise<WalletsAPI.CryptoDepositAccountConfigResponse> {
     return this._client.get('/v1/deposit_accounts/crypto/config', options);
   }
+
+  /**
+   * Fetch the earliest crypto deposit-account sweep into the path wallet after
+   * `after`. Returns `{order: {id, status} | null}` — the same order object as GET
+   * order. The path wallet is the destination (same as create). Accepts an app
+   * secret or a user / wallet-signer JWT (`privy-app-id`).
+   *
+   * @example
+   * ```ts
+   * const getCryptoDepositAccountNextOrderResponse =
+   *   await client.wallets.depositAccounts.crypto.getNextOrder(
+   *     'wallet_id',
+   *     { after: '2019-12-27T18:11:19.117Z' },
+   *   );
+   * ```
+   */
+  getNextOrder(
+    walletID: string,
+    query: CryptoGetNextOrderParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletsAPI.GetCryptoDepositAccountNextOrderResponse> {
+    return this._client.get(path`/v1/wallets/${walletID}/deposit_accounts/crypto/next_order`, {
+      query,
+      ...options,
+    });
+  }
+
+  /**
+   * Returns an indicative route quote without creating a wallet. Amounts use token
+   * standard units. Accepts an app secret or user token.
+   *
+   * @example
+   * ```ts
+   * const depositAccountCryptoQuoteResponse =
+   *   await client.wallets.depositAccounts.crypto.quote({
+   *     destination: { asset: 'usdc', chain: 'base' },
+   *     source: { asset: 'eth', chain: 'ethereum' },
+   *   });
+   * ```
+   */
+  quote(
+    body: CryptoQuoteParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletsAPI.DepositAccountCryptoQuoteResponse> {
+    return this._client.post('/v1/deposit_accounts/crypto/quote', { body, ...options });
+  }
 }
 
 export interface CryptoListParams extends CursorParams {}
@@ -188,10 +235,45 @@ export declare namespace CryptoCreateParams {
   }
 }
 
+export interface CryptoGetNextOrderParams {
+  /**
+   * Return the earliest sweep strictly after this timestamp.
+   */
+  after: string;
+}
+
+export interface CryptoQuoteParams {
+  /**
+   * An asset and chain for an indicative crypto deposit-account quote.
+   */
+  destination: WalletsAPI.DepositAccountCryptoQuoteAsset;
+
+  /**
+   * An asset and chain for an indicative crypto deposit-account quote.
+   */
+  source: WalletsAPI.DepositAccountCryptoQuoteAsset;
+
+  /**
+   * A positive decimal amount in the source token’s standard unit, not its smallest
+   * on-chain unit.
+   */
+  input_amount?: WalletsAPI.DepositAccountCryptoQuoteAmount;
+
+  /**
+   * Value in basis points: integer from 0 to 10000 (0% to 100%).
+   */
+  slippage_bps?: SharedAPI.Bps;
+}
+
 Crypto.Orders = Orders;
 
 export declare namespace Crypto {
-  export { type CryptoListParams as CryptoListParams, type CryptoCreateParams as CryptoCreateParams };
+  export {
+    type CryptoListParams as CryptoListParams,
+    type CryptoCreateParams as CryptoCreateParams,
+    type CryptoGetNextOrderParams as CryptoGetNextOrderParams,
+    type CryptoQuoteParams as CryptoQuoteParams,
+  };
 
   export { Orders as Orders, type OrderGetParams as OrderGetParams };
 }

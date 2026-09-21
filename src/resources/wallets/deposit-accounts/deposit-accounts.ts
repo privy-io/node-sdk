@@ -4,7 +4,13 @@ import { APIResource } from '../../../core/resource';
 import * as FiatAPI from './fiat';
 import { Fiat, FiatCreateParams, FiatGetParams, FiatListParams } from './fiat';
 import * as CryptoAPI from './crypto/crypto';
-import { Crypto, CryptoCreateParams, CryptoListParams } from './crypto/crypto';
+import {
+  Crypto,
+  CryptoCreateParams,
+  CryptoGetNextOrderParams,
+  CryptoListParams,
+  CryptoQuoteParams,
+} from './crypto/crypto';
 
 export class DepositAccounts extends APIResource {
   crypto: CryptoAPI.Crypto = new CryptoAPI.Crypto(this._client);
@@ -19,6 +25,8 @@ export declare namespace DepositAccounts {
     Crypto as Crypto,
     type CryptoListParams as CryptoListParams,
     type CryptoCreateParams as CryptoCreateParams,
+    type CryptoGetNextOrderParams as CryptoGetNextOrderParams,
+    type CryptoQuoteParams as CryptoQuoteParams,
   };
 
   export {

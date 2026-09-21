@@ -80,11 +80,6 @@ export interface AccountWallet {
    * The wallet chain types that offer first class support.
    */
   chain_type: WalletsAPI.FirstClassChainType;
-
-  /**
-   * Information about the custodian managing this wallet.
-   */
-  custody?: WalletsAPI.WalletCustodian;
 }
 
 /**
@@ -95,11 +90,6 @@ export interface AccountWalletConfigurationItem {
    * The wallet chain types that offer first class support.
    */
   chain_type: WalletsAPI.FirstClassChainType;
-
-  /**
-   * Information about the custodian managing this wallet.
-   */
-  custody?: WalletsAPI.WalletCustodian;
 }
 
 /**

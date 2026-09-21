@@ -518,6 +518,10 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletCreateInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustodialWalletProvider</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CustomTokenTransferSource</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">DepositAccountCryptoQuoteAmount</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">DepositAccountCryptoQuoteAsset</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">DepositAccountCryptoQuoteRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">DepositAccountCryptoQuoteResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">DetachWalletAutomationRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">DeveloperFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EncryptedAuthorizationKey</a></code>
@@ -882,6 +886,8 @@ Methods:
 - <code title="get /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">list</a>(walletID, { ...params }) -> CryptoDepositAddressRoutesCursor</code>
 - <code title="post /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">\_create</a>(walletID, { ...params }) -> CreateCryptoDepositAccountResponse</code>
 - <code title="get /v1/deposit_accounts/crypto/config">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">getConfig</a>() -> CryptoDepositAccountConfigResponse</code>
+- <code title="get /v1/wallets/{wallet_id}/deposit_accounts/crypto/next_order">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">getNextOrder</a>(walletID, { ...params }) -> GetCryptoDepositAccountNextOrderResponse</code>
+- <code title="post /v1/deposit_accounts/crypto/quote">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">quote</a>({ ...params }) -> DepositAccountCryptoQuoteResponse</code>
 
 #### Orders
 

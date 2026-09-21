@@ -1189,6 +1189,11 @@ export type CustodialWalletChainType = 'ethereum' | 'solana';
  */
 export interface CustodialWalletCreateInput {
   /**
+   * The chain of the custodial wallet.
+   */
+  chain: CustodialWalletChain;
+
+  /**
    * The provider of the custodial wallet.
    */
   provider: CustodialWalletProvider;
@@ -1203,16 +1208,6 @@ export interface CustodialWalletCreateInput {
    * Additional signers for the wallet.
    */
   additional_signers?: AdditionalSignerInput;
-
-  /**
-   * The chain of the custodial wallet.
-   */
-  chain?: CustodialWalletChain;
-
-  /**
-   * @deprecated The chain type of the custodial wallet (deprecated).
-   */
-  chain_type?: CustodialWalletChainType;
 
   /**
    * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
@@ -1256,6 +1251,73 @@ export interface CustomTokenTransferSource {
    * characters. Deprecated: use the top-level `amount` field instead.
    */
   amount?: string;
+}
+
+/**
+ * A positive decimal amount in the source token’s standard unit, not its smallest
+ * on-chain unit.
+ */
+export type DepositAccountCryptoQuoteAmount = string;
+
+/**
+ * An asset and chain for an indicative crypto deposit-account quote.
+ */
+export interface DepositAccountCryptoQuoteAsset {
+  /**
+   * Named asset ID (e.g. "usdc", "eth") or chain-specific token contract or mint
+   * address
+   */
+  asset: string;
+
+  /**
+   * Friendly chain name or CAIP-2 identifier (e.g. "base", "eip155:8453")
+   */
+  chain: string;
+}
+
+/**
+ * Request body for an indicative crypto deposit-account route quote.
+ */
+export interface DepositAccountCryptoQuoteRequestBody {
+  /**
+   * An asset and chain for an indicative crypto deposit-account quote.
+   */
+  destination: DepositAccountCryptoQuoteAsset;
+
+  /**
+   * An asset and chain for an indicative crypto deposit-account quote.
+   */
+  source: DepositAccountCryptoQuoteAsset;
+
+  /**
+   * A positive decimal amount in the source token’s standard unit, not its smallest
+   * on-chain unit.
+   */
+  input_amount?: DepositAccountCryptoQuoteAmount;
+
+  /**
+   * Value in basis points: integer from 0 to 10000 (0% to 100%).
+   */
+  slippage_bps?: SharedAPI.Bps;
+}
+
+/**
+ * An indicative crypto deposit-account quote. Amounts are in token standard units.
+ */
+export interface DepositAccountCryptoQuoteResponse {
+  created_at: string;
+
+  /**
+   * Estimated output amount as a decimal string in the destination token's standard
+   * unit. Not in the smallest on-chain unit.
+   */
+  estimated_output_amount: string;
+
+  /**
+   * Quoted input amount as a decimal string in the source token's standard unit
+   * (e.g. "0.02" for 0.02 ETH). Not in the smallest on-chain unit.
+   */
+  input_amount: string;
 }
 
 /**
@@ -7441,6 +7503,10 @@ export declare namespace Wallets {
     type CustodialWalletCreateInput as CustodialWalletCreateInput,
     type CustodialWalletProvider as CustodialWalletProvider,
     type CustomTokenTransferSource as CustomTokenTransferSource,
+    type DepositAccountCryptoQuoteAmount as DepositAccountCryptoQuoteAmount,
+    type DepositAccountCryptoQuoteAsset as DepositAccountCryptoQuoteAsset,
+    type DepositAccountCryptoQuoteRequestBody as DepositAccountCryptoQuoteRequestBody,
+    type DepositAccountCryptoQuoteResponse as DepositAccountCryptoQuoteResponse,
     type DetachWalletAutomationRequestBody as DetachWalletAutomationRequestBody,
     type DeveloperFee as DeveloperFee,
     type EncryptedAuthorizationKey as EncryptedAuthorizationKey,

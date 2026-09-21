@@ -133,6 +133,11 @@ export interface CardIssuingCardsResponse {
  */
 export interface CardIssuingConfig {
   /**
+   * Logo for the in-app card face. Null when none is set.
+   */
+  card_logo_url: string | null;
+
+  /**
    * Stripe publishable key for initializing Stripe.js in the browser.
    */
   publishable_key: string;

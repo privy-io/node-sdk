@@ -461,6 +461,12 @@ Types:
 
 Methods:
 
+- <code title="post /v1/wallet_automations">client.walletAutomations.<a href="./src/resources/wallet-automations.ts">create</a>({ ...params }) -> WalletAutomationResponse</code>
+- <code title="patch /v1/wallet_automations/{automation_id}">client.walletAutomations.<a href="./src/resources/wallet-automations.ts">update</a>(automationID, { ...params }) -> WalletAutomationResponse</code>
+- <code title="get /v1/wallet_automations">client.walletAutomations.<a href="./src/resources/wallet-automations.ts">list</a>({ ...params }) -> WalletAutomationResponsesCursor</code>
+- <code title="delete /v1/wallet_automations/{automation_id}">client.walletAutomations.<a href="./src/resources/wallet-automations.ts">delete</a>(automationID) -> WalletAutomationSuccessResponse</code>
+- <code title="get /v1/wallet_automations/{automation_id}">client.walletAutomations.<a href="./src/resources/wallet-automations.ts">get</a>(automationID) -> WalletAutomationResponse</code>
+- <code title="get /v1/wallet_automations/executions">client.walletAutomations.<a href="./src/resources/wallet-automations.ts">listExecutions</a>({ ...params }) -> WalletAutomationExecutionResponsesCursor</code>
 - <code title="post /v1/wallet_automations/reindex">client.walletAutomations.<a href="./src/resources/wallet-automations.ts">reindex</a>({ ...params }) -> WalletAutomationReindexResponse</code>
 
 # Wallets
@@ -694,10 +700,19 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionChainNameInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransactionTokenAddressInput</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferCustodyOptions</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferInitiation</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferInitiationAttestations</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferInitiationChannel</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferInitiationSubchannel</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferQuoteRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferQuoteResponse</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferReceivedTransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferRequestBody</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferScaAttestation</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferScaAuthFactor</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferScaAuthFactorCategory</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">TransferScaOutcome</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TransferSentTransactionDetail</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TronContract</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">TronRawDataForSend</a></code>
@@ -775,6 +790,8 @@ Methods:
 
 - <code title="post /v1/wallets">client.wallets.<a href="./src/resources/wallets/wallets.ts">create</a>({ ...params }) -> Wallet</code>
 - <code title="get /v1/wallets">client.wallets.<a href="./src/resources/wallets/wallets.ts">list</a>({ ...params }) -> WalletsCursor</code>
+- <code title="post /v1/wallets/{wallet_id}/automations/attach">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_attachAutomations</a>(walletID, { ...params }) -> WalletAutomationAttachmentListResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/automations/detach">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_detachAutomations</a>(walletID, { ...params }) -> WalletAutomationSuccessResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/export">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_export</a>(walletID, { ...params }) -> WalletExportResponseBody</code>
 - <code title="post /v1/wallets/import/init">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_initImport</a>({ ...params }) -> WalletInitImportResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/raw_sign">client.wallets.<a href="./src/resources/wallets/wallets.ts">\_rawSign</a>(walletID, { ...params }) -> RawSignResponse</code>
@@ -972,9 +989,9 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">TransactionProviderErrorWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionReplacedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionStillPendingWebhookPayload</a></code>
-- <code><a href="./src/resources/webhooks.ts">UsageCrossChainFeeRecordedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UsageGasSponsorshipRecordedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UsageSourceType</a></code>
+- <code><a href="./src/resources/webhooks.ts">UsageSwapProviderFeeRecordedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserAuthenticatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UserDeletedWebhookPayload</a></code>

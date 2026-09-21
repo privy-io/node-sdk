@@ -209,6 +209,29 @@ describe('resource intents', () => {
       },
       amount: '10.5',
       amount_type: 'exact_input',
+      custody_options: {
+        initiation: {
+          attestations: {
+            sca: {
+              outcome: 'not_applicable',
+              auth_factors: [
+                {
+                  authenticated_at: '2026-01-15T10:30:00Z',
+                  category: 'possession',
+                  reference: 'auth_event_123',
+                },
+                {
+                  authenticated_at: '2026-01-15T10:30:00Z',
+                  category: 'knowledge',
+                  reference: 'auth_event_456',
+                },
+              ],
+            },
+          },
+          channel: 'other_mobile_payment',
+          subchannel: 'remote',
+        },
+      },
       fee_configuration: { type: 'total_fee_bps', value: 50 },
       nonce: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       reference_id: 'x',

@@ -70,6 +70,49 @@ describe('resource wallets', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('_attachAutomations: only required params', async () => {
+    const responsePromise = client.wallets._attachAutomations('wallet_id', { automation_ids: ['x'] });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('_attachAutomations: required and optional params', async () => {
+    const response = await client.wallets._attachAutomations('wallet_id', {
+      automation_ids: ['x'],
+      params: { destination_address: 'x' },
+      'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-request-expiry': 'privy-request-expiry',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('_detachAutomations: only required params', async () => {
+    const responsePromise = client.wallets._detachAutomations('wallet_id', { automation_ids: ['x'] });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('_detachAutomations: required and optional params', async () => {
+    const response = await client.wallets._detachAutomations('wallet_id', {
+      automation_ids: ['x'],
+      'privy-authorization-signature': 'privy-authorization-signature',
+      'privy-request-expiry': 'privy-request-expiry',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('_export: only required params', async () => {
     const responsePromise = client.wallets._export('wallet_id', {
       encryption_type: 'HPKE',
@@ -292,6 +335,29 @@ describe('resource wallets', () => {
       },
       amount: 'amount',
       amount_type: 'exact_input',
+      custody_options: {
+        initiation: {
+          attestations: {
+            sca: {
+              outcome: 'not_applicable',
+              auth_factors: [
+                {
+                  authenticated_at: '2026-01-15T10:30:00Z',
+                  category: 'possession',
+                  reference: 'auth_event_123',
+                },
+                {
+                  authenticated_at: '2026-01-15T10:30:00Z',
+                  category: 'knowledge',
+                  reference: 'auth_event_456',
+                },
+              ],
+            },
+          },
+          channel: 'other_mobile_payment',
+          subchannel: 'remote',
+        },
+      },
       fee_configuration: { type: 'total_fee_bps', value: 50 },
       nonce: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       reference_id: 'x',

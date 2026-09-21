@@ -1322,6 +1322,22 @@ export interface KYCSubmitData {
   last_name?: string;
 
   /**
+   * Legal middle name.
+   */
+  middle_name?: string;
+
+  /**
+   * ISO 3166-1 alpha-3 codes for all nationalities held.
+   */
+  nationalities?: Array<string>;
+
+  /**
+   * Attests the user is a nonresident alien to satisfy identification without a US
+   * tax ID (must be enabled for you).
+   */
+  nonresident_alien_attestation?: boolean;
+
+  /**
    * Phone number in E.164 format.
    */
   phone?: string;
@@ -1330,6 +1346,26 @@ export interface KYCSubmitData {
    * A postal address used in KYC and KYB data submission.
    */
   residential_address?: VerificationAddress;
+
+  /**
+   * Latin-1 transliteration of the first name. Required for non-Latin-1 names.
+   */
+  transliterated_first_name?: string;
+
+  /**
+   * Latin-1 transliteration of the last name. Required for non-Latin-1 names.
+   */
+  transliterated_last_name?: string;
+
+  /**
+   * Latin-1 transliteration of the middle name. Required for non-Latin-1 names.
+   */
+  transliterated_middle_name?: string;
+
+  /**
+   * A postal address used in KYC and KYB data submission.
+   */
+  transliterated_residential_address?: VerificationAddress;
 }
 
 /**

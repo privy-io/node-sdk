@@ -3,12 +3,73 @@
 import { APIResource } from '../core/resource';
 import * as SharedAPI from './shared';
 import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
+import { path } from '../internal/utils/path';
 
 /**
  * Operations related to wallet automations
  */
 export class WalletAutomations extends APIResource {
+  /**
+   * Create a new wallet automation that triggers actions on deposit events.
+   */
+  create(body: WalletAutomationCreateParams, options?: RequestOptions): APIPromise<WalletAutomationResponse> {
+    return this._client.post('/v1/wallet_automations', { body, ...options });
+  }
+
+  /**
+   * Update a wallet automation by ID.
+   */
+  update(
+    automationID: string,
+    body: WalletAutomationUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletAutomationResponse> {
+    return this._client.patch(path`/v1/wallet_automations/${automationID}`, { body, ...options });
+  }
+
+  /**
+   * List all wallet automations for your app, with optional filtering by wallet.
+   */
+  list(
+    query: WalletAutomationListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<WalletAutomationResponsesCursor, WalletAutomationResponse> {
+    return this._client.getAPIList('/v1/wallet_automations', Cursor<WalletAutomationResponse>, {
+      query,
+      ...options,
+    });
+  }
+
+  /**
+   * Delete a wallet automation by ID.
+   */
+  delete(automationID: string, options?: RequestOptions): APIPromise<WalletAutomationSuccessResponse> {
+    return this._client.delete(path`/v1/wallet_automations/${automationID}`, options);
+  }
+
+  /**
+   * Get a wallet automation by ID.
+   */
+  get(automationID: string, options?: RequestOptions): APIPromise<WalletAutomationResponse> {
+    return this._client.get(path`/v1/wallet_automations/${automationID}`, options);
+  }
+
+  /**
+   * List all wallet automation execution records, with optional filtering by wallet.
+   */
+  listExecutions(
+    query: WalletAutomationListExecutionsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<WalletAutomationExecutionResponsesCursor, WalletAutomationExecutionResponse> {
+    return this._client.getAPIList(
+      '/v1/wallet_automations/executions',
+      Cursor<WalletAutomationExecutionResponse>,
+      { query, ...options },
+    );
+  }
+
   /**
    * Re-checks a wallet (identified by wallet_id or deposit_address) for funds
    * matching its wallet automation configs and triggers an automation run if a match
@@ -22,6 +83,10 @@ export class WalletAutomations extends APIResource {
     return this._client.post('/v1/wallet_automations/reindex', { body, ...options });
   }
 }
+
+export type WalletAutomationResponsesCursor = Cursor<WalletAutomationResponse>;
+
+export type WalletAutomationExecutionResponsesCursor = Cursor<WalletAutomationExecutionResponse>;
 
 /**
  * Configuration for an automation action.
@@ -505,6 +570,43 @@ export interface WalletAutomationSuccessResponse {
   success: true;
 }
 
+export interface WalletAutomationCreateParams {
+  /**
+   * Full configuration for a wallet automation (trigger + action) accepting
+   * human-readable aliases.
+   */
+  config: AutomationConfigInput;
+
+  owner_id: string | null;
+
+  name?: string;
+}
+
+export interface WalletAutomationUpdateParams {
+  /**
+   * Full configuration for a wallet automation (trigger + action) accepting
+   * human-readable aliases.
+   */
+  config?: AutomationConfigInput;
+
+  enabled?: boolean;
+
+  name?: string | null;
+
+  /**
+   * A unique identifier for a key quorum.
+   */
+  owner_id?: SharedAPI.KeyQuorumID | null;
+}
+
+export interface WalletAutomationListParams extends CursorParams {
+  wallet_id?: string;
+}
+
+export interface WalletAutomationListExecutionsParams extends CursorParams {
+  wallet_id?: string;
+}
+
 export interface WalletAutomationReindexParams {
   /**
    * Asset contract address to check; the native asset uses `native`.
@@ -575,6 +677,12 @@ export declare namespace WalletAutomations {
     type WalletAutomationResponse as WalletAutomationResponse,
     type WalletAutomationStatus as WalletAutomationStatus,
     type WalletAutomationSuccessResponse as WalletAutomationSuccessResponse,
+    type WalletAutomationResponsesCursor as WalletAutomationResponsesCursor,
+    type WalletAutomationExecutionResponsesCursor as WalletAutomationExecutionResponsesCursor,
+    type WalletAutomationCreateParams as WalletAutomationCreateParams,
+    type WalletAutomationUpdateParams as WalletAutomationUpdateParams,
+    type WalletAutomationListParams as WalletAutomationListParams,
+    type WalletAutomationListExecutionsParams as WalletAutomationListExecutionsParams,
     type WalletAutomationReindexParams as WalletAutomationReindexParams,
   };
 }

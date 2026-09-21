@@ -1310,34 +1310,6 @@ export interface TransactionStillPendingWebhookPayload {
 }
 
 /**
- * Payload for the usage.cross_chain_fee.recorded webhook event (Privy fee on a
- * cross-chain transfer or swap).
- */
-export interface UsageCrossChainFeeRecordedWebhookPayload {
-  amount_usd: string;
-
-  /**
-   * An opaque, stable identifier for this charge. Use it to deduplicate webhook
-   * deliveries.
-   */
-  event_id: string;
-
-  recorded_at: number;
-
-  source_id: string;
-
-  /**
-   * The type of operation that incurred a usage charge.
-   */
-  source_type: UsageSourceType;
-
-  /**
-   * The type of webhook event.
-   */
-  type: 'usage.cross_chain_fee.recorded';
-}
-
-/**
  * Payload for the usage.gas_sponsorship.recorded webhook event (sponsored network
  * gas).
  */
@@ -1369,6 +1341,34 @@ export interface UsageGasSponsorshipRecordedWebhookPayload {
  * The type of operation that incurred a usage charge.
  */
 export type UsageSourceType = 'wallet-action-transfer' | 'wallet-action-swap' | 'rpc';
+
+/**
+ * Payload for the usage.swap_provider_fee.recorded webhook event (swap provider
+ * fee on a cross-chain transfer or swap).
+ */
+export interface UsageSwapProviderFeeRecordedWebhookPayload {
+  amount_usd: string;
+
+  /**
+   * An opaque, stable identifier for this charge. Use it to deduplicate webhook
+   * deliveries.
+   */
+  event_id: string;
+
+  recorded_at: number;
+
+  source_id: string;
+
+  /**
+   * The type of operation that incurred a usage charge.
+   */
+  source_type: UsageSourceType;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'usage.swap_provider_fee.recorded';
+}
 
 /**
  * Payload for the user.authenticated webhook event.
@@ -4234,7 +4234,7 @@ export type WebhookPayload =
   | YieldClaimConfirmedWebhookPayload
   | UserOperationCompletedWebhookPayload
   | UsageGasSponsorshipRecordedWebhookPayload
-  | UsageCrossChainFeeRecordedWebhookPayload
+  | UsageSwapProviderFeeRecordedWebhookPayload
   | IntentCreatedWebhookPayload
   | IntentAuthorizedWebhookPayload
   | IntentRejectedWebhookPayload
@@ -4517,8 +4517,8 @@ export type UnsafeUnwrapWebhookEvent =
   | TransactionProviderErrorWebhookPayload
   | TransactionReplacedWebhookPayload
   | TransactionStillPendingWebhookPayload
-  | UsageCrossChainFeeRecordedWebhookPayload
   | UsageGasSponsorshipRecordedWebhookPayload
+  | UsageSwapProviderFeeRecordedWebhookPayload
   | UserAuthenticatedWebhookPayload
   | UserCreatedWebhookPayload
   | UserDeletedWebhookPayload
@@ -4620,9 +4620,9 @@ export declare namespace Webhooks {
     type TransactionProviderErrorWebhookPayload as TransactionProviderErrorWebhookPayload,
     type TransactionReplacedWebhookPayload as TransactionReplacedWebhookPayload,
     type TransactionStillPendingWebhookPayload as TransactionStillPendingWebhookPayload,
-    type UsageCrossChainFeeRecordedWebhookPayload as UsageCrossChainFeeRecordedWebhookPayload,
     type UsageGasSponsorshipRecordedWebhookPayload as UsageGasSponsorshipRecordedWebhookPayload,
     type UsageSourceType as UsageSourceType,
+    type UsageSwapProviderFeeRecordedWebhookPayload as UsageSwapProviderFeeRecordedWebhookPayload,
     type UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload,
     type UserCreatedWebhookPayload as UserCreatedWebhookPayload,
     type UserDeletedWebhookPayload as UserDeletedWebhookPayload,

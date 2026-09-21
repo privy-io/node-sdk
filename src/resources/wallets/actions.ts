@@ -127,6 +127,14 @@ export interface CustodianTransactionWalletActionStep {
    */
   status: CustodianTransactionWalletActionStepStatus;
 
+  /**
+   * Identifier of the transaction the custodian last reported on the destination
+   * chain. Set on a settled transfer, and also on a failed one when the custodian
+   * had already broadcast a payout that was later returned. Null until the custodian
+   * reports one.
+   */
+  transaction_hash: string | null;
+
   type: 'custodian_transaction';
 
   /**

@@ -126,6 +126,78 @@ export class Wallets extends APIResource {
   }
 
   /**
+   * Attach one or more automations to a wallet.
+   *
+   * @example
+   * ```ts
+   * const walletAutomationAttachmentListResponse =
+   *   await client.wallets._attachAutomations('wallet_id', {
+   *     automation_ids: ['x'],
+   *   });
+   * ```
+   */
+  _attachAutomations(
+    walletID: string,
+    params: WalletAttachAutomationsParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletAutomationAttachmentListResponse> {
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/automations/attach`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Detach one or more automations from a wallet.
+   *
+   * @example
+   * ```ts
+   * const walletAutomationSuccessResponse =
+   *   await client.wallets._detachAutomations('wallet_id', {
+   *     automation_ids: ['x'],
+   *   });
+   * ```
+   */
+  _detachAutomations(
+    walletID: string,
+    params: WalletDetachAutomationsParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletAutomationsAPI.WalletAutomationSuccessResponse> {
+    const {
+      'privy-authorization-signature': privyAuthorizationSignature,
+      'privy-request-expiry': privyRequestExpiry,
+      ...body
+    } = params;
+    return this._client.post(path`/v1/wallets/${walletID}/automations/detach`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(privyAuthorizationSignature != null ?
+            { 'privy-authorization-signature': privyAuthorizationSignature }
+          : undefined),
+          ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Export a wallet's private key
    *
    * @example
@@ -3821,6 +3893,78 @@ export type TransactionDetail = TransferSentTransactionDetail | TransferReceived
 export type TransactionTokenAddressInput = string;
 
 /**
+ * Options for a transfer from a custodial wallet.
+ */
+export interface TransferCustodyOptions {
+  /**
+   * Payment initiation context for transfers sourced from wallets that require
+   * initiation data. Captures how the payment was initiated (channel and subchannel)
+   * and whether Strong Customer Authentication was applied or which SCA exemption
+   * was used.
+   */
+  initiation: TransferInitiation;
+}
+
+/**
+ * Payment initiation context for transfers sourced from wallets that require
+ * initiation data. Captures how the payment was initiated (channel and subchannel)
+ * and whether Strong Customer Authentication was applied or which SCA exemption
+ * was used.
+ */
+export interface TransferInitiation {
+  /**
+   * Payment initiation attestations for a transfer.
+   */
+  attestations: TransferInitiationAttestations;
+
+  /**
+   * How the payment was initiated. Use `p2p_mobile_payment` for peer-to-peer
+   * transfers initiated on a mobile device; `other_mobile_payment` for non-P2P
+   * mobile-initiated payments (e.g. a merchant payment via a mobile app); `other`
+   * for payments not relying on a mobile device.
+   */
+  channel: TransferInitiationChannel;
+
+  /**
+   * Whether the payment was made remotely or in person. Use `remote` for payments
+   * initiated from a distance (mobile app, online banking, or e-commerce checkout);
+   * `non_remote` for payments made in person (physical card, payment terminal, or
+   * contactless tap).
+   */
+  subchannel: TransferInitiationSubchannel;
+}
+
+/**
+ * Payment initiation attestations for a transfer.
+ */
+export interface TransferInitiationAttestations {
+  /**
+   * Strong Customer Authentication attestation for a transfer.
+   */
+  sca: TransferScaAttestation;
+}
+
+/**
+ * How the payment was initiated. Use `p2p_mobile_payment` for peer-to-peer
+ * transfers initiated on a mobile device; `other_mobile_payment` for non-P2P
+ * mobile-initiated payments (e.g. a merchant payment via a mobile app); `other`
+ * for payments not relying on a mobile device.
+ */
+export type TransferInitiationChannel =
+  | 'p2p_mobile_payment'
+  | 'other_mobile_payment'
+  | 'other'
+  | (string & {});
+
+/**
+ * Whether the payment was made remotely or in person. Use `remote` for payments
+ * initiated from a distance (mobile app, online banking, or e-commerce checkout);
+ * `non_remote` for payments made in person (physical card, payment terminal, or
+ * contactless tap).
+ */
+export type TransferInitiationSubchannel = 'remote' | 'non_remote' | (string & {});
+
+/**
  * Request body for requesting a quote for a cross-asset or cross-chain (DADC)
  * transfer.
  */
@@ -3983,6 +4127,11 @@ export interface TransferRequestBody {
   amount_type?: AmountType;
 
   /**
+   * Options for a transfer from a custodial wallet.
+   */
+  custody_options?: TransferCustodyOptions;
+
+  /**
    * Total fees assessed on a transfer, in BPS
    */
   fee_configuration?: FeeConfiguration;
@@ -4004,6 +4153,112 @@ export interface TransferRequestBody {
    */
   slippage_bps?: number;
 }
+
+/**
+ * Strong Customer Authentication attestation for a transfer.
+ */
+export interface TransferScaAttestation {
+  /**
+   * Whether Strong Customer Authentication (SCA) was applied or which regulatory
+   * exemption or non-applicability reason covers this payment. Use `sca_used` when
+   * the user authenticated with SCA. Otherwise, choose the value that applies:
+   * `payment_to_self` — payer and payee are the same person (remote only);
+   * `trusted_beneficiaries` — payee is on the user's pre-approved list;
+   * `recurring_transaction` — amount and payee match a previously SCA-authorized
+   * recurring series; `contactless_low_value` — contactless card payment below the
+   * low-value threshold (non-remote only); `unattended_terminal_for_transport` —
+   * automated terminal for transport fares or parking (non-remote only); `low_value`
+   * — remote payment below the low-value threshold (remote only);
+   * `secure_corporate_payment` — dedicated corporate payment process with controls
+   * equivalent to SCA (remote only); `transaction_risk_analysis` — PSP has performed
+   * real-time risk analysis and the transaction falls within permitted thresholds
+   * (remote only); `merchant_initiated_transaction` — payment triggered by the
+   * merchant without the payer present, on a pre-authorized mandate (remote only);
+   * `not_applicable` — this flow requires initiation context but SCA and SCA
+   * exemptions do not apply; `other` — another recognized exemption not listed
+   * above.
+   */
+  outcome: TransferScaOutcome;
+
+  /**
+   * Authentication factor metadata. Optional when `outcome` is `sca_used`; if
+   * provided, it must contain at least two entries from different `category` values
+   * (e.g. one `possession` factor and one `knowledge` factor). Omit this field for
+   * any other outcome.
+   */
+  auth_factors?: Array<TransferScaAuthFactor>;
+}
+
+/**
+ * Authentication factor metadata for a transfer.
+ */
+export interface TransferScaAuthFactor {
+  /**
+   * The ISO 8601 timestamp when this factor was authenticated.
+   */
+  authenticated_at: string;
+
+  /**
+   * The type of authentication factor used. Known values are: `knowledge` (something
+   * only the user knows, e.g. a PIN or password), `possession` (something only the
+   * user has, e.g. a phone receiving an OTP or a hardware token), and `inherence`
+   * (something the user is, e.g. a fingerprint or face scan). When `outcome` is
+   * `sca_used`, the two factors in `auth_factors` must belong to two different
+   * categories.
+   */
+  category: TransferScaAuthFactorCategory;
+
+  /**
+   * Your internal identifier for this authentication event (e.g. a session ID,
+   * transaction ID, or audit log reference). Used for reconciliation.
+   */
+  reference: string;
+}
+
+/**
+ * The type of authentication factor used. Known values are: `knowledge` (something
+ * only the user knows, e.g. a PIN or password), `possession` (something only the
+ * user has, e.g. a phone receiving an OTP or a hardware token), and `inherence`
+ * (something the user is, e.g. a fingerprint or face scan). When `outcome` is
+ * `sca_used`, the two factors in `auth_factors` must belong to two different
+ * categories.
+ */
+export type TransferScaAuthFactorCategory = 'knowledge' | 'possession' | 'inherence' | (string & {});
+
+/**
+ * Whether Strong Customer Authentication (SCA) was applied or which regulatory
+ * exemption or non-applicability reason covers this payment. Use `sca_used` when
+ * the user authenticated with SCA. Otherwise, choose the value that applies:
+ * `payment_to_self` — payer and payee are the same person (remote only);
+ * `trusted_beneficiaries` — payee is on the user's pre-approved list;
+ * `recurring_transaction` — amount and payee match a previously SCA-authorized
+ * recurring series; `contactless_low_value` — contactless card payment below the
+ * low-value threshold (non-remote only); `unattended_terminal_for_transport` —
+ * automated terminal for transport fares or parking (non-remote only); `low_value`
+ * — remote payment below the low-value threshold (remote only);
+ * `secure_corporate_payment` — dedicated corporate payment process with controls
+ * equivalent to SCA (remote only); `transaction_risk_analysis` — PSP has performed
+ * real-time risk analysis and the transaction falls within permitted thresholds
+ * (remote only); `merchant_initiated_transaction` — payment triggered by the
+ * merchant without the payer present, on a pre-authorized mandate (remote only);
+ * `not_applicable` — this flow requires initiation context but SCA and SCA
+ * exemptions do not apply; `other` — another recognized exemption not listed
+ * above.
+ */
+export type TransferScaOutcome =
+  | 'sca_used'
+  | 'payment_to_self'
+  | 'trusted_beneficiaries'
+  | 'recurring_transaction'
+  | 'contactless_low_value'
+  | 'unattended_terminal_for_transport'
+  | 'low_value'
+  | 'secure_corporate_payment'
+  | 'transaction_risk_analysis'
+  | 'merchant_initiated_transaction'
+  | 'not_applicable'
+  | 'other'
+  | (string & {});
 
 /**
  * Details for a sent transfer transaction.
@@ -5467,6 +5722,49 @@ export interface WalletListParams extends CursorParams {
   user_id?: string;
 }
 
+export interface WalletAttachAutomationsParams {
+  /**
+   * Body param
+   */
+  automation_ids: Array<string>;
+
+  /**
+   * Body param: Per-attachment parameters for swap automations.
+   */
+  params?: WalletAutomationsAPI.SwapAttachmentParams;
+
+  /**
+   * Header param: Request authorization signature. If multiple signatures are
+   * required, they should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
+export interface WalletDetachAutomationsParams {
+  /**
+   * Body param
+   */
+  automation_ids: Array<string>;
+
+  /**
+   * Header param: Request authorization signature. If multiple signatures are
+   * required, they should be comma separated.
+   */
+  'privy-authorization-signature'?: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
 export interface WalletExportParams {
   /**
    * Body param: The encryption type of the wallet to import. Currently only supports
@@ -6887,6 +7185,11 @@ export interface WalletTransferParams {
   amount_type?: AmountType;
 
   /**
+   * Body param: Options for a transfer from a custodial wallet.
+   */
+  custody_options?: TransferCustodyOptions;
+
+  /**
    * Body param: Total fees assessed on a transfer, in BPS
    */
   fee_configuration?: FeeConfiguration;
@@ -7320,10 +7623,19 @@ export declare namespace Wallets {
     type TransactionChainNameInput as TransactionChainNameInput,
     type TransactionDetail as TransactionDetail,
     type TransactionTokenAddressInput as TransactionTokenAddressInput,
+    type TransferCustodyOptions as TransferCustodyOptions,
+    type TransferInitiation as TransferInitiation,
+    type TransferInitiationAttestations as TransferInitiationAttestations,
+    type TransferInitiationChannel as TransferInitiationChannel,
+    type TransferInitiationSubchannel as TransferInitiationSubchannel,
     type TransferQuoteRequestBody as TransferQuoteRequestBody,
     type TransferQuoteResponse as TransferQuoteResponse,
     type TransferReceivedTransactionDetail as TransferReceivedTransactionDetail,
     type TransferRequestBody as TransferRequestBody,
+    type TransferScaAttestation as TransferScaAttestation,
+    type TransferScaAuthFactor as TransferScaAuthFactor,
+    type TransferScaAuthFactorCategory as TransferScaAuthFactorCategory,
+    type TransferScaOutcome as TransferScaOutcome,
     type TransferSentTransactionDetail as TransferSentTransactionDetail,
     type TronContract as TronContract,
     type TronRawDataForSend as TronRawDataForSend,
@@ -7399,6 +7711,8 @@ export declare namespace Wallets {
     type WalletsCursor as WalletsCursor,
     type WalletCreateParams as WalletCreateParams,
     type WalletListParams as WalletListParams,
+    type WalletAttachAutomationsParams as WalletAttachAutomationsParams,
+    type WalletDetachAutomationsParams as WalletDetachAutomationsParams,
     type WalletExportParams as WalletExportParams,
     type WalletInitImportParams as WalletInitImportParams,
     type WalletRawSignParams as WalletRawSignParams,

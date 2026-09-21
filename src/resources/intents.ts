@@ -2010,6 +2010,11 @@ export interface IntentTransferParams {
   amount_type?: WalletsAPI.AmountType;
 
   /**
+   * Body param: Options for a transfer from a custodial wallet.
+   */
+  custody_options?: WalletsAPI.TransferCustodyOptions;
+
+  /**
    * Body param: Total fees assessed on a transfer, in BPS
    */
   fee_configuration?: WalletsAPI.FeeConfiguration;

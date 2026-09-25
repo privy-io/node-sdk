@@ -221,6 +221,18 @@ export interface DepositFailedData {
 }
 
 /**
+ * Metadata identifying a refunded wallet deposit.
+ */
+export interface DepositMetadata {
+  /**
+   * Relay details for a refunded wallet deposit.
+   */
+  details: RefundDetails;
+
+  type: 'refund';
+}
+
+/**
  * Details of a fiat deposit that has begun processing into a deposit account.
  */
 export interface DepositStartedData {
@@ -339,6 +351,11 @@ export interface FundsDepositedWebhookPayload {
    * Metadata about a Bridge transaction associated with a wallet event.
    */
   bridge_metadata?: BridgeMetadata;
+
+  /**
+   * Metadata identifying a refunded wallet deposit.
+   */
+  deposit_metadata?: DepositMetadata;
 
   /**
    * The transaction fee paid, as a stringified bigint in the chain's native token.
@@ -1011,6 +1028,58 @@ export interface PrivateKeyExportWebhookPayload {
    * 'client' is for exporting to the client application.
    */
   export_source?: WalletsAPI.ExportType;
+}
+
+/**
+ * Relay details for a refunded wallet deposit.
+ */
+export interface RefundDetails {
+  /**
+   * The transaction hash of the transfer that was refunded.
+   */
+  original_transaction_hash: string;
+
+  /**
+   * The provider that handled the refund.
+   */
+  provider: 'relay';
+
+  /**
+   * The Privy wallet action ID of the transfer that was refunded.
+   */
+  wallet_action_id: string;
+}
+
+/**
+ * Metadata identifying a refunded wallet deposit.
+ */
+export interface RefundMetadata {
+  /**
+   * Relay details for a refunded wallet deposit.
+   */
+  details: RefundDetails;
+
+  type: 'refund';
+}
+
+/**
+ * Relay details for a refunded wallet deposit.
+ */
+export interface RelayRefundDetails {
+  /**
+   * The transaction hash of the transfer that was refunded.
+   */
+  original_transaction_hash: string;
+
+  /**
+   * The provider that handled the refund.
+   */
+  provider: 'relay';
+
+  /**
+   * The Privy wallet action ID of the transfer that was refunded.
+   */
+  wallet_action_id: string;
 }
 
 /**
@@ -4586,6 +4655,7 @@ export declare namespace Webhooks {
     type DepositCompletedData as DepositCompletedData,
     type DepositCompletedDestination as DepositCompletedDestination,
     type DepositFailedData as DepositFailedData,
+    type DepositMetadata as DepositMetadata,
     type DepositStartedData as DepositStartedData,
     type DepositStartedDestination as DepositStartedDestination,
     type DepositStartedSource as DepositStartedSource,
@@ -4612,6 +4682,9 @@ export declare namespace Webhooks {
     type OrganizationKYBUpdatedKYBData as OrganizationKYBUpdatedKYBData,
     type OrganizationKYBUpdatedTosData as OrganizationKYBUpdatedTosData,
     type PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload,
+    type RefundDetails as RefundDetails,
+    type RefundMetadata as RefundMetadata,
+    type RelayRefundDetails as RelayRefundDetails,
     type SeedPhraseExportWebhookPayload as SeedPhraseExportWebhookPayload,
     type TransactionBroadcastedWebhookPayload as TransactionBroadcastedWebhookPayload,
     type TransactionConfirmedWebhookPayload as TransactionConfirmedWebhookPayload,

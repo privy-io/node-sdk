@@ -961,6 +961,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">DepositCompletedData</a></code>
 - <code><a href="./src/resources/webhooks.ts">DepositCompletedDestination</a></code>
 - <code><a href="./src/resources/webhooks.ts">DepositFailedData</a></code>
+- <code><a href="./src/resources/webhooks.ts">DepositMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">DepositStartedData</a></code>
 - <code><a href="./src/resources/webhooks.ts">DepositStartedDestination</a></code>
 - <code><a href="./src/resources/webhooks.ts">DepositStartedSource</a></code>
@@ -987,6 +988,9 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">OrganizationKYBUpdatedKYBData</a></code>
 - <code><a href="./src/resources/webhooks.ts">OrganizationKYBUpdatedTosData</a></code>
 - <code><a href="./src/resources/webhooks.ts">PrivateKeyExportWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">RefundDetails</a></code>
+- <code><a href="./src/resources/webhooks.ts">RefundMetadata</a></code>
+- <code><a href="./src/resources/webhooks.ts">RelayRefundDetails</a></code>
 - <code><a href="./src/resources/webhooks.ts">SeedPhraseExportWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionBroadcastedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionConfirmedWebhookPayload</a></code>

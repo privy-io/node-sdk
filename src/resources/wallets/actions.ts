@@ -1342,6 +1342,34 @@ export interface TempoVaultDetails {
 }
 
 /**
+ * A wallet action step representing a Tempo Zone settlement on its parent chain.
+ */
+export interface TempoZoneSettlementWalletActionStep {
+  /**
+   * CAIP-2 identifier of the Tempo parent chain, or null when unavailable.
+   */
+  caip2: string | null;
+
+  /**
+   * Status of an external transaction step in a wallet action.
+   */
+  status: ExternalTransactionWalletActionStepStatus;
+
+  /**
+   * A hex-encoded string prefixed with '0x', capped at 300002 characters (150,000
+   * bytes).
+   */
+  transaction_hash: WalletsAPI.Hex | null;
+
+  type: 'tempo_zone_settlement';
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+}
+
+/**
  * Response for a transfer action.
  */
 export interface TransferActionResponse {
@@ -1558,7 +1586,8 @@ export type WalletActionStep =
   | SvmTransactionWalletActionStep
   | TvmTransactionWalletActionStep
   | ExternalTransactionWalletActionStep
-  | CustodianTransactionWalletActionStep;
+  | CustodianTransactionWalletActionStep
+  | TempoZoneSettlementWalletActionStep;
 
 /**
  * Type of a wallet action step.
@@ -1569,7 +1598,8 @@ export type WalletActionStepType =
   | 'svm_transaction'
   | 'tvm_transaction'
   | 'external_transaction'
-  | 'custodian_transaction';
+  | 'custodian_transaction'
+  | 'tempo_zone_settlement';
 
 /**
  * Type of wallet action
@@ -1642,6 +1672,7 @@ export declare namespace Actions {
     type TvmTransactionWalletActionStep as TvmTransactionWalletActionStep,
     type TvmWalletActionStepStatus as TvmWalletActionStepStatus,
     type TempoVaultDetails as TempoVaultDetails,
+    type TempoZoneSettlementWalletActionStep as TempoZoneSettlementWalletActionStep,
     type TransferActionResponse as TransferActionResponse,
     type VedaVaultDetails as VedaVaultDetails,
     type WalletActionInclude as WalletActionInclude,

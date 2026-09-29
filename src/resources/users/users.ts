@@ -96,6 +96,20 @@ export class Users extends APIResource {
   }
 
   /**
+   * Freezes a user by user ID, blocking new logins and revoking active sessions.
+   *
+   * @example
+   * ```ts
+   * const successResponse = await client.users.freeze(
+   *   'user_id',
+   * );
+   * ```
+   */
+  freeze(userID: string, options?: RequestOptions): APIPromise<SharedAPI.SuccessResponse> {
+    return this._client.post(path`/v1/users/${userID}/freeze`, options);
+  }
+
+  /**
    * Looks up a user by their custom auth ID.
    *
    * @example
@@ -316,6 +330,20 @@ export class Users extends APIResource {
     options?: RequestOptions,
   ): APIPromise<User> {
     return this._client.post(path`/v1/users/${userID}/custom_metadata`, { body, ...options });
+  }
+
+  /**
+   * Unfreezes a user by user ID, restoring their ability to log in.
+   *
+   * @example
+   * ```ts
+   * const successResponse = await client.users.unfreeze(
+   *   'user_id',
+   * );
+   * ```
+   */
+  unfreeze(userID: string, options?: RequestOptions): APIPromise<SharedAPI.SuccessResponse> {
+    return this._client.delete(path`/v1/users/${userID}/freeze`, options);
   }
 
   /**

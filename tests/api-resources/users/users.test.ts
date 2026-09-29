@@ -84,6 +84,18 @@ describe('resource users', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('freeze', async () => {
+    const responsePromise = client.users.freeze('user_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('getByCustomAuthID: only required params', async () => {
     const responsePromise = client.users.getByCustomAuthID({ custom_user_id: 'custom_user_id' });
     const rawResponse = await responsePromise.asResponse();
@@ -348,6 +360,18 @@ describe('resource users', () => {
   // Mock server tests are disabled
   test.skip('setCustomMetadata: required and optional params', async () => {
     const response = await client.users.setCustomMetadata('user_id', { custom_metadata: { key: 'value' } });
+  });
+
+  // Mock server tests are disabled
+  test.skip('unfreeze', async () => {
+    const responsePromise = client.users.unfreeze('user_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   // Mock server tests are disabled

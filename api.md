@@ -381,6 +381,7 @@ Methods:
 - <code title="get /v1/users">client.users.<a href="./src/resources/users/users.ts">list</a>({ ...params }) -> UsersCursor</code>
 - <code title="delete /v1/users/{user_id}">client.users.<a href="./src/resources/users/users.ts">delete</a>(userID) -> void</code>
 - <code title="get /v1/users/{user_id}">client.users.<a href="./src/resources/users/users.ts">\_get</a>(userID) -> User</code>
+- <code title="post /v1/users/{user_id}/freeze">client.users.<a href="./src/resources/users/users.ts">freeze</a>(userID) -> SuccessResponse</code>
 - <code title="post /v1/users/custom_auth/id">client.users.<a href="./src/resources/users/users.ts">getByCustomAuthID</a>({ ...params }) -> User</code>
 - <code title="post /v1/users/discord/username">client.users.<a href="./src/resources/users/users.ts">getByDiscordUsername</a>({ ...params }) -> User</code>
 - <code title="post /v1/users/email/address">client.users.<a href="./src/resources/users/users.ts">getByEmailAddress</a>({ ...params }) -> User</code>
@@ -396,6 +397,7 @@ Methods:
 - <code title="post /v1/users/{user_id}/wallets">client.users.<a href="./src/resources/users/users.ts">pregenerateWallets</a>(userID, { ...params }) -> User</code>
 - <code title="post /v1/users/search">client.users.<a href="./src/resources/users/users.ts">search</a>({ ...params }) -> User</code>
 - <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/resources/users/users.ts">setCustomMetadata</a>(userID, { ...params }) -> User</code>
+- <code title="delete /v1/users/{user_id}/freeze">client.users.<a href="./src/resources/users/users.ts">unfreeze</a>(userID) -> SuccessResponse</code>
 - <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/resources/users/users.ts">unlinkLinkedAccount</a>(userID, { ...params }) -> User</code>
 
 ## ExternalFiatAccounts

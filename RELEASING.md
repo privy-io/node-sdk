@@ -8,11 +8,13 @@ Tags are `vX.Y.Z`.
 
 1. 👤 Merge changes into `main`.
 2. 🤖 On every push to `main`, release-please opens or updates the release PR (`release: X.Y.Z`).
-3. 👤 Approve and merge the release PR.
-4. 🤖 CI runs the [release workflow](./.github/workflows/release-please.yml) then:
+3. 🤖 CI adds a **release proposal** comment to the release PR: the source commit and a
+   compare link from the last published tag. Use it to review exactly what ships.
+4. 👤 Approve and merge the release PR.
+5. 🤖 CI runs the [release workflow](./.github/workflows/release-please.yml) then:
    - tags `vX.Y.Z` and creates the GitHub Release;
    - triggers the [publish npm workflow](./.github/workflows/publish-npm.yml)
-5. 👤 Update the changelog in [our public docs](https://docs.privy.io).
+6. 👤 Update the changelog in [our public docs](https://docs.privy.io).
 
 ## Coming soon
 

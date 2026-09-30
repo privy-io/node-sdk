@@ -155,10 +155,12 @@ Types:
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumAuthorizationHeaders</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumCreateRequestBody</a></code>
 - <code><a href="./src/resources/key-quorums.ts">KeyQuorumUpdateRequestBody</a></code>
+- <code><a href="./src/resources/key-quorums.ts">KeyQuorumsResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/key_quorums">client.keyQuorums.<a href="./src/resources/key-quorums.ts">create</a>({ ...params }) -> KeyQuorum</code>
+- <code title="get /v1/key_quorums">client.keyQuorums.<a href="./src/resources/key-quorums.ts">list</a>({ ...params }) -> KeyQuoraCursor</code>
 - <code title="delete /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_delete</a>(keyQuorumID, { ...params }) -> SuccessResponse</code>
 - <code title="patch /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">\_update</a>(keyQuorumID, { ...params }) -> KeyQuorum</code>
 - <code title="get /v1/key_quorums/{key_quorum_id}">client.keyQuorums.<a href="./src/resources/key-quorums.ts">get</a>(keyQuorumID) -> KeyQuorum</code>
@@ -207,70 +209,83 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/policies.ts">AbiParameter</a></code>
-- <code><a href="./src/resources/policies.ts">AbiSchema</a></code>
-- <code><a href="./src/resources/policies.ts">ActionRequestBodyCondition</a></code>
-- <code><a href="./src/resources/policies.ts">AggregationCondition</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionOperator</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSet</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetAuthorizationHeaders</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItem</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItemRequestParams</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItemValueInput</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItems</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItemsRequestBody</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetItemsResponse</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetRequestBody</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionSetRequestParams</a></code>
-- <code><a href="./src/resources/policies.ts">ConditionValue</a></code>
-- <code><a href="./src/resources/policies.ts">Ethereum7702AuthorizationCondition</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumCalldataCondition</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumTransactionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumTransactionConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumTypedDataDomainCondition</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumTypedDataDomainConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">EthereumTypedDataMessageCondition</a></code>
-- <code><a href="./src/resources/policies.ts">MessageSigningCondition</a></code>
-- <code><a href="./src/resources/policies.ts">MessageSigningField</a></code>
-- <code><a href="./src/resources/policies.ts">Policy</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyAction</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyAuthorizationHeaders</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyCondition</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyMethod</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyRequestBody</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyRuleRequestBody</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyRuleRequestParams</a></code>
-- <code><a href="./src/resources/policies.ts">PolicyRuleResponse</a></code>
-- <code><a href="./src/resources/policies.ts">SolanaProgramInstructionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">SolanaSystemProgramInstructionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">SolanaSystemProgramInstructionConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">SolanaTokenProgramInstructionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">SolanaTokenProgramInstructionConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">SuiTransactionCommandCondition</a></code>
-- <code><a href="./src/resources/policies.ts">SuiTransactionCommandOperator</a></code>
-- <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandCondition</a></code>
-- <code><a href="./src/resources/policies.ts">SuiTransferObjectsCommandField</a></code>
-- <code><a href="./src/resources/policies.ts">SystemCondition</a></code>
-- <code><a href="./src/resources/policies.ts">TempoTransactionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">TempoTransactionConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">TronCalldataCondition</a></code>
-- <code><a href="./src/resources/policies.ts">TronTransactionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">TronTransactionConditionField</a></code>
-- <code><a href="./src/resources/policies.ts">TypedDataInput</a></code>
-- <code><a href="./src/resources/policies.ts">UpdateConditionSetRequestBody</a></code>
-- <code><a href="./src/resources/policies.ts">XrplTransactionCondition</a></code>
-- <code><a href="./src/resources/policies.ts">XrplTransactionConditionField</a></code>
+- <code><a href="./src/resources/policies/policies.ts">AbiParameter</a></code>
+- <code><a href="./src/resources/policies/policies.ts">AbiSchema</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ActionRequestBodyCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">AggregationCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionOperator</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionSet</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionSetAuthorizationHeaders</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionSetItem</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionSetItemRequestParams</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionSetItemValueInput</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionSetItems</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionSetItemsRequestBody</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionSetItemsResponse</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionSetRequestBody</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionSetRequestParams</a></code>
+- <code><a href="./src/resources/policies/policies.ts">ConditionValue</a></code>
+- <code><a href="./src/resources/policies/policies.ts">Ethereum7702AuthorizationCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">EthereumCalldataCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">EthereumTransactionCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">EthereumTransactionConditionField</a></code>
+- <code><a href="./src/resources/policies/policies.ts">EthereumTypedDataDomainCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">EthereumTypedDataDomainConditionField</a></code>
+- <code><a href="./src/resources/policies/policies.ts">EthereumTypedDataMessageCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">MessageSigningCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">MessageSigningField</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PoliciesResponse</a></code>
+- <code><a href="./src/resources/policies/policies.ts">Policy</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PolicyAction</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PolicyAuthorizationHeaders</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PolicyCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PolicyListItem</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PolicyMethod</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PolicyRequestBody</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PolicyRuleRequestBody</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PolicyRuleRequestParams</a></code>
+- <code><a href="./src/resources/policies/policies.ts">PolicyRuleResponse</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SolanaProgramInstructionCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SolanaSystemProgramInstructionCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SolanaSystemProgramInstructionConditionField</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SolanaTokenProgramInstructionCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SolanaTokenProgramInstructionConditionField</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SuiTransactionCommandCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SuiTransactionCommandOperator</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SuiTransferObjectsCommandCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SuiTransferObjectsCommandField</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SystemCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">TempoTransactionCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">TempoTransactionConditionField</a></code>
+- <code><a href="./src/resources/policies/policies.ts">TronCalldataCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">TronTransactionCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">TronTransactionConditionField</a></code>
+- <code><a href="./src/resources/policies/policies.ts">TypedDataInput</a></code>
+- <code><a href="./src/resources/policies/policies.ts">UpdateConditionSetRequestBody</a></code>
+- <code><a href="./src/resources/policies/policies.ts">XrplTransactionCondition</a></code>
+- <code><a href="./src/resources/policies/policies.ts">XrplTransactionConditionField</a></code>
 
 Methods:
 
-- <code title="post /v1/policies">client.policies.<a href="./src/resources/policies.ts">create</a>({ ...params }) -> Policy</code>
-- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/resources/policies.ts">\_createRule</a>(policyID, { ...params }) -> PolicyRuleResponse</code>
-- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_delete</a>(policyID, { ...params }) -> SuccessResponse</code>
-- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_deleteRule</a>(ruleID, { ...params }) -> SuccessResponse</code>
-- <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
-- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">\_updateRule</a>(ruleID, { ...params }) -> PolicyRuleResponse</code>
-- <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies.ts">get</a>(policyID) -> Policy</code>
-- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies.ts">getRule</a>(ruleID, { ...params }) -> PolicyRuleResponse</code>
+- <code title="post /v1/policies">client.policies.<a href="./src/resources/policies/policies.ts">create</a>({ ...params }) -> Policy</code>
+- <code title="get /v1/policies">client.policies.<a href="./src/resources/policies/policies.ts">list</a>({ ...params }) -> PolicyListItemsCursor</code>
+- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/resources/policies/policies.ts">\_createRule</a>(policyID, { ...params }) -> PolicyRuleResponse</code>
+- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies/policies.ts">\_delete</a>(policyID, { ...params }) -> SuccessResponse</code>
+- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies/policies.ts">\_deleteRule</a>(ruleID, { ...params }) -> SuccessResponse</code>
+- <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies/policies.ts">\_update</a>(policyID, { ...params }) -> Policy</code>
+- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies/policies.ts">\_updateRule</a>(ruleID, { ...params }) -> PolicyRuleResponse</code>
+- <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/resources/policies/policies.ts">get</a>(policyID) -> Policy</code>
+- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/resources/policies/policies.ts">getRule</a>(ruleID, { ...params }) -> PolicyRuleResponse</code>
+
+## ConditionSets
+
+Types:
+
+- <code><a href="./src/resources/policies/condition-sets.ts">ConditionSetsResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/condition_sets">client.policies.conditionSets.<a href="./src/resources/policies/condition-sets.ts">list</a>({ ...params }) -> ConditionSetsCursor</code>
 
 # Transactions
 

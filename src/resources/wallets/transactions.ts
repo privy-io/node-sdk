@@ -109,6 +109,9 @@ export interface TransactionGetParams {
     | 'trx'
     | Array<WalletsAPI.WalletAsset>;
 
+  /**
+   * Cursor returned by the previous page.
+   */
   cursor?: string;
 
   /**

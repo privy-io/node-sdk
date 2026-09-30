@@ -96,7 +96,7 @@ export interface BridgeBrlFiatVirtualAccountDepositInstructions {
 /**
  * Supported destination stablecoin assets for fiat-to-crypto transfers.
  */
-export type BridgeDestinationAsset = 'usdb' | 'usdc' | 'usdt' | 'dai' | 'pyusd' | 'eurc';
+export type BridgeDestinationAsset = 'usdb' | 'usdc' | 'usdt' | 'dai' | 'pyusd' | 'eurc' | 'ousd';
 
 /**
  * The deposit instructions for a virtual account.

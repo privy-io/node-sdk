@@ -63,8 +63,7 @@ export interface AaveVaultDetails {
   admin_wallet_id: string;
 
   /**
-   * Annual percentage yield earned by the app from fee wrapper fees, in basis
-   * points.
+   * Annual percentage yield earned by the app from vault fees, in basis points.
    */
   app_apy: number | null;
 
@@ -934,6 +933,9 @@ export interface FailureReason {
  * Query parameters for listing wallet actions.
  */
 export interface ListWalletActionsQuery {
+  /**
+   * Cursor returned by the previous page.
+   */
   cursor?: string;
 
   limit?: number | null;
@@ -973,8 +975,7 @@ export interface MorphoVaultDetails {
   admin_wallet_id: string;
 
   /**
-   * Annual percentage yield earned by the app from fee wrapper fees, in basis
-   * points.
+   * Annual percentage yield earned by the app from vault fees, in basis points.
    */
   app_apy: number | null;
 
@@ -1297,8 +1298,7 @@ export interface TempoVaultDetails {
   admin_wallet_id: string | null;
 
   /**
-   * Annual percentage yield earned by the app from fee wrapper fees, in basis
-   * points.
+   * Annual percentage yield earned by the app from vault fees, in basis points.
    */
   app_apy: number | null;
 
@@ -1511,8 +1511,7 @@ export interface VedaVaultDetails {
   admin_wallet_id: string;
 
   /**
-   * Annual percentage yield earned by the app from fee wrapper fees, in basis
-   * points.
+   * Annual percentage yield earned by the app from vault fees, in basis points.
    */
   app_apy: number | null;
 

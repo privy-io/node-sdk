@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as PoliciesAPI from './policies';
 import * as SharedAPI from './shared';
+import * as PoliciesAPI from './policies/policies';
 
 export class Aggregations extends APIResource {}
 

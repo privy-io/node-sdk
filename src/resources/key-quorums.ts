@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as SharedAPI from './shared';
 import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -28,6 +29,24 @@ export class KeyQuorums extends APIResource {
    */
   create(body: KeyQuorumCreateParams, options?: RequestOptions): APIPromise<KeyQuorum> {
     return this._client.post('/v1/key_quorums', { body, ...options });
+  }
+
+  /**
+   * List key quorums in an app.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const keyQuorum of client.keyQuorums.list()) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(
+    query: KeyQuorumListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<KeyQuoraCursor, KeyQuorum> {
+    return this._client.getAPIList('/v1/key_quorums', Cursor<KeyQuorum>, { query, ...options });
   }
 
   /**
@@ -120,6 +139,8 @@ export class KeyQuorums extends APIResource {
     return this._client.get(path`/v1/key_quorums/${keyQuorumID}`, options);
   }
 }
+
+export type KeyQuoraCursor = Cursor<KeyQuorum>;
 
 /**
  * A public key authorized to sign on a key quorum.
@@ -239,6 +260,21 @@ export interface KeyQuorumUpdateRequestBody {
   user_ids?: Array<string>;
 }
 
+/**
+ * Paginated list of key quorums in an app.
+ */
+export interface KeyQuorumsResponse {
+  /**
+   * Key quorums in this page.
+   */
+  data: Array<KeyQuorum>;
+
+  /**
+   * Cursor for the next page. Null when there are no further pages.
+   */
+  next_cursor: string | null;
+}
+
 export interface KeyQuorumCreateParams {
   /**
    * The number of keys that must sign for an action to be valid. Must be less than
@@ -269,6 +305,8 @@ export interface KeyQuorumCreateParams {
    */
   user_ids?: Array<string>;
 }
+
+export interface KeyQuorumListParams extends CursorParams {}
 
 export interface KeyQuorumDeleteParams {
   /**
@@ -334,7 +372,10 @@ export declare namespace KeyQuorums {
     type KeyQuorumAuthorizationHeaders as KeyQuorumAuthorizationHeaders,
     type KeyQuorumCreateRequestBody as KeyQuorumCreateRequestBody,
     type KeyQuorumUpdateRequestBody as KeyQuorumUpdateRequestBody,
+    type KeyQuorumsResponse as KeyQuorumsResponse,
+    type KeyQuoraCursor as KeyQuoraCursor,
     type KeyQuorumCreateParams as KeyQuorumCreateParams,
+    type KeyQuorumListParams as KeyQuorumListParams,
     type KeyQuorumDeleteParams as KeyQuorumDeleteParams,
     type KeyQuorumUpdateParams as KeyQuorumUpdateParams,
   };

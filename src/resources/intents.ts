@@ -2,9 +2,9 @@
 
 import { APIResource } from '../core/resource';
 import * as KeyQuorumsAPI from './key-quorums';
-import * as PoliciesAPI from './policies';
 import * as SharedAPI from './shared';
 import * as AppsAPI from './apps/apps';
+import * as PoliciesAPI from './policies/policies';
 import * as WalletsAPI from './wallets/wallets';
 import { APIPromise } from '../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../core/pagination';

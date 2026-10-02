@@ -1326,6 +1326,11 @@ export interface KYCStatusResponse {
    * Terms of Service acceptance status for a KYC or KYB flow.
    */
   tos: KyxTosStatusDetail;
+
+  /**
+   * Stripe Issuing cardholder ID assigned by Bridge for this user.
+   */
+  stripe_cardholder_id?: string;
 }
 
 /**

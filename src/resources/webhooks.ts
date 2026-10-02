@@ -1514,6 +1514,11 @@ export interface UserKYCUpdatedData {
    * Terms of service status in a KYC update event.
    */
   tos: UserKYCUpdatedTosData;
+
+  /**
+   * Stripe Issuing cardholder ID assigned by Bridge for this user.
+   */
+  stripe_cardholder_id?: string;
 }
 
 /**

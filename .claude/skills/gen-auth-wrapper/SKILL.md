@@ -19,15 +19,6 @@ The user provides freeform input describing which generated method needs a wrapp
 
 If the input is ambiguous, search `src/resources/` and ask the user to clarify which class/method they mean.
 
-### `all` mode (CI)
-
-If the input is `all`, find every generated method that is missing a wrapper, instead of a single method:
-
-1. List every `_`-prefixed method in `src/resources/` whose params type has a `'privy-authorization-signature'` field.
-2. Drop each method that `src/public-api/` already calls (e.g. `this._rpc(` or `super._rpc(`).
-3. If nothing is left, report `No missing wrappers` and stop. Do not change any files.
-4. Otherwise, run the steps below once per missing method. Do not ask the user for clarification; in CI there is no user to answer.
-
 ## Steps
 
 ### 1. Locate the generated resource
@@ -178,8 +169,7 @@ cat tests/integration/test-setup.ts               # shared helpers
 Run lint to confirm the code compiles and passes all checks:
 
 ```bash
-./scripts/format
-./scripts/lint
+yarn lint
 ```
 
 If lint fails, fix the issues and re-run until it passes.

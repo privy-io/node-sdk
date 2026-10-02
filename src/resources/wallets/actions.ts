@@ -1044,6 +1044,12 @@ export interface PayoutResponse {
   destination: FiatAPI.PayoutDestination;
 
   /**
+   * A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+   * "1.5" for 1.5%.
+   */
+  developer_fee_percent: FiatAPI.DeveloperFeePercent;
+
+  /**
    * The Privy API environment.
    */
   environment: SharedAPI.IntegrationEnvironment;

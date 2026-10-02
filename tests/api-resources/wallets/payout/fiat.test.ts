@@ -31,12 +31,13 @@ describe('resource fiat', () => {
   // Mock server tests are disabled
   test.skip('_create: required and optional params', async () => {
     const response = await client.wallets._payout._fiat._create('wallet_id', {
-      destination: { fiat_account_id: 'fiat_account_id' },
+      destination: { fiat_account_id: 'fiat_account_id', payment_rail: 'ach' },
       source: {
         amount: 'amount',
         asset: 'asset',
         chain: 'chain',
       },
+      developer_fee_percent: '1.5',
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
       'privy-request-expiry': 'privy-request-expiry',

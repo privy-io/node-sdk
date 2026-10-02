@@ -31,6 +31,7 @@ describe('resource fiat', () => {
       destination: { asset: 'asset', chain: 'chain' },
       provider: 'bridge',
       source: { currency: 'currency' },
+      developer_fee_percent: '1.5',
       environment: 'sandbox',
     });
   });

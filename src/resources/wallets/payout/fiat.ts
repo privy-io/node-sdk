@@ -70,6 +70,12 @@ export interface FiatCreateParams {
   source: FiatAPI.PayoutSource;
 
   /**
+   * Body param: A developer fee as a percentage string from 0 up to (not including)
+   * 100, e.g. "1.5" for 1.5%.
+   */
+  developer_fee_percent?: FiatAPI.DeveloperFeePercent;
+
+  /**
    * Header param: Request authorization signature. If multiple signatures are
    * required, they should be comma separated.
    */

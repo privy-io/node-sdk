@@ -1654,6 +1654,12 @@ export interface User {
    * Custom metadata associated with the user.
    */
   custom_metadata?: CustomMetadata;
+
+  /**
+   * Unix timestamp in seconds of when the user was frozen, or `null` if not frozen.
+   * Not included in every user response.
+   */
+  frozen_at?: number | null;
 }
 
 /**

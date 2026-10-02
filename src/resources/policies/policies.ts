@@ -819,6 +819,7 @@ export type PolicyCondition =
   | Ethereum7702AuthorizationCondition
   | TempoTransactionCondition
   | SolanaProgramInstructionCondition
+  | SolanaInstructionDataCondition
   | SolanaSystemProgramInstructionCondition
   | SolanaTokenProgramInstructionCondition
   | SystemCondition
@@ -948,6 +949,39 @@ export interface PolicyRuleResponse {
   method: PolicyMethod;
 
   name: string;
+}
+
+/**
+ * A modern Anchor IDL containing selected instructions and their complete type
+ * dependencies.
+ */
+export type SolanaIdl = { [key: string]: unknown };
+
+/**
+ * Solana instruction arguments and named accounts interpreted using an inline
+ * Anchor IDL.
+ */
+export interface SolanaInstructionDataCondition {
+  field: string;
+
+  field_source: 'solana_instruction_data';
+
+  /**
+   * A modern Anchor IDL containing selected instructions and their complete type
+   * dependencies.
+   */
+  idl: SolanaIdl;
+
+  /**
+   * Operator to use for policy conditions.
+   */
+  operator: ConditionOperator;
+
+  /**
+   * Value to compare against in a policy condition. Can be a single string or an
+   * array of strings.
+   */
+  value: ConditionValue;
 }
 
 /**
@@ -1580,6 +1614,8 @@ export declare namespace Policies {
     type PolicyRuleRequestBody as PolicyRuleRequestBody,
     type PolicyRuleRequestParams as PolicyRuleRequestParams,
     type PolicyRuleResponse as PolicyRuleResponse,
+    type SolanaIdl as SolanaIdl,
+    type SolanaInstructionDataCondition as SolanaInstructionDataCondition,
     type SolanaProgramInstructionCondition as SolanaProgramInstructionCondition,
     type SolanaSystemProgramInstructionCondition as SolanaSystemProgramInstructionCondition,
     type SolanaSystemProgramInstructionConditionField as SolanaSystemProgramInstructionConditionField,

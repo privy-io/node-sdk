@@ -141,6 +141,12 @@ export interface CardIssuingConfig {
    * Stripe publishable key for initializing Stripe.js in the browser.
    */
   publishable_key: string;
+
+  /**
+   * Stripe account the publishable key acts on; absent when the key belongs to the
+   * app directly.
+   */
+  stripe_account?: string;
 }
 
 /**

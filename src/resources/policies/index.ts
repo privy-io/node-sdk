@@ -39,6 +39,8 @@ export {
   type PolicyRuleRequestBody,
   type PolicyRuleRequestParams,
   type PolicyRuleResponse,
+  type SolanaIdl,
+  type SolanaInstructionDataCondition,
   type SolanaProgramInstructionCondition,
   type SolanaSystemProgramInstructionCondition,
   type SolanaSystemProgramInstructionConditionField,

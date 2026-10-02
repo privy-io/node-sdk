@@ -56,6 +56,12 @@ export interface BridgeCreateFiatDepositAccountRequestBody {
   source: CreateFiatDepositAccountSource;
 
   /**
+   * A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+   * "1.5" for 1.5%.
+   */
+  developer_fee_percent?: DeveloperFeePercent;
+
+  /**
    * The Privy API environment.
    */
   environment?: SharedAPI.IntegrationEnvironment;
@@ -110,6 +116,12 @@ export interface BridgeFiatDepositAccount {
    * The destination crypto asset and chain for a fiat deposit account.
    */
   destination: FiatDepositAccountDestination;
+
+  /**
+   * A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+   * "1.5" for 1.5%.
+   */
+  developer_fee_percent: DeveloperFeePercent;
 
   /**
    * The Privy API environment.
@@ -216,6 +228,12 @@ export interface CreateFiatDepositAccountRequestBody {
   source: CreateFiatDepositAccountSource;
 
   /**
+   * A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+   * "1.5" for 1.5%.
+   */
+  developer_fee_percent?: DeveloperFeePercent;
+
+  /**
    * The Privy API environment.
    */
   environment?: SharedAPI.IntegrationEnvironment;
@@ -241,7 +259,19 @@ export interface CreatePayoutRequestBody {
    * The source crypto asset, chain, and amount for a payout.
    */
   source: PayoutSource;
+
+  /**
+   * A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+   * "1.5" for 1.5%.
+   */
+  developer_fee_percent?: DeveloperFeePercent;
 }
+
+/**
+ * A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+ * "1.5" for 1.5%.
+ */
+export type DeveloperFeePercent = string;
 
 /**
  * A Bridge external fiat account linked to a user.
@@ -453,6 +483,12 @@ export interface FiatDepositAccount {
    * The destination crypto asset and chain for a fiat deposit account.
    */
   destination: FiatDepositAccountDestination;
+
+  /**
+   * A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+   * "1.5" for 1.5%.
+   */
+  developer_fee_percent: DeveloperFeePercent;
 
   /**
    * The Privy API environment.
@@ -1785,7 +1821,26 @@ export interface PayoutDestination {
    * The ID of a previously registered external fiat account to pay out to.
    */
   fiat_account_id: string;
+
+  /**
+   * A fiat payment rail a payout can settle over. `ach` is a standard ACH credit to
+   * the destination account.
+   */
+  payment_rail?: PayoutPaymentRail;
 }
+
+/**
+ * A fiat payment rail a payout can settle over. `ach` is a standard ACH credit to
+ * the destination account.
+ */
+export type PayoutPaymentRail =
+  | 'ach'
+  | 'ach_same_day'
+  | 'wire'
+  | 'fednow'
+  | 'sepa'
+  | 'faster_payments'
+  | 'pix';
 
 /**
  * The source crypto asset, chain, and amount for a payout.
@@ -1895,6 +1950,7 @@ export declare namespace Fiat {
     type CreateFiatDepositAccountRequestBody as CreateFiatDepositAccountRequestBody,
     type CreateFiatDepositAccountSource as CreateFiatDepositAccountSource,
     type CreatePayoutRequestBody as CreatePayoutRequestBody,
+    type DeveloperFeePercent as DeveloperFeePercent,
     type ExternalFiatAccount as ExternalFiatAccount,
     type ExternalFiatAccountAddress as ExternalFiatAccountAddress,
     type ExternalFiatAccountData as ExternalFiatAccountData,
@@ -1967,6 +2023,7 @@ export declare namespace Fiat {
     type OrganizationExternalFiatAccount as OrganizationExternalFiatAccount,
     type OrganizationExternalFiatAccountResponse as OrganizationExternalFiatAccountResponse,
     type PayoutDestination as PayoutDestination,
+    type PayoutPaymentRail as PayoutPaymentRail,
     type PayoutSource as PayoutSource,
     type VerificationAddress as VerificationAddress,
     type VerificationDocument as VerificationDocument,

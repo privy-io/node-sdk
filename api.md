@@ -245,6 +245,8 @@ Types:
 - <code><a href="./src/resources/policies/policies.ts">PolicyRuleRequestBody</a></code>
 - <code><a href="./src/resources/policies/policies.ts">PolicyRuleRequestParams</a></code>
 - <code><a href="./src/resources/policies/policies.ts">PolicyRuleResponse</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SolanaIdl</a></code>
+- <code><a href="./src/resources/policies/policies.ts">SolanaInstructionDataCondition</a></code>
 - <code><a href="./src/resources/policies/policies.ts">SolanaProgramInstructionCondition</a></code>
 - <code><a href="./src/resources/policies/policies.ts">SolanaSystemProgramInstructionCondition</a></code>
 - <code><a href="./src/resources/policies/policies.ts">SolanaSystemProgramInstructionConditionField</a></code>
@@ -1377,6 +1379,7 @@ Types:
 - <code><a href="./src/resources/fiat.ts">CreateFiatDepositAccountRequestBody</a></code>
 - <code><a href="./src/resources/fiat.ts">CreateFiatDepositAccountSource</a></code>
 - <code><a href="./src/resources/fiat.ts">CreatePayoutRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">DeveloperFeePercent</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccount</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccountAddress</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccountData</a></code>
@@ -1449,6 +1452,7 @@ Types:
 - <code><a href="./src/resources/fiat.ts">OrganizationExternalFiatAccount</a></code>
 - <code><a href="./src/resources/fiat.ts">OrganizationExternalFiatAccountResponse</a></code>
 - <code><a href="./src/resources/fiat.ts">PayoutDestination</a></code>
+- <code><a href="./src/resources/fiat.ts">PayoutPaymentRail</a></code>
 - <code><a href="./src/resources/fiat.ts">PayoutSource</a></code>
 - <code><a href="./src/resources/fiat.ts">VerificationAddress</a></code>
 - <code><a href="./src/resources/fiat.ts">VerificationDocument</a></code>

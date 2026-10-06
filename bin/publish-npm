@@ -55,9 +55,19 @@ if [[ -z "$LAST_VERSION" || "$LAST_VERSION" =~ -([a-zA-Z]+) ]]; then
   LAST_IS_STABLE_RELEASE=false
 fi
 
-# Use a corresponding alpha/beta tag if there already is a stable release and we're publishing a prerelease.
+# Check if current version is a stable release older than latest (a hotfix on an old line)
+CURRENT_IS_OLDER_STABLE=false
+if ! $CURRENT_IS_PRERELEASE && $LAST_IS_STABLE_RELEASE && [[ "$VERSION" != "$LAST_VERSION" ]] &&
+  [[ "$(printf '%s\n' "$VERSION" "$LAST_VERSION" | sort -V | head -n 1)" == "$VERSION" ]]; then
+  CURRENT_IS_OLDER_STABLE=true
+fi
+
+# Use a corresponding alpha/beta/rc tag if there already is a stable release and we're publishing a prerelease.
+# Publish an older stable release (e.g. 1.7.4 while latest is 1.8.0) under release-X.Y so `latest` doesn't move back.
 if $CURRENT_IS_PRERELEASE && $LAST_IS_STABLE_RELEASE; then
   TAG="$CURRENT_TAG"
+elif $CURRENT_IS_OLDER_STABLE; then
+  TAG="release-$(echo "$VERSION" | cut -d. -f1-2)"
 else
   TAG="latest"
 fi

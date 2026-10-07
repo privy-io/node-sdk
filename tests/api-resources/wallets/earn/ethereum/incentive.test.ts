@@ -11,7 +11,7 @@ const client = new PrivyAPI({
 describe('resource incentive', () => {
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.wallets.earn.ethereum.incentive.list('wallet_id', { chain: 'chain' });
+    const responsePromise = client.wallets._earn._ethereum._incentive.list('wallet_id', { chain: 'chain' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,7 +23,7 @@ describe('resource incentive', () => {
 
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.wallets.earn.ethereum.incentive.list('wallet_id', { chain: 'chain' });
+    const response = await client.wallets._earn._ethereum._incentive.list('wallet_id', { chain: 'chain' });
   });
 
   // Mock server tests are disabled

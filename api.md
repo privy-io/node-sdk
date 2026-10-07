@@ -938,6 +938,7 @@ Methods:
 
 Methods:
 
+- <code title="get /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/resources/wallets/earn/ethereum/incentive.ts">list</a>(walletID, { ...params }) -> EarnIncentiveRewardsResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/resources/wallets/earn/ethereum/incentive.ts">\_claim</a>(walletID, { ...params }) -> EarnIncentiveClaimActionResponse</code>
 
 ## Payout

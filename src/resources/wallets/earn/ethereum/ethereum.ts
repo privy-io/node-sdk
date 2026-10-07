@@ -4,7 +4,7 @@ import { APIResource } from '../../../../core/resource';
 import * as ActionsAPI from '../../actions';
 import * as WalletsAPI from '../../wallets';
 import * as IncentiveAPI from './incentive';
-import { Incentive, IncentiveClaimParams } from './incentive';
+import { Incentive, IncentiveClaimParams, IncentiveListParams } from './incentive';
 import { APIPromise } from '../../../../core/api-promise';
 import { buildHeaders } from '../../../../internal/headers';
 import { RequestOptions } from '../../../../internal/request-options';
@@ -257,5 +257,9 @@ export declare namespace Ethereum {
     type EthereumVaultPositionParams as EthereumVaultPositionParams,
   };
 
-  export { Incentive as Incentive, type IncentiveClaimParams as IncentiveClaimParams };
+  export {
+    Incentive as Incentive,
+    type IncentiveListParams as IncentiveListParams,
+    type IncentiveClaimParams as IncentiveClaimParams,
+  };
 }

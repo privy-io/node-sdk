@@ -6,4 +6,4 @@ export {
   type EthereumWithdrawParams,
   type EthereumVaultPositionParams,
 } from './ethereum';
-export { Incentive, type IncentiveClaimParams } from './incentive';
+export { Incentive, type IncentiveListParams, type IncentiveClaimParams } from './incentive';

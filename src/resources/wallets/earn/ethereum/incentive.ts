@@ -13,6 +13,30 @@ import { path } from '../../../../internal/utils/path';
  */
 export class Incentive extends APIResource {
   /**
+   * Retrieve all incentive rewards for a wallet on a given chain, with claimed and
+   * claimable amounts per token.
+   *
+   * @example
+   * ```ts
+   * const earnIncentiveRewardsResponse =
+   *   await client.wallets.earn.ethereum.incentive.list(
+   *     'wallet_id',
+   *     { chain: 'chain' },
+   *   );
+   * ```
+   */
+  list(
+    walletID: string,
+    query: IncentiveListParams,
+    options?: RequestOptions,
+  ): APIPromise<ActionsAPI.EarnIncentiveRewardsResponse> {
+    return this._client.get(path`/v1/wallets/${walletID}/earn/ethereum/incentive/claim`, {
+      query,
+      ...options,
+    });
+  }
+
+  /**
    * Claim incentive rewards for a wallet.
    *
    * @example
@@ -50,6 +74,13 @@ export class Incentive extends APIResource {
       ]),
     });
   }
+}
+
+export interface IncentiveListParams {
+  /**
+   * Chain name to fetch rewards for (e.g. "tempo", "base").
+   */
+  chain: string;
 }
 
 export interface IncentiveClaimParams {
@@ -92,5 +123,8 @@ export interface IncentiveClaimParams {
 }
 
 export declare namespace Incentive {
-  export { type IncentiveClaimParams as IncentiveClaimParams };
+  export {
+    type IncentiveListParams as IncentiveListParams,
+    type IncentiveClaimParams as IncentiveClaimParams,
+  };
 }

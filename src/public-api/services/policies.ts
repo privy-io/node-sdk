@@ -2,6 +2,7 @@ import { Prettify } from 'viem';
 import { PrivyAPI } from '../../client';
 import { APIPromise } from '../../core/api-promise';
 import { prepareRequest } from '../../lib/authorization';
+import { path } from '../../internal/utils/path';
 import {
   Policies,
   Policy,
@@ -47,7 +48,7 @@ export class PrivyPoliciesService extends Policies {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'PATCH',
-      url: `${this._client.baseURL}/v1/policies/${policyId}`,
+      url: `${this._client.baseURL}${path`/v1/policies/${policyId}`}`,
       body: params,
     });
 
@@ -66,7 +67,7 @@ export class PrivyPoliciesService extends Policies {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'DELETE',
-      url: `${this._client.baseURL}/v1/policies/${policyId}`,
+      url: `${this._client.baseURL}${path`/v1/policies/${policyId}`}`,
       body: params,
     });
 
@@ -85,7 +86,7 @@ export class PrivyPoliciesService extends Policies {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
-      url: `${this._client.baseURL}/v1/policies/${policyId}/rules`,
+      url: `${this._client.baseURL}${path`/v1/policies/${policyId}/rules`}`,
       body: params,
     });
 
@@ -105,7 +106,7 @@ export class PrivyPoliciesService extends Policies {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'PATCH',
-      url: `${this._client.baseURL}/v1/policies/${policyId}/rules/${ruleId}`,
+      url: `${this._client.baseURL}${path`/v1/policies/${policyId}/rules/${ruleId}`}`,
       body: params,
     });
 
@@ -125,7 +126,7 @@ export class PrivyPoliciesService extends Policies {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'DELETE',
-      url: `${this._client.baseURL}/v1/policies/${policyId}/rules/${ruleId}`,
+      url: `${this._client.baseURL}${path`/v1/policies/${policyId}/rules/${ruleId}`}`,
       body: params,
     });
 

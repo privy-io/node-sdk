@@ -1,5 +1,6 @@
 import { PrivyAPI } from '../../client';
 import { prepareRequest } from '../../lib/authorization';
+import { path } from '../../internal/utils/path';
 import { CreateCryptoDepositAccountResponse } from '../../resources';
 import { Crypto, CryptoCreateParams } from '../../resources/wallets/deposit-accounts/crypto';
 import { DepositAccounts } from '../../resources/wallets/deposit-accounts/deposit-accounts';
@@ -28,7 +29,7 @@ export class PrivyDepositAccountsCryptoService extends Crypto {
       idempotencyKey,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
-      url: `${this._client.baseURL}/v1/wallets/${walletId}/deposit_accounts/crypto`,
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/deposit_accounts/crypto`}`,
       body: params,
     });
 

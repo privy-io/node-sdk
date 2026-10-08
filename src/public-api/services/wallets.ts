@@ -2,6 +2,7 @@ import { PrivyAPI } from '../../client';
 import { APIPromise } from '../../core/api-promise';
 import { PrivyAPIError } from '../../core/error';
 import { prepareRequest } from '../../lib/authorization';
+import { path } from '../../internal/utils/path';
 import { setupHPKERecipient, setupHPKESender } from '../../lib/cryptography';
 import { entropyToBytes } from '../../lib/wallet-entropy';
 import {
@@ -104,7 +105,7 @@ export class PrivyWalletsService extends Wallets {
       idempotencyKey,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
-      url: `${this._client.baseURL}/v1/wallets/${walletId}/rpc`,
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/rpc`}`,
       body: params,
     });
 
@@ -125,7 +126,7 @@ export class PrivyWalletsService extends Wallets {
       idempotencyKey,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
-      url: `${this._client.baseURL}/v1/wallets/${walletId}/raw_sign`,
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/raw_sign`}`,
       body: params,
     });
 
@@ -146,7 +147,7 @@ export class PrivyWalletsService extends Wallets {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'PATCH',
-      url: `${this._client.baseURL}/v1/wallets/${walletId}`,
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}`}`,
       body: params,
     });
 
@@ -161,7 +162,7 @@ export class PrivyWalletsService extends Wallets {
       authorizationContext,
       requestExpiry: this.privyClient.getRequestExpiry(),
       method: 'POST',
-      url: `${this._client.baseURL}/v1/wallets/${walletId}/transfer`,
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/transfer`}`,
       body: params,
     });
 
@@ -193,7 +194,7 @@ export class PrivyWalletsService extends Wallets {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
-      url: `${this._client.baseURL}/v1/wallets/${walletId}/export`,
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/export`}`,
       body: params,
     });
 

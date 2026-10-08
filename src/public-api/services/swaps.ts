@@ -3,6 +3,7 @@ import { SwapActionResponse } from '../../resources/wallets/actions';
 import { SwapQuoteResponse } from '../../resources';
 import { Swap, SwapExecuteParams, SwapQuoteParams } from '../../resources/wallets/swap';
 import { prepareRequest } from '../../lib/authorization';
+import { path } from '../../internal/utils/path';
 import { PrivyClient } from '../PrivyClient';
 import { Prettify, WithAuthorization, WithIdempotency } from './types';
 
@@ -31,7 +32,7 @@ export class PrivySwapsService {
       authorizationContext,
       idempotencyKey,
       method: 'POST',
-      url: `${this.baseURL}/v1/wallets/${walletId}/swap`,
+      url: `${this.baseURL}${path`/v1/wallets/${walletId}/swap`}`,
       body: params,
     });
 
@@ -45,7 +46,7 @@ export class PrivySwapsService {
     const { headers } = await prepareRequest(this.privyClient, this.appID, {
       authorizationContext,
       method: 'POST',
-      url: `${this.baseURL}/v1/wallets/${walletId}/swap/quote`,
+      url: `${this.baseURL}${path`/v1/wallets/${walletId}/swap/quote`}`,
       body: params,
     });
 

@@ -1,6 +1,7 @@
 import { Prettify } from 'viem';
 import { PrivyAPI } from '../../client';
 import { prepareRequest } from '../../lib/authorization';
+import { path } from '../../internal/utils/path';
 import {
   KeyQuorum,
   KeyQuorumDeleteParams,
@@ -31,7 +32,7 @@ export class PrivyKeyQuorumsService extends KeyQuorums {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'PATCH',
-      url: `${this._client.baseURL}/v1/key_quorums/${keyQuorumId}`,
+      url: `${this._client.baseURL}${path`/v1/key_quorums/${keyQuorumId}`}`,
       body: params,
     });
 
@@ -50,7 +51,7 @@ export class PrivyKeyQuorumsService extends KeyQuorums {
       authorizationContext,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'DELETE',
-      url: `${this._client.baseURL}/v1/key_quorums/${keyQuorumId}`,
+      url: `${this._client.baseURL}${path`/v1/key_quorums/${keyQuorumId}`}`,
       body: params,
     });
 

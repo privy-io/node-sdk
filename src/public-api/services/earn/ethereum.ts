@@ -6,6 +6,7 @@ import {
   EthereumWithdrawParams,
 } from '../../../resources/wallets/earn/ethereum/ethereum';
 import { prepareRequest } from '../../../lib/authorization';
+import { path } from '../../../internal/utils/path';
 import { PrivyClient } from '../../PrivyClient';
 import { PrivyEarnEthereumIncentiveService } from './ethereum-incentive';
 import { Prettify, WithAuthorization, WithIdempotency } from '../types';
@@ -37,7 +38,7 @@ export class PrivyEarnEthereumService extends Ethereum {
       idempotencyKey,
       requestExpiry: this.privyClient.getRequestExpiry(),
       method: 'POST',
-      url: `${this._client.baseURL}/v1/wallets/${walletId}/earn/ethereum/deposit`,
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/earn/ethereum/deposit`}`,
       body: params,
     });
 
@@ -57,7 +58,7 @@ export class PrivyEarnEthereumService extends Ethereum {
       idempotencyKey,
       requestExpiry: this.privyClient.getRequestExpiry(),
       method: 'POST',
-      url: `${this._client.baseURL}/v1/wallets/${walletId}/earn/ethereum/withdraw`,
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/earn/ethereum/withdraw`}`,
       body: params,
     });
 

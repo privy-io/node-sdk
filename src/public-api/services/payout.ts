@@ -1,5 +1,6 @@
 import { PrivyAPI } from '../../client';
 import { prepareRequest } from '../../lib/authorization';
+import { path } from '../../internal/utils/path';
 import { PayoutResponse } from '../../resources/wallets/actions';
 import { Fiat, FiatCreateParams } from '../../resources/wallets/payout/fiat';
 import { Payout } from '../../resources/wallets/payout/payout';
@@ -28,7 +29,7 @@ export class PrivyPayoutFiatService extends Fiat {
       idempotencyKey,
       requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
-      url: `${this._client.baseURL}/v1/wallets/${walletId}/payout/fiat`,
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/payout/fiat`}`,
       body: params,
     });
 

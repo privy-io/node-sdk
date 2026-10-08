@@ -2,6 +2,7 @@ import { PrivyAPI } from '../../../client';
 import { EarnIncentiveClaimActionResponse } from '../../../resources/wallets/actions';
 import { Incentive, IncentiveClaimParams } from '../../../resources/wallets/earn/ethereum/incentive';
 import { prepareRequest } from '../../../lib/authorization';
+import { path } from '../../../internal/utils/path';
 import { PrivyClient } from '../../PrivyClient';
 import { Prettify, WithAuthorization, WithIdempotency } from '../types';
 
@@ -26,7 +27,7 @@ export class PrivyEarnEthereumIncentiveService extends Incentive {
       idempotencyKey,
       requestExpiry: this.privyClient.getRequestExpiry(),
       method: 'POST',
-      url: `${this._client.baseURL}/v1/wallets/${walletId}/earn/ethereum/incentive/claim`,
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/earn/ethereum/incentive/claim`}`,
       body: params,
     });
 

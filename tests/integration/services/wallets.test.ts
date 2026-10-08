@@ -414,6 +414,17 @@ describe('PrivyWalletsService', () => {
     });
   });
 
+  describe('earn incentive list', () => {
+    it('should list incentive rewards for an Ethereum wallet', async () => {
+      const wallet = await privyClient.wallets().create({ chain_type: 'ethereum' });
+      const response = await privyClient.wallets().earn().ethereum().incentive().list(wallet.id, {
+        chain: 'base',
+      });
+
+      expect(Array.isArray(response.rewards)).toBe(true);
+    });
+  });
+
   // Skipped because we don't want to actually claim incentives, but test serves as contract test.
   describe.skip('earn incentive claim', () => {
     let ethWallets: TestWallet[];

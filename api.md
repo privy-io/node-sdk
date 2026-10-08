@@ -1388,9 +1388,12 @@ Types:
 - <code><a href="./src/resources/fiat.ts">DeveloperFeePercent</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccount</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccountAddress</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountBusinessOwner</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccountData</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccountGBData</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccountIbanData</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountIndividualOwner</a></code>
+- <code><a href="./src/resources/fiat.ts">ExternalFiatAccountOwner</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccountPixData</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccountResponse</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccountSwiftCategory</a></code>

@@ -162,6 +162,7 @@ describe('resource walletAutomations', () => {
   test.skip('reindex: required and optional params', async () => {
     const response = await client.walletAutomations.reindex({
       asset_address: 'x',
+      automation_id: 'x',
       caip2: 'tron:mainnet',
       chain: 'x',
       deposit_address: 'x',

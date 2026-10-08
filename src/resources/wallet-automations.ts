@@ -499,6 +499,11 @@ export interface WalletAutomationReindexRequestBody {
   asset_address: string;
 
   /**
+   * Automation to target when more than one active automation matches the asset.
+   */
+  automation_id?: string;
+
+  /**
    * An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
    * reindex.
    */
@@ -612,6 +617,11 @@ export interface WalletAutomationReindexParams {
    * Asset contract address to check; the native asset uses `native`.
    */
   asset_address: string;
+
+  /**
+   * Automation to target when more than one active automation matches the asset.
+   */
+  automation_id?: string;
 
   /**
    * An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation

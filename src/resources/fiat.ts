@@ -24,6 +24,12 @@ export interface BridgeCreateExternalFiatAccountRequestBody {
   provider: 'bridge';
 
   /**
+   * The individual or business that owns the account. Required for `iban`, `gb`, and
+   * `swift` accounts.
+   */
+  account_owner?: ExternalFiatAccountOwner;
+
+  /**
    * Physical address associated with an external fiat account.
    */
   address?: ExternalFiatAccountAddress;
@@ -196,6 +202,12 @@ export interface CreateExternalFiatAccountRequestBody {
   provider: 'bridge';
 
   /**
+   * The individual or business that owns the account. Required for `iban`, `gb`, and
+   * `swift` accounts.
+   */
+  account_owner?: ExternalFiatAccountOwner;
+
+  /**
    * Physical address associated with an external fiat account.
    */
   address?: ExternalFiatAccountAddress;
@@ -322,6 +334,15 @@ export interface ExternalFiatAccountAddress {
 }
 
 /**
+ * A business that owns an external fiat account.
+ */
+export interface ExternalFiatAccountBusinessOwner {
+  business_name: string;
+
+  type: 'business';
+}
+
+/**
  * Bank account details. The `type` field discriminates which shape applies.
  */
 export type ExternalFiatAccountData =
@@ -370,6 +391,23 @@ export interface ExternalFiatAccountIbanData {
 
   type: 'iban';
 }
+
+/**
+ * An individual who owns an external fiat account.
+ */
+export interface ExternalFiatAccountIndividualOwner {
+  first_name: string;
+
+  last_name: string;
+
+  type: 'individual';
+}
+
+/**
+ * The individual or business that owns the account. Required for `iban`, `gb`, and
+ * `swift` accounts.
+ */
+export type ExternalFiatAccountOwner = ExternalFiatAccountIndividualOwner | ExternalFiatAccountBusinessOwner;
 
 /**
  * Brazilian Pix account data for an external fiat account. Provide exactly one of
@@ -1958,9 +1996,12 @@ export declare namespace Fiat {
     type DeveloperFeePercent as DeveloperFeePercent,
     type ExternalFiatAccount as ExternalFiatAccount,
     type ExternalFiatAccountAddress as ExternalFiatAccountAddress,
+    type ExternalFiatAccountBusinessOwner as ExternalFiatAccountBusinessOwner,
     type ExternalFiatAccountData as ExternalFiatAccountData,
     type ExternalFiatAccountGBData as ExternalFiatAccountGBData,
     type ExternalFiatAccountIbanData as ExternalFiatAccountIbanData,
+    type ExternalFiatAccountIndividualOwner as ExternalFiatAccountIndividualOwner,
+    type ExternalFiatAccountOwner as ExternalFiatAccountOwner,
     type ExternalFiatAccountPixData as ExternalFiatAccountPixData,
     type ExternalFiatAccountResponse as ExternalFiatAccountResponse,
     type ExternalFiatAccountSwiftCategory as ExternalFiatAccountSwiftCategory,

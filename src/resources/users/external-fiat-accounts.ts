@@ -118,6 +118,12 @@ export interface ExternalFiatAccountCreateParams {
   provider: 'bridge';
 
   /**
+   * The individual or business that owns the account. Required for `iban`, `gb`, and
+   * `swift` accounts.
+   */
+  account_owner?: FiatAPI.ExternalFiatAccountOwner;
+
+  /**
    * Physical address associated with an external fiat account.
    */
   address?: FiatAPI.ExternalFiatAccountAddress;

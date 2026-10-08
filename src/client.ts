@@ -86,6 +86,9 @@ import {
   CardIssuingEphemeralKey,
   CardIssuingEphemeralKeyRequestBody,
   CardIssuingEphemeralKeyResponse,
+  CardIssuingErc4626VaultFundingSource,
+  CardIssuingErc4626VaultProvider,
+  CardIssuingFundingSource,
   CardIssuingListCardsInput,
   CardIssuingListTransactionsInput,
   CardIssuingMerchant,
@@ -93,10 +96,12 @@ import {
   CardIssuingReplaceCardRequestBody,
   CardIssuingReplacementReason,
   CardIssuingStatementQueryParams,
+  CardIssuingTempoEarnVaultFundingSource,
   CardIssuingTransactionResponse,
   CardIssuingTransactionStatus,
   CardIssuingTransactionsResponse,
   CardIssuingUpdateCardInput,
+  CardIssuingWalletFundingSource,
   Cards,
 } from './resources/cards';
 import {
@@ -2372,6 +2377,9 @@ export declare namespace PrivyAPI {
     type CardIssuingEphemeralKey as CardIssuingEphemeralKey,
     type CardIssuingEphemeralKeyRequestBody as CardIssuingEphemeralKeyRequestBody,
     type CardIssuingEphemeralKeyResponse as CardIssuingEphemeralKeyResponse,
+    type CardIssuingErc4626VaultFundingSource as CardIssuingErc4626VaultFundingSource,
+    type CardIssuingErc4626VaultProvider as CardIssuingErc4626VaultProvider,
+    type CardIssuingFundingSource as CardIssuingFundingSource,
     type CardIssuingListCardsInput as CardIssuingListCardsInput,
     type CardIssuingListTransactionsInput as CardIssuingListTransactionsInput,
     type CardIssuingMerchant as CardIssuingMerchant,
@@ -2379,10 +2387,12 @@ export declare namespace PrivyAPI {
     type CardIssuingReplaceCardRequestBody as CardIssuingReplaceCardRequestBody,
     type CardIssuingReplacementReason as CardIssuingReplacementReason,
     type CardIssuingStatementQueryParams as CardIssuingStatementQueryParams,
+    type CardIssuingTempoEarnVaultFundingSource as CardIssuingTempoEarnVaultFundingSource,
     type CardIssuingTransactionResponse as CardIssuingTransactionResponse,
     type CardIssuingTransactionStatus as CardIssuingTransactionStatus,
     type CardIssuingTransactionsResponse as CardIssuingTransactionsResponse,
     type CardIssuingUpdateCardInput as CardIssuingUpdateCardInput,
+    type CardIssuingWalletFundingSource as CardIssuingWalletFundingSource,
   };
 
   export {

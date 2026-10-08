@@ -57,13 +57,13 @@ export interface CardIssuingCardResponse {
   id: string;
 
   /**
-   * The asset the card funds from. 'usdc' on EVM and Solana, 'pathusd' on Tempo.
+   * The stablecoin the card settles in: 'usdc' on EVM and Solana, 'pathusd' on
+   * Tempo.
    */
   asset: string;
 
   /**
-   * USD balance of the card funding wallet on the configured chain, or null when
-   * unavailable.
+   * USD amount the card can spend right now, or null when unavailable.
    */
   balance_formatted: string | null;
 
@@ -93,6 +93,11 @@ export interface CardIssuingCardResponse {
    * Four-digit card expiration year, or null when unavailable.
    */
   exp_year: number | null;
+
+  /**
+   * The funding sources the card can spend from, with at most one `selected`.
+   */
+  funding_sources: Array<CardIssuingFundingSource>;
 
   last4: string | null;
 
@@ -396,6 +401,48 @@ export interface CardIssuingEphemeralKeyResponse {
 }
 
 /**
+ * The funding wallet's shares in an ERC-4626 Earn vault, which the card spends
+ * instead of its `asset` balance.
+ */
+export interface CardIssuingErc4626VaultFundingSource {
+  /**
+   * Earn provider of an ERC-4626 vault a card can spend.
+   */
+  provider: CardIssuingErc4626VaultProvider;
+
+  /**
+   * Whether this is the source the card spends right now.
+   */
+  selected: boolean;
+
+  /**
+   * EVM address: 0x followed by 40 hex characters. Preserves input case.
+   */
+  share_token_address: SharedAPI.EvmAddress;
+
+  /**
+   * EVM address: 0x followed by 40 hex characters. Preserves input case.
+   */
+  spender_address: SharedAPI.EvmAddress;
+
+  type: 'erc4626_vault';
+}
+
+/**
+ * Earn provider of an ERC-4626 vault a card can spend.
+ */
+export type CardIssuingErc4626VaultProvider = 'morpho' | 'aave';
+
+/**
+ * Funds a card can spend, where `selected`, not list position, marks the one it
+ * spends.
+ */
+export type CardIssuingFundingSource =
+  | CardIssuingWalletFundingSource
+  | CardIssuingErc4626VaultFundingSource
+  | CardIssuingTempoEarnVaultFundingSource;
+
+/**
  * Query parameters for listing cards bound to the authenticated Privy user.
  */
 export interface CardIssuingListCardsInput {
@@ -483,6 +530,40 @@ export interface CardIssuingStatementQueryParams {
 }
 
 /**
+ * The funding wallet's shares in a Tempo Earn vault, which a card that also lists
+ * its wallet can switch to and back from.
+ */
+export interface CardIssuingTempoEarnVaultFundingSource {
+  /**
+   * EVM address: 0x followed by 40 hex characters. Preserves input case.
+   */
+  asset_address: SharedAPI.EvmAddress;
+
+  /**
+   * Whether the card spends this vault right now; neither it nor the wallet is when
+   * the wallet chose a vault outside the app's Earn vaults.
+   */
+  selected: boolean;
+
+  /**
+   * EVM address: 0x followed by 40 hex characters. Preserves input case.
+   */
+  share_token_address: SharedAPI.EvmAddress;
+
+  /**
+   * EVM address: 0x followed by 40 hex characters. Preserves input case.
+   */
+  spender_address: SharedAPI.EvmAddress;
+
+  type: 'tempo_earn_vault';
+
+  /**
+   * EVM address: 0x followed by 40 hex characters. Preserves input case.
+   */
+  vault_address: SharedAPI.EvmAddress;
+}
+
+/**
  * Card activity
  */
 export interface CardIssuingTransactionResponse {
@@ -550,6 +631,18 @@ export interface CardIssuingUpdateCardInput {
   status?: CardIssuingCardStatus;
 }
 
+/**
+ * The funding wallet's `asset` balance.
+ */
+export interface CardIssuingWalletFundingSource {
+  /**
+   * Whether this is the source the card spends right now.
+   */
+  selected: boolean;
+
+  type: 'wallet';
+}
+
 export declare namespace Cards {
   export {
     type CardIssuingBankAgreement as CardIssuingBankAgreement,
@@ -582,6 +675,9 @@ export declare namespace Cards {
     type CardIssuingEphemeralKey as CardIssuingEphemeralKey,
     type CardIssuingEphemeralKeyRequestBody as CardIssuingEphemeralKeyRequestBody,
     type CardIssuingEphemeralKeyResponse as CardIssuingEphemeralKeyResponse,
+    type CardIssuingErc4626VaultFundingSource as CardIssuingErc4626VaultFundingSource,
+    type CardIssuingErc4626VaultProvider as CardIssuingErc4626VaultProvider,
+    type CardIssuingFundingSource as CardIssuingFundingSource,
     type CardIssuingListCardsInput as CardIssuingListCardsInput,
     type CardIssuingListTransactionsInput as CardIssuingListTransactionsInput,
     type CardIssuingMerchant as CardIssuingMerchant,
@@ -589,9 +685,11 @@ export declare namespace Cards {
     type CardIssuingReplaceCardRequestBody as CardIssuingReplaceCardRequestBody,
     type CardIssuingReplacementReason as CardIssuingReplacementReason,
     type CardIssuingStatementQueryParams as CardIssuingStatementQueryParams,
+    type CardIssuingTempoEarnVaultFundingSource as CardIssuingTempoEarnVaultFundingSource,
     type CardIssuingTransactionResponse as CardIssuingTransactionResponse,
     type CardIssuingTransactionStatus as CardIssuingTransactionStatus,
     type CardIssuingTransactionsResponse as CardIssuingTransactionsResponse,
     type CardIssuingUpdateCardInput as CardIssuingUpdateCardInput,
+    type CardIssuingWalletFundingSource as CardIssuingWalletFundingSource,
   };
 }

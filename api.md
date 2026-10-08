@@ -86,6 +86,9 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKey</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKeyRequestBody</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingEphemeralKeyResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingErc4626VaultFundingSource</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingErc4626VaultProvider</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingFundingSource</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingListCardsInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingListTransactionsInput</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingMerchant</a></code>
@@ -93,10 +96,12 @@ Types:
 - <code><a href="./src/resources/cards.ts">CardIssuingReplaceCardRequestBody</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingReplacementReason</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingStatementQueryParams</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingTempoEarnVaultFundingSource</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingTransactionResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingTransactionStatus</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingTransactionsResponse</a></code>
 - <code><a href="./src/resources/cards.ts">CardIssuingUpdateCardInput</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssuingWalletFundingSource</a></code>
 
 # Intents
 

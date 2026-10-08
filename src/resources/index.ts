@@ -103,6 +103,9 @@ export {
   type CardIssuingEphemeralKey,
   type CardIssuingEphemeralKeyRequestBody,
   type CardIssuingEphemeralKeyResponse,
+  type CardIssuingErc4626VaultFundingSource,
+  type CardIssuingErc4626VaultProvider,
+  type CardIssuingFundingSource,
   type CardIssuingListCardsInput,
   type CardIssuingListTransactionsInput,
   type CardIssuingMerchant,
@@ -110,10 +113,12 @@ export {
   type CardIssuingReplaceCardRequestBody,
   type CardIssuingReplacementReason,
   type CardIssuingStatementQueryParams,
+  type CardIssuingTempoEarnVaultFundingSource,
   type CardIssuingTransactionResponse,
   type CardIssuingTransactionStatus,
   type CardIssuingTransactionsResponse,
   type CardIssuingUpdateCardInput,
+  type CardIssuingWalletFundingSource,
 } from './cards';
 export {
   ClientAuth,

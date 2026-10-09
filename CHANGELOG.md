@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.36.0](https://github.com/privy-io/node-sdk/compare/v0.35.0...v0.36.0) (2026-10-09)
+
+
+### Features
+
+* **api:** api update ([d81fbd8](https://github.com/privy-io/node-sdk/commit/d81fbd8408ec1bbc1cbf05687cb4cbf440be6991))
+* **api:** api update ([f9fd9da](https://github.com/privy-io/node-sdk/commit/f9fd9da2df0e1262622000e126ee9d66941de57b))
+* **api:** api update ([037b15e](https://github.com/privy-io/node-sdk/commit/037b15ea7876c42eaa4d86e843d09e13e986c3b2))
+* **api:** api update ([de6de42](https://github.com/privy-io/node-sdk/commit/de6de4278076748649e204fdd451c0b6397976ea))
+* **api:** api update ([f5ce62c](https://github.com/privy-io/node-sdk/commit/f5ce62c8313ead66dfe86b36673702c3d13982df))
+* **api:** api update ([5d77d19](https://github.com/privy-io/node-sdk/commit/5d77d191b0ae7ba7cfe776f0b19d7f52b82d50eb))
+* **api:** api update ([736d6c6](https://github.com/privy-io/node-sdk/commit/736d6c69fe449c8eb897cbde4ccc0540839026b2))
+* **api:** api update ([e4bc3bf](https://github.com/privy-io/node-sdk/commit/e4bc3bf812f448e0f6da629dccbff54dd6f2fae7))
+* **api:** api update ([b82b8f2](https://github.com/privy-io/node-sdk/commit/b82b8f2b0c4f26052e63f53ec4bf38c02c715805))
+* **api:** api update ([37d9e3f](https://github.com/privy-io/node-sdk/commit/37d9e3f93f6bcf167d454bff639605f042f40dad))
+
+
+### Bug Fixes
+
+* **auth:** sign the percent-encoded request path ([#54](https://github.com/privy-io/node-sdk/issues/54)) ([34b9c75](https://github.com/privy-io/node-sdk/commit/34b9c75e29274b780007c7a60190f19aa6907470))
+* **wallets:** sign idempotency key and per-call expiry in transfer ([#56](https://github.com/privy-io/node-sdk/issues/56)) ([604faed](https://github.com/privy-io/node-sdk/commit/604faedf151da5f06f82eeeaf7bafc72b277452b))
+
+
+### Documentation
+
+* update CONTRIBUTING and add RELEASING guide ([#40](https://github.com/privy-io/node-sdk/issues/40)) ([389fdbf](https://github.com/privy-io/node-sdk/commit/389fdbf4d39b2e1bb6c9c91bd936537811189603))
+
 ## [0.35.0](https://github.com/privy-io/node-sdk/compare/v0.34.0...v0.35.0) (2026-09-21)
 
 

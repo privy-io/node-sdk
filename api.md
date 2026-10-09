@@ -1444,6 +1444,8 @@ Types:
 - <code><a href="./src/resources/fiat.ts">KyxEnvironment</a></code>
 - <code><a href="./src/resources/fiat.ts">KyxProvider</a></code>
 - <code><a href="./src/resources/fiat.ts">KyxProviderStatus</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxScreen</a></code>
+- <code><a href="./src/resources/fiat.ts">KyxScreenResult</a></code>
 - <code><a href="./src/resources/fiat.ts">KyxTosRequestBody</a></code>
 - <code><a href="./src/resources/fiat.ts">KyxTosResponse</a></code>
 - <code><a href="./src/resources/fiat.ts">KyxTosStatus</a></code>

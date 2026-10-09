@@ -385,6 +385,8 @@ export {
   type KyxEnvironment,
   type KyxProvider,
   type KyxProviderStatus,
+  type KyxScreen,
+  type KyxScreenResult,
   type KyxTosRequestBody,
   type KyxTosResponse,
   type KyxTosStatus,

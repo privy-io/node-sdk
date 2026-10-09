@@ -693,6 +693,12 @@ export interface KYBAssociatedPerson {
   residential_address: VerificationAddress;
 
   /**
+   * When this person (a control person) attested to having verified the business
+   * ownership structure (ISO 8601).
+   */
+  attested_ownership_structure_at?: (string & {}) | (string & {});
+
+  /**
    * Supporting documents for this person, such as proof of address.
    */
   documents?: Array<KYBIndividualDocument>;
@@ -703,6 +709,12 @@ export interface KYBAssociatedPerson {
   is_director?: boolean;
 
   /**
+   * Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+   * to accept, honoured only for developers enrolled in reliance.
+   */
+  kyc_screen?: KyxScreen;
+
+  /**
    * Legal middle name.
    */
   middle_name?: string;
@@ -711,6 +723,12 @@ export interface KYBAssociatedPerson {
    * ISO 3166-1 alpha-3 codes for all nationalities held.
    */
   nationalities?: Array<string>;
+
+  /**
+   * Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+   * to accept, honoured only for developers enrolled in reliance.
+   */
+  ofac_screen?: KyxScreen;
 
   /**
    * Percentage of the business this person owns.
@@ -756,6 +774,21 @@ export interface KYBAssociatedPerson {
    * A postal address used in KYC and KYB data submission.
    */
   transliterated_residential_address?: VerificationAddress;
+
+  /**
+   * When you verified this person against a database source (ISO 8601).
+   */
+  verified_database_at?: (string & {}) | (string & {});
+
+  /**
+   * When you verified the government ID for this person (ISO 8601).
+   */
+  verified_govid_at?: (string & {}) | (string & {});
+
+  /**
+   * When you verified proof of address for this person (ISO 8601).
+   */
+  verified_proof_of_address_at?: (string & {}) | (string & {});
 }
 
 /**
@@ -1139,6 +1172,18 @@ export interface KYBSubmitData {
   is_dao?: boolean;
 
   /**
+   * Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+   * to accept, honoured only for developers enrolled in reliance.
+   */
+  kyb_screen?: KyxScreen;
+
+  /**
+   * Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+   * to accept, honoured only for developers enrolled in reliance.
+   */
+  ofac_screen?: KyxScreen;
+
+  /**
    * Whether the business operates in prohibited jurisdictions.
    */
   operates_in_prohibited_countries?: boolean;
@@ -1215,6 +1260,22 @@ export interface KYBSubmitData {
    * A postal address used in KYC and KYB data submission.
    */
   transliterated_registered_address?: VerificationAddress;
+
+  /**
+   * When you verified the business against a database source (ISO 8601).
+   */
+  verified_database_at?: (string & {}) | (string & {});
+
+  /**
+   * When you verified the business registration documents (ISO 8601).
+   */
+  verified_govid_at?: (string & {}) | (string & {});
+
+  /**
+   * When you verified the business proof of address (ISO 8601), required for EEA
+   * customers and SEPA rails under reliance.
+   */
+  verified_proof_of_address_at?: (string & {}) | (string & {});
 }
 
 /**
@@ -1396,6 +1457,12 @@ export interface KYCSubmitData {
   identifying_information?: Array<VerificationDocument>;
 
   /**
+   * Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+   * to accept, honoured only for developers enrolled in reliance.
+   */
+  kyc_screen?: KyxScreen;
+
+  /**
    * Legal last name.
    */
   last_name?: string;
@@ -1415,6 +1482,12 @@ export interface KYCSubmitData {
    * tax ID (must be enabled for you).
    */
   nonresident_alien_attestation?: boolean;
+
+  /**
+   * Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+   * to accept, honoured only for developers enrolled in reliance.
+   */
+  ofac_screen?: KyxScreen;
 
   /**
    * Phone number in E.164 format.
@@ -1451,6 +1524,24 @@ export interface KYCSubmitData {
    * A postal address used in KYC and KYB data submission.
    */
   transliterated_residential_address?: VerificationAddress;
+
+  /**
+   * When you verified the user against a database source (ISO 8601), which loosens
+   * the identifying-document requirement under reliance.
+   */
+  verified_database_at?: (string & {}) | (string & {});
+
+  /**
+   * When you verified the government ID (ISO 8601), which loosens the
+   * identifying-document requirement under reliance.
+   */
+  verified_govid_at?: (string & {}) | (string & {});
+
+  /**
+   * When you verified proof of address (ISO 8601), required for EEA customers and
+   * SEPA rails under reliance.
+   */
+  verified_proof_of_address_at?: (string & {}) | (string & {});
 }
 
 /**
@@ -1562,6 +1653,27 @@ export type KyxProvider = 'bridge';
  * KYC/KYB status for the user.
  */
 export type KyxProviderStatus = string;
+
+/**
+ * Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+ * to accept, honoured only for developers enrolled in reliance.
+ */
+export interface KyxScreen {
+  /**
+   * Outcome of a screen performed under KYC/KYB reliance.
+   */
+  result: KyxScreenResult;
+
+  /**
+   * When the screen was performed (ISO 8601 date or date-time).
+   */
+  screened_at: (string & {}) | (string & {});
+}
+
+/**
+ * Outcome of a screen performed under KYC/KYB reliance.
+ */
+export type KyxScreenResult = 'passed' | 'failed';
 
 /**
  * Request body for initiating Terms of Service acceptance.
@@ -2059,6 +2171,8 @@ export declare namespace Fiat {
     type KyxEnvironment as KyxEnvironment,
     type KyxProvider as KyxProvider,
     type KyxProviderStatus as KyxProviderStatus,
+    type KyxScreen as KyxScreen,
+    type KyxScreenResult as KyxScreenResult,
     type KyxTosRequestBody as KyxTosRequestBody,
     type KyxTosResponse as KyxTosResponse,
     type KyxTosStatus as KyxTosStatus,

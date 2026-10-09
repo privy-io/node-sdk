@@ -1,0 +1,81 @@
+name: Prepare release candidate
+
+# Cuts rc/X.Y.Z/N from the tip of main with one verified, empty setup commit whose
+# Release-As footer pins release-please to X.Y.Z-rc.N, then starts release-please on it.
+# See RELEASING.md.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: prepare-release-candidate
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    # Only run from main, in the private repo.
+    if: github.repository == 'privy-io/node-sdk-private' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      # Create the setup commit and the rc/** branch.
+      contents: write
+      # Dispatch release-please.yml on the new branch.
+      actions: write
+      # next-version.mts reads the open main release PR.
+      pull-requests: read
+    steps:
+      # From main (github.ref): the release scripts.
+      - name: Check out release scripts
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/scripts/release
+
+      # Runs the TypeScript release scripts (Node 24 runs .mts files directly).
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+
+      - name: Compute RC version
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node .github/scripts/release/next-version.mts rc
+
+      # The setup commit is an empty commit on the main tip whose Release-As footer pins
+      # release-please to X.Y.Z-rc.N (ci: is hidden from the changelog). It is made through
+      # the Git Data API with no author, so GitHub signs it as github-actions[bot]. rc/X.Y.Z/N
+      # is created already pointing at it, rather than created at the tip and then committed
+      # to: release-please must never run on an unpinned rc branch, or it would open a
+      # release PR with the wrong version.
+      - name: Create rc branch with setup commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.version.outputs.sha }}
+          FULL: ${{ steps.version.outputs.full }}
+          BRANCH: ${{ steps.version.outputs.branch }}
+        run: |
+          set -euo pipefail
+          tree=$(gh api "repos/$GITHUB_REPOSITORY/git/commits/$SHA" --jq .tree.sha)
+          commit=$(gh api "repos/$GITHUB_REPOSITORY/git/commits" -f tree="$tree" -f "parents[]=$SHA" \
+            -f message="$(printf 'ci: prepare release %s\n\nRelease-As: %s' "$FULL" "$FULL")" --jq .sha)
+          gh api "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/heads/$BRANCH" -f sha="$commit" --silent
+          echo "Created $BRANCH at $commit"
+
+      # Refs created with GITHUB_TOKEN don't trigger `push` workflows, but workflow_dispatch
+      # is allowed. release-please.yml then runs on the branch (target-branch rc/X.Y.Z/N)
+      # and opens the RC release PR.
+      - name: Start release-please on the rc branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.version.outputs.branch }}
+        run: gh workflow run release-please.yml --repo "$GITHUB_REPOSITORY" --ref "$BRANCH"
+
+      - name: Summary
+        env:
+          FULL: ${{ steps.version.outputs.full }}
+          BRANCH: ${{ steps.version.outputs.branch }}
+        run: echo "Created [\`$BRANCH\`]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/tree/$BRANCH). Merge its release PR to publish \`$FULL\` to the npm \`rc\` dist-tag." >> "$GITHUB_STEP_SUMMARY"

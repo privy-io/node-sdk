@@ -42,10 +42,14 @@ else
   LAST_VERSION=$(echo "$NPM_INFO" | jq -r '.') # strip quotes
 fi
 
-# Check if current version is pre-release (e.g. alpha / beta / rc)
+# Check if current version is pre-release (any -suffix, e.g. alpha / beta / rc)
 CURRENT_IS_PRERELEASE=false
-if [[ "$VERSION" =~ -([a-zA-Z]+) ]]; then
+if [[ "$VERSION" == *-* ]]; then
   CURRENT_IS_PRERELEASE=true
+  if [[ ! "$VERSION" =~ -([a-zA-Z]+) ]]; then
+    echo "ERROR: prerelease $VERSION has no channel name (e.g. -rc.1) to use as its dist-tag"
+    exit 1
+  fi
   CURRENT_TAG="${BASH_REMATCH[1]}"
 fi
 
@@ -62,9 +66,10 @@ if ! $CURRENT_IS_PRERELEASE && $LAST_IS_STABLE_RELEASE && [[ "$VERSION" != "$LAS
   CURRENT_IS_OLDER_STABLE=true
 fi
 
-# Use a corresponding alpha/beta/rc tag if there already is a stable release and we're publishing a prerelease.
+# A prerelease always uses its alpha/beta/rc dist-tag and never `latest`, whatever npm
+# returned above (an npm error must not turn an RC into `latest`).
 # Publish an older stable release (e.g. 1.7.4 while latest is 1.8.0) under release-X.Y so `latest` doesn't move back.
-if $CURRENT_IS_PRERELEASE && $LAST_IS_STABLE_RELEASE; then
+if $CURRENT_IS_PRERELEASE; then
   TAG="$CURRENT_TAG"
 elif $CURRENT_IS_OLDER_STABLE; then
   TAG="release-$(echo "$VERSION" | cut -d. -f1-2)"

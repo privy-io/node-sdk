@@ -3,6 +3,7 @@
 //
 // The scripts are TypeScript run directly by Node 24 (`node script.mts`, no build step and no
 // dependencies), so they only use erasable syntax and Node built-ins.
+import { appendFileSync } from 'node:fs';
 
 export const MANIFEST_PATH = '.release-please-manifest.json';
 
@@ -21,6 +22,16 @@ export function env(name: string): string {
   const value = process.env[name];
   if (!value) fail(`${name} is not set.`);
   return value;
+}
+
+/** Writes step outputs to $GITHUB_OUTPUT, and logs them. */
+export function setOutputs(outputs: Record<string, string | number>): void {
+  const lines = Object.entries(outputs)
+    .map(([key, value]) => `${key}=${value}\n`)
+    .join('');
+  process.stdout.write(lines);
+  const file = process.env['GITHUB_OUTPUT'];
+  if (file) appendFileSync(file, lines);
 }
 
 // --- GitHub API ---------------------------------------------------------------------------

@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+      - 'rc/**'
+  # prepare-release-candidate.yml starts the first run on rc/X.Y.Z/N: refs created with
+  # GITHUB_TOKEN don't trigger `push`.
+  workflow_dispatch:
 
 # One run per branch at a time, and never cancel one mid-release: a cancelled run could
 # leave a tag without its GitHub Release or a release PR half-updated.
@@ -18,7 +22,8 @@ permissions:
 
 jobs:
   release-please:
-    if: github.repository == 'privy-io/node-sdk-private'
+    # Only release branches, even when dispatched on another ref.
+    if: github.repository == 'privy-io/node-sdk-private' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/rc/'))
     runs-on: ubuntu-latest
     environment: builder-blobby-sdk-sync-and-seal
     outputs:
@@ -47,6 +52,9 @@ jobs:
         id: release
         with:
           token: ${{ steps.app-token.outputs.token }}
+          # Release from the branch that was pushed. Unset, the action targets the repo's
+          # default branch, so an rc/** push would update main's release PR instead.
+          target-branch: ${{ github.ref_name }}
 
   release-proposal:
     name: Post release proposal

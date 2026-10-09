@@ -60,5 +60,6 @@
     }
   ],
   "release-type": "node",
-  "extra-files": ["src/version.ts", "README.md"]
+  "extra-files": ["src/version.ts", "README.md"],
+  "always-update": true
 }

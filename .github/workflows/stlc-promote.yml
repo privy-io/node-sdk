@@ -56,11 +56,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view "$TAG" -R "$GITHUB_REPOSITORY" --json name,body,isPrerelease > "$RUNNER_TEMP/release.json"
+          gh release view "$TAG" -R "$GITHUB_REPOSITORY" --json name,body > "$RUNNER_TEMP/release.json"
           # Stable from main = not a prerelease and on private main; release candidates, betas and
           # hotfixes don't move public main. Not `target_commitish == main`: release-please sets
-          # it to the merge commit SHA.
-          if jq -e '.isPrerelease | not' "$RUNNER_TEMP/release.json" > /dev/null && git merge-base --is-ancestor "$TAG" origin/main; then
+          # it to the merge commit SHA. Prerelease = the tag has a -suffix. Not the private
+          # release's isPrerelease: release-please-config.json keeps "prerelease": false (on 0.x,
+          # `true` would flag every stable release too), so private RCs and betas aren't flagged.
+          if [[ $TAG != *-* ]] && git merge-base --is-ancestor "$TAG" origin/main; then
             echo "stable-main=true" >> "$GITHUB_OUTPUT"
           fi
 
@@ -102,4 +104,4 @@ jobs:
               -e 's@github\.com/privy-io/node-sdk-private/@github.com/privy-io/node-sdk/@g' |
             gh release create "$TAG" -R "$PUBLIC_REPO" --verify-tag --notes-file - \
               --title "$(jq -r .name "$RUNNER_TEMP/release.json")" \
-              --prerelease="$(jq .isPrerelease "$RUNNER_TEMP/release.json")" --latest="$LATEST"
+              --prerelease="$([[ $TAG == *-* ]] && echo true || echo false)" --latest="$LATEST"

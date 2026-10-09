@@ -1000,6 +1000,37 @@ export interface CryptoDepositAccountConfigResponse {
 }
 
 /**
+ * Source tokens matching a crypto deposit-account search.
+ */
+export interface CryptoDepositAccountConfigSearchResponse {
+  chains: { [key: string]: CryptoDepositAccountChain };
+
+  currencies: Array<CryptoDepositAccountSearchCurrency>;
+}
+
+/**
+ * A source token matched by crypto deposit-account search.
+ */
+export interface CryptoDepositAccountSearchCurrency {
+  chains: Array<CryptoDepositAccountSourceChain>;
+
+  name: string;
+
+  symbol: string;
+
+  /**
+   * Whether this token is verified as the canonical token for its symbol, since
+   * unverified tokens may be lookalikes.
+   */
+  verified: boolean;
+
+  /**
+   * URL of the token logo, omitted when none is known.
+   */
+  logo_uri?: string;
+}
+
+/**
  * A token contract on one source chain in the crypto deposit-account catalog.
  */
 export interface CryptoDepositAccountSourceChain {
@@ -1319,6 +1350,17 @@ export interface DepositAccountCryptoQuoteResponse {
    * (e.g. "0.02" for 0.02 ETH). Not in the smallest on-chain unit.
    */
   input_amount: string;
+}
+
+/**
+ * Derives the new wallet from an existing HD root wallet so both share one seed
+ * phrase.
+ */
+export interface DerivationInput {
+  /**
+   * ID of the HD root wallet to derive the new wallet from.
+   */
+  wallet_id: string;
 }
 
 /**
@@ -4912,6 +4954,12 @@ export interface Wallet {
   external_id?: string;
 
   /**
+   * ID of the HD root wallet this wallet was derived from, or null if it was not
+   * derived from another wallet.
+   */
+  parent_wallet_id?: string | null;
+
+  /**
    * The compressed, raw public key for the wallet along the chain cryptographic
    * curve.
    */
@@ -5238,6 +5286,12 @@ export interface WalletBatchItemInput {
    * Additional signers for the wallet.
    */
   additional_signers?: AdditionalSignerInput;
+
+  /**
+   * Derives the new wallet from an existing HD root wallet so both share one seed
+   * phrase.
+   */
+  derivation?: DerivationInput;
 
   /**
    * A human-readable label for the wallet.
@@ -5702,6 +5756,12 @@ export interface WalletCreateParams {
    * Body param: Additional signers for the wallet.
    */
   additional_signers?: AdditionalSignerInput;
+
+  /**
+   * Body param: Derives the new wallet from an existing HD root wallet so both share
+   * one seed phrase.
+   */
+  derivation?: DerivationInput;
 
   /**
    * Body param: A human-readable label for the wallet.
@@ -7409,6 +7469,12 @@ export namespace WalletCreateWalletsWithRecoveryParams {
     chain_type: WalletsAPI.WalletChainType;
 
     /**
+     * Derives the new wallet from an existing HD root wallet so both share one seed
+     * phrase.
+     */
+    derivation?: WalletsAPI.DerivationInput;
+
+    /**
      * A human-readable label for the wallet.
      */
     display_name?: string;
@@ -7487,6 +7553,8 @@ export declare namespace Wallets {
     type CryptoDepositAccountCaip2 as CryptoDepositAccountCaip2,
     type CryptoDepositAccountChain as CryptoDepositAccountChain,
     type CryptoDepositAccountConfigResponse as CryptoDepositAccountConfigResponse,
+    type CryptoDepositAccountConfigSearchResponse as CryptoDepositAccountConfigSearchResponse,
+    type CryptoDepositAccountSearchCurrency as CryptoDepositAccountSearchCurrency,
     type CryptoDepositAccountSourceChain as CryptoDepositAccountSourceChain,
     type CryptoDepositAccountSourceCurrency as CryptoDepositAccountSourceCurrency,
     type CryptoDepositAddressRoute as CryptoDepositAddressRoute,
@@ -7508,6 +7576,7 @@ export declare namespace Wallets {
     type DepositAccountCryptoQuoteAsset as DepositAccountCryptoQuoteAsset,
     type DepositAccountCryptoQuoteRequestBody as DepositAccountCryptoQuoteRequestBody,
     type DepositAccountCryptoQuoteResponse as DepositAccountCryptoQuoteResponse,
+    type DerivationInput as DerivationInput,
     type DetachWalletAutomationRequestBody as DetachWalletAutomationRequestBody,
     type DeveloperFee as DeveloperFee,
     type EncryptedAuthorizationKey as EncryptedAuthorizationKey,

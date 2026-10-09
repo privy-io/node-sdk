@@ -10,6 +10,7 @@ import {
   CryptoGetNextOrderParams,
   CryptoListParams,
   CryptoQuoteParams,
+  CryptoSearchConfigParams,
 } from './crypto/crypto';
 
 export class DepositAccounts extends APIResource {
@@ -27,6 +28,7 @@ export declare namespace DepositAccounts {
     type CryptoCreateParams as CryptoCreateParams,
     type CryptoGetNextOrderParams as CryptoGetNextOrderParams,
     type CryptoQuoteParams as CryptoQuoteParams,
+    type CryptoSearchConfigParams as CryptoSearchConfigParams,
   };
 
   export {

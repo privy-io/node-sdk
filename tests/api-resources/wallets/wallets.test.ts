@@ -26,6 +26,7 @@ describe('resource wallets', () => {
     const response = await client.wallets.create({
       chain_type: 'ethereum',
       additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+      derivation: { wallet_id: 'wallet_id' },
       display_name: 'display_name',
       entity: { id: 'jorpjo4rfxj62nx1itt8y1zt', type: 'user' },
       external_id: 'my-order-123',
@@ -463,6 +464,7 @@ describe('resource wallets', () => {
         {
           chain_type: 'ethereum',
           additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+          derivation: { wallet_id: 'wallet_id' },
           display_name: 'display_name',
           entity: { id: 'jorpjo4rfxj62nx1itt8y1zt', type: 'user' },
           external_id: 'external_id',
@@ -473,6 +475,7 @@ describe('resource wallets', () => {
         {
           chain_type: 'solana',
           additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+          derivation: { wallet_id: 'wallet_id' },
           display_name: 'display_name',
           entity: { id: 'jorpjo4rfxj62nx1itt8y1zt', type: 'user' },
           external_id: 'external_id',
@@ -508,12 +511,14 @@ describe('resource wallets', () => {
       wallets: [
         {
           chain_type: 'ethereum',
+          derivation: { wallet_id: 'wallet_id' },
           display_name: 'display_name',
           external_id: 'external_id',
           policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
         },
         {
           chain_type: 'solana',
+          derivation: { wallet_id: 'wallet_id' },
           display_name: 'display_name',
           external_id: 'external_id',
           policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],

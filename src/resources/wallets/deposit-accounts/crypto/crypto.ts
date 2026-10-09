@@ -146,6 +146,26 @@ export class Crypto extends APIResource {
   ): APIPromise<WalletsAPI.DepositAccountCryptoQuoteResponse> {
     return this._client.post('/v1/deposit_accounts/crypto/quote', { body, ...options });
   }
+
+  /**
+   * Returns deposit-account source tokens matching a symbol, name, or contract
+   * address. Results are limited to supported EVM and Solana source chains and can
+   * include unverified tokens.
+   *
+   * @example
+   * ```ts
+   * const cryptoDepositAccountConfigSearchResponse =
+   *   await client.wallets.depositAccounts.crypto.searchConfig({
+   *     q: 'x',
+   *   });
+   * ```
+   */
+  searchConfig(
+    query: CryptoSearchConfigParams,
+    options?: RequestOptions,
+  ): APIPromise<WalletsAPI.CryptoDepositAccountConfigSearchResponse> {
+    return this._client.get('/v1/deposit_accounts/crypto/config/search', { query, ...options });
+  }
 }
 
 export interface CryptoListParams extends CursorParams {}
@@ -265,6 +285,13 @@ export interface CryptoQuoteParams {
   slippage_bps?: SharedAPI.Bps;
 }
 
+export interface CryptoSearchConfigParams {
+  /**
+   * Token symbol, name, or contract address in any chain format.
+   */
+  q: string;
+}
+
 Crypto.Orders = Orders;
 
 export declare namespace Crypto {
@@ -273,6 +300,7 @@ export declare namespace Crypto {
     type CryptoCreateParams as CryptoCreateParams,
     type CryptoGetNextOrderParams as CryptoGetNextOrderParams,
     type CryptoQuoteParams as CryptoQuoteParams,
+    type CryptoSearchConfigParams as CryptoSearchConfigParams,
   };
 
   export { Orders as Orders, type OrderGetParams as OrderGetParams };

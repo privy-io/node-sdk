@@ -6,5 +6,6 @@ export {
   type CryptoCreateParams,
   type CryptoGetNextOrderParams,
   type CryptoQuoteParams,
+  type CryptoSearchConfigParams,
 } from './crypto';
 export { Orders, type OrderGetParams } from './orders';

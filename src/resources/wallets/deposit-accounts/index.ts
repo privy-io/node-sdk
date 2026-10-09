@@ -6,6 +6,7 @@ export {
   type CryptoCreateParams,
   type CryptoGetNextOrderParams,
   type CryptoQuoteParams,
+  type CryptoSearchConfigParams,
 } from './crypto/index';
 export { DepositAccounts } from './deposit-accounts';
 export { Fiat, type FiatCreateParams, type FiatListParams, type FiatGetParams } from './fiat';

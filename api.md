@@ -525,6 +525,8 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountCaip2</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountChain</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountConfigResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountConfigSearchResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountSearchCurrency</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountSourceChain</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAccountSourceCurrency</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">CryptoDepositAddressRoute</a></code>
@@ -546,6 +548,7 @@ Types:
 - <code><a href="./src/resources/wallets/wallets.ts">DepositAccountCryptoQuoteAsset</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">DepositAccountCryptoQuoteRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">DepositAccountCryptoQuoteResponse</a></code>
+- <code><a href="./src/resources/wallets/wallets.ts">DerivationInput</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">DetachWalletAutomationRequestBody</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">DeveloperFee</a></code>
 - <code><a href="./src/resources/wallets/wallets.ts">EncryptedAuthorizationKey</a></code>
@@ -913,6 +916,7 @@ Methods:
 - <code title="get /v1/deposit_accounts/crypto/config">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">getConfig</a>() -> CryptoDepositAccountConfigResponse</code>
 - <code title="get /v1/wallets/{wallet_id}/deposit_accounts/crypto/next_order">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">getNextOrder</a>(walletID, { ...params }) -> GetCryptoDepositAccountNextOrderResponse</code>
 - <code title="post /v1/deposit_accounts/crypto/quote">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">quote</a>({ ...params }) -> DepositAccountCryptoQuoteResponse</code>
+- <code title="get /v1/deposit_accounts/crypto/config/search">client.wallets.depositAccounts.crypto.<a href="./src/resources/wallets/deposit-accounts/crypto/crypto.ts">searchConfig</a>({ ...params }) -> CryptoDepositAccountConfigSearchResponse</code>
 
 #### Orders
 

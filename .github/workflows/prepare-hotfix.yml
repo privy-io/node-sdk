@@ -1,0 +1,59 @@
+name: Prepare hotfix
+
+# Opens a PR into release/X.Y (created at the highest vX.Y.P tag if needed) that cherry-picks
+# commits from main. Once it is merged, release-please on release/X.Y proposes X.Y.(P+1).
+# See RELEASING.md.
+on:
+  workflow_dispatch:
+    inputs:
+      line:
+        description: Release line to hotfix, X.Y (e.g. 0.35)
+        required: true
+      commits:
+        description: Space-separated SHAs of the commits on main to backport, applied in order
+        required: true
+
+concurrency:
+  group: prepare-hotfix
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    # Only run from main, in the private repo.
+    if: github.repository == 'privy-io/node-sdk-private' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      # Create release/X.Y and push the hotfix/** branch.
+      contents: write
+      # Open the hotfix PR.
+      pull-requests: write
+    steps:
+      # Full history and tags, to cherry-pick from and find vX.Y.P. No credentials are
+      # persisted: the script passes GH_TOKEN to git only for the commands that need it.
+      - name: Check out main
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      # Runs the TypeScript release scripts (Node 24 runs .mts files directly).
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+
+      - name: Open hotfix PR
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LINE: ${{ inputs.line }}
+          COMMITS: ${{ inputs.commits }}
+        run: node .github/scripts/release/prepare-hotfix.mts
+
+      - name: Summary
+        env:
+          URL: ${{ steps.pr.outputs.url }}
+        run: echo "Opened [the hotfix PR]($URL). Close and reopen it to run CI, then merge it to have release-please propose the hotfix." >> "$GITHUB_STEP_SUMMARY"

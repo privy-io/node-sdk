@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - 'release/**'
       - 'rc/**'
   # prepare-release-candidate.yml starts the first run on rc/X.Y.Z/N: refs created with
   # GITHUB_TOKEN don't trigger `push`.
@@ -23,7 +24,7 @@ permissions:
 jobs:
   release-please:
     # Only release branches, even when dispatched on another ref.
-    if: github.repository == 'privy-io/node-sdk-private' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/rc/'))
+    if: github.repository == 'privy-io/node-sdk-private' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/rc/'))
     runs-on: ubuntu-latest
     environment: builder-blobby-sdk-sync-and-seal
     outputs:

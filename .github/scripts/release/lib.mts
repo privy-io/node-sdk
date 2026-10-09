@@ -3,6 +3,7 @@
 //
 // The scripts are TypeScript run directly by Node 24 (`node script.mts`, no build step and no
 // dependencies), so they only use erasable syntax and Node built-ins.
+import { execFileSync, spawnSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 
 export const MANIFEST_PATH = '.release-please-manifest.json';
@@ -94,4 +95,29 @@ export async function manifestVersion(ref: string): Promise<string | undefined> 
     if (error instanceof GitHubError && error.status === 404) return undefined;
     throw error;
   }
+}
+
+// --- git ----------------------------------------------------------------------------------
+
+// Checkouts don't persist credentials. Commands that talk to the remote get the token
+// ($GH_TOKEN) through gh's credential helper for that one command only.
+const GIT_AUTH = ['-c', 'credential.helper=', '-c', 'credential.helper=!gh auth git-credential'];
+
+/** Runs git in the current directory and returns its trimmed stdout. */
+export function git(args: string[], { auth = false } = {}): string {
+  return execFileSync('git', [...(auth ? GIT_AUTH : []), ...args], {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'inherit'],
+  }).trim();
+}
+
+/** Whether `ref` exists on origin. */
+export function remoteRefExists(ref: string): boolean {
+  const result = spawnSync('git', [...GIT_AUTH, 'ls-remote', '--exit-code', 'origin', ref], {
+    stdio: ['ignore', 'ignore', 'inherit'],
+  });
+  // ls-remote --exit-code exits 2 when no ref matches.
+  if (result.status === 0) return true;
+  if (result.status === 2) return false;
+  throw new Error(`git ls-remote origin ${ref} failed (exit ${result.status ?? result.signal}).`);
 }

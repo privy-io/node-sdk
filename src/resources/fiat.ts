@@ -1427,6 +1427,12 @@ export interface KYCSubmitData {
   residential_address?: VerificationAddress;
 
   /**
+   * Stripe Link shared data ID that supplies name, date of birth, address, and US
+   * SSN (omit those fields); retrieval errors surface in endorsements[].issues.
+   */
+  stripe_link_shared_data_id?: string;
+
+  /**
    * Latin-1 transliteration of the first name. Required for non-Latin-1 names.
    */
   transliterated_first_name?: string;
@@ -1511,6 +1517,11 @@ export type KyxCapabilityStatus = string;
  * An endorsement with its approval status and missing requirements.
  */
 export interface KyxEndorsement {
+  /**
+   * Provider issue codes, or null if none.
+   */
+  issues: Array<string> | null;
+
   /**
    * Missing requirements, or null if complete.
    */

@@ -57,8 +57,7 @@ export interface CardIssuingCardResponse {
   id: string;
 
   /**
-   * The stablecoin the card settles in: 'usdc' on EVM and Solana, 'pathusd' on
-   * Tempo.
+   * The stablecoin the card settles in.
    */
   asset: string;
 
@@ -179,8 +178,7 @@ export interface CardIssuingConfigResponse {
  */
 export interface CardIssuingCreateCardInput {
   /**
-   * The asset to fund the card. Must be 'usdc' on EVM and Solana, or 'pathusd' on
-   * Tempo.
+   * The asset that funds the card on `chain_id`.
    */
   asset: string;
 

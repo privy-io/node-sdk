@@ -112,6 +112,7 @@ describe('resource kyc', () => {
           street_line_2: 'x',
           subdivision: 'x',
         },
+        stripe_link_shared_data_id: 'lsd_J!Q0Ok0bzJb7',
         transliterated_first_name: 'x',
         transliterated_last_name: 'x',
         transliterated_middle_name: 'x',

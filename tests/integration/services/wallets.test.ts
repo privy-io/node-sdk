@@ -351,6 +351,8 @@ describe('PrivyWalletsService', () => {
         destination: {
           address: '0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2',
         },
+        idempotency_key: crypto.randomUUID(),
+        request_expiry: Date.now() + 5 * 60 * 1000,
         ...(wallet.authorizationContext && {
           authorization_context: wallet.authorizationContext,
         }),

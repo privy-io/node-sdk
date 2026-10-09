@@ -156,11 +156,17 @@ export class PrivyWalletsService extends Wallets {
 
   public async transfer(
     walletId: string,
-    { authorization_context: authorizationContext = {}, ...params }: PrivyWalletsService.TransferInput,
+    {
+      authorization_context: authorizationContext = {},
+      idempotency_key: idempotencyKey,
+      request_expiry: requestExpiry,
+      ...params
+    }: PrivyWalletsService.TransferInput,
   ): Promise<TransferActionResponse> {
     const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
-      requestExpiry: this.privyClient.getRequestExpiry(),
+      idempotencyKey,
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
       url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/transfer`}`,
       body: params,
@@ -283,7 +289,7 @@ export namespace PrivyWalletsService {
   /** The input type for the {@link PrivyWalletsService.update} method. */
   export type UpdateInput = Prettify<WithExpiry<WithAuthorization<WalletUpdateParams>>>;
   /** The input type for the {@link PrivyWalletsService.transfer} method. */
-  export type TransferInput = Prettify<WithAuthorization<WalletTransferParams>>;
+  export type TransferInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<WalletTransferParams>>>>;
   /** The input type for the {@link PrivyWalletsService.export} method. */
   export type ExportInput = Prettify<WithExpiry<WithAuthorization<Omit<WalletExportParams, 'encryption_type' | 'recipient_public_key'>>>>;
   /** The response type for the {@link PrivyWalletsService.export} method. */

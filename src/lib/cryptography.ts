@@ -3,6 +3,7 @@ import { CipherSuite, DhkemP256HkdfSha256, HkdfSha256 } from '@hpke/core';
 import { p256 } from '@noble/curves/nist';
 import type { PrivKey } from '@noble/curves/utils';
 import { toBase64 } from '../internal/utils/base64';
+import { parseP256PKCS8PrivateKey } from './pkcs8';
 
 /**
  * Returns the runtime's `SubtleCrypto` implementation.
@@ -74,23 +75,19 @@ export async function generateP256KeyPair(): Promise<P256KeyPair> {
 /**
  * Imports a P-256 private key for use with the `@noble/curves` library.
  *
- * @param privateKey - A base64-encoded PKCS8-formatted private key, with no PEM headers.
+ * @param privateKey - A base64-encoded PKCS8-formatted private key, with no PEM headers. Whitespace, such as
+ * line wrapping or a trailing newline, is ignored.
  * @returns A private key object for the P-256 curve.
+ * @throws {PrivyAPIError} If the key is not a valid P-256 PKCS#8 private key; see {@link parseP256PKCS8PrivateKey}.
  * @internal
  */
 export function importPKCS8PrivateKey(privateKey: string): PrivKey {
   const strippedPrivateKey = privateKey
+    .replace(/\s/g, '')
     .replace(AUTHORIZATION_PRIVATE_KEY_PREFIX, '')
     .replace(WALLET_API_PRIVATE_KEY_PREFIX, '');
 
-  // We fall back to `Buffer` here as Uint8Array.fromBase64 is not widely supported yet
-  const pkcs8Bytes = Buffer.from(strippedPrivateKey, 'base64');
-  const privateKeyStart = pkcs8Bytes.indexOf(Buffer.from([0x04, 0x20]));
-
-  if (privateKeyStart === -1) {
-    throw new Error('Invalid wallet authorization private key');
-  }
-  const privateKeyBytes = pkcs8Bytes.subarray(privateKeyStart + 2, privateKeyStart + 34);
+  const privateKeyBytes = parseP256PKCS8PrivateKey(strippedPrivateKey);
   return p256.Point.Fn.fromBytes(privateKeyBytes);
 }
 

@@ -11,6 +11,9 @@ on:
 jobs:
   publish:
     name: publish
+    # Releases are cut in node-sdk-private and promoted here; only the public repo publishes,
+    # so npm provenance points at privy-io/node-sdk.
+    if: github.repository == 'privy-io/node-sdk'
     runs-on: ubuntu-latest
     permissions:
       contents: read

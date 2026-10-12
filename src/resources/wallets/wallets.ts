@@ -3984,6 +3984,7 @@ export type TransactionChainNameInput =
   | 'solana'
   | 'sepolia'
   | 'arc'
+  | 'monad'
   | (string & {});
 
 /**
@@ -4172,6 +4173,7 @@ export interface TransferReceivedTransactionDetail {
     | 'avax'
     | 'pol'
     | 'bnb'
+    | 'mon'
     | 'usdt'
     | 'eurc'
     | 'usdb'
@@ -4376,6 +4378,7 @@ export interface TransferSentTransactionDetail {
     | 'avax'
     | 'pol'
     | 'bnb'
+    | 'mon'
     | 'usdt'
     | 'eurc'
     | 'usdb'
@@ -5025,6 +5028,7 @@ export type WalletAsset =
   | 'avax'
   | 'pol'
   | 'bnb'
+  | 'mon'
   | 'usdt'
   | 'eurc'
   | 'usdb'
@@ -5058,6 +5062,7 @@ export type WalletAssetChainNameInput =
   | 'hyperevm'
   | 'hypercore'
   | 'arc'
+  | 'monad'
   | 'tempo_testnet'
   | 'hoodi'
   | 'sepolia'
@@ -5460,6 +5465,7 @@ export type WalletEthereumAsset =
   | 'avax'
   | 'pol'
   | 'bnb'
+  | 'mon'
   | 'usdt'
   | 'eurc'
   | 'usdb'

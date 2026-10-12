@@ -100,6 +100,7 @@ export interface TransactionGetParams {
     | 'avax'
     | 'pol'
     | 'bnb'
+    | 'mon'
     | 'usdt'
     | 'eurc'
     | 'usdb'

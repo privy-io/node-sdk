@@ -1,0 +1,103 @@
+name: Prepare beta
+
+# Cuts beta/X.Y.Z/N from the tip of a feature branch with one verified, empty setup commit
+# whose Release-As footer pins release-please to X.Y.Z-beta.N, then starts release-please on
+# it. See RELEASING.md.
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Feature branch to publish as a beta
+        required: true
+
+concurrency:
+  group: prepare-beta
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    # Only run from main, in the private repo.
+    if: github.repository == 'privy-io/node-sdk-private' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      # Create the setup commit and the beta/** branch.
+      contents: write
+      # Dispatch release-please.yml on the new branch.
+      actions: write
+      # next-version.mts reads the open main release PR.
+      pull-requests: read
+    steps:
+      # From main (github.ref): the release scripts.
+      - name: Check out release scripts
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/scripts/release
+
+      # Runs the TypeScript release scripts (Node 24 runs .mts files directly).
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+
+      - name: Compute beta version
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE: ${{ inputs.branch }}
+        run: node .github/scripts/release/next-version.mts beta "$SOURCE"
+
+      # release-please.yml runs on beta/X.Y.Z/N as it is on that branch, and stlc-promote.yml
+      # and publish-npm.yml as they are at the beta tag, with the public-repo token and npm
+      # OIDC. So its .github/ must be main's, and so must its bin/: bin/publish-npm picks the
+      # npm dist-tag. So must its release-please-config.json: a release-as there overrides the
+      # setup commit's Release-As. The setup commit can't overlay them: GITHUB_TOKEN can't
+      # create a ref to a commit that changes .github/workflows/.
+      - name: Check the branch has main's workflow code
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.version.outputs.sha }}
+          SOURCE: ${{ inputs.branch }}
+        run: |
+          set -euo pipefail
+          release_files() { gh api "repos/$GITHUB_REPOSITORY/git/trees/$1" --jq '.tree[] | select(.path == ".github" or .path == "bin" or .path == "release-please-config.json") | .sha'; }
+          # Assigned first so that set -e catches an API failure.
+          branch=$(release_files "$SHA")
+          main=$(release_files "$GITHUB_SHA")
+          if [ "$branch" != "$main" ]; then
+            echo "::error title=Workflow code differs from main::$SOURCE's .github/, bin/ or release-please-config.json differs from main's. Merge or rebase main into $SOURCE and retry."
+            exit 1
+          fi
+
+      # Same setup commit as prepare-release-candidate.yml, on the feature branch tip.
+      - name: Create beta branch with setup commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.version.outputs.sha }}
+          FULL: ${{ steps.version.outputs.full }}
+          BRANCH: ${{ steps.version.outputs.branch }}
+        run: |
+          set -euo pipefail
+          tree=$(gh api "repos/$GITHUB_REPOSITORY/git/commits/$SHA" --jq .tree.sha)
+          commit=$(gh api "repos/$GITHUB_REPOSITORY/git/commits" -f tree="$tree" -f "parents[]=$SHA" \
+            -f message="$(printf 'ci: prepare beta %s\n\nRelease-As: %s' "$FULL" "$FULL")" --jq .sha)
+          gh api "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/heads/$BRANCH" -f sha="$commit" --silent
+          echo "Created $BRANCH at $commit"
+
+      # Refs created with GITHUB_TOKEN don't trigger `push` workflows, but workflow_dispatch
+      # is allowed.
+      - name: Start release-please on the beta branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.version.outputs.branch }}
+        run: gh workflow run release-please.yml --repo "$GITHUB_REPOSITORY" --ref "$BRANCH"
+
+      - name: Summary
+        env:
+          FULL: ${{ steps.version.outputs.full }}
+          BRANCH: ${{ steps.version.outputs.branch }}
+          SOURCE: ${{ inputs.branch }}
+        run: echo "Created [\`$BRANCH\`]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/tree/$BRANCH) from \`$SOURCE\`. Merge its release PR, after two approvals including one from someone who didn't write the feature, to publish \`$FULL\` to the npm \`beta\` dist-tag." >> "$GITHUB_STEP_SUMMARY"

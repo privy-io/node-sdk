@@ -5,8 +5,9 @@ on:
       - main
       - 'release/**'
       - 'rc/**'
-  # prepare-release-candidate.yml starts the first run on rc/X.Y.Z/N: refs created with
-  # GITHUB_TOKEN don't trigger `push`.
+      - 'beta/**'
+  # prepare-release-candidate.yml and prepare-beta.yml start the first run on rc/X.Y.Z/N and
+  # beta/X.Y.Z/N: refs created with GITHUB_TOKEN don't trigger `push`.
   workflow_dispatch:
 
 # One run per branch at a time, and never cancel one mid-release: a cancelled run could
@@ -24,7 +25,7 @@ permissions:
 jobs:
   release-please:
     # Only release branches, even when dispatched on another ref.
-    if: github.repository == 'privy-io/node-sdk-private' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/rc/'))
+    if: github.repository == 'privy-io/node-sdk-private' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/rc/') || startsWith(github.ref, 'refs/heads/beta/'))
     runs-on: ubuntu-latest
     environment: builder-blobby-sdk-sync-and-seal
     outputs:

@@ -1,15 +1,16 @@
-// Computes the next release candidate version and branch.
+// Computes the next release candidate or beta version and branch.
 //
 // X.Y.Z is the manifest version on the open release-please PR against main. It fails if there
 // is no such PR, or if it is stale (its head's parent is not the tip of main, i.e.
-// release-please hasn't caught up yet). sha is that tip, so the candidate is cut from it.
+// release-please hasn't caught up yet). sha is the commit to cut from: the tip of main for a
+// release candidate, the tip of <branch> for a beta.
 //
-// N is 1 + the highest N among tags vX.Y.Z-rc.N and branches rc/X.Y.Z/N (branches too, so an
-// unreleased candidate still reserves its number); 1 when there are none.
+// N is 1 + the highest N among tags vX.Y.Z-<channel>.N and branches <channel>/X.Y.Z/N
+// (branches too, so an unreleased one still reserves its number); 1 when there are none.
 //
-// Step outputs: full=X.Y.Z-rc.N, branch=rc/X.Y.Z/N, sha=<tip of main>
+// Step outputs: full=X.Y.Z-<channel>.N, branch=<channel>/X.Y.Z/N, sha=<commit to cut from>
 //
-// Usage: node next-version.mts rc
+// Usage: node next-version.mts rc | beta <branch>
 import { env, fail, github, manifestVersion, run, setOutputs } from './lib.mts';
 
 interface Ref {
@@ -19,7 +20,10 @@ interface Ref {
 
 run(async () => {
   const repo = env('GITHUB_REPOSITORY');
-  if (process.argv[2] !== 'rc') fail('Usage: node next-version.mts rc', 'next-version');
+  const [channel, source] = process.argv.slice(2);
+  if (channel !== 'rc' && !(channel === 'beta' && source)) {
+    fail('Usage: node next-version.mts rc | beta <branch>', 'next-version');
+  }
 
   // --- X.Y.Z ------------------------------------------------------------------------------
   const head = 'privy-io:release-please--branches--main--components--node';
@@ -50,7 +54,13 @@ run(async () => {
       .filter((n) => /^\d+$/.test(n))
       .map(Number);
   const n =
-    Math.max(0, ...(await numbers(`tags/v${version}-rc.`)), ...(await numbers(`heads/rc/${version}/`))) + 1;
+    Math.max(
+      0,
+      ...(await numbers(`tags/v${version}-${channel}.`)),
+      ...(await numbers(`heads/${channel}/${version}/`)),
+    ) + 1;
 
-  setOutputs({ full: `${version}-rc.${n}`, branch: `rc/${version}/${n}`, sha: tip });
+  const sha =
+    channel === 'rc' ? tip : (await github<Ref>(`repos/${repo}/git/ref/heads/${source}`)).object.sha;
+  setOutputs({ full: `${version}-${channel}.${n}`, branch: `${channel}/${version}/${n}`, sha });
 });

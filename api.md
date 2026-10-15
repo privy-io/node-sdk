@@ -11,6 +11,16 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">CaptchaProvider</a></code>
 - <code><a href="./src/resources/apps/apps.ts">Currency</a></code>
 - <code><a href="./src/resources/apps/apps.ts">CurrencyAsset</a></code>
+- <code><a href="./src/resources/apps/apps.ts">DenylistEmailDomainInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">DenylistEmailInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">DenylistEntry</a></code>
+- <code><a href="./src/resources/apps/apps.ts">DenylistEntryCreateRequestBody</a></code>
+- <code><a href="./src/resources/apps/apps.ts">DenylistEntryDeleteRequestBody</a></code>
+- <code><a href="./src/resources/apps/apps.ts">DenylistEthereumAddressInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">DenylistListResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">DenylistPhoneInput</a></code>
+- <code><a href="./src/resources/apps/apps.ts">DenylistRuleType</a></code>
+- <code><a href="./src/resources/apps/apps.ts">DenylistSolanaAddressInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">EmailDomain</a></code>
 - <code><a href="./src/resources/apps/apps.ts">EmailDomainInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">EmailInviteInput</a></code>
@@ -51,6 +61,14 @@ Methods:
 - <code title="post /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">create</a>(appID, { ...params }) -> AllowlistEntry</code>
 - <code title="get /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">list</a>(appID) -> AllowlistListResponse</code>
 - <code title="delete /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/resources/apps/allowlist.ts">delete</a>(appID, { ...params }) -> AllowlistDeletionResponse</code>
+
+## Denylist
+
+Methods:
+
+- <code title="post /v1/apps/{app_id}/denylist">client.apps.denylist.<a href="./src/resources/apps/denylist.ts">create</a>(appID, { ...params }) -> DenylistEntry</code>
+- <code title="get /v1/apps/{app_id}/denylist">client.apps.denylist.<a href="./src/resources/apps/denylist.ts">list</a>(appID, { ...params }) -> DenylistEntriesCursor</code>
+- <code title="delete /v1/apps/{app_id}/denylist">client.apps.denylist.<a href="./src/resources/apps/denylist.ts">delete</a>(appID, { ...params }) -> void</code>
 
 # Cards
 

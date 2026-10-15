@@ -17,6 +17,16 @@ export {
   type CaptchaProvider,
   type Currency,
   type CurrencyAsset,
+  type DenylistEmailDomainInput,
+  type DenylistEmailInput,
+  type DenylistEntry,
+  type DenylistEntryCreateRequestBody,
+  type DenylistEntryDeleteRequestBody,
+  type DenylistEthereumAddressInput,
+  type DenylistListResponse,
+  type DenylistPhoneInput,
+  type DenylistRuleType,
+  type DenylistSolanaAddressInput,
   type EmailDomain,
   type EmailDomainInviteInput,
   type EmailInviteInput,
@@ -40,4 +50,11 @@ export {
   type UserOwnedRecoveryOption,
   type WalletInviteInput,
   type AppGetGasSpendParams,
+  type DenylistEntriesCursor,
 } from './apps';
+export {
+  Denylist,
+  type DenylistCreateParams,
+  type DenylistListParams,
+  type DenylistDeleteParams,
+} from './denylist';

@@ -5,7 +5,10 @@ import * as ClientAuthAPI from '../client-auth';
 import * as EmbeddedWalletsAPI from '../embedded-wallets';
 import * as AllowlistAPI from './allowlist';
 import { Allowlist, AllowlistCreateParams, AllowlistDeleteParams, AllowlistListResponse } from './allowlist';
+import * as DenylistAPI from './denylist';
+import { Denylist, DenylistCreateParams, DenylistDeleteParams, DenylistListParams } from './denylist';
 import { APIPromise } from '../../core/api-promise';
+import { Cursor } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -14,6 +17,7 @@ import { path } from '../../internal/utils/path';
  */
 export class Apps extends APIResource {
   allowlist: AllowlistAPI.Allowlist = new AllowlistAPI.Allowlist(this._client);
+  denylist: DenylistAPI.Denylist = new DenylistAPI.Denylist(this._client);
 
   /**
    * Get the settings and configuration for an app.
@@ -60,6 +64,8 @@ export class Apps extends APIResource {
     return this._client.get(path`/v1/apps/${appID}/test_credentials`, options);
   }
 }
+
+export type DenylistEntriesCursor = Cursor<DenylistEntry>;
 
 /**
  * Confirmation response for deleting an allowlist entry.
@@ -296,6 +302,122 @@ export interface Currency {
  * A currency asset type.
  */
 export type CurrencyAsset = 'native-currency' | 'USDC';
+
+/**
+ * Denylist input for an email domain, which blocks every email address on the
+ * domain.
+ */
+export interface DenylistEmailDomainInput {
+  type: 'emailDomain';
+
+  /**
+   * An email domain.
+   */
+  value: EmailDomain;
+}
+
+/**
+ * Denylist input for an email address, which also blocks its `+` and `.` variants.
+ */
+export interface DenylistEmailInput {
+  type: 'email';
+
+  value: string;
+}
+
+/**
+ * A denylist entry for an app.
+ */
+export interface DenylistEntry {
+  /**
+   * The ID of the denylist entry.
+   */
+  id: string;
+
+  /**
+   * The type of identifier a denylist rule blocks.
+   */
+  rule_type: DenylistRuleType;
+
+  /**
+   * The blocked identifier.
+   */
+  value: string;
+}
+
+/**
+ * Input for adding a denylist entry. Discriminated by type.
+ */
+export type DenylistEntryCreateRequestBody =
+  | DenylistEmailInput
+  | DenylistEmailDomainInput
+  | DenylistPhoneInput
+  | DenylistEthereumAddressInput
+  | DenylistSolanaAddressInput;
+
+/**
+ * Input for removing a denylist entry.
+ */
+export interface DenylistEntryDeleteRequestBody {
+  /**
+   * The ID of the denylist entry to remove.
+   */
+  id: string;
+}
+
+/**
+ * Denylist input for an Ethereum wallet address, which blocks SIWE logins.
+ */
+export interface DenylistEthereumAddressInput {
+  type: 'ethereumAddress';
+
+  value: string;
+}
+
+/**
+ * A page of denylist entries for an app.
+ */
+export interface DenylistListResponse {
+  /**
+   * Denylist entries in this page.
+   */
+  data: Array<DenylistEntry>;
+
+  /**
+   * Cursor for the next page, which is null only when this page is empty, so keep
+   * paging until `data` is empty.
+   */
+  next_cursor: string | null;
+}
+
+/**
+ * Denylist input for a phone number.
+ */
+export interface DenylistPhoneInput {
+  type: 'phone';
+
+  value: string;
+}
+
+/**
+ * The type of identifier a denylist rule blocks.
+ */
+export type DenylistRuleType =
+  | 'email'
+  | 'emailDomain'
+  | 'phone'
+  | 'ethereumAddress'
+  | 'solanaAddress'
+  | (string & {});
+
+/**
+ * Denylist input for a Solana wallet address, which blocks SIWS logins.
+ */
+export interface DenylistSolanaAddressInput {
+  type: 'solanaAddress';
+
+  value: string;
+}
 
 /**
  * An email domain.
@@ -543,6 +665,7 @@ export interface AppGetGasSpendParams {
 }
 
 Apps.Allowlist = Allowlist;
+Apps.Denylist = Denylist;
 
 export declare namespace Apps {
   export {
@@ -555,6 +678,16 @@ export declare namespace Apps {
     type CaptchaProvider as CaptchaProvider,
     type Currency as Currency,
     type CurrencyAsset as CurrencyAsset,
+    type DenylistEmailDomainInput as DenylistEmailDomainInput,
+    type DenylistEmailInput as DenylistEmailInput,
+    type DenylistEntry as DenylistEntry,
+    type DenylistEntryCreateRequestBody as DenylistEntryCreateRequestBody,
+    type DenylistEntryDeleteRequestBody as DenylistEntryDeleteRequestBody,
+    type DenylistEthereumAddressInput as DenylistEthereumAddressInput,
+    type DenylistListResponse as DenylistListResponse,
+    type DenylistPhoneInput as DenylistPhoneInput,
+    type DenylistRuleType as DenylistRuleType,
+    type DenylistSolanaAddressInput as DenylistSolanaAddressInput,
     type EmailDomain as EmailDomain,
     type EmailDomainInviteInput as EmailDomainInviteInput,
     type EmailInviteInput as EmailInviteInput,
@@ -585,5 +718,12 @@ export declare namespace Apps {
     type AllowlistListResponse as AllowlistListResponse,
     type AllowlistCreateParams as AllowlistCreateParams,
     type AllowlistDeleteParams as AllowlistDeleteParams,
+  };
+
+  export {
+    Denylist as Denylist,
+    type DenylistCreateParams as DenylistCreateParams,
+    type DenylistListParams as DenylistListParams,
+    type DenylistDeleteParams as DenylistDeleteParams,
   };
 }

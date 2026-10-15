@@ -30,7 +30,7 @@ describe('resource intents', () => {
           created_by_id: 'created_by_id',
           current_user_has_signed: 'true',
           cursor: 'x',
-          intent_type: 'KEY_QUORUM',
+          intent_type: 'CONDITION_SET_ITEM',
           limit: 100,
           pending_member_id: 'pending_member_id',
           resource_id: 'resource_id',
@@ -40,6 +40,28 @@ describe('resource intents', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(PrivyAPI.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('createConditionSetItems: only required params', async () => {
+    const responsePromise = client.intents.createConditionSetItems('xxxxxxxxxxxxxxxxxxxxxxxx', {
+      condition_set_items_request_body: [{ value: 'x' }],
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('createConditionSetItems: required and optional params', async () => {
+    const response = await client.intents.createConditionSetItems('xxxxxxxxxxxxxxxxxxxxxxxx', {
+      condition_set_items_request_body: [{ value: 'x' }],
+      'privy-request-expiry': 'privy-request-expiry',
+    });
   });
 
   // Mock server tests are disabled
@@ -114,6 +136,26 @@ describe('resource intents', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('rawSign: only required params', async () => {
+    const responsePromise = client.intents.rawSign('wallet_id', { params: { hash: 'string' } });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('rawSign: required and optional params', async () => {
+    const response = await client.intents.rawSign('wallet_id', {
+      params: { hash: 'string' },
+      'privy-request-expiry': 'privy-request-expiry',
+    });
   });
 
   // Mock server tests are disabled

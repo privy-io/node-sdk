@@ -39,6 +39,35 @@ export class Intents extends APIResource {
   }
 
   /**
+   * Create an intent to add items to a condition set. The intent must be authorized
+   * by the condition set owner before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const conditionSetItemIntentResponse =
+   *   await client.intents.createConditionSetItems(
+   *     'xxxxxxxxxxxxxxxxxxxxxxxx',
+   *     { condition_set_items_request_body: [{ value: 'x' }] },
+   *   );
+   * ```
+   */
+  createConditionSetItems(
+    conditionSetID: string,
+    params: IntentCreateConditionSetItemsParams,
+    options?: RequestOptions,
+  ): APIPromise<ConditionSetItemIntentResponse> {
+    const { condition_set_items_request_body, 'privy-request-expiry': privyRequestExpiry } = params;
+    return this._client.post(path`/v1/intents/condition_sets/${conditionSetID}/condition_set_items`, {
+      body: condition_set_items_request_body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Create an intent to add a rule to a policy. The intent must be authorized by the
    * policy owner before it can be executed.
    *
@@ -122,6 +151,34 @@ export class Intents extends APIResource {
       throw new Error('intentID must not be an empty string');
     }
     return this._client.get(path`/v1/intents/${intentID}`, options);
+  }
+
+  /**
+   * Create an intent to sign a raw hash or bytes with a wallet. The intent must be
+   * authorized by either the wallet owner or signers before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const rawSignIntentResponse = await client.intents.rawSign(
+   *   'wallet_id',
+   *   { params: { hash: 'string' } },
+   * );
+   * ```
+   */
+  rawSign(
+    walletID: string,
+    params: IntentRawSignParams,
+    options?: RequestOptions,
+  ): APIPromise<RawSignIntentResponse> {
+    const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
+    return this._client.post(path`/v1/intents/wallets/${walletID}/raw_sign`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -411,6 +468,48 @@ export interface BaseIntentResponse {
 }
 
 /**
+ * Request details for adding items to a condition set via intent.
+ */
+export interface ConditionSetItemIntentCreateRequestDetails {
+  /**
+   * Array of values to add to the condition set. Maximum 100 items per request.
+   */
+  body: PoliciesAPI.ConditionSetItemsRequestBody;
+
+  method: 'POST';
+
+  url: string;
+}
+
+/**
+ * Response for a condition set item intent
+ */
+export interface ConditionSetItemIntentResponse extends BaseIntentResponse {
+  intent_type: 'CONDITION_SET_ITEM';
+
+  /**
+   * Request details for adding items to a condition set via intent.
+   */
+  request_details: ConditionSetItemIntentCreateRequestDetails;
+
+  /**
+   * Result of condition set item execution (only present if status is 'executed' or
+   * 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A condition set for grouping related condition values.
+   */
+  condition_set?: PoliciesAPI.ConditionSet;
+
+  /**
+   * A single item in a condition set.
+   */
+  current_resource_data?: PoliciesAPI.ConditionSetItem;
+}
+
+/**
  * Authorization quorum for an intent
  */
 export interface IntentAuthorization {
@@ -548,10 +647,12 @@ export interface IntentCreationHeaders {
 export type IntentResponse =
   | RpcIntentResponse
   | TransferIntentResponse
+  | RawSignIntentResponse
   | WalletIntentResponse
   | PolicyIntentResponse
   | RuleIntentResponse
-  | KeyQuorumIntentResponse;
+  | KeyQuorumIntentResponse
+  | ConditionSetItemIntentResponse;
 
 /**
  * Current status of an intent.
@@ -568,7 +669,16 @@ export type IntentStatus =
 /**
  * Type of intent.
  */
-export type IntentType = 'KEY_QUORUM' | 'POLICY' | 'RULE' | 'RPC' | 'TRANSFER' | 'WALLET';
+export type IntentType =
+  | 'CONDITION_SET_ITEM'
+  | 'KEY_QUORUM'
+  | 'POLICY'
+  | 'RAW_SIGN'
+  | 'RULE'
+  | 'RPC'
+  | 'TRANSFER'
+  | 'WALLET'
+  | (string & {});
 
 /**
  * Response for a key quorum intent
@@ -702,6 +812,60 @@ export namespace PolicyIntentResponse {
 
       rules?: Array<PoliciesAPI.PolicyRuleRequestBody>;
     }
+  }
+}
+
+/**
+ * Request details for a raw sign intent.
+ */
+export interface RawSignIntentRequestDetails {
+  /**
+   * Provide either `hash` (to sign a pre-computed hash) OR `bytes`, `encoding`, and
+   * `hash_function` (to hash and then sign). These options are mutually exclusive.
+   */
+  body: WalletsAPI.RawSignInput;
+
+  method: 'POST';
+
+  url: string;
+}
+
+/**
+ * Response for a raw sign intent
+ */
+export interface RawSignIntentResponse extends BaseIntentResponse {
+  intent_type: 'RAW_SIGN';
+
+  /**
+   * The original raw sign request that would be sent to the wallet endpoint
+   */
+  request_details: RawSignIntentResponse.RequestDetails;
+
+  /**
+   * Result of raw sign execution (only present if status is 'executed' or 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A wallet managed by Privy's wallet infrastructure.
+   */
+  current_resource_data?: WalletsAPI.Wallet;
+}
+
+export namespace RawSignIntentResponse {
+  /**
+   * The original raw sign request that would be sent to the wallet endpoint
+   */
+  export interface RequestDetails {
+    /**
+     * Provide either `hash` (to sign a pre-computed hash) OR `bytes`, `encoding`, and
+     * `hash_function` (to hash and then sign). These options are mutually exclusive.
+     */
+    body: WalletsAPI.RawSignInput;
+
+    method: 'POST';
+
+    url: string;
   }
 }
 
@@ -1053,6 +1217,20 @@ export interface IntentListParams extends CursorParams {
   status?: IntentStatus;
 }
 
+export interface IntentCreateConditionSetItemsParams {
+  /**
+   * Body param: Array of values to add to the condition set. Maximum 100 items per
+   * request.
+   */
+  condition_set_items_request_body: PoliciesAPI.ConditionSetItemsRequestBody;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
 export interface IntentCreatePolicyRuleParams {
   /**
    * Body param: The action to take when a policy rule matches.
@@ -1086,6 +1264,19 @@ export interface IntentDeletePolicyRuleParams {
    * Path param: ID of the policy.
    */
   policy_id: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
+export interface IntentRawSignParams {
+  /**
+   * Body param: Parameters for the `raw_sign` RPC.
+   */
+  params: WalletsAPI.RawSignInputParams;
 
   /**
    * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -2192,6 +2383,8 @@ export declare namespace Intents {
   export {
     type BaseActionResult as BaseActionResult,
     type BaseIntentResponse as BaseIntentResponse,
+    type ConditionSetItemIntentCreateRequestDetails as ConditionSetItemIntentCreateRequestDetails,
+    type ConditionSetItemIntentResponse as ConditionSetItemIntentResponse,
     type IntentAuthorization as IntentAuthorization,
     type IntentAuthorizationKeyMember as IntentAuthorizationKeyMember,
     type IntentAuthorizationKeyQuorum as IntentAuthorizationKeyQuorum,
@@ -2206,6 +2399,8 @@ export declare namespace Intents {
     type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
     type PolicyIntentRequestDetails as PolicyIntentRequestDetails,
     type PolicyIntentResponse as PolicyIntentResponse,
+    type RawSignIntentRequestDetails as RawSignIntentRequestDetails,
+    type RawSignIntentResponse as RawSignIntentResponse,
     type RpcIntentRequestDetails as RpcIntentRequestDetails,
     type RpcIntentResponse as RpcIntentResponse,
     type RuleDeleteIntentResponse as RuleDeleteIntentResponse,
@@ -2221,8 +2416,10 @@ export declare namespace Intents {
     type WalletIntentResponse as WalletIntentResponse,
     type IntentResponsesCursor as IntentResponsesCursor,
     type IntentListParams as IntentListParams,
+    type IntentCreateConditionSetItemsParams as IntentCreateConditionSetItemsParams,
     type IntentCreatePolicyRuleParams as IntentCreatePolicyRuleParams,
     type IntentDeletePolicyRuleParams as IntentDeletePolicyRuleParams,
+    type IntentRawSignParams as IntentRawSignParams,
     type IntentRpcParams as IntentRpcParams,
     type IntentTransferParams as IntentTransferParams,
     type IntentUpdateKeyQuorumParams as IntentUpdateKeyQuorumParams,

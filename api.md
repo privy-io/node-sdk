@@ -127,6 +127,8 @@ Types:
 
 - <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
 - <code><a href="./src/resources/intents.ts">BaseIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetItemIntentCreateRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetItemIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorum</a></code>
@@ -141,6 +143,8 @@ Types:
 - <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">PolicyIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">RawSignIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">RawSignIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">RuleDeleteIntentResponse</a></code>
@@ -158,9 +162,11 @@ Types:
 Methods:
 
 - <code title="get /v1/intents">client.intents.<a href="./src/resources/intents.ts">list</a>({ ...params }) -> IntentResponsesCursor</code>
+- <code title="post /v1/intents/condition_sets/{condition_set_id}/condition_set_items">client.intents.<a href="./src/resources/intents.ts">createConditionSetItems</a>(conditionSetID, [ ...condition_set_items_request_body ]) -> ConditionSetItemIntentResponse</code>
 - <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleMutateIntentResponse</code>
 - <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicyRule</a>(ruleID, { ...params }) -> RuleDeleteIntentResponse</code>
 - <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/resources/intents.ts">get</a>(intentID) -> IntentResponse</code>
+- <code title="post /v1/intents/wallets/{wallet_id}/raw_sign">client.intents.<a href="./src/resources/intents.ts">rawSign</a>(walletID, { ...params }) -> RawSignIntentResponse</code>
 - <code title="post /v1/intents/{intent_id}/reject">client.intents.<a href="./src/resources/intents.ts">reject</a>(intentID) -> IntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/resources/intents.ts">rpc</a>(walletID, { ...params }) -> RpcIntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/transfer">client.intents.<a href="./src/resources/intents.ts">transfer</a>(walletID, { ...params }) -> TransferIntentResponse</code>

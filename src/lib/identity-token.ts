@@ -95,6 +95,8 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): LinkedAccount | nu
         first_verified_at: null,
         verified_at: account.lv,
         latest_verified_at: account.lv,
+        // Not currently included in the identity token; default to true when absent.
+        user_can_sign: account.user_can_sign ?? true,
         // The following fields are not present in the identity token,
         // but are required. We set them to some safe defaults.
         chain_id: '',

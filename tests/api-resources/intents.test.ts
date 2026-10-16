@@ -30,7 +30,7 @@ describe('resource intents', () => {
           created_by_id: 'created_by_id',
           current_user_has_signed: 'true',
           cursor: 'x',
-          intent_type: 'CONDITION_SET_ITEM',
+          intent_type: 'CONDITION_SET',
           limit: 100,
           pending_member_id: 'pending_member_id',
           resource_id: 'resource_id',
@@ -102,6 +102,52 @@ describe('resource intents', () => {
       ],
       method: 'eth_sendTransaction',
       name: 'x',
+      'privy-request-expiry': 'privy-request-expiry',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('deleteConditionSet', async () => {
+    const responsePromise = client.intents.deleteConditionSet('xxxxxxxxxxxxxxxxxxxxxxxx');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('deleteConditionSet: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.intents.deleteConditionSet(
+        'xxxxxxxxxxxxxxxxxxxxxxxx',
+        { 'privy-request-expiry': 'privy-request-expiry' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(PrivyAPI.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('deleteConditionSetItem: only required params', async () => {
+    const responsePromise = client.intents.deleteConditionSetItem('xxxxxxxxxxxxxxxxxxxxxxxx', {
+      condition_set_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('deleteConditionSetItem: required and optional params', async () => {
+    const response = await client.intents.deleteConditionSetItem('xxxxxxxxxxxxxxxxxxxxxxxx', {
+      condition_set_id: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       'privy-request-expiry': 'privy-request-expiry',
     });
   });
@@ -278,6 +324,28 @@ describe('resource intents', () => {
       nonce: 'xxxxxxxxxxxxxxxxxxxxxxxx',
       reference_id: 'x',
       slippage_bps: 0,
+      'privy-request-expiry': 'privy-request-expiry',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('updateConditionSetItems: only required params', async () => {
+    const responsePromise = client.intents.updateConditionSetItems('xxxxxxxxxxxxxxxxxxxxxxxx', {
+      condition_set_items_request_body: [{ value: 'x' }],
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('updateConditionSetItems: required and optional params', async () => {
+    const response = await client.intents.updateConditionSetItems('xxxxxxxxxxxxxxxxxxxxxxxx', {
+      condition_set_items_request_body: [{ value: 'x' }],
       'privy-request-expiry': 'privy-request-expiry',
     });
   });

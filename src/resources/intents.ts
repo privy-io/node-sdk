@@ -44,7 +44,7 @@ export class Intents extends APIResource {
    *
    * @example
    * ```ts
-   * const conditionSetItemIntentResponse =
+   * const conditionSetItemMutateIntentResponse =
    *   await client.intents.createConditionSetItems(
    *     'xxxxxxxxxxxxxxxxxxxxxxxx',
    *     { condition_set_items_request_body: [{ value: 'x' }] },
@@ -55,7 +55,7 @@ export class Intents extends APIResource {
     conditionSetID: string,
     params: IntentCreateConditionSetItemsParams,
     options?: RequestOptions,
-  ): APIPromise<ConditionSetItemIntentResponse> {
+  ): APIPromise<ConditionSetItemMutateIntentResponse> {
     const { condition_set_items_request_body, 'privy-request-expiry': privyRequestExpiry } = params;
     return this._client.post(path`/v1/intents/condition_sets/${conditionSetID}/condition_set_items`, {
       body: condition_set_items_request_body,
@@ -103,6 +103,64 @@ export class Intents extends APIResource {
         options?.headers,
       ]),
     });
+  }
+
+  /**
+   * Create an intent to delete a condition set. The intent must be authorized by the
+   * condition set owner before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const conditionSetDeleteIntentResponse =
+   *   await client.intents.deleteConditionSet(
+   *     'xxxxxxxxxxxxxxxxxxxxxxxx',
+   *   );
+   * ```
+   */
+  deleteConditionSet(
+    conditionSetID: string,
+    params: IntentDeleteConditionSetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ConditionSetDeleteIntentResponse> {
+    const { 'privy-request-expiry': privyRequestExpiry } = params ?? {};
+    return this._client.delete(path`/v1/intents/condition_sets/${conditionSetID}`, {
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Create an intent to delete an item from a condition set. The intent must be
+   * authorized by the condition set owner before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const conditionSetItemDeleteIntentResponse =
+   *   await client.intents.deleteConditionSetItem(
+   *     'xxxxxxxxxxxxxxxxxxxxxxxx',
+   *     { condition_set_id: 'xxxxxxxxxxxxxxxxxxxxxxxx' },
+   *   );
+   * ```
+   */
+  deleteConditionSetItem(
+    conditionSetItemID: string,
+    params: IntentDeleteConditionSetItemParams,
+    options?: RequestOptions,
+  ): APIPromise<ConditionSetItemDeleteIntentResponse> {
+    const { condition_set_id, 'privy-request-expiry': privyRequestExpiry } = params;
+    return this._client.delete(
+      path`/v1/intents/condition_sets/${condition_set_id}/condition_set_items/${conditionSetItemID}`,
+      {
+        ...options,
+        headers: buildHeaders([
+          { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+          options?.headers,
+        ]),
+      },
+    );
   }
 
   /**
@@ -246,6 +304,35 @@ export class Intents extends APIResource {
     const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
     return this._client.post(path`/v1/intents/wallets/${walletID}/transfer`, {
       body,
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Create an intent to replace all items in a condition set. The intent must be
+   * authorized by the condition set owner before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const conditionSetItemMutateIntentResponse =
+   *   await client.intents.updateConditionSetItems(
+   *     'xxxxxxxxxxxxxxxxxxxxxxxx',
+   *     { condition_set_items_request_body: [{ value: 'x' }] },
+   *   );
+   * ```
+   */
+  updateConditionSetItems(
+    conditionSetID: string,
+    params: IntentUpdateConditionSetItemsParams,
+    options?: RequestOptions,
+  ): APIPromise<ConditionSetItemMutateIntentResponse> {
+    const { condition_set_items_request_body, 'privy-request-expiry': privyRequestExpiry } = params;
+    return this._client.put(path`/v1/intents/condition_sets/${conditionSetID}/condition_set_items`, {
+      body: condition_set_items_request_body,
       ...options,
       headers: buildHeaders([
         { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
@@ -468,6 +555,99 @@ export interface BaseIntentResponse {
 }
 
 /**
+ * Response for a condition set delete intent
+ */
+export interface ConditionSetDeleteIntentResponse extends BaseIntentResponse {
+  intent_type: 'CONDITION_SET';
+
+  /**
+   * Request details for deleting a condition set via intent.
+   */
+  request_details: ConditionSetIntentDeleteRequestDetails;
+
+  /**
+   * Result of condition set execution (only present if status is 'executed' or
+   * 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A condition set for grouping related condition values.
+   */
+  current_resource_data?: PoliciesAPI.ConditionSet;
+}
+
+/**
+ * Empty request body for a condition set delete intent.
+ */
+export interface ConditionSetIntentDeleteRequestBody {}
+
+/**
+ * Request details for deleting a condition set via intent.
+ */
+export interface ConditionSetIntentDeleteRequestDetails {
+  method: 'DELETE';
+
+  url: string;
+
+  /**
+   * Empty request body for a condition set delete intent.
+   */
+  body?: ConditionSetIntentDeleteRequestBody;
+}
+
+/**
+ * Response for a condition set intent
+ */
+export interface ConditionSetIntentResponse extends BaseIntentResponse {
+  intent_type: 'CONDITION_SET';
+
+  /**
+   * Request details for deleting a condition set via intent.
+   */
+  request_details: ConditionSetIntentDeleteRequestDetails;
+
+  /**
+   * Result of condition set execution (only present if status is 'executed' or
+   * 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A condition set for grouping related condition values.
+   */
+  current_resource_data?: PoliciesAPI.ConditionSet;
+}
+
+/**
+ * Response for an intent that deletes a condition set item
+ */
+export interface ConditionSetItemDeleteIntentResponse extends BaseIntentResponse {
+  intent_type: 'CONDITION_SET_ITEM';
+
+  /**
+   * Request details for deleting a condition set item via intent.
+   */
+  request_details: ConditionSetItemIntentDeleteRequestDetails;
+
+  /**
+   * Result of condition set item execution (only present if status is 'executed' or
+   * 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A condition set for grouping related condition values.
+   */
+  condition_set?: PoliciesAPI.ConditionSet;
+
+  /**
+   * A single item in a condition set.
+   */
+  current_resource_data?: PoliciesAPI.ConditionSetItem;
+}
+
+/**
  * Request details for adding items to a condition set via intent.
  */
 export interface ConditionSetItemIntentCreateRequestDetails {
@@ -482,15 +662,87 @@ export interface ConditionSetItemIntentCreateRequestDetails {
 }
 
 /**
+ * Empty request body for a condition set item delete intent.
+ */
+export interface ConditionSetItemIntentDeleteRequestBody {}
+
+/**
+ * Request details for deleting a condition set item via intent.
+ */
+export interface ConditionSetItemIntentDeleteRequestDetails {
+  method: 'DELETE';
+
+  url: string;
+
+  /**
+   * Empty request body for a condition set item delete intent.
+   */
+  body?: ConditionSetItemIntentDeleteRequestBody;
+}
+
+/**
+ * The original condition set item request. Method is POST (add items), PUT
+ * (replace items), or DELETE (delete an item)
+ */
+export type ConditionSetItemIntentRequestDetails =
+  | ConditionSetItemIntentCreateRequestDetails
+  | ConditionSetItemIntentUpdateRequestDetails
+  | ConditionSetItemIntentDeleteRequestDetails;
+
+/**
  * Response for a condition set item intent
  */
 export interface ConditionSetItemIntentResponse extends BaseIntentResponse {
   intent_type: 'CONDITION_SET_ITEM';
 
   /**
-   * Request details for adding items to a condition set via intent.
+   * The original condition set item request. Method is POST (add items), PUT
+   * (replace items), or DELETE (delete an item)
    */
-  request_details: ConditionSetItemIntentCreateRequestDetails;
+  request_details: ConditionSetItemIntentRequestDetails;
+
+  /**
+   * Result of condition set item execution (only present if status is 'executed' or
+   * 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A condition set for grouping related condition values.
+   */
+  condition_set?: PoliciesAPI.ConditionSet;
+
+  /**
+   * A single item in a condition set.
+   */
+  current_resource_data?: PoliciesAPI.ConditionSetItem;
+}
+
+/**
+ * Request details for replacing the items of a condition set via intent.
+ */
+export interface ConditionSetItemIntentUpdateRequestDetails {
+  /**
+   * Array of values to add to the condition set. Maximum 100 items per request.
+   */
+  body: PoliciesAPI.ConditionSetItemsRequestBody;
+
+  method: 'PUT';
+
+  url: string;
+}
+
+/**
+ * Response for an intent that adds or replaces condition set items
+ */
+export interface ConditionSetItemMutateIntentResponse extends BaseIntentResponse {
+  intent_type: 'CONDITION_SET_ITEM';
+
+  /**
+   * The original condition set item request. Method is POST (add items), PUT
+   * (replace items), or DELETE (delete an item)
+   */
+  request_details: ConditionSetItemIntentRequestDetails;
 
   /**
    * Result of condition set item execution (only present if status is 'executed' or
@@ -652,6 +904,7 @@ export type IntentResponse =
   | PolicyIntentResponse
   | RuleIntentResponse
   | KeyQuorumIntentResponse
+  | ConditionSetIntentResponse
   | ConditionSetItemIntentResponse;
 
 /**
@@ -670,6 +923,7 @@ export type IntentStatus =
  * Type of intent.
  */
 export type IntentType =
+  | 'CONDITION_SET'
   | 'CONDITION_SET_ITEM'
   | 'KEY_QUORUM'
   | 'POLICY'
@@ -1251,6 +1505,27 @@ export interface IntentCreatePolicyRuleParams {
    * Body param
    */
   name: string;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
+export interface IntentDeleteConditionSetParams {
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
+export interface IntentDeleteConditionSetItemParams {
+  /**
+   * Path param
+   */
+  condition_set_id: string;
 
   /**
    * Header param: Request expiry. Value is a Unix timestamp in milliseconds
@@ -2236,6 +2511,20 @@ export interface IntentTransferParams {
   'privy-request-expiry'?: string;
 }
 
+export interface IntentUpdateConditionSetItemsParams {
+  /**
+   * Body param: Array of values to add to the condition set. Maximum 100 items per
+   * request.
+   */
+  condition_set_items_request_body: PoliciesAPI.ConditionSetItemsRequestBody;
+
+  /**
+   * Header param: Request expiry. Value is a Unix timestamp in milliseconds
+   * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
 export interface IntentUpdateKeyQuorumParams {
   /**
    * Body param: The number of keys that must sign for an action to be valid. Must be
@@ -2383,8 +2672,18 @@ export declare namespace Intents {
   export {
     type BaseActionResult as BaseActionResult,
     type BaseIntentResponse as BaseIntentResponse,
+    type ConditionSetDeleteIntentResponse as ConditionSetDeleteIntentResponse,
+    type ConditionSetIntentDeleteRequestBody as ConditionSetIntentDeleteRequestBody,
+    type ConditionSetIntentDeleteRequestDetails as ConditionSetIntentDeleteRequestDetails,
+    type ConditionSetIntentResponse as ConditionSetIntentResponse,
+    type ConditionSetItemDeleteIntentResponse as ConditionSetItemDeleteIntentResponse,
     type ConditionSetItemIntentCreateRequestDetails as ConditionSetItemIntentCreateRequestDetails,
+    type ConditionSetItemIntentDeleteRequestBody as ConditionSetItemIntentDeleteRequestBody,
+    type ConditionSetItemIntentDeleteRequestDetails as ConditionSetItemIntentDeleteRequestDetails,
+    type ConditionSetItemIntentRequestDetails as ConditionSetItemIntentRequestDetails,
     type ConditionSetItemIntentResponse as ConditionSetItemIntentResponse,
+    type ConditionSetItemIntentUpdateRequestDetails as ConditionSetItemIntentUpdateRequestDetails,
+    type ConditionSetItemMutateIntentResponse as ConditionSetItemMutateIntentResponse,
     type IntentAuthorization as IntentAuthorization,
     type IntentAuthorizationKeyMember as IntentAuthorizationKeyMember,
     type IntentAuthorizationKeyQuorum as IntentAuthorizationKeyQuorum,
@@ -2418,10 +2717,13 @@ export declare namespace Intents {
     type IntentListParams as IntentListParams,
     type IntentCreateConditionSetItemsParams as IntentCreateConditionSetItemsParams,
     type IntentCreatePolicyRuleParams as IntentCreatePolicyRuleParams,
+    type IntentDeleteConditionSetParams as IntentDeleteConditionSetParams,
+    type IntentDeleteConditionSetItemParams as IntentDeleteConditionSetItemParams,
     type IntentDeletePolicyRuleParams as IntentDeletePolicyRuleParams,
     type IntentRawSignParams as IntentRawSignParams,
     type IntentRpcParams as IntentRpcParams,
     type IntentTransferParams as IntentTransferParams,
+    type IntentUpdateConditionSetItemsParams as IntentUpdateConditionSetItemsParams,
     type IntentUpdateKeyQuorumParams as IntentUpdateKeyQuorumParams,
     type IntentUpdatePolicyParams as IntentUpdatePolicyParams,
     type IntentUpdatePolicyRuleParams as IntentUpdatePolicyRuleParams,

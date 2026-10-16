@@ -639,7 +639,7 @@ export interface EthereumTransactionCondition {
 /**
  * Ethereum transaction-level fields that can be referenced in a policy condition.
  */
-export type EthereumTransactionConditionField = 'to' | 'value' | 'chain_id';
+export type EthereumTransactionConditionField = 'to' | 'value' | 'chain_id' | 'data_byte_length';
 
 /**
  * Attributes from the signing domain that will verify the signature.

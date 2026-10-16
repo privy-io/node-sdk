@@ -127,8 +127,18 @@ Types:
 
 - <code><a href="./src/resources/intents.ts">BaseActionResult</a></code>
 - <code><a href="./src/resources/intents.ts">BaseIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetDeleteIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetIntentDeleteRequestBody</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetIntentDeleteRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetItemDeleteIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">ConditionSetItemIntentCreateRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetItemIntentDeleteRequestBody</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetItemIntentDeleteRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetItemIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">ConditionSetItemIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetItemIntentUpdateRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">ConditionSetItemMutateIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorization</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyMember</a></code>
 - <code><a href="./src/resources/intents.ts">IntentAuthorizationKeyQuorum</a></code>
@@ -162,14 +172,17 @@ Types:
 Methods:
 
 - <code title="get /v1/intents">client.intents.<a href="./src/resources/intents.ts">list</a>({ ...params }) -> IntentResponsesCursor</code>
-- <code title="post /v1/intents/condition_sets/{condition_set_id}/condition_set_items">client.intents.<a href="./src/resources/intents.ts">createConditionSetItems</a>(conditionSetID, [ ...condition_set_items_request_body ]) -> ConditionSetItemIntentResponse</code>
+- <code title="post /v1/intents/condition_sets/{condition_set_id}/condition_set_items">client.intents.<a href="./src/resources/intents.ts">createConditionSetItems</a>(conditionSetID, [ ...condition_set_items_request_body ]) -> ConditionSetItemMutateIntentResponse</code>
 - <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleMutateIntentResponse</code>
+- <code title="delete /v1/intents/condition_sets/{condition_set_id}">client.intents.<a href="./src/resources/intents.ts">deleteConditionSet</a>(conditionSetID, { ...params }) -> ConditionSetDeleteIntentResponse</code>
+- <code title="delete /v1/intents/condition_sets/{condition_set_id}/condition_set_items/{condition_set_item_id}">client.intents.<a href="./src/resources/intents.ts">deleteConditionSetItem</a>(conditionSetItemID, { ...params }) -> ConditionSetItemDeleteIntentResponse</code>
 - <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicyRule</a>(ruleID, { ...params }) -> RuleDeleteIntentResponse</code>
 - <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/resources/intents.ts">get</a>(intentID) -> IntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/raw_sign">client.intents.<a href="./src/resources/intents.ts">rawSign</a>(walletID, { ...params }) -> RawSignIntentResponse</code>
 - <code title="post /v1/intents/{intent_id}/reject">client.intents.<a href="./src/resources/intents.ts">reject</a>(intentID) -> IntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/resources/intents.ts">rpc</a>(walletID, { ...params }) -> RpcIntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/transfer">client.intents.<a href="./src/resources/intents.ts">transfer</a>(walletID, { ...params }) -> TransferIntentResponse</code>
+- <code title="put /v1/intents/condition_sets/{condition_set_id}/condition_set_items">client.intents.<a href="./src/resources/intents.ts">updateConditionSetItems</a>(conditionSetID, [ ...condition_set_items_request_body ]) -> ConditionSetItemMutateIntentResponse</code>
 - <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/resources/intents.ts">updateKeyQuorum</a>(keyQuorumID, { ...params }) -> KeyQuorumIntentResponse</code>
 - <code title="patch /v1/intents/policies/{policy_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicy</a>(policyID, { ...params }) -> PolicyIntentResponse</code>
 - <code title="patch /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicyRule</a>(ruleID, { ...params }) -> RuleMutateIntentResponse</code>

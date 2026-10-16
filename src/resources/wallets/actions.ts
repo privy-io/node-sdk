@@ -1604,7 +1604,8 @@ export type WalletActionStepType =
   | 'tvm_transaction'
   | 'external_transaction'
   | 'custodian_transaction'
-  | 'tempo_zone_settlement';
+  | 'tempo_zone_settlement'
+  | (string & {});
 
 /**
  * Type of wallet action

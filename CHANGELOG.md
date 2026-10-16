@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.36.0](https://github.com/privy-io/node-sdk-private/compare/v0.35.0...v0.36.0) (2026-10-16)
+
+
+### Features
+
+* **api:** api update ([10257d3](https://github.com/privy-io/node-sdk-private/commit/10257d399bbd13382048f16a9a51e7a4d879da67))
+* **api:** api update ([df933c1](https://github.com/privy-io/node-sdk-private/commit/df933c1d5da08141c09aae04170390cf892a3016))
+* **api:** api update ([1477e02](https://github.com/privy-io/node-sdk-private/commit/1477e02228d77c8c6affe5dc0e879e0560f3e598))
+* **api:** api update ([a1a3ace](https://github.com/privy-io/node-sdk-private/commit/a1a3ace1eb0deda3f3f7cd6408e73ee3db6da84f))
+* **api:** api update ([b758250](https://github.com/privy-io/node-sdk-private/commit/b758250ed447d02d5602c5b21c976d4f963d489d))
+* **api:** api update ([d81fbd8](https://github.com/privy-io/node-sdk-private/commit/d81fbd8408ec1bbc1cbf05687cb4cbf440be6991))
+* **api:** api update ([f9fd9da](https://github.com/privy-io/node-sdk-private/commit/f9fd9da2df0e1262622000e126ee9d66941de57b))
+* **api:** api update ([037b15e](https://github.com/privy-io/node-sdk-private/commit/037b15ea7876c42eaa4d86e843d09e13e986c3b2))
+* **api:** api update ([de6de42](https://github.com/privy-io/node-sdk-private/commit/de6de4278076748649e204fdd451c0b6397976ea))
+* **api:** api update ([f5ce62c](https://github.com/privy-io/node-sdk-private/commit/f5ce62c8313ead66dfe86b36673702c3d13982df))
+* **api:** api update ([5d77d19](https://github.com/privy-io/node-sdk-private/commit/5d77d191b0ae7ba7cfe776f0b19d7f52b82d50eb))
+* **api:** api update ([736d6c6](https://github.com/privy-io/node-sdk-private/commit/736d6c69fe449c8eb897cbde4ccc0540839026b2))
+* **api:** api update ([e4bc3bf](https://github.com/privy-io/node-sdk-private/commit/e4bc3bf812f448e0f6da629dccbff54dd6f2fae7))
+* **api:** api update ([b82b8f2](https://github.com/privy-io/node-sdk-private/commit/b82b8f2b0c4f26052e63f53ec4bf38c02c715805))
+* **api:** api update ([37d9e3f](https://github.com/privy-io/node-sdk-private/commit/37d9e3f93f6bcf167d454bff639605f042f40dad))
+
+
+### Bug Fixes
+
+* **auth:** default user_can_sign to true when parsing identity tokens ([#83](https://github.com/privy-io/node-sdk-private/issues/83)) ([04b8415](https://github.com/privy-io/node-sdk-private/commit/04b8415973c0c4b53dc0da0a793d1f087404bc09))
+* **auth:** sign the percent-encoded request path ([#54](https://github.com/privy-io/node-sdk-private/issues/54)) ([34b9c75](https://github.com/privy-io/node-sdk-private/commit/34b9c75e29274b780007c7a60190f19aa6907470))
+* **auth:** strictly validate P-256 PKCS[#8](https://github.com/privy-io/node-sdk-private/issues/8) authorization private keys ([#58](https://github.com/privy-io/node-sdk-private/issues/58)) ([49c2c94](https://github.com/privy-io/node-sdk-private/commit/49c2c94481027a5e08d9e582cb8fd718054092f4))
+* **wallets:** sign idempotency key and per-call expiry in transfer ([#56](https://github.com/privy-io/node-sdk-private/issues/56)) ([604faed](https://github.com/privy-io/node-sdk-private/commit/604faedf151da5f06f82eeeaf7bafc72b277452b))
+
+
+### Documentation
+
+* update CONTRIBUTING and add RELEASING guide ([#40](https://github.com/privy-io/node-sdk-private/issues/40)) ([389fdbf](https://github.com/privy-io/node-sdk-private/commit/389fdbf4d39b2e1bb6c9c91bd936537811189603))
+
 ## [0.35.0](https://github.com/privy-io/node-sdk/compare/v0.34.0...v0.35.0) (2026-09-21)
 
 

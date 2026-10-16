@@ -162,7 +162,8 @@ export function formatViemTransactionType(type: SupportedViemTransactionType) {
 /**
  * Formats a `message` input to viem's `signMessage` function to the format needed for our wallet API.
  *
- * If the `message` is a string, we use it directly.
+ * Strings are UTF-8 text in viem. Encode strings starting with `0x` as bytes to avoid
+ * our Ethereum service interpreting them as hex data.
  *
  * If the `message` is an object containing a `raw` field, it indicates that the use case is signing raw bytes,
  * in which case we convert `message.raw` into a `Uint8Array` before passing it to our own `signMessage`
@@ -170,7 +171,9 @@ export function formatViemTransactionType(type: SupportedViemTransactionType) {
  * @returns message as a utf-8 `string` or `Uint8Array`
  */
 const formatViemPersonalSignMessage = (message: SignMessageParameters['message']): string | Uint8Array => {
-  if (typeof message === 'string') return message;
+  if (typeof message === 'string') {
+    return message.startsWith('0x') ? new TextEncoder().encode(message) : message;
+  }
 
   if (typeof message.raw === 'string') {
     // We `.slice(2)` to remove the `0x` prefix

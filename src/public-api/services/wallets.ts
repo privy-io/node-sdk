@@ -7,7 +7,11 @@ import { setupHPKERecipient, setupHPKESender } from '../../lib/cryptography';
 import { entropyToBytes } from '../../lib/wallet-entropy';
 import {
   Wallet,
+  WalletAttachAutomationsParams,
+  WalletAutomationAttachmentListResponse,
+  WalletAutomationSuccessResponse,
   WalletCreateParams,
+  WalletDetachAutomationsParams,
   WalletExportParams,
   WalletRawSignParams,
   RawSignResponseData,
@@ -176,6 +180,52 @@ export class PrivyWalletsService extends Wallets {
   }
 
   /**
+   * Attach one or more automations to a wallet. The request is signed with the given
+   * authorization context.
+   */
+  public async attachAutomations(
+    walletId: string,
+    {
+      authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
+      ...params
+    }: PrivyWalletsService.AttachAutomationsInput,
+  ): Promise<WalletAutomationAttachmentListResponse> {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
+      authorizationContext,
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'POST',
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/automations/attach`}`,
+      body: params,
+    });
+
+    return await this._attachAutomations(walletId, { ...params, ...headers });
+  }
+
+  /**
+   * Detach one or more automations from a wallet. The request is signed with the given
+   * authorization context.
+   */
+  public async detachAutomations(
+    walletId: string,
+    {
+      authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
+      ...params
+    }: PrivyWalletsService.DetachAutomationsInput,
+  ): Promise<WalletAutomationSuccessResponse> {
+    const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
+      authorizationContext,
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
+      method: 'POST',
+      url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/automations/detach`}`,
+      body: params,
+    });
+
+    return await this._detachAutomations(walletId, { ...params, ...headers });
+  }
+
+  /**
    * @deprecated Use {@link PrivyWalletsService.exportPrivateKey} or {@link PrivyWalletsService.exportSeedPhrase} instead.
    */
   // Note: this export function is deprecated function now, but will become a private helper method for other export functions
@@ -290,6 +340,10 @@ export namespace PrivyWalletsService {
   export type UpdateInput = Prettify<WithExpiry<WithAuthorization<WalletUpdateParams>>>;
   /** The input type for the {@link PrivyWalletsService.transfer} method. */
   export type TransferInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<WalletTransferParams>>>>;
+  /** The input type for the {@link PrivyWalletsService.attachAutomations} method. */
+  export type AttachAutomationsInput = Prettify<WithExpiry<WithAuthorization<WalletAttachAutomationsParams>>>;
+  /** The input type for the {@link PrivyWalletsService.detachAutomations} method. */
+  export type DetachAutomationsInput = Prettify<WithExpiry<WithAuthorization<WalletDetachAutomationsParams>>>;
   /** The input type for the {@link PrivyWalletsService.export} method. */
   export type ExportInput = Prettify<WithExpiry<WithAuthorization<Omit<WalletExportParams, 'encryption_type' | 'recipient_public_key'>>>>;
   /** The response type for the {@link PrivyWalletsService.export} method. */

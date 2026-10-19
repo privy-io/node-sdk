@@ -9,7 +9,7 @@ import { prepareRequest } from '../../../lib/authorization';
 import { path } from '../../../internal/utils/path';
 import { PrivyClient } from '../../PrivyClient';
 import { PrivyEarnEthereumIncentiveService } from './ethereum-incentive';
-import { Prettify, WithAuthorization, WithIdempotency } from '../types';
+import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from '../types';
 
 export class PrivyEarnEthereumService extends Ethereum {
   private incentiveService: PrivyEarnEthereumIncentiveService;
@@ -30,13 +30,14 @@ export class PrivyEarnEthereumService extends Ethereum {
     {
       authorization_context: authorizationContext = {},
       idempotency_key: idempotencyKey,
+      request_expiry: requestExpiry,
       ...params
     }: PrivyEarnEthereumService.DepositInput,
   ): Promise<EarnDepositActionResponse> {
     const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
       idempotencyKey,
-      requestExpiry: this.privyClient.getRequestExpiry(),
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
       url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/earn/ethereum/deposit`}`,
       body: params,
@@ -50,13 +51,14 @@ export class PrivyEarnEthereumService extends Ethereum {
     {
       authorization_context: authorizationContext = {},
       idempotency_key: idempotencyKey,
+      request_expiry: requestExpiry,
       ...params
     }: PrivyEarnEthereumService.WithdrawInput,
   ): Promise<EarnWithdrawActionResponse> {
     const { headers } = await prepareRequest(this.privyClient, this._client.appID, {
       authorizationContext,
       idempotencyKey,
-      requestExpiry: this.privyClient.getRequestExpiry(),
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
       url: `${this._client.baseURL}${path`/v1/wallets/${walletId}/earn/ethereum/withdraw`}`,
       body: params,
@@ -69,7 +71,7 @@ export class PrivyEarnEthereumService extends Ethereum {
 // prettier-ignore
 export namespace PrivyEarnEthereumService {
   /** The input type for the {@link PrivyEarnEthereumService.deposit} method. */
-  export type DepositInput = Prettify<WithIdempotency<WithAuthorization<EthereumDepositParams>>>;
+  export type DepositInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<EthereumDepositParams>>>>;
   /** The input type for the {@link PrivyEarnEthereumService.withdraw} method. */
-  export type WithdrawInput = Prettify<WithIdempotency<WithAuthorization<EthereumWithdrawParams>>>;
+  export type WithdrawInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<EthereumWithdrawParams>>>>;
 }

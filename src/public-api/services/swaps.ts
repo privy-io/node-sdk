@@ -5,7 +5,7 @@ import { Swap, SwapExecuteParams, SwapQuoteParams } from '../../resources/wallet
 import { prepareRequest } from '../../lib/authorization';
 import { path } from '../../internal/utils/path';
 import { PrivyClient } from '../PrivyClient';
-import { Prettify, WithAuthorization, WithIdempotency } from './types';
+import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
 
 export class PrivySwapsService {
   private swapResource: Swap;
@@ -25,12 +25,14 @@ export class PrivySwapsService {
     {
       authorization_context: authorizationContext = {},
       idempotency_key: idempotencyKey,
+      request_expiry: requestExpiry,
       ...params
     }: PrivySwapsService.ExecuteInput,
   ): Promise<SwapActionResponse> {
     const { headers } = await prepareRequest(this.privyClient, this.appID, {
       authorizationContext,
       idempotencyKey,
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
       url: `${this.baseURL}${path`/v1/wallets/${walletId}/swap`}`,
       body: params,
@@ -41,10 +43,15 @@ export class PrivySwapsService {
 
   public async quote(
     walletId: string,
-    { authorization_context: authorizationContext = {}, ...params }: PrivySwapsService.QuoteInput,
+    {
+      authorization_context: authorizationContext = {},
+      request_expiry: requestExpiry,
+      ...params
+    }: PrivySwapsService.QuoteInput,
   ): Promise<SwapQuoteResponse> {
     const { headers } = await prepareRequest(this.privyClient, this.appID, {
       authorizationContext,
+      requestExpiry: requestExpiry ?? this.privyClient.getRequestExpiry(),
       method: 'POST',
       url: `${this.baseURL}${path`/v1/wallets/${walletId}/swap/quote`}`,
       body: params,
@@ -57,7 +64,7 @@ export class PrivySwapsService {
 // prettier-ignore
 export namespace PrivySwapsService {
   /** The input type for the {@link PrivySwapsService.execute} method. */
-  export type ExecuteInput = Prettify<WithIdempotency<WithAuthorization<SwapExecuteParams>>>;
+  export type ExecuteInput = Prettify<WithExpiry<WithIdempotency<WithAuthorization<SwapExecuteParams>>>>;
   /** The input type for the {@link PrivySwapsService.quote} method. */
-  export type QuoteInput = Prettify<WithAuthorization<SwapQuoteParams>>;
+  export type QuoteInput = Prettify<WithExpiry<WithAuthorization<SwapQuoteParams>>>;
 }

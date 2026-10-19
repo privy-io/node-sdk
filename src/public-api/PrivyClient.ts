@@ -71,10 +71,10 @@ export interface PrivyClientOptions extends InternalClientOptions {
 }
 
 const DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY = 1000;
-// 15 minutes
-const DEFAULT_REQUEST_EXPIRY_MS = 15 * 60 * 1000;
-// 72 hours
-const DEFAULT_INTENT_REQUEST_EXPIRY_MS = 72 * 60 * 60 * 1000;
+/** Built-in request expiry duration (15 minutes) for non-intents endpoints. */
+export const DEFAULT_REQUEST_EXPIRY_MS = 15 * 60 * 1000;
+/** Built-in request expiry duration (72 hours) for intents endpoints. */
+export const DEFAULT_INTENT_REQUEST_EXPIRY_MS = 72 * 60 * 60 * 1000;
 
 export class PrivyClient {
   private privyApiClient: PrivyAPI;

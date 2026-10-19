@@ -144,9 +144,9 @@ export interface PreparedRequest {
  * Returns an {@link PreparedRequest} containing all headers that should be forwarded to the
  * underlying generated API method.
  *
- * If `requestExpiry` is provided, it is included in both the authorization signature and the
- * returned headers. If omitted, no expiry header is included — callers that require expiry
- * should compute a default before calling this function.
+ * If `requestExpiry` is provided (including `0`), it is included in both the authorization
+ * signature and the returned headers. If omitted, no expiry header is included — callers that
+ * require expiry should compute a default before calling this function.
  *
  * @param client The Privy client instance, used for JWT exchange.
  * @param appId The Privy app ID for the request.
@@ -185,7 +185,7 @@ export async function prepareRequest(
       headers: {
         'privy-app-id': appId,
         ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
-        ...(requestExpiry && { 'privy-request-expiry': privyRequestExpirtyHeader }),
+        ...(requestExpiry != null && { 'privy-request-expiry': privyRequestExpirtyHeader }),
       },
     },
   });
@@ -194,7 +194,7 @@ export async function prepareRequest(
     headers: {
       'privy-authorization-signature': signatures.join(','),
       ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
-      ...(requestExpiry && { 'privy-request-expiry': privyRequestExpirtyHeader }),
+      ...(requestExpiry != null && { 'privy-request-expiry': privyRequestExpirtyHeader }),
     },
   };
 }

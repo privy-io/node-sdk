@@ -1,5 +1,7 @@
 export {
   PrivyClient,
+  DEFAULT_REQUEST_EXPIRY_MS,
+  DEFAULT_INTENT_REQUEST_EXPIRY_MS,
   type PrivyClientOptions,
   type PrivyRequestExpiryOptions,
 } from './public-api/PrivyClient';

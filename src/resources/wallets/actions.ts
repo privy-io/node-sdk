@@ -1269,6 +1269,11 @@ export interface TvmTransactionWalletActionStep {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
+
+  /**
+   * Amount charged in USD for gas sponsorship on this step.
+   */
+  gas_credits_charged_usd?: string;
 }
 
 /**

@@ -153,6 +153,54 @@ describe('resource intents', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('deleteKeyQuorum', async () => {
+    const responsePromise = client.intents.deleteKeyQuorum('key_quorum_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('deleteKeyQuorum: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.intents.deleteKeyQuorum(
+        'key_quorum_id',
+        { 'privy-request-expiry': 'privy-request-expiry' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(PrivyAPI.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('deletePolicy', async () => {
+    const responsePromise = client.intents.deletePolicy('policy_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('deletePolicy: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.intents.deletePolicy(
+        'policy_id',
+        { 'privy-request-expiry': 'privy-request-expiry' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(PrivyAPI.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('deletePolicyRule: only required params', async () => {
     const responsePromise = client.intents.deletePolicyRule('rule_id', { policy_id: 'policy_id' });
     const rawResponse = await responsePromise.asResponse();

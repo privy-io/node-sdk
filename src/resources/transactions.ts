@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as SharedAPI from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -58,6 +59,11 @@ export interface Transaction {
   transaction_hash: string | null;
 
   wallet_id: string;
+
+  /**
+   * A monetary value with its currency denomination.
+   */
+  gas_credits_charged?: SharedAPI.CurrencyAmount | null;
 
   /**
    * Developer-provided reference ID, if one was included in the request.

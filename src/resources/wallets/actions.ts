@@ -188,9 +188,15 @@ export interface EvmTransactionWalletActionStep {
   finalized?: boolean;
 
   /**
-   * Amount charged in USD for gas sponsorship on this step.
+   * A monetary value with its currency denomination.
    */
-  gas_credits_charged_usd?: string;
+  gas_credits_charged?: SharedAPI.CurrencyAmount | null;
+
+  /**
+   * @deprecated Deprecated, use `gas_credits_charged` instead; gas credits charged
+   * in USD for this step, if sponsored, as a decimal string.
+   */
+  gas_credits_charged_usd?: string | null;
 }
 
 /**
@@ -243,9 +249,15 @@ export interface EvmUserOperationWalletActionStep {
   finalized?: boolean;
 
   /**
-   * Amount charged in USD for gas sponsorship on this step.
+   * A monetary value with its currency denomination.
    */
-  gas_credits_charged_usd?: string;
+  gas_credits_charged?: SharedAPI.CurrencyAmount | null;
+
+  /**
+   * @deprecated Deprecated, use `gas_credits_charged` instead; gas credits charged
+   * in USD for this step, if sponsored, as a decimal string.
+   */
+  gas_credits_charged_usd?: string | null;
 }
 
 /**
@@ -1125,9 +1137,15 @@ export interface SvmTransactionWalletActionStep {
   finalized?: boolean;
 
   /**
-   * Amount charged in USD for gas sponsorship on this step.
+   * A monetary value with its currency denomination.
    */
-  gas_credits_charged_usd?: string;
+  gas_credits_charged?: SharedAPI.CurrencyAmount | null;
+
+  /**
+   * @deprecated Deprecated, use `gas_credits_charged` instead; gas credits charged
+   * in USD for this step, if sponsored, as a decimal string.
+   */
+  gas_credits_charged_usd?: string | null;
 }
 
 /**
@@ -1271,9 +1289,15 @@ export interface TvmTransactionWalletActionStep {
   failure_reason?: FailureReason;
 
   /**
-   * Amount charged in USD for gas sponsorship on this step.
+   * A monetary value with its currency denomination.
    */
-  gas_credits_charged_usd?: string;
+  gas_credits_charged?: SharedAPI.CurrencyAmount | null;
+
+  /**
+   * @deprecated Deprecated, use `gas_credits_charged` instead; gas credits charged
+   * in USD for this step, if sponsored, as a decimal string.
+   */
+  gas_credits_charged_usd?: string | null;
 }
 
 /**

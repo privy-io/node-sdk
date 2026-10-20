@@ -164,6 +164,56 @@ export class Intents extends APIResource {
   }
 
   /**
+   * Create an intent to delete a key quorum. The intent must be authorized by the
+   * key quorum members before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const keyQuorumDeleteIntentResponse =
+   *   await client.intents.deleteKeyQuorum('key_quorum_id');
+   * ```
+   */
+  deleteKeyQuorum(
+    keyQuorumID: string,
+    params: IntentDeleteKeyQuorumParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<KeyQuorumDeleteIntentResponse> {
+    const { 'privy-request-expiry': privyRequestExpiry } = params ?? {};
+    return this._client.delete(path`/v1/intents/key_quorums/${keyQuorumID}`, {
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Create an intent to delete a policy. The intent must be authorized by the policy
+   * owner before it can be executed.
+   *
+   * @example
+   * ```ts
+   * const policyDeleteIntentResponse =
+   *   await client.intents.deletePolicy('policy_id');
+   * ```
+   */
+  deletePolicy(
+    policyID: string,
+    params: IntentDeletePolicyParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<PolicyDeleteIntentResponse> {
+    const { 'privy-request-expiry': privyRequestExpiry } = params ?? {};
+    return this._client.delete(path`/v1/intents/policies/${policyID}`, {
+      ...options,
+      headers: buildHeaders([
+        { ...(privyRequestExpiry != null ? { 'privy-request-expiry': privyRequestExpiry } : undefined) },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Create an intent to delete a rule from a policy. The intent must be authorized
    * by the policy owner before it can be executed.
    *
@@ -347,7 +397,7 @@ export class Intents extends APIResource {
    *
    * @example
    * ```ts
-   * const keyQuorumIntentResponse =
+   * const keyQuorumUpdateIntentResponse =
    *   await client.intents.updateKeyQuorum('key_quorum_id');
    * ```
    */
@@ -355,7 +405,7 @@ export class Intents extends APIResource {
     keyQuorumID: string,
     params: IntentUpdateKeyQuorumParams,
     options?: RequestOptions,
-  ): APIPromise<KeyQuorumIntentResponse> {
+  ): APIPromise<KeyQuorumUpdateIntentResponse> {
     const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
     return this._client.patch(path`/v1/intents/key_quorums/${keyQuorumID}`, {
       body,
@@ -373,7 +423,7 @@ export class Intents extends APIResource {
    *
    * @example
    * ```ts
-   * const policyIntentResponse =
+   * const policyUpdateIntentResponse =
    *   await client.intents.updatePolicy('policy_id');
    * ```
    */
@@ -381,7 +431,7 @@ export class Intents extends APIResource {
     policyID: string,
     params: IntentUpdatePolicyParams,
     options?: RequestOptions,
-  ): APIPromise<PolicyIntentResponse> {
+  ): APIPromise<PolicyUpdateIntentResponse> {
     const { 'privy-request-expiry': privyRequestExpiry, ...body } = params;
     return this._client.patch(path`/v1/intents/policies/${policyID}`, {
       body,
@@ -935,16 +985,102 @@ export type IntentType =
   | (string & {});
 
 /**
+ * Response for a key quorum delete intent
+ */
+export interface KeyQuorumDeleteIntentResponse extends BaseIntentResponse {
+  intent_type: 'KEY_QUORUM';
+
+  /**
+   * Request details for deleting a key quorum via intent.
+   */
+  request_details: KeyQuorumIntentDeleteRequestDetails;
+
+  /**
+   * Result of key quorum delete execution (only present if status is 'executed' or
+   * 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A key quorum for authorizing wallet operations.
+   */
+  current_resource_data?: KeyQuorumsAPI.KeyQuorum;
+}
+
+/**
+ * Empty request body for a key quorum delete intent.
+ */
+export interface KeyQuorumIntentDeleteRequestBody {}
+
+/**
+ * Request details for deleting a key quorum via intent.
+ */
+export interface KeyQuorumIntentDeleteRequestDetails {
+  method: 'DELETE';
+
+  url: string;
+
+  /**
+   * Empty request body for a key quorum delete intent.
+   */
+  body?: KeyQuorumIntentDeleteRequestBody;
+}
+
+/**
+ * Request details for a key quorum intent.
+ */
+export interface KeyQuorumIntentRequestDetails {
+  /**
+   * Request input for updating an existing key quorum. At least one field must be
+   * provided.
+   */
+  body: KeyQuorumsAPI.KeyQuorumUpdateRequestBody;
+
+  method: 'PATCH';
+
+  url: string;
+}
+
+/**
+ * The original key quorum request. Method is PATCH (update) or DELETE (delete).
+ */
+export type KeyQuorumIntentRequestDetailsUnion =
+  | KeyQuorumIntentRequestDetails
+  | KeyQuorumIntentDeleteRequestDetails;
+
+/**
  * Response for a key quorum intent
  */
 export interface KeyQuorumIntentResponse extends BaseIntentResponse {
   intent_type: 'KEY_QUORUM';
 
   /**
-   * The original key quorum update request that would be sent to the key quorum
-   * endpoint
+   * The original key quorum request. Method is PATCH (update) or DELETE (delete).
    */
-  request_details: KeyQuorumIntentResponse.RequestDetails;
+  request_details: KeyQuorumIntentRequestDetailsUnion;
+
+  /**
+   * Result of key quorum execution (only present if status is 'executed' or
+   * 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A key quorum for authorizing wallet operations.
+   */
+  current_resource_data?: KeyQuorumsAPI.KeyQuorum;
+}
+
+/**
+ * Response for a key quorum update intent
+ */
+export interface KeyQuorumUpdateIntentResponse extends BaseIntentResponse {
+  intent_type: 'KEY_QUORUM';
+
+  /**
+   * Request details for a key quorum intent.
+   */
+  request_details: KeyQuorumIntentRequestDetails;
 
   /**
    * Result of key quorum update execution (only present if status is 'executed' or
@@ -958,22 +1094,46 @@ export interface KeyQuorumIntentResponse extends BaseIntentResponse {
   current_resource_data?: KeyQuorumsAPI.KeyQuorum;
 }
 
-export namespace KeyQuorumIntentResponse {
+/**
+ * Response for a policy delete intent
+ */
+export interface PolicyDeleteIntentResponse extends BaseIntentResponse {
+  intent_type: 'POLICY';
+
   /**
-   * The original key quorum update request that would be sent to the key quorum
-   * endpoint
+   * Request details for deleting a policy via intent.
    */
-  export interface RequestDetails {
-    /**
-     * Request input for updating an existing key quorum. At least one field must be
-     * provided.
-     */
-    body: KeyQuorumsAPI.KeyQuorumUpdateRequestBody;
+  request_details: PolicyIntentDeleteRequestDetails;
 
-    method: 'PATCH';
+  /**
+   * Result of policy delete execution (only present if status is 'executed' or
+   * 'failed')
+   */
+  action_result?: BaseActionResult;
 
-    url: string;
-  }
+  /**
+   * A policy for controlling wallet operations.
+   */
+  current_resource_data?: PoliciesAPI.Policy;
+}
+
+/**
+ * Empty request body for a policy delete intent.
+ */
+export interface PolicyIntentDeleteRequestBody {}
+
+/**
+ * Request details for deleting a policy via intent.
+ */
+export interface PolicyIntentDeleteRequestDetails {
+  method: 'DELETE';
+
+  url: string;
+
+  /**
+   * Empty request body for a policy delete intent.
+   */
+  body?: PolicyIntentDeleteRequestBody;
 }
 
 /**
@@ -1011,15 +1171,42 @@ export namespace PolicyIntentRequestDetails {
 }
 
 /**
+ * The original policy request. Method is PATCH (update) or DELETE (delete).
+ */
+export type PolicyIntentRequestDetailsUnion = PolicyIntentRequestDetails | PolicyIntentDeleteRequestDetails;
+
+/**
  * Response for a policy intent
  */
 export interface PolicyIntentResponse extends BaseIntentResponse {
   intent_type: 'POLICY';
 
   /**
-   * The original policy update request that would be sent to the policy endpoint
+   * The original policy request. Method is PATCH (update) or DELETE (delete).
    */
-  request_details: PolicyIntentResponse.RequestDetails;
+  request_details: PolicyIntentRequestDetailsUnion;
+
+  /**
+   * Result of policy execution (only present if status is 'executed' or 'failed')
+   */
+  action_result?: BaseActionResult;
+
+  /**
+   * A policy for controlling wallet operations.
+   */
+  current_resource_data?: PoliciesAPI.Policy;
+}
+
+/**
+ * Response for a policy update intent
+ */
+export interface PolicyUpdateIntentResponse extends BaseIntentResponse {
+  intent_type: 'POLICY';
+
+  /**
+   * Request details for a policy intent.
+   */
+  request_details: PolicyIntentRequestDetails;
 
   /**
    * Result of policy update execution (only present if status is 'executed' or
@@ -1031,42 +1218,6 @@ export interface PolicyIntentResponse extends BaseIntentResponse {
    * A policy for controlling wallet operations.
    */
   current_resource_data?: PoliciesAPI.Policy;
-}
-
-export namespace PolicyIntentResponse {
-  /**
-   * The original policy update request that would be sent to the policy endpoint
-   */
-  export interface RequestDetails {
-    body: RequestDetails.Body;
-
-    method: 'PATCH';
-
-    url: string;
-  }
-
-  export namespace RequestDetails {
-    export interface Body {
-      /**
-       * Name to assign to policy.
-       */
-      name?: string;
-
-      /**
-       * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
-       * null to remove the current owner.
-       */
-      owner?: SharedAPI.OwnerInput | null;
-
-      /**
-       * The key quorum ID to set as the owner of the resource. If you provide this, do
-       * not specify an owner.
-       */
-      owner_id?: SharedAPI.OwnerIDInput | null;
-
-      rules?: Array<PoliciesAPI.PolicyRuleRequestBody>;
-    }
-  }
 }
 
 /**
@@ -1530,6 +1681,22 @@ export interface IntentDeleteConditionSetItemParams {
   /**
    * Header param: Request expiry. Value is a Unix timestamp in milliseconds
    * representing the deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
+export interface IntentDeleteKeyQuorumParams {
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
+   */
+  'privy-request-expiry'?: string;
+}
+
+export interface IntentDeletePolicyParams {
+  /**
+   * Request expiry. Value is a Unix timestamp in milliseconds representing the
+   * deadline by which the request must be processed.
    */
   'privy-request-expiry'?: string;
 }
@@ -2695,9 +2862,20 @@ export declare namespace Intents {
     type IntentResponse as IntentResponse,
     type IntentStatus as IntentStatus,
     type IntentType as IntentType,
+    type KeyQuorumDeleteIntentResponse as KeyQuorumDeleteIntentResponse,
+    type KeyQuorumIntentDeleteRequestBody as KeyQuorumIntentDeleteRequestBody,
+    type KeyQuorumIntentDeleteRequestDetails as KeyQuorumIntentDeleteRequestDetails,
+    type KeyQuorumIntentRequestDetails as KeyQuorumIntentRequestDetails,
+    type KeyQuorumIntentRequestDetailsUnion as KeyQuorumIntentRequestDetailsUnion,
     type KeyQuorumIntentResponse as KeyQuorumIntentResponse,
+    type KeyQuorumUpdateIntentResponse as KeyQuorumUpdateIntentResponse,
+    type PolicyDeleteIntentResponse as PolicyDeleteIntentResponse,
+    type PolicyIntentDeleteRequestBody as PolicyIntentDeleteRequestBody,
+    type PolicyIntentDeleteRequestDetails as PolicyIntentDeleteRequestDetails,
     type PolicyIntentRequestDetails as PolicyIntentRequestDetails,
+    type PolicyIntentRequestDetailsUnion as PolicyIntentRequestDetailsUnion,
     type PolicyIntentResponse as PolicyIntentResponse,
+    type PolicyUpdateIntentResponse as PolicyUpdateIntentResponse,
     type RawSignIntentRequestDetails as RawSignIntentRequestDetails,
     type RawSignIntentResponse as RawSignIntentResponse,
     type RpcIntentRequestDetails as RpcIntentRequestDetails,
@@ -2719,6 +2897,8 @@ export declare namespace Intents {
     type IntentCreatePolicyRuleParams as IntentCreatePolicyRuleParams,
     type IntentDeleteConditionSetParams as IntentDeleteConditionSetParams,
     type IntentDeleteConditionSetItemParams as IntentDeleteConditionSetItemParams,
+    type IntentDeleteKeyQuorumParams as IntentDeleteKeyQuorumParams,
+    type IntentDeletePolicyParams as IntentDeletePolicyParams,
     type IntentDeletePolicyRuleParams as IntentDeletePolicyRuleParams,
     type IntentRawSignParams as IntentRawSignParams,
     type IntentRpcParams as IntentRpcParams,

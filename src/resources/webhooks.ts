@@ -1815,8 +1815,10 @@ export interface WalletActionEarnDepositFailedWebhookPayload {
   status: 'failed';
 
   /**
-   * The steps of the wallet action. Completed steps will have transaction hashes;
-   * the failing step will have a failure_reason.
+   * The steps of the wallet action, where completed steps have transaction hashes
+   * and the failing step has a failure_reason; `gas_credits_charged` on a step may
+   * still be `null` when this webhook fires, so fetch the wallet action directly for
+   * up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -1914,7 +1916,9 @@ export interface WalletActionEarnDepositRejectedWebhookPayload {
   status: 'rejected';
 
   /**
-   * The steps of the wallet action at the time of rejection.
+   * The steps of the wallet action at the time of rejection; `gas_credits_charged`
+   * on a step may still be `null` when this webhook fires, so fetch the wallet
+   * action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -2012,7 +2016,9 @@ export interface WalletActionEarnDepositSucceededWebhookPayload {
   status: 'succeeded';
 
   /**
-   * The steps of the wallet action, including transaction hashes.
+   * The steps of the wallet action, including transaction hashes;
+   * `gas_credits_charged` on a step may still be `null` when this webhook fires, so
+   * fetch the wallet action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -2193,8 +2199,10 @@ export interface WalletActionEarnFeeCollectFailedWebhookPayload {
   status: 'failed';
 
   /**
-   * The steps of the wallet action. Completed steps will have transaction hashes;
-   * the failing step will have a failure_reason.
+   * The steps of the wallet action, where completed steps have transaction hashes
+   * and the failing step has a failure_reason; `gas_credits_charged` on a step may
+   * still be `null` when this webhook fires, so fetch the wallet action directly for
+   * up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -2292,7 +2300,9 @@ export interface WalletActionEarnFeeCollectRejectedWebhookPayload {
   status: 'rejected';
 
   /**
-   * The steps of the wallet action at the time of rejection.
+   * The steps of the wallet action at the time of rejection; `gas_credits_charged`
+   * on a step may still be `null` when this webhook fires, so fetch the wallet
+   * action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -2385,7 +2395,9 @@ export interface WalletActionEarnFeeCollectSucceededWebhookPayload {
   status: 'succeeded';
 
   /**
-   * The steps of the wallet action, including transaction hashes.
+   * The steps of the wallet action, including transaction hashes;
+   * `gas_credits_charged` on a step may still be `null` when this webhook fires, so
+   * fetch the wallet action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -2528,8 +2540,10 @@ export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
   status: 'failed';
 
   /**
-   * The steps of the wallet action. Completed steps will have transaction hashes;
-   * the failing step will have a failure_reason.
+   * The steps of the wallet action, where completed steps have transaction hashes
+   * and the failing step has a failure_reason; `gas_credits_charged` on a step may
+   * still be `null` when this webhook fires, so fetch the wallet action directly for
+   * up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -2594,7 +2608,9 @@ export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
   status: 'rejected';
 
   /**
-   * The steps of the wallet action at the time of rejection.
+   * The steps of the wallet action at the time of rejection; `gas_credits_charged`
+   * on a step may still be `null` when this webhook fires, so fetch the wallet
+   * action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -2654,7 +2670,9 @@ export interface WalletActionEarnIncentiveClaimSucceededWebhookPayload {
   status: 'succeeded';
 
   /**
-   * The steps of the wallet action, including transaction hashes.
+   * The steps of the wallet action, including transaction hashes;
+   * `gas_credits_charged` on a step may still be `null` when this webhook fires, so
+   * fetch the wallet action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -2807,8 +2825,10 @@ export interface WalletActionEarnWithdrawFailedWebhookPayload {
   status: 'failed';
 
   /**
-   * The steps of the wallet action. Completed steps will have transaction hashes;
-   * the failing step will have a failure_reason.
+   * The steps of the wallet action, where completed steps have transaction hashes
+   * and the failing step has a failure_reason; `gas_credits_charged` on a step may
+   * still be `null` when this webhook fires, so fetch the wallet action directly for
+   * up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -2906,7 +2926,9 @@ export interface WalletActionEarnWithdrawRejectedWebhookPayload {
   status: 'rejected';
 
   /**
-   * The steps of the wallet action at the time of rejection.
+   * The steps of the wallet action at the time of rejection; `gas_credits_charged`
+   * on a step may still be `null` when this webhook fires, so fetch the wallet
+   * action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -3004,7 +3026,9 @@ export interface WalletActionEarnWithdrawSucceededWebhookPayload {
   status: 'succeeded';
 
   /**
-   * The steps of the wallet action, including transaction hashes.
+   * The steps of the wallet action, including transaction hashes;
+   * `gas_credits_charged` on a step may still be `null` when this webhook fires, so
+   * fetch the wallet action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -3207,8 +3231,10 @@ export interface WalletActionPayoutFailedWebhookPayload {
   status: 'failed';
 
   /**
-   * The steps of the wallet action. Completed steps will have transaction hashes;
-   * the failing step will have a failure_reason.
+   * The steps of the wallet action, where completed steps have transaction hashes
+   * and the failing step has a failure_reason; `gas_credits_charged` on a step may
+   * still be `null` when this webhook fires, so fetch the wallet action directly for
+   * up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -3303,7 +3329,9 @@ export interface WalletActionPayoutRejectedWebhookPayload {
   status: 'rejected';
 
   /**
-   * The steps of the wallet action at the time of rejection.
+   * The steps of the wallet action at the time of rejection; `gas_credits_charged`
+   * on a step may still be `null` when this webhook fires, so fetch the wallet
+   * action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -3393,7 +3421,9 @@ export interface WalletActionPayoutSucceededWebhookPayload {
   status: 'succeeded';
 
   /**
-   * The steps of the wallet action, including transaction hashes.
+   * The steps of the wallet action, including transaction hashes;
+   * `gas_credits_charged` on a step may still be `null` when this webhook fires, so
+   * fetch the wallet action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -3528,8 +3558,10 @@ export interface WalletActionSwapFailedWebhookPayload {
   status: 'failed';
 
   /**
-   * The steps of the wallet action. Completed steps will have transaction hashes;
-   * the failing step will have a failure_reason.
+   * The steps of the wallet action, where completed steps have transaction hashes
+   * and the failing step has a failure_reason; `gas_credits_charged` on a step may
+   * still be `null` when this webhook fires, so fetch the wallet action directly for
+   * up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -3604,7 +3636,9 @@ export interface WalletActionSwapRejectedWebhookPayload {
   status: 'rejected';
 
   /**
-   * The steps of the wallet action at the time of rejection.
+   * The steps of the wallet action at the time of rejection; `gas_credits_charged`
+   * on a step may still be `null` when this webhook fires, so fetch the wallet
+   * action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -3680,7 +3714,9 @@ export interface WalletActionSwapSucceededWebhookPayload {
   status: 'succeeded';
 
   /**
-   * The steps of the wallet action, including transaction hashes.
+   * The steps of the wallet action, including transaction hashes;
+   * `gas_credits_charged` on a step may still be `null` when this webhook fires, so
+   * fetch the wallet action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -3819,8 +3855,10 @@ export interface WalletActionTransferFailedWebhookPayload {
   status: 'failed';
 
   /**
-   * The steps of the wallet action. Completed steps will have transaction hashes;
-   * the failing step will have a failure_reason.
+   * The steps of the wallet action, where completed steps have transaction hashes
+   * and the failing step has a failure_reason; `gas_credits_charged` on a step may
+   * still be `null` when this webhook fires, so fetch the wallet action directly for
+   * up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -3909,7 +3947,9 @@ export interface WalletActionTransferRejectedWebhookPayload {
   status: 'rejected';
 
   /**
-   * The steps of the wallet action at the time of rejection.
+   * The steps of the wallet action at the time of rejection; `gas_credits_charged`
+   * on a step may still be `null` when this webhook fires, so fetch the wallet
+   * action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -3993,7 +4033,9 @@ export interface WalletActionTransferSucceededWebhookPayload {
   status: 'succeeded';
 
   /**
-   * The steps of the wallet action, including transaction hashes.
+   * The steps of the wallet action, including transaction hashes;
+   * `gas_credits_charged` on a step may still be `null` when this webhook fires, so
+   * fetch the wallet action directly for up-to-date gas data.
    */
   steps: Array<ActionsAPI.WalletActionStep>;
 
@@ -4106,6 +4148,11 @@ export interface WalletAutomationSubmittedWebhookPayload {
    * The ID of the automation execution that fired.
    */
   trigger_id: string;
+
+  /**
+   * Transaction hash of the triggering deposit, or null when triggered by a reindex.
+   */
+  trigger_tx_hash: string | null;
 
   /**
    * The type of webhook event.

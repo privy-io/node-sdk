@@ -150,9 +150,20 @@ Types:
 - <code><a href="./src/resources/intents.ts">IntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">IntentStatus</a></code>
 - <code><a href="./src/resources/intents.ts">IntentType</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumDeleteIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumIntentDeleteRequestBody</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumIntentDeleteRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumIntentRequestDetailsUnion</a></code>
 - <code><a href="./src/resources/intents.ts">KeyQuorumIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">KeyQuorumUpdateIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyDeleteIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyIntentDeleteRequestBody</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyIntentDeleteRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">PolicyIntentRequestDetails</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyIntentRequestDetailsUnion</a></code>
 - <code><a href="./src/resources/intents.ts">PolicyIntentResponse</a></code>
+- <code><a href="./src/resources/intents.ts">PolicyUpdateIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">RawSignIntentRequestDetails</a></code>
 - <code><a href="./src/resources/intents.ts">RawSignIntentResponse</a></code>
 - <code><a href="./src/resources/intents.ts">RpcIntentRequestDetails</a></code>
@@ -176,6 +187,8 @@ Methods:
 - <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleMutateIntentResponse</code>
 - <code title="delete /v1/intents/condition_sets/{condition_set_id}">client.intents.<a href="./src/resources/intents.ts">deleteConditionSet</a>(conditionSetID, { ...params }) -> ConditionSetDeleteIntentResponse</code>
 - <code title="delete /v1/intents/condition_sets/{condition_set_id}/condition_set_items/{condition_set_item_id}">client.intents.<a href="./src/resources/intents.ts">deleteConditionSetItem</a>(conditionSetItemID, { ...params }) -> ConditionSetItemDeleteIntentResponse</code>
+- <code title="delete /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/resources/intents.ts">deleteKeyQuorum</a>(keyQuorumID, { ...params }) -> KeyQuorumDeleteIntentResponse</code>
+- <code title="delete /v1/intents/policies/{policy_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicy</a>(policyID, { ...params }) -> PolicyDeleteIntentResponse</code>
 - <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">deletePolicyRule</a>(ruleID, { ...params }) -> RuleDeleteIntentResponse</code>
 - <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/resources/intents.ts">get</a>(intentID) -> IntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/raw_sign">client.intents.<a href="./src/resources/intents.ts">rawSign</a>(walletID, { ...params }) -> RawSignIntentResponse</code>
@@ -183,8 +196,8 @@ Methods:
 - <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/resources/intents.ts">rpc</a>(walletID, { ...params }) -> RpcIntentResponse</code>
 - <code title="post /v1/intents/wallets/{wallet_id}/transfer">client.intents.<a href="./src/resources/intents.ts">transfer</a>(walletID, { ...params }) -> TransferIntentResponse</code>
 - <code title="put /v1/intents/condition_sets/{condition_set_id}/condition_set_items">client.intents.<a href="./src/resources/intents.ts">updateConditionSetItems</a>(conditionSetID, [ ...condition_set_items_request_body ]) -> ConditionSetItemMutateIntentResponse</code>
-- <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/resources/intents.ts">updateKeyQuorum</a>(keyQuorumID, { ...params }) -> KeyQuorumIntentResponse</code>
-- <code title="patch /v1/intents/policies/{policy_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicy</a>(policyID, { ...params }) -> PolicyIntentResponse</code>
+- <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/resources/intents.ts">updateKeyQuorum</a>(keyQuorumID, { ...params }) -> KeyQuorumUpdateIntentResponse</code>
+- <code title="patch /v1/intents/policies/{policy_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicy</a>(policyID, { ...params }) -> PolicyUpdateIntentResponse</code>
 - <code title="patch /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/resources/intents.ts">updatePolicyRule</a>(ruleID, { ...params }) -> RuleMutateIntentResponse</code>
 - <code title="patch /v1/intents/wallets/{wallet_id}">client.intents.<a href="./src/resources/intents.ts">updateWallet</a>(walletID, { ...params }) -> WalletIntentResponse</code>
 
@@ -1148,6 +1161,7 @@ Types:
 - <code><a href="./src/resources/accounts.ts">AccountDisplayName</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountResponse</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountWallet</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountWalletChainType</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountWalletConfigurationItem</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountWalletIDs</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountWalletsConfiguration</a></code>

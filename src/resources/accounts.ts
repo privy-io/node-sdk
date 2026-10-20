@@ -2,7 +2,6 @@
 
 import { APIResource } from '../core/resource';
 import * as SharedAPI from './shared';
-import * as WalletsAPI from './wallets/wallets';
 
 export class Accounts extends APIResource {}
 
@@ -77,19 +76,24 @@ export interface AccountWallet {
   address: string;
 
   /**
-   * The wallet chain types that offer first class support.
+   * The wallet chain types supported in digital asset accounts.
    */
-  chain_type: WalletsAPI.FirstClassChainType;
+  chain_type: AccountWalletChainType;
 }
+
+/**
+ * The wallet chain types supported in digital asset accounts.
+ */
+export type AccountWalletChainType = 'ethereum' | 'solana' | 'tron' | (string & {});
 
 /**
  * Configuration for a wallet to create within an account.
  */
 export interface AccountWalletConfigurationItem {
   /**
-   * The wallet chain types that offer first class support.
+   * The wallet chain types supported in digital asset accounts.
    */
-  chain_type: WalletsAPI.FirstClassChainType;
+  chain_type: AccountWalletChainType;
 }
 
 /**
@@ -312,6 +316,7 @@ export declare namespace Accounts {
     type AccountDisplayName as AccountDisplayName,
     type AccountResponse as AccountResponse,
     type AccountWallet as AccountWallet,
+    type AccountWalletChainType as AccountWalletChainType,
     type AccountWalletConfigurationItem as AccountWalletConfigurationItem,
     type AccountWalletIDs as AccountWalletIDs,
     type AccountWalletsConfiguration as AccountWalletsConfiguration,

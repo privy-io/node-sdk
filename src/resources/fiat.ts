@@ -71,6 +71,11 @@ export interface BridgeCreateFiatDepositAccountRequestBody {
    * The Privy API environment.
    */
   environment?: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Travel rule information about who sends deposits into a fiat deposit account.
+   */
+  travel_rule?: DepositTravelRule;
 }
 
 /**
@@ -249,6 +254,11 @@ export interface CreateFiatDepositAccountRequestBody {
    * The Privy API environment.
    */
   environment?: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Travel rule information about who sends deposits into a fiat deposit account.
+   */
+  travel_rule?: DepositTravelRule;
 }
 
 /**
@@ -277,6 +287,21 @@ export interface CreatePayoutRequestBody {
    * "1.5" for 1.5%.
    */
   developer_fee_percent?: DeveloperFeePercent;
+
+  /**
+   * Travel rule information about who receives a payout.
+   */
+  travel_rule?: PayoutTravelRule;
+}
+
+/**
+ * Travel rule information about who sends deposits into a fiat deposit account.
+ */
+export interface DepositTravelRule {
+  /**
+   * The bank-side party to a fiat transfer, for travel rule compliance.
+   */
+  source: TravelRuleCounterparty;
 }
 
 /**
@@ -2029,6 +2054,72 @@ export interface PayoutSource {
 }
 
 /**
+ * Travel rule information about who receives a payout.
+ */
+export interface PayoutTravelRule {
+  /**
+   * The bank-side party to a fiat transfer, for travel rule compliance.
+   */
+  destination: TravelRuleCounterparty;
+}
+
+/**
+ * The bank-side party is a business other than the customer.
+ */
+export interface TravelRuleBusinessCounterparty {
+  /**
+   * An official business identifier, such as an LEI, VAT number or company
+   * registration number.
+   */
+  legal_entity_identifier: string;
+
+  /**
+   * Legal name of the business.
+   */
+  name: string;
+
+  type: 'business';
+
+  /**
+   * A postal address used in KYC and KYB data submission.
+   */
+  address?: VerificationAddress;
+}
+
+/**
+ * The bank-side party to a fiat transfer, for travel rule compliance.
+ */
+export type TravelRuleCounterparty =
+  | TravelRuleSelfCounterparty
+  | TravelRuleIndividualCounterparty
+  | TravelRuleBusinessCounterparty;
+
+/**
+ * The bank-side party is a person other than the customer.
+ */
+export interface TravelRuleIndividualCounterparty {
+  /**
+   * Full legal name of the person.
+   */
+  name: string;
+
+  type: 'individual';
+
+  /**
+   * A postal address used in KYC and KYB data submission.
+   */
+  address?: VerificationAddress;
+}
+
+/**
+ * The bank-side party is the KYC-verified customer. Bridge uses the customer's
+ * name and address on file.
+ */
+export interface TravelRuleSelfCounterparty {
+  type: 'self';
+}
+
+/**
  * A postal address used in KYC and KYB data submission.
  */
 export interface VerificationAddress {
@@ -2116,6 +2207,7 @@ export declare namespace Fiat {
     type CreateFiatDepositAccountRequestBody as CreateFiatDepositAccountRequestBody,
     type CreateFiatDepositAccountSource as CreateFiatDepositAccountSource,
     type CreatePayoutRequestBody as CreatePayoutRequestBody,
+    type DepositTravelRule as DepositTravelRule,
     type DeveloperFeePercent as DeveloperFeePercent,
     type ExternalFiatAccount as ExternalFiatAccount,
     type ExternalFiatAccountAddress as ExternalFiatAccountAddress,
@@ -2196,6 +2288,11 @@ export declare namespace Fiat {
     type PayoutDestination as PayoutDestination,
     type PayoutPaymentRail as PayoutPaymentRail,
     type PayoutSource as PayoutSource,
+    type PayoutTravelRule as PayoutTravelRule,
+    type TravelRuleBusinessCounterparty as TravelRuleBusinessCounterparty,
+    type TravelRuleCounterparty as TravelRuleCounterparty,
+    type TravelRuleIndividualCounterparty as TravelRuleIndividualCounterparty,
+    type TravelRuleSelfCounterparty as TravelRuleSelfCounterparty,
     type VerificationAddress as VerificationAddress,
     type VerificationDocument as VerificationDocument,
   };

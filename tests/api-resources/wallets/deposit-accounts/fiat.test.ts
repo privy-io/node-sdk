@@ -33,6 +33,7 @@ describe('resource fiat', () => {
       source: { currency: 'currency' },
       developer_fee_percent: '1.5',
       environment: 'sandbox',
+      travel_rule: { source: { type: 'self' } },
     });
   });
 

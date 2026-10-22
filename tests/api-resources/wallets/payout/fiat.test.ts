@@ -38,6 +38,7 @@ describe('resource fiat', () => {
         chain: 'chain',
       },
       developer_fee_percent: '1.5',
+      travel_rule: { destination: { type: 'self' } },
       'privy-authorization-signature': 'privy-authorization-signature',
       'privy-idempotency-key': 'privy-idempotency-key',
       'privy-request-expiry': 'privy-request-expiry',

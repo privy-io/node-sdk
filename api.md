@@ -1440,6 +1440,7 @@ Types:
 - <code><a href="./src/resources/fiat.ts">CreateFiatDepositAccountRequestBody</a></code>
 - <code><a href="./src/resources/fiat.ts">CreateFiatDepositAccountSource</a></code>
 - <code><a href="./src/resources/fiat.ts">CreatePayoutRequestBody</a></code>
+- <code><a href="./src/resources/fiat.ts">DepositTravelRule</a></code>
 - <code><a href="./src/resources/fiat.ts">DeveloperFeePercent</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccount</a></code>
 - <code><a href="./src/resources/fiat.ts">ExternalFiatAccountAddress</a></code>
@@ -1520,6 +1521,11 @@ Types:
 - <code><a href="./src/resources/fiat.ts">PayoutDestination</a></code>
 - <code><a href="./src/resources/fiat.ts">PayoutPaymentRail</a></code>
 - <code><a href="./src/resources/fiat.ts">PayoutSource</a></code>
+- <code><a href="./src/resources/fiat.ts">PayoutTravelRule</a></code>
+- <code><a href="./src/resources/fiat.ts">TravelRuleBusinessCounterparty</a></code>
+- <code><a href="./src/resources/fiat.ts">TravelRuleCounterparty</a></code>
+- <code><a href="./src/resources/fiat.ts">TravelRuleIndividualCounterparty</a></code>
+- <code><a href="./src/resources/fiat.ts">TravelRuleSelfCounterparty</a></code>
 - <code><a href="./src/resources/fiat.ts">VerificationAddress</a></code>
 - <code><a href="./src/resources/fiat.ts">VerificationDocument</a></code>
 

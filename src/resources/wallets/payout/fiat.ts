@@ -76,6 +76,11 @@ export interface FiatCreateParams {
   developer_fee_percent?: FiatAPI.DeveloperFeePercent;
 
   /**
+   * Body param: Travel rule information about who receives a payout.
+   */
+  travel_rule?: FiatAPI.PayoutTravelRule;
+
+  /**
    * Header param: Request authorization signature. If multiple signatures are
    * required, they should be comma separated.
    */

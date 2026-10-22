@@ -108,6 +108,11 @@ export interface FiatCreateParams {
    * The Privy API environment.
    */
   environment?: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * Travel rule information about who sends deposits into a fiat deposit account.
+   */
+  travel_rule?: FiatAPI.DepositTravelRule;
 }
 
 export interface FiatListParams {

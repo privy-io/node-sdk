@@ -1,5 +1,45 @@
+declare module '@x402/core/client' {
+  interface PaymentRequirements {
+    scheme: string;
+    network: string;
+    amount: string;
+    asset: string;
+    payTo: string;
+    maxTimeoutSeconds: number;
+    extra?: Record<string, unknown>;
+  }
+
+  export interface SpendControlAsset {
+    network: string;
+    asset: string;
+    maxAmountPerPayment?: string;
+  }
+
+  export interface SpendControls {
+    maxAmountPerPayment?: string | number | false;
+    allowedAssets?: true | SpendControlAsset[];
+  }
+
+  export type PaymentPolicy = (
+    x402Version: number,
+    paymentRequirements: PaymentRequirements[],
+  ) => PaymentRequirements[];
+
+  export interface PaymentCreationContext {
+    paymentRequired: unknown;
+    selectedRequirements: PaymentRequirements;
+  }
+}
+
 declare module '@x402/fetch' {
-  export class x402Client {}
+  import type { PaymentCreationContext, PaymentPolicy, SpendControls } from '@x402/core/client';
+
+  export class x402Client {
+    setSpendControls(controls: SpendControls | false): x402Client;
+    registerPolicy(policy: PaymentPolicy): x402Client;
+    onBeforePaymentCreation(hook: (context: PaymentCreationContext) => Promise<void>): x402Client;
+    createPaymentPayload(paymentRequired: unknown): Promise<unknown>;
+  }
 }
 
 declare module '@x402/evm/exact/client' {

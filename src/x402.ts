@@ -1,5 +1,6 @@
 import { isAddress as isEvmAddress, type Hex } from 'viem';
 import { isAddress as isSolanaAddress, type Address } from '@solana/kit';
+import type { PaymentPolicy, SpendControls } from '@x402/core/client';
 import { x402Client } from '@x402/fetch';
 import { registerExactEvmScheme } from '@x402/evm/exact/client';
 import { registerExactSvmScheme } from '@x402/svm/exact/client';
@@ -10,6 +11,9 @@ import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
 import type { SignatureOptions } from './resources';
 
+export type X402SpendControls = SpendControls | false;
+export type X402PaymentPolicy = PaymentPolicy;
+
 export interface CreateX402ClientInput {
   /** ID for the wallet. */
   walletId: string;
@@ -19,6 +23,26 @@ export interface CreateX402ClientInput {
   authorizationContext?: AuthorizationContext;
   /** Signature options for the wallet. Use `{ type: 'erc1271' }` for EIP-7702 gas-sponsored wallets. */
   signatureOptions?: SignatureOptions;
+  /**
+   * Per-payment spending limits and asset controls.
+   * Defaults to x402's $1 cap on recognized default assets.
+   */
+  spendControls?: X402SpendControls;
+  /**
+   * Additional policy for filtering or ordering payment requirements before selection.
+   * Returning transformed requirements is rejected before signing.
+   */
+  paymentPolicy?: X402PaymentPolicy;
+}
+
+function deepFreeze<T>(value: T): T {
+  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const nestedValue of Object.values(value)) {
+      deepFreeze(nestedValue);
+    }
+  }
+  return value;
 }
 
 /**
@@ -34,6 +58,8 @@ export interface CreateX402ClientInput {
  * @param input.walletId - ID of the Privy wallet to use for payments
  * @param input.address - Address of the wallet
  * @param input.authorizationContext - Authorization context for the wallet
+ * @param input.spendControls - Per-payment spending limits and asset controls
+ * @param input.paymentPolicy - Additional payment policy
  * @returns A configured x402Client instance
  *
  * @example
@@ -64,9 +90,44 @@ export interface CreateX402ClientInput {
  */
 export function createX402Client(
   client: PrivyClient,
-  { walletId, address, authorizationContext, signatureOptions }: CreateX402ClientInput,
+  {
+    walletId,
+    address,
+    authorizationContext,
+    signatureOptions,
+    spendControls,
+    paymentPolicy,
+  }: CreateX402ClientInput,
 ): x402Client {
-  const x402client = new x402Client();
+  const approvedRequirements = new WeakMap<object, string>();
+  const x402client = new x402Client()
+    .registerPolicy((_x402Version, requirements) => {
+      for (const requirement of requirements) {
+        deepFreeze(requirement);
+        approvedRequirements.set(requirement, JSON.stringify(requirement));
+      }
+      return requirements;
+    })
+    .onBeforePaymentCreation(async ({ selectedRequirements }) => {
+      const { amount, asset, network } = selectedRequirements;
+      if (
+        typeof amount !== 'string' ||
+        !/^\d+$/.test(amount) ||
+        typeof asset !== 'string' ||
+        asset.length === 0 ||
+        typeof network !== 'string' ||
+        network.length === 0 ||
+        approvedRequirements.get(selectedRequirements) !== JSON.stringify(selectedRequirements)
+      ) {
+        throw new Error('Invalid x402 payment requirements.');
+      }
+    });
+  if (spendControls !== undefined) {
+    x402client.setSpendControls(spendControls);
+  }
+  if (paymentPolicy) {
+    x402client.registerPolicy(paymentPolicy);
+  }
 
   if (isEvmAddress(address)) {
     const evmSigner = createViemAccount(client, {

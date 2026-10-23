@@ -1,4 +1,9 @@
-import { DEFAULT_INTENT_REQUEST_EXPIRY_MS, PrivyClient, generateP256KeyPair } from '@privy-io/node';
+import {
+  DEFAULT_INTENT_REQUEST_EXPIRY_MS,
+  P256KeyPair,
+  PrivyClient,
+  generateP256KeyPair,
+} from '@privy-io/node';
 import { TEST_APP } from '../test-config';
 
 const HASH = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
@@ -82,6 +87,84 @@ describe('PrivyIntentsService request expiry', () => {
         ...transferInput,
         request_expiry: expiry,
       });
+
+      expectCustomExpiry(intent, expiry);
+    });
+  });
+
+  describe('deletePolicy', () => {
+    let policyId: string;
+    let policyKeypair: P256KeyPair;
+
+    beforeAll(async () => {
+      policyKeypair = await generateP256KeyPair();
+      const policy = await privyClient.policies().create({
+        version: '1.0',
+        name: 'Intents Request Expiry Test Policy',
+        chain_type: 'ethereum',
+        owner: { public_key: policyKeypair.publicKey },
+        rules: [],
+      });
+      policyId = policy.id;
+    });
+
+    afterAll(async () => {
+      await privyClient.policies().delete(policyId, {
+        authorization_context: { authorization_private_keys: [policyKeypair.privateKey] },
+      });
+    });
+
+    it('should default to the 72 hour intent expiry', async () => {
+      const before = Date.now();
+      const intent = await privyClient.intents().deletePolicy(policyId);
+      const after = Date.now();
+
+      expect(intent.intent_type).toBe('POLICY');
+      expect(intent.custom_expiry).toBe(true);
+      expectDefaultExpiry(intent, before, after);
+    });
+
+    it('should use a per-call request_expiry', async () => {
+      const expiry = Date.now() + 60 * 60 * 1000;
+      const intent = await privyClient.intents().deletePolicy(policyId, { request_expiry: expiry });
+
+      expectCustomExpiry(intent, expiry);
+    });
+  });
+
+  describe('deleteKeyQuorum', () => {
+    let keyQuorumId: string;
+    let keyQuorumKeypair: P256KeyPair;
+
+    beforeAll(async () => {
+      keyQuorumKeypair = await generateP256KeyPair();
+      const keyQuorum = await privyClient.keyQuorums().create({
+        public_keys: [keyQuorumKeypair.publicKey],
+        display_name: 'Intents Request Expiry Test Key Quorum',
+        authorization_threshold: 1,
+      });
+      keyQuorumId = keyQuorum.id;
+    });
+
+    afterAll(async () => {
+      await privyClient.keyQuorums().delete(keyQuorumId, {
+        authorization_context: { authorization_private_keys: [keyQuorumKeypair.privateKey] },
+      });
+    });
+
+    it('should default to the 72 hour intent expiry', async () => {
+      const before = Date.now();
+      const intent = await privyClient.intents().deleteKeyQuorum(keyQuorumId);
+      const after = Date.now();
+
+      expect(intent.intent_type).toBe('KEY_QUORUM');
+      expect(intent.custom_expiry).toBe(true);
+      expectDefaultExpiry(intent, before, after);
+    });
+
+    it('should use a per-call request_expiry', async () => {
+      const expiry = Date.now() + 60 * 60 * 1000;
+      const intent = await privyClient.intents().deleteKeyQuorum(keyQuorumId, { request_expiry: expiry });
 
       expectCustomExpiry(intent, expiry);
     });

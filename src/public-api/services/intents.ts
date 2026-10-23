@@ -9,6 +9,8 @@ import {
   IntentCreatePolicyRuleParams,
   IntentDeleteConditionSetItemParams,
   IntentDeleteConditionSetParams,
+  IntentDeleteKeyQuorumParams,
+  IntentDeletePolicyParams,
   IntentDeletePolicyRuleParams,
   IntentRawSignParams,
   IntentRpcParams,
@@ -18,8 +20,10 @@ import {
   IntentUpdatePolicyParams,
   IntentUpdatePolicyRuleParams,
   IntentUpdateWalletParams,
-  KeyQuorumIntentResponse,
-  PolicyIntentResponse,
+  KeyQuorumDeleteIntentResponse,
+  KeyQuorumUpdateIntentResponse,
+  PolicyDeleteIntentResponse,
+  PolicyUpdateIntentResponse,
   RawSignIntentResponse,
   RuleDeleteIntentResponse,
   RpcIntentResponse,
@@ -91,7 +95,7 @@ export class PrivyIntentsService extends Intents {
   public override updatePolicy(
     policyId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.UpdatePolicyInput,
-  ): APIPromise<PolicyIntentResponse> {
+  ): APIPromise<PolicyUpdateIntentResponse> {
     return super.updatePolicy(policyId, this.withRequestExpiry(params, requestExpiry));
   }
 
@@ -112,7 +116,7 @@ export class PrivyIntentsService extends Intents {
   public override updateKeyQuorum(
     keyQuorumId: string,
     { request_expiry: requestExpiry, ...params }: PrivyIntentsService.UpdateKeyQuorumInput,
-  ): APIPromise<KeyQuorumIntentResponse> {
+  ): APIPromise<KeyQuorumUpdateIntentResponse> {
     return super.updateKeyQuorum(keyQuorumId, this.withRequestExpiry(params, requestExpiry));
   }
 
@@ -141,6 +145,30 @@ export class PrivyIntentsService extends Intents {
   ): APIPromise<ConditionSetDeleteIntentResponse> {
     const { request_expiry: requestExpiry, ...params } = input ?? {};
     return super.deleteConditionSet(conditionSetId, this.withRequestExpiry(params, requestExpiry));
+  }
+
+  public override deletePolicy(
+    policyId: string,
+    // Same as `deleteConditionSet`: the base params share no property with `{ request_expiry }`.
+    input:
+      | (PrivyIntentsService.DeletePolicyInput & { 'privy-request-expiry'?: never })
+      | null
+      | undefined = {},
+  ): APIPromise<PolicyDeleteIntentResponse> {
+    const { request_expiry: requestExpiry, ...params } = input ?? {};
+    return super.deletePolicy(policyId, this.withRequestExpiry(params, requestExpiry));
+  }
+
+  public override deleteKeyQuorum(
+    keyQuorumId: string,
+    // Same as `deleteConditionSet`: the base params share no property with `{ request_expiry }`.
+    input:
+      | (PrivyIntentsService.DeleteKeyQuorumInput & { 'privy-request-expiry'?: never })
+      | null
+      | undefined = {},
+  ): APIPromise<KeyQuorumDeleteIntentResponse> {
+    const { request_expiry: requestExpiry, ...params } = input ?? {};
+    return super.deleteKeyQuorum(keyQuorumId, this.withRequestExpiry(params, requestExpiry));
   }
 
   public override deleteConditionSetItem(
@@ -178,4 +206,8 @@ export namespace PrivyIntentsService {
   export type DeleteConditionSetInput = Prettify<WithExpiry<IntentDeleteConditionSetParams>>;
   /** The input type for the {@link PrivyIntentsService.deleteConditionSetItem} method. */
   export type DeleteConditionSetItemInput = Prettify<WithExpiry<IntentDeleteConditionSetItemParams>>;
+  /** The input type for the {@link PrivyIntentsService.deletePolicy} method. */
+  export type DeletePolicyInput = Prettify<WithExpiry<IntentDeletePolicyParams>>;
+  /** The input type for the {@link PrivyIntentsService.deleteKeyQuorum} method. */
+  export type DeleteKeyQuorumInput = Prettify<WithExpiry<IntentDeleteKeyQuorumParams>>;
 }

@@ -1453,5 +1453,4 @@ export {
   type EthereumYieldWithdrawInput,
   type EvmCaip2ChainID,
   type VaultAsset,
-  type YieldAuthorizationHeaders,
 } from './yield';

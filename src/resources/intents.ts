@@ -1150,7 +1150,7 @@ export interface PolicyIntentRequestDetails {
 export namespace PolicyIntentRequestDetails {
   export interface Body {
     /**
-     * Name to assign to policy.
+     * Name to assign to the policy, up to 100 characters.
      */
     name?: string;
 
@@ -2731,7 +2731,7 @@ export interface IntentUpdateKeyQuorumParams {
 
 export interface IntentUpdatePolicyParams {
   /**
-   * Body param: Name to assign to policy.
+   * Body param: Name to assign to the policy, up to 100 characters.
    */
   name?: string;
 

@@ -1653,7 +1653,6 @@ Types:
 - <code><a href="./src/resources/yield.ts">EthereumYieldWithdrawInput</a></code>
 - <code><a href="./src/resources/yield.ts">EvmCaip2ChainID</a></code>
 - <code><a href="./src/resources/yield.ts">VaultAsset</a></code>
-- <code><a href="./src/resources/yield.ts">YieldAuthorizationHeaders</a></code>
 
 # KrakenEmbed
 

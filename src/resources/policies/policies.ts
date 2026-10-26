@@ -764,7 +764,7 @@ export interface Policy {
   created_at: number;
 
   /**
-   * Name to assign to policy.
+   * Name to assign to the policy, up to 100 characters.
    */
   name: string;
 
@@ -853,7 +853,7 @@ export interface PolicyListItem {
   created_at: number;
 
   /**
-   * Name to assign to policy.
+   * Name to assign to the policy, up to 100 characters.
    */
   name: string;
 
@@ -1373,7 +1373,7 @@ export interface PolicyCreateParams {
   chain_type: WalletsAPI.WalletChainType;
 
   /**
-   * Body param: Name to assign to policy.
+   * Body param: Name to assign to the policy, up to 100 characters.
    */
   name: string;
 
@@ -1497,7 +1497,7 @@ export interface PolicyDeleteRuleParams {
 
 export interface PolicyUpdateParams {
   /**
-   * Body param: Name to assign to policy.
+   * Body param: Name to assign to the policy, up to 100 characters.
    */
   name?: string;
 

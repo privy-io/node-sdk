@@ -907,7 +907,6 @@ import {
   EvmCaip2ChainID,
   VaultAsset,
   Yield,
-  YieldAuthorizationHeaders,
 } from './resources/yield';
 import {
   AllowlistDeletionResponse,
@@ -3752,7 +3751,6 @@ export declare namespace PrivyAPI {
     type EthereumYieldWithdrawInput as EthereumYieldWithdrawInput,
     type EvmCaip2ChainID as EvmCaip2ChainID,
     type VaultAsset as VaultAsset,
-    type YieldAuthorizationHeaders as YieldAuthorizationHeaders,
   };
 
   export {

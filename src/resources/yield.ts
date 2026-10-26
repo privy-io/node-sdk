@@ -394,28 +394,6 @@ export interface VaultAsset {
   symbol: string;
 }
 
-/**
- * Headers required to authorize yield operations.
- */
-export interface YieldAuthorizationHeaders {
-  /**
-   * ID of your Privy app.
-   */
-  'privy-app-id': string;
-
-  /**
-   * Request authorization signature. If multiple signatures are required, they
-   * should be comma separated.
-   */
-  'privy-authorization-signature'?: string;
-
-  /**
-   * Request expiry. Value is a Unix timestamp in milliseconds representing the
-   * deadline by which the request must be processed.
-   */
-  'privy-request-expiry'?: string;
-}
-
 export declare namespace Yield {
   export {
     type EthereumVaultDetailsInput as EthereumVaultDetailsInput,
@@ -437,6 +415,5 @@ export declare namespace Yield {
     type EthereumYieldWithdrawInput as EthereumYieldWithdrawInput,
     type EvmCaip2ChainID as EvmCaip2ChainID,
     type VaultAsset as VaultAsset,
-    type YieldAuthorizationHeaders as YieldAuthorizationHeaders,
   };
 }

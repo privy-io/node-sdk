@@ -1357,7 +1357,7 @@ export interface TransactionStillPendingWebhookPayload {
 
   /**
    * An unsigned standard Ethereum transaction object. Supports EVM transaction types
-   * 0, 1, 2, and 4.
+   * 0, 2, and 4.
    */
   transaction_request: WalletsAPI.UnsignedStandardEthereumTransaction;
 

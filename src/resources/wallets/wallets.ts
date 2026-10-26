@@ -1721,7 +1721,7 @@ export interface EthereumSendTransactionRpcInput {
 export interface EthereumSendTransactionRpcInputParams {
   /**
    * An unsigned Ethereum transaction object. Supports standard EVM transaction types
-   * (0, 1, 2, 4) and Tempo transactions (type 118).
+   * (0, 2, 4) and Tempo transactions (type 118).
    */
   transaction: UnsignedEthereumTransaction;
 }
@@ -1758,7 +1758,7 @@ export interface EthereumSendTransactionRpcResponseData {
 
   /**
    * An unsigned Ethereum transaction object. Supports standard EVM transaction types
-   * (0, 1, 2, 4) and Tempo transactions (type 118).
+   * (0, 2, 4) and Tempo transactions (type 118).
    */
   transaction_request?: UnsignedEthereumTransaction;
 
@@ -1885,7 +1885,7 @@ export interface EthereumSignTransactionRpcInput {
 export interface EthereumSignTransactionRpcInputParams {
   /**
    * An unsigned Ethereum transaction object. Supports standard EVM transaction types
-   * (0, 1, 2, 4) and Tempo transactions (type 118).
+   * (0, 2, 4) and Tempo transactions (type 118).
    */
   transaction: UnsignedEthereumTransaction;
 }
@@ -4639,13 +4639,13 @@ export type TypedDataTypesInputParams = { [key: string]: Array<TypedDataTypeFiel
 
 /**
  * An unsigned Ethereum transaction object. Supports standard EVM transaction types
- * (0, 1, 2, 4) and Tempo transactions (type 118).
+ * (0, 2, 4) and Tempo transactions (type 118).
  */
 export type UnsignedEthereumTransaction = UnsignedStandardEthereumTransaction | UnsignedTempoTransaction;
 
 /**
  * An unsigned standard Ethereum transaction object. Supports EVM transaction types
- * 0, 1, 2, and 4.
+ * 0, 2, and 4.
  */
 export interface UnsignedStandardEthereumTransaction {
   authorization_list?: Array<EthereumSign7702Authorization>;
@@ -4696,7 +4696,7 @@ export interface UnsignedStandardEthereumTransaction {
 
   to?: string;
 
-  type?: 0 | 1 | 2 | 4;
+  type?: 0 | 2 | 4;
 
   /**
    * A quantity value that can be either a hex string starting with '0x' or a

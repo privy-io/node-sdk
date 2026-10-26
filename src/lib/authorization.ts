@@ -26,6 +26,12 @@ export interface AuthorizationContext {
    */
   user_jwts?: string[];
   /**
+   * A user that should sign the request authorization, with an MFA token from a completed MFA
+   * verification. The JWT is exchanged for the user's authorization key like `user_jwts`, and the
+   * MFA token is sent with that exchange.
+   */
+  user_auth?: AuthorizationContext.UserAuth;
+  /**
    * The signatures that should be used for authorization.
    * These should be base64-encoded signatures.
    */
@@ -42,6 +48,16 @@ export interface AuthorizationContext {
 
 export namespace AuthorizationContext {
   export type SignFn = (payload: Uint8Array) => Promise<string>;
+
+  export interface UserAuth {
+    /** A valid JWT for the user. */
+    user_jwt: string;
+    /**
+     * An MFA token from the user's completed MFA verification. The JWT exchange requires it when
+     * the user has MFA enrolled.
+     */
+    mfa_token?: string;
+  }
 }
 
 export type WalletApiRequestSignatureInput = {
@@ -104,13 +120,15 @@ export async function generateAuthorizationSignatures(
 ): Promise<string[]> {
   const payload = formatRequestForAuthorizationSignature(input);
 
-  const userJwts = authorizationContext.user_jwts ?? [];
-  let userKeys: string[] = [];
-  if (userJwts.length > 0) {
-    userKeys = await Promise.all(
-      userJwts.map((jwt) => client._jwtExchange().exchangeJwtForAuthorizationKey(jwt)),
-    );
-  }
+  const userAuths: AuthorizationContext.UserAuth[] = [
+    ...(authorizationContext.user_jwts ?? []).map((user_jwt) => ({ user_jwt })),
+    ...(authorizationContext.user_auth ? [authorizationContext.user_auth] : []),
+  ];
+  const userKeys = await Promise.all(
+    userAuths.map(({ user_jwt, mfa_token }) =>
+      client._jwtExchange().exchangeJwtForAuthorizationKey(user_jwt, mfa_token),
+    ),
+  );
 
   /** These are the private keys provided by the caller, either directly or via JWT exchange */
   const privateKeys = [...(authorizationContext.authorization_private_keys ?? []), ...userKeys];

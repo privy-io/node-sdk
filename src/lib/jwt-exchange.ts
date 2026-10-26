@@ -21,25 +21,31 @@ export class JwtExchangeService {
   }
 
   /**
-   * Exchanges a JWT for an authorization key.
+   * Exchanges a JWT for an authorization key. Keys are cached per JWT and MFA token.
    * @param jwt - The JWT to exchange for an authorization key.
+   * @param mfaToken - An MFA token from the user's completed MFA verification, sent as the
+   *   `privy-mfa-token` header.
    * @returns The (base-64 encoded PKCS8-formatted) authorization key.
    * @internal
    */
-  async exchangeJwtForAuthorizationKey(jwt: string): Promise<string> {
-    const cachedAuthorizationKey = this.jwtCache.get(jwt);
+  async exchangeJwtForAuthorizationKey(jwt: string, mfaToken?: string): Promise<string> {
+    const cacheKey = mfaToken ? `${jwt}:${mfaToken}` : jwt;
+    const cachedAuthorizationKey = this.jwtCache.get(cacheKey);
     if (cachedAuthorizationKey) {
       return cachedAuthorizationKey;
     }
 
     const { publicKeySpki, decryptPayload } = await this.getHpkeRecipient();
 
-    const signer = await this.walletsService.authenticateWithJwt({
-      user_jwt: jwt,
-      encryption_type: 'HPKE',
-      // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
-      recipient_public_key: Buffer.from(publicKeySpki).toString('base64'),
-    });
+    const signer = await this.walletsService.authenticateWithJwt(
+      {
+        user_jwt: jwt,
+        encryption_type: 'HPKE',
+        // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
+        recipient_public_key: Buffer.from(publicKeySpki).toString('base64'),
+      },
+      mfaToken ? { headers: { 'privy-mfa-token': mfaToken } } : undefined,
+    );
     if (
       'encrypted_authorization_key' in signer &&
       signer.encrypted_authorization_key.encryption_type === 'HPKE'
@@ -52,7 +58,7 @@ export class JwtExchangeService {
       );
       const authorizationKey = new TextDecoder().decode(decryptedAuthorizationKey);
       this.jwtCache.set(
-        jwt,
+        cacheKey,
         authorizationKey,
         // Setting the TTL here makes the LRU cache check and prune on `.get`.
         { ttl: signer.expires_at - Date.now() },

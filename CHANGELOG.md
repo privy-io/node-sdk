@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.37.0](https://github.com/privy-io/node-sdk-private/compare/v0.36.0...v0.37.0) (2026-10-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* enforce x402 spending controls ([#95](https://github.com/privy-io/node-sdk-private/issues/95))
+
+### Features
+
+* **api:** api update ([d787297](https://github.com/privy-io/node-sdk-private/commit/d787297ac9820ddbdcd3433ee1fae3df510015c3))
+* **api:** api update ([478c1ef](https://github.com/privy-io/node-sdk-private/commit/478c1ef11921fe55eb532135e6c3e88f2599e9de))
+* **api:** api update ([1020b64](https://github.com/privy-io/node-sdk-private/commit/1020b64264b7c8746f961463b676b9b1b27f1567))
+* **api:** api update ([3768339](https://github.com/privy-io/node-sdk-private/commit/3768339f8046890db496043e4a2df6a9d045162d))
+* **intents:** apply intent request expiry to all intent methods ([#90](https://github.com/privy-io/node-sdk-private/issues/90)) ([72d44af](https://github.com/privy-io/node-sdk-private/commit/72d44afab5f50c4558b5f33cb04ff21bf82204de))
+* **wallets:** add signed attachAutomations and detachAutomations wrappers ([#89](https://github.com/privy-io/node-sdk-private/issues/89)) ([c87a50e](https://github.com/privy-io/node-sdk-private/commit/c87a50e51390833842a85a00100b2c73819af07b))
+* **wallets:** request expiry for swaps and per-call expiry for earn ([#88](https://github.com/privy-io/node-sdk-private/issues/88)) ([6ac9985](https://github.com/privy-io/node-sdk-private/commit/6ac9985aba2f62988890b16180b1f57e9f7503a1))
+
+
+### Bug Fixes
+
+* **auth:** sign and send a request expiry of 0 ([#87](https://github.com/privy-io/node-sdk-private/issues/87)) ([8c15045](https://github.com/privy-io/node-sdk-private/commit/8c150457282f931563253e17111817245263ad66))
+* **ci:** protect npm publishing ([#94](https://github.com/privy-io/node-sdk-private/issues/94)) ([5b06073](https://github.com/privy-io/node-sdk-private/commit/5b06073ef3ea10b29add1196b83b888c32121398))
+* **deps:** verify tsc-multi release integrity ([#81](https://github.com/privy-io/node-sdk-private/issues/81)) ([1abca9c](https://github.com/privy-io/node-sdk-private/commit/1abca9cb3f4d0be2082cfef391fd628120cdd50b))
+* enforce x402 spending controls ([#95](https://github.com/privy-io/node-sdk-private/issues/95)) ([becac37](https://github.com/privy-io/node-sdk-private/commit/becac37079db3b9e18ef400c047a28ada3f5a9ae))
+* **intents:** match updated intent response types and default expiry on delete intents ([#93](https://github.com/privy-io/node-sdk-private/issues/93)) ([2a1c37e](https://github.com/privy-io/node-sdk-private/commit/2a1c37e78a3dfe67d3a76827818bf3e3702d7b7f))
+
 ## [0.36.0](https://github.com/privy-io/node-sdk-private/compare/v0.35.0...v0.36.0) (2026-10-16)
 
 

@@ -31,7 +31,7 @@ describe('resource intents', () => {
           current_user_has_signed: 'true',
           cursor: 'x',
           intent_type: 'CONDITION_SET',
-          limit: 100,
+          limit: 1,
           pending_member_id: 'pending_member_id',
           resource_id: 'resource_id',
           sort_by: 'created_at_desc',

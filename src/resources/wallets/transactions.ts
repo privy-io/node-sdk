@@ -120,7 +120,7 @@ export interface TransactionGetParams {
    */
   include_archived?: boolean;
 
-  limit?: number | null;
+  limit?: number;
 
   tx_hash?: string;
 }

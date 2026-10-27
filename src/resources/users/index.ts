@@ -9,6 +9,30 @@ export {
 } from './external-fiat-accounts';
 export { KYC, type KYCInitiateLinksParams, type KYCInitiateTosParams, type KYCSubmitParams } from './kyc';
 export {
+  Mfa,
+  type MfaPasskeyAssertionResponse,
+  type MfaPasskeyAttestationResponse,
+  type MfaPasskeyAuthenticatorEnrollmentOptions,
+  type MfaPasskeyAuthenticatorEnrollmentResponse,
+  type MfaPasskeyAuthenticatorSelection,
+  type MfaPasskeyAuthenticatorVerifyOptions,
+  type MfaPasskeyAuthenticatorVerifyResponse,
+  type MfaPasskeyClientExtensionResults,
+  type MfaPasskeyCredPropsResult,
+  type MfaPasskeyCredentialDescriptor,
+  type MfaPasskeyEnrollmentExtensions,
+  type MfaPasskeyPubKeyCredParam,
+  type MfaPasskeyRelyingParty,
+  type MfaPasskeyUser,
+  type MfaPasskeyVerifyExtensions,
+  type MfaVerificationResponse,
+  type SMSMfaEnrollmentInitRequestBody,
+  type SMSMfaVerifyRequestBody,
+  type TotpMfaEnrollmentInitResponse,
+  type TotpMfaEnrollmentOptions,
+  type TotpMfaVerifyRequestBody,
+} from './mfa/index';
+export {
   Users,
   type AuthenticatedUser,
   type ClientSessionUpdateAction,

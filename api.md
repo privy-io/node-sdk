@@ -490,6 +490,63 @@ Methods:
 - <code title="post /v1/users/{user_id}/kyc/tos">client.users.kyc.<a href="./src/resources/users/kyc.ts">initiateTos</a>(userID, { ...params }) -> KyxTosResponse</code>
 - <code title="post /v1/users/{user_id}/kyc/submit">client.users.kyc.<a href="./src/resources/users/kyc.ts">submit</a>(userID, { ...params }) -> KYCStatusResponse</code>
 
+## Mfa
+
+Types:
+
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyAssertionResponse</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyAttestationResponse</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyAuthenticatorEnrollmentOptions</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyAuthenticatorEnrollmentResponse</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyAuthenticatorSelection</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyAuthenticatorVerifyOptions</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyAuthenticatorVerifyResponse</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyClientExtensionResults</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyCredPropsResult</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyCredentialDescriptor</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyEnrollmentExtensions</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyPubKeyCredParam</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyRelyingParty</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyUser</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyVerifyExtensions</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">MfaVerificationResponse</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">SMSMfaEnrollmentInitRequestBody</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">SMSMfaVerifyRequestBody</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">TotpMfaEnrollmentInitResponse</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">TotpMfaEnrollmentOptions</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">TotpMfaVerifyRequestBody</a></code>
+
+### SMS
+
+#### Enrollment
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/sms/enrollment/init">client.users.mfa.sms.enrollment.<a href="./src/resources/users/mfa/sms/enrollment.ts">init</a>(userID, { ...params }) -> SuccessResponse</code>
+- <code title="post /v1/users/{user_id}/mfa/sms/enrollment/verify">client.users.mfa.sms.enrollment.<a href="./src/resources/users/mfa/sms/enrollment.ts">verify</a>(userID, { ...params }) -> MfaVerificationResponse</code>
+
+#### Verification
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/sms/verification/init">client.users.mfa.sms.verification.<a href="./src/resources/users/mfa/sms/verification.ts">init</a>(userID, { ...params }) -> SuccessResponse</code>
+- <code title="post /v1/users/{user_id}/mfa/sms/verification/verify">client.users.mfa.sms.verification.<a href="./src/resources/users/mfa/sms/verification.ts">verify</a>(userID, { ...params }) -> MfaVerificationResponse</code>
+
+### Totp
+
+#### Enrollment
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/totp/enrollment/init">client.users.mfa.totp.enrollment.<a href="./src/resources/users/mfa/totp/enrollment.ts">init</a>(userID, { ...params }) -> TotpMfaEnrollmentInitResponse</code>
+- <code title="post /v1/users/{user_id}/mfa/totp/enrollment/verify">client.users.mfa.totp.enrollment.<a href="./src/resources/users/mfa/totp/enrollment.ts">verify</a>(userID, { ...params }) -> MfaVerificationResponse</code>
+
+#### Verification
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/totp/verification/verify">client.users.mfa.totp.verification.<a href="./src/resources/users/mfa/totp/verification.ts">verify</a>(userID, { ...params }) -> MfaVerificationResponse</code>
+
 # WalletAutomations
 
 Types:

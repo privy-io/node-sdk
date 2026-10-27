@@ -29,7 +29,7 @@ describe('resource transactions', () => {
       asset: 'usdc',
       cursor: 'x',
       include_archived: true,
-      limit: 100,
+      limit: 1,
       tx_hash: 'tx_hash',
     });
   });

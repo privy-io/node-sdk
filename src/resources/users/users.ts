@@ -16,6 +16,31 @@ import {
 import * as KYCAPI from './kyc';
 import { KYC, KYCInitiateLinksParams, KYCInitiateTosParams, KYCSubmitParams } from './kyc';
 import * as WalletsAPI from '../wallets/wallets';
+import * as MfaAPI from './mfa/mfa';
+import {
+  Mfa,
+  MfaPasskeyAssertionResponse,
+  MfaPasskeyAttestationResponse,
+  MfaPasskeyAuthenticatorEnrollmentOptions,
+  MfaPasskeyAuthenticatorEnrollmentResponse,
+  MfaPasskeyAuthenticatorSelection,
+  MfaPasskeyAuthenticatorVerifyOptions,
+  MfaPasskeyAuthenticatorVerifyResponse,
+  MfaPasskeyClientExtensionResults,
+  MfaPasskeyCredPropsResult,
+  MfaPasskeyCredentialDescriptor,
+  MfaPasskeyEnrollmentExtensions,
+  MfaPasskeyPubKeyCredParam,
+  MfaPasskeyRelyingParty,
+  MfaPasskeyUser,
+  MfaPasskeyVerifyExtensions,
+  MfaVerificationResponse,
+  SMSMfaEnrollmentInitRequestBody,
+  SMSMfaVerifyRequestBody,
+  TotpMfaEnrollmentInitResponse,
+  TotpMfaEnrollmentOptions,
+  TotpMfaVerifyRequestBody,
+} from './mfa/mfa';
 import { APIPromise } from '../../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -29,6 +54,7 @@ export class Users extends APIResource {
   externalFiatAccounts: ExternalFiatAccountsAPI.ExternalFiatAccounts =
     new ExternalFiatAccountsAPI.ExternalFiatAccounts(this._client);
   kyc: KYCAPI.KYC = new KYCAPI.KYC(this._client);
+  mfa: MfaAPI.Mfa = new MfaAPI.Mfa(this._client);
 
   /**
    * Create a new user with linked accounts. Optionally pre-generate embedded wallets
@@ -1855,6 +1881,7 @@ export interface UserUnlinkLinkedAccountParams {
 
 Users.ExternalFiatAccounts = ExternalFiatAccounts;
 Users.KYC = KYC;
+Users.Mfa = Mfa;
 
 export declare namespace Users {
   export {
@@ -1962,5 +1989,30 @@ export declare namespace Users {
     type KYCInitiateLinksParams as KYCInitiateLinksParams,
     type KYCInitiateTosParams as KYCInitiateTosParams,
     type KYCSubmitParams as KYCSubmitParams,
+  };
+
+  export {
+    Mfa as Mfa,
+    type MfaPasskeyAssertionResponse as MfaPasskeyAssertionResponse,
+    type MfaPasskeyAttestationResponse as MfaPasskeyAttestationResponse,
+    type MfaPasskeyAuthenticatorEnrollmentOptions as MfaPasskeyAuthenticatorEnrollmentOptions,
+    type MfaPasskeyAuthenticatorEnrollmentResponse as MfaPasskeyAuthenticatorEnrollmentResponse,
+    type MfaPasskeyAuthenticatorSelection as MfaPasskeyAuthenticatorSelection,
+    type MfaPasskeyAuthenticatorVerifyOptions as MfaPasskeyAuthenticatorVerifyOptions,
+    type MfaPasskeyAuthenticatorVerifyResponse as MfaPasskeyAuthenticatorVerifyResponse,
+    type MfaPasskeyClientExtensionResults as MfaPasskeyClientExtensionResults,
+    type MfaPasskeyCredPropsResult as MfaPasskeyCredPropsResult,
+    type MfaPasskeyCredentialDescriptor as MfaPasskeyCredentialDescriptor,
+    type MfaPasskeyEnrollmentExtensions as MfaPasskeyEnrollmentExtensions,
+    type MfaPasskeyPubKeyCredParam as MfaPasskeyPubKeyCredParam,
+    type MfaPasskeyRelyingParty as MfaPasskeyRelyingParty,
+    type MfaPasskeyUser as MfaPasskeyUser,
+    type MfaPasskeyVerifyExtensions as MfaPasskeyVerifyExtensions,
+    type MfaVerificationResponse as MfaVerificationResponse,
+    type SMSMfaEnrollmentInitRequestBody as SMSMfaEnrollmentInitRequestBody,
+    type SMSMfaVerifyRequestBody as SMSMfaVerifyRequestBody,
+    type TotpMfaEnrollmentInitResponse as TotpMfaEnrollmentInitResponse,
+    type TotpMfaEnrollmentOptions as TotpMfaEnrollmentOptions,
+    type TotpMfaVerifyRequestBody as TotpMfaVerifyRequestBody,
   };
 }

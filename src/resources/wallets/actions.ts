@@ -950,7 +950,7 @@ export interface ListWalletActionsQuery {
    */
   cursor?: string;
 
-  limit?: number | null;
+  limit?: number;
 
   /**
    * Type of wallet action

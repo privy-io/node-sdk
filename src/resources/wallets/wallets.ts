@@ -5453,7 +5453,7 @@ export type WalletEntityType = 'user' | 'organization';
 /**
  * The entropy type of the wallet.
  */
-export type WalletEntropyType = 'hd' | 'private-key';
+export type WalletEntropyType = 'hd' | 'private-key' | 'ed25519-scalar' | (string & {});
 
 /**
  * A named asset on Ethereum-compatible chains.

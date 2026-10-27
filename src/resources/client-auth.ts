@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as EmbeddedWalletsAPI from './embedded-wallets';
 import * as UsersAPI from './users/users';
+import * as MfaAPI from './users/mfa/mfa';
 
 export class ClientAuth extends APIResource {}
 
@@ -1218,31 +1219,31 @@ export interface PasskeyAuthenticateInput {
 export interface PasskeyAuthenticatorEnrollmentOptions {
   challenge: string;
 
-  pub_key_cred_params: Array<PasskeyPubKeyCredParam>;
+  pub_key_cred_params: Array<MfaAPI.MfaPasskeyPubKeyCredParam>;
 
   /**
    * Relying party information for a WebAuthn ceremony.
    */
-  rp: PasskeyRelyingParty;
+  rp: MfaAPI.MfaPasskeyRelyingParty;
 
   /**
    * User entity for a WebAuthn registration ceremony.
    */
-  user: PasskeyUser;
+  user: MfaAPI.MfaPasskeyUser;
 
   attestation?: string;
 
   /**
    * Authenticator selection criteria for a WebAuthn registration ceremony.
    */
-  authenticator_selection?: PasskeyAuthenticatorSelection;
+  authenticator_selection?: MfaAPI.MfaPasskeyAuthenticatorSelection;
 
-  exclude_credentials?: Array<PasskeyCredentialDescriptor>;
+  exclude_credentials?: Array<MfaAPI.MfaPasskeyCredentialDescriptor>;
 
   /**
    * Extensions for a WebAuthn registration ceremony.
    */
-  extensions?: PasskeyEnrollmentExtensions;
+  extensions?: MfaAPI.MfaPasskeyEnrollmentExtensions;
 
   timeout?: number;
 }
@@ -1257,14 +1258,14 @@ export interface PasskeyAuthenticatorEnrollmentResponse {
   /**
    * Client extension results returned by the WebAuthn authenticator.
    */
-  client_extension_results: PasskeyClientExtensionResults;
+  client_extension_results: MfaAPI.MfaPasskeyClientExtensionResults;
 
   raw_id: string;
 
   /**
    * The authenticator attestation response from a WebAuthn registration ceremony.
    */
-  response: PasskeyAttestationResponse;
+  response: MfaAPI.MfaPasskeyAttestationResponse;
 
   type: 'public-key';
 
@@ -1291,12 +1292,12 @@ export interface PasskeyAuthenticatorSelection {
 export interface PasskeyAuthenticatorVerifyOptions {
   challenge: string;
 
-  allow_credentials?: Array<PasskeyCredentialDescriptor>;
+  allow_credentials?: Array<MfaAPI.MfaPasskeyCredentialDescriptor>;
 
   /**
    * Extensions for a WebAuthn authentication ceremony.
    */
-  extensions?: PasskeyVerifyExtensions;
+  extensions?: MfaAPI.MfaPasskeyVerifyExtensions;
 
   rp_id?: string;
 
@@ -1315,14 +1316,14 @@ export interface PasskeyAuthenticatorVerifyResponse {
   /**
    * Client extension results returned by the WebAuthn authenticator.
    */
-  client_extension_results: PasskeyClientExtensionResults;
+  client_extension_results: MfaAPI.MfaPasskeyClientExtensionResults;
 
   raw_id: string;
 
   /**
    * The authenticator assertion response from a WebAuthn authentication ceremony.
    */
-  response: PasskeyAssertionResponse;
+  response: MfaAPI.MfaPasskeyAssertionResponse;
 
   type: 'public-key';
 
@@ -1338,7 +1339,7 @@ export interface PasskeyClientExtensionResults {
   /**
    * The result of the WebAuthn credProps extension.
    */
-  cred_props?: PasskeyCredPropsResult;
+  cred_props?: MfaAPI.MfaPasskeyCredPropsResult;
 
   hmac_create_secret?: boolean;
 }
@@ -1370,7 +1371,7 @@ export interface PasskeyEnrollmentExtensions {
   /**
    * The result of the WebAuthn credProps extension.
    */
-  cred_props?: PasskeyCredPropsResult;
+  cred_props?: MfaAPI.MfaPasskeyCredPropsResult;
 
   hmac_create_secret?: boolean;
 }

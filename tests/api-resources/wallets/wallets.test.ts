@@ -62,7 +62,7 @@ describe('resource wallets', () => {
           entity_id: 'entity_id',
           external_id: 'external_id',
           include_archived: true,
-          limit: 100,
+          limit: 1,
           user_id: 'user_id',
         },
         { path: '/_stainless_unknown_path' },

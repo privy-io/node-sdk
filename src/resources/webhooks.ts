@@ -1379,6 +1379,34 @@ export interface TransactionStillPendingWebhookPayload {
 }
 
 /**
+ * Payload for the usage.ata_deposit.recorded webhook event (sponsored Solana
+ * associated token account creation rent).
+ */
+export interface UsageAtaDepositRecordedWebhookPayload {
+  amount_usd: string;
+
+  /**
+   * An opaque, stable identifier for this charge. Use it to deduplicate webhook
+   * deliveries.
+   */
+  event_id: string;
+
+  recorded_at: number;
+
+  source_id: string;
+
+  /**
+   * The type of operation that incurred a usage charge.
+   */
+  source_type: UsageSourceType;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'usage.ata_deposit.recorded';
+}
+
+/**
  * Payload for the usage.gas_sponsorship.recorded webhook event (sponsored network
  * gas).
  */
@@ -4356,6 +4384,7 @@ export type WebhookPayload =
   | UserOperationCompletedWebhookPayload
   | UsageGasSponsorshipRecordedWebhookPayload
   | UsageSwapProviderFeeRecordedWebhookPayload
+  | UsageAtaDepositRecordedWebhookPayload
   | IntentCreatedWebhookPayload
   | IntentAuthorizedWebhookPayload
   | IntentRejectedWebhookPayload
@@ -4638,6 +4667,7 @@ export type UnsafeUnwrapWebhookEvent =
   | TransactionProviderErrorWebhookPayload
   | TransactionReplacedWebhookPayload
   | TransactionStillPendingWebhookPayload
+  | UsageAtaDepositRecordedWebhookPayload
   | UsageGasSponsorshipRecordedWebhookPayload
   | UsageSwapProviderFeeRecordedWebhookPayload
   | UserAuthenticatedWebhookPayload
@@ -4745,6 +4775,7 @@ export declare namespace Webhooks {
     type TransactionProviderErrorWebhookPayload as TransactionProviderErrorWebhookPayload,
     type TransactionReplacedWebhookPayload as TransactionReplacedWebhookPayload,
     type TransactionStillPendingWebhookPayload as TransactionStillPendingWebhookPayload,
+    type UsageAtaDepositRecordedWebhookPayload as UsageAtaDepositRecordedWebhookPayload,
     type UsageGasSponsorshipRecordedWebhookPayload as UsageGasSponsorshipRecordedWebhookPayload,
     type UsageSourceType as UsageSourceType,
     type UsageSwapProviderFeeRecordedWebhookPayload as UsageSwapProviderFeeRecordedWebhookPayload,

@@ -891,6 +891,7 @@ export type PolicyMethod =
   | 'xrpl_signTransaction'
   | 'earn_deposit'
   | 'earn_withdraw'
+  | 'earn_incentive_claim'
   | 'transfer'
   | '*';
 

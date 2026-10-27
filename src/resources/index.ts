@@ -1363,6 +1363,7 @@ export {
   type TransactionProviderErrorWebhookPayload,
   type TransactionReplacedWebhookPayload,
   type TransactionStillPendingWebhookPayload,
+  type UsageAtaDepositRecordedWebhookPayload,
   type UsageGasSponsorshipRecordedWebhookPayload,
   type UsageSourceType,
   type UsageSwapProviderFeeRecordedWebhookPayload,

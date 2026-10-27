@@ -1136,6 +1136,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">TransactionProviderErrorWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionReplacedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionStillPendingWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">UsageAtaDepositRecordedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UsageGasSponsorshipRecordedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">UsageSourceType</a></code>
 - <code><a href="./src/resources/webhooks.ts">UsageSwapProviderFeeRecordedWebhookPayload</a></code>

@@ -53,8 +53,16 @@ describe('viem Tempo support', () => {
       expect(formatViemTransactionType('tempo')).toBe(118);
     });
 
-    it('reports the unsupported transaction type', () => {
-      expect(() => formatViemTransactionType('eip4844')).toThrow(
+    it.each([
+      ['legacy', 0],
+      ['eip1559', 2],
+      [undefined, 2],
+    ] as const)('maps %s to type %s', (type, expected) => {
+      expect(formatViemTransactionType(type)).toBe(expected);
+    });
+
+    it.each(['eip4844', 'eip7702'] as const)('rejects %s transactions', (type) => {
+      expect(() => formatViemTransactionType(type)).toThrow(
         'EIP4844 and EIP7702 transaction types are not yet supported.',
       );
     });
@@ -211,6 +219,23 @@ describe('viem Tempo support', () => {
   });
 
   describe('createViemAccount.signTransaction', () => {
+    it('rejects EIP-2930 transactions before calling eth_signTransaction', async () => {
+      const { client, signTransaction } = createMockClient();
+      const account = createViemAccount(client, { walletId: 'wallet-id', address: ADDRESS });
+
+      await expect(
+        account.signTransaction({
+          type: 'eip2930',
+          chainId: 1,
+          to: RECIPIENT,
+          gasPrice: 1n,
+          accessList: [],
+        }),
+      ).rejects.toThrow('EIP2930 transactions are not supported.');
+
+      expect(signTransaction).not.toHaveBeenCalled();
+    });
+
     it('promotes implicit Tempo transactions before calling eth_signTransaction', async () => {
       const { client, signTransaction } = createMockClient();
       const account = createViemAccount(client, { walletId: 'wallet-id', address: ADDRESS });

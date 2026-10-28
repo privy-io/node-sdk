@@ -134,21 +134,20 @@ export function createViemAccount(
 /**
  * Formats a viem transaction type to the JSON-RPC transaction type:
  * - 'legacy' -> 0
- * - 'eip2930' -> 1
  * - 'eip1559' or undefined -> 2. This is the default EVM transaction type.
  * - 'tempo' -> 118
- * - Other transaction types, including EIP-4844 and EIP-7702, are not supported yet.
+ * - Other transaction types, including EIP-2930, EIP-4844, and EIP-7702, are not supported.
  * @param type viem transaction type
- * @returns 0 | 1 | 2 | 118
+ * @returns 0 | 2 | 118
  */
 export function formatViemTransactionType(type: 'tempo'): 118;
-export function formatViemTransactionType(type: StandardViemTransactionType): 0 | 1 | 2;
-export function formatViemTransactionType(type: SupportedViemTransactionType): 0 | 1 | 2 | 118;
+export function formatViemTransactionType(type: StandardViemTransactionType): 0 | 2;
+export function formatViemTransactionType(type: SupportedViemTransactionType): 0 | 2 | 118;
 export function formatViemTransactionType(type: SupportedViemTransactionType) {
   if (type === 'legacy') {
     return 0 as const;
   } else if (type === 'eip2930') {
-    return 1 as const;
+    throw new PrivyAPIError('EIP2930 transactions are not supported.');
   } else if (type == 'eip1559' || typeof type === 'undefined') {
     // Type 2 (EIP-1559) is the default transaction type
     return 2 as const;

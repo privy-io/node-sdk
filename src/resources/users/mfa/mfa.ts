@@ -2,12 +2,15 @@
 
 import { APIResource } from '../../../core/resource';
 import * as UsersAPI from '../users';
+import * as PasskeyAPI from './passkey/passkey';
+import { Passkey } from './passkey/passkey';
 import * as SMSAPI from './sms/sms';
 import { SMS } from './sms/sms';
 import * as TotpAPI from './totp/totp';
 import { Totp } from './totp/totp';
 
 export class Mfa extends APIResource {
+  passkey: PasskeyAPI.Passkey = new PasskeyAPI.Passkey(this._client);
   sms: SMSAPI.SMS = new SMSAPI.SMS(this._client);
   totp: TotpAPI.Totp = new TotpAPI.Totp(this._client);
 }
@@ -267,6 +270,60 @@ export interface MfaVerificationResponse {
 }
 
 /**
+ * WebAuthn registration options for the started passkey MFA enrollment.
+ */
+export interface PasskeyMfaEnrollmentInitResponse {
+  /**
+   * WebAuthn registration options as defined by the Web Authentication
+   * specification.
+   */
+  options: MfaPasskeyAuthenticatorEnrollmentOptions;
+}
+
+/**
+ * Completes passkey MFA enrollment with a WebAuthn registration response.
+ */
+export interface PasskeyMfaEnrollmentVerifyRequestBody {
+  /**
+   * WebAuthn registration response as defined by the Web Authentication
+   * specification.
+   */
+  credential: MfaPasskeyAuthenticatorEnrollmentResponse;
+}
+
+/**
+ * Starts a passkey MFA ceremony for the specified relying party origin.
+ */
+export interface PasskeyMfaInitRequestBody {
+  /**
+   * Origin where the authenticator runs, such as https://app.example.com.
+   */
+  relying_party: string;
+}
+
+/**
+ * WebAuthn authentication options for the started passkey MFA verification.
+ */
+export interface PasskeyMfaVerificationInitResponse {
+  /**
+   * WebAuthn authentication options as defined by the Web Authentication
+   * specification.
+   */
+  options: MfaPasskeyAuthenticatorVerifyOptions;
+}
+
+/**
+ * Completes passkey MFA verification with a WebAuthn authentication response.
+ */
+export interface PasskeyMfaVerificationVerifyRequestBody {
+  /**
+   * WebAuthn authentication response as defined by the Web Authentication
+   * specification.
+   */
+  credential: MfaPasskeyAuthenticatorVerifyResponse;
+}
+
+/**
  * Starts SMS MFA enrollment by sending a code to the phone number.
  */
 export interface SMSMfaEnrollmentInitRequestBody {
@@ -312,6 +369,7 @@ export interface TotpMfaVerifyRequestBody {
   code: string;
 }
 
+Mfa.Passkey = Passkey;
 Mfa.SMS = SMS;
 Mfa.Totp = Totp;
 
@@ -333,12 +391,19 @@ export declare namespace Mfa {
     type MfaPasskeyUser as MfaPasskeyUser,
     type MfaPasskeyVerifyExtensions as MfaPasskeyVerifyExtensions,
     type MfaVerificationResponse as MfaVerificationResponse,
+    type PasskeyMfaEnrollmentInitResponse as PasskeyMfaEnrollmentInitResponse,
+    type PasskeyMfaEnrollmentVerifyRequestBody as PasskeyMfaEnrollmentVerifyRequestBody,
+    type PasskeyMfaInitRequestBody as PasskeyMfaInitRequestBody,
+    type PasskeyMfaVerificationInitResponse as PasskeyMfaVerificationInitResponse,
+    type PasskeyMfaVerificationVerifyRequestBody as PasskeyMfaVerificationVerifyRequestBody,
     type SMSMfaEnrollmentInitRequestBody as SMSMfaEnrollmentInitRequestBody,
     type SMSMfaVerifyRequestBody as SMSMfaVerifyRequestBody,
     type TotpMfaEnrollmentInitResponse as TotpMfaEnrollmentInitResponse,
     type TotpMfaEnrollmentOptions as TotpMfaEnrollmentOptions,
     type TotpMfaVerifyRequestBody as TotpMfaVerifyRequestBody,
   };
+
+  export { Passkey as Passkey };
 
   export { SMS as SMS };
 

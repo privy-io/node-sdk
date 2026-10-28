@@ -18,11 +18,17 @@ export {
   type MfaPasskeyUser,
   type MfaPasskeyVerifyExtensions,
   type MfaVerificationResponse,
+  type PasskeyMfaEnrollmentInitResponse,
+  type PasskeyMfaEnrollmentVerifyRequestBody,
+  type PasskeyMfaInitRequestBody,
+  type PasskeyMfaVerificationInitResponse,
+  type PasskeyMfaVerificationVerifyRequestBody,
   type SMSMfaEnrollmentInitRequestBody,
   type SMSMfaVerifyRequestBody,
   type TotpMfaEnrollmentInitResponse,
   type TotpMfaEnrollmentOptions,
   type TotpMfaVerifyRequestBody,
 } from './mfa';
+export { Passkey } from './passkey/index';
 export { SMS } from './sms/index';
 export { Totp } from './totp/index';

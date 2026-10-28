@@ -510,11 +510,32 @@ Types:
 - <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyUser</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyVerifyExtensions</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">MfaVerificationResponse</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">PasskeyMfaEnrollmentInitResponse</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">PasskeyMfaEnrollmentVerifyRequestBody</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">PasskeyMfaInitRequestBody</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">PasskeyMfaVerificationInitResponse</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">PasskeyMfaVerificationVerifyRequestBody</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">SMSMfaEnrollmentInitRequestBody</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">SMSMfaVerifyRequestBody</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">TotpMfaEnrollmentInitResponse</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">TotpMfaEnrollmentOptions</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">TotpMfaVerifyRequestBody</a></code>
+
+### Passkey
+
+#### Enrollment
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/passkey/enrollment/init">client.users.mfa.passkey.enrollment.<a href="./src/resources/users/mfa/passkey/enrollment.ts">init</a>(userID, { ...params }) -> PasskeyMfaEnrollmentInitResponse</code>
+- <code title="post /v1/users/{user_id}/mfa/passkey/enrollment/verify">client.users.mfa.passkey.enrollment.<a href="./src/resources/users/mfa/passkey/enrollment.ts">verify</a>(userID, { ...params }) -> MfaVerificationResponse</code>
+
+#### Verification
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/passkey/verification/init">client.users.mfa.passkey.verification.<a href="./src/resources/users/mfa/passkey/verification.ts">init</a>(userID, { ...params }) -> PasskeyMfaVerificationInitResponse</code>
+- <code title="post /v1/users/{user_id}/mfa/passkey/verification/verify">client.users.mfa.passkey.verification.<a href="./src/resources/users/mfa/passkey/verification.ts">verify</a>(userID, { ...params }) -> MfaVerificationResponse</code>
 
 ### SMS
 

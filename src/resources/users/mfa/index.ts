@@ -1,7 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+export { Email } from './email/index';
 export {
   Mfa,
+  type EmailMfaEnrollmentInitRequestBody,
+  type EmailMfaVerifyRequestBody,
   type MfaPasskeyAssertionResponse,
   type MfaPasskeyAttestationResponse,
   type MfaPasskeyAuthenticatorEnrollmentOptions,

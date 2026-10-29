@@ -18,6 +18,8 @@ import { KYC, KYCInitiateLinksParams, KYCInitiateTosParams, KYCSubmitParams } fr
 import * as WalletsAPI from '../wallets/wallets';
 import * as MfaAPI from './mfa/mfa';
 import {
+  EmailMfaEnrollmentInitRequestBody,
+  EmailMfaVerifyRequestBody,
   Mfa,
   MfaPasskeyAssertionResponse,
   MfaPasskeyAttestationResponse,
@@ -1998,6 +2000,8 @@ export declare namespace Users {
 
   export {
     Mfa as Mfa,
+    type EmailMfaEnrollmentInitRequestBody as EmailMfaEnrollmentInitRequestBody,
+    type EmailMfaVerifyRequestBody as EmailMfaVerifyRequestBody,
     type MfaPasskeyAssertionResponse as MfaPasskeyAssertionResponse,
     type MfaPasskeyAttestationResponse as MfaPasskeyAttestationResponse,
     type MfaPasskeyAuthenticatorEnrollmentOptions as MfaPasskeyAuthenticatorEnrollmentOptions,

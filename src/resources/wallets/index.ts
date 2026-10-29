@@ -28,6 +28,7 @@ export {
   type EthereumEarnPositionResponse,
   type EthereumEarnProvider,
   type EthereumEarnVaultDetailsResponse,
+  type ExternalTransactionStepProvider,
   type ExternalTransactionWalletActionStep,
   type ExternalTransactionWalletActionStepStatus,
   type FailureReason,

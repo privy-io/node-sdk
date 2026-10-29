@@ -494,6 +494,8 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/users/mfa/mfa.ts">EmailMfaEnrollmentInitRequestBody</a></code>
+- <code><a href="./src/resources/users/mfa/mfa.ts">EmailMfaVerifyRequestBody</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyAssertionResponse</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyAttestationResponse</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">MfaPasskeyAuthenticatorEnrollmentOptions</a></code>
@@ -520,6 +522,22 @@ Types:
 - <code><a href="./src/resources/users/mfa/mfa.ts">TotpMfaEnrollmentInitResponse</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">TotpMfaEnrollmentOptions</a></code>
 - <code><a href="./src/resources/users/mfa/mfa.ts">TotpMfaVerifyRequestBody</a></code>
+
+### Email
+
+#### Enrollment
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/email/enrollment/init">client.users.mfa.email.enrollment.<a href="./src/resources/users/mfa/email/enrollment.ts">init</a>(userID, { ...params }) -> SuccessResponse</code>
+- <code title="post /v1/users/{user_id}/mfa/email/enrollment/verify">client.users.mfa.email.enrollment.<a href="./src/resources/users/mfa/email/enrollment.ts">verify</a>(userID, { ...params }) -> MfaVerificationResponse</code>
+
+#### Verification
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/email/verification/init">client.users.mfa.email.verification.<a href="./src/resources/users/mfa/email/verification.ts">init</a>(userID, { ...params }) -> SuccessResponse</code>
+- <code title="post /v1/users/{user_id}/mfa/email/verification/verify">client.users.mfa.email.verification.<a href="./src/resources/users/mfa/email/verification.ts">verify</a>(userID, { ...params }) -> MfaVerificationResponse</code>
 
 ### Passkey
 
@@ -996,6 +1014,7 @@ Types:
 - <code><a href="./src/resources/wallets/actions.ts">EthereumEarnPositionResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EthereumEarnProvider</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">EthereumEarnVaultDetailsResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">ExternalTransactionStepProvider</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">ExternalTransactionWalletActionStep</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">ExternalTransactionWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">FailureReason</a></code>

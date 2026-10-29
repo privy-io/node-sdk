@@ -10,6 +10,8 @@ export {
 export { KYC, type KYCInitiateLinksParams, type KYCInitiateTosParams, type KYCSubmitParams } from './kyc';
 export {
   Mfa,
+  type EmailMfaEnrollmentInitRequestBody,
+  type EmailMfaVerifyRequestBody,
   type MfaPasskeyAssertionResponse,
   type MfaPasskeyAttestationResponse,
   type MfaPasskeyAuthenticatorEnrollmentOptions,

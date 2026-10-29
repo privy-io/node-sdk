@@ -2,6 +2,8 @@
 
 import { APIResource } from '../../../core/resource';
 import * as UsersAPI from '../users';
+import * as EmailAPI from './email/email';
+import { Email } from './email/email';
 import * as PasskeyAPI from './passkey/passkey';
 import { Passkey } from './passkey/passkey';
 import * as SMSAPI from './sms/sms';
@@ -10,9 +12,24 @@ import * as TotpAPI from './totp/totp';
 import { Totp } from './totp/totp';
 
 export class Mfa extends APIResource {
+  email: EmailAPI.Email = new EmailAPI.Email(this._client);
   passkey: PasskeyAPI.Passkey = new PasskeyAPI.Passkey(this._client);
   sms: SMSAPI.SMS = new SMSAPI.SMS(this._client);
   totp: TotpAPI.Totp = new TotpAPI.Totp(this._client);
+}
+
+/**
+ * Starts email MFA enrollment by sending a code to the email address.
+ */
+export interface EmailMfaEnrollmentInitRequestBody {
+  email_address: string;
+}
+
+/**
+ * Completes an email MFA ceremony with the code sent at init.
+ */
+export interface EmailMfaVerifyRequestBody {
+  code: string;
 }
 
 /**
@@ -369,12 +386,15 @@ export interface TotpMfaVerifyRequestBody {
   code: string;
 }
 
+Mfa.Email = Email;
 Mfa.Passkey = Passkey;
 Mfa.SMS = SMS;
 Mfa.Totp = Totp;
 
 export declare namespace Mfa {
   export {
+    type EmailMfaEnrollmentInitRequestBody as EmailMfaEnrollmentInitRequestBody,
+    type EmailMfaVerifyRequestBody as EmailMfaVerifyRequestBody,
     type MfaPasskeyAssertionResponse as MfaPasskeyAssertionResponse,
     type MfaPasskeyAttestationResponse as MfaPasskeyAttestationResponse,
     type MfaPasskeyAuthenticatorEnrollmentOptions as MfaPasskeyAuthenticatorEnrollmentOptions,
@@ -402,6 +422,8 @@ export declare namespace Mfa {
     type TotpMfaEnrollmentOptions as TotpMfaEnrollmentOptions,
     type TotpMfaVerifyRequestBody as TotpMfaVerifyRequestBody,
   };
+
+  export { Email as Email };
 
   export { Passkey as Passkey };
 

@@ -898,10 +898,20 @@ export type EthereumEarnVaultDetailsResponse =
   | VedaVaultDetails;
 
 /**
+ * External provider that fills an external transaction step.
+ */
+export type ExternalTransactionStepProvider = 'relay' | 'tempo_routes' | 'bridge' | (string & {});
+
+/**
  * A wallet action step representing a cross-chain/cross-asset fill by an external
  * provider.
  */
 export interface ExternalTransactionWalletActionStep {
+  /**
+   * External provider that fills an external transaction step.
+   */
+  provider: ExternalTransactionStepProvider | null;
+
   /**
    * Status of an external transaction step in a wallet action.
    */
@@ -1694,6 +1704,7 @@ export declare namespace Actions {
     type EthereumEarnPositionResponse as EthereumEarnPositionResponse,
     type EthereumEarnProvider as EthereumEarnProvider,
     type EthereumEarnVaultDetailsResponse as EthereumEarnVaultDetailsResponse,
+    type ExternalTransactionStepProvider as ExternalTransactionStepProvider,
     type ExternalTransactionWalletActionStep as ExternalTransactionWalletActionStep,
     type ExternalTransactionWalletActionStepStatus as ExternalTransactionWalletActionStepStatus,
     type FailureReason as FailureReason,

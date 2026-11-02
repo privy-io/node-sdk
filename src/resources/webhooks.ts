@@ -1740,6 +1740,12 @@ export interface WalletActionEarnDepositCreatedWebhookPayload {
   created_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Base-unit amount of asset deposited (e.g. "1500000").
    */
   raw_amount: string;
@@ -1821,6 +1827,12 @@ export interface WalletActionEarnDepositFailedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * ISO 8601 timestamp of when the wallet action failed.
@@ -1922,6 +1934,12 @@ export interface WalletActionEarnDepositRejectedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -2029,6 +2047,12 @@ export interface WalletActionEarnDepositSucceededWebhookPayload {
   created_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Base-unit amount of asset deposited (e.g. "1500000").
    */
   raw_amount: string;
@@ -2124,6 +2148,12 @@ export interface WalletActionEarnFeeCollectCreatedWebhookPayload {
   created_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Base-unit amount of fees collected (e.g. "1500000").
    */
   raw_amount: string;
@@ -2205,6 +2235,12 @@ export interface WalletActionEarnFeeCollectFailedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * ISO 8601 timestamp of when the wallet action failed.
@@ -2306,6 +2342,12 @@ export interface WalletActionEarnFeeCollectRejectedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -2413,6 +2455,12 @@ export interface WalletActionEarnFeeCollectSucceededWebhookPayload {
   created_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Base-unit amount of fees collected (e.g. "1500000").
    */
   raw_amount: string;
@@ -2498,6 +2546,12 @@ export interface WalletActionEarnIncentiveClaimCreatedWebhookPayload {
   created_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
    */
   rewards: Array<ActionsAPI.EarnIncetiveClaimRewardEntry> | null;
@@ -2546,6 +2600,12 @@ export interface WalletActionEarnIncentiveClaimFailedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * ISO 8601 timestamp of when the wallet action failed.
@@ -2614,6 +2674,12 @@ export interface WalletActionEarnIncentiveClaimRejectedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -2688,6 +2754,12 @@ export interface WalletActionEarnIncentiveClaimSucceededWebhookPayload {
   created_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Claimed reward tokens. Populated after the preparation step fetches from Merkl.
    */
   rewards: Array<ActionsAPI.EarnIncetiveClaimRewardEntry> | null;
@@ -2748,6 +2820,12 @@ export interface WalletActionEarnWithdrawCreatedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * Base-unit amount of asset withdrawn (e.g. "1500000").
@@ -2831,6 +2909,12 @@ export interface WalletActionEarnWithdrawFailedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * ISO 8601 timestamp of when the wallet action failed.
@@ -2932,6 +3016,12 @@ export interface WalletActionEarnWithdrawRejectedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -3039,6 +3129,12 @@ export interface WalletActionEarnWithdrawSucceededWebhookPayload {
   created_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Base-unit amount of asset withdrawn (e.g. "1500000").
    */
   raw_amount: string;
@@ -3144,6 +3240,12 @@ export interface WalletActionPayoutCreatedWebhookPayload {
   environment: SharedAPI.IntegrationEnvironment;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Supported fiat orchestration providers.
    */
   provider: SharedAPI.OrchestrationProvider;
@@ -3222,6 +3324,12 @@ export interface WalletActionPayoutFailedWebhookPayload {
    * The Privy API environment.
    */
   environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * ISO 8601 timestamp of when the wallet action failed.
@@ -3320,6 +3428,12 @@ export interface WalletActionPayoutRejectedWebhookPayload {
    * The Privy API environment.
    */
   environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -3424,6 +3538,12 @@ export interface WalletActionPayoutSucceededWebhookPayload {
   environment: SharedAPI.IntegrationEnvironment;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Supported fiat orchestration providers.
    */
   provider: SharedAPI.OrchestrationProvider;
@@ -3496,6 +3616,12 @@ export interface WalletActionSwapCreatedWebhookPayload {
   created_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Amount of input token in base units. Populated after onchain confirmation.
    */
   input_amount: string | null;
@@ -3554,6 +3680,12 @@ export interface WalletActionSwapFailedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * ISO 8601 timestamp of when the wallet action failed.
@@ -3632,6 +3764,12 @@ export interface WalletActionSwapRejectedWebhookPayload {
    * ISO 8601 timestamp of when the wallet action was created.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -3716,6 +3854,12 @@ export interface WalletActionSwapSucceededWebhookPayload {
   created_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Amount of input token in base units. Populated after onchain confirmation.
    */
   input_amount: string | null;
@@ -3787,6 +3931,12 @@ export interface WalletActionTransferCreatedWebhookPayload {
    * Recipient address.
    */
   destination_address: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * Chain name (e.g. "tempo", "base").
@@ -3861,6 +4011,12 @@ export interface WalletActionTransferFailedWebhookPayload {
    * Recipient address.
    */
   destination_address: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * ISO 8601 timestamp of when the wallet action failed.
@@ -3953,6 +4109,12 @@ export interface WalletActionTransferRejectedWebhookPayload {
    * Recipient address.
    */
   destination_address: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * A description of why a wallet action (or a step within a wallet action) failed.
@@ -4049,6 +4211,12 @@ export interface WalletActionTransferSucceededWebhookPayload {
    * Recipient address.
    */
   destination_address: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * Chain name (e.g. "tempo", "base").

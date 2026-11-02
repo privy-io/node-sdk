@@ -26,6 +26,12 @@ export interface AuthorizationContext {
    */
   user_jwts?: string[];
   /**
+   * The users that should sign the request authorization, each with an optional MFA token from a
+   * completed MFA verification. Each JWT is exchanged for the user's signing key like
+   * `user_jwts`, and its MFA token is sent with that exchange.
+   */
+  user_auth?: AuthorizationContext.UserAuth[];
+  /**
    * The signatures that should be used for authorization.
    * These should be base64-encoded signatures.
    */
@@ -42,6 +48,16 @@ export interface AuthorizationContext {
 
 export namespace AuthorizationContext {
   export type SignFn = (payload: Uint8Array) => Promise<string>;
+
+  export interface UserAuth {
+    /** A valid JWT for the user. */
+    user_jwt: string;
+    /**
+     * An MFA token from the user's completed MFA verification. The JWT exchange requires it when
+     * the user has MFA enrolled. `null` is the same as omitting it.
+     */
+    mfa_token?: string | null;
+  }
 }
 
 export type WalletApiRequestSignatureInput = {
@@ -104,13 +120,18 @@ export async function generateAuthorizationSignatures(
 ): Promise<string[]> {
   const payload = formatRequestForAuthorizationSignature(input);
 
-  const userJwts = authorizationContext.user_jwts ?? [];
-  let userKeys: string[] = [];
-  if (userJwts.length > 0) {
-    userKeys = await Promise.all(
-      userJwts.map((jwt) => client._jwtExchange().exchangeJwtForAuthorizationKey(jwt)),
-    );
+  /** One exchange per JWT. A JWT given with and without an MFA token keeps the MFA token. */
+  const mfaTokenByJwt = new Map<string, string | null | undefined>(
+    (authorizationContext.user_jwts ?? []).map((jwt) => [jwt, undefined]),
+  );
+  for (const { user_jwt, mfa_token } of authorizationContext.user_auth ?? []) {
+    mfaTokenByJwt.set(user_jwt, mfa_token || mfaTokenByJwt.get(user_jwt));
   }
+  const userKeys = await Promise.all(
+    [...mfaTokenByJwt].map(([jwt, mfaToken]) =>
+      client._jwtExchange().exchangeJwtForAuthorizationKey(jwt, mfaToken),
+    ),
+  );
 
   /** These are the private keys provided by the caller, either directly or via JWT exchange */
   const privateKeys = [...(authorizationContext.authorization_private_keys ?? []), ...userKeys];

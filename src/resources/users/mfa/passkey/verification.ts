@@ -19,10 +19,7 @@ export class Verification extends APIResource {
    * const passkeyMfaVerificationInitResponse =
    *   await client.users.mfa.passkey.verification.init(
    *     'user_id',
-   *     {
-   *       relying_party: 'https://example.com',
-   *       'privy-user-token': 'x',
-   *     },
+   *     { relying_party: 'https://example.com', user_jwt: 'x' },
    *   );
    * ```
    */
@@ -31,11 +28,11 @@ export class Verification extends APIResource {
     params: VerificationInitParams,
     options?: RequestOptions,
   ): APIPromise<MfaAPI.PasskeyMfaVerificationInitResponse> {
-    const { 'privy-user-token': privyUserToken, ...body } = params;
+    const { user_jwt, ...body } = params;
     return this._client.post(path`/v1/users/${userID}/mfa/passkey/verification/init`, {
       body,
       ...options,
-      headers: buildHeaders([{ 'privy-user-token': privyUserToken }, options?.headers]),
+      headers: buildHeaders([{ 'privy-user-token': user_jwt }, options?.headers]),
     });
   }
 
@@ -59,7 +56,7 @@ export class Verification extends APIResource {
    *         },
    *         type: 'public-key',
    *       },
-   *       'privy-user-token': 'x',
+   *       user_jwt: 'x',
    *     },
    *   );
    * ```
@@ -69,11 +66,11 @@ export class Verification extends APIResource {
     params: VerificationVerifyParams,
     options?: RequestOptions,
   ): APIPromise<MfaAPI.MfaVerificationResponse> {
-    const { 'privy-user-token': privyUserToken, ...body } = params;
+    const { user_jwt, ...body } = params;
     return this._client.post(path`/v1/users/${userID}/mfa/passkey/verification/verify`, {
       body,
       ...options,
-      headers: buildHeaders([{ 'privy-user-token': privyUserToken }, options?.headers]),
+      headers: buildHeaders([{ 'privy-user-token': user_jwt }, options?.headers]),
     });
   }
 }
@@ -89,7 +86,7 @@ export interface VerificationInitParams {
    * Header param: Access token or custom authentication JWT for the user the request
    * acts on.
    */
-  'privy-user-token': string;
+  user_jwt: string;
 }
 
 export interface VerificationVerifyParams {
@@ -103,7 +100,7 @@ export interface VerificationVerifyParams {
    * Header param: Access token or custom authentication JWT for the user the request
    * acts on.
    */
-  'privy-user-token': string;
+  user_jwt: string;
 }
 
 export declare namespace Verification {

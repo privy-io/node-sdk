@@ -13,7 +13,7 @@ describe('resource enrollment', () => {
   test.skip('init: only required params', async () => {
     const responsePromise = client.users.mfa.passkey.enrollment.init('user_id', {
       relying_party: 'https://example.com',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,8 +28,8 @@ describe('resource enrollment', () => {
   test.skip('init: required and optional params', async () => {
     const response = await client.users.mfa.passkey.enrollment.init('user_id', {
       relying_party: 'https://example.com',
-      'privy-user-token': 'x',
-      'privy-mfa-token': 'x',
+      user_jwt: 'x',
+      mfa_token: 'x',
     });
   });
 
@@ -43,7 +43,7 @@ describe('resource enrollment', () => {
         response: { attestation_object: 'attestation_object', client_data_json: 'client_data_json' },
         type: 'public-key',
       },
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -76,7 +76,7 @@ describe('resource enrollment', () => {
         type: 'public-key',
         authenticator_attachment: 'authenticator_attachment',
       },
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
   });
 });

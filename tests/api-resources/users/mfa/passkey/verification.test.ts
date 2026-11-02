@@ -13,7 +13,7 @@ describe('resource verification', () => {
   test.skip('init: only required params', async () => {
     const responsePromise = client.users.mfa.passkey.verification.init('user_id', {
       relying_party: 'https://example.com',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,7 +28,7 @@ describe('resource verification', () => {
   test.skip('init: required and optional params', async () => {
     const response = await client.users.mfa.passkey.verification.init('user_id', {
       relying_party: 'https://example.com',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
   });
 
@@ -46,7 +46,7 @@ describe('resource verification', () => {
         },
         type: 'public-key',
       },
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -77,7 +77,7 @@ describe('resource verification', () => {
         type: 'public-key',
         authenticator_attachment: 'authenticator_attachment',
       },
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
   });
 });

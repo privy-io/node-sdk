@@ -13,7 +13,7 @@ describe('resource verification', () => {
   test.skip('verify: only required params', async () => {
     const responsePromise = client.users.mfa.totp.verification.verify('user_id', {
       code: 'xxxxxx',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,7 +28,7 @@ describe('resource verification', () => {
   test.skip('verify: required and optional params', async () => {
     const response = await client.users.mfa.totp.verification.verify('user_id', {
       code: 'xxxxxx',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
   });
 });

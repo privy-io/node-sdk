@@ -19,7 +19,7 @@ export class Verification extends APIResource {
    * const mfaVerificationResponse =
    *   await client.users.mfa.totp.verification.verify(
    *     'user_id',
-   *     { code: 'xxxxxx', 'privy-user-token': 'x' },
+   *     { code: 'xxxxxx', user_jwt: 'x' },
    *   );
    * ```
    */
@@ -28,11 +28,11 @@ export class Verification extends APIResource {
     params: VerificationVerifyParams,
     options?: RequestOptions,
   ): APIPromise<MfaAPI.MfaVerificationResponse> {
-    const { 'privy-user-token': privyUserToken, ...body } = params;
+    const { user_jwt, ...body } = params;
     return this._client.post(path`/v1/users/${userID}/mfa/totp/verification/verify`, {
       body,
       ...options,
-      headers: buildHeaders([{ 'privy-user-token': privyUserToken }, options?.headers]),
+      headers: buildHeaders([{ 'privy-user-token': user_jwt }, options?.headers]),
     });
   }
 }
@@ -47,7 +47,7 @@ export interface VerificationVerifyParams {
    * Header param: Access token or custom authentication JWT for the user the request
    * acts on.
    */
-  'privy-user-token': string;
+  user_jwt: string;
 }
 
 export declare namespace Verification {

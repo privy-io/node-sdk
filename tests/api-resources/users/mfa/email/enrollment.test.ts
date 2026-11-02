@@ -13,7 +13,7 @@ describe('resource enrollment', () => {
   test.skip('init: only required params', async () => {
     const responsePromise = client.users.mfa.email.enrollment.init('user_id', {
       email_address: 'dev@stainless.com',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,8 +28,8 @@ describe('resource enrollment', () => {
   test.skip('init: required and optional params', async () => {
     const response = await client.users.mfa.email.enrollment.init('user_id', {
       email_address: 'dev@stainless.com',
-      'privy-user-token': 'x',
-      'privy-mfa-token': 'x',
+      user_jwt: 'x',
+      mfa_token: 'x',
     });
   });
 
@@ -37,7 +37,7 @@ describe('resource enrollment', () => {
   test.skip('verify: only required params', async () => {
     const responsePromise = client.users.mfa.email.enrollment.verify('user_id', {
       code: 'xxxxxx',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -52,7 +52,7 @@ describe('resource enrollment', () => {
   test.skip('verify: required and optional params', async () => {
     const response = await client.users.mfa.email.enrollment.verify('user_id', {
       code: 'xxxxxx',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
   });
 });

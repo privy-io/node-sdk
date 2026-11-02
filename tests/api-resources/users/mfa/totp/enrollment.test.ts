@@ -11,7 +11,7 @@ const client = new PrivyAPI({
 describe('resource enrollment', () => {
   // Mock server tests are disabled
   test.skip('init: only required params', async () => {
-    const responsePromise = client.users.mfa.totp.enrollment.init('user_id', { 'privy-user-token': 'x' });
+    const responsePromise = client.users.mfa.totp.enrollment.init('user_id', { user_jwt: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,8 +24,8 @@ describe('resource enrollment', () => {
   // Mock server tests are disabled
   test.skip('init: required and optional params', async () => {
     const response = await client.users.mfa.totp.enrollment.init('user_id', {
-      'privy-user-token': 'x',
-      'privy-mfa-token': 'x',
+      user_jwt: 'x',
+      mfa_token: 'x',
     });
   });
 
@@ -33,7 +33,7 @@ describe('resource enrollment', () => {
   test.skip('verify: only required params', async () => {
     const responsePromise = client.users.mfa.totp.enrollment.verify('user_id', {
       code: 'xxxxxx',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -48,7 +48,7 @@ describe('resource enrollment', () => {
   test.skip('verify: required and optional params', async () => {
     const response = await client.users.mfa.totp.enrollment.verify('user_id', {
       code: 'xxxxxx',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
   });
 });

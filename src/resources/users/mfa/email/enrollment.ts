@@ -20,7 +20,7 @@ export class Enrollment extends APIResource {
    * const successResponse =
    *   await client.users.mfa.email.enrollment.init('user_id', {
    *     email_address: 'dev@stainless.com',
-   *     'privy-user-token': 'x',
+   *     user_jwt: 'x',
    *   });
    * ```
    */
@@ -29,14 +29,14 @@ export class Enrollment extends APIResource {
     params: EnrollmentInitParams,
     options?: RequestOptions,
   ): APIPromise<SharedAPI.SuccessResponse> {
-    const { 'privy-user-token': privyUserToken, 'privy-mfa-token': privyMfaToken, ...body } = params;
+    const { user_jwt, mfa_token, ...body } = params;
     return this._client.post(path`/v1/users/${userID}/mfa/email/enrollment/init`, {
       body,
       ...options,
       headers: buildHeaders([
         {
-          'privy-user-token': privyUserToken,
-          ...(privyMfaToken != null ? { 'privy-mfa-token': privyMfaToken } : undefined),
+          'privy-user-token': user_jwt,
+          ...(mfa_token != null ? { 'privy-mfa-token': mfa_token } : undefined),
         },
         options?.headers,
       ]),
@@ -51,7 +51,7 @@ export class Enrollment extends APIResource {
    * const mfaVerificationResponse =
    *   await client.users.mfa.email.enrollment.verify(
    *     'user_id',
-   *     { code: 'xxxxxx', 'privy-user-token': 'x' },
+   *     { code: 'xxxxxx', user_jwt: 'x' },
    *   );
    * ```
    */
@@ -60,11 +60,11 @@ export class Enrollment extends APIResource {
     params: EnrollmentVerifyParams,
     options?: RequestOptions,
   ): APIPromise<MfaAPI.MfaVerificationResponse> {
-    const { 'privy-user-token': privyUserToken, ...body } = params;
+    const { user_jwt, ...body } = params;
     return this._client.post(path`/v1/users/${userID}/mfa/email/enrollment/verify`, {
       body,
       ...options,
-      headers: buildHeaders([{ 'privy-user-token': privyUserToken }, options?.headers]),
+      headers: buildHeaders([{ 'privy-user-token': user_jwt }, options?.headers]),
     });
   }
 }
@@ -79,13 +79,13 @@ export interface EnrollmentInitParams {
    * Header param: Access token or custom authentication JWT for the user the request
    * acts on.
    */
-  'privy-user-token': string;
+  user_jwt: string;
 
   /**
    * Header param: MFA token from a completed MFA verification, required on
    * MFA-protected requests for users with MFA enrolled.
    */
-  'privy-mfa-token'?: string;
+  mfa_token?: string;
 }
 
 export interface EnrollmentVerifyParams {
@@ -98,7 +98,7 @@ export interface EnrollmentVerifyParams {
    * Header param: Access token or custom authentication JWT for the user the request
    * acts on.
    */
-  'privy-user-token': string;
+  user_jwt: string;
 }
 
 export declare namespace Enrollment {

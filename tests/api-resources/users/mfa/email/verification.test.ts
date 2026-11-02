@@ -11,7 +11,7 @@ const client = new PrivyAPI({
 describe('resource verification', () => {
   // Mock server tests are disabled
   test.skip('init: only required params', async () => {
-    const responsePromise = client.users.mfa.email.verification.init('user_id', { 'privy-user-token': 'x' });
+    const responsePromise = client.users.mfa.email.verification.init('user_id', { user_jwt: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,14 +23,14 @@ describe('resource verification', () => {
 
   // Mock server tests are disabled
   test.skip('init: required and optional params', async () => {
-    const response = await client.users.mfa.email.verification.init('user_id', { 'privy-user-token': 'x' });
+    const response = await client.users.mfa.email.verification.init('user_id', { user_jwt: 'x' });
   });
 
   // Mock server tests are disabled
   test.skip('verify: only required params', async () => {
     const responsePromise = client.users.mfa.email.verification.verify('user_id', {
       code: 'xxxxxx',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -45,7 +45,7 @@ describe('resource verification', () => {
   test.skip('verify: required and optional params', async () => {
     const response = await client.users.mfa.email.verification.verify('user_id', {
       code: 'xxxxxx',
-      'privy-user-token': 'x',
+      user_jwt: 'x',
     });
   });
 });

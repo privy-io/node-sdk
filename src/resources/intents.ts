@@ -39,6 +39,26 @@ export class Intents extends APIResource {
   }
 
   /**
+   * Authorize a pending intent by providing a signature. Can be called by the wallet
+   * owner (via user token) or with the app secret.
+   *
+   * @example
+   * ```ts
+   * const intentResponse = await client.intents._authorize(
+   *   'intent_id',
+   *   { signature: 'signature', timestamp: 0 },
+   * );
+   * ```
+   */
+  _authorize(
+    intentID: string,
+    body: IntentAuthorizeParams,
+    options?: RequestOptions,
+  ): APIPromise<IntentResponse> {
+    return this._client.post(path`/v1/intents/${intentID}/authorize`, { body, ...options });
+  }
+
+  /**
    * Create an intent to add items to a condition set. The intent must be authorized
    * by the condition set owner before it can be executed.
    *
@@ -1622,6 +1642,19 @@ export interface IntentListParams extends CursorParams {
   status?: IntentStatus;
 }
 
+export interface IntentAuthorizeParams {
+  /**
+   * Signature authorizing the intent.
+   */
+  signature: string;
+
+  /**
+   * Unix timestamp (in milliseconds) when the signature was created. Used to verify
+   * the signature was created when the signing key was valid.
+   */
+  timestamp: number;
+}
+
 export interface IntentCreateConditionSetItemsParams {
   /**
    * Body param: Array of values to add to the condition set. Maximum 100 items per
@@ -2893,6 +2926,7 @@ export declare namespace Intents {
     type WalletIntentResponse as WalletIntentResponse,
     type IntentResponsesCursor as IntentResponsesCursor,
     type IntentListParams as IntentListParams,
+    type IntentAuthorizeParams as IntentAuthorizeParams,
     type IntentCreateConditionSetItemsParams as IntentCreateConditionSetItemsParams,
     type IntentCreatePolicyRuleParams as IntentCreatePolicyRuleParams,
     type IntentDeleteConditionSetParams as IntentDeleteConditionSetParams,

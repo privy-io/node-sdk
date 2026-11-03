@@ -12,6 +12,7 @@ import {
 } from './external-fiat-accounts';
 import * as KYBAPI from './kyb';
 import { KYB, KYBInitiateLinksParams, KYBInitiateTosParams, KYBSubmitParams } from './kyb';
+import * as WalletsAPI from '../wallets/wallets';
 import { APIPromise } from '../../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -162,6 +163,52 @@ export interface OrganizationCreateRequestBody {
 }
 
 /**
+ * Defaults applied to wallets created with the organization as their entity, keyed
+ * by chain type.
+ */
+export interface OrganizationDefaultWalletConfigurations {
+  /**
+   * Default policies and additional signers for wallets of one chain type.
+   */
+  ethereum?: OrganizationWalletConfiguration;
+
+  /**
+   * Default policies and additional signers for wallets of one chain type.
+   */
+  solana?: OrganizationWalletConfiguration;
+
+  /**
+   * Default policies and additional signers for wallets of one chain type.
+   */
+  tron?: OrganizationWalletConfiguration;
+
+  [k: string]: OrganizationWalletConfiguration | undefined;
+}
+
+/**
+ * Changes to the defaults, keyed by chain type. Omitted chains and fields are
+ * unchanged, and `null` removes a chain.
+ */
+export interface OrganizationDefaultWalletConfigurationsUpdate {
+  /**
+   * Default policies and additional signers for wallets of one chain type.
+   */
+  ethereum?: OrganizationWalletConfiguration | null;
+
+  /**
+   * Default policies and additional signers for wallets of one chain type.
+   */
+  solana?: OrganizationWalletConfiguration | null;
+
+  /**
+   * Default policies and additional signers for wallets of one chain type.
+   */
+  tron?: OrganizationWalletConfiguration | null;
+
+  [k: string]: OrganizationWalletConfiguration | null | undefined;
+}
+
+/**
  * Request body for targeting a specific organization secret.
  */
 export interface OrganizationSecretIDInput {
@@ -221,6 +268,21 @@ export interface OrganizationUpdateRequestBody {
 }
 
 /**
+ * Default policies and additional signers for wallets of one chain type.
+ */
+export interface OrganizationWalletConfiguration {
+  /**
+   * Additional signers for the wallet.
+   */
+  additional_signers?: WalletsAPI.AdditionalSignerInput;
+
+  /**
+   * An optional list of up to one policy ID to enforce on the wallet.
+   */
+  policy_ids?: WalletsAPI.PolicyInput;
+}
+
+/**
  * Response returned when listing organizations for an app.
  */
 export interface OrganizationsListResponse {
@@ -267,10 +329,13 @@ export declare namespace Organizations {
     type CreateOrganizationSecretResponse as CreateOrganizationSecretResponse,
     type Organization as Organization,
     type OrganizationCreateRequestBody as OrganizationCreateRequestBody,
+    type OrganizationDefaultWalletConfigurations as OrganizationDefaultWalletConfigurations,
+    type OrganizationDefaultWalletConfigurationsUpdate as OrganizationDefaultWalletConfigurationsUpdate,
     type OrganizationSecretIDInput as OrganizationSecretIDInput,
     type OrganizationSecretView as OrganizationSecretView,
     type OrganizationSecretsListResponse as OrganizationSecretsListResponse,
     type OrganizationUpdateRequestBody as OrganizationUpdateRequestBody,
+    type OrganizationWalletConfiguration as OrganizationWalletConfiguration,
     type OrganizationsListResponse as OrganizationsListResponse,
     type UpdateOrganizationSecretSigningKeyInput as UpdateOrganizationSecretSigningKeyInput,
     type OrganizationsCursor as OrganizationsCursor,

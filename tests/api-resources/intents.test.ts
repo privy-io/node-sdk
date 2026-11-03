@@ -43,6 +43,23 @@ describe('resource intents', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('_authorize: only required params', async () => {
+    const responsePromise = client.intents._authorize('intent_id', { signature: 'signature', timestamp: 0 });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('_authorize: required and optional params', async () => {
+    const response = await client.intents._authorize('intent_id', { signature: 'signature', timestamp: 0 });
+  });
+
+  // Mock server tests are disabled
   test.skip('createConditionSetItems: only required params', async () => {
     const responsePromise = client.intents.createConditionSetItems('xxxxxxxxxxxxxxxxxxxxxxxx', {
       condition_set_items_request_body: [{ value: 'x' }],

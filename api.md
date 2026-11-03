@@ -183,6 +183,7 @@ Types:
 Methods:
 
 - <code title="get /v1/intents">client.intents.<a href="./src/resources/intents.ts">list</a>({ ...params }) -> IntentResponsesCursor</code>
+- <code title="post /v1/intents/{intent_id}/authorize">client.intents.<a href="./src/resources/intents.ts">\_authorize</a>(intentID, { ...params }) -> IntentResponse</code>
 - <code title="post /v1/intents/condition_sets/{condition_set_id}/condition_set_items">client.intents.<a href="./src/resources/intents.ts">createConditionSetItems</a>(conditionSetID, [ ...condition_set_items_request_body ]) -> ConditionSetItemMutateIntentResponse</code>
 - <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/resources/intents.ts">createPolicyRule</a>(policyID, { ...params }) -> RuleMutateIntentResponse</code>
 - <code title="delete /v1/intents/condition_sets/{condition_set_id}">client.intents.<a href="./src/resources/intents.ts">deleteConditionSet</a>(conditionSetID, { ...params }) -> ConditionSetDeleteIntentResponse</code>
@@ -227,10 +228,13 @@ Types:
 - <code><a href="./src/resources/organizations/organizations.ts">CreateOrganizationSecretResponse</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">Organization</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationCreateRequestBody</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationDefaultWalletConfigurations</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationDefaultWalletConfigurationsUpdate</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretIDInput</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretView</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretsListResponse</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationUpdateRequestBody</a></code>
+- <code><a href="./src/resources/organizations/organizations.ts">OrganizationWalletConfiguration</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationsListResponse</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">UpdateOrganizationSecretSigningKeyInput</a></code>
 

@@ -1386,8 +1386,8 @@ export interface UsageAtaDepositRecordedWebhookPayload {
   amount_usd: string;
 
   /**
-   * An opaque, stable identifier for this charge. Use it to deduplicate webhook
-   * deliveries.
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
    */
   event_id: string;
 
@@ -1414,8 +1414,8 @@ export interface UsageGasSponsorshipRecordedWebhookPayload {
   amount_usd: string;
 
   /**
-   * An opaque, stable identifier for this charge. Use it to deduplicate webhook
-   * deliveries.
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
    */
   event_id: string;
 
@@ -1447,8 +1447,8 @@ export interface UsageSwapProviderFeeRecordedWebhookPayload {
   amount_usd: string;
 
   /**
-   * An opaque, stable identifier for this charge. Use it to deduplicate webhook
-   * deliveries.
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
    */
   event_id: string;
 

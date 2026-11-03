@@ -69,6 +69,10 @@ export type WalletApiRequestSignatureInput = {
   url: string;
   /** Request body. */
   body: any;
+  /** Unix timestamp (in milliseconds) of the signature. Set only when authorizing an intent. */
+  timestamp?: number;
+  /** ID of the intent being authorized. Set only when authorizing an intent. */
+  intent_id?: string;
   /** Privy-specific headers. */
   headers: {
     'privy-app-id': string;
@@ -79,14 +83,21 @@ export type WalletApiRequestSignatureInput = {
 
 /**
  * Formats the request payload into the expected authorization payload, canconicalizes it,
- * and encodes the JSON string into bytes.
+ * and encodes the JSON string into bytes. An empty body is serialized as an empty string,
+ * except in an intent authorization payload, which signs the body exactly as the intent's
+ * `request_details` has it.
  *
  * @param request The request to be formatted.
  * @return The raw bytes representing the authorization payload.
  */
 export function formatRequestForAuthorizationSignature(input: WalletApiRequestSignatureInput): Uint8Array {
   const body: unknown = input.body;
-  if (typeof body === 'object' && body !== null && Object.keys(body).length === 0) {
+  if (
+    input.intent_id === undefined &&
+    typeof body === 'object' &&
+    body !== null &&
+    Object.keys(body).length === 0
+  ) {
     // This is a special case, where if the body is empty, we want to serialize it
     // as an empty string.
     input.body = '';
@@ -96,6 +107,35 @@ export function formatRequestForAuthorizationSignature(input: WalletApiRequestSi
     throw new PrivyAPIError('Failed to serialize request for authorization signature');
   }
   return new TextEncoder().encode(serializedInput);
+}
+
+/** Maps each user JWT to its MFA token. A JWT given with and without an MFA token keeps the MFA token. */
+function mfaTokenByUserJwt(
+  authorizationContext: AuthorizationContext,
+): Map<string, string | null | undefined> {
+  const mfaTokenByJwt = new Map<string, string | null | undefined>(
+    (authorizationContext.user_jwts ?? []).map((jwt) => [jwt, undefined]),
+  );
+  for (const { user_jwt, mfa_token } of authorizationContext.user_auth ?? []) {
+    mfaTokenByJwt.set(user_jwt, mfa_token || mfaTokenByJwt.get(user_jwt));
+  }
+  return mfaTokenByJwt;
+}
+
+/**
+ * Counts the signatures {@link generateAuthorizationSignatures} produces for the given
+ * authorization context, without exchanging JWTs or calling sign functions.
+ *
+ * @param authorizationContext The authorization context containing JWTs, private keys, and signatures.
+ * @returns The number of authorization signatures.
+ */
+export function countAuthorizationSignatures(authorizationContext: AuthorizationContext): number {
+  return (
+    (authorizationContext.signatures?.length ?? 0) +
+    (authorizationContext.authorization_private_keys?.length ?? 0) +
+    mfaTokenByUserJwt(authorizationContext).size +
+    (authorizationContext.sign_fns?.length ?? 0)
+  );
 }
 
 /**
@@ -120,15 +160,8 @@ export async function generateAuthorizationSignatures(
 ): Promise<string[]> {
   const payload = formatRequestForAuthorizationSignature(input);
 
-  /** One exchange per JWT. A JWT given with and without an MFA token keeps the MFA token. */
-  const mfaTokenByJwt = new Map<string, string | null | undefined>(
-    (authorizationContext.user_jwts ?? []).map((jwt) => [jwt, undefined]),
-  );
-  for (const { user_jwt, mfa_token } of authorizationContext.user_auth ?? []) {
-    mfaTokenByJwt.set(user_jwt, mfa_token || mfaTokenByJwt.get(user_jwt));
-  }
   const userKeys = await Promise.all(
-    [...mfaTokenByJwt].map(([jwt, mfaToken]) =>
+    [...mfaTokenByUserJwt(authorizationContext)].map(([jwt, mfaToken]) =>
       client._jwtExchange().exchangeJwtForAuthorizationKey(jwt, mfaToken),
     ),
   );

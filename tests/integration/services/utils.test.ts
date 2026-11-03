@@ -81,6 +81,26 @@ describe('PrivyUtils', () => {
           `{"body":"","headers":{"privy-app-id":"${TEST_APP.id}"},"method":"POST","url":"/api/v1/wallets","version":1}`,
         );
       });
+      it('should keep an empty body in an intent authorization payload', async () => {
+        const result = await privyClient
+          .utils()
+          .requestFormatter()
+          .formatRequestForAuthorizationSignature({
+            version: 1,
+            method: 'DELETE',
+            url: '/api/v1/policies/policy-id',
+            body: {},
+            timestamp: 1750000000000,
+            intent_id: 'intent-id',
+            headers: {
+              'privy-app-id': TEST_APP.id,
+            },
+          });
+        const resultString = new TextDecoder().decode(result);
+        expect(resultString).toBe(
+          `{"body":{},"headers":{"privy-app-id":"${TEST_APP.id}"},"intent_id":"intent-id","method":"DELETE","timestamp":1750000000000,"url":"/api/v1/policies/policy-id","version":1}`,
+        );
+      });
     });
     describe('generateAuthorizationSignature', () => {
       it('generates p256 signatures over the request payload', async () => {

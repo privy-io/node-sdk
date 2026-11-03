@@ -1,5 +1,11 @@
 import { PrivyAPI } from '../../client';
 import { APIPromise } from '../../core/api-promise';
+import { PrivyAPIError } from '../../core/error';
+import {
+  AuthorizationContext,
+  countAuthorizationSignatures,
+  generateAuthorizationSignatures,
+} from '../../lib/authorization';
 import {
   ConditionSetDeleteIntentResponse,
   ConditionSetItemDeleteIntentResponse,
@@ -13,6 +19,7 @@ import {
   IntentDeletePolicyParams,
   IntentDeletePolicyRuleParams,
   IntentRawSignParams,
+  IntentResponse,
   IntentRpcParams,
   IntentTransferParams,
   IntentUpdateConditionSetItemsParams,
@@ -55,6 +62,48 @@ export class PrivyIntentsService extends Intents {
       ...params,
       ...(expiry != null && { 'privy-request-expiry': String(expiry) }),
     };
+  }
+
+  /**
+   * Authorizes a pending intent. Fetches the intent, signs its underlying action with the given
+   * authorization context, and submits the signature. The authorize endpoint accepts one
+   * signature per call, so the authorization context must produce exactly one signature.
+   *
+   * @param intentId The ID of the intent to authorize.
+   * @param input The authorization context of a single owner or signer of the intent's resource.
+   * @returns The updated intent.
+   */
+  public async authorize(
+    intentId: string,
+    { authorization_context: authorizationContext }: PrivyIntentsService.AuthorizeInput,
+  ): Promise<IntentResponse> {
+    const signatureCount = countAuthorizationSignatures(authorizationContext);
+    if (signatureCount !== 1) {
+      throw new PrivyAPIError(
+        `An intent can only be authorized with a single authorization signature, got ${signatureCount}`,
+      );
+    }
+
+    const intent = await this.get(intentId);
+    // Privy rejects a timestamp more than 5 minutes from its server time.
+    const timestamp = Date.now();
+    const [signature] = await generateAuthorizationSignatures(this.privyClient, {
+      authorizationContext,
+      input: {
+        version: 1,
+        method: intent.request_details.method,
+        url: intent.request_details.url,
+        body: intent.request_details.body,
+        timestamp,
+        intent_id: intent.intent_id,
+        headers: {
+          'privy-app-id': this._client.appID,
+          ...(intent.custom_expiry && { 'privy-request-expiry': String(intent.expires_at) }),
+        },
+      },
+    });
+
+    return await this._authorize(intentId, { signature: signature!, timestamp });
   }
 
   public override rpc(
@@ -180,6 +229,8 @@ export class PrivyIntentsService extends Intents {
 }
 
 export namespace PrivyIntentsService {
+  /** The input type for the {@link PrivyIntentsService.authorize} method. */
+  export type AuthorizeInput = { authorization_context: AuthorizationContext };
   /** The input type for the {@link PrivyIntentsService.rpc} method. */
   export type RpcInput = Prettify<WithExpiry<IntentRpcParams>>;
   /** The input type for the {@link PrivyIntentsService.rawSign} method. */

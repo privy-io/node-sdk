@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.38.0](https://github.com/privy-io/node-sdk-private/compare/v0.37.0...v0.38.0) (2026-11-03)
+
+
+### Features
+
+* **api:** api update ([9324100](https://github.com/privy-io/node-sdk-private/commit/9324100364eff75c03d1f5a16edf7ba5884ccf14))
+* **api:** api update ([bb5ae83](https://github.com/privy-io/node-sdk-private/commit/bb5ae83ca38a7a7733a4caf45cea5df35c89d8fc))
+* **api:** api update ([ad5d612](https://github.com/privy-io/node-sdk-private/commit/ad5d6128462a5395b29cd07424707f1731ee258c))
+* **api:** api update ([412046b](https://github.com/privy-io/node-sdk-private/commit/412046bf012eb0fcae4058cdc0e37cae2b58022b))
+* **api:** api update ([e0bd08c](https://github.com/privy-io/node-sdk-private/commit/e0bd08c13256852789b83c2f8fd8170764fb2e79))
+* **api:** api update ([ce30392](https://github.com/privy-io/node-sdk-private/commit/ce30392d8e76ef1236bdc01e97727e982e3f0544))
+* **api:** api update ([fac70e6](https://github.com/privy-io/node-sdk-private/commit/fac70e680e525877f0e6b33c455fec2f661c9842))
+* **api:** api update ([47514c6](https://github.com/privy-io/node-sdk-private/commit/47514c6bb0e514bed2e6383916cf97b92e6e8dda))
+* **api:** api update ([6d6bbad](https://github.com/privy-io/node-sdk-private/commit/6d6bbadebe76177594f6dfc67326b4d0f4606586))
+* **auth:** accept user_auth with an MFA token in the authorization context ([#97](https://github.com/privy-io/node-sdk-private/issues/97)) ([69983c4](https://github.com/privy-io/node-sdk-private/commit/69983c4a6a30de311af63c0561e577791648fe90))
+* **intents:** add intents().authorize ([#98](https://github.com/privy-io/node-sdk-private/issues/98)) ([4068613](https://github.com/privy-io/node-sdk-private/commit/40686139406246e44b3f0efeb86c5bd533f3a384))
+
+
+### Bug Fixes
+
+* restore main CI after generated API updates 🪿✨ ([#99](https://github.com/privy-io/node-sdk-private/issues/99)) ([b75322c](https://github.com/privy-io/node-sdk-private/commit/b75322ca6ab52955b4576fd65021e320e447c5b7))
+
 ## [0.37.0](https://github.com/privy-io/node-sdk-private/compare/v0.36.0...v0.37.0) (2026-10-26)
 
 

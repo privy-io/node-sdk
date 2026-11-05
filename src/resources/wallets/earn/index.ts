@@ -7,3 +7,10 @@ export {
   type EthereumWithdrawParams,
   type EthereumVaultPositionParams,
 } from './ethereum/index';
+export {
+  Tmmf,
+  type TmmfDepositParams,
+  type TmmfWithdrawParams,
+  type TmmfListPositionsParams,
+  type TmmfRegisterParams,
+} from './tmmf';

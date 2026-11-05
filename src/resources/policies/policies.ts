@@ -784,7 +784,7 @@ export interface Policy {
 /**
  * The action to take when a policy rule matches.
  */
-export type PolicyAction = 'ALLOW' | 'DENY';
+export type PolicyAction = 'ALLOW' | 'DENY' | 'ALLOW_WITH_MFA';
 
 /**
  * Headers required to authorize modifications to policies.

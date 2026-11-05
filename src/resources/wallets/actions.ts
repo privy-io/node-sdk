@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ActionsAPI from './actions';
 import * as FiatAPI from '../fiat';
 import * as SharedAPI from '../shared';
 import * as WalletsAPI from './wallets';
@@ -1415,6 +1416,447 @@ export interface TempoZoneSettlementWalletActionStep {
 }
 
 /**
+ * Chain the fund is held on, e.g. "ethereum_sepolia".
+ */
+export type TmmfChain = string;
+
+/**
+ * Currency symbol, e.g. "USDC". Case-insensitive.
+ */
+export type TmmfCurrency = string;
+
+/**
+ * A positive decimal amount in the asset's standard unit, e.g. "1000.00".
+ */
+export type TmmfDecimalAmount = string;
+
+/**
+ * A tokenized money market fund (tMMF) deposit.
+ */
+export interface TmmfDepositActionResponse {
+  /**
+   * The ID of the wallet action.
+   */
+  id: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionStatus;
+
+  type: 'tmmf_deposit';
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+
+  /**
+   * The steps of the wallet action. Only returned if `?include=steps` is provided.
+   */
+  steps?: Array<WalletActionStep>;
+}
+
+/**
+ * Request body for buying tMMF shares with a currency the wallet holds.
+ */
+export interface TmmfDepositRequestBody {
+  /**
+   * A positive decimal amount in the asset's standard unit, e.g. "1000.00".
+   */
+  amount: TmmfDecimalAmount;
+
+  /**
+   * Chain the fund is held on, e.g. "ethereum_sepolia".
+   */
+  chain: TmmfChain;
+
+  /**
+   * Currency symbol, e.g. "USDC". Case-insensitive.
+   */
+  deposit_asset: TmmfCurrency;
+
+  /**
+   * Fund ticker, e.g. "WTGXX". Case-insensitive.
+   */
+  fund: TmmfFund;
+
+  /**
+   * How a tMMF order fills: `secondary` from the provider pool in minutes, or
+   * `primary` at the next NAV strike.
+   */
+  order_type: TmmfOrderType;
+
+  /**
+   * Unique caller-generated nonce used to prevent replaying a signed wallet action
+   * request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
+
+  /**
+   * Developer-provided identifier for this request. Must be unique per app.
+   */
+  reference_id?: string;
+}
+
+/**
+ * Fund ticker, e.g. "WTGXX". Case-insensitive.
+ */
+export type TmmfFund = string;
+
+/**
+ * A tMMF purchase or redemption wallet action, discriminated on type.
+ */
+export type TmmfOrderActionResponse = TmmfDepositActionResponse | TmmfWithdrawActionResponse;
+
+/**
+ * How a tMMF order fills: `secondary` from the provider pool in minutes, or
+ * `primary` at the next NAV strike.
+ */
+export type TmmfOrderType = 'primary' | 'secondary';
+
+/**
+ * A wallet's position in one fund on one chain. Fields read from the provider are
+ * null when that call fails.
+ */
+export interface TmmfPosition {
+  /**
+   * Chain the fund is held on, e.g. "ethereum_sepolia".
+   */
+  chain: TmmfChain;
+
+  /**
+   * Fund ticker, e.g. "WTGXX". Case-insensitive.
+   */
+  fund: TmmfFund;
+
+  /**
+   * Publication date of the NAV, e.g. "2026-09-25", or null without one or when the
+   * provider call fails.
+   */
+  nav_date: string | null;
+
+  /**
+   * Latest published NAV per share in USD, or null when the provider call fails.
+   */
+  nav_usd: string | null;
+
+  /**
+   * Accrued, undistributed income in USD that is not yet spendable, or null when the
+   * provider call fails.
+   */
+  pending_dividends_usd: string | null;
+
+  /**
+   * Wallet actions for purchases and redemptions that are still pending.
+   */
+  pending_orders: Array<TmmfOrderActionResponse>;
+
+  /**
+   * Start date of the open accrual period, e.g. "2026-09-01", or null without one or
+   * when the provider call fails.
+   */
+  pending_since: string | null;
+
+  /**
+   * The fund provider.
+   */
+  provider: TmmfProvider;
+
+  /**
+   * `shares` valued at `nav_usd`, or null when the provider call fails.
+   */
+  share_value_usd: string | null;
+
+  /**
+   * Fund shares held on-chain by the wallet.
+   */
+  shares: string;
+
+  /**
+   * Estimated share value plus available pending dividends, excluding settlement
+   * currency and in-transit assets; null without NAV.
+   */
+  total_position_value_usd: string | null;
+}
+
+/**
+ * A page of a wallet's tMMF positions for all providers: one per fund and chain
+ * the wallet is registered for.
+ */
+export interface TmmfPositionResponse {
+  /**
+   * Cursor of the next page of positions, or null on the last page.
+   */
+  next_cursor: string | null;
+
+  /**
+   * A page of the wallet's positions, one per registered fund and chain.
+   */
+  positions: Array<TmmfPosition>;
+
+  /**
+   * ID of the Privy wallet holding the positions.
+   */
+  wallet_id: string;
+}
+
+/**
+ * The fund provider.
+ */
+export type TmmfProvider = 'wisdomtree' | (string & {});
+
+/**
+ * A registered wallet's status with its tMMF provider, read live from the
+ * provider.
+ */
+export type TmmfProviderWalletStatus = 'created' | 'approved' | 'rejected' | (string & {});
+
+/**
+ * Request body for registering a wallet with a tMMF provider for the wallet's
+ * user, e.g. an organization.
+ */
+export interface TmmfRegisterRequestBody {
+  /**
+   * Chain the fund is held on, e.g. "ethereum_sepolia".
+   */
+  chain: TmmfChain;
+
+  /**
+   * The fund provider.
+   */
+  provider: TmmfProvider;
+}
+
+/**
+ * A user's registration status with a tMMF provider, read live from the provider.
+ */
+export type TmmfRegistrationStatus =
+  | 'pending'
+  | 'action_required'
+  | 'approved'
+  | 'rejected'
+  | 'suspended'
+  | (string & {});
+
+/**
+ * A user's registration with one tMMF provider.
+ */
+export interface TmmfUserRegistration {
+  /**
+   * The fund provider.
+   */
+  provider: TmmfProvider;
+
+  /**
+   * A user's registration status with a tMMF provider, read live from the provider.
+   */
+  status: TmmfRegistrationStatus;
+}
+
+/**
+ * A user's registration with each tMMF provider, and the wallets registered for
+ * each.
+ */
+export interface TmmfUserResponse {
+  /**
+   * ID of the Privy user, which can be an organization.
+   */
+  user_id: string;
+
+  /**
+   * The user's registrations with tMMF providers.
+   */
+  user_registrations: Array<TmmfUserRegistration>;
+
+  /**
+   * A page of wallets registered for the user with tMMF providers.
+   */
+  wallet_registrations: Array<TmmfUserWalletResponse>;
+
+  /**
+   * Cursor of the next page of wallet registrations, or null on the last page.
+   */
+  wallets_next_cursor: string | null;
+}
+
+/**
+ * A wallet registered for a user with a provider on one chain.
+ */
+export interface TmmfUserWalletResponse {
+  /**
+   * Blockchain address of the registered wallet.
+   */
+  address: string;
+
+  /**
+   * Chain the fund is held on, e.g. "ethereum_sepolia".
+   */
+  chain: TmmfChain;
+
+  /**
+   * The fund provider.
+   */
+  provider: TmmfProvider;
+
+  /**
+   * A registered wallet's status with its tMMF provider, read live from the
+   * provider.
+   */
+  status: TmmfProviderWalletStatus | null;
+
+  /**
+   * ID of the registered Privy wallet.
+   */
+  wallet_id: string;
+}
+
+/**
+ * A Privy wallet registered for a user with one tMMF provider on one chain.
+ */
+export interface TmmfWalletResponse {
+  /**
+   * Blockchain address of the registered wallet.
+   */
+  address: string;
+
+  /**
+   * Chain the fund is held on, e.g. "ethereum_sepolia".
+   */
+  chain: TmmfChain;
+
+  /**
+   * Unix timestamp in milliseconds when the wallet registration was created.
+   */
+  created_at: number;
+
+  /**
+   * The fund provider.
+   */
+  provider: TmmfProvider;
+
+  /**
+   * A registered wallet's status with its tMMF provider, read live from the
+   * provider.
+   */
+  status: TmmfProviderWalletStatus | null;
+
+  /**
+   * Unix timestamp in milliseconds when the wallet registration was last updated.
+   */
+  updated_at: number;
+
+  /**
+   * ID of the Privy user the wallet is registered for.
+   */
+  user_id: string;
+
+  /**
+   * ID of the Privy wallet registered to trade and hold fund shares.
+   */
+  wallet_id: string;
+}
+
+/**
+ * A tokenized money market fund (tMMF) withdrawal.
+ */
+export interface TmmfWithdrawActionResponse {
+  /**
+   * The ID of the wallet action.
+   */
+  id: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * Status of a wallet action.
+   */
+  status: WalletActionStatus;
+
+  type: 'tmmf_withdraw';
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+
+  /**
+   * The steps of the wallet action. Only returned if `?include=steps` is provided.
+   */
+  steps?: Array<WalletActionStep>;
+}
+
+/**
+ * Request body for redeeming tMMF shares the wallet holds.
+ */
+export interface TmmfWithdrawRequestBody {
+  /**
+   * Chain the fund is held on, e.g. "ethereum_sepolia".
+   */
+  chain: TmmfChain;
+
+  /**
+   * Fund ticker, e.g. "WTGXX". Case-insensitive.
+   */
+  fund: TmmfFund;
+
+  /**
+   * How a tMMF order fills: `secondary` from the provider pool in minutes, or
+   * `primary` at the next NAV strike.
+   */
+  order_type: TmmfOrderType;
+
+  /**
+   * A positive decimal amount in the asset's standard unit, e.g. "1000.00".
+   */
+  shares: TmmfDecimalAmount;
+
+  /**
+   * Currency symbol, e.g. "USDC". Case-insensitive.
+   */
+  withdraw_asset: TmmfCurrency;
+
+  /**
+   * Unique caller-generated nonce used to prevent replaying a signed wallet action
+   * request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+   */
+  nonce?: WalletsAPI.WalletActionNonce;
+
+  /**
+   * Developer-provided identifier for this request. Must be unique per app.
+   */
+  reference_id?: string;
+}
+
+/**
  * Response for a transfer action.
  */
 export interface TransferActionResponse {
@@ -1614,7 +2056,9 @@ export type WalletActionResponse =
   | EarnWithdrawActionResponse
   | EarnIncentiveClaimActionResponse
   | EarnFeeCollectActionResponse
-  | PayoutResponse;
+  | PayoutResponse
+  | TmmfDepositActionResponse
+  | TmmfWithdrawActionResponse;
 
 /**
  * Status of a wallet action.
@@ -1631,7 +2075,8 @@ export type WalletActionStep =
   | TvmTransactionWalletActionStep
   | ExternalTransactionWalletActionStep
   | CustodianTransactionWalletActionStep
-  | TempoZoneSettlementWalletActionStep;
+  | TempoZoneSettlementWalletActionStep
+  | WisdomTreeSettlementWalletActionStep;
 
 /**
  * Type of a wallet action step.
@@ -1644,6 +2089,7 @@ export type WalletActionStepType =
   | 'external_transaction'
   | 'custodian_transaction'
   | 'tempo_zone_settlement'
+  | 'wisdomtree_settlement'
   | (string & {});
 
 /**
@@ -1656,7 +2102,144 @@ export type WalletActionType =
   | 'earn_withdraw'
   | 'earn_incentive_claim'
   | 'earn_fee_collect'
-  | 'payout';
+  | 'payout'
+  | 'tmmf_deposit'
+  | 'tmmf_withdraw'
+  | (string & {});
+
+/**
+ * An amount of the currency a tMMF deposit sends.
+ */
+export interface WisdomTreeSettlementDepositAssetAmount {
+  /**
+   * A positive decimal amount in the asset's standard unit, e.g. "1000.00".
+   */
+  amount: TmmfDecimalAmount;
+
+  /**
+   * Currency symbol, e.g. "USDC". Case-insensitive.
+   */
+  deposit_asset: TmmfCurrency;
+}
+
+/**
+ * An amount of fund shares a tMMF order sends or receives.
+ */
+export interface WisdomTreeSettlementFundAmount {
+  /**
+   * A positive decimal amount in the asset's standard unit, e.g. "1000.00".
+   */
+  amount: TmmfDecimalAmount;
+
+  /**
+   * Fund ticker, e.g. "WTGXX". Case-insensitive.
+   */
+  fund: TmmfFund;
+}
+
+/**
+ * What a tMMF order receives: fund shares for a deposit, the withdraw asset for a
+ * withdrawal.
+ */
+export type WisdomTreeSettlementReceivedAmount =
+  | WisdomTreeSettlementFundAmount
+  | WisdomTreeSettlementWithdrawAssetAmount;
+
+/**
+ * What a tMMF order sends: the deposit asset for a deposit, fund shares for a
+ * withdrawal.
+ */
+export type WisdomTreeSettlementRequestedAmount =
+  | WisdomTreeSettlementDepositAssetAmount
+  | WisdomTreeSettlementFundAmount;
+
+/**
+ * A wallet action step representing the settlement of a tokenized money market
+ * fund (tMMF) order by WisdomTree.
+ */
+export interface WisdomTreeSettlementWalletActionStep {
+  /**
+   * CAIP-2 identifier of the chain the order trades on.
+   */
+  caip2: string | null;
+
+  /**
+   * How a tMMF order fills: `secondary` from the provider pool in minutes, or
+   * `primary` at the next NAV strike.
+   */
+  order_type: TmmfOrderType | null;
+
+  /**
+   * What a tMMF order receives: fund shares for a deposit, the withdraw asset for a
+   * withdrawal.
+   */
+  received: WisdomTreeSettlementWalletActionStep.Received;
+
+  /**
+   * What a tMMF order sends: the deposit asset for a deposit, fund shares for a
+   * withdrawal.
+   */
+  requested: WisdomTreeSettlementWalletActionStep.Requested;
+
+  /**
+   * The transaction that delivered the received asset. Null until Privy verifies the
+   * settlement.
+   */
+  settlement_transaction_hash: string | null;
+
+  /**
+   * Status of a WisdomTree settlement step in a wallet action.
+   */
+  status: WisdomTreeSettlementWalletActionStepStatus;
+
+  type: 'wisdomtree_settlement';
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason?: FailureReason;
+}
+
+export namespace WisdomTreeSettlementWalletActionStep {
+  /**
+   * What a tMMF order receives: fund shares for a deposit, the withdraw asset for a
+   * withdrawal.
+   */
+  export type Received = ActionsAPI.WisdomTreeSettlementReceivedAmount & {};
+
+  /**
+   * What a tMMF order sends: the deposit asset for a deposit, fund shares for a
+   * withdrawal.
+   */
+  export type Requested = ActionsAPI.WisdomTreeSettlementRequestedAmount & {};
+}
+
+/**
+ * Status of a WisdomTree settlement step in a wallet action.
+ */
+export type WisdomTreeSettlementWalletActionStepStatus =
+  | 'preparing'
+  | 'queued'
+  | 'pending'
+  | 'confirmed'
+  | 'rejected'
+  | 'failed'
+  | (string & {});
+
+/**
+ * An amount of the currency a tMMF withdrawal receives.
+ */
+export interface WisdomTreeSettlementWithdrawAssetAmount {
+  /**
+   * A positive decimal amount in the asset's standard unit, e.g. "1000.00".
+   */
+  amount: TmmfDecimalAmount;
+
+  /**
+   * Currency symbol, e.g. "USDC". Case-insensitive.
+   */
+  withdraw_asset: TmmfCurrency;
+}
 
 export interface ActionGetParams {
   /**
@@ -1719,6 +2302,26 @@ export declare namespace Actions {
     type TvmWalletActionStepStatus as TvmWalletActionStepStatus,
     type TempoVaultDetails as TempoVaultDetails,
     type TempoZoneSettlementWalletActionStep as TempoZoneSettlementWalletActionStep,
+    type TmmfChain as TmmfChain,
+    type TmmfCurrency as TmmfCurrency,
+    type TmmfDecimalAmount as TmmfDecimalAmount,
+    type TmmfDepositActionResponse as TmmfDepositActionResponse,
+    type TmmfDepositRequestBody as TmmfDepositRequestBody,
+    type TmmfFund as TmmfFund,
+    type TmmfOrderActionResponse as TmmfOrderActionResponse,
+    type TmmfOrderType as TmmfOrderType,
+    type TmmfPosition as TmmfPosition,
+    type TmmfPositionResponse as TmmfPositionResponse,
+    type TmmfProvider as TmmfProvider,
+    type TmmfProviderWalletStatus as TmmfProviderWalletStatus,
+    type TmmfRegisterRequestBody as TmmfRegisterRequestBody,
+    type TmmfRegistrationStatus as TmmfRegistrationStatus,
+    type TmmfUserRegistration as TmmfUserRegistration,
+    type TmmfUserResponse as TmmfUserResponse,
+    type TmmfUserWalletResponse as TmmfUserWalletResponse,
+    type TmmfWalletResponse as TmmfWalletResponse,
+    type TmmfWithdrawActionResponse as TmmfWithdrawActionResponse,
+    type TmmfWithdrawRequestBody as TmmfWithdrawRequestBody,
     type TransferActionResponse as TransferActionResponse,
     type VedaVaultDetails as VedaVaultDetails,
     type WalletActionInclude as WalletActionInclude,
@@ -1727,6 +2330,13 @@ export declare namespace Actions {
     type WalletActionStep as WalletActionStep,
     type WalletActionStepType as WalletActionStepType,
     type WalletActionType as WalletActionType,
+    type WisdomTreeSettlementDepositAssetAmount as WisdomTreeSettlementDepositAssetAmount,
+    type WisdomTreeSettlementFundAmount as WisdomTreeSettlementFundAmount,
+    type WisdomTreeSettlementReceivedAmount as WisdomTreeSettlementReceivedAmount,
+    type WisdomTreeSettlementRequestedAmount as WisdomTreeSettlementRequestedAmount,
+    type WisdomTreeSettlementWalletActionStep as WisdomTreeSettlementWalletActionStep,
+    type WisdomTreeSettlementWalletActionStepStatus as WisdomTreeSettlementWalletActionStepStatus,
+    type WisdomTreeSettlementWithdrawAssetAmount as WisdomTreeSettlementWithdrawAssetAmount,
     type ActionGetParams as ActionGetParams,
   };
 }

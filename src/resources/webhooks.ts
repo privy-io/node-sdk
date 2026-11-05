@@ -1114,6 +1114,58 @@ export interface SeedPhraseExportWebhookPayload {
 }
 
 /**
+ * Payload for the tmmf.wallet.updated webhook event: a register request created or
+ * confirmed a tMMF wallet.
+ */
+export interface TmmfWalletUpdatedWebhookPayload {
+  /**
+   * Blockchain address of the registered wallet.
+   */
+  address: string;
+
+  /**
+   * Chain the fund is held on, e.g. "ethereum_sepolia".
+   */
+  chain: ActionsAPI.TmmfChain;
+
+  /**
+   * Unix timestamp in milliseconds when the wallet registration was created.
+   */
+  created_at: number;
+
+  /**
+   * The fund provider.
+   */
+  provider: ActionsAPI.TmmfProvider;
+
+  /**
+   * A registered wallet's status with its tMMF provider, read live from the
+   * provider.
+   */
+  status: ActionsAPI.TmmfProviderWalletStatus | null;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'tmmf.wallet.updated';
+
+  /**
+   * Unix timestamp in milliseconds when the wallet registration was last updated.
+   */
+  updated_at: number;
+
+  /**
+   * ID of the Privy user the wallet is registered for.
+   */
+  user_id: string;
+
+  /**
+   * ID of the Privy wallet registered to trade and hold fund shares.
+   */
+  wallet_id: string;
+}
+
+/**
  * Payload for the transaction.broadcasted webhook event.
  */
 export interface TransactionBroadcastedWebhookPayload {
@@ -3914,6 +3966,468 @@ export interface WalletActionSwapSucceededWebhookPayload {
 }
 
 /**
+ * Payload for the wallet_action.tmmf_deposit.created webhook event.
+ */
+export interface WalletActionTmmfDepositCreatedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'pending';
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.tmmf_deposit.created';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+}
+
+/**
+ * Payload for the wallet_action.tmmf_deposit.failed webhook event.
+ */
+export interface WalletActionTmmfDepositFailedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action failed.
+   */
+  failed_at: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: ActionsAPI.FailureReason;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'failed';
+
+  /**
+   * The steps of the wallet action, where completed steps have transaction hashes
+   * and the failing step has a failure_reason; `gas_credits_charged` on a step may
+   * still be `null` when this webhook fires, so fetch the wallet action directly for
+   * up-to-date gas data.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.tmmf_deposit.failed';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+}
+
+/**
+ * Payload for the wallet_action.tmmf_deposit.rejected webhook event.
+ */
+export interface WalletActionTmmfDepositRejectedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: ActionsAPI.FailureReason;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was rejected.
+   */
+  rejected_at: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'rejected';
+
+  /**
+   * The steps of the wallet action at the time of rejection; `gas_credits_charged`
+   * on a step may still be `null` when this webhook fires, so fetch the wallet
+   * action directly for up-to-date gas data.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.tmmf_deposit.rejected';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+}
+
+/**
+ * Payload for the wallet_action.tmmf_deposit.succeeded webhook event.
+ */
+export interface WalletActionTmmfDepositSucceededWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action completed successfully.
+   */
+  completed_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'succeeded';
+
+  /**
+   * The steps of the wallet action, including transaction hashes;
+   * `gas_credits_charged` on a step may still be `null` when this webhook fires, so
+   * fetch the wallet action directly for up-to-date gas data.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.tmmf_deposit.succeeded';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+}
+
+/**
+ * Payload for the wallet_action.tmmf_withdraw.created webhook event.
+ */
+export interface WalletActionTmmfWithdrawCreatedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'pending';
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.tmmf_withdraw.created';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+}
+
+/**
+ * Payload for the wallet_action.tmmf_withdraw.failed webhook event.
+ */
+export interface WalletActionTmmfWithdrawFailedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action failed.
+   */
+  failed_at: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: ActionsAPI.FailureReason;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'failed';
+
+  /**
+   * The steps of the wallet action, where completed steps have transaction hashes
+   * and the failing step has a failure_reason; `gas_credits_charged` on a step may
+   * still be `null` when this webhook fires, so fetch the wallet action directly for
+   * up-to-date gas data.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.tmmf_withdraw.failed';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+}
+
+/**
+ * Payload for the wallet_action.tmmf_withdraw.rejected webhook event.
+ */
+export interface WalletActionTmmfWithdrawRejectedWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
+   * A description of why a wallet action (or a step within a wallet action) failed.
+   */
+  failure_reason: ActionsAPI.FailureReason;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was rejected.
+   */
+  rejected_at: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'rejected';
+
+  /**
+   * The steps of the wallet action at the time of rejection; `gas_credits_charged`
+   * on a step may still be `null` when this webhook fires, so fetch the wallet
+   * action directly for up-to-date gas data.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.tmmf_withdraw.rejected';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+}
+
+/**
+ * Payload for the wallet_action.tmmf_withdraw.succeeded webhook event.
+ */
+export interface WalletActionTmmfWithdrawSucceededWebhookPayload {
+  /**
+   * Type of wallet action
+   */
+  action_type: ActionsAPI.WalletActionType;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action completed successfully.
+   */
+  completed_at: string;
+
+  /**
+   * ISO 8601 timestamp of when the wallet action was created.
+   */
+  created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
+   * The status of the wallet action.
+   */
+  status: 'succeeded';
+
+  /**
+   * The steps of the wallet action, including transaction hashes;
+   * `gas_credits_charged` on a step may still be `null` when this webhook fires, so
+   * fetch the wallet action directly for up-to-date gas data.
+   */
+  steps: Array<ActionsAPI.WalletActionStep>;
+
+  /**
+   * The type of webhook event.
+   */
+  type: 'wallet_action.tmmf_withdraw.succeeded';
+
+  /**
+   * The ID of the wallet action.
+   */
+  wallet_action_id: string;
+
+  /**
+   * The ID of the wallet involved in the action.
+   */
+  wallet_id: string;
+
+  /**
+   * Developer-provided reference ID, if one was included in the request.
+   */
+  reference_id?: string | null;
+}
+
+/**
  * Payload for the wallet_action.transfer.created webhook event.
  */
 export interface WalletActionTransferCreatedWebhookPayload {
@@ -4549,6 +5063,7 @@ export type WebhookPayload =
   | YieldDepositConfirmedWebhookPayload
   | YieldWithdrawConfirmedWebhookPayload
   | YieldClaimConfirmedWebhookPayload
+  | TmmfWalletUpdatedWebhookPayload
   | UserOperationCompletedWebhookPayload
   | UsageGasSponsorshipRecordedWebhookPayload
   | UsageSwapProviderFeeRecordedWebhookPayload
@@ -4586,6 +5101,14 @@ export type WebhookPayload =
   | WalletActionPayoutSucceededWebhookPayload
   | WalletActionPayoutRejectedWebhookPayload
   | WalletActionPayoutFailedWebhookPayload
+  | WalletActionTmmfDepositCreatedWebhookPayload
+  | WalletActionTmmfDepositSucceededWebhookPayload
+  | WalletActionTmmfDepositRejectedWebhookPayload
+  | WalletActionTmmfDepositFailedWebhookPayload
+  | WalletActionTmmfWithdrawCreatedWebhookPayload
+  | WalletActionTmmfWithdrawSucceededWebhookPayload
+  | WalletActionTmmfWithdrawRejectedWebhookPayload
+  | WalletActionTmmfWithdrawFailedWebhookPayload
   | WalletAutomationSubmittedWebhookPayload;
 
 /**
@@ -4828,6 +5351,7 @@ export type UnsafeUnwrapWebhookEvent =
   | MfaDisabledWebhookPayload
   | MfaEnabledWebhookPayload
   | OrganizationKYBUpdatedWebhookEvent
+  | TmmfWalletUpdatedWebhookPayload
   | TransactionBroadcastedWebhookPayload
   | TransactionConfirmedWebhookPayload
   | TransactionExecutionRevertedWebhookPayload
@@ -4882,6 +5406,14 @@ export type UnsafeUnwrapWebhookEvent =
   | WalletActionSwapFailedWebhookPayload
   | WalletActionSwapRejectedWebhookPayload
   | WalletActionSwapSucceededWebhookPayload
+  | WalletActionTmmfDepositCreatedWebhookPayload
+  | WalletActionTmmfDepositFailedWebhookPayload
+  | WalletActionTmmfDepositRejectedWebhookPayload
+  | WalletActionTmmfDepositSucceededWebhookPayload
+  | WalletActionTmmfWithdrawCreatedWebhookPayload
+  | WalletActionTmmfWithdrawFailedWebhookPayload
+  | WalletActionTmmfWithdrawRejectedWebhookPayload
+  | WalletActionTmmfWithdrawSucceededWebhookPayload
   | WalletActionTransferCreatedWebhookPayload
   | WalletActionTransferFailedWebhookPayload
   | WalletActionTransferRejectedWebhookPayload
@@ -4936,6 +5468,7 @@ export declare namespace Webhooks {
     type RefundMetadata as RefundMetadata,
     type RelayRefundDetails as RelayRefundDetails,
     type SeedPhraseExportWebhookPayload as SeedPhraseExportWebhookPayload,
+    type TmmfWalletUpdatedWebhookPayload as TmmfWalletUpdatedWebhookPayload,
     type TransactionBroadcastedWebhookPayload as TransactionBroadcastedWebhookPayload,
     type TransactionConfirmedWebhookPayload as TransactionConfirmedWebhookPayload,
     type TransactionExecutionRevertedWebhookPayload as TransactionExecutionRevertedWebhookPayload,
@@ -4984,6 +5517,14 @@ export declare namespace Webhooks {
     type WalletActionSwapFailedWebhookPayload as WalletActionSwapFailedWebhookPayload,
     type WalletActionSwapRejectedWebhookPayload as WalletActionSwapRejectedWebhookPayload,
     type WalletActionSwapSucceededWebhookPayload as WalletActionSwapSucceededWebhookPayload,
+    type WalletActionTmmfDepositCreatedWebhookPayload as WalletActionTmmfDepositCreatedWebhookPayload,
+    type WalletActionTmmfDepositFailedWebhookPayload as WalletActionTmmfDepositFailedWebhookPayload,
+    type WalletActionTmmfDepositRejectedWebhookPayload as WalletActionTmmfDepositRejectedWebhookPayload,
+    type WalletActionTmmfDepositSucceededWebhookPayload as WalletActionTmmfDepositSucceededWebhookPayload,
+    type WalletActionTmmfWithdrawCreatedWebhookPayload as WalletActionTmmfWithdrawCreatedWebhookPayload,
+    type WalletActionTmmfWithdrawFailedWebhookPayload as WalletActionTmmfWithdrawFailedWebhookPayload,
+    type WalletActionTmmfWithdrawRejectedWebhookPayload as WalletActionTmmfWithdrawRejectedWebhookPayload,
+    type WalletActionTmmfWithdrawSucceededWebhookPayload as WalletActionTmmfWithdrawSucceededWebhookPayload,
     type WalletActionTransferCreatedWebhookPayload as WalletActionTransferCreatedWebhookPayload,
     type WalletActionTransferFailedWebhookPayload as WalletActionTransferFailedWebhookPayload,
     type WalletActionTransferRejectedWebhookPayload as WalletActionTransferRejectedWebhookPayload,

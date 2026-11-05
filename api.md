@@ -476,6 +476,14 @@ Methods:
 - <code title="delete /v1/users/{user_id}/freeze">client.users.<a href="./src/resources/users/users.ts">unfreeze</a>(userID) -> SuccessResponse</code>
 - <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/resources/users/users.ts">unlinkLinkedAccount</a>(userID, { ...params }) -> User</code>
 
+## Earn
+
+### Tmmf
+
+Methods:
+
+- <code title="get /v1/users/{user_id}/earn/tmmf">client.users.earn.tmmf.<a href="./src/resources/users/earn/tmmf.ts">get</a>(userID, { ...params }) -> TmmfUserResponse</code>
+
 ## ExternalFiatAccounts
 
 Methods:
@@ -1033,6 +1041,26 @@ Types:
 - <code><a href="./src/resources/wallets/actions.ts">TvmWalletActionStepStatus</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">TempoVaultDetails</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">TempoZoneSettlementWalletActionStep</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfChain</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfCurrency</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfDecimalAmount</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfDepositActionResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfDepositRequestBody</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfFund</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfOrderActionResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfOrderType</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfPosition</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfPositionResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfProvider</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfProviderWalletStatus</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfRegisterRequestBody</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfRegistrationStatus</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfUserRegistration</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfUserResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfUserWalletResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfWalletResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfWithdrawActionResponse</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">TmmfWithdrawRequestBody</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">TransferActionResponse</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">VedaVaultDetails</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionInclude</a></code>
@@ -1041,6 +1069,13 @@ Types:
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionStep</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionStepType</a></code>
 - <code><a href="./src/resources/wallets/actions.ts">WalletActionType</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">WisdomTreeSettlementDepositAssetAmount</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">WisdomTreeSettlementFundAmount</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">WisdomTreeSettlementReceivedAmount</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">WisdomTreeSettlementRequestedAmount</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">WisdomTreeSettlementWalletActionStep</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">WisdomTreeSettlementWalletActionStepStatus</a></code>
+- <code><a href="./src/resources/wallets/actions.ts">WisdomTreeSettlementWithdrawAssetAmount</a></code>
 
 Methods:
 
@@ -1100,6 +1135,15 @@ Methods:
 
 - <code title="get /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/resources/wallets/earn/ethereum/incentive.ts">list</a>(walletID, { ...params }) -> EarnIncentiveRewardsResponse</code>
 - <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/resources/wallets/earn/ethereum/incentive.ts">\_claim</a>(walletID, { ...params }) -> EarnIncentiveClaimActionResponse</code>
+
+### Tmmf
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/earn/tmmf/deposit">client.wallets.earn.tmmf.<a href="./src/resources/wallets/earn/tmmf.ts">\_deposit</a>(walletID, { ...params }) -> TmmfDepositActionResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/earn/tmmf/withdraw">client.wallets.earn.tmmf.<a href="./src/resources/wallets/earn/tmmf.ts">\_withdraw</a>(walletID, { ...params }) -> TmmfWithdrawActionResponse</code>
+- <code title="get /v1/wallets/{wallet_id}/earn/tmmf/positions">client.wallets.earn.tmmf.<a href="./src/resources/wallets/earn/tmmf.ts">listPositions</a>(walletID, { ...params }) -> TmmfPositionResponse</code>
+- <code title="post /v1/wallets/{wallet_id}/earn/tmmf/register">client.wallets.earn.tmmf.<a href="./src/resources/wallets/earn/tmmf.ts">register</a>(walletID, { ...params }) -> TmmfWalletResponse</code>
 
 ## Payout
 
@@ -1173,6 +1217,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">RefundMetadata</a></code>
 - <code><a href="./src/resources/webhooks.ts">RelayRefundDetails</a></code>
 - <code><a href="./src/resources/webhooks.ts">SeedPhraseExportWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">TmmfWalletUpdatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionBroadcastedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionConfirmedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">TransactionExecutionRevertedWebhookPayload</a></code>
@@ -1221,6 +1266,14 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WalletActionSwapFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionSwapRejectedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionSwapSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTmmfDepositCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTmmfDepositFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTmmfDepositRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTmmfDepositSucceededWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTmmfWithdrawCreatedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTmmfWithdrawFailedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTmmfWithdrawRejectedWebhookPayload</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletActionTmmfWithdrawSucceededWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionTransferCreatedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionTransferFailedWebhookPayload</a></code>
 - <code><a href="./src/resources/webhooks.ts">WalletActionTransferRejectedWebhookPayload</a></code>

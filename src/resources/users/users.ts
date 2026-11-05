@@ -16,6 +16,8 @@ import {
 import * as KYCAPI from './kyc';
 import { KYC, KYCInitiateLinksParams, KYCInitiateTosParams, KYCSubmitParams } from './kyc';
 import * as WalletsAPI from '../wallets/wallets';
+import * as EarnAPI from './earn/earn';
+import { Earn } from './earn/earn';
 import * as MfaAPI from './mfa/mfa';
 import {
   EmailMfaEnrollmentInitRequestBody,
@@ -58,6 +60,7 @@ import { path } from '../../internal/utils/path';
  * Operations related to users
  */
 export class Users extends APIResource {
+  earn: EarnAPI.Earn = new EarnAPI.Earn(this._client);
   externalFiatAccounts: ExternalFiatAccountsAPI.ExternalFiatAccounts =
     new ExternalFiatAccountsAPI.ExternalFiatAccounts(this._client);
   kyc: KYCAPI.KYC = new KYCAPI.KYC(this._client);
@@ -1886,6 +1889,7 @@ export interface UserUnlinkLinkedAccountParams {
   provider?: string;
 }
 
+Users.Earn = Earn;
 Users.ExternalFiatAccounts = ExternalFiatAccounts;
 Users.KYC = KYC;
 Users.Mfa = Mfa;
@@ -1982,6 +1986,8 @@ export declare namespace Users {
     type UserSetCustomMetadataParams as UserSetCustomMetadataParams,
     type UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams,
   };
+
+  export { Earn as Earn };
 
   export {
     ExternalFiatAccounts as ExternalFiatAccounts,

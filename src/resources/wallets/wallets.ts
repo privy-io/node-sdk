@@ -524,10 +524,18 @@ export class Wallets extends APIResource {
    * ```
    */
   authenticateWithJwt(
-    body: WalletAuthenticateWithJwtParams,
+    params: WalletAuthenticateWithJwtParams,
     options?: RequestOptions,
   ): APIPromise<WalletAuthenticateWithJwtResponse> {
-    return this._client.post('/v1/wallets/authenticate', { body, ...options });
+    const { mfa_token, ...body } = params;
+    return this._client.post('/v1/wallets/authenticate', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(mfa_token != null ? { 'privy-mfa-token': mfa_token } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -7465,21 +7473,27 @@ export interface WalletAssignEntityParams {
 
 export interface WalletAuthenticateWithJwtParams {
   /**
-   * The encryption type for the authentication response. Currently only supports
-   * HPKE.
+   * Body param: The encryption type for the authentication response. Currently only
+   * supports HPKE.
    */
   encryption_type: 'HPKE';
 
   /**
-   * The public key of your ECDH keypair, in base64-encoded, SPKI-format, whose
-   * private key will be able to decrypt the session key.
+   * Body param: The public key of your ECDH keypair, in base64-encoded, SPKI-format,
+   * whose private key will be able to decrypt the session key.
    */
   recipient_public_key: string;
 
   /**
-   * The user's JWT, to be used to authenticate the user.
+   * Body param: The user's JWT, to be used to authenticate the user.
    */
   user_jwt: string;
+
+  /**
+   * Header param: MFA token from a completed MFA verification, required on
+   * MFA-protected requests for users with MFA enrolled.
+   */
+  mfa_token?: string;
 }
 
 export interface WalletCreateBatchParams {

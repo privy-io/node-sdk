@@ -11,7 +11,7 @@ const client = new PrivyAPI({
 describe('resource tmmf', () => {
   // Mock server tests are disabled
   test.skip('_deposit: only required params', async () => {
-    const responsePromise = client.wallets.earn.tmmf._deposit('wallet_id', {
+    const responsePromise = client.wallets._earn.tmmf._deposit('wallet_id', {
       amount: '1000.00',
       chain: 'ethereum_sepolia',
       deposit_asset: 'USDC',
@@ -29,7 +29,7 @@ describe('resource tmmf', () => {
 
   // Mock server tests are disabled
   test.skip('_deposit: required and optional params', async () => {
-    const response = await client.wallets.earn.tmmf._deposit('wallet_id', {
+    const response = await client.wallets._earn.tmmf._deposit('wallet_id', {
       amount: '1000.00',
       chain: 'ethereum_sepolia',
       deposit_asset: 'USDC',
@@ -45,7 +45,7 @@ describe('resource tmmf', () => {
 
   // Mock server tests are disabled
   test.skip('_withdraw: only required params', async () => {
-    const responsePromise = client.wallets.earn.tmmf._withdraw('wallet_id', {
+    const responsePromise = client.wallets._earn.tmmf._withdraw('wallet_id', {
       chain: 'ethereum_sepolia',
       fund: 'WTGXX',
       order_type: 'primary',
@@ -63,7 +63,7 @@ describe('resource tmmf', () => {
 
   // Mock server tests are disabled
   test.skip('_withdraw: required and optional params', async () => {
-    const response = await client.wallets.earn.tmmf._withdraw('wallet_id', {
+    const response = await client.wallets._earn.tmmf._withdraw('wallet_id', {
       chain: 'ethereum_sepolia',
       fund: 'WTGXX',
       order_type: 'primary',
@@ -79,7 +79,7 @@ describe('resource tmmf', () => {
 
   // Mock server tests are disabled
   test.skip('listPositions', async () => {
-    const responsePromise = client.wallets.earn.tmmf.listPositions('wallet_id');
+    const responsePromise = client.wallets._earn.tmmf.listPositions('wallet_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -93,7 +93,7 @@ describe('resource tmmf', () => {
   test.skip('listPositions: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.wallets.earn.tmmf.listPositions(
+      client.wallets._earn.tmmf.listPositions(
         'wallet_id',
         {
           chain: 'ethereum_sepolia',
@@ -109,7 +109,7 @@ describe('resource tmmf', () => {
 
   // Mock server tests are disabled
   test.skip('register: only required params', async () => {
-    const responsePromise = client.wallets.earn.tmmf.register('wallet_id', {
+    const responsePromise = client.wallets._earn.tmmf.register('wallet_id', {
       chain: 'ethereum_sepolia',
       provider: 'wisdomtree',
     });
@@ -124,7 +124,7 @@ describe('resource tmmf', () => {
 
   // Mock server tests are disabled
   test.skip('register: required and optional params', async () => {
-    const response = await client.wallets.earn.tmmf.register('wallet_id', {
+    const response = await client.wallets._earn.tmmf.register('wallet_id', {
       chain: 'ethereum_sepolia',
       provider: 'wisdomtree',
     });

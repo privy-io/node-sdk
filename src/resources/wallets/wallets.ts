@@ -1292,10 +1292,10 @@ export type CustodialWalletProvider = 'bridge';
  */
 export interface CustomTokenTransferSource {
   /**
-   * The token contract address (EVM) or mint address (Solana) of the asset to
-   * transfer.
+   * Stellar account address: an ed25519 public key in StrKey encoding, starting with
+   * G.
    */
-  asset_address: string;
+  asset_address: SharedAPI.StellarAddress;
 
   /**
    * The blockchain network on which to perform the transfer. Supported chains
@@ -1410,7 +1410,11 @@ export interface DeveloperFee {
 
   type: 'developer';
 
-  recipient?: string;
+  /**
+   * Stellar account address: an ed25519 public key in StrKey encoding, starting with
+   * G.
+   */
+  recipient?: SharedAPI.StellarAddress;
 }
 
 /**
@@ -2629,7 +2633,11 @@ export interface PrivyFee {
 
   type: 'privy';
 
-  recipient?: string;
+  /**
+   * Stellar account address: an ed25519 public key in StrKey encoding, starting with
+   * G.
+   */
+  recipient?: SharedAPI.StellarAddress;
 }
 
 /**
@@ -2768,7 +2776,11 @@ export interface RelayerFee {
 
   type: 'relayer';
 
-  recipient?: string;
+  /**
+   * Stellar account address: an ed25519 public key in StrKey encoding, starting with
+   * G.
+   */
+  recipient?: SharedAPI.StellarAddress;
 }
 
 /**
@@ -3957,9 +3969,10 @@ export interface TokenOutput {
  */
 export interface TokenTransferDestination {
   /**
-   * Recipient address (hex for EVM, base58 for Solana, base58check for Tron)
+   * Stellar account address: an ed25519 public key in StrKey encoding, starting with
+   * G.
    */
-  address: string;
+  address: SharedAPI.StellarAddress;
 
   /**
    * The destination asset. Required for cross-asset transfers (e.g., source 'usdt'

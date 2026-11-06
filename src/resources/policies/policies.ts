@@ -485,6 +485,11 @@ export interface ConditionSetItem {
    * The value stored in this condition set item.
    */
   value: string;
+
+  /**
+   * Label for the item, or null if it has none.
+   */
+  name?: string | null;
 }
 
 /**
@@ -498,10 +503,15 @@ export interface ConditionSetItemRequestParams {
 }
 
 /**
- * A single value to add to a condition set.
+ * A value to add to a condition set, with an optional name.
  */
 export interface ConditionSetItemValueInput {
   value: string;
+
+  /**
+   * Optional label for the item, unique within the condition set ignoring case.
+   */
+  name?: string;
 }
 
 /**
@@ -1288,6 +1298,22 @@ export interface TypedDataInput {
 }
 
 /**
+ * Fields to update on a condition set item; at least one is required.
+ */
+export interface UpdateConditionSetItemRequestBody {
+  /**
+   * New label for the item, unique within the condition set ignoring case, or `null`
+   * to remove it.
+   */
+  name?: string | null;
+
+  /**
+   * New value for the item, which must not already exist in the condition set.
+   */
+  value?: string;
+}
+
+/**
  * Request body for updating a condition set. At least one field must be provided.
  * `owner` and `owner_id` are mutually exclusive.
  */
@@ -1633,6 +1659,7 @@ export declare namespace Policies {
     type TronTransactionCondition as TronTransactionCondition,
     type TronTransactionConditionField as TronTransactionConditionField,
     type TypedDataInput as TypedDataInput,
+    type UpdateConditionSetItemRequestBody as UpdateConditionSetItemRequestBody,
     type UpdateConditionSetRequestBody as UpdateConditionSetRequestBody,
     type XrplTransactionCondition as XrplTransactionCondition,
     type XrplTransactionConditionField as XrplTransactionConditionField,

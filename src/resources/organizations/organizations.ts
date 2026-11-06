@@ -140,6 +140,12 @@ export interface Organization {
   default_key_quorum_id: SharedAPI.KeyQuorumID;
 
   /**
+   * Defaults applied to wallets created with the organization as their entity, keyed
+   * by chain type.
+   */
+  default_wallet_configurations: OrganizationDefaultWalletConfigurations;
+
+  /**
    * Organization display name
    */
   display_name: string;
@@ -160,6 +166,12 @@ export interface OrganizationCreateRequestBody {
   default_key_quorum_id: SharedAPI.KeyQuorumID;
 
   display_name: string;
+
+  /**
+   * Defaults applied to wallets created with the organization as their entity, keyed
+   * by chain type.
+   */
+  default_wallet_configurations?: OrganizationDefaultWalletConfigurations;
 }
 
 /**
@@ -264,6 +276,12 @@ export interface OrganizationUpdateRequestBody {
    */
   default_key_quorum_id?: SharedAPI.KeyQuorumID;
 
+  /**
+   * Changes to the defaults, keyed by chain type. Omitted chains and fields are
+   * unchanged, and `null` removes a chain.
+   */
+  default_wallet_configurations?: OrganizationDefaultWalletConfigurationsUpdate;
+
   display_name?: string;
 }
 
@@ -308,6 +326,12 @@ export interface OrganizationCreateParams {
   default_key_quorum_id: SharedAPI.KeyQuorumID;
 
   display_name: string;
+
+  /**
+   * Defaults applied to wallets created with the organization as their entity, keyed
+   * by chain type.
+   */
+  default_wallet_configurations?: OrganizationDefaultWalletConfigurations;
 }
 
 export interface OrganizationUpdateParams {
@@ -315,6 +339,12 @@ export interface OrganizationUpdateParams {
    * A unique identifier for a key quorum.
    */
   default_key_quorum_id?: SharedAPI.KeyQuorumID;
+
+  /**
+   * Changes to the defaults, keyed by chain type. Omitted chains and fields are
+   * unchanged, and `null` removes a chain.
+   */
+  default_wallet_configurations?: OrganizationDefaultWalletConfigurationsUpdate;
 
   display_name?: string;
 }

@@ -29,6 +29,20 @@ describe('resource organizations', () => {
     const response = await client.organizations.create({
       default_key_quorum_id: 'string',
       display_name: 'x',
+      default_wallet_configurations: {
+        ethereum: {
+          additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+          policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
+        },
+        solana: {
+          additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+          policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
+        },
+        tron: {
+          additional_signers: [{ signer_id: 'string', override_policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'] }],
+          policy_ids: ['xxxxxxxxxxxxxxxxxxxxxxxx'],
+        },
+      },
     });
   });
 

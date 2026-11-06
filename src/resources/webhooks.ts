@@ -438,6 +438,12 @@ export interface IntentAuthorizedWebhookPayload {
   created_at: number;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Unix timestamp when the intent expires.
    */
   expires_at: number;
@@ -486,6 +492,12 @@ export interface IntentCreatedWebhookPayload {
    * Unix timestamp when the intent was created.
    */
   created_at: number;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * Unix timestamp when the intent expires.
@@ -543,6 +555,12 @@ export interface IntentExecutedWebhookPayload {
   created_at: number;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Unix timestamp when the intent expires.
    */
   expires_at: number;
@@ -593,6 +611,12 @@ export interface IntentFailedWebhookPayload {
   created_at: number;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Unix timestamp when the intent expires.
    */
   expires_at: number;
@@ -636,6 +660,12 @@ export interface IntentRejectedWebhookPayload {
    * Unix timestamp when the intent was created.
    */
   created_at: number;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * Unix timestamp when the intent expires.
@@ -693,6 +723,12 @@ export interface KrakenEmbedCustomOrderCancelledWebhookPayload {
   custom_order_id: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * A human-readable description of why the custom order was cancelled. Intended for
    * display and logging purposes only.
    */
@@ -719,6 +755,12 @@ export interface KrakenEmbedCustomOrderExecutedWebhookPayload {
   custom_order_id: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * ISO 8601 timestamp of when the custom order was executed.
    */
   executed_at: string;
@@ -742,6 +784,12 @@ export interface KrakenEmbedCustomOrderExecutionFailedWebhookPayload {
    * The ID of the custom order that failed to execute.
    */
   custom_order_id: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * ISO 8601 timestamp of when the custom order execution failed.
@@ -775,6 +823,12 @@ export interface KrakenEmbedQuoteCancelledWebhookPayload {
   cancelled_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The ID of the cancelled quote.
    */
   quote_id: string;
@@ -801,6 +855,12 @@ export interface KrakenEmbedQuoteCancelledWebhookPayload {
  */
 export interface KrakenEmbedQuoteExecutedWebhookPayload {
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * ISO 8601 timestamp of when the quote was executed.
    */
   executed_at: string;
@@ -825,6 +885,12 @@ export interface KrakenEmbedQuoteExecutedWebhookPayload {
  * Payload for the kraken_embed.quote.execution_failed webhook event.
  */
 export interface KrakenEmbedQuoteExecutionFailedWebhookPayload {
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
   /**
    * ISO 8601 timestamp of when the quote execution failed.
    */
@@ -862,6 +928,12 @@ export interface KrakenEmbedUserClosedWebhookPayload {
   closed_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The type of webhook event.
    */
   type: 'kraken_embed.user.closed';
@@ -882,6 +954,12 @@ export interface KrakenEmbedUserDisabledWebhookPayload {
   disabled_at: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The type of webhook event.
    */
   type: 'kraken_embed.user.disabled';
@@ -896,6 +974,12 @@ export interface KrakenEmbedUserDisabledWebhookPayload {
  * Payload for the kraken_embed.user.verified webhook event.
  */
 export interface KrakenEmbedUserVerifiedWebhookPayload {
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
   /**
    * The type of webhook event.
    */
@@ -917,6 +1001,12 @@ export interface KrakenEmbedUserVerifiedWebhookPayload {
  */
 export interface MfaDisabledWebhookPayload {
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * A multi-factor authentication method supported by the app.
    */
   method: AppsAPI.MfaMethod;
@@ -936,6 +1026,12 @@ export interface MfaDisabledWebhookPayload {
  * Payload for the mfa.enabled webhook event.
  */
 export interface MfaEnabledWebhookPayload {
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
   /**
    * A multi-factor authentication method supported by the app.
    */
@@ -1003,6 +1099,12 @@ export interface OrganizationKYBUpdatedTosData {
  * Payload for the wallet.private_key_export webhook event.
  */
 export interface PrivateKeyExportWebhookPayload {
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
   /**
    * The type of webhook event.
    */
@@ -1087,6 +1189,12 @@ export interface RelayRefundDetails {
  */
 export interface SeedPhraseExportWebhookPayload {
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The type of webhook event.
    */
   type: 'wallet.seed_phrase_export';
@@ -1134,6 +1242,12 @@ export interface TmmfWalletUpdatedWebhookPayload {
   created_at: number;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The fund provider.
    */
   provider: ActionsAPI.TmmfProvider;
@@ -1176,6 +1290,12 @@ export interface TransactionBroadcastedWebhookPayload {
   caip2: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The blockchain transaction hash.
    */
   transaction_hash: string;
@@ -1211,6 +1331,12 @@ export interface TransactionConfirmedWebhookPayload {
    * mainnet).
    */
   caip2: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * The blockchain transaction hash.
@@ -1250,6 +1376,12 @@ export interface TransactionExecutionRevertedWebhookPayload {
   caip2: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The blockchain transaction hash.
    */
   transaction_hash: string;
@@ -1285,6 +1417,12 @@ export interface TransactionFailedWebhookPayload {
    * mainnet).
    */
   caip2: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * The blockchain transaction hash.
@@ -1324,6 +1462,12 @@ export interface TransactionProviderErrorWebhookPayload {
   caip2: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The blockchain transaction hash.
    */
   transaction_hash: string;
@@ -1361,6 +1505,12 @@ export interface TransactionReplacedWebhookPayload {
   caip2: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The blockchain transaction hash.
    */
   transaction_hash: string;
@@ -1396,6 +1546,12 @@ export interface TransactionStillPendingWebhookPayload {
    * mainnet).
    */
   caip2: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * The blockchain transaction hash.
@@ -1529,6 +1685,12 @@ export interface UserAuthenticatedWebhookPayload {
   account: UsersAPI.LinkedAccount;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The type of webhook event.
    */
   type: 'user.authenticated';
@@ -1544,6 +1706,12 @@ export interface UserAuthenticatedWebhookPayload {
  */
 export interface UserCreatedWebhookPayload {
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The type of webhook event.
    */
   type: 'user.created';
@@ -1558,6 +1726,12 @@ export interface UserCreatedWebhookPayload {
  * Payload for the user.deleted webhook event.
  */
 export interface UserDeletedWebhookPayload {
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
   /**
    * The type of webhook event.
    */
@@ -1631,6 +1805,12 @@ export interface UserLinkedAccountWebhookPayload {
   account: UsersAPI.LinkedAccount;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The type of webhook event.
    */
   type: 'user.linked_account';
@@ -1692,6 +1872,12 @@ export interface UserTransferredAccountWebhookPayload {
   deletedUser: true;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * A reference to a user by their unique identifier.
    */
   fromUser: UserReference;
@@ -1717,6 +1903,12 @@ export interface UserUnlinkedAccountWebhookPayload {
   account: UsersAPI.LinkedAccount;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The type of webhook event.
    */
   type: 'user.unlinked_account';
@@ -1737,6 +1929,12 @@ export interface UserUpdatedAccountWebhookPayload {
   account: UsersAPI.LinkedAccount;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The type of webhook event.
    */
   type: 'user.updated_account';
@@ -1751,6 +1949,12 @@ export interface UserUpdatedAccountWebhookPayload {
  * Payload for the user.wallet_created webhook event.
  */
 export interface UserWalletCreatedWebhookPayload {
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
   /**
    * The type of webhook event.
    */
@@ -4809,6 +5013,12 @@ export interface WalletArchivedWebhookPayload {
   chain_type: string;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The type of webhook event.
    */
   type: 'wallet.archived';
@@ -4842,6 +5052,12 @@ export interface WalletAutomationSubmittedWebhookPayload {
    * ISO 8601 timestamp of when the automation was submitted.
    */
   created_at: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * Contract address of the triggering deposit's asset, or 'native-token' for the
@@ -4945,6 +5161,12 @@ export interface WalletFundsTrc20Asset {
  */
 export interface WalletRecoveredWebhookPayload {
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * The type of webhook event.
    */
   type: 'wallet.recovered';
@@ -4981,6 +5203,12 @@ export type WalletRecoverySetupMethod =
  */
 export interface WalletRecoverySetupWebhookPayload {
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Recovery method types for embedded wallet recovery setup webhooks.
    */
   method: WalletRecoverySetupMethod;
@@ -5014,6 +5242,12 @@ export interface WalletRestoredWebhookPayload {
    * The chain type of the restored wallet.
    */
   chain_type: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * The type of webhook event.
@@ -5117,6 +5351,12 @@ export type WebhookPayload =
 export interface YieldClaimConfirmedWebhookPayload {
   caip2: string;
 
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
   rewards: Array<YieldClaimReward>;
 
   transaction_id: string;
@@ -5148,6 +5388,12 @@ export interface YieldDepositConfirmedWebhookPayload {
 
   caip2: string;
 
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
   owner: string;
 
   sender: string;
@@ -5169,6 +5415,12 @@ export interface YieldWithdrawConfirmedWebhookPayload {
   assets: string;
 
   caip2: string;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   owner: string;
 
@@ -5199,6 +5451,12 @@ export interface OrganizationKYBUpdatedWebhookEvent {
    */
   environment: FiatAPI.KyxEnvironment;
 
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
   organization_id: string;
 
   /**
@@ -5224,6 +5482,12 @@ export interface UserKYCUpdatedWebhookEvent {
    * Provider environment (production or sandbox).
    */
   environment: FiatAPI.KyxEnvironment;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * KYC/KYB provider identifier.
@@ -5253,6 +5517,12 @@ export interface WalletDepositAccountDepositCompletedWebhookEvent {
    * The Privy API environment.
    */
   environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * Supported fiat orchestration providers.
@@ -5288,6 +5558,12 @@ export interface WalletDepositAccountDepositFailedWebhookEvent {
   environment: SharedAPI.IntegrationEnvironment;
 
   /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
+
+  /**
    * Supported fiat orchestration providers.
    */
   provider: SharedAPI.OrchestrationProvider;
@@ -5320,6 +5596,12 @@ export interface WalletDepositAccountDepositStartedWebhookEvent {
    * The Privy API environment.
    */
   environment: SharedAPI.IntegrationEnvironment;
+
+  /**
+   * The ID of this event, stable across repeat deliveries so clients can deduplicate
+   * on it.
+   */
+  event_id: string;
 
   /**
    * Supported fiat orchestration providers.
@@ -5382,6 +5664,7 @@ export type UnsafeUnwrapWebhookEvent =
   | WalletRecoveredWebhookPayload
   | WalletRecoverySetupWebhookPayload
   | WalletRestoredWebhookPayload
+  | SeedPhraseExportWebhookPayload
   | WalletActionEarnDepositCreatedWebhookPayload
   | WalletActionEarnDepositFailedWebhookPayload
   | WalletActionEarnDepositRejectedWebhookPayload

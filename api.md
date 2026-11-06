@@ -322,6 +322,7 @@ Types:
 - <code><a href="./src/resources/policies/policies.ts">TronTransactionCondition</a></code>
 - <code><a href="./src/resources/policies/policies.ts">TronTransactionConditionField</a></code>
 - <code><a href="./src/resources/policies/policies.ts">TypedDataInput</a></code>
+- <code><a href="./src/resources/policies/policies.ts">UpdateConditionSetItemRequestBody</a></code>
 - <code><a href="./src/resources/policies/policies.ts">UpdateConditionSetRequestBody</a></code>
 - <code><a href="./src/resources/policies/policies.ts">XrplTransactionCondition</a></code>
 - <code><a href="./src/resources/policies/policies.ts">XrplTransactionConditionField</a></code>
@@ -1576,6 +1577,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">P256PublicKey</a></code>
 - <code><a href="./src/resources/shared.ts">SolanaAddress</a></code>
 - <code><a href="./src/resources/shared.ts">SolanaCaip2</a></code>
+- <code><a href="./src/resources/shared.ts">StellarAddress</a></code>
 - <code><a href="./src/resources/shared.ts">SuccessResponse</a></code>
 - <code><a href="./src/resources/shared.ts">TokenIdentifier</a></code>
 - <code><a href="./src/resources/shared.ts">TronAddress</a></code>

@@ -76,7 +76,7 @@ describe('resource intents', () => {
   // Mock server tests are disabled
   test.skip('createConditionSetItems: required and optional params', async () => {
     const response = await client.intents.createConditionSetItems('xxxxxxxxxxxxxxxxxxxxxxxx', {
-      condition_set_items_request_body: [{ value: 'x' }],
+      condition_set_items_request_body: [{ value: 'x', name: 'x' }],
       'privy-request-expiry': 'privy-request-expiry',
     });
   });
@@ -410,7 +410,7 @@ describe('resource intents', () => {
   // Mock server tests are disabled
   test.skip('updateConditionSetItems: required and optional params', async () => {
     const response = await client.intents.updateConditionSetItems('xxxxxxxxxxxxxxxxxxxxxxxx', {
-      condition_set_items_request_body: [{ value: 'x' }],
+      condition_set_items_request_body: [{ value: 'x', name: 'x' }],
       'privy-request-expiry': 'privy-request-expiry',
     });
   });

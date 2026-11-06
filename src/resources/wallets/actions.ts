@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as ActionsAPI from './actions';
 import * as FiatAPI from '../fiat';
 import * as SharedAPI from '../shared';
 import * as WalletsAPI from './wallets';
@@ -2173,13 +2172,13 @@ export interface WisdomTreeSettlementWalletActionStep {
    * What a tMMF order receives: fund shares for a deposit, the withdraw asset for a
    * withdrawal.
    */
-  received: WisdomTreeSettlementWalletActionStep.Received;
+  received: WisdomTreeSettlementReceivedAmount | null;
 
   /**
    * What a tMMF order sends: the deposit asset for a deposit, fund shares for a
    * withdrawal.
    */
-  requested: WisdomTreeSettlementWalletActionStep.Requested;
+  requested: WisdomTreeSettlementRequestedAmount | null;
 
   /**
    * The transaction that delivered the received asset. Null until Privy verifies the
@@ -2198,20 +2197,6 @@ export interface WisdomTreeSettlementWalletActionStep {
    * A description of why a wallet action (or a step within a wallet action) failed.
    */
   failure_reason?: FailureReason;
-}
-
-export namespace WisdomTreeSettlementWalletActionStep {
-  /**
-   * What a tMMF order receives: fund shares for a deposit, the withdraw asset for a
-   * withdrawal.
-   */
-  export type Received = ActionsAPI.WisdomTreeSettlementReceivedAmount & {};
-
-  /**
-   * What a tMMF order sends: the deposit asset for a deposit, fund shares for a
-   * withdrawal.
-   */
-  export type Requested = ActionsAPI.WisdomTreeSettlementRequestedAmount & {};
 }
 
 /**

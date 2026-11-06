@@ -49,7 +49,7 @@ export namespace TransactionGetResponse {
     /**
      * Details of a wallet transaction, varying by transaction type.
      */
-    details: WalletsAPI.TransactionDetail;
+    details: WalletsAPI.TransactionDetail | null;
 
     /**
      * Privy's ID for the transaction, or `null` if the transaction was not broadcasted

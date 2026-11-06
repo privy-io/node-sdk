@@ -118,6 +118,12 @@ export type SolanaAddress = string;
 export type SolanaCaip2 = string;
 
 /**
+ * Stellar account address: an ed25519 public key in StrKey encoding, starting with
+ * G.
+ */
+export type StellarAddress = string;
+
+/**
  * A simple success response.
  */
 export interface SuccessResponse {
@@ -167,6 +173,7 @@ export declare namespace Shared {
     type P256PublicKey as P256PublicKey,
     type SolanaAddress as SolanaAddress,
     type SolanaCaip2 as SolanaCaip2,
+    type StellarAddress as StellarAddress,
     type SuccessResponse as SuccessResponse,
     type TokenIdentifier as TokenIdentifier,
     type TronAddress as TronAddress,

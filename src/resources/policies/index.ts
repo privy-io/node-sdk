@@ -57,6 +57,7 @@ export {
   type TronTransactionCondition,
   type TronTransactionConditionField,
   type TypedDataInput,
+  type UpdateConditionSetItemRequestBody,
   type UpdateConditionSetRequestBody,
   type XrplTransactionCondition,
   type XrplTransactionConditionField,

@@ -1,4 +1,3 @@
-import { Prettify } from 'viem';
 import { PrivyAPI } from '../../client';
 import { APIPromise } from '../../core/api-promise';
 import { prepareRequest } from '../../lib/authorization';
@@ -16,7 +15,7 @@ import {
   SuccessResponse,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
-import { WithAuthorization, WithExpiry, WithIdempotency } from './types';
+import { Prettify, WithAuthorization, WithExpiry, WithIdempotency } from './types';
 
 export class PrivyPoliciesService extends Policies {
   private privyClient: PrivyClient;

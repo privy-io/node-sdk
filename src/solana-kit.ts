@@ -2,14 +2,12 @@ import {
   getBase64EncodedWireTransaction,
   getTransactionDecoder,
   type Address,
+  type MessagePartialSigner,
   type SignatureBytes,
+  type TransactionPartialSigner,
+  type TransactionSendingSigner,
 } from '@solana/kit';
 import { base58, base64 } from '@scure/base';
-import type {
-  MessagePartialSigner,
-  TransactionPartialSigner,
-  TransactionSendingSigner,
-} from '@solana/signers';
 import type { AuthorizationContext } from './lib/authorization';
 import type { PrivyClient } from './public-api/PrivyClient';
 

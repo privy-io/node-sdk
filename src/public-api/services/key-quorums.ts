@@ -1,4 +1,3 @@
-import { Prettify } from 'viem';
 import { PrivyAPI } from '../../client';
 import { prepareRequest } from '../../lib/authorization';
 import { path } from '../../internal/utils/path';
@@ -10,7 +9,7 @@ import {
   SuccessResponse,
 } from '../../resources';
 import { PrivyClient } from '../PrivyClient';
-import { WithAuthorization, WithExpiry } from './types';
+import { Prettify, WithAuthorization, WithExpiry } from './types';
 
 export class PrivyKeyQuorumsService extends KeyQuorums {
   private privyClient: PrivyClient;

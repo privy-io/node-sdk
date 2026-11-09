@@ -46,6 +46,10 @@ export interface PrivyClientOptions extends InternalClientOptions {
   appId: string;
   appSecret: string;
   apiUrl?: string;
+  /**
+   * Maximum number of user-JWT-derived authorization keys to cache. Must be a positive integer.
+   * @default 1000
+   */
   authorizationKeyCacheMaxCapacity?: number;
   /**
    * Default request expiry duration in milliseconds from now. Defaults to 15 minutes.

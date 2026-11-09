@@ -18,6 +18,11 @@ export class JwtExchangeService {
   private jwtCache: LRUCache<string, CachedSigningKey>;
 
   constructor(walletsService: Wallets, authorizationKeyCacheMaxCapacity: number) {
+    if (!Number.isInteger(authorizationKeyCacheMaxCapacity) || authorizationKeyCacheMaxCapacity <= 0) {
+      throw new PrivyAPIError(
+        `authorizationKeyCacheMaxCapacity must be a positive integer, got ${authorizationKeyCacheMaxCapacity}`,
+      );
+    }
     this.walletsService = walletsService;
     this.jwtCache = new LRUCache({ max: authorizationKeyCacheMaxCapacity });
   }

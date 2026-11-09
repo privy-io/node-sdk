@@ -9,14 +9,14 @@ type AuthenticateWithJwt = Wallets['authenticateWithJwt'];
 
 /** Stands in for `POST /v1/wallets/authenticate`, encrypting a fresh signing key per call. */
 function fakeAuthenticate(expiresInMs = 60_000) {
-  return jest.fn(async (body: Parameters<AuthenticateWithJwt>[0], _options?: unknown) => {
+  return jest.fn(async (params: Parameters<AuthenticateWithJwt>[0], _options?: unknown) => {
     const { privateKey } = await generateP256KeyPair();
     const recipientPublicKey = new Uint8Array(
       await crypto.subtle.exportKey(
         'raw',
         await crypto.subtle.importKey(
           'spki',
-          Buffer.from(body.recipient_public_key, 'base64'),
+          Buffer.from(params.recipient_public_key, 'base64'),
           { name: 'ECDH', namedCurve: 'P-256' },
           true,
           [],
@@ -44,31 +44,26 @@ function exchangeService(authenticate: ReturnType<typeof fakeAuthenticate>) {
   return new JwtExchangeService({ authenticateWithJwt: authenticate } as unknown as Wallets, 10);
 }
 
-function mfaHeader(call: unknown[]) {
-  const options = call[1] as { headers?: Record<string, string> } | undefined;
-  return options?.headers?.['privy-mfa-token'];
-}
-
 describe('JwtExchangeService', () => {
   const jwt = `jwt-${crypto.randomUUID()}`;
   const mfaToken = `mfa-${crypto.randomUUID()}`;
 
-  it('sends the MFA token as the privy-mfa-token header', async () => {
+  it('passes the MFA token to authenticateWithJwt as mfa_token', async () => {
     const authenticate = fakeAuthenticate();
 
     await exchangeService(authenticate).exchangeJwtForAuthorizationKey(jwt, mfaToken);
 
     expect(authenticate).toHaveBeenCalledTimes(1);
     expect(authenticate.mock.calls[0]![0]).toMatchObject({ user_jwt: jwt, encryption_type: 'HPKE' });
-    expect(mfaHeader(authenticate.mock.calls[0]!)).toBe(mfaToken);
+    expect(authenticate.mock.calls[0]![0].mfa_token).toBe(mfaToken);
   });
 
-  it('sends no MFA header without an MFA token', async () => {
+  it('passes no mfa_token without an MFA token', async () => {
     const authenticate = fakeAuthenticate();
 
     await exchangeService(authenticate).exchangeJwtForAuthorizationKey(jwt);
 
-    expect(mfaHeader(authenticate.mock.calls[0]!)).toBeUndefined();
+    expect(authenticate.mock.calls[0]![0].mfa_token).toBeUndefined();
   });
 
   it('reuses the cached key for the same JWT', async () => {
@@ -134,7 +129,7 @@ describe('JwtExchangeService', () => {
     const withMfa = await service.exchangeJwtForAuthorizationKey(jwt, mfaToken);
 
     expect(withMfa).not.toBe(withoutMfa);
-    expect(mfaHeader(authenticate.mock.calls[1]!)).toBe(mfaToken);
+    expect(authenticate.mock.calls[1]![0].mfa_token).toBe(mfaToken);
     expect(await service.exchangeJwtForAuthorizationKey(jwt)).toBe(withMfa);
     expect(authenticate).toHaveBeenCalledTimes(2);
   });
@@ -148,7 +143,7 @@ describe('JwtExchangeService', () => {
     const withOtherMfa = await service.exchangeJwtForAuthorizationKey(jwt, otherMfaToken);
 
     expect(withOtherMfa).not.toBe(withMfa);
-    expect(mfaHeader(authenticate.mock.calls[1]!)).toBe(otherMfaToken);
+    expect(authenticate.mock.calls[1]![0].mfa_token).toBe(otherMfaToken);
     expect(await service.exchangeJwtForAuthorizationKey(jwt, otherMfaToken)).toBe(withOtherMfa);
     expect(await service.exchangeJwtForAuthorizationKey(jwt)).toBe(withOtherMfa);
     expect(authenticate).toHaveBeenCalledTimes(2);
@@ -160,11 +155,11 @@ describe('JwtExchangeService', () => {
     const exchange = authenticate.getMockImplementation()!;
     let releaseExchangeWithoutMfa!: () => void;
     const exchangeWithoutMfaReleased = new Promise<void>((resolve) => (releaseExchangeWithoutMfa = resolve));
-    authenticate.mockImplementation(async (body, options) => {
-      if (!mfaHeader([body, options])) {
+    authenticate.mockImplementation(async (params, options) => {
+      if (!params.mfa_token) {
         await exchangeWithoutMfaReleased;
       }
-      return exchange(body, options);
+      return exchange(params, options);
     });
 
     const withoutMfa = service.exchangeJwtForAuthorizationKey(jwt);
@@ -195,7 +190,7 @@ describe('JwtExchangeService', () => {
 
     expect(await service.exchangeJwtForAuthorizationKey(jwt, null)).toBe(withoutMfa);
     expect(authenticate).toHaveBeenCalledTimes(1);
-    expect(mfaHeader(authenticate.mock.calls[0]!)).toBeUndefined();
+    expect(authenticate.mock.calls[0]![0].mfa_token).toBeUndefined();
   });
 });
 
@@ -216,7 +211,7 @@ describe('generateAuthorizationSignatures', () => {
   function exchanges(authenticate: ReturnType<typeof fakeAuthenticate>) {
     return authenticate.mock.calls.map((call) => ({
       user_jwt: call[0].user_jwt,
-      mfa_token: mfaHeader(call),
+      mfa_token: call[0].mfa_token,
     }));
   }
 

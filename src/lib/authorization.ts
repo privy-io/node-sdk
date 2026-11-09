@@ -53,8 +53,9 @@ export namespace AuthorizationContext {
     /** A valid JWT for the user. */
     user_jwt: string;
     /**
-     * An MFA token from the user's completed MFA verification. The JWT exchange requires it when
-     * the user has MFA enrolled. `null` is the same as omitting it.
+     * An MFA token from the user's completed MFA verification, sent as the `privy-mfa-token` header
+     * on the JWT exchange. The exchange requires it when the user has MFA enrolled. `null` is the
+     * same as omitting it.
      */
     mfa_token?: string | null;
   }

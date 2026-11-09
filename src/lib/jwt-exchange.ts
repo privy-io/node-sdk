@@ -43,8 +43,9 @@ export class JwtExchangeService {
    * token; otherwise it exchanges with the token and replaces the cached key. A key issued without
    * an MFA token never replaces an unexpired one issued with one.
    * @param jwt - The JWT to exchange for a signing key.
-   * @param mfaToken - An MFA token from the user's completed MFA verification, sent as the
-   *   `privy-mfa-token` header. `null` is the same as omitting it.
+   * @param mfaToken - An MFA token from the user's completed MFA verification, passed to
+   *   {@link Wallets.authenticateWithJwt} as `mfa_token`, which sends it as the `privy-mfa-token`
+   *   header. `null` is the same as omitting it.
    * @returns The (base-64 encoded PKCS8-formatted) signing key.
    * @internal
    */
@@ -58,15 +59,13 @@ export class JwtExchangeService {
 
     const { publicKeySpki, decryptPayload } = await this.getHpkeRecipient();
 
-    const signer = await this.walletsService.authenticateWithJwt(
-      {
-        user_jwt: jwt,
-        encryption_type: 'HPKE',
-        // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
-        recipient_public_key: Buffer.from(publicKeySpki).toString('base64'),
-      },
-      mfaToken ? { headers: { 'privy-mfa-token': mfaToken } } : undefined,
-    );
+    const signer = await this.walletsService.authenticateWithJwt({
+      user_jwt: jwt,
+      encryption_type: 'HPKE',
+      // We fall back to `Buffer` here as Uint8Array.toBase64 is not widely supported yet
+      recipient_public_key: Buffer.from(publicKeySpki).toString('base64'),
+      ...(mfaToken ? { mfa_token: mfaToken } : {}),
+    });
     if (
       'encrypted_authorization_key' in signer &&
       signer.encrypted_authorization_key.encryption_type === 'HPKE'

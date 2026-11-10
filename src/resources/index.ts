@@ -353,6 +353,7 @@ export {
   type ExternalFiatAccountIbanData,
   type ExternalFiatAccountIndividualOwner,
   type ExternalFiatAccountOwner,
+  type ExternalFiatAccountPaymentRails,
   type ExternalFiatAccountPixData,
   type ExternalFiatAccountResponse,
   type ExternalFiatAccountSwiftCategory,

@@ -107,6 +107,12 @@ export interface BridgeExternalFiatAccount {
   bank_name?: string;
 
   last_4?: string;
+
+  /**
+   * Payment rails supported by an external fiat account and reasons other rails are
+   * unavailable.
+   */
+  payment_rails?: ExternalFiatAccountPaymentRails;
 }
 
 /**
@@ -186,6 +192,12 @@ export interface BridgeOrganizationExternalFiatAccount {
   bank_name?: string;
 
   last_4?: string;
+
+  /**
+   * Payment rails supported by an external fiat account and reasons other rails are
+   * unavailable.
+   */
+  payment_rails?: ExternalFiatAccountPaymentRails;
 }
 
 /**
@@ -339,6 +351,12 @@ export interface ExternalFiatAccount {
   bank_name?: string;
 
   last_4?: string;
+
+  /**
+   * Payment rails supported by an external fiat account and reasons other rails are
+   * unavailable.
+   */
+  payment_rails?: ExternalFiatAccountPaymentRails;
 }
 
 /**
@@ -433,6 +451,23 @@ export interface ExternalFiatAccountIndividualOwner {
  * `swift` accounts.
  */
 export type ExternalFiatAccountOwner = ExternalFiatAccountIndividualOwner | ExternalFiatAccountBusinessOwner;
+
+/**
+ * Payment rails supported by an external fiat account and reasons other rails are
+ * unavailable.
+ */
+export interface ExternalFiatAccountPaymentRails {
+  /**
+   * Supported payment rails, using the same names as `payment_rail` on payouts, such
+   * as ach, ach_same_day, wire, or fednow.
+   */
+  supported: Array<string>;
+
+  /**
+   * Reasons payment rails are unavailable, keyed by rail name.
+   */
+  unsupported_reasons: { [key: string]: string };
+}
 
 /**
  * Brazilian Pix account data for an external fiat account. Provide exactly one of
@@ -1992,6 +2027,12 @@ export interface OrganizationExternalFiatAccount {
   bank_name?: string;
 
   last_4?: string;
+
+  /**
+   * Payment rails supported by an external fiat account and reasons other rails are
+   * unavailable.
+   */
+  payment_rails?: ExternalFiatAccountPaymentRails;
 }
 
 /**
@@ -2217,6 +2258,7 @@ export declare namespace Fiat {
     type ExternalFiatAccountIbanData as ExternalFiatAccountIbanData,
     type ExternalFiatAccountIndividualOwner as ExternalFiatAccountIndividualOwner,
     type ExternalFiatAccountOwner as ExternalFiatAccountOwner,
+    type ExternalFiatAccountPaymentRails as ExternalFiatAccountPaymentRails,
     type ExternalFiatAccountPixData as ExternalFiatAccountPixData,
     type ExternalFiatAccountResponse as ExternalFiatAccountResponse,
     type ExternalFiatAccountSwiftCategory as ExternalFiatAccountSwiftCategory,

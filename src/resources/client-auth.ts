@@ -742,6 +742,13 @@ export interface MfaEmailVerifyRequestBody {
 }
 
 /**
+ * The enrolled user, with an MFA token only when adding the first MFA method.
+ */
+export interface MfaEnrollResponseBody extends UsersAPI.User {
+  mfa_token?: string;
+}
+
+/**
  * The request body for enrolling a passkey MFA flow.
  */
 export interface MfaPasskeyEnrollmentRequestBody {
@@ -2124,6 +2131,7 @@ export declare namespace ClientAuth {
     type MfaEmailInitRequestBody as MfaEmailInitRequestBody,
     type MfaEmailInitVerifyInput as MfaEmailInitVerifyInput,
     type MfaEmailVerifyRequestBody as MfaEmailVerifyRequestBody,
+    type MfaEnrollResponseBody as MfaEnrollResponseBody,
     type MfaPasskeyEnrollmentRequestBody as MfaPasskeyEnrollmentRequestBody,
     type MfaPasskeyInitRequestBody as MfaPasskeyInitRequestBody,
     type MfaPasskeyInitResponseBody as MfaPasskeyInitResponseBody,

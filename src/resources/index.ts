@@ -198,6 +198,7 @@ export {
   type MfaEmailInitRequestBody,
   type MfaEmailInitVerifyInput,
   type MfaEmailVerifyRequestBody,
+  type MfaEnrollResponseBody,
   type MfaPasskeyEnrollmentRequestBody,
   type MfaPasskeyInitRequestBody,
   type MfaPasskeyInitResponseBody,

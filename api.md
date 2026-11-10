@@ -1448,6 +1448,7 @@ Types:
 - <code><a href="./src/resources/client-auth.ts">MfaEmailInitRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaEmailInitVerifyInput</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaEmailVerifyRequestBody</a></code>
+- <code><a href="./src/resources/client-auth.ts">MfaEnrollResponseBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaPasskeyEnrollmentRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaPasskeyInitRequestBody</a></code>
 - <code><a href="./src/resources/client-auth.ts">MfaPasskeyInitResponseBody</a></code>

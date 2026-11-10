@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.39.0](https://github.com/privy-io/node-sdk-private/compare/v0.38.0...v0.39.0) (2026-11-10)
+
+
+### Features
+
+* **api:** api update ([cec2987](https://github.com/privy-io/node-sdk-private/commit/cec298738cda4c48c86aa597d8d8ee08939b10df))
+* **api:** api update ([ea63cf9](https://github.com/privy-io/node-sdk-private/commit/ea63cf96f13560b8ad245a5bf2aeb7839fc5f48b))
+* **api:** api update ([6ea332c](https://github.com/privy-io/node-sdk-private/commit/6ea332c499ad4bacfc4243081b8ab3528de399be))
+* **api:** api update ([22eeaf6](https://github.com/privy-io/node-sdk-private/commit/22eeaf6b04ff257f2562cc1dcaa0fcfd463d0f6b))
+* **api:** api update ([6ff061a](https://github.com/privy-io/node-sdk-private/commit/6ff061a95e85d875e1217f4e70a1e20ea667cf6e))
+* **api:** api update ([463adcd](https://github.com/privy-io/node-sdk-private/commit/463adcd8dafa0b54815fc2f7e041f03d5f8329b0))
+
+
+### Bug Fixes
+
+* **tests:** use _earn in TMMF resource tests 🪿✨ ([#108](https://github.com/privy-io/node-sdk-private/issues/108)) ([ba87ae0](https://github.com/privy-io/node-sdk-private/commit/ba87ae0faf9c3e8ebe31ddb5349d60508a2996b0))
+* **types:** stop main entry types from importing optional peer viem ([#65](https://github.com/privy-io/node-sdk-private/issues/65)) ([f0259a5](https://github.com/privy-io/node-sdk-private/commit/f0259a52a361cefd88bf17a551622cfe78ffefd7))
+* validate authorizationKeyCacheMaxCapacity ([#66](https://github.com/privy-io/node-sdk-private/issues/66)) ([26e20a9](https://github.com/privy-io/node-sdk-private/commit/26e20a9d77efc28458b53882526a3fbe3eeae23c))
+
+
+### Chores
+
+* **ci:** point at renamed privy-io/sdks config repo ([#107](https://github.com/privy-io/node-sdk-private/issues/107)) ([7b65476](https://github.com/privy-io/node-sdk-private/commit/7b6547679c8b5afb338654ef8ade86ae4644291f))
+* rename privy-io/stainless-sdks-config to privy-io/sdks ([#103](https://github.com/privy-io/node-sdk-private/issues/103)) ([665b33d](https://github.com/privy-io/node-sdk-private/commit/665b33defa1d5cd874aae84edb9ea0c5753b1e40))
+
+
+### Refactors
+
+* **auth:** pass the MFA token to authenticateWithJwt as mfa_token ([#110](https://github.com/privy-io/node-sdk-private/issues/110)) ([fa7182d](https://github.com/privy-io/node-sdk-private/commit/fa7182d2976f46ef1bb08467444412b75a9baec3))
+
 ## [0.38.0](https://github.com/privy-io/node-sdk-private/compare/v0.37.0...v0.38.0) (2026-11-03)
 
 

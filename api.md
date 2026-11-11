@@ -225,18 +225,13 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/organizations/organizations.ts">CreateOrganizationSecretResponse</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">Organization</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationCreateRequestBody</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationDefaultWalletConfigurations</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationDefaultWalletConfigurationsUpdate</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretIDInput</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretView</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">OrganizationSecretsListResponse</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationUpdateRequestBody</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationWalletConfiguration</a></code>
 - <code><a href="./src/resources/organizations/organizations.ts">OrganizationsListResponse</a></code>
-- <code><a href="./src/resources/organizations/organizations.ts">UpdateOrganizationSecretSigningKeyInput</a></code>
 
 Methods:
 

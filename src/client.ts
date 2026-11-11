@@ -968,23 +968,18 @@ import {
   WalletInviteInput,
 } from './resources/apps/apps';
 import {
-  CreateOrganizationSecretResponse,
   Organization,
   OrganizationCreateParams,
   OrganizationCreateRequestBody,
   OrganizationDefaultWalletConfigurations,
   OrganizationDefaultWalletConfigurationsUpdate,
   OrganizationListParams,
-  OrganizationSecretIDInput,
-  OrganizationSecretView,
-  OrganizationSecretsListResponse,
   OrganizationUpdateParams,
   OrganizationUpdateRequestBody,
   OrganizationWalletConfiguration,
   Organizations,
   OrganizationsCursor,
   OrganizationsListResponse,
-  UpdateOrganizationSecretSigningKeyInput,
 } from './resources/organizations/organizations';
 import {
   AbiParameter,
@@ -2572,18 +2567,13 @@ export declare namespace PrivyAPI {
 
   export {
     Organizations as Organizations,
-    type CreateOrganizationSecretResponse as CreateOrganizationSecretResponse,
     type Organization as Organization,
     type OrganizationCreateRequestBody as OrganizationCreateRequestBody,
     type OrganizationDefaultWalletConfigurations as OrganizationDefaultWalletConfigurations,
     type OrganizationDefaultWalletConfigurationsUpdate as OrganizationDefaultWalletConfigurationsUpdate,
-    type OrganizationSecretIDInput as OrganizationSecretIDInput,
-    type OrganizationSecretView as OrganizationSecretView,
-    type OrganizationSecretsListResponse as OrganizationSecretsListResponse,
     type OrganizationUpdateRequestBody as OrganizationUpdateRequestBody,
     type OrganizationWalletConfiguration as OrganizationWalletConfiguration,
     type OrganizationsListResponse as OrganizationsListResponse,
-    type UpdateOrganizationSecretSigningKeyInput as UpdateOrganizationSecretSigningKeyInput,
     type OrganizationsCursor as OrganizationsCursor,
     type OrganizationCreateParams as OrganizationCreateParams,
     type OrganizationUpdateParams as OrganizationUpdateParams,

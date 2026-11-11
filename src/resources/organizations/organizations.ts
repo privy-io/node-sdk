@@ -111,16 +111,6 @@ export class Organizations extends APIResource {
 export type OrganizationsCursor = Cursor<Organization>;
 
 /**
- * Response returned when creating a new organization secret.
- */
-export interface CreateOrganizationSecretResponse extends OrganizationSecretView {
-  /**
-   * The plaintext organization secret. Returned only at creation time.
-   */
-  organization_secret: string;
-}
-
-/**
  * A Privy organization object.
  */
 export interface Organization {
@@ -221,53 +211,6 @@ export interface OrganizationDefaultWalletConfigurationsUpdate {
 }
 
 /**
- * Request body for targeting a specific organization secret.
- */
-export interface OrganizationSecretIDInput {
-  /**
-   * The organization secret ID.
-   */
-  secret_id: string;
-}
-
-/**
- * View of an organization secret for list and management endpoints.
- */
-export interface OrganizationSecretView {
-  /**
-   * Unique secret identifier
-   */
-  id: string;
-
-  /**
-   * ISO 8601 creation timestamp
-   */
-  created_at: string;
-
-  /**
-   * Last four characters of the secret
-   */
-  last_four: string;
-
-  /**
-   * ISO 8601 revocation timestamp, or null if active
-   */
-  revoked_at: string | null;
-
-  /**
-   * P-256 public key in PEM format for request signing, or null if not configured
-   */
-  signing_public_key: string | null;
-}
-
-/**
- * Response returned when listing organization secrets for an account.
- */
-export interface OrganizationSecretsListResponse {
-  data: Array<OrganizationSecretView>;
-}
-
-/**
  * Request body for updating an organization.
  */
 export interface OrganizationUpdateRequestBody {
@@ -309,16 +252,6 @@ export interface OrganizationsListResponse {
   next_cursor: string | null;
 }
 
-/**
- * Request body for updating the signing public key on an organization secret.
- */
-export interface UpdateOrganizationSecretSigningKeyInput extends OrganizationSecretIDInput {
-  /**
-   * P-256 public key in PEM format, or null to clear the configured signing key.
-   */
-  signing_public_key: string | null;
-}
-
 export interface OrganizationCreateParams {
   /**
    * A unique identifier for a key quorum.
@@ -356,18 +289,13 @@ Organizations.KYB = KYB;
 
 export declare namespace Organizations {
   export {
-    type CreateOrganizationSecretResponse as CreateOrganizationSecretResponse,
     type Organization as Organization,
     type OrganizationCreateRequestBody as OrganizationCreateRequestBody,
     type OrganizationDefaultWalletConfigurations as OrganizationDefaultWalletConfigurations,
     type OrganizationDefaultWalletConfigurationsUpdate as OrganizationDefaultWalletConfigurationsUpdate,
-    type OrganizationSecretIDInput as OrganizationSecretIDInput,
-    type OrganizationSecretView as OrganizationSecretView,
-    type OrganizationSecretsListResponse as OrganizationSecretsListResponse,
     type OrganizationUpdateRequestBody as OrganizationUpdateRequestBody,
     type OrganizationWalletConfiguration as OrganizationWalletConfiguration,
     type OrganizationsListResponse as OrganizationsListResponse,
-    type UpdateOrganizationSecretSigningKeyInput as UpdateOrganizationSecretSigningKeyInput,
     type OrganizationsCursor as OrganizationsCursor,
     type OrganizationCreateParams as OrganizationCreateParams,
     type OrganizationUpdateParams as OrganizationUpdateParams,

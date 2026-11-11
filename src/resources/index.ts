@@ -692,18 +692,13 @@ export {
 } from './onramps';
 export {
   Organizations,
-  type CreateOrganizationSecretResponse,
   type Organization,
   type OrganizationCreateRequestBody,
   type OrganizationDefaultWalletConfigurations,
   type OrganizationDefaultWalletConfigurationsUpdate,
-  type OrganizationSecretIDInput,
-  type OrganizationSecretView,
-  type OrganizationSecretsListResponse,
   type OrganizationUpdateRequestBody,
   type OrganizationWalletConfiguration,
   type OrganizationsListResponse,
-  type UpdateOrganizationSecretSigningKeyInput,
   type OrganizationCreateParams,
   type OrganizationUpdateParams,
   type OrganizationListParams,

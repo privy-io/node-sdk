@@ -4164,6 +4164,16 @@ export interface WalletActionSwapSucceededWebhookPayload {
   wallet_id: string;
 
   /**
+   * CAIP-2 identifier of the chain that settled the swap output.
+   */
+  destination_caip2?: string;
+
+  /**
+   * Transaction hash on the destination chain that settled the swap output.
+   */
+  destination_transaction_hash?: string;
+
+  /**
    * Developer-provided reference ID, if one was included in the request.
    */
   reference_id?: string | null;

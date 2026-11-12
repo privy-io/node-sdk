@@ -158,7 +158,7 @@ function mapIdLinkedAccountToUserLinkedAccount(account: any): LinkedAccount | nu
     let pfp = account.pfp ? account.pfp : null;
     if (pfp?.startsWith('default')) {
       pfp = `https://abs.twimg.com/sticky/default_profile_images/${pfp}`;
-    } else if (!pfp?.startsWith('https://')) {
+    } else if (pfp && !pfp.startsWith('https://')) {
       pfp = `https://pbs.twimg.com/profile_images/${pfp}`;
     }
 

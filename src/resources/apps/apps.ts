@@ -266,6 +266,11 @@ export interface AppResponse {
   funding_config?: FundingConfigResponseSchema;
 
   /**
+   * How the app enforces multi-factor authentication for wallet operations.
+   */
+  mfa_enforcement_mode?: TransactionMfaEnforcementMode;
+
+  /**
    * Configuration for Telegram authentication.
    */
   telegram_auth_config?: TelegramAuthConfigSchema;
@@ -634,6 +639,11 @@ export interface TestAccountsResponse {
 }
 
 /**
+ * How the app enforces multi-factor authentication for wallet operations.
+ */
+export type TransactionMfaEnforcementMode = 'POLICY_BASED' | 'ALL_WALLET_OPERATIONS' | (string & {});
+
+/**
  * Input for adding or removing an allowlist entry. Discriminated by type.
  */
 export type UserInviteInput =
@@ -707,6 +717,7 @@ export declare namespace Apps {
     type TelegramAuthConfigSchema as TelegramAuthConfigSchema,
     type TestAccount as TestAccount,
     type TestAccountsResponse as TestAccountsResponse,
+    type TransactionMfaEnforcementMode as TransactionMfaEnforcementMode,
     type UserInviteInput as UserInviteInput,
     type UserOwnedRecoveryOption as UserOwnedRecoveryOption,
     type WalletInviteInput as WalletInviteInput,

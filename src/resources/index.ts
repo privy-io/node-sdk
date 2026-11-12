@@ -77,6 +77,7 @@ export {
   type TelegramAuthConfigSchema,
   type TestAccount,
   type TestAccountsResponse,
+  type TransactionMfaEnforcementMode,
   type UserInviteInput,
   type UserOwnedRecoveryOption,
   type WalletInviteInput,

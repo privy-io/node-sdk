@@ -40,6 +40,7 @@ Types:
 - <code><a href="./src/resources/apps/apps.ts">TelegramAuthConfigSchema</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccount</a></code>
 - <code><a href="./src/resources/apps/apps.ts">TestAccountsResponse</a></code>
+- <code><a href="./src/resources/apps/apps.ts">TransactionMfaEnforcementMode</a></code>
 - <code><a href="./src/resources/apps/apps.ts">UserInviteInput</a></code>
 - <code><a href="./src/resources/apps/apps.ts">UserOwnedRecoveryOption</a></code>
 - <code><a href="./src/resources/apps/apps.ts">WalletInviteInput</a></code>

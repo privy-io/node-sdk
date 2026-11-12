@@ -1645,7 +1645,7 @@ export interface UsageGasSponsorshipRecordedWebhookPayload {
 /**
  * The type of operation that incurred a usage charge.
  */
-export type UsageSourceType = 'wallet-action-transfer' | 'wallet-action-swap' | 'rpc';
+export type UsageSourceType = 'wallet-action-transfer' | 'wallet-action-swap' | 'rpc' | 'deposit-address';
 
 /**
  * Payload for the usage.swap_provider_fee.recorded webhook event (swap provider

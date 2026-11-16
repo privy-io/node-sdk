@@ -85,20 +85,9 @@ async function postprocess() {
     },
   };
 
-  await fs.promises.writeFile(
-    'dist/package.json',
-    JSON.stringify(
-      Object.assign(
-        /** @type {Record<String, unknown>} */ (
-          JSON.parse(await fs.promises.readFile('dist/package.json', 'utf-8'))
-        ),
-        {
-          exports: newExports,
-        },
-      ),
-      null,
-      2,
-    ),
-  );
+  /** @type {Record<String, unknown>} */
+  const pkgJson = JSON.parse(await fs.promises.readFile('dist/package.json', 'utf-8'));
+  pkgJson.exports = newExports;
+  await fs.promises.writeFile('dist/package.json', JSON.stringify(pkgJson, null, 2));
 }
 postprocess();

@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.40.0](https://github.com/privy-io/node-sdk-private/compare/v0.39.0...v0.40.0) (2026-11-12)
+
+
+### Features
+
+* **api:** api update ([c06098e](https://github.com/privy-io/node-sdk-private/commit/c06098e3dca3a7495956411ebbe1e69196374fc7))
+* **api:** api update ([a5715c7](https://github.com/privy-io/node-sdk-private/commit/a5715c7068e702074d0e851d6aa7254deb2a746c))
+* **api:** api update ([ab4f710](https://github.com/privy-io/node-sdk-private/commit/ab4f710f3821c7f0d516b1189b1bb62204282c72))
+* **api:** api update ([0115d70](https://github.com/privy-io/node-sdk-private/commit/0115d701292bd647bd00462570b17d8ed509ee4e))
+
+
+### Bug Fixes
+
+* **users:** map Twitter pfp to profile_picture_url per spec ([#68](https://github.com/privy-io/node-sdk-private/issues/68)) ([6aed8a7](https://github.com/privy-io/node-sdk-private/commit/6aed8a76fc31dce4481913e03ce2c0ae1fb76234))
+
 ## [0.39.0](https://github.com/privy-io/node-sdk-private/compare/v0.38.0...v0.39.0) (2026-11-10)
 
 

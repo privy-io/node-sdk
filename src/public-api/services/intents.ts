@@ -3,8 +3,8 @@ import { APIPromise } from '../../core/api-promise';
 import { PrivyAPIError } from '../../core/error';
 import {
   AuthorizationContext,
-  countAuthorizationSignatures,
   generateAuthorizationSignatures,
+  numberOfSigners,
 } from '../../lib/authorization';
 import {
   ConditionSetDeleteIntentResponse,
@@ -77,10 +77,10 @@ export class PrivyIntentsService extends Intents {
     intentId: string,
     { authorization_context: authorizationContext }: PrivyIntentsService.AuthorizeInput,
   ): Promise<IntentResponse> {
-    const signatureCount = countAuthorizationSignatures(authorizationContext);
-    if (signatureCount !== 1) {
+    const signerCount = numberOfSigners(authorizationContext);
+    if (signerCount !== 1) {
       throw new PrivyAPIError(
-        `An intent can only be authorized with a single authorization signature, got ${signatureCount}`,
+        `An intent can only be authorized with a single authorization signature, got ${signerCount}`,
       );
     }
 

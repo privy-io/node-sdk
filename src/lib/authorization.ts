@@ -124,13 +124,14 @@ function mfaTokenByUserJwt(
 }
 
 /**
- * Counts the signatures {@link generateAuthorizationSignatures} produces for the given
- * authorization context, without exchanging JWTs or calling sign functions.
+ * The number of signers in the given authorization context, which is the number of signatures
+ * {@link generateAuthorizationSignatures} produces for it. Computed without exchanging JWTs or
+ * calling sign functions.
  *
  * @param authorizationContext The authorization context containing JWTs, private keys, and signatures.
  * @returns The number of authorization signatures.
  */
-export function countAuthorizationSignatures(authorizationContext: AuthorizationContext): number {
+export function numberOfSigners(authorizationContext: AuthorizationContext): number {
   return (
     (authorizationContext.signatures?.length ?? 0) +
     (authorizationContext.authorization_private_keys?.length ?? 0) +

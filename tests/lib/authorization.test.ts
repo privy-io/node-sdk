@@ -1,9 +1,9 @@
-import { countAuthorizationSignatures } from '@privy-io/node/lib/authorization';
+import { numberOfSigners } from '@privy-io/node/lib/authorization';
 
-describe('countAuthorizationSignatures', () => {
+describe('numberOfSigners', () => {
   it('counts every source of signatures', () => {
     expect(
-      countAuthorizationSignatures({
+      numberOfSigners({
         signatures: ['signature'],
         authorization_private_keys: ['private-key-1', 'private-key-2'],
         user_jwts: ['jwt-1'],
@@ -15,7 +15,7 @@ describe('countAuthorizationSignatures', () => {
 
   it('counts a JWT given in both user_jwts and user_auth once', () => {
     expect(
-      countAuthorizationSignatures({
+      numberOfSigners({
         user_jwts: ['jwt'],
         user_auth: [{ user_jwt: 'jwt', mfa_token: 'mfa-token' }],
       }),
@@ -23,6 +23,6 @@ describe('countAuthorizationSignatures', () => {
   });
 
   it('counts an empty authorization context as zero', () => {
-    expect(countAuthorizationSignatures({})).toBe(0);
+    expect(numberOfSigners({})).toBe(0);
   });
 });

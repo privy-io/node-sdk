@@ -667,10 +667,23 @@ export interface WalletInviteInput {
 }
 
 export interface AppGetGasSpendParams {
+  /**
+   * Unix timestamp in milliseconds, exclusive. Must be greater than or equal to
+   * `start_timestamp`, and the range from `start_timestamp` to `end_timestamp` must
+   * not exceed 30 days.
+   */
   end_timestamp: number;
 
+  /**
+   * Unix timestamp in milliseconds, inclusive. Must be less than or equal to
+   * `end_timestamp`, and the range from `start_timestamp` to `end_timestamp` must
+   * not exceed 30 days.
+   */
   start_timestamp: number;
 
+  /**
+   * List of wallet IDs to query gas spend for. Maximum 100.
+   */
   wallet_ids: Array<string>;
 }
 

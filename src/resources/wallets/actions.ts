@@ -2233,7 +2233,7 @@ export interface ActionGetParams {
   wallet_id: string;
 
   /**
-   * Query param: Expandable relations to include on a wallet action response.
+   * Query param: Include step-level details in the response.
    */
   include?: WalletActionInclude;
 

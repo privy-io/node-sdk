@@ -794,6 +794,7 @@ export {
   type OwnerInputPublicKey,
   type OwnerInputUser,
   type P256PublicKey,
+  type PolicyID,
   type SolanaAddress,
   type SolanaCaip2,
   type StellarAddress,

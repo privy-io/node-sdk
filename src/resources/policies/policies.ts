@@ -100,7 +100,7 @@ export class Policies extends APIResource {
    * ```
    */
   _createRule(
-    policyID: string,
+    policyID: SharedAPI.PolicyID,
     params: PolicyCreateRuleParams,
     options?: RequestOptions,
   ): APIPromise<PolicyRuleResponse> {
@@ -135,7 +135,7 @@ export class Policies extends APIResource {
    * ```
    */
   _delete(
-    policyID: string,
+    policyID: SharedAPI.PolicyID,
     params: PolicyDeleteParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<SharedAPI.SuccessResponse> {
@@ -202,7 +202,11 @@ export class Policies extends APIResource {
    * );
    * ```
    */
-  _update(policyID: string, params: PolicyUpdateParams, options?: RequestOptions): APIPromise<Policy> {
+  _update(
+    policyID: SharedAPI.PolicyID,
+    params: PolicyUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<Policy> {
     const {
       'privy-authorization-signature': privyAuthorizationSignature,
       'privy-request-expiry': privyRequestExpiry,
@@ -284,7 +288,7 @@ export class Policies extends APIResource {
    * );
    * ```
    */
-  get(policyID: string, options?: RequestOptions): APIPromise<Policy> {
+  get(policyID: SharedAPI.PolicyID, options?: RequestOptions): APIPromise<Policy> {
     if (policyID === '') {
       throw new Error('policyID must not be an empty string');
     }
@@ -758,10 +762,9 @@ export interface PoliciesResponse {
  */
 export interface Policy {
   /**
-   * Unique ID of the created policy. This will be the primary identifier when using
-   * the policy in the future.
+   * A unique identifier for a policy.
    */
-  id: string;
+  id: SharedAPI.PolicyID;
 
   /**
    * The wallet chain types.
@@ -847,10 +850,9 @@ export type PolicyCondition =
  */
 export interface PolicyListItem {
   /**
-   * Unique ID of the created policy. This will be the primary identifier when using
-   * the policy in the future.
+   * A unique identifier for a policy.
    */
-  id: string;
+  id: SharedAPI.PolicyID;
 
   /**
    * The wallet chain types.
@@ -909,7 +911,10 @@ export type PolicyMethod =
  * Unique ID of the policy to take actions on.
  */
 export interface PolicyRequestBody {
-  policy_id: string;
+  /**
+   * A unique identifier for a policy.
+   */
+  policy_id: SharedAPI.PolicyID;
 }
 
 /**
@@ -935,7 +940,10 @@ export interface PolicyRuleRequestBody {
  * Unique IDs of the policy and the rule within the policy to take actions on.
  */
 export interface PolicyRuleRequestParams {
-  policy_id: string;
+  /**
+   * A unique identifier for a policy.
+   */
+  policy_id: SharedAPI.PolicyID;
 
   rule_id: string;
 }
@@ -1505,9 +1513,9 @@ export interface PolicyDeleteParams {
 
 export interface PolicyDeleteRuleParams {
   /**
-   * Path param
+   * Path param: A unique identifier for a policy.
    */
-  policy_id: string;
+  policy_id: SharedAPI.PolicyID;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are
@@ -1560,9 +1568,9 @@ export interface PolicyUpdateParams {
 
 export interface PolicyUpdateRuleParams {
   /**
-   * Path param
+   * Path param: A unique identifier for a policy.
    */
-  policy_id: string;
+  policy_id: SharedAPI.PolicyID;
 
   /**
    * Body param: The action to take when a policy rule matches.
@@ -1598,7 +1606,10 @@ export interface PolicyUpdateRuleParams {
 }
 
 export interface PolicyGetRuleParams {
-  policy_id: string;
+  /**
+   * A unique identifier for a policy.
+   */
+  policy_id: SharedAPI.PolicyID;
 }
 
 Policies.ConditionSets = ConditionSets;

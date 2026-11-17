@@ -1240,7 +1240,7 @@ export interface CustodialWallet {
    */
   chain_type?: CustodialWalletChainType;
 
-  policy_ids?: Array<string>;
+  policy_ids?: Array<SharedAPI.PolicyID>;
 }
 
 /**
@@ -2528,7 +2528,7 @@ export interface OutputWithPreviousTransactionData {
 /**
  * An optional list of up to one policy ID to enforce on the wallet.
  */
-export type PolicyInput = Array<string>;
+export type PolicyInput = Array<SharedAPI.PolicyID>;
 
 /**
  * Input for exporting a wallet (private key or seed phrase) with HPKE encryption.
@@ -5382,7 +5382,7 @@ export interface WalletBatchItemInput {
    * List of policy IDs for policies that should be enforced on the wallet.
    * Currently, only one policy is supported per wallet.
    */
-  policy_ids?: Array<string>;
+  policy_ids?: Array<SharedAPI.PolicyID>;
 }
 
 /**
@@ -5716,10 +5716,9 @@ export interface WalletUpdateRequestBody {
   owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
-   * New policy IDs to enforce on the wallet. Currently, only one policy is supported
-   * per wallet.
+   * An optional list of up to one policy ID to enforce on the wallet.
    */
-  policy_ids?: Array<string>;
+  policy_ids?: PolicyInput;
 }
 
 /**
@@ -7444,10 +7443,9 @@ export interface WalletUpdateParams {
   owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
-   * Body param: New policy IDs to enforce on the wallet. Currently, only one policy
-   * is supported per wallet.
+   * Body param: An optional list of up to one policy ID to enforce on the wallet.
    */
-  policy_ids?: Array<string>;
+  policy_ids?: PolicyInput;
 
   /**
    * Header param: Request authorization signature. If multiple signatures are

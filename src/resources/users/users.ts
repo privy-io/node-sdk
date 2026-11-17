@@ -1781,7 +1781,7 @@ export namespace UserCreateParams {
      * Policy IDs to enforce on the wallet. Currently, only one policy is supported per
      * wallet.
      */
-    policy_ids?: Array<string>;
+    policy_ids?: Array<SharedAPI.PolicyID>;
   }
 
   export namespace Wallet {
@@ -1796,7 +1796,7 @@ export namespace UserCreateParams {
        * this will override the base policy IDs set on the wallet. Currently, only one
        * policy is supported per signer.
        */
-      override_policy_ids?: Array<string>;
+      override_policy_ids?: Array<SharedAPI.PolicyID>;
     }
   }
 }

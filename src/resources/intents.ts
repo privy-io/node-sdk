@@ -1569,45 +1569,15 @@ export namespace WalletIntentResponse {
    * The original wallet update request that would be sent to the wallet endpoint
    */
   export interface RequestDetails {
-    body: RequestDetails.Body;
+    /**
+     * Request body for updating a wallet. `owner` and `owner_id` are mutually
+     * exclusive.
+     */
+    body: WalletsAPI.WalletUpdateRequestBody;
 
     method: 'PATCH';
 
     url: string;
-  }
-
-  export namespace RequestDetails {
-    export interface Body {
-      /**
-       * Additional signers for the wallet.
-       */
-      additional_signers?: WalletsAPI.AdditionalSignerInput;
-
-      authorization_key_ids?: Array<string>;
-
-      authorization_threshold?: number;
-
-      display_name?: string | null;
-
-      external_id?: string;
-
-      /**
-       * The owner of the resource, specified as a Privy user ID, a P-256 public key, or
-       * null to remove the current owner.
-       */
-      owner?: SharedAPI.OwnerInput | null;
-
-      /**
-       * The key quorum ID to set as the owner of the resource. If you provide this, do
-       * not specify an owner.
-       */
-      owner_id?: SharedAPI.OwnerIDInput | null;
-
-      /**
-       * An optional list of up to one policy ID to enforce on the wallet.
-       */
-      policy_ids?: WalletsAPI.PolicyInput;
-    }
   }
 }
 
@@ -2856,10 +2826,9 @@ export interface IntentUpdateWalletParams {
   owner_id?: SharedAPI.OwnerIDInput | null;
 
   /**
-   * Body param: New policy IDs to enforce on the wallet. Currently, only one policy
-   * is supported per wallet.
+   * Body param: An optional list of up to one policy ID to enforce on the wallet.
    */
-  policy_ids?: Array<string>;
+  policy_ids?: WalletsAPI.PolicyInput;
 
   /**
    * Header param: Request expiry. Value is a Unix timestamp in milliseconds

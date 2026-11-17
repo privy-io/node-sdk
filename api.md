@@ -1572,6 +1572,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">OwnerInputPublicKey</a></code>
 - <code><a href="./src/resources/shared.ts">OwnerInputUser</a></code>
 - <code><a href="./src/resources/shared.ts">P256PublicKey</a></code>
+- <code><a href="./src/resources/shared.ts">PolicyID</a></code>
 - <code><a href="./src/resources/shared.ts">SolanaAddress</a></code>
 - <code><a href="./src/resources/shared.ts">SolanaCaip2</a></code>
 - <code><a href="./src/resources/shared.ts">StellarAddress</a></code>

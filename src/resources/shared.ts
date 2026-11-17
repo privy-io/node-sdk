@@ -108,6 +108,11 @@ export interface OwnerInputUser {
 export type P256PublicKey = string;
 
 /**
+ * A unique identifier for a policy.
+ */
+export type PolicyID = string;
+
+/**
  * Solana address: base58-encoded public key (32 bytes).
  */
 export type SolanaAddress = string;
@@ -171,6 +176,7 @@ export declare namespace Shared {
     type OwnerInputPublicKey as OwnerInputPublicKey,
     type OwnerInputUser as OwnerInputUser,
     type P256PublicKey as P256PublicKey,
+    type PolicyID as PolicyID,
     type SolanaAddress as SolanaAddress,
     type SolanaCaip2 as SolanaCaip2,
     type StellarAddress as StellarAddress,

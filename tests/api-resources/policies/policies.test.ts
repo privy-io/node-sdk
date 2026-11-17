@@ -9,6 +9,59 @@ const client = new PrivyAPI({
 });
 
 describe('resource policies', () => {
+  describe('ID validation', () => {
+    const fetch = jest.fn<Promise<Response>, [string | URL | Request, RequestInit?]>(
+      async () => new Response('{}', { headers: { 'content-type': 'application/json' } }),
+    );
+    const client = new PrivyAPI({
+      appID: 'test-app-id',
+      appSecret: 'test-app-secret',
+      baseURL: 'http://localhost:4010',
+      fetch,
+    });
+
+    beforeEach(() => fetch.mockClear());
+
+    test('get rejects an empty policy ID before making a request', () => {
+      expect(() => client.policies.get('')).toThrow('policyID must not be an empty string');
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
+    test('getRule rejects an empty rule ID before making a request', () => {
+      expect(() => client.policies.getRule('', { policy_id: 'policy-id' })).toThrow(
+        'ruleID must not be an empty string',
+      );
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
+    test('getRule rejects an empty policy ID before making a request', () => {
+      expect(() => client.policies.getRule('rule-id', { policy_id: '' })).toThrow(
+        'policy_id must not be an empty string',
+      );
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
+    test('get passes valid IDs and request options to the generated transport', async () => {
+      await client.policies.get('policy-id', { headers: { 'x-test-header': 'test-value' } });
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+      const [url, options] = fetch.mock.calls[0]!;
+      expect(String(url)).toBe('http://localhost:4010/v1/policies/policy-id');
+      expect(options?.method).toBe('GET');
+      expect(new Headers(options?.headers).get('x-test-header')).toBe('test-value');
+    });
+
+    test('getRule passes valid IDs to the generated transport', async () => {
+      await client.policies.getRule('rule-id', { policy_id: 'policy-id' });
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(fetch).toHaveBeenCalledWith(
+        'http://localhost:4010/v1/policies/policy-id/rules/rule-id',
+        expect.objectContaining({ method: 'GET' }),
+      );
+    });
+  });
+
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.policies.create({

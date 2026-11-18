@@ -200,6 +200,9 @@ export interface PreparedRequest {
  * Returns an {@link PreparedRequest} containing all headers that should be forwarded to the
  * underlying generated API method.
  *
+ * The `privy-authorization-signature` header is only included when at least one signature is
+ * produced; an empty or missing authorization context yields no signature header.
+ *
  * If `requestExpiry` is provided (including `0`), it is included in both the authorization
  * signature and the returned headers. If omitted, no expiry header is included — callers that
  * require expiry should compute a default before calling this function.
@@ -248,7 +251,9 @@ export async function prepareRequest(
 
   return {
     headers: {
-      'privy-authorization-signature': signatures.join(','),
+      // An empty authorization context produces no signatures; omit the header entirely rather
+      // than sending an empty value, so app-authenticated ownerless requests remain possible.
+      ...(signatures.length > 0 && { 'privy-authorization-signature': signatures.join(',') }),
       ...(idempotencyKey && { 'privy-idempotency-key': idempotencyKey }),
       ...(requestExpiry != null && { 'privy-request-expiry': privyRequestExpirtyHeader }),
     },

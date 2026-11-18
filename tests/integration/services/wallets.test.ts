@@ -58,6 +58,20 @@ describe('PrivyWalletsService', () => {
       });
       expect(wallet3.owner_id).toBeNull();
     });
+
+    it('should be able to update an ownerless wallet with an empty authorization context', async () => {
+      const wallet = await privyClient.wallets().create({ chain_type: 'ethereum' });
+      expect(wallet.owner_id).toBeNull();
+
+      // An empty context emits no authorization signature header, so the app-authenticated
+      // request must still succeed for an ownerless wallet.
+      const updated = await privyClient.wallets().update(wallet.id, {
+        owner: { public_key: resources.p256KeyPair.publicKey },
+        authorization_context: {},
+      });
+      expect(updated.owner_id).toBeDefined();
+      expect(updated.owner_id).not.toBeNull();
+    });
   });
   describe('export', () => {
     it('should be able to export an Ethereum wallet', async () => {

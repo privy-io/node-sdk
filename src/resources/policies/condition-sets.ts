@@ -37,7 +37,7 @@ export class ConditionSets extends APIResource {
  */
 export interface ConditionSetsResponse {
   /**
-   * Condition sets in this page.
+   * Items in this page.
    */
   data: Array<PoliciesAPI.ConditionSet>;
 

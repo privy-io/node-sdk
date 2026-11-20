@@ -2397,8 +2397,14 @@ export interface IntentBinding {
  * A page of active crypto deposit accounts for a destination wallet.
  */
 export interface ListCryptoDepositAccountsResponse {
+  /**
+   * Items in this page.
+   */
   data: Array<CryptoDepositAddressRoute>;
 
+  /**
+   * Cursor for the next page. Null when there are no further pages.
+   */
   next_cursor: string | null;
 }
 

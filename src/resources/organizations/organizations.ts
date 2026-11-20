@@ -247,8 +247,14 @@ export interface OrganizationWalletConfiguration {
  * Response returned when listing organizations for an app.
  */
 export interface OrganizationsListResponse {
+  /**
+   * Items in this page.
+   */
   data: Array<Organization>;
 
+  /**
+   * Cursor for the next page. Null when there are no further pages.
+   */
   next_cursor: string | null;
 }
 

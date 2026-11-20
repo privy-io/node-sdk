@@ -265,7 +265,7 @@ export interface KeyQuorumUpdateRequestBody {
  */
 export interface KeyQuorumsResponse {
   /**
-   * Key quorums in this page.
+   * Items in this page.
    */
   data: Array<KeyQuorum>;
 

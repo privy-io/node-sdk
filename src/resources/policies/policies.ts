@@ -747,7 +747,7 @@ export type MessageSigningField = 'content' | 'byte_length';
  */
 export interface PoliciesResponse {
   /**
-   * Policies in this page.
+   * Items in this page.
    */
   data: Array<PolicyListItem>;
 

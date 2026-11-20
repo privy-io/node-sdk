@@ -1497,6 +1497,23 @@ export interface KYCStatusResponse {
  */
 export interface KYCSubmitData {
   /**
+   * Primary purpose of the individual's account, as one of the provider's
+   * [accepted values](https://apidocs.bridge.xyz/platform/customers/customers/api).
+   */
+  account_purpose?: string;
+
+  /**
+   * Free-text account purpose, required by the provider when `account_purpose` is
+   * `other`.
+   */
+  account_purpose_other?: string;
+
+  /**
+   * Whether the individual is acting as an intermediary for a third party.
+   */
+  acting_as_intermediary?: boolean;
+
+  /**
    * Date of birth in YYYY-MM-DD format.
    */
   date_of_birth?: string;
@@ -1505,6 +1522,18 @@ export interface KYCSubmitData {
    * Email address.
    */
   email?: string;
+
+  /**
+   * The individual's employment status, as one of the provider's
+   * [accepted values](https://apidocs.bridge.xyz/platform/customers/customers/api).
+   */
+  employment_status?: string;
+
+  /**
+   * The individual's expected monthly payments, as one of the provider's
+   * [USD buckets](https://apidocs.bridge.xyz/platform/customers/customers/api).
+   */
+  expected_monthly_payments_usd?: string;
 
   /**
    * Legal first name.
@@ -1533,6 +1562,12 @@ export interface KYCSubmitData {
   middle_name?: string;
 
   /**
+   * The individual's most recent occupation, as an ISCO code, passed through to the
+   * provider.
+   */
+  most_recent_occupation?: string;
+
+  /**
    * ISO 3166-1 alpha-3 codes for all nationalities held.
    */
   nationalities?: Array<string>;
@@ -1558,6 +1593,12 @@ export interface KYCSubmitData {
    * A postal address used in KYC and KYB data submission.
    */
   residential_address?: VerificationAddress;
+
+  /**
+   * Primary source of the individual's funds, as one of the provider's
+   * [accepted values](https://apidocs.bridge.xyz/platform/customers/customers/api).
+   */
+  source_of_funds?: string;
 
   /**
    * Stripe Link shared data ID that supplies name, date of birth, address, and US

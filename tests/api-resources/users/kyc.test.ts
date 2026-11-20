@@ -85,8 +85,13 @@ describe('resource kyc', () => {
   test.skip('submit: required and optional params', async () => {
     const response = await client.users.kyc.submit('user_id', {
       data: {
+        account_purpose: 'x',
+        account_purpose_other: 'x',
+        acting_as_intermediary: true,
         date_of_birth: '7321-69-10',
         email: 'dev@stainless.com',
+        employment_status: 'x',
+        expected_monthly_payments_usd: 'x',
         first_name: 'x',
         identifying_information: [
           {
@@ -102,6 +107,7 @@ describe('resource kyc', () => {
         kyc_screen: { result: 'passed', screened_at: '2019-12-27T18:11:19.117Z' },
         last_name: 'x',
         middle_name: 'x',
+        most_recent_occupation: 'x',
         nationalities: ['xxx'],
         nonresident_alien_attestation: true,
         ofac_screen: { result: 'passed', screened_at: '2019-12-27T18:11:19.117Z' },
@@ -114,6 +120,7 @@ describe('resource kyc', () => {
           street_line_2: 'x',
           subdivision: 'x',
         },
+        source_of_funds: 'x',
         stripe_link_shared_data_id: 'lsd_J!Q0Ok0bzJb7',
         transliterated_first_name: 'x',
         transliterated_last_name: 'x',

@@ -127,8 +127,14 @@ export interface CardIssuingCardholder {
  * Stripe Issuing cards bound to the authenticated Privy user.
  */
 export interface CardIssuingCardsResponse {
+  /**
+   * Items in this page.
+   */
   data: Array<CardIssuingCardResponse>;
 
+  /**
+   * Cursor for the next page. Null when there are no further pages.
+   */
   next_cursor: string | null;
 }
 
@@ -598,8 +604,14 @@ export type CardIssuingTransactionStatus = 'pending' | 'posted' | 'declined' | '
  * A chronological list of card activity.
  */
 export interface CardIssuingTransactionsResponse {
+  /**
+   * Items in this page.
+   */
   data: Array<CardIssuingTransactionResponse>;
 
+  /**
+   * Cursor for the next page. Null when there are no further pages.
+   */
   next_cursor: string | null;
 }
 

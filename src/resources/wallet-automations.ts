@@ -377,8 +377,14 @@ export interface UpdateAutomationRequestBody {
  * Paginated list of wallet automation executions.
  */
 export interface WalletAutomationExecutionListResponse {
+  /**
+   * Items in this page.
+   */
   data: Array<WalletAutomationExecutionResponse>;
 
+  /**
+   * Cursor for the next page. Null when there are no further pages.
+   */
   next_cursor: string | null;
 }
 
@@ -429,8 +435,14 @@ export type WalletAutomationExecutionStatus = 'pending' | 'submitted' | 'complet
  * Paginated list of wallet automations.
  */
 export interface WalletAutomationListResponse {
+  /**
+   * Items in this page.
+   */
   data: Array<WalletAutomationResponse>;
 
+  /**
+   * Cursor for the next page. Null when there are no further pages.
+   */
   next_cursor: string | null;
 }
 

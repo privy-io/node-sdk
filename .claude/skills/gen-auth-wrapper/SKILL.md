@@ -169,7 +169,7 @@ cat tests/integration/test-setup.ts               # shared helpers
 Run lint to confirm the code compiles and passes all checks:
 
 ```bash
-yarn lint
+pnpm lint
 ```
 
 If lint fails, fix the issues and re-run until it passes.

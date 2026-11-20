@@ -5,8 +5,8 @@
       "Bash(grep:*)",
       "Bash(tree:*)",
       "Bash(find:*)",
-      "Bash(yarn lint)",
-      "Bash(yarn test:integration:*)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm test:integration:*)",
       "Bash(git show:*)",
       "Bash(gh pr view:*)"
     ]

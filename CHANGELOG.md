@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.42.0](https://github.com/privy-io/node-sdk-private/compare/v0.41.0...v0.42.0) (2026-11-20)
+
+
+### Features
+
+* **api:** api update ([214edcd](https://github.com/privy-io/node-sdk-private/commit/214edcdf299ec8029830db4b2410ea7ed731ab26))
+* **api:** api update ([6972706](https://github.com/privy-io/node-sdk-private/commit/69727069538ec95d61fc5311f3f5eddc045a8398))
+* **api:** api update ([53cc449](https://github.com/privy-io/node-sdk-private/commit/53cc4499d634141e51ff8cbcdd0194dc104293c8))
+* **api:** api update ([eabc56d](https://github.com/privy-io/node-sdk-private/commit/eabc56d1fddc17429b5fa714291bb2204b4cb967))
+
+
+### Bug Fixes
+
+* **auth:** omit privy-authorization-signature header for empty authorization context ([#53](https://github.com/privy-io/node-sdk-private/issues/53)) ([73ff9a7](https://github.com/privy-io/node-sdk-private/commit/73ff9a7461d6ad5a3c38ed154e61196be77f7a4f))
+
+
+### Chores
+
+* replace leftover yarn commands with pnpm ([#121](https://github.com/privy-io/node-sdk-private/issues/121)) ([ea52cf9](https://github.com/privy-io/node-sdk-private/commit/ea52cf9cf319b9d3db16a892cb890c0e862b2ec8))
+
+
+### Refactors
+
+* **auth:** rename countAuthorizationSignatures to numberOfSigners ([#105](https://github.com/privy-io/node-sdk-private/issues/105)) ([f53a827](https://github.com/privy-io/node-sdk-private/commit/f53a827d106356f02a144e8430c4b0e338f89952))
+
 ## [0.41.0](https://github.com/privy-io/node-sdk-private/compare/v0.40.0...v0.41.0) (2026-11-16)
 
 

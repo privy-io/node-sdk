@@ -1624,7 +1624,7 @@ export type TmmfProvider = 'wisdomtree' | (string & {});
  * A registered wallet's status with its tMMF provider, read live from the
  * provider.
  */
-export type TmmfProviderWalletStatus = 'created' | 'approved' | 'rejected' | (string & {});
+export type TmmfProviderWalletStatus = 'created' | 'approved' | 'rejected' | 'deactivated' | (string & {});
 
 /**
  * Request body for registering a wallet with a tMMF provider for the wallet's

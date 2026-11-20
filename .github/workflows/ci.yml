@@ -30,8 +30,11 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Bootstrap
-        run: ./scripts/bootstrap
+        run: ./scripts/bootstrap --frozen-lockfile
 
       - name: Check types
         run: ./scripts/lint
@@ -52,8 +55,11 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Bootstrap
-        run: ./scripts/bootstrap
+        run: ./scripts/bootstrap --frozen-lockfile
 
       - name: Check build
         run: ./scripts/build
@@ -95,11 +101,14 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Bootstrap
-        run: ./scripts/bootstrap
+        run: ./scripts/bootstrap --frozen-lockfile
 
       - name: Run tests
-        run: yarn test:integration
+        run: pnpm test:integration
 
   notify-failure:
     name: Notify Slack on failure

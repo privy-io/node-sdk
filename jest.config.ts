@@ -6,7 +6,7 @@ const config: JestConfigWithTsJest = {
   transform: {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!jose)'],
+  transformIgnorePatterns: ['/node_modules/(?!(?:\\.pnpm/)?jose(?:@|/))'],
   moduleNameMapper: {
     '^@privy-io/node$': '<rootDir>/src/index.ts',
     '^@privy-io/node/(.*)$': '<rootDir>/src/$1',

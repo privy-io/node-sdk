@@ -31,9 +31,11 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
-        run: |
-          yarn install
+        run: ./scripts/bootstrap --frozen-lockfile
 
       - name: Publish to NPM
         run: |

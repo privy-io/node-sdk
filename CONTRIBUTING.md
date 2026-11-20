@@ -3,13 +3,15 @@
 ## Prerequisites
 
 - Node 20+
-- [yarn v1](https://classic.yarnpkg.com/lang/en/docs/install)
+- [pnpm](https://pnpm.io/) (use the version pinned in `package.json` via `corepack enable`)
+
+Other package managers may work but are not officially supported for development.
 
 ## Setup
 
 ```sh
-yarn
-yarn build
+pnpm install --frozen-lockfile
+pnpm build
 ```
 
 This installs all dependencies and builds output files to `dist/`.
@@ -87,19 +89,25 @@ Manual edits persist across regeneration but may cause merge conflicts with chan
 
 ## Development workflow
 
+### Offline tests
+
+```sh
+./scripts/test --testPathIgnorePatterns=tests/integration
+```
+
 ### End-to-end tests
 
 End-to-end tests run against the staging environment. Create a `.env` file with `TEST_APP_SECRET` set, and optionally `TEST_APP_ID` and `TEST_API_URL`, then run:
 
 ```sh
-yarn test:integration
+pnpm test:integration
 ```
 
 ### Lint & format
 
 ```sh
-yarn lint
-yarn fix
+pnpm lint
+pnpm fix
 ```
 
 Formatting and linting use [prettier](https://www.npmjs.com/package/prettier) and [eslint](https://www.npmjs.com/package/eslint).

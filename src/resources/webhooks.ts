@@ -1222,8 +1222,8 @@ export interface SeedPhraseExportWebhookPayload {
 }
 
 /**
- * Payload for the tmmf.wallet.updated webhook event: a register request created or
- * confirmed a tMMF wallet.
+ * Payload for the tmmf.wallet.updated webhook event: the status of a tMMF wallet
+ * with the provider changed.
  */
 export interface TmmfWalletUpdatedWebhookPayload {
   /**
@@ -1277,6 +1277,18 @@ export interface TmmfWalletUpdatedWebhookPayload {
    * ID of the Privy wallet registered to trade and hold fund shares.
    */
   wallet_id: string;
+
+  /**
+   * Unix timestamp in milliseconds when the provider emitted the event of the
+   * change; absent when no provider event reported it.
+   */
+  emitted_at?: number;
+
+  /**
+   * The provider's sequence number of the change, higher for later changes to the
+   * resource; absent when no provider event reported it.
+   */
+  sequence?: number;
 }
 
 /**

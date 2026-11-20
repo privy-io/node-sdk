@@ -11,7 +11,7 @@ TypeScript SDK (`@privy-io/node`). Stainless generates the API core; Privy-owned
 ./scripts/test --testPathIgnorePatterns=tests/integration # offline Jest tests
 ./scripts/test path/to/file.test.ts                     # focused test file
 ./scripts/test                                           # all tests, including live integration tests
-yarn test:integration                                    # live staging tests
+pnpm test:integration                                    # live staging tests
 ```
 
 Run `./scripts/format`, `./scripts/lint`, and the smallest relevant test set before finishing. `./scripts/test` includes `tests/integration/`. Integration tests make live requests and require the environment described in `CONTRIBUTING.md`.

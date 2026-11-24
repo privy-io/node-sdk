@@ -14,6 +14,26 @@ import type { SignatureOptions } from './resources';
 export type X402SpendControls = SpendControls | false;
 export type X402PaymentPolicy = PaymentPolicy;
 
+export interface X402DacsGuardrail {
+  /** Optional DACS mandate identifier. */
+  dacsMandate?: string;
+  /** Optional DACS session identifier. */
+  dacsSessionId?: string;
+  /**
+   * Deterministic pre-flight spend ceiling in base units (bigint or integer string).
+   * Enforced whenever supplied, even when `dacsMandate` / `dacsSessionId` are omitted.
+   */
+  dacsMaxAmount?: bigint | string;
+  /** Optional synchronous or async DACS attestation hook invoked before payment creation. */
+  onAttest?: (context: {
+    amount: bigint;
+    asset: string;
+    network: string;
+    dacsMandate?: string;
+    dacsSessionId?: string;
+  }) => void | Promise<void>;
+}
+
 export interface CreateX402ClientInput {
   /** ID for the wallet. */
   walletId: string;
@@ -33,6 +53,26 @@ export interface CreateX402ClientInput {
    * Returning transformed requirements is rejected before signing.
    */
   paymentPolicy?: X402PaymentPolicy;
+  /**
+   * Optional DACS (Distributed Attestation & Consensus System) pre-flight guardrail
+   * enforced before payment creation.
+   */
+  dacsGuardrail?: X402DacsGuardrail;
+}
+
+function parseDacsMaxAmountBaseUnits(maxAmount: bigint | string): bigint {
+  if (typeof maxAmount === 'bigint') {
+    if (maxAmount < 0n) {
+      throw new Error(`Invalid negative DACS ceiling: ${maxAmount.toString()}`);
+    }
+    return maxAmount;
+  }
+
+  const normalized = maxAmount.trim();
+  if (!/^\d+$/.test(normalized)) {
+    throw new Error(`Invalid DACS ceiling base units: "${maxAmount}"`);
+  }
+  return BigInt(normalized);
 }
 
 function deepFreeze<T>(value: T, visited = new WeakSet<object>()): T {
@@ -65,6 +105,7 @@ function deepFreeze<T>(value: T, visited = new WeakSet<object>()): T {
  * @param input.authorizationContext - Authorization context for the wallet
  * @param input.spendControls - Per-payment spending limits and asset controls
  * @param input.paymentPolicy - Additional payment policy
+ * @param input.dacsGuardrail - Optional DACS pre-flight spend ceiling and attestation hook
  * @returns A configured x402Client instance
  *
  * @example
@@ -86,7 +127,7 @@ function deepFreeze<T>(value: T, visited = new WeakSet<object>()): T {
  *
  * // Use with fetch
  * const fetchWithPayment = wrapFetchWithPayment(fetch, x402client);
- * const response = await fetchWithPayment('https://api.example.com/premium');
+ * const response = await fetchWithPayment('[https://api.example.com/premium](https://api.example.com/premium)');
  *
  * // Or use with axios
  * // import { wrapAxiosWithPayment } from '@x402/axios';
@@ -102,6 +143,7 @@ export function createX402Client(
     signatureOptions,
     spendControls,
     paymentPolicy,
+    dacsGuardrail,
   }: CreateX402ClientInput,
 ): x402Client {
   let approvedRequirements = new WeakMap<object, string>();
@@ -131,6 +173,28 @@ export function createX402Client(
         approvedRequirements.get(selectedRequirements) !== JSON.stringify(selectedRequirements)
       ) {
         throw new Error('Invalid x402 payment requirements.');
+      }
+
+      if (dacsGuardrail) {
+        const requestedAmount = BigInt(amount);
+        if (dacsGuardrail.dacsMaxAmount !== undefined) {
+          const ceilingBaseUnits = parseDacsMaxAmountBaseUnits(dacsGuardrail.dacsMaxAmount);
+          if (requestedAmount > ceilingBaseUnits) {
+            throw new Error(
+              `[DACS Guardrail] x402 payment amount (${requestedAmount.toString()}) exceeds ceiling (${ceilingBaseUnits.toString()}).`,
+            );
+          }
+        }
+
+        if (dacsGuardrail.onAttest) {
+          await dacsGuardrail.onAttest({
+            amount: requestedAmount,
+            asset,
+            network,
+            ...(dacsGuardrail.dacsMandate ? { dacsMandate: dacsGuardrail.dacsMandate } : {}),
+            ...(dacsGuardrail.dacsSessionId ? { dacsSessionId: dacsGuardrail.dacsSessionId } : {}),
+          });
+        }
       }
     });
   if (spendControls !== undefined) {
